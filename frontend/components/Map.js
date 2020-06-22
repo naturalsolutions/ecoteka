@@ -21,6 +21,15 @@ export default class Map extends Component {
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
     });
+
+    this.map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+      })
+    );
   }
 
   componentWillUpdate(nextProps) {
