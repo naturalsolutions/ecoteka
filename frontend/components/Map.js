@@ -23,16 +23,14 @@ export default class Map extends Component {
     });
   }
 
-  componentDidUpdate(nextProps) {
-    const { style } = this.props;
-
-    if (nextProps.style !== style) {
+  componentWillUpdate(nextProps) {
+    if (this.props.style !== nextProps.style) {
       this.setState({
         style: nextProps.style,
       });
-
-      this.map.setStyle(this.state.style);
     }
+
+    this.map.setStyle(nextProps.style);
   }
 
   render() {

@@ -1,18 +1,34 @@
 import { useState, useEffect, createRef } from "react";
-import { Layout, Button, Row, Col, Tooltip } from "antd";
-import { CaretLeftOutlined } from "@ant-design/icons";
+import { Layout, Button, Row, Col, Tooltip, Switch } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
 import Map from "../components/Map";
 
 const { Header, Sider, Content } = Layout;
 
 export default () => {
   const mapRef = createRef();
-  const [isSiderVisible, setIsSiderVisible] = useState(false);
-  const [theme, setTheme] = useState("dark");
+  const [isSiderVisible, setIsSiderVisible] = useState(true);
+  const [theme, setTheme] = useState("light");
   const headerStyles = {
     padding: 0,
     height: "50px",
     lineHeight: "50px",
+  };
+
+  const themeStyle = {
+    dark: {
+      header: {
+        background: "#161616",
+        ...headerStyles,
+      },
+    },
+
+    light: {
+      header: {
+        background: "#fff",
+        ...headerStyles,
+      },
+    },
   };
 
   useEffect(() => {
@@ -23,18 +39,26 @@ export default () => {
 
   return (
     <Layout className="etkMainLayout">
-      <Header style={headerStyles}>
-        <img
-          src={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
-          height="100%"
-        />
-        <Button
-          onClick={() => {
-            setTheme(theme === "light" ? "dark" : "light");
-          }}
-        >
-          Toggle
-        </Button>
+      <Header style={themeStyle[theme].header} hasSider={true}>
+        <Row align="middle">
+          <img
+            src={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
+            height="40px"
+          />
+          <Col flex="auto">
+            <Row flex="auto" justify="right">
+              <Col flex="auto"></Col>
+              <Col>
+                <Switch
+                  style={{ marginRight: "1rem" }}
+                  onChange={() => {
+                    setTheme(theme === "light" ? "dark" : "light");
+                  }}
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </Header>
       <Layout>
         <Sider
@@ -48,7 +72,7 @@ export default () => {
               flex="auto"
               style={{ display: !isSiderVisible ? "block" : "none" }}
             >
-              sdsdsdsdsd
+              Panel lateral
             </Col>
           </Row>
         </Sider>
@@ -57,9 +81,9 @@ export default () => {
             ref={mapRef}
             style={`${process.env.assetPrefix}/assets/${theme}/style.json`}
           />
-          <Tooltip placement="right" title="ddddd">
+          <Tooltip placement="right" title="Mostrar el panel lateral">
             <Button
-              icon={<CaretLeftOutlined />}
+              icon={<MenuOutlined />}
               style={{
                 height: "80px",
               }}
