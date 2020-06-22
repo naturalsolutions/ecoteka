@@ -1,7 +1,8 @@
 import { useState, useEffect, createRef } from "react";
-import { Layout, Button, Row, Col, Tooltip, Switch } from "antd";
+import { Layout, Button, Row, Col, Tooltip, Switch, Select } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import Map from "../components/Map";
+import speces from "../public/assets/speces.json";
 
 const { Header, Sider, Content } = Layout;
 
@@ -9,6 +10,8 @@ export default () => {
   const mapRef = createRef();
   const [isSiderVisible, setIsSiderVisible] = useState(true);
   const [theme, setTheme] = useState("light");
+  const [specesSelected, setSpecesSelected] = useState([]);
+  const [filter, setFilter] = useState(null);
   const headerStyles = {
     padding: 0,
     height: "50px",
@@ -36,6 +39,20 @@ export default () => {
       window.dispatchEvent(new Event("resize"));
     }, 200);
   });
+
+  let filterSpeces = (values) => {
+    setSpecesSelected(values);
+
+    if (Array.isArray(values)) {
+      let filters = [];
+      for (let value of values) {
+        filters.push(["==", "genre_latin", value]);
+        setFilter(filters);
+      }
+    } else {
+      setFilter(null);
+    }
+  };
 
   return (
     <Layout className="etkMainLayout">
@@ -72,7 +89,21 @@ export default () => {
               flex="auto"
               style={{ display: !isSiderVisible ? "block" : "none" }}
             >
-              Panel lateral
+              <Select
+                value={specesSelected}
+                onChange={(value) => {
+                  setSpecesSelected(value);
+                  filterSpeces(value);
+                }}
+                mode="tags"
+                style={{ width: "100%" }}
+              >
+                {speces.map((s) => (
+                  <Select.Option key={s} value={s}>
+                    {s}
+                  </Select.Option>
+                ))}
+              </Select>
             </Col>
           </Row>
         </Sider>
@@ -80,6 +111,7 @@ export default () => {
           <Map
             ref={mapRef}
             style={`${process.env.assetPrefix}/assets/${theme}/style.json`}
+            filter={filter}
           />
           <Tooltip
             placement="right"

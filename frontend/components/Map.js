@@ -11,6 +11,7 @@ export default class Map extends Component {
       lng: 2.54,
       lat: 46.7,
       zoom: 5,
+      filter: props.filter,
     };
   }
 
@@ -20,6 +21,7 @@ export default class Map extends Component {
       style: this.state.style,
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
+      filter: this.state.filter,
     });
 
     this.map.addControl(
@@ -30,16 +32,26 @@ export default class Map extends Component {
         trackUserLocation: true,
       })
     );
+
+    this.map.on("styledata", this.onStyleData.bind(this));
   }
 
-  componentWillUpdate(nextProps) {
-    if (this.props.style !== nextProps.style) {
-      this.setState({
-        style: nextProps.style,
-      });
+  componentDidUpdate(prevProps) {
+    if (prevProps.style !== this.props.style) {
+      this.map.setStyle(this.props.style);
     }
 
-    this.map.setStyle(nextProps.style);
+    if (prevProps.filter !== this.props.filter) {
+      for (let filter of this.props.filter) {
+        this.map.setFilter("arbres", filter);
+      }
+    }
+  }
+
+  onStyleData() {
+    if (this.props.filter) {
+      this.map.setFilter("arbres", this.props.filter);
+    }
   }
 
   render() {
