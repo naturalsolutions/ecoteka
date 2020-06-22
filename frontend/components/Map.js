@@ -7,6 +7,7 @@ export default class Map extends Component {
     super(props);
     this.map = null;
     this.state = {
+      style: props.style,
       lng: 2.54,
       lat: 46.7,
       zoom: 3,
@@ -14,12 +15,24 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
-    this.mapp = new mapboxgl.Map({
+    this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: `${process.env.assetPrefix}/assets/dark/style.json`,
+      style: this.state.style,
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
     });
+  }
+
+  componentDidUpdate(nextProps) {
+    const { style } = this.props;
+
+    if (nextProps.style !== style) {
+      this.setState({
+        style: nextProps.style,
+      });
+
+      this.map.setStyle(this.state.style);
+    }
   }
 
   render() {

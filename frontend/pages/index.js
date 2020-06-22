@@ -21,19 +21,20 @@ export default () => {
     }, 200);
   });
 
-  const themes = {
-    dark: {
-      logo: `${process.env.assetPrefix}/assets/dark/Ecoteka_logo_dark.svg`,
-    },
-    light: {
-      logo: `${process.env.assetPrefix}/assets/light/Ecoteka_logo_light.svg`,
-    },
-  };
-
   return (
     <Layout className="etkMainLayout">
       <Header style={headerStyles}>
-        <img src={themes[theme].logo} height="100%" />
+        <img
+          src={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
+          height="100%"
+        />
+        <Button
+          onClick={() => {
+            setTheme(theme === "light" ? "dark" : "light");
+          }}
+        >
+          Toggle
+        </Button>
       </Header>
       <Layout>
         <Sider
@@ -52,7 +53,10 @@ export default () => {
           </Row>
         </Sider>
         <Content style={{ position: "relative" }}>
-          <Map ref={mapRef} />
+          <Map
+            ref={mapRef}
+            style={`${process.env.assetPrefix}/assets/${theme}/style.json`}
+          />
           <Tooltip placement="right" title="ddddd">
             <Button
               icon={<CaretLeftOutlined />}
