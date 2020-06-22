@@ -11,5 +11,13 @@
     "next": "9.4.4",
     "react": "16.13.1",
     "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "@zeit/next-less": "^1.0.1",
+    "@zeit/next-sass": "^1.0.1",
+    "antd": "^4.3.5",
+    "less": "^3.11.3",
+    "mapbox-gl": "^1.11.0"
   }
 }
