@@ -9,7 +9,7 @@ if (typeof require !== "undefined") {
   require.extensions[".less"] = (file) => {};
 }
 
-module.exports = withCss(
+let config = withCss(
   withLess(
     withSass({
       lessLoaderOptions: {
@@ -18,3 +18,9 @@ module.exports = withCss(
     })
   )
 );
+
+// CDN Support with Asset Prefix
+// https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
+config.assetPrefix = process.env.NODE_ENV === "production" ? "/ecoteka" : "";
+
+module.exports = config;
