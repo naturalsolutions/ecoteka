@@ -39,7 +39,7 @@ export default () => {
 
   return (
     <Layout className="etkMainLayout">
-      <Header style={themeStyle[theme].header} hasSider={true}>
+      <Header style={themeStyle[theme].header}>
         <Row align="middle">
           <img
             src={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
@@ -81,7 +81,12 @@ export default () => {
             ref={mapRef}
             style={`${process.env.assetPrefix}/assets/${theme}/style.json`}
           />
-          <Tooltip placement="right" title="Mostrar el panel lateral">
+          <Tooltip
+            placement="right"
+            title={`${
+              isSiderVisible ? "Afficher" : "Oculter"
+            } le panneau lateral`}
+          >
             <Button
               icon={<MenuOutlined />}
               style={{
