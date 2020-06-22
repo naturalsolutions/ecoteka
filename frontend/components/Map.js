@@ -10,7 +10,7 @@ export default class Map extends Component {
       style: props.style,
       lng: 2.54,
       lat: 46.7,
-      zoom: 3,
+      zoom: 5,
     };
   }
 
