@@ -1,0 +1,32 @@
+variables:
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - pages
+
+build:
+  stage: build
+  image: docker
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:latest  ./frontend
+    - docker push ${CI_REGISTRY_IMAGE}:latest
+  only:
+    - master
+  tags:
+    - ns01
+
+pages:
+  image: ${CI_REGISTRY_IMAGE}:latest
+  stage: pages
+  script:
+    - cp -r /usr/share/nginx/html public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
