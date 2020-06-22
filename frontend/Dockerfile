@@ -1,10 +1,11 @@
 FROM node as builder
 
+ARG asset_prefix
 WORKDIR /app
 COPY package.json .
 RUN npm install 
 COPY . .
-RUN npm run build && npx next export
+RUN ASSET_PREFIX=${asset_prefix} npm run build && npx next export
 
 FROM nginx:alpine
 

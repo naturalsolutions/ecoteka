@@ -23,10 +23,10 @@ export default () => {
 
   const themes = {
     dark: {
-      logo: "/assets/dark/Ecoteka_logo_dark.svg",
+      logo: `${process.env.assetPrefix}/assets/dark/Ecoteka_logo_dark.svg`,
     },
     light: {
-      logo: "/assets/light/Ecoteka_logo_light.svg",
+      logo: `${process.env.assetPrefix}/assets/light/Ecoteka_logo_light.svg`,
     },
   };
 

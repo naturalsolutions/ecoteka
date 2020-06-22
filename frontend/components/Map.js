@@ -16,7 +16,7 @@ export default class Map extends Component {
   componentDidMount() {
     this.mapp = new mapboxgl.Map({
       container: this.mapContainer,
-      style: "/assets/dark/style.json",
+      style: `${process.env.assetPrefix}/assets/dark/style.json`,
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
     });

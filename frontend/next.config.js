@@ -19,8 +19,14 @@ let config = withCss(
   )
 );
 
+const assetPrefix = process.env["ASSET_PREFIX"] || "";
+
 // CDN Support with Asset Prefix
 // https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
-config.assetPrefix = process.env.NODE_ENV === "production" ? "/ecoteka" : "";
+config.assetPrefix = assetPrefix;
+
+config.env = {
+  assetPrefix: assetPrefix,
+};
 
 module.exports = config;
