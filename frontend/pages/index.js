@@ -49,7 +49,7 @@ export default () => {
   const [filter, setFilter] = useState(null);
   const [viewMode, setViewMode] = useState("map");
   const [communes, setCommunes] = useState([]);
-  const [commune, setCommune] = useState("");
+  const [commune, setCommune] = useState([]);
 
   const filterSpeces = (values) => {
     setSpecesSelected(values);
@@ -71,7 +71,6 @@ export default () => {
   };
 
   let dataLoaded = false;
-  let allCommunes = [];
 
   const onStyleData = async () => {
     if (!dataLoaded) {
@@ -82,21 +81,6 @@ export default () => {
       const json = await response.json();
 
       setCommunes(json);
-      allCommunes = [...json];
-    }
-  };
-
-  let onSearch = (value) => {
-    if (value.length > 0) {
-      let data = communes.filter((commune) => {
-        let regex = new RegExp(value, "g");
-
-        if (commune.slug.match(regex)) return true;
-      });
-
-      setCommunes(data);
-    } else {
-      setCommunes(allCommunes);
     }
   };
 
@@ -170,18 +154,23 @@ export default () => {
                 <Divider orientation="left">Filtre par commune</Divider>
                 <Select
                   value={commune}
-                  labelInValue
-                  filterOption={false}
                   showSearch
-                  onSearch={onSearch}
                   onChange={(value) => {
                     setCommune(value);
+                    let coord = value.split(",");
+                    mapRef.current.map.setZoom(12);
+                    mapRef.current.map.flyTo({
+                      center: [coord[2], coord[1]],
+                    });
                   }}
                   style={{ width: "100%" }}
                 >
                   {communes.map((commune) => (
-                    <Select.Option key={commune.id} value={commune.id}>
-                      {commune.name}
+                    <Select.Option
+                      key={commune.id}
+                      value={`${commune.slug},${commune.gps_lat},${commune.gps_lng}`}
+                    >
+                      {commune.zip_code} {commune.name}
                     </Select.Option>
                   ))}
                 </Select>
