@@ -119,11 +119,10 @@ export default () => {
             >
               <div
                 style={{
-                  padding: "1rem",
+                  padding: "0 1rem",
                   boxSizing: "border-box",
                 }}
               >
-                <ViewMode onChange={onViewModeChange} />
                 <Divider orientation="left">Filtre par genre latin</Divider>
                 <Select
                   value={specesSelected}
@@ -185,6 +184,12 @@ export default () => {
               }}
             />
           </Tooltip>
+          <Affix
+            style={{ position: "absolute", left: "1rem", bottom: "1.4rem" }}
+          >
+            <ViewMode onChange={onViewModeChange} />
+          </Affix>
+
           <Affix
             style={{ position: "absolute", right: "1rem", bottom: "1.4rem" }}
           >
