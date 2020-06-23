@@ -41,16 +41,21 @@ export default class Map extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.style !== this.props.style) {
       this.map.setStyle(this.props.style);
-      this.map.setFilter("arbres", this.props.filter);
     }
 
     if (prevProps.filter !== this.props.filter) {
       this.map.setFilter("arbres", this.props.filter);
     }
+
+    this.map.on("styledata", () => {
+      this.map.setFilter("arbres", this.props.filter);
+    });
   }
 
   onStyleData() {
-    this.map.setFilter("arbres", this.props.filter);
+    if (this.props.onStyleData) {
+      this.props.onStyleData();
+    }
   }
 
   render() {

@@ -18,40 +18,38 @@ import speces from "../public/assets/speces.json";
 
 const { Header, Sider, Content } = Layout;
 
+const mapRef = createRef();
+
+const headerStyles = {
+  padding: 0,
+  height: "50px",
+  lineHeight: "50px",
+};
+
+const themeStyle = {
+  dark: {
+    header: {
+      background: "#161616",
+      ...headerStyles,
+    },
+  },
+
+  light: {
+    header: {
+      background: "#fff",
+      ...headerStyles,
+    },
+  },
+};
+
 export default () => {
-  const mapRef = createRef();
   const [isSiderVisible, setIsSiderVisible] = useState(true);
   const [theme, setTheme] = useState("light");
   const [specesSelected, setSpecesSelected] = useState([]);
   const [filter, setFilter] = useState(null);
   const [viewMode, setViewMode] = useState("map");
-  const headerStyles = {
-    padding: 0,
-    height: "50px",
-    lineHeight: "50px",
-  };
-
-  const themeStyle = {
-    dark: {
-      header: {
-        background: "#161616",
-        ...headerStyles,
-      },
-    },
-
-    light: {
-      header: {
-        background: "#fff",
-        ...headerStyles,
-      },
-    },
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      window.dispatchEvent(new Event("resize"));
-    }, 200);
-  });
+  const [communes, setCommunes] = useState([]);
+  const [commune, setCommune] = useState("");
 
   const filterSpeces = (values) => {
     setSpecesSelected(values);
@@ -70,6 +68,36 @@ export default () => {
       "visibility",
       viewMode !== "map" ? "none" : "visible"
     );
+  };
+
+  let dataLoaded = false;
+  let allCommunes = [];
+
+  const onStyleData = async () => {
+    if (!dataLoaded) {
+      dataLoaded = true;
+      const response = await fetch(
+        `${process.env.assetPrefix}/assets/cities.json`
+      );
+      const json = await response.json();
+
+      setCommunes(json);
+      allCommunes = [...json];
+    }
+  };
+
+  let onSearch = (value) => {
+    if (value.length > 0) {
+      let data = communes.filter((commune) => {
+        let regex = new RegExp(value, "g");
+
+        if (commune.slug.match(regex)) return true;
+      });
+
+      setCommunes(data);
+    } else {
+      setCommunes(allCommunes);
+    }
   };
 
   return (
@@ -139,6 +167,24 @@ export default () => {
                     </Select.Option>
                   ))}
                 </Select>
+                <Divider orientation="left">Filtre par commune</Divider>
+                <Select
+                  value={commune}
+                  labelInValue
+                  filterOption={false}
+                  showSearch
+                  onSearch={onSearch}
+                  onChange={(value) => {
+                    setCommune(value);
+                  }}
+                  style={{ width: "100%" }}
+                >
+                  {communes.map((commune) => (
+                    <Select.Option key={commune.id} value={commune.id}>
+                      {commune.name}
+                    </Select.Option>
+                  ))}
+                </Select>
               </div>
             </Col>
           </Row>
@@ -148,6 +194,7 @@ export default () => {
             ref={mapRef}
             style={`${process.env.assetPrefix}/assets/${theme}/style.json`}
             filter={filter}
+            onStyleData={onStyleData}
           />
           <Tooltip
             placement="right"
@@ -174,7 +221,7 @@ export default () => {
             />
           </Tooltip>
           <Affix
-            style={{ position: "absolute", right: "1rem", bottom: "1rem" }}
+            style={{ position: "absolute", right: "1rem", bottom: "1.4rem" }}
           >
             <Button
               type="primary"
