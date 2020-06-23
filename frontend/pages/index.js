@@ -10,6 +10,7 @@ import {
   Divider,
   Spin,
   Radio,
+  Statistic,
   Space,
   Affix,
 } from "antd";
@@ -50,7 +51,8 @@ export default () => {
   const [filter, setFilter] = useState(null);
   const [viewMode, setViewMode] = useState("map");
   const [communes, setCommunes] = useState([]);
-  const [commune, setCommune] = useState([]);
+  const [population, setPopulation] = useState(0);
+  const [commune, setCommune] = useState("");
   const [fetching, setFetching] = useState(false);
 
   const filterSpeces = (values) => {
@@ -80,7 +82,6 @@ export default () => {
       const response = await fetch(url);
       const json = await response.json();
       setFetching(false);
-
       setCommunes(json);
     }
   };
@@ -167,6 +168,8 @@ export default () => {
                       mapRef.current.map.flyTo({
                         center: [coord[1], coord[2]],
                       });
+
+                      setPopulation(coord[3]);
                     }
                   }}
                   onSearch={onSearch}
@@ -175,12 +178,14 @@ export default () => {
                   {communes.map((commune) => (
                     <Select.Option
                       key={commune.code}
-                      value={`${commune.nom},${commune.centre.coordinates[0]},${commune.centre.coordinates[1]}`}
+                      value={`${commune.nom},${commune.centre.coordinates[0]},${commune.centre.coordinates[1]},${commune.population}`}
                     >
                       {commune.nom}
                     </Select.Option>
                   ))}
                 </Select>
+                <Divider />
+                <Statistic title="Population" value={population} />
               </div>
             </Col>
           </Row>
