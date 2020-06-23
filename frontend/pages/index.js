@@ -9,6 +9,7 @@ import {
   Select,
   Divider,
   Radio,
+  Space,
 } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import Map from "../components/Map";
@@ -51,7 +52,7 @@ export default () => {
     }, 200);
   });
 
-  let filterSpeces = (values) => {
+  const filterSpeces = (values) => {
     setSpecesSelected(values);
 
     if (!values.length) {
@@ -61,7 +62,7 @@ export default () => {
     setFilter(["in", "genre_latin", ...values]);
   };
 
-  let onChangeViewMode = (e) => {
+  const onChangeViewMode = (e) => {
     setViewMode(e.target.value);
     mapRef.current.map.setLayoutProperty(
       "satellite",
@@ -82,12 +83,22 @@ export default () => {
             <Row flex="auto" justify="right">
               <Col flex="auto"></Col>
               <Col>
-                <Switch
-                  style={{ marginRight: "1rem" }}
-                  onChange={() => {
-                    setTheme(theme === "light" ? "dark" : "light");
-                  }}
-                />
+                <Space>
+                  <Button
+                    type="primary"
+                    shape="round"
+                    href="https://www.natural-solutions.eu/contacts"
+                    target="_blank"
+                  >
+                    En savoir plus
+                  </Button>
+                  <Switch
+                    style={{ marginRight: "1rem" }}
+                    onChange={() => {
+                      setTheme(theme === "light" ? "dark" : "light");
+                    }}
+                  />
+                </Space>
               </Col>
             </Row>
           </Col>
@@ -129,9 +140,9 @@ export default () => {
                   mode="tags"
                   style={{ width: "100%" }}
                 >
-                  {speces.map((s) => (
-                    <Select.Option key={s} value={s}>
-                      {s}
+                  {speces.map((spece) => (
+                    <Select.Option key={spece} value={spece}>
+                      {spece}
                     </Select.Option>
                   ))}
                 </Select>

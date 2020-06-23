@@ -11,6 +11,10 @@ export default class Map extends Component {
       lat: 46.7,
       zoom: 5,
     };
+
+    if (props.onStyleDataLoaded) {
+      this.onStyleDataLoaded = props.onStyleDataLoaded;
+    }
   }
 
   componentDidMount() {
@@ -37,6 +41,7 @@ export default class Map extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.style !== this.props.style) {
       this.map.setStyle(this.props.style);
+      this.map.setFilter("arbres", this.props.filter);
     }
 
     if (prevProps.filter !== this.props.filter) {
