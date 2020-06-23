@@ -8,6 +8,7 @@ import {
   Switch,
   Select,
   Divider,
+  Spin,
   Radio,
   Space,
   Affix,
@@ -50,6 +51,7 @@ export default () => {
   const [viewMode, setViewMode] = useState("map");
   const [communes, setCommunes] = useState([]);
   const [commune, setCommune] = useState([]);
+  const [fetching, setFetching] = useState(false);
 
   const filterSpeces = (values) => {
     setSpecesSelected(values);
@@ -70,15 +72,14 @@ export default () => {
     );
   };
 
-  let dataLoaded = false;
+  const onSearch = async (value) => {
+    if (value.length > 3) {
+      let url = `https://geo.api.gouv.fr/communes?nom=${value}&fields=nom,code,codesPostaux,codeDepartement,centre,codeRegion,population&format=json&geometry=centre`;
 
-  const onStyleData = async () => {
-    if (!dataLoaded) {
-      dataLoaded = true;
-      const response = await fetch(
-        `${process.env.assetPrefix}/assets/cities.json`
-      );
+      setFetching(true);
+      const response = await fetch(url);
       const json = await response.json();
+      setFetching(false);
 
       setCommunes(json);
     }
@@ -155,22 +156,28 @@ export default () => {
                 <Select
                   value={commune}
                   showSearch
+                  allowClear
+                  notFoundContent={fetching ? <Spin size="small" /> : null}
+                  filterOption={false}
                   onChange={(value) => {
-                    setCommune(value);
-                    let coord = value.split(",");
-                    mapRef.current.map.setZoom(12);
-                    mapRef.current.map.flyTo({
-                      center: [coord[2], coord[1]],
-                    });
+                    if (value) {
+                      setCommune(value);
+                      let coord = value.split(",");
+                      mapRef.current.map.setZoom(12);
+                      mapRef.current.map.flyTo({
+                        center: [coord[1], coord[2]],
+                      });
+                    }
                   }}
+                  onSearch={onSearch}
                   style={{ width: "100%" }}
                 >
                   {communes.map((commune) => (
                     <Select.Option
-                      key={commune.id}
-                      value={`${commune.slug},${commune.gps_lat},${commune.gps_lng}`}
+                      key={commune.code}
+                      value={`${commune.nom},${commune.centre.coordinates[0]},${commune.centre.coordinates[1]}`}
                     >
-                      {commune.zip_code} {commune.name}
+                      {commune.nom}
                     </Select.Option>
                   ))}
                 </Select>
@@ -183,7 +190,6 @@ export default () => {
             ref={mapRef}
             style={`${process.env.assetPrefix}/assets/${theme}/style.json`}
             filter={filter}
-            onStyleData={onStyleData}
           />
           <Tooltip
             placement="right"
