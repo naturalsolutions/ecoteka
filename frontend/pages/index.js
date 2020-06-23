@@ -1,5 +1,14 @@
 import { useState, useEffect, createRef } from "react";
-import { Layout, Button, Row, Col, Tooltip, Switch, Select } from "antd";
+import {
+  Layout,
+  Button,
+  Row,
+  Col,
+  Tooltip,
+  Switch,
+  Select,
+  Divider,
+} from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import Map from "../components/Map";
 import speces from "../public/assets/speces.json";
@@ -43,15 +52,11 @@ export default () => {
   let filterSpeces = (values) => {
     setSpecesSelected(values);
 
-    if (Array.isArray(values)) {
-      let filters = [];
-      for (let value of values) {
-        filters.push(["==", "genre_latin", value]);
-        setFilter(filters);
-      }
-    } else {
-      setFilter(null);
+    if (!values.length) {
+      return setFilter(null);
     }
+
+    setFilter(["in", "genre_latin", ...values]);
   };
 
   return (
@@ -89,21 +94,29 @@ export default () => {
               flex="auto"
               style={{ display: !isSiderVisible ? "block" : "none" }}
             >
-              <Select
-                value={specesSelected}
-                onChange={(value) => {
-                  setSpecesSelected(value);
-                  filterSpeces(value);
+              <div
+                style={{
+                  padding: "1rem",
+                  boxSizing: "border-box",
                 }}
-                mode="tags"
-                style={{ width: "100%" }}
               >
-                {speces.map((s) => (
-                  <Select.Option key={s} value={s}>
-                    {s}
-                  </Select.Option>
-                ))}
-              </Select>
+                <Divider orientation="left">Filtre par genre latin</Divider>
+                <Select
+                  value={specesSelected}
+                  onChange={(value) => {
+                    setSpecesSelected(value);
+                    filterSpeces(value);
+                  }}
+                  mode="tags"
+                  style={{ width: "100%" }}
+                >
+                  {speces.map((s) => (
+                    <Select.Option key={s} value={s}>
+                      {s}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
             </Col>
           </Row>
         </Sider>

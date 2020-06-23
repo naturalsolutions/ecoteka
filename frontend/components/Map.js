@@ -7,21 +7,19 @@ export default class Map extends Component {
     super(props);
     this.map = null;
     this.state = {
-      style: props.style,
       lng: 2.54,
       lat: 46.7,
       zoom: 5,
-      filter: props.filter,
     };
   }
 
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: this.state.style,
+      style: this.props.style,
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
-      filter: this.state.filter,
+      filter: this.props.filter,
     });
 
     this.map.addControl(
@@ -42,16 +40,12 @@ export default class Map extends Component {
     }
 
     if (prevProps.filter !== this.props.filter) {
-      for (let filter of this.props.filter) {
-        this.map.setFilter("arbres", filter);
-      }
+      this.map.setFilter("arbres", this.props.filter);
     }
   }
 
   onStyleData() {
-    if (this.props.filter) {
-      this.map.setFilter("arbres", this.props.filter);
-    }
+    this.map.setFilter("arbres", this.props.filter);
   }
 
   render() {
