@@ -179,6 +179,9 @@ export default () => {
               }}
               onClick={() => {
                 setIsSiderVisible(!isSiderVisible);
+                setTimeout(() => {
+                  window.dispatchEvent(new Event("resize"));
+                }, 200);
               }}
             />
           </Tooltip>
