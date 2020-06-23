@@ -829,6 +829,15 @@
       "type": "line"
     },
     {
+      "id": "satellite",
+      "type": "raster",
+      "source": "satellite",
+      "minzoom": 0,
+      "filter": ["all"],
+      "layout": { "visibility": "none" },
+      "paint": { "raster-opacity": 1 }
+    },
+    {
       "filter": ["in", "admin_level", 4, 6, 8],
       "id": "admin_sub",
       "layout": {
@@ -1840,6 +1849,11 @@
     "openmaptiles": {
       "type": "vector",
       "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=1zul9rM9yDm3Dbdl3U9r"
+    },
+    "satellite": {
+      "type": "raster",
+      "url": "https://api.maptiler.com/tiles/satellite/tiles.json?key=1zul9rM9yDm3Dbdl3U9r",
+      "tileSize": 256
     },
     "arbres": {
       "type": "vector",

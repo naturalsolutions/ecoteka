@@ -8,6 +8,7 @@ import {
   Switch,
   Select,
   Divider,
+  Radio,
 } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import Map from "../components/Map";
@@ -21,6 +22,7 @@ export default () => {
   const [theme, setTheme] = useState("light");
   const [specesSelected, setSpecesSelected] = useState([]);
   const [filter, setFilter] = useState(null);
+  const [viewMode, setViewMode] = useState("map");
   const headerStyles = {
     padding: 0,
     height: "50px",
@@ -57,6 +59,15 @@ export default () => {
     }
 
     setFilter(["in", "genre_latin", ...values]);
+  };
+
+  let onChangeViewMode = (e) => {
+    setViewMode(e.target.value);
+    mapRef.current.map.setLayoutProperty(
+      "satellite",
+      "visibility",
+      viewMode !== "map" ? "none" : "visible"
+    );
   };
 
   return (
@@ -100,6 +111,14 @@ export default () => {
                   boxSizing: "border-box",
                 }}
               >
+                <Radio.Group
+                  defaultValue={viewMode}
+                  buttonStyle="solid"
+                  onChange={onChangeViewMode}
+                >
+                  <Radio.Button value="map">Carte</Radio.Button>
+                  <Radio.Button value="satellite">Satellite</Radio.Button>
+                </Radio.Group>
                 <Divider orientation="left">Filtre par genre latin</Divider>
                 <Select
                   value={specesSelected}
