@@ -10,6 +10,7 @@ import {
   Divider,
   Radio,
   Space,
+  Affix,
 } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import Map from "../components/Map";
@@ -84,14 +85,6 @@ export default () => {
               <Col flex="auto"></Col>
               <Col>
                 <Space>
-                  <Button
-                    type="primary"
-                    shape="round"
-                    href="https://www.natural-solutions.eu/contacts"
-                    target="_blank"
-                  >
-                    En savoir plus
-                  </Button>
                   <Switch
                     style={{ marginRight: "1rem" }}
                     onChange={() => {
@@ -180,6 +173,18 @@ export default () => {
               }}
             />
           </Tooltip>
+          <Affix
+            style={{ position: "absolute", right: "1rem", bottom: "1rem" }}
+          >
+            <Button
+              type="primary"
+              shape="round"
+              href="https://www.natural-solutions.eu/contacts"
+              target="_blank"
+            >
+              En savoir plus
+            </Button>
+          </Affix>
         </Content>
       </Layout>
     </Layout>
