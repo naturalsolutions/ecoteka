@@ -19,6 +19,7 @@ export default function LayoutSider(props) {
         defaultActiveKey="1"
         activeKey={props.activeTab}
         style={{ height: "100%" }}
+        onChange={props.onTabChange}
       >
         <TabPane tab="Search" key="1" style={{ padding: "0 1rem" }}>
           <SearchPanel

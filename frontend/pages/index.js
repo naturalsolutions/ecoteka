@@ -123,6 +123,7 @@ export default () => {
           currentGenre={currentGenre}
           onFilterSpecies={onFilterSpecies}
           onSearchCityChange={onSearchCityChange}
+          onTabChange={setActiveTab}
         />
 
         <Content style={{ position: "relative" }}>
