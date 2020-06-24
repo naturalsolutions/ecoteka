@@ -825,7 +825,7 @@
       "source": "satellite",
       "minzoom": 0,
       "filter": ["all"],
-      "layout": { "visibility": "visible" },
+      "layout": { "visibility": "none" },
       "paint": { "raster-opacity": 1 }
     },
     {
