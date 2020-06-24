@@ -6,6 +6,7 @@ export default class Map extends Component {
   constructor(props) {
     super(props);
     this.map = null;
+    this.styleSource = props.styleSource;
     this.state = {
       lng: 2.54,
       lat: 46.7,
@@ -20,7 +21,7 @@ export default class Map extends Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: this.props.styleSource,
+      style: this.styleSource,
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
       filter: this.props.filter,
@@ -36,6 +37,11 @@ export default class Map extends Component {
     );
 
     this.map.on("styledata", this.onStyleData.bind(this));
+    this.map.on("click", this.onMapClick.bind(this));
+
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 200);
   }
 
   componentDidUpdate(prevProps) {
@@ -56,8 +62,26 @@ export default class Map extends Component {
     if (this.props.onStyleData) {
       this.props.onStyleData();
     }
+  }
 
-    window.dispatchEvent(new Event("resize"));
+  onMapClick(e) {
+    const bbox = [
+      [e.point.x - 5, e.point.y - 5],
+      [e.point.x + 5, e.point.y + 5],
+    ];
+
+    var features = this.map.queryRenderedFeatures(bbox, {
+      layers: ["arbres"],
+    });
+
+    if (features.length) {
+      const feature = features.pop();
+      const genre = feature.properties.genre_latin
+        .toLowerCase()
+        .replace(" ", "_");
+
+      this.props.onMapClick(genre);
+    }
   }
 
   render() {

@@ -35,10 +35,9 @@ const themeStyle = {
 export default () => {
   const [isSiderVisible, setIsSiderVisible] = useState(true);
   const [theme, setTheme] = useState("light");
-  const [specesSelected, setSpecesSelected] = useState([]);
   const [filter, setFilter] = useState(null);
   const [communes, setCommunes] = useState([]);
-  const [population, setPopulation] = useState(0);
+  const [currentGenre, setCurrentGenre] = useState(null);
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -63,6 +62,10 @@ export default () => {
     });
 
     setPopulation(data.population);
+  };
+
+  const onMapClick = (genre) => {
+    setCurrentGenre(genre);
   };
 
   return (
@@ -97,6 +100,7 @@ export default () => {
           theme={theme}
           speces={speces}
           communes={communes}
+          currentGenre={currentGenre}
           onFilterSpecies={onFilterSpecies}
           onSearchCityChange={onSearchCityChange}
         />
@@ -106,6 +110,7 @@ export default () => {
             ref={mapRef}
             styleSource={`${process.env.assetPrefix}/assets/${theme}/style.json`}
             filter={filter}
+            onMapClick={onMapClick}
           />
           <Tooltip
             placement="right"
