@@ -13,9 +13,10 @@ async function getInformationByProp(prop, genre) {
   if (prop === "pageimages" && json.hasOwnProperty("query")) {
     const width = 240;
     if (json.query.pages && json.query.pages.length) {
-      return json.query.pages
-        .pop()
-        .thumbnail.source.replace(/\/\d\dpx-/, `/${width}px-`);
+      let image = json.query.pages.pop();
+
+      if (image && image.thumbnail)
+        return image.thumbnail.source.replace(/\/\d\dpx-/, `/${width}px-`);
     }
   }
 }
