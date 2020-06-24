@@ -42,6 +42,7 @@ export default () => {
   const [filter, setFilter] = useState(null);
   const [communes, setCommunes] = useState([]);
   const [currentGenre, setCurrentGenre] = useState(null);
+  const [activeTab, setActiveTab] = useState("1");
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -69,7 +70,15 @@ export default () => {
   };
 
   const onMapClick = (genre) => {
-    setCurrentGenre(genre);
+    if (genre) {
+      if (isSiderVisible) {
+        setIsSiderVisible(false);
+      }
+      setActiveTab("2");
+      setCurrentGenre(genre);
+    } else {
+      setCurrentGenre(null);
+    }
   };
 
   return (
@@ -110,6 +119,7 @@ export default () => {
           theme={appState.theme}
           speces={speces}
           communes={communes}
+          activeTab={activeTab}
           currentGenre={currentGenre}
           onFilterSpecies={onFilterSpecies}
           onSearchCityChange={onSearchCityChange}
