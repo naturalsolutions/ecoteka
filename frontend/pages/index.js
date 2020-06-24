@@ -1,25 +1,12 @@
 import { useState, useEffect, createRef } from "react";
-import {
-  Layout,
-  Button,
-  Row,
-  Col,
-  Tooltip,
-  Switch,
-  Select,
-  Divider,
-  Radio,
-  Statistic,
-  Space,
-  Affix,
-} from "antd";
+import { Layout, Button, Row, Col, Tooltip, Switch, Space, Affix } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
-import SearchCity from "../components/SearchCity";
 import Map from "../components/Map";
 import ViewMode from "../components/ViewMode";
+import LayoutSider from "../components/Layout/Sider";
 import speces from "../public/assets/speces.json";
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 const mapRef = createRef();
 
@@ -53,9 +40,7 @@ export default () => {
   const [communes, setCommunes] = useState([]);
   const [population, setPopulation] = useState(0);
 
-  const filterSpeces = (values) => {
-    setSpecesSelected(values);
-
+  const onFilterSpecies = (values) => {
     if (!values.length) {
       return setFilter(null);
     }
@@ -106,55 +91,20 @@ export default () => {
         </Row>
       </Header>
       <Layout>
-        <Sider
-          theme={theme}
-          collapsed={isSiderVisible}
-          collapsedWidth={0}
+        <LayoutSider
           width={300}
-        >
-          <Row>
-            <Col
-              flex="auto"
-              style={{ display: !isSiderVisible ? "block" : "none" }}
-            >
-              <div
-                style={{
-                  padding: "0 1rem",
-                  boxSizing: "border-box",
-                }}
-              >
-                <Divider orientation="left">Filtre par genre latin</Divider>
-                <Select
-                  value={specesSelected}
-                  onChange={(value) => {
-                    setSpecesSelected(value);
-                    filterSpeces(value);
-                  }}
-                  mode="tags"
-                  style={{ width: "100%" }}
-                >
-                  {speces.map((spece) => (
-                    <Select.Option key={spece} value={spece}>
-                      {spece}
-                    </Select.Option>
-                  ))}
-                </Select>
-                <Divider orientation="left">Filtre par commune</Divider>
-                <SearchCity items={communes} onChange={onSearchCityChange} />
-                <Divider />
-                <Statistic
-                  title="Population"
-                  value={population}
-                  groupSeparator="."
-                />
-              </div>
-            </Col>
-          </Row>
-        </Sider>
+          collapsed={isSiderVisible}
+          theme={theme}
+          speces={speces}
+          communes={communes}
+          onFilterSpecies={onFilterSpecies}
+          onSearchCityChange={onSearchCityChange}
+        />
+
         <Content style={{ position: "relative" }}>
           <Map
             ref={mapRef}
-            style={`${process.env.assetPrefix}/assets/${theme}/style.json`}
+            styleSource={`${process.env.assetPrefix}/assets/${theme}/style.json`}
             filter={filter}
           />
           <Tooltip

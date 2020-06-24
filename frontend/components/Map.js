@@ -20,7 +20,7 @@ export default class Map extends Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: this.props.style,
+      style: this.props.styleSource,
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
       filter: this.props.filter,
@@ -39,8 +39,8 @@ export default class Map extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.style !== this.props.style) {
-      this.map.setStyle(this.props.style);
+    if (prevProps.styleSource !== this.props.styleSource) {
+      this.map.setStyle(this.props.styleSource);
     }
 
     if (prevProps.filter !== this.props.filter) {
@@ -56,6 +56,8 @@ export default class Map extends Component {
     if (this.props.onStyleData) {
       this.props.onStyleData();
     }
+
+    window.dispatchEvent(new Event("resize"));
   }
 
   render() {
