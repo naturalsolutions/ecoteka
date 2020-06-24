@@ -43,7 +43,7 @@ export default function Wikipedia(props) {
         image,
         html,
       });
-    })(genre);
+    })(props.genre);
   }, [props]);
 
   return genre ? (
