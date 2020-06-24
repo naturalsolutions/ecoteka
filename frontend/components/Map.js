@@ -6,8 +6,8 @@ export default class Map extends Component {
   constructor(props) {
     super(props);
     this.map = null;
-    this.styleSource = props.styleSource;
     this.state = {
+      styleSource: props.styleSource,
       lng: 2.54,
       lat: 46.7,
       zoom: 5,
@@ -21,7 +21,7 @@ export default class Map extends Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: this.styleSource,
+      style: this.state.styleSource,
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
       filter: this.props.filter,
@@ -36,7 +36,6 @@ export default class Map extends Component {
       })
     );
 
-    this.map.on("styledata", this.onStyleData.bind(this));
     this.map.on("click", this.onMapClick.bind(this));
 
     setTimeout(() => {
@@ -47,20 +46,13 @@ export default class Map extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.styleSource !== this.props.styleSource) {
       this.map.setStyle(this.props.styleSource);
+      setTimeout(() => {
+        this.map.setFilter("arbres", this.props.filter);
+      }, 200);
     }
 
     if (prevProps.filter !== this.props.filter) {
       this.map.setFilter("arbres", this.props.filter);
-    }
-
-    this.map.on("styledata", () => {
-      this.map.setFilter("arbres", this.props.filter);
-    });
-  }
-
-  onStyleData() {
-    if (this.props.onStyleData) {
-      this.props.onStyleData();
     }
   }
 

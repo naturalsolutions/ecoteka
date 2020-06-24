@@ -33,8 +33,12 @@ const themeStyle = {
 };
 
 export default () => {
+  const [appState, setAppState] = useState({
+    theme: "light",
+    styleSource: `${process.env.assetPrefix}/assets/light/style.json`,
+    checked: false,
+  });
   const [isSiderVisible, setIsSiderVisible] = useState(true);
-  const [theme, setTheme] = useState("light");
   const [filter, setFilter] = useState(null);
   const [communes, setCommunes] = useState([]);
   const [currentGenre, setCurrentGenre] = useState(null);
@@ -70,10 +74,10 @@ export default () => {
 
   return (
     <Layout className="etkMainLayout">
-      <Header style={themeStyle[theme].header}>
+      <Header style={themeStyle[appState.theme].header}>
         <Row align="middle">
           <img
-            src={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
+            src={`${process.env.assetPrefix}/assets/${appState.theme}/logo.svg`}
             height="40px"
           />
           <Col flex="auto">
@@ -82,9 +86,15 @@ export default () => {
               <Col>
                 <Space>
                   <Switch
+                    checked={appState.checked}
                     style={{ marginRight: "1rem" }}
-                    onChange={() => {
-                      setTheme(theme === "light" ? "dark" : "light");
+                    onChange={(value) => {
+                      const theme = value ? "dark" : "light";
+                      setAppState({
+                        checked: value,
+                        theme: theme,
+                        styleSource: `${process.env.assetPrefix}/assets/${theme}/style.json`,
+                      });
                     }}
                   />
                 </Space>
@@ -97,7 +107,7 @@ export default () => {
         <LayoutSider
           width={300}
           collapsed={isSiderVisible}
-          theme={theme}
+          theme={appState.theme}
           speces={speces}
           communes={communes}
           currentGenre={currentGenre}
@@ -108,7 +118,7 @@ export default () => {
         <Content style={{ position: "relative" }}>
           <Map
             ref={mapRef}
-            styleSource={`${process.env.assetPrefix}/assets/${theme}/style.json`}
+            styleSource={appState.styleSource}
             filter={filter}
             onMapClick={onMapClick}
           />
