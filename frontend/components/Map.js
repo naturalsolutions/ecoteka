@@ -63,16 +63,24 @@ export default class Map extends Component {
     ];
 
     var features = this.map.queryRenderedFeatures(bbox, {
-      layers: ["arbres"],
+      layers: ["arbres", "ales"],
     });
 
     if (features.length) {
       const feature = features.pop();
-      const genre = feature.properties.genre_latin
-        .toLowerCase()
-        .replace(" ", "_");
+      let genre = null;
 
-      this.props.onMapClick(genre);
+      if (feature.properties.genre_latin) {
+        genre = feature.properties.genre_latin.toLowerCase().replace(" ", "_");
+      }
+
+      if (feature.properties.genre) {
+        genre = feature.properties.genre.toLowerCase().replace(" ", "_");
+      }
+
+      this.props.onMapClick(genre, feature.properties);
+    } else {
+      this.props.onMapClick(null, null);
     }
   }
 

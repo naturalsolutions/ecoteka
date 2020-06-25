@@ -1,6 +1,7 @@
 import { Tabs, Layout, Empty } from "antd";
 import SearchPanel from "../SearchPanel";
 import Wikipedia from "../Wikipedia";
+import Properties from "../Properties";
 
 const { TabPane } = Tabs;
 
@@ -29,14 +30,11 @@ export default function LayoutSider(props) {
             onFilterSpecies={props.onFilterSpecies}
           ></SearchPanel>
         </TabPane>
-        <TabPane tab="Info" key="2">
+        <TabPane tab="Wikipedia" key="2">
           <Wikipedia genre={props.currentGenre} />
         </TabPane>
-        <TabPane tab="City" key="3">
-          <Empty />
-        </TabPane>
-        <TabPane tab="Layers" key="4">
-          <Empty />
+        <TabPane tab="Properties" key="3" style={{ padding: "0 1rem" }}>
+          <Properties properties={props.currentProperties} />
         </TabPane>
       </Tabs>
     </Layout.Sider>

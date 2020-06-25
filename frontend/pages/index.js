@@ -42,6 +42,7 @@ export default () => {
   const [filter, setFilter] = useState(null);
   const [communes, setCommunes] = useState([]);
   const [currentGenre, setCurrentGenre] = useState(null);
+  const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState("1");
 
   const onFilterSpecies = (values) => {
@@ -65,19 +66,18 @@ export default () => {
     mapRef.current.map.flyTo({
       center: data.center,
     });
-
-    setPopulation(data.population);
   };
 
-  const onMapClick = (genre) => {
-    if (genre) {
-      if (isSiderVisible) {
-        setIsSiderVisible(false);
-      }
-      setActiveTab("2");
-      setCurrentGenre(genre);
-    } else {
-      setCurrentGenre(null);
+  const onMapClick = (genre, properties) => {
+    if ((genre || properties) && isSiderVisible) {
+      setIsSiderVisible(false);
+    }
+
+    setCurrentGenre(genre);
+    setCurrentProperties(properties);
+
+    if (properties) {
+      setActiveTab("3");
     }
   };
 
@@ -121,6 +121,7 @@ export default () => {
           communes={communes}
           activeTab={activeTab}
           currentGenre={currentGenre}
+          currentProperties={currentProperties}
           onFilterSpecies={onFilterSpecies}
           onSearchCityChange={onSearchCityChange}
           onTabChange={setActiveTab}
