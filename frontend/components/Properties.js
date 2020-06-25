@@ -5,7 +5,7 @@ export default function Properties(props) {
     <Descriptions bordered size="small" column={1}>
       {Object.keys(props.properties).map((property) => {
         return (
-          <Descriptions.Item label={property}>
+          <Descriptions.Item label={property} key={property}>
             {props.properties[property]}
           </Descriptions.Item>
         );

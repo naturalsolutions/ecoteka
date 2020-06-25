@@ -62,7 +62,9 @@ export default class Map extends Component {
       [e.point.x + 5, e.point.y + 5],
     ];
 
-    var features = this.map.queryRenderedFeatures(bbox);
+    var features = this.map.queryRenderedFeatures(bbox, {
+      layers: ["arbres"],
+    });
 
     if (features.length) {
       const feature = features.pop();
