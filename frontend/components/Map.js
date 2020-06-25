@@ -63,7 +63,7 @@ export default class Map extends Component {
     ];
 
     var features = this.map.queryRenderedFeatures(bbox, {
-      layers: ["arbres", "ales"],
+      layers: ["arbres"],
     });
 
     if (features.length) {
