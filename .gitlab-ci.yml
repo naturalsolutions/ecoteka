@@ -8,6 +8,18 @@ stages:
   - build
   - pages
 
+data:
+  stage: build
+  image: docker
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:data-latest ./data
+    - docker push ${CI_REGISTRY_IMAGE}:data-latest
+  only:
+    - dev
+  tags:
+    - ns01
+
 build:
   stage: build
   image: docker
