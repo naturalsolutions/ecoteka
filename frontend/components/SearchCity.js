@@ -4,7 +4,7 @@ import { Select, Spin } from "antd";
 export default function SearchCity(props) {
   const [value, setValue] = useState("");
   const [fetching, setFetching] = useState(false);
-  const [items, setItems] = useState(props.items);
+  const [items, setItems] = useState([]);
 
   function onChange(newValue) {
     if (newValue) {

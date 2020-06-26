@@ -12,10 +12,6 @@ export default class Map extends Component {
       lat: 46.7,
       zoom: 5,
     };
-
-    if (props.onStyleDataLoaded) {
-      this.onStyleDataLoaded = props.onStyleDataLoaded;
-    }
   }
 
   componentDidMount() {
@@ -36,52 +32,16 @@ export default class Map extends Component {
       })
     );
 
-    this.map.on("click", this.onMapClick.bind(this));
+    this.map.on("click", (e) => this.props.onMapClick(this.map, e));
+
+    if (this.props.onStyleData) {
+      this.map.on("styledata", this.props.onStyleData);
+    }
 
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
+      this.props.onLoaded(this.map);
     }, 200);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.styleSource !== this.props.styleSource) {
-      this.map.setStyle(this.props.styleSource);
-      setTimeout(() => {
-        this.map.setFilter("arbres", this.props.filter);
-      }, 200);
-    }
-
-    if (prevProps.filter !== this.props.filter) {
-      this.map.setFilter("arbres", this.props.filter);
-    }
-  }
-
-  onMapClick(e) {
-    const bbox = [
-      [e.point.x - 5, e.point.y - 5],
-      [e.point.x + 5, e.point.y + 5],
-    ];
-
-    var features = this.map.queryRenderedFeatures(bbox, {
-      layers: ["arbres"],
-    });
-
-    if (features.length) {
-      const feature = features.pop();
-      let genre = null;
-
-      if (feature.properties.genre_latin) {
-        genre = feature.properties.genre_latin.toLowerCase().replace(" ", "_");
-      }
-
-      if (feature.properties.genre) {
-        genre = feature.properties.genre.toLowerCase().replace(" ", "_");
-      }
-
-      this.props.onMapClick(genre, feature.properties);
-    } else {
-      this.props.onMapClick(null, null);
-    }
   }
 
   render() {

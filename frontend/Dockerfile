@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json .
 RUN npm install 
 COPY . .
-RUN ASSET_PREFIX=${asset_prefix} npm run build && npx next export
+RUN ASSET_PREFIX=${asset_prefix} npm run build && npm run export
 
 FROM nginx:alpine
 

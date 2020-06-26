@@ -1,14 +1,8 @@
-variables:
-  DOCKER_DRIVER: overlay2
-
-services:
-  - docker:dind
-
 stages:
   - build
   - pages
 
-build:
+build-ecoteka-web:
   stage: build
   image: docker
   script:
