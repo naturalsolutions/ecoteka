@@ -8,12 +8,13 @@ export default function ViewMode(props) {
     setViewMode(e.target.value);
 
     if (props.onChange) {
-      props.onChange(viewMode);
+      props.onChange(e.target.value);
     }
   };
 
   return (
     <Radio.Group
+      value={viewMode}
       defaultValue={viewMode}
       buttonStyle="solid"
       onChange={onChange}

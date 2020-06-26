@@ -16,9 +16,12 @@
     "antd": "^4.3.5"
   },
   "devDependencies": {
+    "@types/node": "^14.0.14",
+    "@types/react": "^16.9.41",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-less": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
-    "less": "^3.11.3"
+    "less": "^3.11.3",
+    "typescript": "^3.9.5"
   }
 }
