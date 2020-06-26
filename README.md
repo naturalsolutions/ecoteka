@@ -12,6 +12,7 @@ Clone locally and install:
 
 ```
 git clone git@gitlab.com:natural-solutions/ecoteka.git
+cd frontend
 npm install
 npm run dev
 ```

@@ -9,14 +9,11 @@ import LayoutSider from "../components/Layout/Sider";
 import LayoutSiderToggle from "../components/Layout/SiderToggle";
 import themeStyle from "../lib/themeStyle";
 import speces from "../public/assets/speces.json";
-import layers from "../public/assets/layers.json";
+import layersStyle from "../public/assets/layersStyle.json";
 
 export default () => {
   const mapRef = createRef();
-  const [appState, setAppState] = useState({
-    theme: "light",
-    styleSource: `${process.env.assetPrefix}/assets/light/style.json`,
-  });
+  const [theme, setTheme] = useState("light");
   const [isSiderCollapsed, setIsSiderCollapsed] = useState(true);
   const [filter, setFilter] = useState(null);
   const [currentGenre, setCurrentGenre] = useState(null);
@@ -25,13 +22,14 @@ export default () => {
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
-      return setFilter(null);
+      mapRef.current.map.setFilter("ecoteka-data", null);
+      return;
     }
 
-    setFilter([
-      "all",
-      ["in", "genre_latin", ...values],
-      ["in", "genre", ...values],
+    mapRef.current.map.setFilter("ecoteka-data", [
+      "in",
+      "genre_latin",
+      ...values,
     ]);
   };
 
@@ -50,14 +48,14 @@ export default () => {
     });
   };
 
-  const onMapClick = (e) => {
+  const onMapClick = (map, e) => {
     const bbox = [
       [e.point.x - 5, e.point.y - 5],
       [e.point.x + 5, e.point.y + 5],
     ];
 
-    var features = mapRef.current.map.queryRenderedFeatures(bbox, {
-      layers: layers,
+    var features = map.queryRenderedFeatures(bbox, {
+      layers: ["ecoteka-data"],
     });
 
     if (features.length) {
@@ -86,14 +84,19 @@ export default () => {
   };
 
   const onLayoutHeaderDarkThemeChange = (darkTheme) => {
-    const theme = darkTheme ? "dark" : "light";
-    const newAppState = {
-      theme: theme,
-      styleSource: `${process.env.assetPrefix}/assets/${theme}/style.json`,
-    };
+    const newTheme = darkTheme ? "dark" : "light";
 
-    mapRef.current.map.setStyle(newAppState.styleSource);
-    setAppState(newAppState);
+    for (let layer of Object.keys(layersStyle)) {
+      for (let property of Object.keys(layersStyle[layer][newTheme])) {
+        mapRef.current.map.setPaintProperty(
+          layer,
+          property,
+          layersStyle[layer][newTheme][property]
+        );
+      }
+    }
+
+    setTheme(newTheme);
   };
 
   const onLayoutSiderToggle = () => {
@@ -104,23 +107,15 @@ export default () => {
   };
 
   const onMapLoaded = (map) => {
-    for (const layer of layers) {
-      map.addLayer({
-        id: layer,
-        type: "circle",
-        source: "ales",
-        "source-layer": layer,
-        paint: themeStyle(appState.theme).circlePaint,
-      });
-    }
+    onLayoutHeaderDarkThemeChange(false);
   };
 
   return (
     <LayoutBase
       header={
         <LayoutHeader
-          themeStyle={themeStyle(appState.theme).header}
-          logo={`${process.env.assetPrefix}/assets/${appState.theme}/logo.svg`}
+          themeStyle={themeStyle(theme).header}
+          logo={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
           onDarkThemeChange={onLayoutHeaderDarkThemeChange}
         />
       }
@@ -128,7 +123,7 @@ export default () => {
         <LayoutSider
           width={300}
           collapsed={isSiderCollapsed}
-          theme={appState.theme}
+          theme={theme}
           speces={speces}
           activeTab={activeTab}
           currentGenre={currentGenre}
@@ -141,7 +136,7 @@ export default () => {
     >
       <Map
         ref={mapRef}
-        styleSource={appState.styleSource}
+        styleSource="/assets/style.json"
         filter={filter}
         onMapClick={onMapClick}
         onLoaded={onMapLoaded}

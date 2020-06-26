@@ -1,0 +1,1054 @@
+{
+  "background": {
+    "light": {
+      "background-color": "rgb(246, 247, 253)"
+    },
+    "dark": {
+      "background-color": "rgb(39, 39, 39)"
+    }
+  },
+  "landuse_residential": {
+    "light": {
+      "fill-color": "rgb(239, 241, 250)",
+      "fill-opacity": 0.7
+    },
+    "dark": {
+      "fill-color": "rgb(34, 34, 34)",
+      "fill-opacity": 0.7
+    }
+  },
+  "landcover_grass": {
+    "light": {
+      "fill-color": "rgba(192, 213, 169, 1)",
+      "fill-opacity": 0.4
+    },
+    "dark": {
+      "fill-color": "rgb(157, 185, 157)",
+      "fill-opacity": 0.4
+    }
+  },
+  "landcover_wood": {
+    "light": {
+      "fill-color": "hsl(82, 46%, 72%)",
+      "fill-opacity": {
+        "base": 1,
+        "stops": [
+          [8, 0.6],
+          [22, 1]
+        ]
+      }
+    },
+    "dark": {
+      "fill-color": "rgb(143, 189, 138)",
+      "fill-opacity": {
+        "base": 1,
+        "stops": [
+          [8, 0.6],
+          [22, 1]
+        ]
+      }
+    }
+  },
+  "water": {
+    "light": {
+      "fill-color": "rgb(228, 231, 242)"
+    },
+    "dark": {
+      "fill-color": "rgb(0, 0, 0)"
+    }
+  },
+  "water_intermittent": {
+    "light": {
+      "fill-color": "rgb(228, 231, 242)",
+      "fill-opacity": 0.7
+    },
+    "dark": {
+      "fill-color": "rgb(0, 0, 0)",
+      "fill-opacity": 0.7
+    }
+  },
+  "landcover_ice-shelf": {
+    "light": {
+      "fill-color": "rgb(229, 227, 227)",
+      "fill-opacity": 0.8
+    },
+    "dark": {
+      "fill-color": "hsl(47, 26%, 88%)",
+      "fill-opacity": 0.8
+    }
+  },
+  "landcover_glacier": {
+    "light": {
+      "fill-color": "rgb(243, 243, 243)",
+      "fill-opacity": {
+        "base": 1,
+        "stops": [
+          [0, 1],
+          [8, 0.5]
+        ]
+      }
+    },
+    "dark": {
+      "fill-color": "hsl(47, 22%, 94%)",
+      "fill-opacity": {
+        "base": 1,
+        "stops": [
+          [0, 1],
+          [8, 0.5]
+        ]
+      }
+    }
+  },
+  "landcover_sand": {
+    "light": {
+      "fill-antialias": false,
+      "fill-color": "rgba(232, 214, 38, 1)",
+      "fill-opacity": 0.3
+    },
+    "dark": {
+      "fill-antialias": false,
+      "fill-color": "rgb(110, 188, 42)",
+      "fill-opacity": 0.3
+    }
+  },
+  "waterway_tunnel": {
+    "light": {
+      "line-color": "rgb(228, 231, 242)",
+      "line-dasharray": [3, 3],
+      "line-gap-width": {
+        "stops": [
+          [12, 0],
+          [20, 6]
+        ]
+      },
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [8, 1],
+          [20, 2]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(0, 0, 0)",
+      "line-dasharray": [3, 3],
+      "line-gap-width": {
+        "stops": [
+          [12, 0],
+          [20, 6]
+        ]
+      },
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [8, 1],
+          [20, 2]
+        ]
+      }
+    }
+  },
+  "waterway": {
+    "light": {
+      "line-color": "rgb(228, 231, 242)",
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [8, 1],
+          [20, 8]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(0, 0, 0)",
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [8, 1],
+          [20, 8]
+        ]
+      }
+    }
+  },
+  "waterway_intermittent": {
+    "light": {
+      "line-color": "rgb(228, 231, 242)",
+      "line-dasharray": [2, 1],
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [8, 1],
+          [20, 8]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(0, 0, 0)",
+      "line-dasharray": [2, 1],
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [8, 1],
+          [20, 8]
+        ]
+      }
+    }
+  },
+  "tunnel_railway_transit": {
+    "light": {
+      "line-color": "rgb(110, 90, 174)",
+      "line-dasharray": [3, 3],
+      "line-opacity": {
+        "base": 1,
+        "stops": [
+          [11, 0],
+          [16, 1]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(0, 0, 0)",
+      "line-dasharray": [3, 3],
+      "line-opacity": {
+        "base": 1,
+        "stops": [
+          [11, 0],
+          [16, 1]
+        ]
+      }
+    }
+  },
+  "building": {
+    "light": {
+      "fill-antialias": true,
+      "fill-color": "rgba(222, 211, 190, 1)",
+      "fill-opacity": {
+        "base": 1,
+        "stops": [
+          [13, 0],
+          [15, 1]
+        ]
+      },
+      "fill-outline-color": {
+        "stops": [
+          [15, "rgba(212, 177, 146, 0)"],
+          [16, "rgba(212, 177, 146, 0.5)"]
+        ]
+      }
+    },
+    "dark": {
+      "fill-antialias": true,
+      "fill-color": "rgba(222, 211, 190, 1)",
+      "fill-opacity": {
+        "base": 1,
+        "stops": [
+          [13, 0],
+          [15, 1]
+        ]
+      },
+      "fill-outline-color": {
+        "stops": [
+          [15, "rgba(212, 177, 146, 0)"],
+          [16, "rgba(212, 177, 146, 0.5)"]
+        ]
+      }
+    }
+  },
+  "road_area_pier": {
+    "light": {
+      "fill-antialias": true,
+      "fill-color": "rgb(246, 247, 253)"
+    },
+    "dark": {
+      "fill-antialias": true,
+      "fill-color": "rgb(39, 39, 39)"
+    }
+  },
+  "road_pier": {
+    "light": {
+      "line-color": "rgb(183, 156, 221)",
+      "line-width": {
+        "base": 1.2,
+        "stops": [
+          [15, 1],
+          [17, 4]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(24, 21, 14)",
+      "line-width": {
+        "base": 1.2,
+        "stops": [
+          [15, 1],
+          [17, 4]
+        ]
+      }
+    }
+  },
+  "road_bridge_area": {
+    "light": {
+      "fill-color": "rgb(246, 247, 253)",
+      "fill-opacity": 0.5
+    },
+    "dark": {
+      "fill-color": "rgb(39, 39, 39)",
+      "fill-opacity": 0.5
+    }
+  },
+  "road_path": {
+    "light": {
+      "line-color": "rgb(202, 206, 221)",
+      "line-dasharray": [1, 1],
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 7]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(42, 42, 42)",
+      "line-dasharray": [1, 1],
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 7]
+        ]
+      }
+    }
+  },
+  "road_minor": {
+    "light": {
+      "line-color": "rgb(202, 206, 221)",
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(42, 42, 42)",
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      }
+    }
+  },
+  "tunnel_minor": {
+    "light": {
+      "line-color": "rgb(191, 197, 215)",
+      "line-dasharray": [0.36, 0.18],
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(34, 34, 34)",
+      "line-dasharray": [0.36, 0.18],
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      }
+    }
+  },
+  "tunnel_major": {
+    "light": {
+      "line-color": "rgb(211, 215, 227)",
+      "line-dasharray": [0.28, 0.14],
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [6, 0.5],
+          [20, 30]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(50, 50, 50)",
+      "line-dasharray": [0.28, 0.14],
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [6, 0.5],
+          [20, 30]
+        ]
+      }
+    }
+  },
+  "aeroway_area": {
+    "light": {
+      "fill-color": "rgba(255, 255, 255, 1)",
+      "fill-opacity": {
+        "base": 1,
+        "stops": [
+          [13, 0],
+          [14, 1]
+        ]
+      }
+    },
+    "dark": {
+      "fill-color": "rgba(255, 255, 255, 1)",
+      "fill-opacity": {
+        "base": 1,
+        "stops": [
+          [13, 0],
+          [14, 1]
+        ]
+      }
+    }
+  },
+  "aeroway_taxiway": {
+    "light": {
+      "line-color": "rgb(211, 215, 227)",
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.5,
+        "stops": [
+          [12, 1],
+          [17, 10]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(50, 50, 50)",
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.5,
+        "stops": [
+          [12, 1],
+          [17, 10]
+        ]
+      }
+    }
+  },
+  "aeroway_runway": {
+    "light": {
+      "line-color": "rgb(211, 215, 227)",
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.5,
+        "stops": [
+          [11, 4],
+          [17, 50]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(50, 50, 50)",
+      "line-opacity": 1,
+      "line-width": {
+        "base": 1.5,
+        "stops": [
+          [11, 4],
+          [17, 50]
+        ]
+      }
+    }
+  },
+  "road_trunk_primary": {
+    "light": {
+      "line-color": "rgb(211, 215, 227)",
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [6, 0.5],
+          [20, 30]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(50, 50, 50)",
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [6, 0.5],
+          [20, 30]
+        ]
+      }
+    }
+  },
+  "road_secondary_tertiary": {
+    "light": {
+      "line-color": "rgb(211, 215, 227)",
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [6, 0.5],
+          [20, 20]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(50, 50, 50)",
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [6, 0.5],
+          [20, 20]
+        ]
+      }
+    }
+  },
+  "road_major_motorway": {
+    "light": {
+      "line-color": "rgb(211, 215, 227)",
+      "line-offset": 0,
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [8, 1],
+          [16, 10]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(50, 50, 50)",
+      "line-offset": 0,
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [8, 1],
+          [16, 10]
+        ]
+      }
+    }
+  },
+  "railway_transit": {
+    "light": {
+      "line-color": "rgb(110, 90, 174)",
+      "line-opacity": {
+        "base": 1,
+        "stops": [
+          [11, 0],
+          [16, 1]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(0, 0, 0)",
+      "line-opacity": {
+        "base": 1,
+        "stops": [
+          [11, 0],
+          [16, 1]
+        ]
+      }
+    }
+  },
+  "railway": {
+    "light": {
+      "line-color": "rgb(110, 90, 174)",
+      "line-opacity": {
+        "base": 1,
+        "stops": [
+          [11, 0],
+          [16, 1]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(0, 0, 0)",
+      "line-opacity": {
+        "base": 1,
+        "stops": [
+          [11, 0],
+          [16, 1]
+        ]
+      }
+    }
+  },
+  "waterway-bridge-case": {
+    "light": {
+      "line-color": "#bbbbbb",
+      "line-gap-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      },
+      "line-width": {
+        "base": 1.6,
+        "stops": [
+          [12, 0.5],
+          [20, 10]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "#bbbbbb",
+      "line-gap-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      },
+      "line-width": {
+        "base": 1.6,
+        "stops": [
+          [12, 0.5],
+          [20, 10]
+        ]
+      }
+    }
+  },
+  "waterway-bridge": {
+    "light": {
+      "line-color": "hsl(205, 56%, 73%)",
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "hsl(205, 56%, 73%)",
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      }
+    }
+  },
+  "bridge_minor case": {
+    "light": {
+      "line-color": "rgb(171, 178, 201)",
+      "line-gap-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      },
+      "line-width": {
+        "base": 1.6,
+        "stops": [
+          [12, 0.5],
+          [20, 10]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(17, 17, 17)",
+      "line-gap-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      },
+      "line-width": {
+        "base": 1.6,
+        "stops": [
+          [12, 0.5],
+          [20, 10]
+        ]
+      }
+    }
+  },
+  "bridge_major case": {
+    "light": {
+      "line-color": "rgb(171, 178, 201)",
+      "line-gap-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      },
+      "line-width": {
+        "base": 1.6,
+        "stops": [
+          [12, 0.5],
+          [20, 10]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(17, 17, 17)",
+      "line-gap-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      },
+      "line-width": {
+        "base": 1.6,
+        "stops": [
+          [12, 0.5],
+          [20, 10]
+        ]
+      }
+    }
+  },
+  "bridge_minor": {
+    "light": {
+      "line-color": "rgb(191, 197, 215)",
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(34, 34, 34)",
+      "line-width": {
+        "base": 1.55,
+        "stops": [
+          [4, 0.25],
+          [20, 30]
+        ]
+      }
+    }
+  },
+  "bridge_major": {
+    "light": {
+      "line-color": "rgb(211, 215, 227)",
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [6, 0.5],
+          [20, 30]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(50, 50, 50)",
+      "line-width": {
+        "base": 1.4,
+        "stops": [
+          [6, 0.5],
+          [20, 30]
+        ]
+      }
+    }
+  },
+  "admin_sub": {
+    "light": {
+      "line-color": "rgba(107, 124, 146, 0.5)",
+      "line-dasharray": [2, 1]
+    },
+    "dark": {
+      "line-color": "rgba(0, 0, 0, 0.5)",
+      "line-dasharray": [2, 1]
+    }
+  },
+  "admin_country_z0-4": {
+    "light": {
+      "line-color": "rgb(107, 124, 146)",
+      "line-width": {
+        "base": 1.3,
+        "stops": [
+          [3, 0.5],
+          [22, 15]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(0, 0, 0)",
+      "line-width": {
+        "base": 1.3,
+        "stops": [
+          [3, 0.5],
+          [22, 15]
+        ]
+      }
+    }
+  },
+  "admin_country_z5-": {
+    "light": {
+      "line-color": "rgb(107, 124, 146)",
+      "line-width": {
+        "base": 1.3,
+        "stops": [
+          [3, 0.5],
+          [22, 15]
+        ]
+      }
+    },
+    "dark": {
+      "line-color": "rgb(0, 0, 0)",
+      "line-width": {
+        "base": 1.3,
+        "stops": [
+          [3, 0.5],
+          [22, 15]
+        ]
+      }
+    }
+  },
+  "airport_label": {
+    "light": {
+      "text-color": "rgb(224, 228, 233)",
+      "text-halo-blur": 1,
+      "text-halo-color": "rgba(255, 255, 255, 0.75)",
+      "text-halo-width": 1
+    },
+    "dark": {
+      "text-color": "rgb(78, 78, 78)",
+      "text-halo-blur": 1,
+      "text-halo-color": "rgba(0, 0, 0, 0.75)",
+      "text-halo-width": 1
+    }
+  },
+  "airport_label-fr": {
+    "light": {
+      "text-color": "rgb(224, 228, 233)",
+      "text-halo-blur": 1,
+      "text-halo-color": "rgba(255, 255, 255, 0.75)",
+      "text-halo-width": 1
+    },
+    "dark": {
+      "text-color": "rgb(78, 78, 78)",
+      "text-halo-blur": 1,
+      "text-halo-color": "rgba(0, 0, 0, 0.75)",
+      "text-halo-width": 1
+    }
+  },
+  "road_major_label": {
+    "light": {
+      "text-color": "rgb(107, 124, 146)",
+      "text-halo-color": "rgb(255, 255, 255)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(180, 180, 180)",
+      "text-halo-color": "rgb(0, 0, 0)",
+      "text-halo-width": 2
+    }
+  },
+  "road_major_label-fr": {
+    "light": {
+      "text-color": "rgb(107, 124, 146)",
+      "text-halo-color": "rgb(255, 255, 255)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(180, 180, 180)",
+      "text-halo-color": "rgb(0, 0, 0)",
+      "text-halo-width": 2
+    }
+  },
+  "place_label_other": {
+    "light": {
+      "text-color": "rgb(180, 189, 200)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgb(255, 255, 255)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(116, 116, 116)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgb(0, 0, 0)",
+      "text-halo-width": 2
+    }
+  },
+  "place_label_other-fr": {
+    "light": {
+      "text-color": "rgb(180, 189, 200)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgb(255, 255, 255)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(116, 116, 116)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgb(0, 0, 0)",
+      "text-halo-width": 2
+    }
+  },
+  "place_label_city": {
+    "light": {
+      "text-color": "rgb(107, 124, 146)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(255, 255, 255, 0.75)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(180, 180, 180)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(0, 0, 0, 0.75)",
+      "text-halo-width": 2
+    }
+  },
+  "place_label_city-fr": {
+    "light": {
+      "text-color": "rgb(107, 124, 146)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(255, 255, 255, 0.75)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(180, 180, 180)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(0, 0, 0, 0.75)",
+      "text-halo-width": 2
+    }
+  },
+  "country_label-other": {
+    "light": {
+      "text-color": "rgb(145, 158, 174)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(255, 255, 255, 0.75)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(147, 147, 147)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(0, 0, 0, 0.75)",
+      "text-halo-width": 2
+    }
+  },
+  "country_label-other-fr": {
+    "light": {
+      "text-color": "rgb(145, 158, 174)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(255, 255, 255, 0.75)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(147, 147, 147)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(0, 0, 0, 0.75)",
+      "text-halo-width": 2
+    }
+  },
+  "country_label": {
+    "light": {
+      "text-color": "rgb(145, 158, 174)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(255, 255, 255, 0.75)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(147, 147, 147)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(0, 0, 0, 0.75)",
+      "text-halo-width": 2
+    }
+  },
+  "country_label-fr": {
+    "light": {
+      "text-color": "rgb(145, 158, 174)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(255, 255, 255, 0.75)",
+      "text-halo-width": 2
+    },
+    "dark": {
+      "text-color": "rgb(147, 147, 147)",
+      "text-halo-blur": 0,
+      "text-halo-color": "rgba(0, 0, 0, 0.75)",
+      "text-halo-width": 2
+    }
+  },
+  "ecoteka-data": {
+    "light": {
+      "circle-radius": {
+        "base": 1.75,
+        "stops": [
+          [12, 2],
+          [22, 180]
+        ]
+      },
+      "circle-color": [
+        "match",
+        ["get", "genre"],
+        "Celtis",
+        "#63b598",
+        "Platanus",
+        "#659B5E",
+        "Pinus",
+        "#556F44",
+        "Olea",
+        "#8FAD88",
+        "Malus",
+        "#B9F18C",
+        "Liquidambar",
+        "#04724D",
+        "Autre",
+        "#8DB38B",
+        "Cupressus",
+        "#56876D",
+        "Magnolia",
+        "#4E6E58",
+        "Cedrus",
+        "#77AD78",
+        "Quercus",
+        "#6F8F72",
+        "Catalpa",
+        "#8FD694",
+        "Acer",
+        "#7DBA84",
+        "#6F8F72"
+      ]
+    },
+    "dark": {
+      "circle-radius": {
+        "base": 1.75,
+        "stops": [
+          [12, 2],
+          [22, 180]
+        ]
+      },
+      "circle-color": [
+        "match",
+        ["get", "genre"],
+        "Celtis",
+        "#63b598",
+        "Platanus",
+        "#659B5E",
+        "Pinus",
+        "#556F44",
+        "Olea",
+        "#8FAD88",
+        "Malus",
+        "#B9F18C",
+        "Liquidambar",
+        "#04724D",
+        "Autre",
+        "#8DB38B",
+        "Cupressus",
+        "#56876D",
+        "Magnolia",
+        "#4E6E58",
+        "Cedrus",
+        "#77AD78",
+        "Quercus",
+        "#6F8F72",
+        "Catalpa",
+        "#8FD694",
+        "Acer",
+        "#7DBA84",
+        "#6F8F72"
+      ]
+    }
+  }
+}

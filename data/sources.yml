@@ -1,28 +1,29 @@
-- id: paris
+- id: namr
   country: France
-  city: Paris
-  url: https://www.data.gouv.fr/es/datasets/r/c558ddb2-cc46-4e26-b96a-bd2735a8f343
+  name: Référentiel arbre nam.R
+  url: https://www.data.gouv.fr/fr/datasets/r/4b8881a3-e674-4718-859b-ab0ade24c0ff
   format: GeoJSON
   collection: ecoteka.europe.france
 
 - id: barcelona
-  url: https://opendata-ajuntament.barcelona.cat/data/dataset/27b3f8a7-e536-4eea-b025-ce094817b2bd/resource/28034af4-b636-48e7-b3df-fa1c422e6287/download
-  format: csv
   country: Spain
+  url: https://opendata-ajuntament.barcelona.cat/data/dataset/27b3f8a7-e536-4eea-b025-ce094817b2bd/resource/28034af4-b636-48e7-b3df-fa1c422e6287/download
+  name: Barcelona
+  format: csv
   collection: ecoteka.europe.spain
   long: LONGITUD_WGS84
   lat: LATITUD_WGS84
 
 - id: santiago-de-compostela
   country: Spain
-  city: Santiago de Compostela
+  name: Santiago de Compostela
   url: https://datos.santiagodecompostela.gal/catalogo/dataset/60b1928e-32a9-442a-8f69-0215ba0862a4/resource/fab2344b-3c5c-466b-9e63-2e05e11fd9ce/download/arboredo_points.zip'
   format: zip
   collection: ecoteka.europe.spain
 
 - id: new-york
+  country: USA
+  name: New york
   url: https://data.cityofnewyork.us/api/geospatial/pi5s-9p35?method=export&format=GeoJSON
   format: geojson
-  short: New york
-  country: USA
   collection: ecoteka.north-america.usa

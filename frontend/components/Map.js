@@ -32,7 +32,7 @@ export default class Map extends Component {
       })
     );
 
-    this.map.on("click", this.props.onMapClick);
+    this.map.on("click", (e) => this.props.onMapClick(this.map, e));
 
     if (this.props.onStyleData) {
       this.map.on("styledata", this.props.onStyleData);
