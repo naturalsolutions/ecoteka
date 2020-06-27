@@ -35,13 +35,8 @@ export default class Map extends Component {
     this.map.on("click", (e) => this.props.onMapClick(this.map, e));
 
     if (this.props.onStyleData) {
-      this.map.on("styledata", this.props.onStyleData);
+      this.map.once("styledata", this.props.onStyleData);
     }
-
-    setTimeout(() => {
-      window.dispatchEvent(new Event("resize"));
-      this.props.onLoaded(this.map);
-    }, 200);
   }
 
   render() {
