@@ -108,6 +108,7 @@ export default () => {
 
   const onMapLoaded = (map) => {
     onLayoutHeaderDarkThemeChange(false);
+    window.dispatchEvent(new Event("resize"));
   };
 
   return (
@@ -139,7 +140,7 @@ export default () => {
         styleSource="/assets/style.json"
         filter={filter}
         onMapClick={onMapClick}
-        onLoaded={onMapLoaded}
+        onStyleData={onMapLoaded}
       />
       <LayoutSiderToggle onToggle={onLayoutSiderToggle} />
       <Affix style={{ position: "absolute", left: "1rem", bottom: "1.4rem" }}>

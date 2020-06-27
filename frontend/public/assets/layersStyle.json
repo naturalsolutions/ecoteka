@@ -980,7 +980,7 @@
       },
       "circle-color": [
         "match",
-        ["get", "genre"],
+        ["get", "genre_latin"],
         "Celtis",
         "#63b598",
         "Platanus",
