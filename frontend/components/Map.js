@@ -37,6 +37,12 @@ export default class Map extends Component {
     if (this.props.onStyleData) {
       this.map.once("styledata", this.props.onStyleData);
     }
+
+    window.addEventListener("orientationchange", (e) => {
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 200);
+    });
   }
 
   render() {
