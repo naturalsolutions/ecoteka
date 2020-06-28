@@ -6,7 +6,10 @@
   "layers": [
     {
       "id": "background",
-      "type": "background"
+      "type": "background",
+      "paint": {
+        "background-color": "rgb(246, 247, 253)"
+      }
     },
     {
       "filter": [
