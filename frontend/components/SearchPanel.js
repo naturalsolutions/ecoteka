@@ -15,9 +15,9 @@ export default function SearchPanel(props) {
 
   return (
     <div>
-      <Divider orientation="left">Filtre par commune</Divider>
+      <Divider orientation="left">Search City</Divider>
       <SearchCity items={props.communes} onChange={props.onSearchCityChange} />
-      <Divider orientation="left">Filtre par genre latin</Divider>
+      <Divider orientation="left">Filter By Scientific Name</Divider>
       <Select
         value={selected}
         onChange={onFilter}
