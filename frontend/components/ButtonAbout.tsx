@@ -9,7 +9,7 @@ const ButtonAbout: React.FC = () => {
         href="https://www.natural-solutions.eu/contacts"
         target="_blank"
       >
-        En savoir plus
+        About
       </Button>
     </Affix>
   );

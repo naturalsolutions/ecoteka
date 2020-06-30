@@ -19,7 +19,7 @@ export default function ViewMode(props) {
       buttonStyle="solid"
       onChange={onChange}
     >
-      <Radio.Button value="map">Carte</Radio.Button>
+      <Radio.Button value="map">Map</Radio.Button>
       <Radio.Button value="satellite">Satellite</Radio.Button>
     </Radio.Group>
   );
