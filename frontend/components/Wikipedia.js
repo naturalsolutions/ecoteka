@@ -25,6 +25,10 @@ export default function Wikipedia(props) {
   const [genre, setGenre] = useState(props.genre);
   const [data, setData] = useState({ image: null, html: null });
 
+  function onThemeChange(theme) {
+    return theme === 'light' ? null : { color: 'white' }
+  }
+
   useEffect(() => {
     setGenre(props.genre);
 
@@ -66,6 +70,6 @@ export default function Wikipedia(props) {
       <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
     </div>
   ) : (
-    <Empty />
-  );
+      <Empty style={onThemeChange(props.theme)} />
+    );
 }

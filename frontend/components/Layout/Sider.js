@@ -26,15 +26,16 @@ export default function LayoutSider(props) {
           <SearchPanel
             speces={props.speces}
             communes={props.communes}
+            theme={props.theme}
             onSearchCityChange={props.onSearchCityChange}
             onFilterSpecies={props.onFilterSpecies}
           ></SearchPanel>
         </TabPane>
         <TabPane tab="Wikipedia" key="2">
-          <Wikipedia genre={props.currentGenre} />
+          <Wikipedia theme={props.theme} genre={props.currentGenre} />
         </TabPane>
         <TabPane tab="Properties" key="3" style={{ padding: "0 1rem" }}>
-          <Properties properties={props.currentProperties} />
+          <Properties theme={props.theme} properties={props.currentProperties} />
         </TabPane>
       </Tabs>
     </Layout.Sider>

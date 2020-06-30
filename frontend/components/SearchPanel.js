@@ -5,6 +5,10 @@ import SearchCity from "./SearchCity";
 export default function SearchPanel(props) {
   const [selected, setSelected] = useState([]);
 
+  function onThemeChange(theme) {
+    return theme === 'light' ? null : { color: 'white' }
+  }
+
   function onFilter(value) {
     setSelected(value);
 
@@ -15,9 +19,9 @@ export default function SearchPanel(props) {
 
   return (
     <div>
-      <Divider orientation="left">Search City</Divider>
+      <Divider orientation="left" style={onThemeChange(props.theme)}>Search City</Divider>
       <SearchCity items={props.communes} onChange={props.onSearchCityChange} />
-      <Divider orientation="left">Filter By Scientific Name</Divider>
+      <Divider orientation="left" style={onThemeChange(props.theme)}>Filter By Scientific Name</Divider>
       <Select
         value={selected}
         onChange={onFilter}
