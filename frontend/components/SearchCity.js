@@ -19,6 +19,9 @@ export default function SearchCity(props) {
       if (props.onChange) {
         props.onChange(data);
       }
+    } else {
+      setValue("");
+      setItems([]);
     }
   }
 
@@ -29,8 +32,13 @@ export default function SearchCity(props) {
       setFetching(true);
       const response = await fetch(url);
       const json = await response.json();
+      const items = json.filter(
+        (item) => item.centre && item.centre.coordinates
+      );
       setFetching(false);
-      setItems(json);
+      setItems(items);
+    } else {
+      setItems([]);
     }
   };
 
@@ -38,6 +46,8 @@ export default function SearchCity(props) {
     <Select
       value={value}
       showSearch
+      showArrow={false}
+      defaultActiveFirstOption={false}
       allowClear
       notFoundContent={fetching ? <Spin size="small" /> : null}
       filterOption={false}
