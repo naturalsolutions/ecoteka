@@ -21,21 +21,31 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = (props) => {
 
   return (
     <Layout.Header style={props.themeStyle}>
-      <Row align="middle">
-        <img src={props.logo} height="40px" />
-        <Col flex="auto">
-          <Row justify="start">
-            <Col flex="auto" />
-            <Col>
-              <Space>
-                <Switch
-                  checked={darkTheme}
-                  style={{ marginRight: "1rem" }}
-                  onChange={onDarkThemeChange}
-                />
-              </Space>
-            </Col>
-          </Row>
+      <Row justify="start" align="middle">
+        <Col>
+          <img src={props.logo} height="40px" />
+        </Col>
+        <Col xs={0} md={10}>
+          <h2
+            style={{
+              margin: 0,
+              color: "#01685a",
+              fontSize: "1.8rem",
+              fontWeight: "lighter",
+            }}
+          >
+            3.6 million open trees
+          </h2>
+        </Col>
+        <Col flex="auto" />
+        <Col>
+          <Space>
+            <Switch
+              checked={darkTheme}
+              style={{ marginRight: "1rem" }}
+              onChange={onDarkThemeChange}
+            />
+          </Space>
         </Col>
       </Row>
     </Layout.Header>
