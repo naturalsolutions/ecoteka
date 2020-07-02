@@ -42,10 +42,12 @@ export default () => {
   };
 
   const onSearchCityChange = (data) => {
-    mapRef.current.map.setZoom(12);
-    mapRef.current.map.flyTo({
-      center: data.center,
-    });
+    if (data) {
+      mapRef.current.map.setZoom(12);
+      mapRef.current.map.flyTo({
+        center: data.center,
+      });
+    }
   };
 
   const onMapClick = (map, e) => {
