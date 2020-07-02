@@ -22,10 +22,9 @@ export default function LayoutSider(props) {
         style={{ height: "100%" }}
         onChange={props.onTabChange}
       >
-        <TabPane tab="Search" key="1" style={{ padding: "0 1rem" }}>
+        <TabPane tab="Filters" key="1" style={{ padding: "0 1rem" }}>
           <SearchPanel
             speces={props.speces}
-            communes={props.communes}
             theme={props.theme}
             onSearchCityChange={props.onSearchCityChange}
             onFilterSpecies={props.onFilterSpecies}
@@ -35,7 +34,10 @@ export default function LayoutSider(props) {
           <Wikipedia theme={props.theme} genre={props.currentGenre} />
         </TabPane>
         <TabPane tab="Properties" key="3" style={{ padding: "0 1rem" }}>
-          <Properties theme={props.theme} properties={props.currentProperties} />
+          <Properties
+            theme={props.theme}
+            properties={props.currentProperties}
+          />
         </TabPane>
       </Tabs>
     </Layout.Sider>

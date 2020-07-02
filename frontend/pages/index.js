@@ -1,12 +1,12 @@
 import { useState, createRef, useEffect } from "react";
-import { Button, Affix } from "antd";
+import { Affix } from "antd";
 import Map from "../components/Map";
 import ButtonAbout from "../components/ButtonAbout";
 import ViewMode from "../components/ViewMode";
 import LayoutBase from "../components/Layout/Base";
 import LayoutHeader from "../components/Layout/Header";
 import LayoutSider from "../components/Layout/Sider";
-import LayoutSiderToggle from "../components/Layout/SiderToggle";
+import SearchCity from "../components/SearchCity";
 import themeStyle from "../lib/themeStyle";
 import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
@@ -15,7 +15,7 @@ export default () => {
   const mapRef = createRef();
   const [theme, setTheme] = useState("light");
   const [isSiderCollapsed, setIsSiderCollapsed] = useState(true);
-  const [filter, setFilter] = useState(null);
+  const [filter] = useState(null);
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState("1");
@@ -119,6 +119,7 @@ export default () => {
         <LayoutHeader
           themeStyle={themeStyle(theme).header}
           logo={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
+          onLayoutSiderToggle={onLayoutSiderToggle}
           onDarkThemeChange={onLayoutHeaderDarkThemeChange}
         />
       }
@@ -132,7 +133,6 @@ export default () => {
           currentGenre={currentGenre}
           currentProperties={currentProperties}
           onFilterSpecies={onFilterSpecies}
-          onSearchCityChange={onSearchCityChange}
           onTabChange={setActiveTab}
         />
       }
@@ -144,7 +144,9 @@ export default () => {
         onMapClick={onMapClick}
         onStyleData={onMapLoaded}
       />
-      <LayoutSiderToggle onToggle={onLayoutSiderToggle} />
+      <Affix style={{ position: "absolute", left: "1rem", top: ".4rem" }}>
+        <SearchCity onChange={onSearchCityChange} />
+      </Affix>
       <Affix style={{ position: "absolute", left: "1rem", bottom: "1.4rem" }}>
         <ViewMode onChange={onViewModeChange} />
       </Affix>
