@@ -12,8 +12,8 @@ export default function LayoutSiderToggle(props) {
 
   return (
     <Button
-      icon={active ? <MenuOutlined /> : <CloseCircleOutlined />}
-      style={{ height: "50px", marginRight: ".3rem" }}
+      icon={active ? <CloseCircleOutlined /> : <MenuOutlined />}
+      style={{ height: "50px", marginRight: ".3rem", borderRadius: 0 }}
       type="primary"
       size="large"
       onClick={onClick}
