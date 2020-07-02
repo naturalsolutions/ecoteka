@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Divider, Select } from "antd";
-import SearchCity from "./SearchCity";
 
 export default function SearchPanel(props) {
   const [selected, setSelected] = useState([]);
 
   function onThemeChange(theme) {
-    return theme === 'light' ? null : { color: 'white' }
+    return theme === "light" ? null : { color: "white" };
   }
 
   function onFilter(value) {
@@ -19,9 +18,9 @@ export default function SearchPanel(props) {
 
   return (
     <div>
-      <Divider orientation="left" style={onThemeChange(props.theme)}>Search City</Divider>
-      <SearchCity items={props.communes} onChange={props.onSearchCityChange} />
-      <Divider orientation="left" style={onThemeChange(props.theme)}>Filter By Scientific Name</Divider>
+      <Divider orientation="left" style={onThemeChange(props.theme)}>
+        Filter By Scientific Name
+      </Divider>
       <Select
         value={selected}
         onChange={onFilter}

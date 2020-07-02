@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, MouseEventHandler } from "react";
 import { Layout, Row, Col, Space, Switch } from "antd";
 import { SwitchChangeEventHandler } from "antd/lib/switch";
+import LayoutSiderToggle from "./SiderToggle";
 
 export interface LayoutHeaderProps {
   logo: string;
   themeStyle: React.CSSProperties;
   onDarkThemeChange: SwitchChangeEventHandler;
+  onLayoutSiderToggle: MouseEventHandler<HTMLElement>;
 }
 
 const LayoutHeader: React.FC<LayoutHeaderProps> = (props) => {
@@ -22,6 +24,7 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = (props) => {
   return (
     <Layout.Header style={props.themeStyle}>
       <Row justify="start" align="middle">
+        <LayoutSiderToggle onToggle={props.onLayoutSiderToggle} />
         <Col>
           <img src={props.logo} height="40px" />
         </Col>

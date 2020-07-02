@@ -1,22 +1,22 @@
-import { Button, Tooltip } from "antd";
-import { MenuOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+import { MenuOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 export default function LayoutSiderToggle(props) {
+  const [active, setActive] = useState(false);
+
+  function onClick() {
+    setActive(!active);
+    props.onToggle();
+  }
+
   return (
     <Button
-      icon={<MenuOutlined />}
-      style={{
-        height: "80px",
-      }}
+      icon={active ? <MenuOutlined /> : <CloseCircleOutlined />}
+      style={{ height: "50px", marginRight: ".3rem" }}
       type="primary"
       size="large"
-      style={{
-        borderRadius: 0,
-        top: 0,
-        left: 0,
-        position: "absolute",
-      }}
-      onClick={props.onToggle}
+      onClick={onClick}
     />
   );
 }

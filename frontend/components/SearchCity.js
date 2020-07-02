@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Select, Spin } from "antd";
+import { Select, Spin, Row, Col } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 export default function SearchCity(props) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(null);
   const [fetching, setFetching] = useState(false);
   const [items, setItems] = useState([]);
 
@@ -20,7 +21,7 @@ export default function SearchCity(props) {
         props.onChange(data);
       }
     } else {
-      setValue("");
+      setValue(null);
       setItems([]);
     }
   }
@@ -46,14 +47,27 @@ export default function SearchCity(props) {
     <Select
       value={value}
       showSearch
+      size="large"
       showArrow={false}
       defaultActiveFirstOption={false}
+      placeholder={
+        <Row align="middle" gutter={10}>
+          <Col>
+            <Row>
+              <SearchOutlined />
+            </Row>
+          </Col>
+          <Col>
+            <div>Search for a city</div>
+          </Col>
+        </Row>
+      }
       allowClear
       notFoundContent={fetching ? <Spin size="small" /> : null}
       filterOption={false}
       onChange={onChange}
       onSearch={onSearch}
-      style={{ width: "100%" }}
+      style={{ width: "280px" }}
     >
       {items.map((item) => (
         <Select.Option
