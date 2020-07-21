@@ -825,6 +825,12 @@
       "type": "symbol"
     },
     {
+      "id": "ecoteka-data-osm",
+      "type": "circle",
+      "source": "ecoteka-data-osm",
+      "source-layer": "ecoteka-data"
+    },
+    {
       "id": "ecoteka-data",
       "type": "circle",
       "source": "ecoteka-data",
@@ -847,6 +853,14 @@
       "type": "vector",
       "tiles": [
         "https://natural-solutions.gitlab.io/ecoteka-data/{z}/{x}/{y}.pbf"
+      ],
+      "minzoom": 0,
+      "maxzoom": 12
+    },
+    "ecoteka-data-osm": {
+      "type": "vector",
+      "tiles": [
+        "https://natural-solutions.gitlab.io/ecoteka-data-osm/tiles/{z}/{x}/{y}.pbf"
       ],
       "minzoom": 0,
       "maxzoom": 12
