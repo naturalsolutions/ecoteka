@@ -57,7 +57,7 @@ export default () => {
     ];
 
     var features = map.queryRenderedFeatures(bbox, {
-      layers: ["ecoteka-data"],
+      layers: ["ecoteka-data", "ecoteka-data-osm"],
     });
 
     if (features.length) {

@@ -37,7 +37,7 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = (props) => {
               fontWeight: "lighter",
             }}
           >
-            3.6 million open trees
+            4.6 million open trees
           </h2>
         </Col>
         <Col flex="auto" />
