@@ -1,0 +1,57 @@
+version: "3.3"
+
+services:
+  proxy:
+    ports:
+      - "${NS_ECOTEKA_PROXY_HTTP_PORT}:80"
+      - "${NS_ECOTEKA_PROXY_API_PORT}:8080"
+    command:
+      # Enable Docker in Traefik, so that it reads labels from Docker services
+      - --providers.docker
+      # Do not expose all Docker services, only the ones explicitly exposed
+      - --providers.docker.exposedbydefault=false
+      # Disable Docker Swarm mode for local development
+      # - --providers.docker.swarmmode
+      # Enable the access log, with HTTP requests
+      - --accesslog
+      # Enable the Traefik log, for configurations and errors
+      - --log
+      # Enable the Dashboard and API
+      - --api
+      # Enable the Dashboard and API in insecure mode for local development
+      - --api.insecure=true
+    labels:
+      - traefik.enable=true
+
+  db:
+    ports:
+      - "${NS_ECOTEKA_DB_PORT}:5432"
+    environment:
+      - POSTGRES_SERVER=${NS_ECOTEKA_DB_SERVER}
+      - POSTGRES_USER=${NS_ECOTEKA_DB_USER}
+      - POSTGRES_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
+      - POSTGRES_DB=${NS_ECOTEKA_DB_NAME}
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    labels:
+        - traefik.enable=true
+        - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+        - traefik.http.services.frontend.loadbalancer.server.port=80
+
+  backend:
+    volumes:
+      - ./backend/app/app/main.py:/app/app/main.py
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: /start-reload.sh
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_PREFIX}`)
+      - traefik.http.routers.backend.middlewares=backend
+      - traefik.http.services.backend.loadbalancer.server.port=80
+      - traefik.http.middlewares.backend.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_PREFIX}
+
