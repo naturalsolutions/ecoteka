@@ -6,19 +6,11 @@ services:
       - "${NS_ECOTEKA_PROXY_HTTP_PORT}:80"
       - "${NS_ECOTEKA_PROXY_API_PORT}:8080"
     command:
-      # Enable Docker in Traefik, so that it reads labels from Docker services
       - --providers.docker
-      # Do not expose all Docker services, only the ones explicitly exposed
       - --providers.docker.exposedbydefault=false
-      # Disable Docker Swarm mode for local development
-      # - --providers.docker.swarmmode
-      # Enable the access log, with HTTP requests
       - --accesslog
-      # Enable the Traefik log, for configurations and errors
       - --log
-      # Enable the Dashboard and API
       - --api
-      # Enable the Dashboard and API in insecure mode for local development
       - --api.insecure=true
     labels:
       - traefik.enable=true
@@ -37,21 +29,40 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     labels:
-        - traefik.enable=true
-        - traefik.http.routers.frontend.rule=PathPrefix(`/`)
-        - traefik.http.services.frontend.loadbalancer.server.port=80
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+      - traefik.http.services.frontend.loadbalancer.server.port=80
 
   backend:
     volumes:
-      - ./backend/app/app/main.py:/app/app/main.py
+      - ./backend/app:/app
     build:
       context: ./backend
       dockerfile: Dockerfile
     command: /start-reload.sh
     labels:
       - traefik.enable=true
-      - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_PREFIX}`)
+      - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
       - traefik.http.routers.backend.middlewares=backend
       - traefik.http.services.backend.loadbalancer.server.port=80
-      - traefik.http.middlewares.backend.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_PREFIX}
-
+      - traefik.http.middlewares.backend.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_BASE_PATH}
+    environment:
+      - EXTERNAL_PATH=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
+      - PROJECT_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
+      - ROOT_PATH=${NS_ECOTEKA_BACKEND_BASE_PATH}
+      - SMTP_TLS=${NS_ECOTEKA_BACKEND_SMTP_TLS}
+      - SMTP_PORT=${NS_ECOTEKA_BACKEND_SMTP_PORT}
+      - SMTP_HOST=${NS_ECOTEKA_BACKEND_SMTP_HOST}
+      - SMTP_USER=${NS_ECOTEKA_BACKEND_SMTP_USER}
+      - SMTP_PASSWORD=${NS_ECOTEKA_BACKEND_SMTP_PASSWORD}
+      - EMAILS_FROM_EMAIL=${NS_ECOTEKA_BACKEND_EMAILS_FROM_EMAIL}
+      - EMAILS_FROM_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
+      - EMAIL_RESET_TOKEN_EXPIRE_HOURS=${NS_ECOTEKA_BACKEND_EMAIL_RESET_TOKEN_EXPIRE_HOURS}
+      - EMAILS_TEMPLATES_DIR=${NS_ECOTEKA_BACKEND_EMAILS_TEMPLATES_DIR}
+      - EMAILS_ENABLED=${NS_ECOTEKA_BACKEND_EMAILS_ENABLED}
+      - FIRST_SUPERUSER=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL}
+      - FIRST_SUPERUSER_PASSWORD=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_PASSWORD}
+      - DB_SERVER=${NS_ECOTEKA_DB_SERVER}
+      - DB_USER=${NS_ECOTEKA_DB_USER}
+      - DB_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
+      - DB_NAME=${NS_ECOTEKA_DB_NAME}

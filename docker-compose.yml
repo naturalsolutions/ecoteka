@@ -4,23 +4,20 @@ services:
   proxy:
     image: traefik:v2.2
     networks:
-      - default
       - traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command:
       - --providers.docker
-      # Do not expose all Docker services, only the ones explicitly exposed
       - --providers.docker.exposedbydefault=false
-      # Enable the access log, with HTTP requests
       - --accesslog
-      # Enable the Traefik log, for configurations and errors
       - --log
-      # Enable the Dashboard and API
       - --api
     
   db:
     image: postgres:12
+    networks:
+      - traefik
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
     env_file:
@@ -31,16 +28,12 @@ services:
   frontend:
     image: ${NS_ECOTEKA_FRONTEND_IMAGE}
     networks:
-      - default
       - traefik
 
   backend:
     image: ${NS_ECOTEKA_BACKEND_IMAGE}
     networks:
-      - default
       - traefik
-    environment:
-      - ROOT_PATH=${NS_ECOTEKA_BACKEND_PREFIX}
 
 volumes:
   app-db-data:

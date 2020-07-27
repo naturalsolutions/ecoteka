@@ -1,12 +1,22 @@
 from fastapi import FastAPI
-from pydantic import BaseSettings
+from starlette.middleware.cors import CORSMiddleware
 
-class Settings(BaseSettings):
-    root_path: str = "/api/v1"
+from app.api.api_v1.api import api_router
+from app.core.config import settings
 
-settings = Settings()
-app = FastAPI(root_path=settings.root_path, openapi_prefix=settings.root_path)
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    root_path=settings.ROOT_PATH
+)
 
-@app.get("/aaa")
-def read_root():
-    return {"Hello": "monde"}
+# Set all CORS enabled origins
+if settings.BACKEND_CORS_ORIGINS:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+app.include_router(api_router)
