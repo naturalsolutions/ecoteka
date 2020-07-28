@@ -20,6 +20,214 @@ All work environments need at least the following requirements:
 - [Tippecanoe][tippecanoe] to build vector tilesets.
 
 
+## Quick Start With Docker Compose
+
+To start with docker-compose we just need to copy `.env.example` to `.env`. You 
+can use the following command:
+
+```bash
+$ cp .env.example .env
+``` 
+
+`.env` contains all the environment variables that we can modify in out project.
+
+Once the variables are set, you can start with the following command:
+
+```bash
+$ docker-compose up -d
+
+Starting ecoteka_proxy_1    ... done
+Starting ecoteka_db_1       ... done
+Starting ecoteka_backend_1  ... done
+Starting ecoteka_frontend_1 ... done
+```
+
+## Environment variables
+
+These are the environment variables that you can set in docker-compose to 
+configure it and their default values:
+
+### PROXY
+
+#### `NS_ECOTEKA_PROXY_HTTP_PORT`
+
+The external [Traefik][traefik] port.
+
+By default:
+
+  - 8000
+
+#### `NS_ECOTEKA_PROXY_API_PORT`
+
+The external [Traefik][traefik] API port.
+
+By default:
+
+  - 8080
+
+### DB
+
+#### `NS_ECOTEKA_DB_PORT`
+
+The [PostgreSQL][postgresql] database port.
+
+By default:
+
+  - 5432
+
+#### `NS_ECOTEKA_DB_SERVER`
+
+The [PostgreSQL][postgresql] server host.
+
+By default:
+
+  - db
+
+#### `NS_ECOTEKA_DB_USER`
+
+The [PostgresSQL][postgresql] user.
+
+By default:
+
+  - postgres
+
+#### `NS_ECOTEKA_DB_PASSWORD`
+
+The [PostgresSQL][postgresql] user password.
+
+By default:
+
+  - password
+
+#### `NS_ECOTEKA_DB_NAME`
+
+The [PostgresSQL][postgresql] database name.
+
+By default:
+
+  - ecoteka
+
+### FRONTEND
+
+#### `NS_ECOTEKA_FRONTEND_IMAGE`
+
+The path of the frontend docker image.
+
+By default:
+
+  - registry.gitlab.com/natural-solutions/ecoteka:latest
+
+
+### BACKEND
+
+#### `NS_ECOTEKA_BACKEND_IMAGE`
+
+The path of the backend docker image.
+
+By default:
+
+  - registry.gitlab.com/natural-solutions/ecoteka:backend-latest
+
+#### `NS_ECOTEKA_BACKEND_PROJECT_NAME`
+
+The project name for [FastAPI][fastapi].
+
+By default:
+
+  - ecoTeka
+
+#### `NS_ECOTEKA_BACKEND_BASE_PATH`
+
+To allow [FastAPI][fastapi] to run behind a proxy it is possible to set the
+--root-path parameter to [Uvicorn][uvicorn].
+
+More information can be found on FastAPI's documentation page: https://fastapi.tiangolo.com/advanced/behind-a-proxy/#about-root_path
+
+By default:
+
+  - /api/v1
+
+#### `NS_ECOTEKA_BACKEND_EXTERNAL_PATH`
+
+External URL for API access
+
+By default:
+
+  - http://localhost:8000/api/v1
+
+#### `NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL`
+
+The first time the project is started up, a super admin is created. `NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL` defines the email with which the 
+user will be created.
+
+By default:
+
+  - admin@ecoteka.natural-solutions.eu
+
+#### `NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_PASSWORD`
+
+The password for the super admin user explained above.
+
+By default:
+
+  - password
+
+#### `NS_ECOTEKA_BACKEND_SMTP_TLS`
+
+By default:
+
+  - True
+
+#### `NS_ECOTEKA_BACKEND_SMTP_PORT`
+
+By default:
+
+  - 438
+
+#### `NS_ECOTEKA_BACKEND_SMTP_HOST`
+
+By default:
+
+  - localhost
+
+#### `NS_ECOTEKA_BACKEND_SMTP_USER`
+
+By default:
+
+  - user
+
+#### `NS_ECOTEKA_BACKEND_SMTP_PASSWORD`
+
+By default:
+
+  - password
+
+#### `NS_ECOTEKA_BACKEND_EMAILS_ENABLED`
+
+By default:
+
+  - False
+
+#### `NS_ECOTEKA_BACKEND_EMAILS_TEMPLATES_DIR`
+
+By default:
+
+  - app/app/email-templates/build
+
+#### `NS_ECOTEKA_BACKEND_EMAILS_FROM_EMAIL`
+
+By default:
+
+  - contact@ecoteka.natural-solutions.eu
+
+#### `NS_ECOTEKA_BACKEND_EMAIL_RESET_TOKEN_EXPIRE_HOURS`
+
+By default:
+
+  - 48
+
+
+
 [docker]: https://docs.docker.com/get-docker
 [docker-compose]: https://docs.docker.com/compose/install
 [traefik]: https://docs.traefik.io
@@ -31,28 +239,7 @@ All work environments need at least the following requirements:
 [material-ui]: https://material-ui.com
 [mapbox-gl-js]: https://docs.mapbox.com/mapbox-gl-js/api
 [tippecanoe]: https://github.com/mapbox/tippecanoe
+[uvicorn]: https://www.uvicorn.org/settings
 
 [backend]: https://gitlab.com/natural-solutions/ecoteka/-/tree/dev/backend
 [frontend]: https://gitlab.com/natural-solutions/ecoteka/-/tree/dev/frontend
-
-## Docker Compose
-
-To start with docker-compose we just need to copy `.env.example` to `.env`. We 
-use the following command:
-
-```bash
-$ cp .env.example .env
-``` 
-
-`.env` contains all the environment variables that we can modify in out project.
-
-Once the variables are set, you car start with the following command:
-
-```bash
-$ docker-compose up -d
-
-Starting ecoteka_proxy_1    ... done
-Starting ecoteka_db_1       ... done
-Starting ecoteka_backend_1  ... done
-Starting ecoteka_frontend_1 ... done
-```
