@@ -32,7 +32,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
 
   return (
-    <AppBar position="absolute" color="transparent">
+    <AppBar position="absolute" color="inherit">
       <Toolbar variant="dense">
         <IconButton
           edge="start"
