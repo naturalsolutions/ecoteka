@@ -3,6 +3,7 @@ import Drawer from "@material-ui/core/Drawer";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import ETKToolbar from "../components/Toolbar";
+import ETKMap from "../components/Map";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     height: "100vh",
+    width: "100vw",
     overflow: "auto",
   },
 }));
@@ -31,13 +33,8 @@ export default function Index() {
           onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
         />
 
-        <main className="content">
-          <div className={classes.appBarSpacer} />
-          <Container>
-            <Grid container>
-              <div>hello !</div>
-            </Grid>
-          </Container>
+        <main className={classes.content}>
+          <ETKMap styleSource="/assets/style.json" />
         </main>
       </div>
       <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
