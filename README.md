@@ -42,6 +42,18 @@ Starting ecoteka_backend_1  ... done
 Starting ecoteka_frontend_1 ... done
 ```
 
+With our container running, we should be able to see the main page of the 
+project on the following link:
+
+  - http://localhost:8000
+
+## Access To API Documentation
+
+The project's API documentation is found once the local instance of the 
+backend is started on the next path:
+
+  - http://localhost:8000/api/v1/docs
+
 ## Environment variables
 
 These are the environment variables that you can set in docker-compose to 
