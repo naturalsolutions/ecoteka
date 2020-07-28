@@ -3,6 +3,7 @@ import Drawer from "@material-ui/core/Drawer";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import ETKToolbar from "../components/Toolbar";
+import ETKSidebar from "../components/Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +42,7 @@ export default function Index() {
         </main>
       </div>
       <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-        <div>aaaaa</div>
+        <ETKSidebar />
       </Drawer>
     </React.Fragment>
   );
