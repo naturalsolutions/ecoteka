@@ -1,3 +1,4 @@
+import { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -6,6 +7,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
+import ETKContact from "./Contact";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -34,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
 
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
   return (
     <AppBar className={classes.appBar} position="fixed" color="inherit">
       <Toolbar variant="dense">
@@ -56,10 +60,11 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
             {props.numberOfTrees}
           </Typography>
           <div className={classes.buttons}>
-            <Button color="primary">{props.aboutText}</Button>
+            <Button color="primary" onClick={() => { setIsContactOpen(true); }}>{props.aboutText}</Button>
           </div>
         </Hidden>
       </Toolbar>
+      <ETKContact isOpen={isContactOpen} onClose={() => { setIsContactOpen(false); }} />
     </AppBar>
   );
 };
