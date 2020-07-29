@@ -58,11 +58,13 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           >
             {props.numberOfTrees}
           </Typography>
-          <div className={classes.buttons}>
-            <Button color="primary">{props.aboutText}</Button>
-          </div>
         </Hidden>
-        <ETKDarkToggle onToggle={props.onDarkToggle} />
+        <div className={classes.buttons}>
+          <Hidden smDown>
+            <Button color="primary">{props.aboutText}</Button>
+          </Hidden>
+          <ETKDarkToggle onToggle={props.onDarkToggle} />
+        </div>
       </Toolbar>
     </AppBar>
   );
