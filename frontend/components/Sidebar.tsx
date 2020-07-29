@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   tabPanel: {
-    maxWidth: 500
+    maxWidth: 500,
+    overflowY: 'auto'
   },
   propertyValue: {
     overflowWrap: 'break-word'

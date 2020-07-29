@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 async function getInformationByProp(prop, genre) {
   const url = `https://en.wikipedia.org/w/api.php?action=query&prop=${prop}&titles=${genre}&formatversion=2&origin=*&format=json`;
@@ -51,23 +51,10 @@ export default function Wikipedia(props) {
   }, [props]);
 
   return genre ? (
-    <div
-      style={{
-        position: "absolute",
-        marginTop: "38px",
-        boxSizing: "border-box",
-        left: 0,
-        top: 0,
-        height: "calc(100% - 38px)",
-        width: "100%",
-        overflowY: "scroll",
-        overflowX: "hidden",
-        padding: "1rem",
-      }}
-    >
+    <React.Fragment>
       <img src={data.image} />
       <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
-    </div>
+    </React.Fragment>
   ) : (
       <div>No genre</div>
     );
