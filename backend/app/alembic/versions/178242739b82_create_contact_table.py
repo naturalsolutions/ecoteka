@@ -31,7 +31,7 @@ def upgrade():
     )
 
     op.create_index(op.f("ix_contact_id"), "contact", ["id"], unique=True)
-    op.create_index(op.f("ix_contact_email"), "contact", ["email"], unique=True)
+    op.create_index(op.f("ix_contact_email"), "contact", ["email"])
 
 
 def downgrade():

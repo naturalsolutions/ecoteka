@@ -104,3 +104,20 @@ def verify_password_reset_token(token: str) -> Optional[str]:
         return decoded_token["email"]
     except jwt.JWTError:
         return None
+
+
+def send_contact_request_confirmation(email_to: str, first_name: str, last_name: str) -> None:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - contact request"
+    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "first_name": first_name,
+            "last_name": last_name
+        },
+    )
