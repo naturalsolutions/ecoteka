@@ -1,13 +1,12 @@
 import { useState, createRef } from "react";
 import Drawer from "@material-ui/core/Drawer";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import ETKToolbar from "../components/Toolbar";
 import ETKSidebar from "../components/Sidebar";
 import ETKMap from "../components/Map";
 import { makeStyles } from "@material-ui/core/styles";
-import speces from "../public/assets/speces.json";
 import { Toolbar } from "@material-ui/core";
+import speces from "../public/assets/speces.json";
+import layersStyle from "../public/assets/layersStyle.json";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,6 +77,23 @@ export default function Index() {
     }
   };
 
+  const toggleTheme = (theme) => {
+    for (let layer of Object.keys(layersStyle)) {
+      for (let property of Object.keys(layersStyle[layer][theme])) {
+        mapRef.current.map.setPaintProperty(
+          layer,
+          property,
+          layersStyle[layer][theme][property]
+        );
+      }
+    }
+  };
+
+  const onMapLoaded = (map) => {
+    toggleTheme("light");
+    window.dispatchEvent(new Event("resize"));
+  };
+
   return (
     <React.Fragment>
       <div className={classes.root} role="presentation">
@@ -93,6 +109,7 @@ export default function Index() {
             ref={mapRef}
             styleSource="/assets/style.json"
             onMapClick={onMapClick}
+            onStyleData={onMapLoaded}
           />
         </main>
       </div>
