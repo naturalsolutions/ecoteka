@@ -9,11 +9,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import ETKContact from "./Contact";
 
+import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
+
 export interface ETKToolbarProps {
   logo: string;
   numberOfTrees: string;
   aboutText: string;
   onMenuClick: React.MouseEventHandler<HTMLElement>;
+  onDarkToggle: ETKDarkToggleProps["onToggle"];
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -63,6 +66,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
             <Button color="primary" onClick={() => { setIsContactOpen(true); }}>{props.aboutText}</Button>
           </div>
         </Hidden>
+        <ETKDarkToggle onToggle={props.onDarkToggle} />
       </Toolbar>
       <ETKContact isOpen={isContactOpen} onClose={() => { setIsContactOpen(false); }} />
     </AppBar>

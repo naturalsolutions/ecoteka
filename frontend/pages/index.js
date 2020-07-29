@@ -5,8 +5,11 @@ import ETKSidebar from "../components/Sidebar";
 import ETKMap from "../components/Map";
 import { makeStyles } from "@material-ui/core/styles";
 import { Toolbar } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core/styles";
 import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +31,7 @@ export default function Index() {
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
+  const [currentTheme, setCurrentTheme] = useState("light");
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -77,31 +81,57 @@ export default function Index() {
     }
   };
 
-  const toggleTheme = (theme) => {
+  const toggleMapTheme = (mapTheme) => {
     for (let layer of Object.keys(layersStyle)) {
-      for (let property of Object.keys(layersStyle[layer][theme])) {
+      for (let property of Object.keys(layersStyle[layer][mapTheme])) {
         mapRef.current.map.setPaintProperty(
           layer,
           property,
-          layersStyle[layer][theme][property]
+          layersStyle[layer][mapTheme][property]
         );
       }
     }
   };
 
   const onMapLoaded = (map) => {
-    toggleTheme("light");
+    toggleMapTheme(currentTheme);
     window.dispatchEvent(new Event("resize"));
   };
 
+  const onDarkToggleHandler = (dark) => {
+    const mapTheme = dark ? "light" : "dark";
+
+    setCurrentTheme(mapTheme);
+    toggleMapTheme(mapTheme);
+  };
+
+  const theme = createMuiTheme({
+    palette: {
+      type: currentTheme,
+      primary: {
+        main: "#01685a",
+      },
+      secondary: {
+        main: "#19857b",
+      },
+      error: {
+        main: red.A400,
+      },
+      background: {
+        default: "#fff",
+      },
+    },
+  });
+
   return (
-    <React.Fragment>
+    <ThemeProvider theme={theme}>
       <div className={classes.root} role="presentation">
         <ETKToolbar
           logo="/assets/light/logo.svg"
           numberOfTrees="4.6 millions of trees"
           aboutText="About"
           onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
+          onDarkToggle={onDarkToggleHandler}
         />
 
         <main className={classes.content}>
@@ -128,6 +158,6 @@ export default function Index() {
           onTabChange={setActiveTab}
         />
       </Drawer>
-    </React.Fragment>
+    </ThemeProvider>
   );
 }
