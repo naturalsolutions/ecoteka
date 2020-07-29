@@ -109,7 +109,7 @@ def verify_password_reset_token(token: str) -> Optional[str]:
 def send_contact_request_confirmation(email_to: str, first_name: str, last_name: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - contact request"
-    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
+    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "contact_request.html") as f:
         template_str = f.read()
     send_email(
         email_to=email_to,
