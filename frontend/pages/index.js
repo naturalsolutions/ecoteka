@@ -109,7 +109,7 @@ export default function Index() {
     palette: {
       type: currentTheme,
       primary: {
-        main: "#01685a",
+        main: currentTheme === "light" ? "#01685a" : "#fff",
       },
       secondary: {
         main: "#19857b",
@@ -127,7 +127,7 @@ export default function Index() {
     <ThemeProvider theme={theme}>
       <div className={classes.root} role="presentation">
         <ETKToolbar
-          logo="/assets/light/logo.svg"
+          logo={`/assets/${currentTheme}/logo.svg`}
           numberOfTrees="4.6 millions of trees"
           aboutText="About"
           onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
