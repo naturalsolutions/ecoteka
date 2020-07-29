@@ -44,12 +44,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   return (
     <AppBar className={classes.appBar} position="fixed" color="inherit">
       <Toolbar variant="dense">
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          onClick={props.onMenuClick}
-        >
+        <IconButton edge="start" aria-label="menu" onClick={props.onMenuClick}>
           <MenuIcon />
         </IconButton>
         <img src={props.logo} className={classes.logo} />
@@ -65,12 +60,24 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         </Hidden>
         <div className={classes.buttons}>
           <Hidden smDown>
-            <Button color="primary" onClick={() => { setIsContactOpen(true); }}>{props.aboutText}</Button>
+            <Button
+              color="primary"
+              onClick={() => {
+                setIsContactOpen(true);
+              }}
+            >
+              {props.aboutText}
+            </Button>
           </Hidden>
           <ETKDarkToggle onToggle={props.onDarkToggle} />
         </div>
       </Toolbar>
-      <ETKContact isOpen={isContactOpen} onClose={() => { setIsContactOpen(false); }} />
+      <ETKContact
+        isOpen={isContactOpen}
+        onClose={() => {
+          setIsContactOpen(false);
+        }}
+      />
     </AppBar>
   );
 };
