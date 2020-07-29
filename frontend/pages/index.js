@@ -7,6 +7,7 @@ import ETKSidebar from "../components/Sidebar";
 import ETKMap from "../components/Map";
 import { makeStyles } from "@material-ui/core/styles";
 import speces from "../public/assets/speces.json";
+import { Toolbar } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,7 +68,7 @@ export default function Index() {
       if ((genre || feature.properties) && !isDrawerOpen) {
         setIsDrawerOpen(true);
       }
-      console.log(feature.properties)
+
       setCurrentGenre(genre);
       setCurrentProperties(feature.properties);
 
@@ -83,22 +84,32 @@ export default function Index() {
         <ETKToolbar
           logo="/assets/light/logo.svg"
           numberOfTrees="4.6 millions of trees"
-          aboutText="En savoir plus"
+          aboutText="About"
           onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
         />
 
         <main className={classes.content}>
-          <ETKMap ref={mapRef} styleSource="/assets/style.json" onMapClick={onMapClick} />
+          <ETKMap
+            ref={mapRef}
+            styleSource="/assets/style.json"
+            onMapClick={onMapClick}
+          />
         </main>
       </div>
-      <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+      <Drawer
+        variant="persistent"
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      >
+        <Toolbar variant="dense" />
         <ETKSidebar
           speces={speces}
           activeTab={activeTab}
           currentGenre={currentGenre}
           currentProperties={currentProperties}
           onFilterSpecies={onFilterSpecies}
-          onTabChange={setActiveTab} />
+          onTabChange={setActiveTab}
+        />
       </Drawer>
     </React.Fragment>
   );

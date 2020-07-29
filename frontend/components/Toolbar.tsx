@@ -14,7 +14,10 @@ export interface ETKToolbarProps {
   onMenuClick: React.MouseEventHandler<HTMLElement>;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
   logo: {
     maxHeight: "40px",
   },
@@ -32,7 +35,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
 
   return (
-    <AppBar position="absolute" color="inherit">
+    <AppBar className={classes.appBar} position="fixed" color="inherit">
       <Toolbar variant="dense">
         <IconButton
           edge="start"

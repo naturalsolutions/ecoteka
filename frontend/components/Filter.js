@@ -10,7 +10,6 @@ export default function Filter(props) {
   }
 
   function onFilter(e, value) {
-    console.log('la', value);
     setSelected(value);
 
     if (props.onFilterSpecies) {
