@@ -7,11 +7,14 @@ import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 
+import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
+
 export interface ETKToolbarProps {
   logo: string;
   numberOfTrees: string;
   aboutText: string;
   onMenuClick: React.MouseEventHandler<HTMLElement>;
+  onDarkToggle: ETKDarkToggleProps["onToggle"];
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +62,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
             <Button color="primary">{props.aboutText}</Button>
           </div>
         </Hidden>
+        <ETKDarkToggle onToggle={props.onDarkToggle} />
       </Toolbar>
     </AppBar>
   );
