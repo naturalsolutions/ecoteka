@@ -15,7 +15,7 @@ def user_authentication_headers(
 ) -> Dict[str, str]:
     data = {"username": email, "password": password}
 
-    r = client.post(f"{settings.ROOT_PATH}/login/access-token", data=data)
+    r = client.post(f"/login/access-token", data=data)
     response = r.json()
     auth_token = response["access_token"]
     headers = {"Authorization": f"Bearer {auth_token}"}
