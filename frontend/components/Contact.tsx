@@ -113,8 +113,12 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
         {hasSuccess ?
           <React.Fragment>
             <DialogContent>
-              <CheckCircleIcon style={{ fontSize: 40 }} />
-              <Typography>Votre message a bien été envoyé, nous vous répondrons dans les plus brefs délais !</Typography>
+              <Typography component="div" align="center" color="textSecondary">
+                <CheckCircleIcon style={{ fontSize: 40 }} />
+              </Typography>
+              <Typography align="center">
+                Votre message a bien été envoyé, nous vous répondrons dans les plus brefs délais !
+              </Typography>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => { handleClose() }} color="primary">Retour à l'accueil</Button>
