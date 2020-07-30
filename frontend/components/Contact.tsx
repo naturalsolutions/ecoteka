@@ -11,8 +11,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
 import Backdrop from '@material-ui/core/Backdrop';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import Alert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 import getConfig from "next/config";
@@ -49,6 +53,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
   const [form, setForm] = useState(getFormDefault());
   const [isSending, setIsSending] = useState(false);
   const [hasSuccess, setHasSuccess] = useState(false);
+  const [postErrorMessage, setPostErrorMessage] = useState('');
 
   const handleClose = () => {
     if (isSending) {
@@ -104,23 +109,35 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
 
     setIsSending(true);
 
-    /* const url = `${publicRuntimeConfig.apiUrl}/`;
-    const response = await fetch(url);
-    const json = await response.json(); */
-    setTimeout(() => {
-      onResponse();
-    }, 1500);
-  }
+    const payload: any = {};
+    for (const key in form) {
+      payload[key] = form[key].value;
+    }
 
-  const onResponse = () => {
+    const url = `${publicRuntimeConfig.apiUrl}/contact`;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
     setIsSending(false);
-    let error = false;
-    if (!error) {
+    const json = await response.json();
+    if (response.status == 422) {
+      handleError(json);
+    } else if (response.status == 200) {
       setHasSuccess(true);
       setForm({ ...getFormDefault() });
     } else {
-      //TODO
+      setPostErrorMessage("Erreur interne, veuillez recommencer plus tard.");
     }
+  }
+
+  const handleError = (data) => {
+    data.detail.forEach(error => {
+      const fieldName = error.loc[1];
+      form[fieldName].errorMessage = error.msg;
+    });
+
+    setForm({...form});
   }
 
   return (
@@ -238,9 +255,9 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                       onChange={onInputChange}
                     >
                       <option aria-label="None" value="" />
-                      <option value="dev">Développeur</option>
-                      <option value="po">Product owner</option>
-                      <option value="chef_projet">Chef de projet</option>
+                      <option value="Responsable espaces verts">Responsable espaces verts</option>
+                      <option value="Directeurs de services technique">Directeurs de services technique</option>
+                      <option value="Autres">Autres</option>
                     </Select>
                   </FormControl>
                 </div>
@@ -293,6 +310,28 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
         <Backdrop className={classes.backdrop} open={isSending}>
           <CircularProgress color="inherit" />
         </Backdrop>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
+          }}
+          open={Boolean(postErrorMessage)}
+          onClose={() => { setPostErrorMessage(''); }}
+        >
+          <Alert severity="error" variant="filled" closeText="OK" action={
+            <React.Fragment>
+              <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={() => { setPostErrorMessage(''); }}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </React.Fragment>
+          }>
+            <div dangerouslySetInnerHTML={{ __html: postErrorMessage }}></div>
+          </Alert>
+        </Snackbar>
       </Dialog>
     </React.Fragment>
   );
