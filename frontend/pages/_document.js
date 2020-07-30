@@ -1,7 +1,8 @@
 import * as React from "react";
-import Document, { Head, Main, NextScript } from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
+import { ServerStyleSheets } from "@material-ui/core/styles";
 
-export default class extends Document {
+export default class MyDocument extends Document {
   static async getInitialProps(...args) {
     const documentProps = await Document.getInitialProps(...args);
     const { renderPage } = args[0];
@@ -12,7 +13,7 @@ export default class extends Document {
 
   render() {
     return (
-      <html lang="ko">
+      <Html lang="en">
         <Head>
           <meta
             name="viewport"
@@ -44,7 +45,27 @@ export default class extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }
+
+MyDocument.getInitialProps = async (ctx) => {
+  const sheets = new ServerStyleSheets();
+  const originalRenderPage = ctx.renderPage;
+
+  ctx.renderPage = () =>
+    originalRenderPage({
+      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
+    });
+
+  const initialProps = await Document.getInitialProps(ctx);
+
+  return {
+    ...initialProps,
+    styles: [
+      ...React.Children.toArray(initialProps.styles),
+      sheets.getStyleElement(),
+    ],
+  };
+};
