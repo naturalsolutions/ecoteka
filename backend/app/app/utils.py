@@ -6,7 +6,6 @@ from typing import Any, Dict, Optional
 import emails
 from emails.template import JinjaTemplate
 from jose import jwt
-
 from app.core.config import settings
 
 
@@ -29,6 +28,7 @@ def send_email(
         smtp_options["user"] = settings.SMTP_USER
     if settings.SMTP_PASSWORD:
         smtp_options["password"] = settings.SMTP_PASSWORD
+    logging.info(f"sending email to {email_to} with smtp config {smtp_options}")
     response = message.send(to=email_to, render=environment, smtp=smtp_options)
     logging.info(f"send email result: {response}")
 
@@ -104,3 +104,20 @@ def verify_password_reset_token(token: str) -> Optional[str]:
         return decoded_token["email"]
     except jwt.JWTError:
         return None
+
+
+def send_contact_request_confirmation(email_to: str, first_name: str, last_name: str) -> None:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - contact request"
+    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "contact_request.html") as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "first_name": first_name,
+            "last_name": last_name
+        },
+    )
