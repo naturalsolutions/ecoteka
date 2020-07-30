@@ -1,7 +1,7 @@
-import IconButton from "@material-ui/core/IconButton";
-import Brightness4OutlinedIcon from "@material-ui/icons/Brightness4Outlined";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
-import { useState } from "react";
+import IconButton from '@material-ui/core/IconButton';
+import Brightness4OutlinedIcon from '@material-ui/icons/Brightness4Outlined';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import { useState } from 'react';
 
 export interface ETKDarkToggleProps {
   onToggle?(dark: boolean): void;

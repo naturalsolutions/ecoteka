@@ -1,6 +1,6 @@
-import { Fab } from "@material-ui/core";
-import MyLocationIcon from "@material-ui/icons/MyLocation";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { Fab } from '@material-ui/core';
+import MyLocationIcon from '@material-ui/icons/MyLocation';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 export interface ETKMapGeolocateFabProps {
   map: any;
@@ -9,7 +9,7 @@ export interface ETKMapGeolocateFabProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     fab: {
-      position: "absolute",
+      position: 'absolute',
       bottom: theme.spacing(2),
       right: theme.spacing(2),
     },

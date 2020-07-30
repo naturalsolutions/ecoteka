@@ -1,31 +1,31 @@
-import React, { useState } from "react";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Wikipedia from "./Wikipedia";
-import Filter from "./Filter";
+import React from 'react';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Wikipedia from './Wikipedia';
+import Filter from './Filter';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   logo: {
-    maxHeight: "40px",
+    maxHeight: '40px',
   },
   buttons: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "flex-end",
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'flex-end',
   },
   numberOfTrees: {
-    width: "100%",
+    width: '100%',
   },
   tabPanel: {
     maxWidth: 500,
-    overflowY: "auto",
+    overflowY: 'auto',
   },
   propertyValue: {
-    overflowWrap: "break-word",
+    overflowWrap: 'break-word',
   },
 }));
 
@@ -81,7 +81,7 @@ function Properties(props) {
 function a11yProps(index: any) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
@@ -90,12 +90,11 @@ export interface ETKSidebarProps {
   currentGenre: string;
   currentProperties: any;
   onFilterSpecies: string;
-  onTabChange: Function;
+  onTabChange(): void;
   speces: any[];
 }
 
 const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
-  const classes = useStyles();
   const [activeTab, setActiveTab] = React.useState(props.activeTab);
 
   const handleChange = (event, newValue) => {

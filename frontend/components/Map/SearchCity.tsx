@@ -1,17 +1,17 @@
-import { TextField, CircularProgress } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { useState, useEffect, useRef, Fragment } from "react";
+import { TextField, CircularProgress } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { useState, useEffect, Fragment } from 'react';
 
 export interface ETKMapSearchCityProps {
-  onChange?(item: {}): void;
+  onChange?(item: any): void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     searchCity: {
-      background: "#fff",
-      position: "absolute",
+      background: '#fff',
+      position: 'absolute',
       top: theme.spacing(8),
       right: theme.spacing(2),
     },
@@ -21,14 +21,14 @@ const useStyles = makeStyles((theme: Theme) =>
 const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
   const classes = useStyles();
   const [value, setValue] = useState(null);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let active = true;
 
-    if (inputValue === "" || inputValue.length < 3) {
+    if (inputValue === '' || inputValue.length < 3) {
       setOptions([]);
       return undefined;
     }
