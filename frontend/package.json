@@ -8,12 +8,13 @@
     "start": "next start",
     "export": "next export",
     "lint": "eslint components pages --ext .js,.ts,.tsx",
-    "lint:fix": "npm run lint -- --fix",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
+    "lint:fix": "npm run lint -- --fix"
   },
-  "pre-commit": [
-    "lint:fix"
-  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm lint:fix"
+    }
+  },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -36,6 +37,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
+    "husky": "^4.2.5",
     "prettier": "^2.0.5",
     "typescript": "^3.9.7"
   }
