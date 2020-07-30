@@ -1,25 +1,25 @@
-import { useState, createRef } from "react";
-import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
+import { useState, createRef } from 'react';
+import { Toolbar, Drawer, makeStyles } from '@material-ui/core';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors';
 
-import ETKToolbar from "../components/Toolbar";
-import ETKSidebar from "../components/Sidebar";
-import ETKMap from "../components/Map/Map";
-import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
-import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
-import ETKMapSearchCity from "../components/Map/SearchCity";
-import speces from "../public/assets/speces.json";
-import layersStyle from "../public/assets/layersStyle.json";
+import ETKToolbar from '../components/Toolbar';
+import ETKSidebar from '../components/Sidebar';
+import ETKMap from '../components/Map/Map';
+import ETKMapGeolocateFab from '../components/Map/GeolocateFab';
+import ETKMapSateliteToggle from '../components/Map/MapSatelliteToggle';
+import ETKMapSearchCity from '../components/Map/SearchCity';
+import speces from '../public/assets/speces.json';
+import layersStyle from '../public/assets/layersStyle.json';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    display: 'flex',
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: "100vh",
+    height: '100vh',
   },
 }));
 
@@ -30,34 +30,34 @@ export default function Index() {
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
-  const [currentTheme, setCurrentTheme] = useState("light");
+  const [currentTheme, setCurrentTheme] = useState('light');
   const theme = createMuiTheme({
     palette: {
       type: currentTheme,
       primary: {
-        main: currentTheme === "light" ? "#01685a" : "#fff",
+        main: currentTheme === 'light' ? '#01685a' : '#fff',
       },
       secondary: {
-        main: "#19857b",
+        main: '#19857b',
       },
       error: {
         main: red.A400,
       },
       background: {
-        default: "#fff",
+        default: '#fff',
       },
     },
   });
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
-      mapRef.current.map.setFilter("ecoteka-data", null);
+      mapRef.current.map.setFilter('ecoteka-data', null);
       return;
     }
 
-    mapRef.current.map.setFilter("ecoteka-data", [
-      "in",
-      "genre_latin",
+    mapRef.current.map.setFilter('ecoteka-data', [
+      'in',
+      'genre_latin',
       ...values,
     ]);
   };
@@ -69,7 +69,7 @@ export default function Index() {
     ];
 
     var features = map.queryRenderedFeatures(bbox, {
-      layers: ["ecoteka-data", "ecoteka-data-osm"],
+      layers: ['ecoteka-data', 'ecoteka-data-osm'],
     });
 
     if (features.length) {
@@ -77,11 +77,11 @@ export default function Index() {
       let genre = null;
 
       if (feature.properties.genre_latin) {
-        genre = feature.properties.genre_latin.toLowerCase().replace(" ", "_");
+        genre = feature.properties.genre_latin.toLowerCase().replace(' ', '_');
       }
 
       if (feature.properties.genre) {
-        genre = feature.properties.genre.toLowerCase().replace(" ", "_");
+        genre = feature.properties.genre.toLowerCase().replace(' ', '_');
       }
 
       if ((genre || feature.properties) && !isDrawerOpen) {
@@ -111,11 +111,11 @@ export default function Index() {
 
   const onMapLoaded = (map) => {
     toggleMapTheme(currentTheme);
-    window.dispatchEvent(new Event("resize"));
+    window.dispatchEvent(new Event('resize'));
   };
 
   const onDarkToggleHandler = (dark) => {
-    const mapTheme = dark ? "light" : "dark";
+    const mapTheme = dark ? 'light' : 'dark';
 
     setCurrentTheme(mapTheme);
     toggleMapTheme(mapTheme);
@@ -123,9 +123,9 @@ export default function Index() {
 
   const onMapSateliteToggleHandler = (active) => {
     mapRef.current.map.setLayoutProperty(
-      "satellite",
-      "visibility",
-      active === "map" ? "none" : "visible"
+      'satellite',
+      'visibility',
+      active === 'map' ? 'none' : 'visible'
     );
   };
 
