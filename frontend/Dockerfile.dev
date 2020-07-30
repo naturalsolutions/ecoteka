@@ -9,4 +9,4 @@ RUN npx next telemetry disable
 
 EXPOSE 80
 
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["./start-dev.sh"]
