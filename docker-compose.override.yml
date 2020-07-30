@@ -25,13 +25,15 @@ services:
       - POSTGRES_DB=${NS_ECOTEKA_DB_NAME}
 
   frontend:
+    volumes:
+      - ./frontend:/app
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     labels:
       - traefik.enable=true
       - traefik.http.routers.frontend.rule=PathPrefix(`/`)
-      - traefik.http.services.frontend.loadbalancer.server.port=80
+      - traefik.http.services.frontend.loadbalancer.server.port=3000
 
   backend:
     volumes:
