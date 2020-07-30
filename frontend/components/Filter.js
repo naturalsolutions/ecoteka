@@ -1,12 +1,12 @@
-import { useState } from "react";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
+import { useState } from 'react';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 
 export default function Filter(props) {
   const [selected, setSelected] = useState();
 
   function onThemeChange(theme) {
-    return theme === "light" ? null : { color: "white" };
+    return theme === 'light' ? null : { color: 'white' };
   }
 
   function onFilter(e, value) {

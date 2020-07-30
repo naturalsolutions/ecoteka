@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 async function getInformationByProp(prop, genre) {
   const url = `https://en.wikipedia.org/w/api.php?action=query&prop=${prop}&titles=${genre}&formatversion=2&origin=*&format=json`;
   const response = await fetch(url);
   const json = await response.json();
 
-  if (prop === "extracts" && json.hasOwnProperty("query")) {
+  if (
+    prop === 'extracts' &&
+    Object.prototype.hasOwnProperty.call(json, 'query')
+  ) {
     return json.query.pages.pop().extract;
   }
 
-  if (prop === "pageimages" && json.hasOwnProperty("query")) {
+  if (
+    prop === 'pageimages' &&
+    Object.prototype.hasOwnProperty.call(json, 'query')
+  ) {
     const width = 240;
     if (json.query.pages && json.query.pages.length) {
       let image = json.query.pages.pop();
@@ -25,7 +31,7 @@ export default function Wikipedia(props) {
   const [data, setData] = useState({ image: null, html: null });
 
   function onThemeChange(theme) {
-    return theme === "light" ? null : { color: "white" };
+    return theme === 'light' ? null : { color: 'white' };
   }
 
   useEffect(() => {
@@ -36,11 +42,11 @@ export default function Wikipedia(props) {
         setData({ image: null, html: null });
         return;
       }
-      const html = await getInformationByProp("extracts", genre);
+      const html = await getInformationByProp('extracts', genre);
       let image = null;
 
       if (html) {
-        image = await getInformationByProp("pageimages", genre);
+        image = await getInformationByProp('pageimages', genre);
       }
 
       setData({

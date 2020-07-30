@@ -109,7 +109,7 @@ export default function Index() {
     }
   };
 
-  const onMapLoaded = (map) => {
+  const onMapLoaded = () => {
     toggleMapTheme(currentTheme);
     window.dispatchEvent(new Event('resize'));
   };

@@ -1,5 +1,5 @@
-import { Component } from "react";
-import mapboxgl from "mapbox-gl";
+import { Component } from 'react';
+import mapboxgl from 'mapbox-gl';
 
 export default class ETKMap extends Component {
   constructor(props) {
@@ -31,15 +31,15 @@ export default class ETKMap extends Component {
     });
 
     this.map.addControl(this.geolocate);
-    this.map.on("click", (e) => this.props.onMapClick(this.map, e));
+    this.map.on('click', (e) => this.props.onMapClick(this.map, e));
 
     if (this.props.onStyleData) {
-      this.map.once("styledata", this.props.onStyleData);
+      this.map.once('styledata', this.props.onStyleData);
     }
 
-    window.addEventListener("orientationchange", (e) => {
+    window.addEventListener('orientationchange', (e) => {
       setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
+        window.dispatchEvent(new Event('resize'));
       }, 200);
     });
   }
@@ -49,8 +49,8 @@ export default class ETKMap extends Component {
       <div
         ref={(el) => (this.mapContainer = el)}
         style={{
-          width: "100%",
-          height: "100%",
+          width: '100%',
+          height: '100%',
         }}
       />
     );
