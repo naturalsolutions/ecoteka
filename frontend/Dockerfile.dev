@@ -3,10 +3,10 @@ FROM node
 ARG asset_prefix
 WORKDIR /app
 COPY package.json .
-RUN npm install 
+RUN npm install
 COPY . .
 RUN npx next telemetry disable
 
-EXPOSE 80
+EXPOSE 3000
 
-ENTRYPOINT ["./start-dev.sh"]
+ENTRYPOINT [ "./start-dev.sh" ]
