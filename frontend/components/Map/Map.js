@@ -1,11 +1,11 @@
 import { Component } from "react";
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 
 export default class ETKMap extends Component {
   constructor(props) {
     super(props);
     this.map = null;
+    this.geolocate = null;
     this.state = {
       styleSource: props.styleSource,
       lng: 2.54,
@@ -23,15 +23,14 @@ export default class ETKMap extends Component {
       filter: this.props.filter,
     });
 
-    this.map.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        trackUserLocation: true,
-      })
-    );
+    this.geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      trackUserLocation: true,
+    });
 
+    this.map.addControl(this.geolocate);
     this.map.on("click", (e) => this.props.onMapClick(this.map, e));
 
     if (this.props.onStyleData) {

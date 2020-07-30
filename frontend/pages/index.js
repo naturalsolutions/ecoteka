@@ -1,15 +1,15 @@
 import { useState, createRef } from "react";
-import Drawer from "@material-ui/core/Drawer";
+import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { red } from "@material-ui/core/colors";
+
 import ETKToolbar from "../components/Toolbar";
 import ETKSidebar from "../components/Sidebar";
-import ETKMap from "../components/Map";
-import { makeStyles } from "@material-ui/core/styles";
-import { Toolbar } from "@material-ui/core";
-import { ThemeProvider } from "@material-ui/core/styles";
+import ETKMap from "../components/Map/Map";
+import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
+import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
-import { createMuiTheme } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,8 +19,6 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     height: "100vh",
-    width: "100vw",
-    overflow: "auto",
   },
 }));
 
@@ -32,6 +30,23 @@ export default function Index() {
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [currentTheme, setCurrentTheme] = useState("light");
+  const theme = createMuiTheme({
+    palette: {
+      type: currentTheme,
+      primary: {
+        main: currentTheme === "light" ? "#01685a" : "#fff",
+      },
+      secondary: {
+        main: "#19857b",
+      },
+      error: {
+        main: red.A400,
+      },
+      background: {
+        default: "#fff",
+      },
+    },
+  });
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -105,23 +120,13 @@ export default function Index() {
     toggleMapTheme(mapTheme);
   };
 
-  const theme = createMuiTheme({
-    palette: {
-      type: currentTheme,
-      primary: {
-        main: currentTheme === "light" ? "#01685a" : "#fff",
-      },
-      secondary: {
-        main: "#19857b",
-      },
-      error: {
-        main: red.A400,
-      },
-      background: {
-        default: "#fff",
-      },
-    },
-  });
+  const onMapSateliteToggleHandler = (active) => {
+    mapRef.current.map.setLayoutProperty(
+      "satellite",
+      "visibility",
+      active === "map" ? "none" : "visible"
+    );
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -141,6 +146,8 @@ export default function Index() {
             onMapClick={onMapClick}
             onStyleData={onMapLoaded}
           />
+          <ETKMapGeolocateFab map={mapRef} />
+          <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
         </main>
       </div>
       <Drawer

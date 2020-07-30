@@ -25,7 +25,7 @@ export default function Wikipedia(props) {
   const [data, setData] = useState({ image: null, html: null });
 
   function onThemeChange(theme) {
-    return theme === 'light' ? null : { color: 'white' }
+    return theme === "light" ? null : { color: "white" };
   }
 
   useEffect(() => {
@@ -56,6 +56,6 @@ export default function Wikipedia(props) {
       <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
     </React.Fragment>
   ) : (
-      <div>No genre</div>
-    );
+    <div>No genre</div>
+  );
 }
