@@ -8,6 +8,7 @@ import ETKSidebar from "../components/Sidebar";
 import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
 import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
+import ETKMapSearchCity from "../components/Map/SearchCity";
 import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
 
@@ -128,6 +129,15 @@ export default function Index() {
     );
   };
 
+  const onSearchCityChangeHandler = (city) => {
+    if (city.centre && city.centre.coordinates) {
+      mapRef.current.map.setZoom(12);
+      mapRef.current.map.flyTo({
+        center: city.centre.coordinates,
+      });
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root} role="presentation">
@@ -146,6 +156,7 @@ export default function Index() {
             onMapClick={onMapClick}
             onStyleData={onMapLoaded}
           />
+          <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
           <ETKMapGeolocateFab map={mapRef} />
           <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
         </main>

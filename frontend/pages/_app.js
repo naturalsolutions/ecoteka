@@ -6,6 +6,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
+
   React.useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
 
