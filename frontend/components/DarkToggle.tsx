@@ -16,7 +16,7 @@ const ETKDarkToggle: React.FC<ETKDarkToggleProps> = (props) => {
   }
 
   return (
-    <IconButton onClick={onClickHandler}>
+    <IconButton size="small" onClick={onClickHandler}>
       {dark ? <Brightness4Icon /> : <Brightness4OutlinedIcon />}
     </IconButton>
   );

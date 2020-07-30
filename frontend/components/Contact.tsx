@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
+import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 export interface ETKContactProps {
-  isOpen: boolean,
-  onClose: Function
+  isOpen: boolean;
+  onClose: Function;
 }
 
 const useStyles = makeStyles((theme) => createStyles({
@@ -26,15 +26,15 @@ const useStyles = makeStyles((theme) => createStyles({
 const ETKContact: React.FC<ETKContactProps> = (props) => {
   const classes = useStyles();
 
+  // TODO: some interface ?
   const getFormDefault = () => {
     return {
       email: {} as any,
       subject: {} as any,
       body: {} as any
     };
-  }
+  };
 
-  // TODO: some interface ?
   const [form, setForm] = useState(getFormDefault());
   const [isSending, setIsSending] = useState(false);
   const [hasSuccess, setHasSuccess] = useState(false);
@@ -44,22 +44,22 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
       return;
     }
     props.onClose && props.onClose();
-  }
+  };
 
   const handleOnEnter = () => {
     console.log('handleonEnter');
     setHasSuccess(false);
-  }
+  };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     form[e.target.name].value = e.target.value;
     setForm({ ...form });
-  }
+  };
 
   const validateEmail = (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
-  }
+  };
 
   const submit = () => {
     // TODO: use AJV ?
@@ -71,7 +71,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
     }
 
     if (!validateEmail(form.email.value)) {
-      form.email.errorMessage = "Veuillez saisir un email valide."
+      form.email.errorMessage = "Veuillez saisir un email valide.";
     }
 
     setForm({ ...form });

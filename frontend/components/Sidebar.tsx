@@ -22,11 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
   tabPanel: {
     maxWidth: 500,
-    overflowY: 'auto'
+    overflowY: "auto",
   },
   propertyValue: {
-    overflowWrap: 'break-word'
-  }
+    overflowWrap: "break-word",
+  },
 }));
 
 interface TabPanelProps {
@@ -47,23 +47,14 @@ function TabPanel(props: TabPanelProps) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
-
     >
-      {value === index && (
-        <Box p={3}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
 }
 
 function Properties(props) {
   const classes = useStyles();
-
-  function onThemeChange(theme) {
-    return theme === 'light' ? null : { color: 'white' }
-  }
 
   return props.properties ? (
     <Grid container spacing={3}>
@@ -83,24 +74,24 @@ function Properties(props) {
       })}
     </Grid>
   ) : (
-      <div>No properties</div>
-    );
+    <div>No properties</div>
+  );
 }
 
 function a11yProps(index: any) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
 export interface ETKSidebarProps {
-  activeTab: number,
-  currentGenre: string,
-  currentProperties: any,
-  onFilterSpecies: string,
-  onTabChange: Function,
-  speces: any[]
+  activeTab: number;
+  currentGenre: string;
+  currentProperties: any;
+  onFilterSpecies: string;
+  onTabChange: Function;
+  speces: any[];
 }
 
 const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
@@ -113,7 +104,11 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
 
   return (
     <React.Fragment>
-      <Tabs value={activeTab} onChange={handleChange} aria-label="simple tabs example">
+      <Tabs
+        value={activeTab}
+        onChange={handleChange}
+        aria-label="simple tabs example"
+      >
         <Tab label="Wikipedia" {...a11yProps(0)} />
         <Tab label="Properties" {...a11yProps(1)} />
         <Tab label="Filter" {...a11yProps(2)} />
