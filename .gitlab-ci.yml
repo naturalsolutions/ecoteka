@@ -10,7 +10,7 @@ build_frontend:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-latest ./frontend
     - docker push ${CI_REGISTRY_IMAGE}:frontend-latest
-    - docker system prune -a
+    - docker system prune -a -f
   only:
     - 11-deploy-ci-cd
   tags:
@@ -23,7 +23,7 @@ build_backend:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-latest ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-latest
-    - docker system prune -a
+    - docker system prune -a -f
   only:
     - 11-deploy-ci-cd
   tags:
