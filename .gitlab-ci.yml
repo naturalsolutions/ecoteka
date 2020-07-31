@@ -1,9 +1,34 @@
 stages:
   - build
-  - pages
+  - build_prod
+  - pages_prod
+
+build_fronted:
+  stage: build
+  image: docker
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-latest ./frontend
+    - docker push ${CI_REGISTRY_IMAGE}:frontend-latest
+  only:
+    - 11-deploy-ci-cd
+  tags:
+    - ns01
+
+build_backend:
+  stage: build
+  image: docker
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-latest ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-latest
+  only:
+    - 11-deploy-ci-cd
+  tags:
+    - ns01
 
 build-ecoteka-web:
-  stage: build
+  stage: build_prod
   image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
@@ -16,7 +41,7 @@ build-ecoteka-web:
 
 pages:
   image: ${CI_REGISTRY_IMAGE}:latest
-  stage: pages
+  stage: pages_prod
   script:
     - cp -r /usr/share/nginx/html public
   artifacts:
