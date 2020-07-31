@@ -3,6 +3,8 @@ version: "3.3"
 services:
   proxy:
     image: traefik:v2.2
+    ports:
+      - "80:80"
     networks:
       - traefik
     volumes:
