@@ -2,6 +2,7 @@ stages:
   - build
   - build_prod
   - pages_prod
+  - deploy
 
 build_frontend:
   stage: build
@@ -24,6 +25,15 @@ build_backend:
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-latest ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-latest
     - docker system prune -a -f
+  only:
+    - 11-deploy-ci-cd
+  tags:
+    - ns01
+
+deploy:
+  stage: deploy
+  script:
+    - cd /opt/ecoteka && ansible-playbook -i inventory ecoteka.yml
   only:
     - 11-deploy-ci-cd
   tags:
