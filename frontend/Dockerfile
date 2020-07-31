@@ -1,12 +1,11 @@
 FROM node as builder
 
-ARG asset_prefix
 WORKDIR /app
 COPY package.json .
 RUN npm install 
 COPY . .
 RUN npx next telemetry disable
-RUN ASSET_PREFIX=${asset_prefix} npm run build && npm run export
+RUN npm run build && npm run export
 
 FROM nginx:alpine
 
