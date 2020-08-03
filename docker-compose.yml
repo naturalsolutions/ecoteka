@@ -1,8 +1,10 @@
-version: '3.3'
+version: "3.3"
 
 services:
   proxy:
     image: traefik:v2.2
+    ports:
+      - "80:80"
     networks:
       - traefik
     volumes:
@@ -13,7 +15,9 @@ services:
       - --accesslog
       - --log
       - --api
-    
+    labels:
+      - traefik.enable=true
+
   db:
     image: postgres:12
     networks:
@@ -29,15 +33,47 @@ services:
     image: ${NS_ECOTEKA_FRONTEND_IMAGE}
     networks:
       - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+      - traefik.http.services.frontend.loadbalancer.server.port=80
+    environment:
+      - NS_ECOTEKA_FRONTEND_BACKEND_API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
 
   backend:
     image: ${NS_ECOTEKA_BACKEND_IMAGE}
     networks:
       - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
+      - traefik.http.routers.backend.middlewares=backend
+      - traefik.http.services.backend.loadbalancer.server.port=80
+      - traefik.http.middlewares.backend.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_BASE_PATH}
+    environment:
+      - EXTERNAL_PATH=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
+      - PROJECT_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
+      - ROOT_PATH=${NS_ECOTEKA_BACKEND_BASE_PATH}
+      - SMTP_TLS=${NS_ECOTEKA_BACKEND_SMTP_TLS}
+      - SMTP_PORT=${NS_ECOTEKA_BACKEND_SMTP_PORT}
+      - SMTP_HOST=${NS_ECOTEKA_BACKEND_SMTP_HOST}
+      - SMTP_USER=${NS_ECOTEKA_BACKEND_SMTP_USER}
+      - SMTP_PASSWORD=${NS_ECOTEKA_BACKEND_SMTP_PASSWORD}
+      - EMAILS_FROM_EMAIL=${NS_ECOTEKA_BACKEND_EMAILS_FROM_EMAIL}
+      - EMAILS_FROM_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
+      - EMAIL_RESET_TOKEN_EXPIRE_HOURS=${NS_ECOTEKA_BACKEND_EMAIL_RESET_TOKEN_EXPIRE_HOURS}
+      - EMAILS_TEMPLATES_DIR=${NS_ECOTEKA_BACKEND_EMAILS_TEMPLATES_DIR}
+      - EMAILS_ENABLED=${NS_ECOTEKA_BACKEND_EMAILS_ENABLED}
+      - FIRST_SUPERUSER=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL}
+      - FIRST_SUPERUSER_PASSWORD=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_PASSWORD}
+      - DB_SERVER=${NS_ECOTEKA_DB_SERVER}
+      - DB_USER=${NS_ECOTEKA_DB_USER}
+      - DB_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
+      - DB_NAME=${NS_ECOTEKA_DB_NAME}
 
 volumes:
   app-db-data:
 
-networks: 
-  traefik: 
+networks:
+  traefik:
     external: true

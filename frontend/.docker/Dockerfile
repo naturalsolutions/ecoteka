@@ -1,18 +1,18 @@
 FROM node as builder
 
-ARG asset_prefix
 WORKDIR /app
 COPY package.json .
 RUN npm install 
 COPY . .
 RUN npx next telemetry disable
-RUN ASSET_PREFIX=${asset_prefix} npm run build && npm run export
+RUN npm run build && npm run export
 
 FROM nginx:alpine
 
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/out /usr/share/nginx/html
+COPY .docker/docker-entrypoint.sh /docker-entrypoint.sh
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
