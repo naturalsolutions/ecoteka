@@ -6,7 +6,8 @@ COPY package.json .
 RUN npm install
 COPY . .
 RUN npx next telemetry disable
+COPY .docker/start-dev.sh /docker-entrypoint.sh
 
 EXPOSE 3000
 
-ENTRYPOINT [ "./start-dev.sh" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
