@@ -6,18 +6,18 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import Grid from '@material-ui/core/Grid';
-import Backdrop from '@material-ui/core/Backdrop';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import Alert from '@material-ui/lab/Alert';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CloseIcon from '@material-ui/icons/Close';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import Grid from "@material-ui/core/Grid";
+import Backdrop from "@material-ui/core/Backdrop";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import CloseIcon from "@material-ui/icons/Close";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -27,12 +27,14 @@ export interface ETKContactProps {
   onClose: Function;
 }
 
-const useStyles = makeStyles((theme) => createStyles({
-  backdrop: {
-    zIndex: 1400,
-    color: '#fff',
-  }
-}));
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    backdrop: {
+      zIndex: 1400,
+      color: "#fff",
+    },
+  })
+);
 
 const ETKContact: React.FC<ETKContactProps> = (props) => {
   const classes = useStyles();
@@ -53,7 +55,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
   const [form, setForm] = useState(getFormDefault());
   const [isSending, setIsSending] = useState(false);
   const [hasSuccess, setHasSuccess] = useState(false);
-  const [postErrorMessage, setPostErrorMessage] = useState('');
+  const [postErrorMessage, setPostErrorMessage] = useState("");
 
   const handleClose = () => {
     if (isSending) {
@@ -63,7 +65,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
   };
 
   const handleOnEnter = () => {
-    console.log('handleonEnter');
+    console.log("handleonEnter");
     setHasSuccess(false);
   };
 
@@ -75,7 +77,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
   const onCityChange = (item) => {
     form.township.value = item.code;
     setForm({ ...form });
-  }
+  };
 
   const validateEmail = (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -84,7 +86,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
 
   const submit = async () => {
     // TODO: use AJV ?
-    const optionalFields = ['phone_number', 'position'];
+    const optionalFields = ["phone_number", "position"];
     for (const key in form) {
       form[key].errorMessage = "";
       if (optionalFields.indexOf(key) > -1) {
@@ -114,10 +116,10 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
       payload[key] = form[key].value;
     }
 
-    const url = `${publicRuntimeConfig.apiUrl}/contact`;
+    const url = `${publicRuntimeConfig.apiUrl}/contacts`;
     const response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(payload)
+      method: "POST",
+      body: JSON.stringify(payload),
     });
     setIsSending(false);
     const json = await response.json();
@@ -129,47 +131,64 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
     } else {
       setPostErrorMessage("Erreur interne, veuillez recommencer plus tard.");
     }
-  }
+  };
 
   const handleError = (data) => {
-    data.detail.forEach(error => {
+    data.detail.forEach((error) => {
       const fieldName = error.loc[1];
       form[fieldName].errorMessage = error.msg;
     });
 
-    setForm({...form});
-  }
+    setForm({ ...form });
+  };
 
   return (
     <React.Fragment>
       <Dialog
         open={props.isOpen}
-        onEnter={() => { handleOnEnter() }}
-        onClose={() => { handleClose() }}
+        onEnter={() => {
+          handleOnEnter();
+        }}
+        onClose={() => {
+          handleClose();
+        }}
         scroll="paper"
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">Nous contacter</DialogTitle>
-        {hasSuccess ?
+        {hasSuccess ? (
           <React.Fragment>
             <DialogContent>
               <Typography component="div" align="center" color="textSecondary">
                 <CheckCircleIcon style={{ fontSize: 40 }} />
               </Typography>
               <Typography align="center">
-                Votre message a bien été envoyé, nous vous répondrons dans les plus brefs délais !
+                Votre message a bien été envoyé, nous vous répondrons dans les
+                plus brefs délais !
               </Typography>
             </DialogContent>
             <DialogActions>
-              <Button onClick={() => { handleClose() }} color="primary">Retour à l'accueil</Button>
+              <Button
+                onClick={() => {
+                  handleClose();
+                }}
+                color="primary"
+              >
+                Retour à l'accueil
+              </Button>
             </DialogActions>
           </React.Fragment>
-          :
+        ) : (
           <React.Fragment>
             <DialogContent>
-              <Typography component="p" variant="h5">Notre équipe sera heureuse de vous répondre</Typography>
-              <Typography>Merci de remplir ce formulaire. Nous vous répondrons dans les plus brefs délais.</Typography>
+              <Typography component="p" variant="h5">
+                Notre équipe sera heureuse de vous répondre
+              </Typography>
+              <Typography>
+                Merci de remplir ce formulaire. Nous vous répondrons dans les
+                plus brefs délais.
+              </Typography>
               <form noValidate autoComplete="off">
                 <Grid container spacing={1}>
                   <Grid item xs={6}>
@@ -181,7 +200,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                       variant="filled"
                       margin="dense"
                       InputProps={{
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                       label="Nom"
                       onChange={onInputChange}
@@ -197,7 +216,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                       variant="filled"
                       margin="dense"
                       InputProps={{
-                        disableUnderline: true
+                        disableUnderline: true,
                       }}
                       label="Prénom"
                       onChange={onInputChange}
@@ -213,7 +232,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                     variant="filled"
                     margin="dense"
                     InputProps={{
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                     label="Adresse email"
                     type="email"
@@ -229,7 +248,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                     variant="filled"
                     margin="dense"
                     InputProps={{
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                     label="Téléphone"
                     fullWidth
@@ -239,24 +258,24 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                   />
                 </div>
                 <div>
-                  <FormControl
-                    fullWidth
-                    variant="filled"
-                    margin="dense"
-                  >
+                  <FormControl fullWidth variant="filled" margin="dense">
                     <InputLabel htmlFor="select-position">Position</InputLabel>
                     <Select
                       native
                       disableUnderline
                       inputProps={{
-                        name: 'position',
-                        id: 'select-position',
+                        name: "position",
+                        id: "select-position",
                       }}
                       onChange={onInputChange}
                     >
                       <option aria-label="None" value="" />
-                      <option value="Responsable espaces verts">Responsable espaces verts</option>
-                      <option value="Directeurs de services technique">Directeurs de services technique</option>
+                      <option value="Responsable espaces verts">
+                        Responsable espaces verts
+                      </option>
+                      <option value="Directeurs de services technique">
+                        Directeurs de services technique
+                      </option>
                       <option value="Autres">Autres</option>
                     </Select>
                   </FormControl>
@@ -267,7 +286,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                     variant="filled"
                     margin="dense"
                     InputProps={{
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                     label="Commune dans laquelle vous exercez"
                     fullWidth
@@ -283,7 +302,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                     variant="filled"
                     margin="dense"
                     InputProps={{
-                      disableUnderline: true
+                      disableUnderline: true,
                     }}
                     label="Quelle est votre question ?"
                     fullWidth
@@ -298,37 +317,57 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
               </form>
             </DialogContent>
             <DialogActions>
-              <Button onClick={() => { handleClose() }}>
+              <Button
+                onClick={() => {
+                  handleClose();
+                }}
+              >
                 Annuler
               </Button>
-              <Button onClick={() => { submit() }} color="primary" variant="contained">
+              <Button
+                onClick={() => {
+                  submit();
+                }}
+                color="primary"
+                variant="contained"
+              >
                 Envoyer la demande de contact
               </Button>
             </DialogActions>
           </React.Fragment>
-        }
+        )}
         <Backdrop className={classes.backdrop} open={isSending}>
           <CircularProgress color="inherit" />
         </Backdrop>
         <Snackbar
           anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center'
+            vertical: "top",
+            horizontal: "center",
           }}
           open={Boolean(postErrorMessage)}
-          onClose={() => { setPostErrorMessage(''); }}
+          onClose={() => {
+            setPostErrorMessage("");
+          }}
         >
-          <Alert severity="error" variant="filled" closeText="OK" action={
-            <React.Fragment>
-              <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={() => { setPostErrorMessage(''); }}>
-                <CloseIcon fontSize="small" />
-              </IconButton>
-            </React.Fragment>
-          }>
+          <Alert
+            severity="error"
+            variant="filled"
+            closeText="OK"
+            action={
+              <React.Fragment>
+                <IconButton
+                  size="small"
+                  aria-label="close"
+                  color="inherit"
+                  onClick={() => {
+                    setPostErrorMessage("");
+                  }}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </React.Fragment>
+            }
+          >
             <div dangerouslySetInnerHTML={{ __html: postErrorMessage }}></div>
           </Alert>
         </Snackbar>
