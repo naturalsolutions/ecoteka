@@ -9,4 +9,4 @@ RUN npx next telemetry disable
 
 EXPOSE 3000
 
-ENTRYPOINT [ "./start-dev.sh" ]
+ENTRYPOINT [ "./.docker/start-dev.sh" ]

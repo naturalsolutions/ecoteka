@@ -1,5 +1,5 @@
 const assetPrefix = process.env["ASSET_PREFIX"] || "";
-const apiUrl = process.env["API_URL"] || "http://localhost:8000/api/v1";
+const apiUrl = process.env["API_URL"] || "%api_url%";
 
 let config = {};
 

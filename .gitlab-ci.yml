@@ -9,7 +9,7 @@ build_frontend:
   image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-latest ./frontend
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-latest -f ./frontend/.docker/Dockerfile ./frontend
     - docker push ${CI_REGISTRY_IMAGE}:frontend-latest
     - docker system prune -a -f
   only:
