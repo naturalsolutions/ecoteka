@@ -35,7 +35,7 @@ services:
       - traefik.http.routers.frontend.rule=PathPrefix(`/`)
       - traefik.http.services.frontend.loadbalancer.server.port=3000
     environment:
-      - NS_ECOTEKA_FRONTEND_BACKEND_API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
+      - API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
 
   backend:
     volumes:
