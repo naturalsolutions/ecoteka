@@ -54,6 +54,20 @@ backend is started on the next path:
 
   - http://localhost:8000/api/v1/docs
 
+## How to deploy in production
+
+First create an .env file and modify the necessary variables:
+
+```bash
+cp .env.example .env
+```
+
+and you can execute the following command to deploy in production:
+
+```bash
+./script/deploy.sh
+```
+
 ## Environment variables
 
 These are the environment variables that you can set in docker-compose to 
