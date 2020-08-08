@@ -59,7 +59,31 @@ backend is started on the next path:
 These are the environment variables that you can set in docker-compose to 
 configure it and their default values:
 
+### GLOBAL
+
+#### `NS_ECOTEKA_DOMAIN_NAME`
+
+The domain name associated to the stack
+
+By default:
+
+  - localhost
+
 ### PROXY
+
+#### `NS_ECOTEKA_PROXY_IMAGE`
+
+The name of the traefik docker image.
+
+By default:
+
+  - traefik:v2.2
+
+#### `NS_ECOTEKA_PROXY_CERTIFICATESRESOLVERS_LE_ACME_EMAIL`
+
+By default:
+
+  - noreply@localhost
 
 #### `NS_ECOTEKA_PROXY_HTTP_PORT`
 
@@ -78,6 +102,14 @@ By default:
   - 8080
 
 ### DB
+
+#### `NS_ECOTEKA_DB_IMAGE`
+
+The name of the postgres docker image.
+
+By default:
+
+  - traefik:v2.2
 
 #### `NS_ECOTEKA_DB_PORT`
 

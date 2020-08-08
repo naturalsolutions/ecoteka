@@ -35,8 +35,8 @@ services:
       - traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_BASE_PATH}
       - traefik.http.services.backend.loadbalancer.server.port=80
     environment:
-      - SERVER_NAME=${DOMAIN_NAME}
-      - SERVER_HOST=https://${DOMAIN_NAME}
+      - SERVER_NAME=${NS_ECOTEKA_DOMAIN_NAME}
+      - SERVER_HOST=https://${NS_ECOTEKA_DOMAIN_NAME}
       - EXTERNAL_PATH=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
       - PROJECT_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
       - ROOT_PATH=${NS_ECOTEKA_BACKEND_BASE_PATH}

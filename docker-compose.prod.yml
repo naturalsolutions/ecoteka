@@ -36,8 +36,8 @@ services:
 
       # Let's Encrypt
       - traefik.http.services.proxy.loadbalancer.server.port=80
-      - traefik.http.routers.wwwsecure.tls.domains[0].main=${DOMAIN_NAME}
-      - traefik.http.routers.wwwsecure.tls.domains[0].sans=www.${DOMAIN_NAME}
+      - traefik.http.routers.wwwsecure.tls.domains[0].main=${NS_ECOTEKA_DOMAIN_NAME}
+      - traefik.http.routers.wwwsecure.tls.domains[0].sans=www.${NS_ECOTEKA_DOMAIN_NAME}
       - traefik.http.routers.wwwsecure.tls.certresolver=le
 
   backend:
