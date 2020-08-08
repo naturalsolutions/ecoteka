@@ -2,43 +2,27 @@ version: "3.3"
 
 services:
   proxy:
-    image: traefik:v2.2
-    ports:
-      - "80:80"
+    image: ${NS_ECOTEKA_PROXY_IMAGE}
     networks:
       - traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command:
-      - --providers.docker
-      - --providers.docker.exposedbydefault=false
-      - --accesslog
-      - --log
-      - --api
+    restart: always
     labels:
       - traefik.enable=true
 
   db:
-    image: postgres:12
+    image: ${NS_ECOTEKA_DB_IMAGE}
     networks:
       - traefik
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
-    env_file:
-      - .env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
-
-  frontend:
-    image: ${NS_ECOTEKA_FRONTEND_IMAGE}
-    networks:
-      - traefik
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
-      - traefik.http.services.frontend.loadbalancer.server.port=80
-    environment:
-      - NS_ECOTEKA_FRONTEND_BACKEND_API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
+      - POSTGRES_SERVER=${NS_ECOTEKA_DB_SERVER}
+      - POSTGRES_USER=${NS_ECOTEKA_DB_USER}
+      - POSTGRES_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
+      - POSTGRES_DB=${NS_ECOTEKA_DB_NAME}
 
   backend:
     image: ${NS_ECOTEKA_BACKEND_IMAGE}
@@ -47,10 +31,12 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
-      - traefik.http.routers.backend.middlewares=backend
+      - traefik.http.routers.backend.middlewares=api-stripprefix
+      - traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_BASE_PATH}
       - traefik.http.services.backend.loadbalancer.server.port=80
-      - traefik.http.middlewares.backend.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_BASE_PATH}
     environment:
+      - SERVER_NAME=${DOMAIN_NAME}
+      - SERVER_HOST=https://${DOMAIN_NAME}
       - EXTERNAL_PATH=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
       - PROJECT_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
       - ROOT_PATH=${NS_ECOTEKA_BACKEND_BASE_PATH}
@@ -70,6 +56,17 @@ services:
       - DB_USER=${NS_ECOTEKA_DB_USER}
       - DB_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
       - DB_NAME=${NS_ECOTEKA_DB_NAME}
+
+  frontend:
+    image: ${NS_ECOTEKA_FRONTEND_IMAGE}
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+      - traefik.http.services.frontend.loadbalancer.server.port=3000
+    environment:
+      - NS_ECOTEKA_FRONTEND_BACKEND_API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
 
 volumes:
   app-db-data:
