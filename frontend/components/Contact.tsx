@@ -116,7 +116,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
       payload[key] = form[key].value;
     }
 
-    const url = `${publicRuntimeConfig.apiUrl}/contacts`;
+    const url = `${publicRuntimeConfig.apiUrl}/contacts/`;
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(payload),
