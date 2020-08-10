@@ -10,11 +10,11 @@ All work environments need at least the following requirements:
 ## Structure
 
 - We use [Traefik][traefik] as proxy
-- The project uses as database [PostgreSQL 12][postgresql], 
-  [SQLAlchemy][sql-alchemy] as toolkit and Object Relational Mapper and 
+- The project uses as database [PostgreSQL 12][postgresql],
+  [SQLAlchemy][sql-alchemy] as toolkit and Object Relational Mapper and
   [Alembic][alembic] as database migration tool.
 - The [backend] uses the [FastAPI][fastapi] framework.
-- The [frontend] uses [next.js][next.js] as framework and 
+- The [frontend] uses [next.js][next.js] as framework and
   [Material-UI][material-ui] as components library.
 - [Mapbox GL JS][mapbox-gl-js] as library to render interactive maps.
 - [Tippecanoe][tippecanoe] to build vector tilesets.
@@ -22,12 +22,12 @@ All work environments need at least the following requirements:
 
 ## Quick Start With Docker Compose
 
-To start with docker-compose we just need to copy `.env.example` to `.env`. You 
+To start with docker-compose we just need to copy `.env.example` to `.env`. You
 can use the following command:
 
 ```bash
 $ cp .env.example .env
-``` 
+```
 
 `.env` contains all the environment variables that we can modify in out project.
 
@@ -42,14 +42,14 @@ Starting ecoteka_backend_1  ... done
 Starting ecoteka_frontend_1 ... done
 ```
 
-With our container running, we should be able to see the main page of the 
+With our container running, we should be able to see the main page of the
 project on the following link:
 
   - http://localhost:8000
 
 ## Access To API Documentation
 
-The project's API documentation is found once the local instance of the 
+The project's API documentation is found once the local instance of the
 backend is started on the next path:
 
   - http://localhost:8000/api/v1/docs
@@ -70,219 +70,63 @@ and you can execute the following command to deploy in production:
 
 ## Environment variables
 
-These are the environment variables that you can set in docker-compose to 
+These are the environment variables that you can set in docker-compose to
 configure it and their default values:
+
 
 ### GLOBAL
 
-#### `NS_ECOTEKA_DOMAIN_NAME`
-
-The domain name associated to the stack
-
-By default:
-
-  - localhost
+| Key                        | Description                               | Default value |
+| :--                        | :----                                     |          --:  |
+| NS_ECOTEKA_DOMAIN_NAME     | The domain name associated to the stack   | localhost     |
 
 ### PROXY
 
-#### `NS_ECOTEKA_PROXY_IMAGE`
-
-The name of the traefik docker image.
-
-By default:
-
-  - traefik:v2.2
-
-#### `NS_ECOTEKA_PROXY_CERTIFICATESRESOLVERS_LE_ACME_EMAIL`
-
-By default:
-
-  - noreply@localhost
-
-#### `NS_ECOTEKA_PROXY_HTTP_PORT`
-
-The external [Traefik][traefik] port.
-
-By default:
-
-  - 8000
-
-#### `NS_ECOTEKA_PROXY_API_PORT`
-
-The external [Traefik][traefik] API port.
-
-By default:
-
-  - 8080
+| Key                                                   | Description                               | Default value     |
+| :--                                                   | :----                                     |              --:  |
+| NS_ECOTEKA_PROXY_API_PORT                             | The external [Traefik][traefik] API port. | 8080              |
+| NS_ECOTEKA_PROXY_CERTIFICATESRESOLVERS_LE_ACME_EMAIL  |                                           | noreply@localhost |
+| NS_ECOTEKA_PROXY_HTTP_PORT                            | The external [Traefik][traefik] port.     | 8000              |
+| NS_ECOTEKA_PROXY_IMAGE                                | The name of the traefik docker image.     | traefik:v2.2      |
 
 ### DB
 
-#### `NS_ECOTEKA_DB_IMAGE`
-
-The name of the postgres docker image.
-
-By default:
-
-  - traefik:v2.2
-
-#### `NS_ECOTEKA_DB_PORT`
-
-The [PostgreSQL][postgresql] database port.
-
-By default:
-
-  - 5432
-
-#### `NS_ECOTEKA_DB_SERVER`
-
-The [PostgreSQL][postgresql] server host.
-
-By default:
-
-  - db
-
-#### `NS_ECOTEKA_DB_USER`
-
-The [PostgresSQL][postgresql] user.
-
-By default:
-
-  - postgres
-
-#### `NS_ECOTEKA_DB_PASSWORD`
-
-The [PostgresSQL][postgresql] user password.
-
-By default:
-
-  - password
-
-#### `NS_ECOTEKA_DB_NAME`
-
-The [PostgresSQL][postgresql] database name.
-
-By default:
-
-  - ecoteka
+| Key                        | Description                                    | Default value |
+| :--                        | :----                                          |          --:  |
+| NS_ECOTEKA_DB_IMAGE        | The name of the postgres docker image.         | postgres:12   |
+| NS_ECOTEKA_DB_NAME         | The [PostgresSQL][postgresql] database name.   | ecoteka       |
+| NS_ECOTEKA_DB_PASSWORD     | The [PostgresSQL][postgresql] user password.   | password      |
+| NS_ECOTEKA_DB_PORT         | The [PostgreSQL][postgresql] database port.    | 5432          |
+| NS_ECOTEKA_DB_SERVER       | The [PostgreSQL][postgresql] server host.      | db            |
+| NS_ECOTEKA_DB_USER         | The [PostgresSQL][postgresql] user.            | postgres      |
 
 ### FRONTEND
 
-#### `NS_ECOTEKA_FRONTEND_IMAGE`
-
-The path of the frontend docker image.
-
-By default:
-
-  - registry.gitlab.com/natural-solutions/ecoteka:latest
+| Key                        | Description                                    | Default value                                        |
+| :--                        | :----                                          |          --:                                         |
+| NS_ECOTEKA_FRONTEND_IMAGE  | The path of the frontend docker image.         | registry.gitlab.com/natural-solutions/ecoteka:latest |
 
 
 ### BACKEND
 
-#### `NS_ECOTEKA_BACKEND_IMAGE`
+| Key                                               | Description                                           | Default value                                                      |
+| :--                                               | :----                                                 | --:                                                                |
+| NS_ECOTEKA_BACKEND_BASE_PATH                      | To allow [FastAPI][fastapi] to run behind a proxy it is possible to set the --root-path parameter to [Uvicorn][uvicorn].<BR/>More information can be found on FastAPI's documentation page: https://fastapi.tiangolo.com/advanced/behind-a-proxy/#about-root_path        | /api/v1                           |
+| NS_ECOTEKA_BACKEND_EMAIL_RESET_TOKEN_EXPIRE_HOURS |                                                                                     | 48                                   |
+| NS_ECOTEKA_BACKEND_EMAILS_ENABLED                 | Enabled the feature for sending mail after user created                             | False                                |
+| NS_ECOTEKA_BACKEND_EMAILS_FROM_EMAIL              |                                                                                     | contact@ecoteka.natural-solutions.eu |
+| NS_ECOTEKA_BACKEND_EMAILS_TEMPLATES_DIR           | The relative path from /backend that will be used for storing templates generated.  | app/app/email-templates/build        |
+| NS_ECOTEKA_BACKEND_EXTERNAL_PATH                  |  External URL for API access  |  http://localhost:8000/api/v1                                                              |
+| NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL          | The first time the project is started up, a super admin is created. `NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL` defines the email with which the user will be created.   | admin@ecoteka.natural-solutions.eu                                                                                                |
+| NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_PASSWORD       | The password for the super admin user explained above.                              | password                             |
+| NS_ECOTEKA_BACKEND_IMAGE                          | The path of the backend docker image.                 | registry.gitlab.com/natural-solutions/ecoteka:backend-latest       |
+| NS_ECOTEKA_BACKEND_PROJECT_NAME                   | The project name for [FastAPI][fastapi].              | ecoTeka                                                            |
+| NS_ECOTEKA_BACKEND_SMTP_HOST                      | Host of smtp server                                                                 |  localhost                           |
+| NS_ECOTEKA_BACKEND_SMTP_PASSWORD                  | Password mail                                                                       | password                             |
+| NS_ECOTEKA_BACKEND_SMTP_PORT                      | Port of the smtp server                                                             |  438                                 |
+| NS_ECOTEKA_BACKEND_SMTP_TLS                       | Rncryption connection with smtp server                                              | True                                 |
+| NS_ECOTEKA_BACKEND_SMTP_USER                      | Login mail                                                                          | user                                 |
 
-The path of the backend docker image.
-
-By default:
-
-  - registry.gitlab.com/natural-solutions/ecoteka:backend-latest
-
-#### `NS_ECOTEKA_BACKEND_PROJECT_NAME`
-
-The project name for [FastAPI][fastapi].
-
-By default:
-
-  - ecoTeka
-
-#### `NS_ECOTEKA_BACKEND_BASE_PATH`
-
-To allow [FastAPI][fastapi] to run behind a proxy it is possible to set the
---root-path parameter to [Uvicorn][uvicorn].
-
-More information can be found on FastAPI's documentation page: https://fastapi.tiangolo.com/advanced/behind-a-proxy/#about-root_path
-
-By default:
-
-  - /api/v1
-
-#### `NS_ECOTEKA_BACKEND_EXTERNAL_PATH`
-
-External URL for API access
-
-By default:
-
-  - http://localhost:8000/api/v1
-
-#### `NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL`
-
-The first time the project is started up, a super admin is created. `NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL` defines the email with which the 
-user will be created.
-
-By default:
-
-  - admin@ecoteka.natural-solutions.eu
-
-#### `NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_PASSWORD`
-
-The password for the super admin user explained above.
-
-By default:
-
-  - password
-
-#### `NS_ECOTEKA_BACKEND_SMTP_TLS`
-
-By default:
-
-  - True
-
-#### `NS_ECOTEKA_BACKEND_SMTP_PORT`
-
-By default:
-
-  - 438
-
-#### `NS_ECOTEKA_BACKEND_SMTP_HOST`
-
-By default:
-
-  - localhost
-
-#### `NS_ECOTEKA_BACKEND_SMTP_USER`
-
-By default:
-
-  - user
-
-#### `NS_ECOTEKA_BACKEND_SMTP_PASSWORD`
-
-By default:
-
-  - password
-
-#### `NS_ECOTEKA_BACKEND_EMAILS_ENABLED`
-
-By default:
-
-  - False
-
-#### `NS_ECOTEKA_BACKEND_EMAILS_TEMPLATES_DIR`
-
-By default:
-
-  - app/app/email-templates/build
-
-#### `NS_ECOTEKA_BACKEND_EMAILS_FROM_EMAIL`
-
-By default:
-
-  - contact@ecoteka.natural-solutions.eu
-
-#### `NS_ECOTEKA_BACKEND_EMAIL_RESET_TOKEN_EXPIRE_HOURS`
-
-By default:
-
-  - 48
 
 
 
