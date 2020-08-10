@@ -1,43 +1,70 @@
 import getConfig from "next/config";
+import { useContext, createContext, useState, useEffect } from "react";
 
 const { publicRuntimeConfig } = getConfig();
 
-const useSession = (session) => {
+const StoreContext = createContext();
 
+const SessionProvider = ({ children }) => {
+  const { tokenStorage } = publicRuntimeConfig;
+  let initialState = null
+
+  if (typeof window !== 'undefined') {
+    initialState = localStorage.getItem(tokenStorage)
+  }
+
+  const [session, setSession] = useState(initialState);
+
+  useEffect(function watchForChanges() {
+    if (session) {
+      localStorage.setItem(tokenStorage, session)
+    } else {
+      localStorage.removeItem(tokenStorage)
+    }
+  }, [session]);
+
+  return (
+    <StoreContext.Provider value={{ session, setSession }}>
+      {children}
+    </StoreContext.Provider>
+  );
 }
 
+const useSession = () => useContext(StoreContext)
+
 const signIn = async (credentials) => {
+  const { apiUrl, tokenStorage } = publicRuntimeConfig;
   const { username, password } = credentials
 
   if (!username || !password) {
     return
   }
 
-  const { apiUrl } = publicRuntimeConfig;
-  const signInUrl = `${apiUrl}/login/access-token/`
+  const signInUrl = `${apiUrl}/login/access-token`
+
+  const body = new FormData();
+
+  body.append('username', username);
+  body.append('password', password);
+
   const fetchOptions = {
     method: 'post',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      username,
-      password
-    })
+    body: body
   }
 
   const response = await fetch(signInUrl, fetchOptions)
   const data = await response.json()
 
-  console.log(data)
-}
+  if (data) {
+    const { access_token: accessToken } = data
+    return accessToken
+  }
 
-const signOut = async () => {
-
+  return false
 }
 
 export default {
+  SessionProvider,
   useSession,
-  signIn,
-  signOut
+  signIn
 }

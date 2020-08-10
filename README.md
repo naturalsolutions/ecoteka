@@ -102,9 +102,10 @@ configure it and their default values:
 
 ### FRONTEND
 
-| Key                        | Description                                    | Default value                                        |
-| :--                        | :----                                          |          --:                                         |
-| NS_ECOTEKA_FRONTEND_IMAGE  | The path of the frontend docker image.         | registry.gitlab.com/natural-solutions/ecoteka:latest |
+| Key                               | Description                                        |                                        Default value |
+|:----------------------------------|:---------------------------------------------------|-----------------------------------------------------:|
+| NS_ECOTEKA_FRONTEND_IMAGE         | The path of the frontend docker image.             | registry.gitlab.com/natural-solutions/ecoteka:latest |
+| NS_ECOTEKA_FRONTEND_TOKEN_STORAGE | localStorage key to get access to the stored token |                                 ecoteka_access_token |
 
 
 ### BACKEND

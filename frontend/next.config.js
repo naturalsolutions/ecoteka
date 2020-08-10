@@ -1,5 +1,6 @@
 const assetPrefix = process.env["ASSET_PREFIX"] || "";
 const apiUrl = process.env["API_URL"] || "%api_url%";
+const tokenStorage = process.env["TOKEN_STORAGE"] || "%token_storage%"
 
 let config = {};
 
@@ -12,7 +13,8 @@ config.env = {
 };
 
 config.publicRuntimeConfig = {
-  apiUrl: apiUrl,
+  apiUrl,
+  tokenStorage
 };
 
 module.exports = config;

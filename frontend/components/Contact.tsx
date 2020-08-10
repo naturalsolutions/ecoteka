@@ -180,162 +180,162 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
             </DialogActions>
           </React.Fragment>
         ) : (
-          <React.Fragment>
-            <DialogContent>
-              <Typography component="p" variant="h5">
-                Notre équipe sera heureuse de vous répondre
+            <React.Fragment>
+              <DialogContent>
+                <Typography component="p" variant="h5">
+                  Notre équipe sera heureuse de vous répondre
               </Typography>
-              <Typography>
-                Merci de remplir ce formulaire. Nous vous répondrons dans les
-                plus brefs délais.
+                <Typography>
+                  Merci de remplir ce formulaire. Nous vous répondrons dans les
+                  plus brefs délais.
               </Typography>
-              <form noValidate autoComplete="off">
-                <Grid container spacing={1}>
-                  <Grid item xs={6}>
+                <form noValidate autoComplete="off">
+                  <Grid container spacing={1}>
+                    <Grid item xs={6}>
+                      <TextField
+                        name="last_name"
+                        required
+                        autoFocus
+                        fullWidth
+                        variant="filled"
+                        margin="dense"
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                        label="Nom"
+                        onChange={onInputChange}
+                        error={Boolean(form.last_name.errorMessage)}
+                        helperText={form.last_name.errorMessage}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <TextField
+                        name="first_name"
+                        required
+                        fullWidth
+                        variant="filled"
+                        margin="dense"
+                        InputProps={{
+                          disableUnderline: true,
+                        }}
+                        label="Prénom"
+                        onChange={onInputChange}
+                        error={Boolean(form.first_name.errorMessage)}
+                        helperText={form.first_name.errorMessage}
+                      />
+                    </Grid>
+                  </Grid>
+                  <div>
                     <TextField
-                      name="last_name"
+                      name="email"
                       required
-                      autoFocus
-                      fullWidth
                       variant="filled"
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
                       }}
-                      label="Nom"
-                      onChange={onInputChange}
-                      error={Boolean(form.last_name.errorMessage)}
-                      helperText={form.last_name.errorMessage}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      name="first_name"
-                      required
+                      label="Adresse email"
+                      type="email"
                       fullWidth
+                      onChange={onInputChange}
+                      error={Boolean(form.email.errorMessage)}
+                      helperText={form.email.errorMessage}
+                    />
+                  </div>
+                  <div>
+                    <TextField
+                      name="phone_number"
                       variant="filled"
                       margin="dense"
                       InputProps={{
                         disableUnderline: true,
                       }}
-                      label="Prénom"
+                      label="Téléphone"
+                      fullWidth
                       onChange={onInputChange}
-                      error={Boolean(form.first_name.errorMessage)}
-                      helperText={form.first_name.errorMessage}
+                      error={Boolean(form.phone_number.errorMessage)}
+                      helperText={form.phone_number.errorMessage}
                     />
-                  </Grid>
-                </Grid>
-                <div>
-                  <TextField
-                    name="email"
-                    required
-                    variant="filled"
-                    margin="dense"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                    label="Adresse email"
-                    type="email"
-                    fullWidth
-                    onChange={onInputChange}
-                    error={Boolean(form.email.errorMessage)}
-                    helperText={form.email.errorMessage}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    name="phone_number"
-                    variant="filled"
-                    margin="dense"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                    label="Téléphone"
-                    fullWidth
-                    onChange={onInputChange}
-                    error={Boolean(form.phone_number.errorMessage)}
-                    helperText={form.phone_number.errorMessage}
-                  />
-                </div>
-                <div>
-                  <FormControl fullWidth variant="filled" margin="dense">
-                    <InputLabel htmlFor="select-position">Position</InputLabel>
-                    <Select
-                      native
-                      disableUnderline
-                      inputProps={{
-                        name: "position",
-                        id: "select-position",
+                  </div>
+                  <div>
+                    <FormControl fullWidth variant="filled" margin="dense">
+                      <InputLabel htmlFor="select-position">Position</InputLabel>
+                      <Select
+                        native
+                        disableUnderline
+                        inputProps={{
+                          name: "position",
+                          id: "select-position",
+                        }}
+                        onChange={onInputChange}
+                      >
+                        <option aria-label="None" value="" />
+                        <option value="Responsable espaces verts">
+                          Responsable espaces verts
+                      </option>
+                        <option value="Directeurs de services technique">
+                          Directeurs de services technique
+                      </option>
+                        <option value="Autres">Autres</option>
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <div>
+                    <TextField
+                      name="township"
+                      variant="filled"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
                       }}
+                      label="Commune dans laquelle vous exercez"
+                      fullWidth
                       onChange={onInputChange}
-                    >
-                      <option aria-label="None" value="" />
-                      <option value="Responsable espaces verts">
-                        Responsable espaces verts
-                      </option>
-                      <option value="Directeurs de services technique">
-                        Directeurs de services technique
-                      </option>
-                      <option value="Autres">Autres</option>
-                    </Select>
-                  </FormControl>
-                </div>
-                <div>
-                  <TextField
-                    name="township"
-                    variant="filled"
-                    margin="dense"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                    label="Commune dans laquelle vous exercez"
-                    fullWidth
-                    onChange={onInputChange}
-                    error={Boolean(form.township.errorMessage)}
-                    helperText={form.township.errorMessage}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    name="contact_request"
-                    required
-                    variant="filled"
-                    margin="dense"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                    label="Quelle est votre question ?"
-                    fullWidth
-                    multiline
-                    rows={3}
-                    rowsMax={6}
-                    onChange={onInputChange}
-                    error={Boolean(form.contact_request.errorMessage)}
-                    helperText={form.contact_request.errorMessage}
-                  />
-                </div>
-              </form>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  handleClose();
-                }}
-              >
-                Annuler
+                      error={Boolean(form.township.errorMessage)}
+                      helperText={form.township.errorMessage}
+                    />
+                  </div>
+                  <div>
+                    <TextField
+                      name="contact_request"
+                      required
+                      variant="filled"
+                      margin="dense"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                      label="Quelle est votre question ?"
+                      fullWidth
+                      multiline
+                      rows={3}
+                      rowsMax={6}
+                      onChange={onInputChange}
+                      error={Boolean(form.contact_request.errorMessage)}
+                      helperText={form.contact_request.errorMessage}
+                    />
+                  </div>
+                </form>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={() => {
+                    handleClose();
+                  }}
+                >
+                  Annuler
               </Button>
-              <Button
-                onClick={() => {
-                  submit();
-                }}
-                color="primary"
-                variant="contained"
-              >
-                Envoyer la demande de contact
+                <Button
+                  onClick={() => {
+                    submit();
+                  }}
+                  color="primary"
+                  variant="contained"
+                >
+                  Envoyer la demande de contact
               </Button>
-            </DialogActions>
-          </React.Fragment>
-        )}
+              </DialogActions>
+            </React.Fragment>
+          )}
         <Backdrop className={classes.backdrop} open={isSending}>
           <CircularProgress color="inherit" />
         </Backdrop>

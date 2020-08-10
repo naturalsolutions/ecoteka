@@ -65,7 +65,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.frontend.rule=PathPrefix(`/`)
     environment:
-      - NS_ECOTEKA_FRONTEND_BACKEND_API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
+      - API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
+      - TOKEN_STORAGE=${NS_ECOTEKA_FRONTEND_TOKEN_STORAGE}
 
 volumes:
   app-db-data:

@@ -7,9 +7,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import ETKLogin from "../components/Login";
+import dynamic from "next/dynamic";
 import ETKContact from "./Contact";
-
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 
 export interface ETKToolbarProps {
@@ -39,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
+  const ETKLogin = dynamic(() => import("../components/Login"), {
+    ssr: false
+  });
 
   const [isContactOpen, setIsContactOpen] = useState(false);
 

@@ -1,30 +1,32 @@
+import { Fragment } from "react"
 import { Button } from "@material-ui/core";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Auth from './Auth.js';
 
 export interface ETKLoginProps { }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({})
-);
+const ETKLogin: React.FC<ETKLoginProps> = (props) => {
+  const { session, setSession } = Auth.useSession()
 
-const onClickHandler = (e) => {
-  const crendentials = {
-    username: 'admin@ecoteka.natural-solutions.eu',
-    password: 'password'
+  const onLogoutHandler = (e) => {
+    setSession(null)
   }
 
-  Auth.signIn(crendentials)
-}
+  const onLoginHandler = async (e) => {
+    const crendentials = {
+      username: 'admin@ecoteka.natural-solutions.eu',
+      password: 'password'
+    }
 
-const ETKLogin: React.FC<ETKLoginProps> = (props) => {
-  const classes = useStyles();
+    const responseLogin = await Auth.signIn(crendentials)
+    setSession(responseLogin)
+  }
+
+  const login = (<Button onClick={onLoginHandler}>Login</Button>)
+  const logout = (<Button onClick={onLogoutHandler}>Logout</Button>)
 
   return (
-    <Button onClick={onClickHandler}>
-      Login
-    </Button>
-  );
+    <Fragment>{session ? logout : login}</Fragment>
+  )
 };
 
 export default ETKLogin;
