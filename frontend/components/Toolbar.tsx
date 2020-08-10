@@ -7,6 +7,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
+import ETKLogin from "../components/Login";
 import ETKContact from "./Contact";
 
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
@@ -59,6 +60,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           </Typography>
         </Hidden>
         <div className={classes.buttons}>
+          <ETKLogin />
           <Hidden smDown>
             <Button
               color="primary"
