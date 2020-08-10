@@ -33,7 +33,7 @@ build_backend:
 deploy:
   stage: deploy
   script:
-    - cd /opt/ecoteka && ansible-playbook -i inventory ecoteka.yml
+    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka deploy.yml
   only:
     - dev
   tags:
