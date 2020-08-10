@@ -2,43 +2,27 @@ version: "3.3"
 
 services:
   proxy:
-    image: traefik:v2.2
-    ports:
-      - "80:80"
+    image: ${NS_ECOTEKA_PROXY_IMAGE}
     networks:
       - traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command:
-      - --providers.docker
-      - --providers.docker.exposedbydefault=false
-      - --accesslog
-      - --log
-      - --api
+    restart: always
     labels:
       - traefik.enable=true
 
   db:
-    image: postgres:12
+    image: ${NS_ECOTEKA_DB_IMAGE}
     networks:
       - traefik
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
-    env_file:
-      - .env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
-
-  frontend:
-    image: ${NS_ECOTEKA_FRONTEND_IMAGE}
-    networks:
-      - traefik
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
-      - traefik.http.services.frontend.loadbalancer.server.port=80
-    environment:
-      - NS_ECOTEKA_FRONTEND_BACKEND_API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
+      - POSTGRES_DB=${NS_ECOTEKA_DB_NAME}
+      - POSTGRES_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
+      - POSTGRES_SERVER=${NS_ECOTEKA_DB_SERVER}
+      - POSTGRES_USER=${NS_ECOTEKA_DB_USER}
 
   backend:
     image: ${NS_ECOTEKA_BACKEND_IMAGE}
@@ -47,29 +31,41 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
-      - traefik.http.routers.backend.middlewares=backend
+      - traefik.http.routers.backend.middlewares=api-stripprefix
+      - traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_BASE_PATH}
       - traefik.http.services.backend.loadbalancer.server.port=80
-      - traefik.http.middlewares.backend.stripprefix.prefixes=${NS_ECOTEKA_BACKEND_BASE_PATH}
     environment:
-      - EXTERNAL_PATH=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
-      - PROJECT_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
-      - ROOT_PATH=${NS_ECOTEKA_BACKEND_BASE_PATH}
-      - SMTP_TLS=${NS_ECOTEKA_BACKEND_SMTP_TLS}
-      - SMTP_PORT=${NS_ECOTEKA_BACKEND_SMTP_PORT}
-      - SMTP_HOST=${NS_ECOTEKA_BACKEND_SMTP_HOST}
-      - SMTP_USER=${NS_ECOTEKA_BACKEND_SMTP_USER}
-      - SMTP_PASSWORD=${NS_ECOTEKA_BACKEND_SMTP_PASSWORD}
-      - EMAILS_FROM_EMAIL=${NS_ECOTEKA_BACKEND_EMAILS_FROM_EMAIL}
-      - EMAILS_FROM_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
-      - EMAIL_RESET_TOKEN_EXPIRE_HOURS=${NS_ECOTEKA_BACKEND_EMAIL_RESET_TOKEN_EXPIRE_HOURS}
-      - EMAILS_TEMPLATES_DIR=${NS_ECOTEKA_BACKEND_EMAILS_TEMPLATES_DIR}
-      - EMAILS_ENABLED=${NS_ECOTEKA_BACKEND_EMAILS_ENABLED}
-      - FIRST_SUPERUSER=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL}
-      - FIRST_SUPERUSER_PASSWORD=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_PASSWORD}
+      - DB_NAME=${NS_ECOTEKA_DB_NAME}
+      - DB_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
       - DB_SERVER=${NS_ECOTEKA_DB_SERVER}
       - DB_USER=${NS_ECOTEKA_DB_USER}
-      - DB_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
-      - DB_NAME=${NS_ECOTEKA_DB_NAME}
+      - EMAIL_RESET_TOKEN_EXPIRE_HOURS=${NS_ECOTEKA_BACKEND_EMAIL_RESET_TOKEN_EXPIRE_HOURS}
+      - EMAILS_ENABLED=${NS_ECOTEKA_BACKEND_EMAILS_ENABLED}
+      - EMAILS_FROM_EMAIL=${NS_ECOTEKA_BACKEND_EMAILS_FROM_EMAIL}
+      - EMAILS_FROM_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
+      - EMAILS_TEMPLATES_DIR=${NS_ECOTEKA_BACKEND_EMAILS_TEMPLATES_DIR}
+      - EXTERNAL_PATH=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
+      - FIRST_SUPERUSER_PASSWORD=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_PASSWORD}
+      - FIRST_SUPERUSER=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL}
+      - PROJECT_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
+      - ROOT_PATH=${NS_ECOTEKA_BACKEND_BASE_PATH}
+      - SERVER_HOST=https://${NS_ECOTEKA_DOMAIN_NAME}
+      - SERVER_NAME=${NS_ECOTEKA_DOMAIN_NAME}
+      - SMTP_HOST=${NS_ECOTEKA_BACKEND_SMTP_HOST}
+      - SMTP_PASSWORD=${NS_ECOTEKA_BACKEND_SMTP_PASSWORD}
+      - SMTP_PORT=${NS_ECOTEKA_BACKEND_SMTP_PORT}
+      - SMTP_TLS=${NS_ECOTEKA_BACKEND_SMTP_TLS}
+      - SMTP_USER=${NS_ECOTEKA_BACKEND_SMTP_USER}
+
+  frontend:
+    image: ${NS_ECOTEKA_FRONTEND_IMAGE}
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=PathPrefix(`/`)
+    environment:
+      - NS_ECOTEKA_FRONTEND_BACKEND_API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
 
 volumes:
   app-db-data:
