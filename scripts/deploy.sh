@@ -14,6 +14,11 @@ fi
 # Create the traefik network and if it exists continues
 docker network create traefik || true
 
+# Pull docker images
+docker-compose -f docker-compose.yml \
+               -f docker-compose.prod.yml \
+               pull
+
 # Start the stack
 docker-compose -f docker-compose.yml \
                -f docker-compose.prod.yml \
