@@ -31,3 +31,5 @@ services:
     build:
       context: ./frontend
       dockerfile: .docker/Dockerfile.dev
+    labels:
+      - traefik.http.services.frontend.loadbalancer.server.port=3000
