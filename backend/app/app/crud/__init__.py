@@ -1,5 +1,22 @@
-from .crud_user import user
-from .crud_contact import contact
+from .base import (
+    CRUDBase
+)
+from .crud_user import (
+    user
+)
+from .crud_contact import (
+    contact
+)
+from .crud_registration_link import (
+    registration_link
+)
+
+__all__ = [
+    "user",
+    "CRUDBase",
+    "contact",
+    "registration_link"
+]
 
 # For a new basic set of CRUD operations you could just do
 
