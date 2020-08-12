@@ -10,7 +10,7 @@ from app.models import (
     User
 )
 
-from app.schemas.registration_link import (
+from app.schemas import (
     RegistrationLinkCreate,
     RegistrationLinkUpdate
 )

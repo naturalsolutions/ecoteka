@@ -15,7 +15,10 @@ from app.schemas import (
     RegistrationLinkCreate,
     RegistrationLinkUpdate
 )
-from app.api import deps
+from app.api import (
+    get_db,
+    get_current_user
+)
 from sqlalchemy.orm import Session
 from datetime import (
     datetime,
@@ -31,8 +34,8 @@ router = APIRouter()
 def verification(
     activation_link_value: str,
     # activation_link_in_db: Registration_Link,
-    db: Session = Depends(deps.get_db),
-    current_user: User = Depends(deps.get_current_user)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     registration_link_in_db = registration_link.validate(
         db=db,
@@ -52,8 +55,8 @@ def verification(
 
 @router.get("/regenerate/")
 def regenerate_registration_link(
-    db: Session = Depends(deps.get_db),
-    current_user: User = Depends(deps.get_current_user)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     if user.is_verified(current_user):

@@ -2,23 +2,30 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
+class RegistrationLinkPrimaryKey(BaseModel):
+    fk_user: int
+
+
 # Shared properties
 class RegistrationLinkBase(BaseModel):
-    fk_user: int
     value: str
     creation_date: datetime
 
 
-class RegistrationLinkCreate(RegistrationLinkBase):
+class RegistrationLinkCreate(RegistrationLinkPrimaryKey, RegistrationLinkBase):
     pass
 
 
-class RegistrationLinkUpdate(RegistrationLinkBase):
+class RegistrationLinkUpdate(RegistrationLinkPrimaryKey, RegistrationLinkBase):
+    pass
+
+
+class RegistrationLinkOut(RegistrationLinkPrimaryKey, RegistrationLinkBase):
     pass
 
 
 # Additional properties to return via API
-class Registration_Link(RegistrationLinkUpdate):
+class RegistrationLinkDB(RegistrationLinkPrimaryKey, RegistrationLinkBase):
 
     class Config:
         orm_mode = True

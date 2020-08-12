@@ -8,22 +8,24 @@ from fastapi import (
 from sqlalchemy.orm import Session
 
 from app.schemas import (
-    Contact,
+    ContactDB,
     ContactCreate
 )
 from app.crud import (
     contact
 )
-from app.api import deps
+from app.api import (
+    get_db
+)
 from app.utils import send_contact_request_confirmation
 
 router = APIRouter()
 
 
-@router.post("/", response_model=Contact)
+@router.post("/", response_model=ContactDB)
 async def post_contact_request(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     contact_in: ContactCreate,  # provided contact info from the http.post
     background_tasks: BackgroundTasks
 ) -> Any:
