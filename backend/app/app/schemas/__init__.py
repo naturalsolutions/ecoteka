@@ -6,36 +6,38 @@ from .token import (
     TokenPayload
 )
 from .user import (
-    User,
     UserCreate,
-    UserInDB,
-    UserUpdate
+    UserDB,
+    UserUpdate,
+    UserOut
 )
 from .contact import (
-    Contact,
     ContactCreate,
-    ContactUpdate
+    ContactDB,
+    ContactUpdate,
+    ContactOut
 )
 from .registration_link import (
-    Registration_Link,
-    RegistrationLinkBase,
     RegistrationLinkCreate,
-    RegistrationLinkUpdate
+    RegistrationLinkDB,
+    RegistrationLinkUpdate,
+    RegistrationLinkOut
 )
 
 __all__ = [
-    "Contact",
     "ContactCreate",
+    "ContactDB",
     "ContactUpdate",
-    "Registration_Link",
-    "RegistrationLinkBase",
+    "ContactOut",
     "RegistrationLinkCreate",
+    "RegistrationLinkDB",
     "RegistrationLinkUpdate",
+    "RegistrationLinkOut",
     "Msg",
-    "User",
     "UserCreate",
-    "UserInDB",
+    "UserDB",
     "UserUpdate",
+    "UserOut",
     "Token",
     "TokenPayload"
 ]
