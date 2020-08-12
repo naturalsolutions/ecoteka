@@ -13,12 +13,15 @@ class ContactBase(BaseModel):
     position: Optional[str]
     contact_request: str
 
+
 # Properties to receive via API on creation
 class ContactCreate(ContactBase):
     pass
 
+
 class ContactUpdate(BaseModel):
     pass
+
 
 # Additional properties to return via API
 class Contact(ContactBase):
