@@ -44,6 +44,8 @@ services:
     labels:
       - traefik.http.routers.backend.entrypoints=websecure
       - traefik.http.routers.backend.tls=true
+    volumes:
+      - ./data/uploaded_files:${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
 
   frontend:
     labels:
