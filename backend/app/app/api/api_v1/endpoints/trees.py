@@ -6,7 +6,8 @@ from fastapi import (
     APIRouter,
     Body,
     Depends,
-    HTTPException
+    HTTPException,
+    BackgroundTasks
 )
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
@@ -14,6 +15,7 @@ from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
+from app.tasks import import_geofile
 
 router = APIRouter()
 
@@ -22,12 +24,18 @@ router = APIRouter()
 def import_from_geofile(
     *,
     db: Session = Depends(deps.get_db),
-    name: str
+    name: str,
+    background_tasks: BackgroundTasks
 ) -> Any:
     """
     import trees from geofile 
     """
     geofile = crud.geo_file.get_by_name(db, name=name)
-    crud.tree.import_from_geo_file(db, geofile)
+
+    background_tasks.add_task(
+        import_geofile,
+        db=db,
+        geofile=geofile
+    )
 
     return geofile
