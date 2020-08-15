@@ -4,7 +4,7 @@ import enum
 from typing import TYPE_CHECKING
 from pathlib import Path
 
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum, null
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum
 from sqlalchemy.orm import relationship
 import fiona
 import pandas as pd
