@@ -39,21 +39,21 @@ async def upload_geo_file(
         unique_filename = f"{unique_name}.{extension}"
         copy_filename = f"{settings.UPLOADED_FILES_FOLDER}/{unique_filename}"
         copy_file = await file.read()
+
         with open(copy_filename, "wb") as f:
             f.write(copy_file)
 
-        geofile = models.GeoFile()
+        geofile = models.GeoFile(
+            name=unique_name,
+            original_name=file.filename,
+            extension=extension
+        )
 
-        if not geofile.is_valid(copy_filename):
+        if not geofile.is_valid():
             raise HTTPException(status_code=415, detail="File corrupt")
 
-        obj_in = {
-            "name": unique_name,
-            "original_name": file.filename,
-            "extension": extension
-        }
-
-        geofile = crud.geo_file.create(db=db, obj_in=obj_in)
+        db.add(geofile)
+        db.commit()
 
     finally:
         await file.close()

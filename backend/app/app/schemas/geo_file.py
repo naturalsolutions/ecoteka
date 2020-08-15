@@ -11,6 +11,9 @@ class GeoFileBase(BaseModel):
     name: str
     original_name: str
     extension: str
+    count: int = 0
+    crs: str = None
+    driver: str = None
     status: GeoFileStatus
     uploaded_date: datetime
     imported_date: datetime = None

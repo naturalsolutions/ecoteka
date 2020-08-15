@@ -24,6 +24,9 @@ class GeoFile(Base):
     name = Column(String, index=True, unique=True, nullable=False)
     original_name = Column(String, nullable=False)
     extension = Column(String, nullable=False)
+    count = Column(Integer, nullable=False, default=0)
+    driver = Column(String, nullable=True)
+    crs = Column(String, nullable=True)
     status = Column(Enum(GeoFileStatus,
                          values_callable=lambda obj: [e.value for e in obj]),
                     nullable=False,
@@ -33,28 +36,40 @@ class GeoFile(Base):
     importing_start = Column(DateTime, nullable=True)
     public = Column(Boolean, nullable=False, default=False)
 
+    def __init__(self, name: str, extension: str, original_name: str):
+        self.name = name
+        self.extension = extension
+        self.original_name = original_name
+        self.get_metadata()
+        super().__init__()
+
     def get_filepath(self):
-        return f'{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
+        if self.extension == 'zip':
+            return f'zip://{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
+        else:
+            return f'{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
 
-    def is_valid(self, path: Path):
+    def get_metadata(self):
+        if self.extension in ['geojson', 'zip']:
+            with fiona.open(self.get_filepath()) as c:
+                self.count = len(c)
+                self.driver = c.driver
+                self.crs = c.crs["init"]
+
+    def is_valid(self):
         try:
-            filename_parts = os.path.splitext(path)
-            extension = filename_parts[1][1:]
+            if self.extension == 'geojson':
+                return self.driver == 'GeoJSON'
 
-            if extension == 'geojson':
-                with fiona.open(path) as c:
-                    return c.driver == 'GeoJSON'
+            if self.extension == 'zip':
+                return self.driver == 'ESRI Shapefile'
 
-            if extension == 'zip':
-                with fiona.open(f'zip://{path}') as c:
-                    return c.driver == 'ESRI Shapefile'
-
-            if extension == 'csv':
-                df = pd.read_csv(path)
+            if self.extension == 'csv':
+                df = pd.read_csv(self.get_filepath())
                 return len(df.columns) > 0 and not df.empty
 
-            if extension == 'xls' or extension == 'xlsx':
-                df = pd.read_excel(path)
+            if self.extension == 'xls' or self.extension == 'xlsx':
+                df = pd.read_excel(self.get_filepath())
                 return len(df.columns) > 0 and not df.empty
         except:
             return False

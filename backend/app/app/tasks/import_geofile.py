@@ -10,6 +10,7 @@ from app.models import GeoFile, GeoFileStatus, Tree
 
 def import_from_fiona(db: Session, path: Path, geofile_id: int):
     with fiona.open(path) as source:
+        print('total', len(source))
         for i, feature in enumerate(source):
             x, y = feature["geometry"]["coordinates"]
             tree = Tree(
