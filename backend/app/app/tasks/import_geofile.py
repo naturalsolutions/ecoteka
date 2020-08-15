@@ -9,9 +9,8 @@ from app.models import GeoFile, GeoFileStatus, Tree
 
 
 def import_from_fiona(db: Session, path: Path, geofile_id: int):
-    with fiona.open(path) as source:
-        print('total', len(source))
-        for i, feature in enumerate(source):
+    with fiona.open(path) as c:
+        for i, feature in enumerate(c):
             x, y = feature["geometry"]["coordinates"]
             tree = Tree(
                 geofile_id=geofile_id,
@@ -30,11 +29,8 @@ def import_geofile(db: Session, geofile: GeoFile):
     geofile.importing_start = datetime.datetime.utcnow()
     db.commit()
 
-    if geofile.extension == 'geojson':
+    if geofile.extension == 'geojson' or geofile.extension == 'zip':
         import_from_fiona(db, geofile.get_filepath(), geofile.id)
-
-    if geofile.extension == 'zip':
-        import_from_fiona(db, f'zip://{geofile.get_filepath()}', geofile.id)
 
     geofile.imported_date = datetime.datetime.utcnow()
     geofile.status = GeoFileStatus.IMPORTED.value

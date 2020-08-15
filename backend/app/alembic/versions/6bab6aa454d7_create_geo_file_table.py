@@ -29,6 +29,7 @@ def upgrade():
         sa.Column("count", sa.Integer(), nullable=False),
         sa.Column("driver", sa.String(), nullable=True),
         sa.Column("crs", sa.String(), nullable=True),
+        sa.Column("properties", sa.JSON(), nullable=True),
         sa.Column("status",
                   sa.Enum(GeoFileStatus,
                           values_callable=lambda obj: [e.value for e in obj]),

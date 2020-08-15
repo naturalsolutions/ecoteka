@@ -1,10 +1,11 @@
 import os
 import datetime
 import enum
+from json import dumps
 from typing import TYPE_CHECKING
 from pathlib import Path
 
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum, JSON
 from sqlalchemy.orm import relationship
 import fiona
 import pandas as pd
@@ -27,6 +28,7 @@ class GeoFile(Base):
     count = Column(Integer, nullable=False, default=0)
     driver = Column(String, nullable=True)
     crs = Column(String, nullable=True)
+    properties = Column(JSON, nullable=True)
     status = Column(Enum(GeoFileStatus,
                          values_callable=lambda obj: [e.value for e in obj]),
                     nullable=False,
@@ -55,6 +57,7 @@ class GeoFile(Base):
                 self.count = len(c)
                 self.driver = c.driver
                 self.crs = c.crs["init"]
+                self.properties = dumps(c.schema["properties"])
 
     def is_valid(self):
         try:

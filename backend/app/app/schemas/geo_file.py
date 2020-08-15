@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Json
 
 from app.models.geo_file import GeoFileStatus
 
@@ -14,6 +14,7 @@ class GeoFileBase(BaseModel):
     count: int = 0
     crs: str = None
     driver: str = None
+    properties: Json = None
     status: GeoFileStatus
     uploaded_date: datetime
     imported_date: datetime = None
