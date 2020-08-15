@@ -3,14 +3,18 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from app.models.geo_file import GeoFileStatus
+
 
 # Shared properties
 class GeoFileBase(BaseModel):
     name: str
     original_name: str
     extension: str
-    imported: bool = False
-    imported_date: datetime
+    status: GeoFileStatus
+    uploaded_date: datetime
+    imported_date: datetime = None
+    importing_start: datetime = None
     public: bool = False
 
     # Properties to receive via API on creation

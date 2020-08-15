@@ -32,6 +32,11 @@ def import_from_geofile(
     """
     geofile = crud.geo_file.get_by_name(db, name=name)
 
+    if geofile.status == models.GeoFileStatus.IMPORTING:
+        raise HTTPException(
+            status_code=409,
+            detail=f"{geofile.name} has already started an import process")
+
     background_tasks.add_task(
         import_geofile,
         db=db,

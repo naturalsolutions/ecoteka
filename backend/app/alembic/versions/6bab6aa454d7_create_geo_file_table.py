@@ -5,8 +5,11 @@ Revises: 178242739b82
 Create Date: 2020-08-12 11:15:32.317531
 
 """
+import datetime
 from alembic import op
 import sqlalchemy as sa
+
+from app.models.geo_file import GeoFileStatus
 
 
 # revision identifiers, used by Alembic.
@@ -23,8 +26,17 @@ def upgrade():
         sa.Column("name", sa.String(42), nullable=False),
         sa.Column("original_name", sa.String(), nullable=False),
         sa.Column("extension", sa.String(7), nullable=False),
-        sa.Column("imported", sa.Boolean(), unique=False, server_default=sa.false()),
-        sa.Column("imported_date", sa.DateTime(), nullable=True),
+        sa.Column("status",
+                  sa.Enum(GeoFileStatus,
+                          values_callable=lambda obj: [e.value for e in obj]),
+                  nullable=False,
+                  default=GeoFileStatus.UPLOADED.value,
+                  server_default=GeoFileStatus.UPLOADED.value),
+        sa.Column("uploaded_date",
+                  sa.DateTime,
+                  nullable=False),
+        sa.Column("imported_date", sa.DateTime, nullable=True),
+        sa.Column("importing_start", sa.DateTime, nullable=True),
         sa.Column("public", sa.Boolean(), nullable=False, server_default=sa.false()),
         sa.UniqueConstraint("name"),
         sa.PrimaryKeyConstraint("id"),
@@ -38,3 +50,4 @@ def downgrade():
     op.drop_index(op.f("ix_geofile_id"), table_name="geofile")
     op.drop_index(op.f("ix_geofile_name"), table_name="geofile")
     op.drop_table("geofile")
+    op.execute('DROP TYPE geofilestatus')

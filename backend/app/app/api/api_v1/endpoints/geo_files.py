@@ -50,8 +50,7 @@ async def upload_geo_file(
         obj_in = {
             "name": unique_name,
             "original_name": file.filename,
-            "extension": extension,
-            "imported": False
+            "extension": extension
         }
 
         geofile = crud.geo_file.create(db=db, obj_in=obj_in)
