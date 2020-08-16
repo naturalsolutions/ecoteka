@@ -41,13 +41,21 @@ async def upload_geo_file(
         copy_file = await file.read()
 
         with open(copy_filename, "wb") as f:
-            f.write(copy_file)
+            f.write(copy_file)  # type: ignore
 
         geofile = models.GeoFile(
-            name=unique_name,
+            name=str(unique_name),
             original_name=file.filename,
             extension=extension
         )
+
+        geofile_exists = crud.geo_file.get_by_checksum(db, checksum=geofile.checksum)
+
+        if geofile_exists:
+            os.remove(geofile.get_filepath(extended=False))
+            raise HTTPException(
+                status_code=400,
+                detail=f"The geofile with {geofile.checksum} checksum already exists in the system.")
 
         if not geofile.is_valid():
             raise HTTPException(status_code=415, detail="File corrupt")

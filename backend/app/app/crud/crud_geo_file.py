@@ -11,5 +11,8 @@ class CRUDGeoFile(CRUDBase[GeoFile, GeoFileCreate, GeoFileUpdate]):
     def get_by_name(self, db: Session, *, name: str) -> Optional[GeoFile]:
         return db.query(GeoFile).filter(GeoFile.name == name).first()
 
+    def get_by_checksum(self, db: Session, *, checksum: str) -> Optional[GeoFile]:
+        return db.query(GeoFile).filter(GeoFile.checksum == checksum).first()
+
 
 geo_file = CRUDGeoFile(GeoFile)

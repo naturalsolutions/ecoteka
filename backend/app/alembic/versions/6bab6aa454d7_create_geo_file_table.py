@@ -26,6 +26,7 @@ def upgrade():
         sa.Column("name", sa.String(42), nullable=False),
         sa.Column("original_name", sa.String(), nullable=False),
         sa.Column("extension", sa.String(7), nullable=False),
+        sa.Column("checksum", sa.String(32), nullable=False),
         sa.Column("count", sa.Integer(), nullable=False),
         sa.Column("driver", sa.String(), nullable=True),
         sa.Column("crs", sa.String(), nullable=True),
@@ -47,11 +48,13 @@ def upgrade():
     )
 
     op.create_index(op.f("ix_geofile_id"), "geofile", ["id"], unique=True)
-    op.create_index(op.f("ix_geofile_name"), "geofile", ["name"])
+    op.create_index(op.f("ix_geofile_name"), "geofile", ["name"], unique=True)
+    op.create_index(op.f("ix_geofile_checksum"), "geofile", ["checksum"], unique=True)
 
 
 def downgrade():
     op.drop_index(op.f("ix_geofile_id"), table_name="geofile")
     op.drop_index(op.f("ix_geofile_name"), table_name="geofile")
+    op.drop_index(op.f("ix_geofile_checksum"), table_name="geofile")
     op.drop_table("geofile")
     op.execute('DROP TYPE geofilestatus')

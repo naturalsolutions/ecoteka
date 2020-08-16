@@ -8,7 +8,7 @@ class TreeBase(BaseModel):
     name: str
     geo_file: int
     geom: str
-    properties: Json = None
+    properties: Json
 
 
 class TreeCreate(TreeBase):

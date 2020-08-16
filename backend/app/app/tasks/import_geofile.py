@@ -19,7 +19,7 @@ def import_from_fiona(db: Session, path: Path, geofile_id: int):
                 geofile_id=geofile_id,
                 geom=f'POINT({x} {y})',
                 properties=properties
-            )
+            )  # type: ignore
 
             db.add(tree)
 

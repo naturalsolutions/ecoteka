@@ -1,6 +1,7 @@
 import os
 import datetime
 import enum
+import hashlib
 from json import dumps
 from typing import TYPE_CHECKING
 from pathlib import Path
@@ -25,6 +26,7 @@ class GeoFile(Base):
     name = Column(String, index=True, unique=True, nullable=False)
     original_name = Column(String, nullable=False)
     extension = Column(String, nullable=False)
+    checksum = Column(String, nullable=False)
     count = Column(Integer, nullable=False, default=0)
     driver = Column(String, nullable=True)
     crs = Column(String, nullable=True)
@@ -43,10 +45,11 @@ class GeoFile(Base):
         self.extension = extension
         self.original_name = original_name
         self.get_metadata()
+        self.get_checksum()
         super().__init__()
 
-    def get_filepath(self):
-        if self.extension == 'zip':
+    def get_filepath(self, extended: bool = True):
+        if self.extension == 'zip' and extended:
             return f'zip://{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
         else:
             return f'{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
@@ -58,6 +61,14 @@ class GeoFile(Base):
                 self.driver = c.driver
                 self.crs = c.crs["init"]
                 self.properties = dumps(c.schema["properties"])
+
+    def get_checksum(self):
+        with open(self.get_filepath(extended=False), "rb") as f:
+            file_hash = hashlib.md5()
+            while chunk := f.read(8192):
+                file_hash.update(chunk)
+
+        self.checksum = file_hash.hexdigest()
 
     def is_valid(self):
         try:
