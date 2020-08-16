@@ -23,6 +23,7 @@ def upgrade():
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("geofile_id", sa.Integer(), nullable=True),
         sa.Column("geom", ga.Geometry('POINT')),
+        sa.Column("properties", sa.JSON(), nullable=True),
         sa.ForeignKeyConstraint(['geofile_id'], ['geofile.id']),
         sa.PrimaryKeyConstraint("id"),
     )

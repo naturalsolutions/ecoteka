@@ -1,12 +1,14 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Json
 
 
 class TreeBase(BaseModel):
     name: str
     geo_file: int
+    geom: str
+    properties: Json = None
 
 
 class TreeCreate(TreeBase):

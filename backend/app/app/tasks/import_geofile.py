@@ -1,6 +1,7 @@
 import fiona
 import logging
 import datetime
+from json import dumps
 from pathlib import Path
 
 from sqlalchemy.orm import Session
@@ -12,9 +13,12 @@ def import_from_fiona(db: Session, path: Path, geofile_id: int):
     with fiona.open(path) as c:
         for i, feature in enumerate(c):
             x, y = feature["geometry"]["coordinates"]
+            properties = dumps(feature["properties"])
+
             tree = Tree(
                 geofile_id=geofile_id,
-                geom=f'POINT({x} {y})'
+                geom=f'POINT({x} {y})',
+                properties=properties
             )
 
             db.add(tree)
