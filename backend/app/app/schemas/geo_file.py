@@ -16,6 +16,8 @@ class GeoFileBase(BaseModel):
     count: int = 0
     crs: str = ''
     driver: str = ''
+    longitude_column: Optional[str] = Field(...)
+    latitude_column: Optional[str] = Field(...)
     properties: Optional[Json] = Field(...)
     status: GeoFileStatus
     uploaded_date: Optional[datetime] = Field(...)

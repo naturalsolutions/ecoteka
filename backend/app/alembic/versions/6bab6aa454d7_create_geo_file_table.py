@@ -30,6 +30,8 @@ def upgrade():
         sa.Column("count", sa.Integer(), nullable=False),
         sa.Column("driver", sa.String(), nullable=True),
         sa.Column("crs", sa.String(), nullable=True),
+        sa.Column("longitude_column", sa.String(), nullable=True),
+        sa.Column("latitude_column", sa.String(), nullable=True),
         sa.Column("properties", sa.JSON(), nullable=True),
         sa.Column("status",
                   sa.Enum(GeoFileStatus,

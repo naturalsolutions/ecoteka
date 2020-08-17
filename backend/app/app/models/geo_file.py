@@ -30,6 +30,8 @@ class GeoFile(Base):
     count = Column(Integer, nullable=False, default=0)
     driver = Column(String, nullable=True)
     crs = Column(String, nullable=True)
+    longitude_column = Column(String, nullable=True)
+    latitude_column = Column(String, nullable=True)
     properties = Column(JSON, nullable=True)
     status = Column(Enum(GeoFileStatus,
                          values_callable=lambda obj: [e.value for e in obj]),
