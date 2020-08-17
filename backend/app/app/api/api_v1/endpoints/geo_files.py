@@ -23,7 +23,8 @@ router = APIRouter()
 @router.post("/upload", response_model=schemas.GeoFile)
 async def upload_geo_file(
     file: UploadFile = File(...),
-    db: Session = Depends(deps.get_db)
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user)
 ):
     """
     Upload a geo file
@@ -55,7 +56,7 @@ async def upload_geo_file(
             os.remove(geofile.get_filepath(extended=False))
             raise HTTPException(
                 status_code=400,
-                detail=f"The geofile with {geofile.checksum} checksum already exists in the system.")
+                detail=f"The geofile with the {geofile.checksum} checksum already exists in the system.")
 
         if not geofile.is_valid():
             raise HTTPException(status_code=415, detail="File corrupt")
@@ -73,7 +74,8 @@ async def upload_geo_file(
 def read_geo_files(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
-    limit: int = 100
+    limit: int = 100,
+    current_user: models.User = Depends(deps.get_current_active_user)
 ) -> Any:
     """
     Retrieve geo files.

@@ -62,6 +62,20 @@ class GeoFile(Base):
                 self.crs = c.crs["init"]
                 self.properties = dumps(c.schema["properties"])
 
+        if self.extension in ['xlsx', 'xls']:
+            df = pd.read_excel(self.get_filepath())
+            self.count = len(df.index)
+            self.driver = 'Excel'
+            self.crs = 'epsg:4326'
+            self.properties = dumps(df.dtypes.astype(str).to_dict())
+
+        if self.extension == 'csv':
+            df = pd.read_csv(self.get_filepath())
+            self.count = len(df.index)
+            self.driver = 'CSV'
+            self.crs = 'epsg:4326'
+            self.properties = dumps(df.dtypes.astype(str).to_dict())
+
     def get_checksum(self):
         with open(self.get_filepath(extended=False), "rb") as f:
             file_hash = hashlib.md5()
