@@ -42,7 +42,7 @@ services:
 
       # Middlewate: http(s)://ecoteka.natural-solutions.eu to https://
       - traefik.http.middlewares.nstoecoteka.redirectregex.regex=^https?://(?:www\.)?(.)
-      - traefik.http.middlewares.nstoecoteka.redirectregex.replacement=https://ecoteka.org
+      - traefik.http.middlewares.nstoecoteka.redirectregex.replacement=https://${NS_ECOTEKA_DOMAIN_NAME}
       - traefik.http.middlewares.nstoecoteka.redirectregex.permanent=true
 
       # Let's Encrypt
