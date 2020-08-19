@@ -1,11 +1,37 @@
 stages:
-  - build
-  - build_prod
-  - pages_prod
-  - deploy
+  - build_dev
+  - deploy_dev
+  - build_master
+  - deploy_master
 
-build_frontend:
-  stage: build
+build_frontend_dev:
+  stage: build_dev
+  image: docker
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-dev-latest -f ./frontend/.docker/Dockerfile ./frontend
+    - docker push ${CI_REGISTRY_IMAGE}:frontend-dev-latest
+    - docker system prune -a -f
+  only:
+    - dev
+  tags:
+    - ns01
+
+build_backend_dev:
+  stage: build_dev
+  image: docker
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-dev-latest ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-dev-latest
+    - docker system prune -a -f
+  only:
+    - dev
+  tags:
+    - ns01
+
+build_frontend_master:
+  stage: build_master
   image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
@@ -13,12 +39,12 @@ build_frontend:
     - docker push ${CI_REGISTRY_IMAGE}:frontend-latest
     - docker system prune -a -f
   only:
-    - dev
+    - master
   tags:
     - ns01
 
-build_backend:
-  stage: build
+build_backend_master:
+  stage: build_master
   image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
@@ -26,16 +52,25 @@ build_backend:
     - docker push ${CI_REGISTRY_IMAGE}:backend-latest
     - docker system prune -a -f
   only:
+    - master
+  tags:
+    - ns01
+
+deploy_dev:
+  stage: deploy_dev
+  script:
+    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_master deploy.yml
+  only:
     - dev
   tags:
     - ns01
 
-deploy:
-  stage: deploy
+deploy_master:
+  stage: deploy_master
   script:
-    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka deploy.yml
+    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_master deploy.yml
   only:
-    - dev
+    - master
   tags:
     - ns01
 
