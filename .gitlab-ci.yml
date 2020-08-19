@@ -59,7 +59,7 @@ build_backend_master:
 deploy_dev:
   stage: deploy_dev
   script:
-    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_master deploy.yml
+    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_dev deploy.yml
   only:
     - dev
   tags:
@@ -73,26 +73,3 @@ deploy_master:
     - master
   tags:
     - ns01
-
-build-ecoteka-web:
-  stage: build_prod
-  image: docker
-  script:
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build --build-arg asset_prefix=${ETK_ASSET_PREFIX} -t ${CI_REGISTRY_IMAGE}:latest ./frontend
-    - docker push ${CI_REGISTRY_IMAGE}:latest
-  only:
-    - master
-  tags:
-    - ns01
-
-pages:
-  image: ${CI_REGISTRY_IMAGE}:latest
-  stage: pages_prod
-  script:
-    - cp -r /usr/share/nginx/html public
-  artifacts:
-    paths:
-      - public
-  only:
-    - master
