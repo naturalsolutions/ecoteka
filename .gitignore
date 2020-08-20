@@ -1,3 +1,5 @@
 .env
 .devcontainer
 .vscode/
+backend/app/app/uploaded_files
+backups
