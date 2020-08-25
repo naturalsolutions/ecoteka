@@ -70,6 +70,31 @@ async def upload_geo_file(
     return geofile
 
 
+@router.put("/", response_model=schemas.GeoFile)
+def update_geo_file(
+    *,
+    db: Session = Depends(deps.get_db),
+    name: str,
+    geofile_in: schemas.GeoFileUpdate,
+    # current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Update geo file.
+    """
+    geofile = crud.geo_file.get_by_name(db, name=name)
+
+    if not geofile:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The geofile with name {name} does not exist in the system",
+        )
+
+    print(geofile_in)
+    # geofile = crud.geo_file.update(db, db_obj=geofile, obj_in=geofile_in)
+
+    return geofile
+
+
 @router.get("/", response_model=List[schemas.GeoFile])
 def read_geo_files(
     db: Session = Depends(deps.get_db),

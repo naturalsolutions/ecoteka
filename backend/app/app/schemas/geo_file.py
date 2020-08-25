@@ -33,7 +33,8 @@ class GeoFileCreate(GeoFileBase):
 
 
 class GeoFileUpdate(BaseModel):
-    pass
+    longitude_column: Optional[str] = Field(...)
+    latitude_column: Optional[str] = Field(...)
 
 # Additional properties to return via API
 
