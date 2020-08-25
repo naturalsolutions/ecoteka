@@ -72,7 +72,7 @@ services:
       - HEALTHCHECK_PORT=${NS_ECOTEKA_DB_BACKUPS_HEALTHCHECK_PORT}
 
   files_backups:
-    image: registry.gitlab.com/natural-solutions/docker-duplicit
+    image: registry.gitlab.com/natural-solutions/docker-duplicity
     restart: always
     networks:
       - traefik
