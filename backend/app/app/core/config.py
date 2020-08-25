@@ -1,6 +1,6 @@
 import secrets
 from typing import Any, Dict, List, Optional, Union
-
+from pathlib import Path
 from pydantic import AnyHttpUrl, BaseSettings, EmailStr, HttpUrl, PostgresDsn, validator
 
 
@@ -75,6 +75,9 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = True
+
+    UPLOADED_FILES_FOLDER: Path = "/app/app/uploaded_files"
+    GEO_FILES_ALLOWED: str = 'geojson,zip,csv,xls,xlsx'
 
     class Config:
         case_sensitive = True
