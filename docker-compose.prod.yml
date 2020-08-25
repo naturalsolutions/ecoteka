@@ -77,7 +77,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${NS_ECOTEKA_FILES_BACKUPS_PATH}:/home/duplicity/src
+      - ${NS_ECOTEKA_FILES_BACKUPS_SRC}:/home/duplicity/src
       - ${NS_ECOTEKA_FILES_BACKUPS_TARGET}:/home/duplicity/backup
       - ./scripts/files_backup.sh:/backup.sh
     environment:
