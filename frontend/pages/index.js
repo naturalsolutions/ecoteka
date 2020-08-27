@@ -1,24 +1,53 @@
-import { useState, createRef, useEffect } from "react";
-import { Affix } from "antd";
-import Map from "../components/Map";
-import ButtonAbout from "../components/ButtonAbout";
-import ViewMode from "../components/ViewMode";
-import LayoutBase from "../components/Layout/Base";
-import LayoutHeader from "../components/Layout/Header";
-import LayoutSider from "../components/Layout/Sider";
-import SearchCity from "../components/SearchCity";
-import themeStyle from "../lib/themeStyle";
+import { useState, createRef } from "react";
+import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { red } from "@material-ui/core/colors";
+
+import ETKToolbar from "../components/Toolbar";
+import ETKSidebar from "../components/Sidebar";
+import ETKMap from "../components/Map/Map";
+import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
+import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
+import ETKMapSearchCity from "../components/Map/SearchCity";
 import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
 
-export default () => {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: "100vh",
+  },
+}));
+
+export default function Index() {
   const mapRef = createRef();
-  const [theme, setTheme] = useState("light");
-  const [isSiderCollapsed, setIsSiderCollapsed] = useState(true);
-  const [filter] = useState(null);
+  const classes = useStyles();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState(0);
+  const [currentTheme, setCurrentTheme] = useState("light");
+  const theme = createMuiTheme({
+    palette: {
+      type: currentTheme,
+      primary: {
+        main: currentTheme === "light" ? "#01685a" : "#fff",
+      },
+      secondary: {
+        main: "#19857b",
+      },
+      error: {
+        main: red.A400,
+      },
+      background: {
+        default: "#fff",
+      },
+    },
+  });
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -31,23 +60,6 @@ export default () => {
       "genre_latin",
       ...values,
     ]);
-  };
-
-  const onViewModeChange = (viewMode) => {
-    mapRef.current.map.setLayoutProperty(
-      "satellite",
-      "visibility",
-      viewMode === "map" ? "none" : "visible"
-    );
-  };
-
-  const onSearchCityChange = (data) => {
-    if (data) {
-      mapRef.current.map.setZoom(12);
-      mapRef.current.map.flyTo({
-        center: data.center,
-      });
-    }
   };
 
   const onMapClick = (map, e) => {
@@ -72,62 +84,90 @@ export default () => {
         genre = feature.properties.genre.toLowerCase().replace(" ", "_");
       }
 
-      if ((genre || feature.properties) && isSiderCollapsed) {
-        setIsSiderCollapsed(false);
+      if ((genre || feature.properties) && !isDrawerOpen) {
+        setIsDrawerOpen(true);
       }
 
       setCurrentGenre(genre);
       setCurrentProperties(feature.properties);
 
       if (feature.properties) {
-        setActiveTab("3");
+        setActiveTab(1);
       }
     }
   };
 
-  const onLayoutHeaderDarkThemeChange = (darkTheme) => {
-    const newTheme = darkTheme ? "dark" : "light";
-
+  const toggleMapTheme = (mapTheme) => {
     for (let layer of Object.keys(layersStyle)) {
-      for (let property of Object.keys(layersStyle[layer][newTheme])) {
+      for (let property of Object.keys(layersStyle[layer][mapTheme])) {
         mapRef.current.map.setPaintProperty(
           layer,
           property,
-          layersStyle[layer][newTheme][property]
+          layersStyle[layer][mapTheme][property]
         );
       }
     }
-
-    setTheme(newTheme);
-  };
-
-  const onLayoutSiderToggle = () => {
-    setIsSiderCollapsed(!isSiderCollapsed);
-    setTimeout(() => {
-      window.dispatchEvent(new Event("resize"));
-    }, 200);
   };
 
   const onMapLoaded = (map) => {
-    onLayoutHeaderDarkThemeChange(false);
+    toggleMapTheme(currentTheme);
     window.dispatchEvent(new Event("resize"));
   };
 
+  const onDarkToggleHandler = (dark) => {
+    const mapTheme = dark ? "light" : "dark";
+
+    setCurrentTheme(mapTheme);
+    toggleMapTheme(mapTheme);
+  };
+
+  const onMapSateliteToggleHandler = (active) => {
+    mapRef.current.map.setLayoutProperty(
+      "satellite",
+      "visibility",
+      active === "map" ? "none" : "visible"
+    );
+  };
+
+  const onSearchCityChangeHandler = (city) => {
+    if (city.centre && city.centre.coordinates) {
+      mapRef.current.map.setZoom(12);
+      mapRef.current.map.flyTo({
+        center: city.centre.coordinates,
+      });
+    }
+  };
+
   return (
-    <LayoutBase
-      header={
-        <LayoutHeader
-          themeStyle={themeStyle(theme).header}
-          logo={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
-          onLayoutSiderToggle={onLayoutSiderToggle}
-          onDarkThemeChange={onLayoutHeaderDarkThemeChange}
+    <ThemeProvider theme={theme}>
+      <div className={classes.root} role="presentation">
+        <ETKToolbar
+          logo={`/assets/${currentTheme}/logo.svg`}
+          numberOfTrees="4.6 millions of trees"
+          aboutText="About"
+          onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
+          onDarkToggle={onDarkToggleHandler}
         />
-      }
-      sider={
-        <LayoutSider
-          width={300}
-          collapsed={isSiderCollapsed}
-          theme={theme}
+
+        <main className={classes.content}>
+          <ETKMap
+            ref={mapRef}
+            styleSource="/assets/style.json"
+            onMapClick={onMapClick}
+            onStyleData={onMapLoaded}
+          />
+          <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+          <ETKMapGeolocateFab map={mapRef} />
+          <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
+        </main>
+      </div>
+      <Drawer
+        variant="persistent"
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+      >
+        <Toolbar variant="dense" />
+        <ETKSidebar
           speces={speces}
           activeTab={activeTab}
           currentGenre={currentGenre}
@@ -135,22 +175,7 @@ export default () => {
           onFilterSpecies={onFilterSpecies}
           onTabChange={setActiveTab}
         />
-      }
-    >
-      <Map
-        ref={mapRef}
-        styleSource="/assets/style.json"
-        filter={filter}
-        onMapClick={onMapClick}
-        onStyleData={onMapLoaded}
-      />
-      <Affix style={{ position: "absolute", left: "1rem", top: ".4rem" }}>
-        <SearchCity onChange={onSearchCityChange} />
-      </Affix>
-      <Affix style={{ position: "absolute", left: "1rem", bottom: "1.4rem" }}>
-        <ViewMode onChange={onViewModeChange} />
-      </Affix>
-      <ButtonAbout />
-    </LayoutBase>
+      </Drawer>
+    </ThemeProvider>
   );
-};
+}

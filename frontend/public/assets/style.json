@@ -1,6 +1,9 @@
 {
   "bearing": 0,
-  "center": [0, 0],
+  "center": [
+    0,
+    0
+  ],
   "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=1zul9rM9yDm3Dbdl3U9r",
   "id": "basic",
   "layers": [
@@ -14,8 +17,18 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Polygon"],
-        ["in", "class", "residential", "suburb", "neighbourhood"]
+        [
+          "==",
+          "$type",
+          "Polygon"
+        ],
+        [
+          "in",
+          "class",
+          "residential",
+          "suburb",
+          "neighbourhood"
+        ]
       ],
       "id": "landuse_residential",
       "layout": {
@@ -26,14 +39,22 @@
       "type": "fill"
     },
     {
-      "filter": ["==", "class", "grass"],
+      "filter": [
+        "==",
+        "class",
+        "grass"
+      ],
       "id": "landcover_grass",
       "source": "openmaptiles",
       "source-layer": "landcover",
       "type": "fill"
     },
     {
-      "filter": ["==", "class", "wood"],
+      "filter": [
+        "==",
+        "class",
+        "wood"
+      ],
       "id": "landcover_wood",
       "source": "openmaptiles",
       "source-layer": "landcover",
@@ -42,9 +63,21 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Polygon"],
-        ["!=", "intermittent", 1],
-        ["!=", "brunnel", "tunnel"]
+        [
+          "==",
+          "$type",
+          "Polygon"
+        ],
+        [
+          "!=",
+          "intermittent",
+          1
+        ],
+        [
+          "!=",
+          "brunnel",
+          "tunnel"
+        ]
       ],
       "id": "water",
       "layout": {
@@ -55,7 +88,19 @@
       "type": "fill"
     },
     {
-      "filter": ["all", ["==", "$type", "Polygon"], ["==", "intermittent", 1]],
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "Polygon"
+        ],
+        [
+          "==",
+          "intermittent",
+          1
+        ]
+      ],
       "id": "water_intermittent",
       "layout": {
         "visibility": "visible"
@@ -65,7 +110,11 @@
       "type": "fill"
     },
     {
-      "filter": ["==", "subclass", "ice_shelf"],
+      "filter": [
+        "==",
+        "subclass",
+        "ice_shelf"
+      ],
       "id": "landcover_ice-shelf",
       "layout": {
         "visibility": "none"
@@ -75,7 +124,11 @@
       "type": "fill"
     },
     {
-      "filter": ["==", "subclass", "glacier"],
+      "filter": [
+        "==",
+        "subclass",
+        "glacier"
+      ],
       "id": "landcover_glacier",
       "layout": {
         "visibility": "none"
@@ -85,7 +138,14 @@
       "type": "fill"
     },
     {
-      "filter": ["all", ["in", "class", "sand"]],
+      "filter": [
+        "all",
+        [
+          "in",
+          "class",
+          "sand"
+        ]
+      ],
       "id": "landcover_sand",
       "metadata": {},
       "source": "openmaptiles",
@@ -95,8 +155,16 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "tunnel"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "tunnel"
+        ]
       ],
       "id": "waterway_tunnel",
       "layout": {
@@ -109,9 +177,22 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["!in", "brunnel", "tunnel", "bridge"],
-        ["!=", "intermittent", 1]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "!in",
+          "brunnel",
+          "tunnel",
+          "bridge"
+        ],
+        [
+          "!=",
+          "intermittent",
+          1
+        ]
       ],
       "id": "waterway",
       "layout": {
@@ -124,9 +205,22 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["!in", "brunnel", "tunnel", "bridge"],
-        ["==", "intermittent", 1]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "!in",
+          "brunnel",
+          "tunnel",
+          "bridge"
+        ],
+        [
+          "==",
+          "intermittent",
+          1
+        ]
       ],
       "id": "waterway_intermittent",
       "layout": {
@@ -139,9 +233,21 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "tunnel"],
-        ["==", "class", "transit"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "tunnel"
+        ],
+        [
+          "==",
+          "class",
+          "transit"
+        ]
       ],
       "id": "tunnel_railway_transit",
       "layout": {
@@ -163,7 +269,19 @@
       }
     },
     {
-      "filter": ["all", ["==", "$type", "Polygon"], ["==", "class", "pier"]],
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "Polygon"
+        ],
+        [
+          "==",
+          "class",
+          "pier"
+        ]
+      ],
       "id": "road_area_pier",
       "layout": {
         "visibility": "visible"
@@ -174,7 +292,19 @@
       "type": "fill"
     },
     {
-      "filter": ["all", ["==", "$type", "LineString"], ["in", "class", "pier"]],
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "in",
+          "class",
+          "pier"
+        ]
+      ],
       "id": "road_pier",
       "layout": {
         "line-cap": "round",
@@ -188,8 +318,16 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Polygon"],
-        ["in", "brunnel", "bridge"]
+        [
+          "==",
+          "$type",
+          "Polygon"
+        ],
+        [
+          "in",
+          "brunnel",
+          "bridge"
+        ]
       ],
       "id": "road_bridge_area",
       "layout": {},
@@ -200,8 +338,17 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["in", "class", "path", "track"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "in",
+          "class",
+          "path",
+          "track"
+        ]
       ],
       "id": "road_path",
       "layout": {
@@ -215,8 +362,17 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["in", "class", "minor", "service"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "in",
+          "class",
+          "minor",
+          "service"
+        ]
       ],
       "id": "road_minor",
       "layout": {
@@ -231,9 +387,21 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "tunnel"],
-        ["==", "class", "minor_road"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "tunnel"
+        ],
+        [
+          "==",
+          "class",
+          "minor_road"
+        ]
       ],
       "id": "tunnel_minor",
       "layout": {
@@ -247,9 +415,24 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "tunnel"],
-        ["in", "class", "primary", "secondary", "tertiary", "trunk"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "tunnel"
+        ],
+        [
+          "in",
+          "class",
+          "primary",
+          "secondary",
+          "tertiary",
+          "trunk"
+        ]
       ],
       "id": "tunnel_major",
       "layout": {
@@ -263,8 +446,17 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Polygon"],
-        ["in", "class", "runway", "taxiway"]
+        [
+          "==",
+          "$type",
+          "Polygon"
+        ],
+        [
+          "in",
+          "class",
+          "runway",
+          "taxiway"
+        ]
       ],
       "id": "aeroway_area",
       "layout": {
@@ -281,8 +473,16 @@
     {
       "filter": [
         "all",
-        ["in", "class", "taxiway"],
-        ["==", "$type", "LineString"]
+        [
+          "in",
+          "class",
+          "taxiway"
+        ],
+        [
+          "==",
+          "$type",
+          "LineString"
+        ]
       ],
       "id": "aeroway_taxiway",
       "layout": {
@@ -301,8 +501,16 @@
     {
       "filter": [
         "all",
-        ["in", "class", "runway"],
-        ["==", "$type", "LineString"]
+        [
+          "in",
+          "class",
+          "runway"
+        ],
+        [
+          "==",
+          "$type",
+          "LineString"
+        ]
       ],
       "id": "aeroway_runway",
       "layout": {
@@ -321,8 +529,17 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["in", "class", "trunk", "primary"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "in",
+          "class",
+          "trunk",
+          "primary"
+        ]
       ],
       "id": "road_trunk_primary",
       "layout": {
@@ -336,8 +553,17 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["in", "class", "secondary", "tertiary"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "in",
+          "class",
+          "secondary",
+          "tertiary"
+        ]
       ],
       "id": "road_secondary_tertiary",
       "layout": {
@@ -351,8 +577,16 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "class", "motorway"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "class",
+          "motorway"
+        ]
       ],
       "id": "road_major_motorway",
       "layout": {
@@ -366,8 +600,16 @@
     {
       "filter": [
         "all",
-        ["==", "class", "transit"],
-        ["!=", "brunnel", "tunnel"]
+        [
+          "==",
+          "class",
+          "transit"
+        ],
+        [
+          "!=",
+          "brunnel",
+          "tunnel"
+        ]
       ],
       "id": "railway_transit",
       "layout": {
@@ -378,7 +620,11 @@
       "type": "line"
     },
     {
-      "filter": ["==", "class", "rail"],
+      "filter": [
+        "==",
+        "class",
+        "rail"
+      ],
       "id": "railway",
       "layout": {
         "visibility": "visible"
@@ -390,8 +636,16 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "bridge"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "bridge"
+        ]
       ],
       "id": "waterway-bridge-case",
       "layout": {
@@ -405,8 +659,16 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "bridge"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "bridge"
+        ]
       ],
       "id": "waterway-bridge",
       "layout": {
@@ -420,9 +682,21 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "bridge"],
-        ["==", "class", "minor_road"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "bridge"
+        ],
+        [
+          "==",
+          "class",
+          "minor_road"
+        ]
       ],
       "id": "bridge_minor case",
       "layout": {
@@ -436,9 +710,24 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "bridge"],
-        ["in", "class", "primary", "secondary", "tertiary", "trunk"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "bridge"
+        ],
+        [
+          "in",
+          "class",
+          "primary",
+          "secondary",
+          "tertiary",
+          "trunk"
+        ]
       ],
       "id": "bridge_major case",
       "layout": {
@@ -452,9 +741,21 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "bridge"],
-        ["==", "class", "minor_road"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "bridge"
+        ],
+        [
+          "==",
+          "class",
+          "minor_road"
+        ]
       ],
       "id": "bridge_minor",
       "layout": {
@@ -468,9 +769,24 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "LineString"],
-        ["==", "brunnel", "bridge"],
-        ["in", "class", "primary", "secondary", "tertiary", "trunk"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "brunnel",
+          "bridge"
+        ],
+        [
+          "in",
+          "class",
+          "primary",
+          "secondary",
+          "tertiary",
+          "trunk"
+        ]
       ],
       "id": "bridge_major",
       "layout": {
@@ -486,12 +802,24 @@
       "type": "raster",
       "source": "satellite",
       "minzoom": 0,
-      "filter": ["all"],
-      "layout": { "visibility": "none" },
-      "paint": { "raster-opacity": 1 }
+      "filter": [
+        "all"
+      ],
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "raster-opacity": 1
+      }
     },
     {
-      "filter": ["in", "admin_level", 4, 6, 8],
+      "filter": [
+        "in",
+        "admin_level",
+        4,
+        6,
+        8
+      ],
       "id": "admin_sub",
       "layout": {
         "visibility": "visible"
@@ -503,9 +831,20 @@
     {
       "filter": [
         "all",
-        ["<=", "admin_level", 2],
-        ["==", "$type", "LineString"],
-        ["!has", "claimed_by"]
+        [
+          "<=",
+          "admin_level",
+          2
+        ],
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "!has",
+          "claimed_by"
+        ]
       ],
       "id": "admin_country_z0-4",
       "layout": {
@@ -522,8 +861,16 @@
     {
       "filter": [
         "all",
-        ["<=", "admin_level", 2],
-        ["==", "$type", "LineString"]
+        [
+          "<=",
+          "admin_level",
+          2
+        ],
+        [
+          "==",
+          "$type",
+          "LineString"
+        ]
       ],
       "id": "admin_country_z5-",
       "layout": {
@@ -537,15 +884,30 @@
       "type": "line"
     },
     {
-      "filter": ["all", ["has", "iata"], ["!has", "name:fr"]],
+      "filter": [
+        "all",
+        [
+          "has",
+          "iata"
+        ],
+        [
+          "!has",
+          "name:fr"
+        ]
+      ],
       "id": "airport_label",
       "layout": {
         "icon-size": 1,
         "text-anchor": "top",
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-max-width": 8,
-        "text-offset": [0, 0.5],
+        "text-offset": [
+          0,
+          0.5
+        ],
         "text-size": 11,
         "visibility": "visible"
       },
@@ -555,15 +917,30 @@
       "type": "symbol"
     },
     {
-      "filter": ["all", ["has", "iata"], ["has", "name:fr"]],
+      "filter": [
+        "all",
+        [
+          "has",
+          "iata"
+        ],
+        [
+          "has",
+          "name:fr"
+        ]
+      ],
       "id": "airport_label-fr",
       "layout": {
         "icon-size": 1,
         "text-anchor": "top",
         "text-field": "{name:fr}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-max-width": 8,
-        "text-offset": [0, 0.5],
+        "text-offset": [
+          0,
+          0.5
+        ],
         "text-size": 11,
         "visibility": "visible"
       },
@@ -573,43 +950,38 @@
       "type": "symbol"
     },
     {
-      "filter": ["all", ["==", "$type", "LineString"], ["!has", "name:fr"]],
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "!has",
+          "name:fr"
+        ]
+      ],
       "id": "road_major_label",
       "layout": {
         "symbol-placement": "line",
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-letter-spacing": 0.1,
         "text-rotation-alignment": "map",
         "text-size": {
           "base": 1.4,
           "stops": [
-            [10, 8],
-            [20, 14]
-          ]
-        },
-        "text-transform": "uppercase",
-        "visibility": "visible"
-      },
-      "minzoom": 13,
-      "source": "openmaptiles",
-      "source-layer": "transportation_name",
-      "type": "symbol"
-    },
-    {
-      "filter": ["all", ["==", "$type", "LineString"], ["has", "name:fr"]],
-      "id": "road_major_label-fr",
-      "layout": {
-        "symbol-placement": "line",
-        "text-field": "{name:fr}",
-        "text-font": ["Noto Sans Regular"],
-        "text-letter-spacing": 0.1,
-        "text-rotation-alignment": "map",
-        "text-size": {
-          "base": 1.4,
-          "stops": [
-            [10, 8],
-            [20, 14]
+            [
+              10,
+              8
+            ],
+            [
+              20,
+              14
+            ]
           ]
         },
         "text-transform": "uppercase",
@@ -623,20 +995,85 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Point"],
-        ["!in", "class", "city", "state", "country", "continent"],
-        ["!has", "name:fr"]
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "has",
+          "name:fr"
+        ]
+      ],
+      "id": "road_major_label-fr",
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{name:fr}",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-letter-spacing": 0.1,
+        "text-rotation-alignment": "map",
+        "text-size": {
+          "base": 1.4,
+          "stops": [
+            [
+              10,
+              8
+            ],
+            [
+              20,
+              14
+            ]
+          ]
+        },
+        "text-transform": "uppercase",
+        "visibility": "visible"
+      },
+      "minzoom": 13,
+      "source": "openmaptiles",
+      "source-layer": "transportation_name",
+      "type": "symbol"
+    },
+    {
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "!in",
+          "class",
+          "city",
+          "state",
+          "country",
+          "continent"
+        ],
+        [
+          "!has",
+          "name:fr"
+        ]
       ],
       "id": "place_label_other",
       "layout": {
         "text-anchor": "center",
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-max-width": 6,
         "text-size": {
           "stops": [
-            [6, 10],
-            [12, 14]
+            [
+              6,
+              10
+            ],
+            [
+              12,
+              14
+            ]
           ]
         },
         "visibility": "visible"
@@ -649,20 +1086,42 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Point"],
-        ["!in", "class", "city", "state", "country", "continent"],
-        ["has", "name:fr"]
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "!in",
+          "class",
+          "city",
+          "state",
+          "country",
+          "continent"
+        ],
+        [
+          "has",
+          "name:fr"
+        ]
       ],
       "id": "place_label_other-fr",
       "layout": {
         "text-anchor": "center",
         "text-field": "{name:fr}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-max-width": 6,
         "text-size": {
           "stops": [
-            [6, 10],
-            [12, 14]
+            [
+              6,
+              10
+            ],
+            [
+              12,
+              14
+            ]
           ]
         },
         "visibility": "visible"
@@ -675,19 +1134,38 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Point"],
-        ["==", "class", "city"],
-        ["!has", "name:fr"]
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "==",
+          "class",
+          "city"
+        ],
+        [
+          "!has",
+          "name:fr"
+        ]
       ],
       "id": "place_label_city",
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-max-width": 10,
         "text-size": {
           "stops": [
-            [3, 11],
-            [8, 16]
+            [
+              3,
+              11
+            ],
+            [
+              8,
+              16
+            ]
           ]
         }
       },
@@ -699,19 +1177,38 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Point"],
-        ["==", "class", "city"],
-        ["has", "name:fr"]
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "==",
+          "class",
+          "city"
+        ],
+        [
+          "has",
+          "name:fr"
+        ]
       ],
       "id": "place_label_city-fr",
       "layout": {
         "text-field": "{name:fr}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-max-width": 10,
         "text-size": {
           "stops": [
-            [3, 11],
-            [8, 16]
+            [
+              3,
+              11
+            ],
+            [
+              8,
+              16
+            ]
           ]
         }
       },
@@ -723,20 +1220,42 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Point"],
-        ["==", "class", "country"],
-        ["!has", "iso_a2"],
-        ["!has", "name:fr"]
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "==",
+          "class",
+          "country"
+        ],
+        [
+          "!has",
+          "iso_a2"
+        ],
+        [
+          "!has",
+          "name:fr"
+        ]
       ],
       "id": "country_label-other",
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-max-width": 10,
         "text-size": {
           "stops": [
-            [3, 12],
-            [8, 22]
+            [
+              3,
+              12
+            ],
+            [
+              8,
+              22
+            ]
           ]
         },
         "visibility": "visible"
@@ -749,20 +1268,42 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Point"],
-        ["==", "class", "country"],
-        ["!has", "iso_a2"],
-        ["has", "name:fr"]
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "==",
+          "class",
+          "country"
+        ],
+        [
+          "!has",
+          "iso_a2"
+        ],
+        [
+          "has",
+          "name:fr"
+        ]
       ],
       "id": "country_label-other-fr",
       "layout": {
         "text-field": "{name:fr}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
         "text-max-width": 10,
         "text-size": {
           "stops": [
-            [3, 12],
-            [8, 22]
+            [
+              3,
+              12
+            ],
+            [
+              8,
+              22
+            ]
           ]
         },
         "visibility": "visible"
@@ -775,20 +1316,42 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Point"],
-        ["==", "class", "country"],
-        ["has", "iso_a2"],
-        ["!has", "name:fr"]
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "==",
+          "class",
+          "country"
+        ],
+        [
+          "has",
+          "iso_a2"
+        ],
+        [
+          "!has",
+          "name:fr"
+        ]
       ],
       "id": "country_label",
       "layout": {
         "text-field": "{name:latin}",
-        "text-font": ["Noto Sans Bold"],
+        "text-font": [
+          "Noto Sans Bold"
+        ],
         "text-max-width": 10,
         "text-size": {
           "stops": [
-            [3, 12],
-            [8, 22]
+            [
+              3,
+              12
+            ],
+            [
+              8,
+              22
+            ]
           ]
         },
         "visibility": "visible"
@@ -801,20 +1364,42 @@
     {
       "filter": [
         "all",
-        ["==", "$type", "Point"],
-        ["==", "class", "country"],
-        ["has", "iso_a2"],
-        ["has", "name:fr"]
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "==",
+          "class",
+          "country"
+        ],
+        [
+          "has",
+          "iso_a2"
+        ],
+        [
+          "has",
+          "name:fr"
+        ]
       ],
       "id": "country_label-fr",
       "layout": {
         "text-field": "{name:fr}",
-        "text-font": ["Noto Sans Bold"],
+        "text-font": [
+          "Noto Sans Bold"
+        ],
         "text-max-width": 10,
         "text-size": {
           "stops": [
-            [3, 12],
-            [8, 22]
+            [
+              3,
+              12
+            ],
+            [
+              8,
+              22
+            ]
           ]
         },
         "visibility": "visible"
@@ -863,7 +1448,7 @@
         "https://natural-solutions.gitlab.io/ecoteka-data-osm/tiles/{z}/{x}/{y}.pbf"
       ],
       "minzoom": 0,
-      "maxzoom": 12
+      "maxzoom": 15
     }
   },
   "version": 8,
