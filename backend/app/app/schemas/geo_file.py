@@ -1,6 +1,6 @@
 from datetime import datetime
 from uuid import UUID
-from typing import Optional
+from typing import Optional, Any
 
 from pydantic import BaseModel, Field, Json
 
@@ -14,11 +14,11 @@ class GeoFileBase(BaseModel):
     extension: str
     checksum: str
     count: int = 0
-    crs: str = ''
+    crs: Optional[str] = Field(...)
     driver: str = ''
     longitude_column: Optional[str] = Field(...)
     latitude_column: Optional[str] = Field(...)
-    properties: Optional[Json] = Field(...)
+    properties: Optional[Any] = Field(...)
     status: GeoFileStatus
     uploaded_date: Optional[datetime] = Field(...)
     imported_date: Optional[datetime] = Field(...)
@@ -32,9 +32,9 @@ class GeoFileCreate(GeoFileBase):
     pass
 
 
-class GeoFileUpdate(BaseModel):
-    longitude_column: Optional[str] = Field(...)
-    latitude_column: Optional[str] = Field(...)
+class GeoFileUpdate(GeoFileBase):
+    pass
+
 
 # Additional properties to return via API
 

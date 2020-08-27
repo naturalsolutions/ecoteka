@@ -68,7 +68,7 @@ class GeoFile(Base):
             df = pd.read_excel(self.get_filepath())
             self.count = len(df.index)
             self.driver = 'Excel'
-            self.crs = 'epsg:4326'
+            self.crs = None
             self.properties = dumps(df.dtypes.astype(str).to_dict())
 
         if self.extension == 'csv':

@@ -1,5 +1,6 @@
 import os
 import uuid
+import json
 from typing import Any, List
 
 from fastapi import (
@@ -10,8 +11,9 @@ from fastapi import (
     File,
     UploadFile
 )
-from fastapi.encoders import jsonable_encoder
+
 from sqlalchemy.orm import Session
+from pydantic import Json
 
 from app import crud, models, schemas
 from app.api import deps
@@ -74,13 +76,13 @@ async def upload_geo_file(
 def update_geo_file(
     *,
     db: Session = Depends(deps.get_db),
-    name: str,
     geofile_in: schemas.GeoFileUpdate,
-    # current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.User = Depends(deps.get_current_active_user)
 ) -> Any:
     """
     Update geo file.
     """
+    name = geofile_in.name.__str__()
     geofile = crud.geo_file.get_by_name(db, name=name)
 
     if not geofile:
@@ -89,8 +91,7 @@ def update_geo_file(
             detail=f"The geofile with name {name} does not exist in the system",
         )
 
-    print(geofile_in)
-    # geofile = crud.geo_file.update(db, db_obj=geofile, obj_in=geofile_in)
+    geofile = crud.geo_file.update(db, db_obj=geofile, obj_in=geofile_in)
 
     return geofile
 
@@ -100,7 +101,7 @@ def read_geo_files(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_user)
+    #current_user: models.User = Depends(deps.get_current_active_user)
 ) -> Any:
     """
     Retrieve geo files.
