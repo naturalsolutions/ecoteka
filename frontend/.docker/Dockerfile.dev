@@ -1,0 +1,13 @@
+FROM node
+
+ARG asset_prefix
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+RUN npx next telemetry disable
+COPY .docker/start-dev.sh /docker-entrypoint.sh
+
+EXPOSE 3000
+
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
