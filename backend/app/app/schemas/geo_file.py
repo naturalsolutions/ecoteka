@@ -9,6 +9,7 @@ from app.models.geo_file import GeoFileStatus
 
 # Shared properties
 class GeoFileBase(BaseModel):
+    user_id: int
     name: UUID
     original_name: str
     extension: str

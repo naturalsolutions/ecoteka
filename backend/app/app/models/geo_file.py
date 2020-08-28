@@ -6,7 +6,7 @@ from json import dumps
 from typing import TYPE_CHECKING
 from pathlib import Path
 
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum, JSON
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum, JSON, ForeignKey
 from sqlalchemy.orm import relationship
 import fiona
 import pandas as pd
@@ -23,6 +23,7 @@ class GeoFileStatus(enum.Enum):
 
 class GeoFile(Base):
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
     name = Column(String, index=True, unique=True, nullable=False)
     original_name = Column(String, nullable=False)
     extension = Column(String, nullable=False)
@@ -42,7 +43,8 @@ class GeoFile(Base):
     importing_start = Column(DateTime, nullable=True)
     public = Column(Boolean, nullable=False, default=False)
 
-    def __init__(self, name: str, extension: str, original_name: str):
+    def __init__(self, user_id: int, name: str, extension: str, original_name: str):
+        self.user_id = user_id
         self.name = name
         self.extension = extension
         self.original_name = original_name

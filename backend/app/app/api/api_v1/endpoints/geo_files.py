@@ -49,7 +49,8 @@ async def upload_geo_file(
         geofile = models.GeoFile(
             name=str(unique_name),
             original_name=file.filename,
-            extension=extension
+            extension=extension,
+            user_id=current_user.id
         )
 
         geofile_exists = crud.geo_file.get_by_checksum(db, checksum=geofile.checksum)
