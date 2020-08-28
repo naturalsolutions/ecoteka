@@ -36,6 +36,16 @@ def import_from_geofile(
     if not geofile:
         raise HTTPException(status_code=404, detail=f"{name} not found")
 
+    if not geofile.crs:
+        raise HTTPException(status_code=415, detail='crs not found')
+
+    if geofile.driver in ['xlsx', 'xls', 'csv']:
+        if not geofile.longitude_column:
+            raise HTTPException(status_code=415, detail='longitude_column not found')
+
+        if not geofile.latitude_column:
+            raise HTTPException(status_code=415, detail='latitude_column not found')
+
     if geofile.status == models.GeoFileStatus.IMPORTING:
         raise HTTPException(
             status_code=409,

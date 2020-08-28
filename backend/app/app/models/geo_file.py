@@ -56,6 +56,17 @@ class GeoFile(Base):
         else:
             return f'{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
 
+    def get_longitude_latitude_columns(self):
+        if not self.longitude_column:
+            for i in self.properties:
+                if i in ['longitude', 'long', 'lon', 'x']:
+                    self.longitude_column = i
+
+        if not self.latitude_column:
+            for i in self.properties:
+                if i in ['latitude', 'lat', 'y']:
+                    self.latitude_column = i
+
     def get_metadata(self):
         if self.extension in ['geojson', 'zip']:
             with fiona.open(self.get_filepath()) as c:
@@ -70,13 +81,15 @@ class GeoFile(Base):
             self.driver = 'Excel'
             self.crs = None
             self.properties = dumps(df.dtypes.astype(str).to_dict())
+            self.get_longitude_latitude_columns()
 
         if self.extension == 'csv':
             df = pd.read_csv(self.get_filepath())
             self.count = len(df.index)
             self.driver = 'CSV'
-            self.crs = 'epsg:4326'
+            self.crs = None
             self.properties = dumps(df.dtypes.astype(str).to_dict())
+            self.get_longitude_latitude_columns()
 
     def get_checksum(self):
         with open(self.get_filepath(extended=False), "rb") as f:
