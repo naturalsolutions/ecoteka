@@ -61,7 +61,7 @@ class GeoFile(Base):
     def get_longitude_latitude_columns(self):
         if not self.longitude_column:
             for i in self.properties:
-                if i in ['longitude', 'long', 'lon', 'x']:
+                if i in ['longitude', 'long', 'lon', 'lng', 'x']:
                     self.longitude_column = i
 
         if not self.latitude_column:
