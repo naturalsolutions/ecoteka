@@ -30,7 +30,7 @@ class GeoFile(Base):
     checksum = Column(String, nullable=False)
     count = Column(Integer, nullable=False, default=0)
     driver = Column(String, nullable=True)
-    crs = Column(String, nullable=True)
+    crs = Column(String, nullable=True, default=None)
     longitude_column = Column(String, nullable=True)
     latitude_column = Column(String, nullable=True)
     properties = Column(JSON, nullable=True)
