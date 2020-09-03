@@ -11,6 +11,7 @@ import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
 import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
+import ETKImport from "../components/Import/Index.tsx"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -167,14 +168,31 @@ export default function Index() {
         onClose={() => setIsDrawerOpen(false)}
       >
         <Toolbar variant="dense" />
-        <ETKSidebar
+        <ETKImport
+          tooltipcontent={[
+            '- Importing data is an action that can take several tens of minutes',
+            '-Find the progress of your import in the menu: "History of imports"',
+            '- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes',
+            '- Retrouvez l\'état d\'avancement de votre import dans le menu : "Historique des imports"'
+          ]}
+          extensionsFileAccepted={[
+            '.xls',
+            '.xlsx',
+            '.csv',
+            '.geojson',
+            '.zip'
+          ]}
+          templateTips={['Do not hesitate to download our template in .xls format']}
+          dropzoneText={ "Drag 'n' drop some files here\nor click to select files"}
+        />
+        {/* <ETKSidebar
           speces={speces}
           activeTab={activeTab}
           currentGenre={currentGenre}
           currentProperties={currentProperties}
           onFilterSpecies={onFilterSpecies}
           onTabChange={setActiveTab}
-        />
+        /> */}
       </Drawer>
     </ThemeProvider>
   );
