@@ -2,6 +2,7 @@ import { useState, createRef } from "react";
 import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { red } from "@material-ui/core/colors";
+import Router from "next/router";
 
 import ETKToolbar from "../components/Toolbar";
 import ETKSidebar from "../components/Sidebar";
@@ -11,7 +12,7 @@ import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
 import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
-import ETKImport from "../components/Import/Index.tsx"
+import ETKImport from "../components/Import/Index.tsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Index() {
+export default function IndexPage({ drawer }) {
   const mapRef = createRef();
   const classes = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -68,6 +69,11 @@ export default function Index() {
       [e.point.x - 5, e.point.y - 5],
       [e.point.x + 5, e.point.y + 5],
     ];
+
+    Router.push({
+      pathname: "/",
+      query: { drawer: null },
+    });
 
     var features = map.queryRenderedFeatures(bbox, {
       layers: ["ecoteka-data", "ecoteka-data-osm"],
@@ -139,6 +145,40 @@ export default function Index() {
     }
   };
 
+  const renderImport = (
+    <ETKImport
+      tooltipcontent={[
+        "- Importing data is an action that can take several tens of minutes",
+        '- Find the progress of your import in the menu: "History of imports"',
+        "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes",
+        "- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
+      ]}
+      extensionsFileAccepted={[".xls", ".xlsx", ".csv", ".geojson", ".zip"]}
+      templateTips={["Do not hesitate to download our template in .xls format"]}
+      dropzoneText={"Drag 'n' drop some files here\nor click to select files"}
+    />
+  );
+
+  const renderSidebar = (
+    <ETKSidebar
+      speces={speces}
+      activeTab={activeTab}
+      currentGenre={currentGenre}
+      currentProperties={currentProperties}
+      onFilterSpecies={onFilterSpecies}
+      onTabChange={setActiveTab}
+    />
+  );
+
+  const switchRenderDrawer = (panel) => {
+    switch (panel) {
+      case "import":
+        return renderImport;
+      default:
+        return renderSidebar;
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root} role="presentation">
@@ -168,32 +208,12 @@ export default function Index() {
         onClose={() => setIsDrawerOpen(false)}
       >
         <Toolbar variant="dense" />
-        <ETKImport
-          tooltipcontent={[
-            '- Importing data is an action that can take several tens of minutes',
-            '-Find the progress of your import in the menu: "History of imports"',
-            '- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes',
-            '- Retrouvez l\'état d\'avancement de votre import dans le menu : "Historique des imports"'
-          ]}
-          extensionsFileAccepted={[
-            '.xls',
-            '.xlsx',
-            '.csv',
-            '.geojson',
-            '.zip'
-          ]}
-          templateTips={['Do not hesitate to download our template in .xls format']}
-          dropzoneText={ "Drag 'n' drop some files here\nor click to select files"}
-        />
-        {/* <ETKSidebar
-          speces={speces}
-          activeTab={activeTab}
-          currentGenre={currentGenre}
-          currentProperties={currentProperties}
-          onFilterSpecies={onFilterSpecies}
-          onTabChange={setActiveTab}
-        /> */}
+        {switchRenderDrawer(drawer)}
       </Drawer>
     </ThemeProvider>
   );
 }
+
+IndexPage.getInitialProps = ({ query: { drawer } }) => {
+  return { drawer };
+};

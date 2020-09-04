@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Typography, Grid, Box } from '@material-ui/core';
+import { Button, Typography, Grid, Box } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 export interface ETKImportTemplateProps {
@@ -21,26 +21,19 @@ const useStyle = makeStyles(() =>
       backgroundColor: "#bbbbbb",
       borderRadius: "5px",
       padding: "5px 15px 5px 15px",
-      width: "100%"
-    }
+      width: "100%",
+    },
   })
 );
 
 const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
   const classes = useStyle();
 
-  return (
-    props.isOpen
-    ? (
+  return props.isOpen ? (
     <React.Fragment>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="flex-end"
-      >
+      <Grid container direction="column" justify="center" alignItems="flex-end">
         <Grid className={classes.content}>
-          <Typography variant="h6" >{props.titleText}</Typography>
+          <Typography variant="h6">{props.titleText}</Typography>
           {props.hintText}
           <Grid>
             <div>- {props.latitudeText}</div>
@@ -55,25 +48,25 @@ const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
           variant="outlined"
           size="large"
           href={props.linkTemplate}
-          target="_blank">
+          target="_blank"
+        >
           {props.downloadText}
         </Button>
       </Grid>
-    </React.Fragment>)
-    : null
-  );
+    </React.Fragment>
+  ) : null;
 };
 
 ETKImportTemplate.defaultProps = {
   isOpen: true,
-  titleText: 'A doubt with your file?',
-  hintText: 'Make sure your file has the following information',
-  templateTips: 'Do not hesitate to download our template in csv format',
-  latitudeText: 'Latitude',
-  longitudeText: 'Longitude',
-  crsText: 'Coordinates Reference System',
-  downloadText: 'Download template',
-  linkTemplate: '/assets/template.xslx'
-}
+  titleText: "A doubt with your file?",
+  hintText: "Make sure your file has the following information",
+  templateTips: "Do not hesitate to download our template in csv format",
+  latitudeText: "Latitude",
+  longitudeText: "Longitude",
+  crsText: "Coordinates Reference System",
+  downloadText: "Download template",
+  linkTemplate: "/assets/template.xslx",
+};
 
 export default ETKImportTemplate;

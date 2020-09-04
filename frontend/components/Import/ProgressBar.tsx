@@ -1,70 +1,67 @@
 import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import LinearProgress from '@material-ui/core/LinearProgress';
-
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 export interface ETKProgressBarProps {
-  step: string;
   linearProgressValue: number;
   message: string;
 }
 
 const useStyle = makeStyles(() =>
   createStyles({
-    root:{
+    root: {
       width: "100%",
       marginTop: ".5rem",
-      marginBottom: ".5rem"
-    }
+      marginBottom: ".5rem",
+    },
   })
 );
 
-
 const ETKProgressBar: React.FC<ETKProgressBarProps> = (props) => {
   const classes = useStyle();
-  let properties = {}
+  let properties = {};
 
-  switch (props.step) {
-    case 'UPLOAD_START':{
-      properties = {
-        variant: "determinate",
-        value:  props.linearProgressValue
-      }
+  // switch (props.step) {
+  //   case "UPLOAD_START": {
+  //     properties = {
+  //       variant: "determinate",
+  //       value: props.linearProgressValue,
+  //     };
 
-      break;
-    }
-    case 'PROCESSING_DATA':{
-      properties = {
-        color: "primary"
-      }
+  //     break;
+  //   }
+  //   case "PROCESSING_DATA": {
+  //     properties = {
+  //       color: "primary",
+  //     };
 
-      break;
-    }
-    case 'IMPORT_PENDING':{
-      properties = {
-        color: "primary"
-      }
-      break;
-    }
+  //     break;
+  //   }
+  //   case "IMPORT_PENDING": {
+  //     properties = {
+  //       color: "primary",
+  //     };
+  //     break;
+  //   }
 
-    default: {
-      properties = {
-        variant: "determinate",
-        value: props.linearProgressValue
-      }
-    break;
-    }
-  }
-
-  console.log("properties ",properties)
-  console.log("props ",props.message)
+  //   default: {
+  //     properties = {
+  //       variant: "determinate",
+  //       value: props.linearProgressValue,
+  //     };
+  //     break;
+  //   }
+  // }
 
   return (
     <React.Fragment>
-      <LinearProgress {...properties} className={classes.root}/>
-      <em>
-        { props.message }
-      </em>
+      <LinearProgress
+        variant="determinate"
+        value={props.linearProgressValue}
+        {...properties}
+        className={classes.root}
+      />
+      <em>{props.message}</em>
       {/* {
         step === 'UPLOAD_START'
         &&

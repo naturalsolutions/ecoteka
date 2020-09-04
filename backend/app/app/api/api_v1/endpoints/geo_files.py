@@ -1,5 +1,6 @@
 import os
 import uuid
+import json
 from typing import Any, List
 
 from fastapi import (
@@ -10,8 +11,9 @@ from fastapi import (
     File,
     UploadFile
 )
-from fastapi.encoders import jsonable_encoder
+
 from sqlalchemy.orm import Session
+from pydantic import Json
 
 from app import crud, models, schemas
 from app.api import deps
@@ -47,7 +49,8 @@ async def upload_geo_file(
         geofile = models.GeoFile(
             name=str(unique_name),
             original_name=file.filename,
-            extension=extension
+            extension=extension,
+            user_id=current_user.id
         )
 
         geofile_exists = crud.geo_file.get_by_checksum(db, checksum=geofile.checksum)
@@ -66,6 +69,30 @@ async def upload_geo_file(
 
     finally:
         await file.close()
+
+    return geofile
+
+
+@router.put("/", response_model=schemas.GeoFile)
+def update_geo_file(
+    *,
+    db: Session = Depends(deps.get_db),
+    geofile_in: schemas.GeoFileUpdate,
+    current_user: models.User = Depends(deps.get_current_active_user)
+) -> Any:
+    """
+    Update geo file.
+    """
+    name = geofile_in.name.__str__()
+    geofile = crud.geo_file.get_by_name(db, name=name)
+
+    if not geofile:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The geofile with name {name} does not exist in the system",
+        )
+
+    geofile = crud.geo_file.update(db, db_obj=geofile, obj_in=geofile_in)
 
     return geofile
 

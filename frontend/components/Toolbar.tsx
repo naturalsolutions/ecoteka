@@ -8,6 +8,7 @@ import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import ETKContact from "./Contact";
+import Router from "next/router";
 
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 
@@ -59,6 +60,16 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           </Typography>
         </Hidden>
         <div className={classes.buttons}>
+          <Button
+            onClick={() => {
+              Router.push({
+                pathname: "/",
+                query: { drawer: "import" },
+              });
+            }}
+          >
+            Import
+          </Button>
           <Hidden smDown>
             <Button
               color="primary"

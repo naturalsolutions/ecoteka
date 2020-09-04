@@ -1,27 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles, withStyles } from "@material-ui/core/styles";
 import { Tooltip, Box, Grid } from "@material-ui/core";
 import HelpIcon from "@material-ui/icons/Help";
 import Divider from "@material-ui/core/Divider";
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography'
-import { DropzoneArea } from 'material-ui-dropzone'
-import GetAppIcon from '@material-ui/icons/GetApp';
-import ErrorIcon from '@material-ui/icons/Error';
-import ETKProgressBar from './ProgressBar'
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { DropzoneArea } from "material-ui-dropzone";
+import GetAppIcon from "@material-ui/icons/GetApp";
+import ErrorIcon from "@material-ui/icons/Error";
+import ETKProgressBar from "./ProgressBar";
+import getConfig from "next/config";
+import Geofile from "../Geofile";
 
+const { publicRuntimeConfig } = getConfig();
 
 export interface ETKUploadProps {
+  uploadUrl?: string;
+  geofile: Geofile;
   tooltipcontent: [string];
   extensionsFileAccepted: [string];
   dropzoneText: string;
-  step: string;
-  linearProgressValue: number;
   progressBarMessage: string;
-  onClickButton(status:boolean):void;
-  files: [File?]
-  onStepChanged(newState:string):void;
-  onFilesAdd(newFiles:[File?]):void;
+  missingInfo?: [string?];
+  isUploaded: boolean;
+  isReadyToImport: boolean;
+  onUploadProgress?(progress: number): void;
+  onUploaded?(geofile: Geofile): void;
 }
 
 const useStyle = makeStyles(() =>
@@ -33,9 +37,6 @@ const useStyle = makeStyles(() =>
       padding: "5px 15px 5px 15px",
       width: "100%",
     },
-    import: {
-      // alignSelf: "flex-start",
-    },
     fullwidth: {
       width: "100%",
     },
@@ -43,25 +44,25 @@ const useStyle = makeStyles(() =>
       color: "white",
       borderRadius: "50%",
       backgroundColor: "green",
-      margin: '1rem'
+      margin: "1rem",
     },
     divider: {
-      margin: ".5rem"
+      margin: ".5rem 0",
     },
     iconErrorUploaded: {
       color: "red",
-      margin: '1rem'
+      margin: "1rem",
     },
     etkDropzoneText: {
-      whiteSpace: "pre"
+      whiteSpace: "pre",
     },
     etkDropzone: {
       backgroundColor: "#f8f8f8",
-      color: "#707070"
+      color: "#707070",
     },
     submitbtn: {
-      alignSelf: "flex-end"
-    }
+      alignSelf: "flex-end",
+    },
   })
 );
 
@@ -77,91 +78,117 @@ const HtmlTooltip = withStyles((theme) => ({
 
 const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   const classes = useStyle();
-  // const [files, setFiles] = useState([])
+  const [file, setFile] = useState<File>();
+  const [linearProgressValue, setLinearProgressValue] = useState(0);
+  const [error, setError] = useState(null);
+  const [inProgress, setInProgress] = useState(false);
+  const [xhr, setXHR] = useState(null);
 
-  const isCancellable = ['','UPLOAD_COMPLETE'].includes(props.step);
-  const inProgress = ['PROCESSING_DATA', 'UPLOAD_START'].includes(props.step);
+  const ETKFiles = (
+    <React.Fragment key={file?.name}>
+      {file && !error && (
+        <Grid direction="row" container alignItems="center">
+          <Grid item xs={2}>
+            <GetAppIcon className={classes.iconFileUploaded} />
+          </Grid>
+          <Grid item xs={10}>
+            {file?.name}
+          </Grid>
+        </Grid>
+      )}
+      {error && (
+        <Grid direction="row" container alignItems="center">
+          <Grid item xs={2}>
+            <ErrorIcon className={classes.iconErrorUploaded} />
+          </Grid>
+          <Grid item xs={10}>
+            <span>{error}</span>
+          </Grid>
+        </Grid>
+      )}
+    </React.Fragment>
+  );
 
-
-  const ETKFiles = props.files?.map(file => {
-
-    const isOk = file.__isUploaded && !file.__isOnServ;
-    const isError = file.__isUploaded && file.__isOnServ;
-    console.log("upload", file.__isUploaded , "o nserver", file.__isOnServ)
-
-    return (
-      <React.Fragment key={file.name}>
-        {isOk &&
-          <GetAppIcon className={classes.iconFileUploaded} />
-        }
-        {isError &&
-          <ErrorIcon className={classes.iconErrorUploaded} />
-        }
-        {file.name}
-        {isError &&
-          <p>
-            This file was uploaded
-          </p>
-        }
-      </React.Fragment>
-    )
-  });
-
-  const myCustomFilesGetter = async (event) => {
-    const files = [] as [File?];
-    const fileList = event.dataTransfer ? event.dataTransfer.files : event.target.files;
-
-    for (const file of fileList) {
-      Object.defineProperty(file, '__isUploaded', {
-        value: true,
-        writable: true
-      });
-
-      Object.defineProperty(file, '__isOnServ', {
-        value: undefined,
-        writable: true
-      });
-
-      files.push(file);
+  useEffect(() => {
+    if (props.isUploaded) {
+      setFile(null);
     }
-    props.onFilesAdd(files)
-    return files
-  }
+  }, [props.isUploaded]);
 
-  const hasFiles = props.files?.length > 0
-  const showDropZoneStyle = {
-    display: `${!!hasFiles ? 'none' : 'flex'}`
-  }
+  const onAddFiles = async (event) => {
+    const fileList = event.dataTransfer
+      ? event.dataTransfer.files
+      : event.target.files;
 
-  const showFilesStyle = {
-    display: `${hasFiles ? 'flex' : 'none'}`
-  }
+    if (fileList.length) {
+      setFile(fileList[0]);
+    }
 
-  const showButtons = props.step !== 'UPLOAD_COMPLETE'
+    return [];
+  };
 
   const htmlTooltip = (
     <React.Fragment>
       {props.tooltipcontent.map((row, index) => (
-        <Typography key={`import.step1.title.tooltip.${index}`}>
+        <Typography key={`import.upload.title.tooltip.${index}`}>
           {row}
         </Typography>
       ))}
     </React.Fragment>
-  )
+  );
+
+  const onUploadClick = () => {
+    const formData = new FormData();
+
+    formData.append("file", file, file.name);
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = (event) => {
+      const progress = (event.loaded / event.total) * 100;
+
+      setLinearProgressValue(progress);
+
+      if (props.onUploadProgress) {
+        props.onUploadProgress(progress);
+      }
+    };
+
+    xhr.onload = () => {
+      const response = JSON.parse(xhr.response);
+
+      setInProgress(false);
+      setXHR(null);
+
+      if (xhr.status !== 200) {
+        setError(response.detail);
+        return;
+      }
+
+      props.onUploaded(response);
+    };
+
+    xhr.onerror = () => {
+      const errorResponse = JSON.parse(xhr.response);
+
+      setError(errorResponse.detail);
+      setInProgress(false);
+      setXHR(null);
+    };
+
+    xhr.open("POST", props.uploadUrl, true);
+    xhr.send(formData);
+    setXHR(xhr);
+    setInProgress(true);
+  };
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="center"
-      alignItems="flex-end"
-      className={classes.import}
-    >
+    <Grid container direction="column" justify="center" alignItems="flex-end">
       <Grid container alignItems="center">
-        <Typography variant="h4">
+        <Typography variant="h6">
           <Grid container alignItems="center">
             <Box component="span" mr={1}>
-              Import your datas
+              Import your data
             </Box>
             <HtmlTooltip title={htmlTooltip}>
               <HelpIcon />
@@ -171,8 +198,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
       </Grid>
       <Grid container>
         <ETKProgressBar
-          step={props.step}
-          linearProgressValue={props.linearProgressValue}
+          linearProgressValue={linearProgressValue}
           message={props.progressBarMessage}
         />
       </Grid>
@@ -181,70 +207,74 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
       </Grid>
       <Grid container>
         <form noValidate autoComplete="off" className={classes.fullwidth}>
-          <Grid container style={showDropZoneStyle} >
+          {!props.isUploaded && !props.missingInfo.length ? (
+            <Grid container>
               <DropzoneArea
                 acceptedFiles={props.extensionsFileAccepted}
                 Icon={GetAppIcon}
                 dropzoneText={props.dropzoneText}
                 dropzoneProps={{
-                  getFilesFromEvent: myCustomFilesGetter
+                  getFilesFromEvent: onAddFiles,
                 }}
                 showPreviewsInDropzone={false}
                 showFileNames={true}
-                showAlerts={['error']}
+                showAlerts={["error"]}
                 maxFileSize={50000000} //50MB
                 filesLimit={1}
-                dropzoneParagraphClass={ `${classes.etkDropzoneText}` }
-                dropzoneClass={ `${classes.etkDropzone}` }
+                dropzoneParagraphClass={classes.etkDropzoneText}
+                dropzoneClass={classes.etkDropzone}
               />
-              <Typography>Files types accepted : {props.extensionsFileAccepted.join(',')}</Typography>
-          </Grid>
-          <React.Fragment>
-            <Grid
-              container
-              alignItems="center"
-              style={showFilesStyle} >
-              {ETKFiles}
+              <Typography style={{ marginTop: ".7rem" }}>
+                Files types accepted : {props.extensionsFileAccepted.join(",")}
+              </Typography>
             </Grid>
-            <Divider className={classes.divider}/>
-          </React.Fragment>
-          { showButtons &&
-          <Grid
-              container
-              justify="space-between"
-            >
-            <Button
-              disabled={props.files?.length ? false : true}
-              variant="contained"
-              onClick={() => {
-                if (isCancellable) {
-                  props.onStepChanged('RESET')
-                  return
-                }
-                props.onClickButton(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className={classes.submitbtn}
-              disabled={!props.files?.length || props.files[0].__isOnServ ? true : false}
-              color="primary"
-              variant="contained"
-              onClick={() => {
-                props.onClickButton(true);
-              }}
-            >
-              Submit
-            </Button>
-          </Grid>
-          }
+          ) : null}
+          {file ? (
+            <React.Fragment>
+              <Grid container alignItems="center">
+                {ETKFiles}
+              </Grid>
+              <Divider className={classes.divider} />
+            </React.Fragment>
+          ) : null}
+          {file && !(props.missingInfo.length > 0) && !props.isReadyToImport && (
+            <Grid container justify="space-between">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setFile(null);
+                  setError(null);
+
+                  if (xhr?.abort()) {
+                    xhr.abort();
+                  }
+
+                  setLinearProgressValue(0);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className={classes.submitbtn}
+                disabled={!file || error !== null || inProgress}
+                color="primary"
+                variant="contained"
+                onClick={onUploadClick}
+              >
+                Upload
+              </Button>
+            </Grid>
+          )}
         </form>
       </Grid>
     </Grid>
   );
 };
 
-ETKUpload.defaultProps = {};
+ETKUpload.defaultProps = {
+  uploadUrl: `${publicRuntimeConfig.apiUrl}/geo_files/upload`,
+  missingInfo: [],
+  isReadyToImport: false,
+};
 
 export default ETKUpload;
