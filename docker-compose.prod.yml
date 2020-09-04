@@ -71,10 +71,24 @@ services:
       - BACKUP_KEEP_MONTHS=${NS_ECOTEKA_DB_BACKUPS_BACKUP_KEEP_MONTHS}
       - HEALTHCHECK_PORT=${NS_ECOTEKA_DB_BACKUPS_HEALTHCHECK_PORT}
 
+  files_backups:
+    image: registry.gitlab.com/natural-solutions/docker-duplicity
+    restart: always
+    networks:
+      - traefik
+    volumes:
+      - ${NS_ECOTEKA_FILES_BACKUPS_SRC}:/home/duplicity/src
+      - ${NS_ECOTEKA_FILES_BACKUPS_TARGET}:/home/duplicity/backup
+      - ./scripts/files_backup.sh:/backup.sh
+    environment:
+      - HEALTHCHECK_PORT=${NS_ECOTEKA_DB_BACKUPS_HEALTHCHECK_PORT}
+
   backend:
     labels:
       - traefik.http.routers.backend.entrypoints=websecure
       - traefik.http.routers.backend.tls=true
+    volumes:
+      - ./data/uploaded_files:${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
 
   frontend:
     labels:
