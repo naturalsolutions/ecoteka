@@ -34,7 +34,9 @@ export default class ETKMap extends Component {
     this.map.on("click", (e) => this.props.onMapClick(this.map, e));
 
     if (this.props.onStyleData) {
-      this.map.once("styledata", this.props.onStyleData);
+      this.map.once("styledata", () => {
+        this.props.onStyleData();
+      });
     }
 
     window.addEventListener("orientationchange", (e) => {

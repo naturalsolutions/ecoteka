@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -8,8 +8,9 @@ import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import ETKContact from "./Contact";
+import Link from "next/link";
+import { useRouter } from 'next/router'
 
-import Paper from '@material-ui/core/Paper';
 import Collapse from '@material-ui/core/Collapse';
 
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
@@ -34,9 +35,31 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     justifyContent: "flex-end",
   },
+  toolbar: {
+    background: '#CCC'
+  },
   navBar: {
-    '& button:not(:last-child)': {
-      marginRight: "30px"
+    display: "flex",
+    paddingLeft: 5,
+    '& > div': {
+      '&:not(:last-child)': {
+        marginRight: "30px"
+      },
+      '& > button': {
+        minHeight: 48,
+        borderRadius: 0,
+        borderBottom: '2px solid transparent',
+        '&.active': {
+          borderBottomColor: '#000'
+        }
+      }
+    },
+    '& .level-2': {
+      padding: '5px 0',
+      '& .MuiButton-root': {
+        display: 'block',
+        textTransform: 'none'
+      }
     }
   },
   numberOfTrees: {
@@ -49,10 +72,53 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
 
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [curLevel1, setCurLevel1] = useState('patrimony');
+
+  const router = useRouter();
+
+  //TODO
+  const matchCurLevel1 = (url) => {
+    const urlObj = new URL(url, 'http://anybase/');
+    const drawerName = urlObj.searchParams.get('drawer');
+    if (drawerName == 'import') {
+      setCurLevel1('import')
+    } else if (drawerName == 'intervention_request') {
+      setCurLevel1('intervention');
+    } else {
+      setCurLevel1('patrimony');
+    }
+  }
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      matchCurLevel1(url);
+      setIsMenuOpen(false);
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, []);
+
+  const getLevel1ClassNames = (name) => {
+    const classNames = {
+      active: curLevel1 == name
+    };
+
+    return Object.keys(classNames).filter(key => {
+      return Boolean(classNames[key]);
+    }).join(' ');
+  }
+
+  useEffect(() => {
+    matchCurLevel1(window.location.href);
+  });
 
   return (
-    <AppBar className={classes.appBar} position="fixed" color="inherit" elevation={isMenuOpen ? 0 : 4}>
-      <Toolbar variant="dense">
+    <AppBar className={classes.appBar} position="fixed" color="inherit" elevation={4}>
+      <Toolbar variant="dense" className={classes.toolbar}>
         <IconButton edge="start" aria-label="menu" onClick={props.onMenuClick}>
           <MenuIcon />
         </IconButton>
@@ -82,54 +148,72 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         </div>
       </Toolbar>
       <Collapse in={isMenuOpen} collapsedHeight={48}>
-        <Paper elevation={4}>
-          <Toolbar className={classes.navBar} variant="dense">
+        <div className={classes.navBar}>
+          <div>
             <Button
               color="primary"
+              className={getLevel1ClassNames('patrimony')}
               onClick={() => {
                 setIsMenuOpen(!isMenuOpen);
               }}
             >
               PATRIMOINE VEGETAL
             </Button>
+            <div className="level-2">
+              <Button size="small">
+                Tous les arbres
+              </Button>
+              <Button size="small">
+                Ajouter un arbre
+              </Button>
+              <Button size="small">
+                Créer un espace de plantation
+              </Button>
+            </div>
+          </div>
+          <div>
             <Button
               color="primary"
+              className={getLevel1ClassNames('intervention')}
               onClick={() => {
                 setIsMenuOpen(!isMenuOpen);
               }}
             >
               INTERVENTIONS
-           </Button>
+            </Button>
+            <div className="level-2">
+              <Button size="small">
+                Calendrier des interventions
+              </Button>
+              <Link href="/?drawer=intervention_request" passHref>
+                <Button size="small" component="a">
+                  Demander une intervention
+                </Button>
+              </Link>
+            </div>
+          </div>
+          <div>
             <Button
               color="primary"
+              className={getLevel1ClassNames('import')}
               onClick={() => {
                 setIsMenuOpen(!isMenuOpen);
               }}
             >
               iMPORT DE DONNEES
-           </Button>
-          </Toolbar>
-          <div>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-          </Typography>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-          </Typography>
+            </Button>
+            <div className="level-2">
+              <Link href="/?drawer=import" passHref>
+                <Button size="small" component="a">
+                  Importer des données
+                </Button>
+              </Link>
+              <Button size="small">
+                Historique des imports
+              </Button>
+            </div>
           </div>
-          <div>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-          </Typography>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-              sit amet blandit leo lobortis eget.
-          </Typography>
-          </div>
-        </Paper>
+        </div>
       </Collapse>
       <ETKContact
         isOpen={isContactOpen}
