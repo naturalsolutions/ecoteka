@@ -80,7 +80,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const matchCurLevel1 = (url) => {
     const urlObj = new URL(url, 'http://anybase/');
     const drawerName = urlObj.searchParams.get('drawer');
-    if (drawerName == 'import') {
+    if (drawerName == 'import' || urlObj.pathname == '/imports') {
       setCurLevel1('import')
     } else if (drawerName == 'intervention_request') {
       setCurLevel1('intervention');
@@ -119,9 +119,9 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   return (
     <AppBar className={classes.appBar} position="fixed" color="inherit" elevation={4}>
       <Toolbar variant="dense" className={classes.toolbar}>
-        <IconButton edge="start" aria-label="menu" onClick={props.onMenuClick}>
+        {/* <IconButton edge="start" aria-label="menu" onClick={props.onMenuClick}>
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
         <img src={props.logo} className={classes.logo} />
         <Hidden smDown>
           <Typography
@@ -134,16 +134,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           </Typography>
         </Hidden>
         <div className={classes.buttons}>
-          <Button
-            onClick={() => {
-              router.push({
-                pathname: "/",
-                query: { drawer: "import" },
-              });
-            }}
-          >
-            Import
-          </Button>
           <Hidden smDown>
             <Button
               color="primary"
@@ -170,9 +160,11 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               PATRIMOINE VEGETAL
             </Button>
             <div className="level-2">
-              <Button size="small">
-                Tous les arbres
-              </Button>
+              <Link href="/" passHref>
+                <Button size="small" component="a">
+                  Tous les arbres
+                </Button>
+              </Link>
               <Button size="small">
                 Ajouter un arbre
               </Button>
@@ -218,9 +210,11 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                   Importer des données
                 </Button>
               </Link>
-              <Button size="small">
-                Historique des imports
-              </Button>
+              <Link href="/imports" passHref>
+                <Button size="small" component="a">
+                  Historique des imports
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

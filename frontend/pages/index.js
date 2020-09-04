@@ -1,10 +1,9 @@
 import { useState, createRef, useEffect } from "react";
-import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
+import { Toolbar, Drawer, makeStyles, useTheme } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import { useRouter } from 'next/router'
 
-import ETKToolbar from "../components/Toolbar";
 import ETKSidebar from "../components/Sidebar";
 import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
@@ -14,17 +13,20 @@ import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
 import ETKImport from "../components/Import/Index.tsx";
 
+import Template from "../components/Template";
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    //display: "flex",
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    //flexGrow: 1,
+  main: {
     position: 'relative',
-    height: "calc(100vh - 96px)",
-    marginTop: 96
+    height: '100%'
   },
+  drawerCloseBtn: {
+    position: 'absolute',
+    top: 96,
+    right: 0,
+    zIndex: 1,
+    color: 'red'
+  }
 }));
 
 export default function IndexPage({ drawer }) {
@@ -34,25 +36,9 @@ export default function IndexPage({ drawer }) {
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
-  const [drawerName, setDrawerName] = useState('');
+  //const [drawerName, setDrawerName] = useState('');
   const [currentTheme, setCurrentTheme] = useState("light");
-  const theme = createMuiTheme({
-    palette: {
-      type: currentTheme,
-      primary: {
-        main: currentTheme === "light" ? "#01685a" : "#fff",
-      },
-      secondary: {
-        main: "#19857b",
-      },
-      error: {
-        main: red.A400,
-      },
-      background: {
-        default: "#fff",
-      },
-    },
-  });
+  const theme = useTheme();
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -151,6 +137,15 @@ export default function IndexPage({ drawer }) {
 
   const router = useRouter();
 
+  //TODO ?
+  useEffect(() => {
+    setIsDrawerOpen(true);
+  }, [drawer]);
+
+  useEffect(() => {
+    console.log(theme);
+  }, [theme]);
+
   /* useEffect(() => {
     const handleRouteChange = (value) => {
       const url = new URL(value, 'http://anybase/');
@@ -200,27 +195,17 @@ export default function IndexPage({ drawer }) {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <div className={classes.root} role="presentation">
-        <ETKToolbar
-          logo={`/assets/${currentTheme}/logo.svg`}
-          numberOfTrees="4.6 millions of trees"
-          aboutText="About"
-          onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
-          onDarkToggle={onDarkToggleHandler}
+    <Template>
+      <div className={classes.main}>
+        <ETKMap
+          ref={mapRef}
+          styleSource="/assets/style.json"
+          onMapClick={onMapClick}
+          onStyleData={onMapLoaded}
         />
-
-        <main className={classes.content}>
-          <ETKMap
-            ref={mapRef}
-            styleSource="/assets/style.json"
-            onMapClick={onMapClick}
-            onStyleData={onMapLoaded}
-          />
-          <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
-          <ETKMapGeolocateFab map={mapRef} />
-          <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
-        </main>
+        <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+        <ETKMapGeolocateFab map={mapRef} />
+        <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
       </div>
       <Drawer
         variant="persistent"
@@ -229,9 +214,18 @@ export default function IndexPage({ drawer }) {
       >
         <Toolbar variant="dense" />
         <Toolbar variant="dense" />
+        <IconButton
+          size="small"
+          className={classes.drawerCloseBtn}
+          onClick={() => {
+            setIsDrawerOpen(false);
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         {switchRenderDrawer(drawer)}
       </Drawer>
-    </ThemeProvider>
+    </Template>
   );
 }
 
