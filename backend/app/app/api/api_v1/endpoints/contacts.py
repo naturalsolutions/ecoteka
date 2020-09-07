@@ -8,7 +8,7 @@ from fastapi import (
     HTTPException
 )
 from fastapi.encoders import jsonable_encoder
-from pydantic.networks import EmailStr
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
@@ -18,11 +18,12 @@ from app.utils import send_contact_request_confirmation
 
 router = APIRouter()
 
-@router.post("/",response_model=schemas.Contact)
+
+@router.post("/", response_model=schemas.Contact)
 async def post_contact_request(
     *,
     db: Session = Depends(deps.get_db),
-    contact_in: schemas.ContactCreate, #provided contact info from the http.post
+    contact_in: schemas.ContactCreate,  # provided contact info from the http.post
     background_tasks: BackgroundTasks
 ) -> Any:
     """Submits a contact request"""
