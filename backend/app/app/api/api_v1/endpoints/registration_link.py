@@ -47,12 +47,11 @@ def verification(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="This link is no more usable please regenerate a new one"
         )
-    else:
-        db.delete(registration_link_in_db)
-        db.commit()
-        return {
-            "message": f"email { current_user.email } is verified"
-        }
+    db.delete(registration_link_in_db)
+    db.commit()
+    return {
+        "message": "Your account is validated"
+    }
 
 
 @router.get("/regenerate/")
