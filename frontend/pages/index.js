@@ -144,6 +144,9 @@ export default function Index() {
         <ETKToolbar
           logo={`/assets/${currentTheme}/logo.svg`}
           numberOfTrees="4.6 millions of trees"
+          loginText="Login"
+          logoutText="Logout"
+          registerText="Register"
           aboutText="About"
           onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
           onDarkToggle={onDarkToggleHandler}
