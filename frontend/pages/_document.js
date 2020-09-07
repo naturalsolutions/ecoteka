@@ -1,6 +1,7 @@
 import * as React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheets } from "@material-ui/core/styles";
+import AppContext from "../providers/app-context";
 
 export default class MyDocument extends Document {
   static async getInitialProps(...args) {
@@ -47,7 +48,9 @@ export default class MyDocument extends Document {
             }} />
         </Head>
         <body>
-          <Main />
+          <AppContext.AppContextProvider>
+            <Main />
+          </AppContext.AppContextProvider>
           <NextScript />
         </body>
       </Html>

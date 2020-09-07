@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { red } from "@material-ui/core/colors";
 
 import ETKToolbar from "./Toolbar";
+import AppContext from "../providers/app-context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,10 +39,17 @@ export default function Template(props) {
       },
     },
   });
+  /* console.log(AppContext) */
+  const {appContext} = AppContext.useAppContext();
 
   const onDarkToggleHandler = (dark) => {
     const mapTheme = dark ? "light" : "dark";
-
+    /* setAppContext({
+      ...{
+        theme: mapTheme
+      }
+    }); */
+    console.log(appContext)
     setCurrentTheme(mapTheme);
   };
 

@@ -1,4 +1,4 @@
-import { useState, createRef, useEffect } from "react";
+import { useState, createRef, useEffect, useContext } from "react";
 import { Toolbar, Drawer, makeStyles, useTheme } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
@@ -14,6 +14,8 @@ import layersStyle from "../public/assets/layersStyle.json";
 import ETKImport from "../components/Import/Index.tsx";
 
 import Template from "../components/Template";
+//import { useToto } from "../providers/app-context";
+
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -29,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
+
 export default function IndexPage({ drawer }) {
   const mapRef = createRef();
   const classes = useStyles();
@@ -39,6 +43,17 @@ export default function IndexPage({ drawer }) {
   //const [drawerName, setDrawerName] = useState('');
   const [currentTheme, setCurrentTheme] = useState("light");
   const theme = useTheme();
+  //const appContext = useAppContext();
+  /* const setToto = useToto();
+  useEffect(() => {
+    (() => {
+      console.log('otot')
+    })()
+  }, [setToto]) */
+
+  /* useEffect(() => {
+    console.log(appContext);
+  }, [appContext]); */
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -143,7 +158,7 @@ export default function IndexPage({ drawer }) {
   }, [drawer]);
 
   useEffect(() => {
-    console.log(theme);
+    console.log('theme', theme);
   }, [theme]);
 
   /* useEffect(() => {
@@ -223,6 +238,7 @@ export default function IndexPage({ drawer }) {
         >
           <CloseIcon />
         </IconButton>
+        {/* <Toolbar>{appContext.theme}</Toolbar> */}
         {switchRenderDrawer(drawer)}
       </Drawer>
     </Template>
