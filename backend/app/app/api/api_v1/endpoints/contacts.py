@@ -1,5 +1,4 @@
 from typing import Any
-
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -17,7 +16,13 @@ from app.crud import (
 from app.api import (
     get_db
 )
-from app.utils import send_contact_request_confirmation
+from app.utils import (
+    send_contact_request_confirmation,
+    send_new_contact_notification
+)
+from app.core import (
+    settings
+)
 
 router = APIRouter()
 
@@ -37,6 +42,19 @@ async def post_contact_request(
         email_to=contact_in_db.email,
         first_name=contact_in_db.first_name,
         last_name=contact_in_db.last_name
+    )
+
+    background_tasks.add_task(
+        send_new_contact_notification,
+        email_to=settings.SUPERUSERS_CONTACT_LIST,
+        contactId=contact_in_db.id,
+        first_name=contact_in_db.first_name,
+        last_name=contact_in_db.last_name,
+        email=contact_in_db.email,
+        phone_number=contact_in_db.phone_number,
+        township=contact_in_db.township,
+        position=contact_in_db.position,
+        contact_request=contact_in_db.contact_request,
     )
 
     return contact_in_db
