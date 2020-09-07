@@ -5,13 +5,20 @@ from app.api.api_v1.endpoints import (
     login,
     users,
     utils,
-    registration_link
+    register,
+    registration_link,
 )
 
 api_router = APIRouter()
 api_router.include_router(
     login.router,
-    tags=["login"]
+    prefix="/auth",
+    tags=["auth"]
+)
+api_router.include_router(
+    register.router,
+    prefix="/auth",
+    tags=["auth"]
 )
 api_router.include_router(
     users.router,
