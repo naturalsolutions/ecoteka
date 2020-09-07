@@ -19,18 +19,21 @@ class UserBase(BaseModel):
 
 
 # Properties to receive via API on creation
-class UserCreate(UserBase):
+class UserCreate(BaseModel):
+    full_name: str
     email: EmailStr
     password: str
 
 
 # Properties to receive via API on update
-class UserUpdate(UserPrimaryKey, UserBase):
+class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
 class UserOut(UserPrimaryKey, UserBase):
-    pass
+
+    class Config:
+        orm_mode = True
 
 
 class UserDB(UserPrimaryKey, UserBase):
