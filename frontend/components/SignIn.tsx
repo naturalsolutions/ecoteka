@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
 import Dialog from "@material-ui/core/Dialog";
@@ -17,7 +17,7 @@ const { publicRuntimeConfig } = getConfig();
 export interface ETKSigninProps {
   isOpen: boolean;
   onClose: Function;
-  onRegisterBtnClick: Function;
+  titleText: string;
 }
 
 const useStyles = makeStyles((theme) =>
@@ -43,9 +43,6 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
   const [ isSending, setIsSending ] = useState(false);
   const { session, setSession } = Auth.useSession()
 
-  const onRegisterHandler = () => {
-    props.onRegisterBtnClick(true)
-  };
 
   const handleClose = () => {
     console.log("onclose signin")
@@ -54,6 +51,12 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
     }
     props.onClose && props.onClose();
   };
+
+  useEffect(() => {
+    if (session) {
+      props.onClose()
+    }
+  }, [session])
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     form[e.target.name].value = e.target.value;
@@ -95,9 +98,14 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
       password: form["password"].value
     }
     const responseLogin = await Auth.signIn(credentials);
+    if (!responseLogin) {
+      form.username.errorMessage = "Incorrect email or password"
+      form.password.errorMessage = "Incorrect email or password"
+      setIsSending(false);
+      return;
+    }
     setIsSending(false);
     setSession(responseLogin)
-    props.onClose();
   }
 
 
@@ -111,7 +119,7 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
     aria-labelledby="scroll-dialog-title"
     aria-describedby="scroll-dialog-description"
     >
-      <DialogTitle id="scroll-dialog-title">Connexion</DialogTitle>
+      <DialogTitle id="scroll-dialog-title">{props.titleText}</DialogTitle>
       <Fragment>
         <DialogContent>
           <form noValidate autoComplete="off">
