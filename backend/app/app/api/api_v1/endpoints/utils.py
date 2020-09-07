@@ -7,7 +7,7 @@ from app.models import User
 from app.schemas import Msg
 
 from app.api import (
-    get_current_active_superuser
+    get_current_user_if_is_superuser
 )
 from app.utils import send_test_email
 
@@ -17,7 +17,7 @@ router = APIRouter()
 @router.post("/test-email/", response_model=Msg, status_code=201)
 def test_email(
     email_to: EmailStr,
-    current_user: User = Depends(get_current_active_superuser),
+    current_user: User = Depends(get_current_user_if_is_superuser),
 ) -> Any:
     """
     Test emails.
