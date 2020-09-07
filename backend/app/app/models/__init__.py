@@ -18,8 +18,8 @@ from .tree import (
 __all__ = [
     "Contact",
     "GeoFile",
-    "GeoFileStatus"
+    "GeoFileStatus",
     "Registration_Link",
     "Tree",
-    "User",
+    "User"
 ]

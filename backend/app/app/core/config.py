@@ -6,7 +6,7 @@ from typing import (
     Optional,
     Union
 )
-
+from pathlib import Path
 from pydantic import (
     AnyHttpUrl,
     BaseSettings,
