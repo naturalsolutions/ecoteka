@@ -10,12 +10,20 @@ from .crud_contact import (
 from .crud_registration_link import (
     registration_link
 )
+from .crud_geo_file import (
+    geo_file
+)
+from .crud_tree import (
+    tree
+)
 
 __all__ = [
     "user",
     "CRUDBase",
     "contact",
-    "registration_link"
+    "geo_file",
+    "registration_link",
+    "tree"
 ]
 
 # For a new basic set of CRUD operations you could just do

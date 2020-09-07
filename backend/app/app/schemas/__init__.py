@@ -23,12 +23,26 @@ from .registration_link import (
     RegistrationLinkUpdate,
     RegistrationLinkOut
 )
+from .geo_file import (
+    GeoFile,
+    GeoFileCreate,
+    GeoFileUpdate
+)
+from .tree import (
+    Tree,
+    TreeCreate,
+    TreeUpdate,
+    TreeImportFromGeofile
+)
 
 __all__ = [
     "ContactCreate",
     "ContactDB",
     "ContactUpdate",
     "ContactOut",
+    "GeoFile",
+    "GeoFileCreate",
+    "GeoFileUpdate",
     "RegistrationLinkCreate",
     "RegistrationLinkDB",
     "RegistrationLinkUpdate",
@@ -39,5 +53,9 @@ __all__ = [
     "UserUpdate",
     "UserOut",
     "Token",
-    "TokenPayload"
+    "TokenPayload",
+    "Tree",
+    "TreeCreate",
+    "TreeUpdate",
+    "TreeImportFromGeofile"
 ]

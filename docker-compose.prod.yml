@@ -29,24 +29,75 @@ services:
       - traefik.http.routers.wwwsecure-catchall.tls=true
       - traefik.http.routers.wwwsecure-catchall.middlewares=wwwtohttps
 
+      # Redirection ecoteka.natural-solutions.eu to ecoteka.org
+      - traefik.http.routers.natural-solutions.rule=Host(`ecoteka.natural-solutions.eu`)
+      - traefik.http.routers.natural-solutions.entrypoints=websecure
+      - traefik.http.routers.natural-solutions.tls=true
+      - traefik.http.routers.natural-solutions.middlewares=nstoecoteka
+
       # Middleware: http(s)://(www.) to  https://
       - traefik.http.middlewares.wwwtohttps.redirectregex.regex=^https?://(?:www\.)?(.+)
       - traefik.http.middlewares.wwwtohttps.redirectregex.replacement=https://$${1}
       - traefik.http.middlewares.wwwtohttps.redirectregex.permanent=true
 
+      # Middlewate: http(s)://ecoteka.natural-solutions.eu to https://
+      - traefik.http.middlewares.nstoecoteka.redirectregex.regex=^https?://(?:www\.)?(.+)
+      - traefik.http.middlewares.nstoecoteka.redirectregex.replacement=https://${NS_ECOTEKA_DOMAIN_NAME}
+      - traefik.http.middlewares.nstoecoteka.redirectregex.permanent=true
+
       # Let's Encrypt
       - traefik.http.services.proxy.loadbalancer.server.port=80
       - traefik.http.routers.wwwsecure.tls.domains[0].main=${NS_ECOTEKA_DOMAIN_NAME}
       - traefik.http.routers.wwwsecure.tls.domains[0].sans=www.${NS_ECOTEKA_DOMAIN_NAME}
+      - traefik.http.routers.wwwsecure.tls.domains[1].main=ecoteka.natural-solutions.eu
       - traefik.http.routers.wwwsecure.tls.certresolver=le
+
+  db_backups:
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    networks:
+      - traefik
+    volumes:
+      - ${NS_ECOTEKA_DB_BACKUPS_VOLUME_PATH}:/backups
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=${NS_ECOTEKA_DB_NAME}
+      - POSTGRES_USER=${NS_ECOTEKA_DB_USER}
+      - POSTGRES_PASSWORD=${NS_ECOTEKA_DB_PASSWORD}
+      - POSTGRES_EXTRA_OPTS=-Z9 --schema=public --blobs
+      - SCHEDULE=${NS_ECOTEKA_DB_BACKUPS_SCHEDULE}
+      - BACKUP_KEEP_DAYS=${NS_ECOTEKA_DB_BACKUPS_BACKUP_KEEP_DAYS}
+      - BACKUP_KEEP_WEEKS=${NS_ECOTEKA_DB_BACKUPS_BACKUP_KEEP_WEEKS}
+      - BACKUP_KEEP_MONTHS=${NS_ECOTEKA_DB_BACKUPS_BACKUP_KEEP_MONTHS}
+      - HEALTHCHECK_PORT=${NS_ECOTEKA_DB_BACKUPS_HEALTHCHECK_PORT}
+
+  files_backups:
+    image: registry.gitlab.com/natural-solutions/docker-duplicity
+    restart: always
+    networks:
+      - traefik
+    volumes:
+      - ${NS_ECOTEKA_FILES_BACKUPS_SRC}:/home/duplicity/src
+      - ${NS_ECOTEKA_FILES_BACKUPS_TARGET}:/home/duplicity/backup
+      - ./scripts/files_backup.sh:/backup.sh
+    environment:
+      - HEALTHCHECK_PORT=${NS_ECOTEKA_DB_BACKUPS_HEALTHCHECK_PORT}
 
   backend:
     labels:
       - traefik.http.routers.backend.entrypoints=websecure
       - traefik.http.routers.backend.tls=true
+    volumes:
+      - ./data/uploaded_files:${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
 
   frontend:
     labels:
       - traefik.http.routers.frontend.entrypoints=websecure
       - traefik.http.routers.frontend.tls=true
       - traefik.http.services.frontend.loadbalancer.server.port=80
+
+  tile_server:
+    labels:
+      - traefik.http.routers.tile_server.entrypoints=websecure
+      - traefik.http.routers.tile_server.tls=true
+      - traefik.http.services.tile_server.loadbalancer.server.port=80

@@ -93,7 +93,7 @@ configure it and their default values:
 
 | Key                        | Description                                    | Default value |
 | :--                        | :----                                          |          --:  |
-| NS_ECOTEKA_DB_IMAGE        | The name of the postgres docker image.         | postgres:12   |
+| NS_ECOTEKA_DB_IMAGE        | The name of the postgres docker image.         | postgis/postgis   |
 | NS_ECOTEKA_DB_NAME         | The [PostgresSQL][postgresql] database name.   | ecoteka       |
 | NS_ECOTEKA_DB_PASSWORD     | The [PostgresSQL][postgresql] user password.   | password      |
 | NS_ECOTEKA_DB_PORT         | The [PostgreSQL][postgresql] database port.    | 5432          |
@@ -127,9 +127,14 @@ configure it and their default values:
 | NS_ECOTEKA_BACKEND_SMTP_PORT                      | Port of the smtp server                                                             |  438                                 |
 | NS_ECOTEKA_BACKEND_SMTP_TLS                       | Rncryption connection with smtp server                                              | True                                 |
 | NS_ECOTEKA_BACKEND_SMTP_USER                      | Login mail                                                                          | user                                 |
+| NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER          | Uploaded files folder                                                               | /app/app/uploaded_files              |
 
-
-
+### TILE SERVER
+| Key                                   | Description                       |                                            Default value |
+|:--------------------------------------|:----------------------------------|---------------------------------------------------------:|
+| NS_ECOTEKA_TILE_SERVER_IMAGE          | Vector Tile Server Docker Image   | registry.gitlab.com/natural-solutions/vector-tile-server |
+| NS_ECOTEKA_TILE_SERVER_PUBLIC_FOLDER  | Public Vector Tiles Files Folder  |                                           ./tiles/public |
+| NS_ECOTEKA_TILE_SERVER_PRIVATE_FOLDER | Private Vector Tiles Files Folder |                                          ./tiles/private |
 
 [docker]: https://docs.docker.com/get-docker
 [docker-compose]: https://docs.docker.com/compose/install

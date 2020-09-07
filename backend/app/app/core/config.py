@@ -97,6 +97,9 @@ class Settings(BaseSettings):
     SUPERUSERS_CONTACT_LIST: Optional[EmailStr] = None
     USERS_OPEN_REGISTRATION: bool = True
 
+    UPLOADED_FILES_FOLDER: Path = "/app/app/uploaded_files"
+    GEO_FILES_ALLOWED: str = 'geojson,zip,csv,xls,xlsx'
+
     class Config:
         case_sensitive = True
 

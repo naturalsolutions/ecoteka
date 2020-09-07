@@ -487,8 +487,12 @@
       "source": "satellite",
       "minzoom": 0,
       "filter": ["all"],
-      "layout": { "visibility": "none" },
-      "paint": { "raster-opacity": 1 }
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "raster-opacity": 1
+      }
     },
     {
       "filter": ["in", "admin_level", 4, 6, 8],
@@ -859,11 +863,9 @@
     },
     "ecoteka-data-osm": {
       "type": "vector",
-      "tiles": [
-        "https://natural-solutions.gitlab.io/ecoteka-data-osm/tiles/{z}/{x}/{y}.pbf"
-      ],
+      "tiles": ["https://dev.ecoteka.org/tiles/osm/{z}/{x}/{y}.pbf"],
       "minzoom": 0,
-      "maxzoom": 12
+      "maxzoom": 13
     }
   },
   "version": 8,

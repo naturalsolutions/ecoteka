@@ -10,7 +10,7 @@ from fastapi import (
     HTTPException
 )
 from fastapi.encoders import jsonable_encoder
-from pydantic.networks import EmailStr
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
 from app.schemas import (
     UserCreate,

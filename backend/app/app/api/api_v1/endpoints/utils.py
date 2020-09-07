@@ -1,7 +1,7 @@
 from typing import Any
 
 from fastapi import APIRouter, Depends
-from pydantic.networks import EmailStr
+from pydantic import EmailStr
 
 from app.models import User
 from app.schemas import Msg

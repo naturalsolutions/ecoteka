@@ -1,7 +1,8 @@
-import { useState, createRef } from "react";
+import { useState, createRef, useEffect } from "react";
 import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { red } from "@material-ui/core/colors";
+import { useRouter } from 'next/router'
 
 import ETKToolbar from "../components/Toolbar";
 import ETKSidebar from "../components/Sidebar";
@@ -14,12 +15,14 @@ import layersStyle from "../public/assets/layersStyle.json";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    //display: "flex",
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
-    flexGrow: 1,
-    height: "100vh",
+    //flexGrow: 1,
+    position: 'relative',
+    height: "calc(100vh - 96px)",
+    marginTop: 96
   },
 }));
 
@@ -30,6 +33,7 @@ export default function Index() {
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
+  const [drawerName, setDrawerName] = useState('');
   const [currentTheme, setCurrentTheme] = useState("light");
   const theme = createMuiTheme({
     palette: {
@@ -88,6 +92,7 @@ export default function Index() {
         setIsDrawerOpen(true);
       }
 
+      router.push('/');
       setCurrentGenre(genre);
       setCurrentProperties(feature.properties);
 
@@ -138,6 +143,55 @@ export default function Index() {
     }
   };
 
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = (value) => {
+      const url = new URL(value, 'http://anybase/');
+      setDrawerName(url.searchParams.get('drawer'));
+      setIsDrawerOpen(true);
+    };
+
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, []);
+
+  const interventionRequestDrawer = () => {
+    return <div>
+      <h4>hello intervention_request</h4>
+    </div>
+  }
+
+  const importDrawer = () => {
+    return <div>
+      <h4>hello import</h4>
+    </div>
+  }
+
+  const defaultDrawer = () => {
+    return <ETKSidebar
+      speces={speces}
+      activeTab={activeTab}
+      currentGenre={currentGenre}
+      currentProperties={currentProperties}
+      onFilterSpecies={onFilterSpecies}
+      onTabChange={setActiveTab}
+    />
+  }
+
+  const getDrawerContent = () => {
+    const drawers = {
+      intervention_request: interventionRequestDrawer,
+      import: importDrawer,
+      default: defaultDrawer
+    };
+
+    return drawers[drawerName] ? drawers[drawerName]() : drawers.default();
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root} role="presentation">
@@ -170,14 +224,8 @@ export default function Index() {
         onClose={() => setIsDrawerOpen(false)}
       >
         <Toolbar variant="dense" />
-        <ETKSidebar
-          speces={speces}
-          activeTab={activeTab}
-          currentGenre={currentGenre}
-          currentProperties={currentProperties}
-          onFilterSpecies={onFilterSpecies}
-          onTabChange={setActiveTab}
-        />
+        <Toolbar variant="dense" />
+        {getDrawerContent()}
       </Drawer>
     </ThemeProvider>
   );
