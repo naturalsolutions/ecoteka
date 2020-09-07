@@ -21,7 +21,7 @@ def upgrade():
         sa.Column(
             "fk_user",
             sa.Integer(),
-            sa.ForeignKey("user.id"),
+            sa.ForeignKey("user.id", ondelete="CASCADE"),
             primary_key=True),
         sa.Column("value", sa.String(), nullable=True),
         sa.Column(
