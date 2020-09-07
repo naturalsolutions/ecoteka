@@ -2,7 +2,7 @@ import { useState, createRef, useEffect, useContext } from "react";
 import { Toolbar, Drawer, makeStyles, useTheme } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 import ETKSidebar from "../components/Sidebar";
 import ETKMap from "../components/Map/Map";
@@ -14,24 +14,21 @@ import layersStyle from "../public/assets/layersStyle.json";
 import ETKImport from "../components/Import/Index.tsx";
 
 import Template from "../components/Template";
-//import { useToto } from "../providers/app-context";
-
+import { useAppContext } from "../providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    position: 'relative',
-    height: '100%'
+    position: "relative",
+    height: "100%",
   },
   drawerCloseBtn: {
-    position: 'absolute',
+    position: "absolute",
     top: 96,
     right: 0,
     zIndex: 1,
-    color: 'red'
-  }
+    color: "red",
+  },
 }));
-
-
 
 export default function IndexPage({ drawer }) {
   const mapRef = createRef();
@@ -41,19 +38,13 @@ export default function IndexPage({ drawer }) {
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   //const [drawerName, setDrawerName] = useState('');
-  const [currentTheme, setCurrentTheme] = useState("light");
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const theme = useTheme();
-  //const appContext = useAppContext();
-  /* const setToto = useToto();
-  useEffect(() => {
-    (() => {
-      console.log('otot')
-    })()
-  }, [setToto]) */
+  const { appContext, setAppContext } = useAppContext();
 
-  /* useEffect(() => {
-    console.log(appContext);
-  }, [appContext]); */
+  useEffect(() => {
+    toggleMapTheme(appContext.theme);
+  }, [appContext]);
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -99,7 +90,7 @@ export default function IndexPage({ drawer }) {
         setIsDrawerOpen(true);
       }
 
-      router.push('/');
+      router.push("/");
       setCurrentGenre(genre);
       setCurrentProperties(feature.properties);
 
@@ -110,6 +101,10 @@ export default function IndexPage({ drawer }) {
   };
 
   const toggleMapTheme = (mapTheme) => {
+    if (!isMapLoaded) {
+      return;
+    }
+
     for (let layer of Object.keys(layersStyle)) {
       for (let property of Object.keys(layersStyle[layer][mapTheme])) {
         mapRef.current.map.setPaintProperty(
@@ -122,8 +117,11 @@ export default function IndexPage({ drawer }) {
   };
 
   const onMapLoaded = (map) => {
-    toggleMapTheme(currentTheme);
     window.dispatchEvent(new Event("resize"));
+    setIsMapLoaded(true);
+    setAppContext({
+      theme: "light",
+    });
   };
 
   const onDarkToggleHandler = (dark) => {
@@ -156,10 +154,6 @@ export default function IndexPage({ drawer }) {
   useEffect(() => {
     setIsDrawerOpen(true);
   }, [drawer]);
-
-  useEffect(() => {
-    console.log('theme', theme);
-  }, [theme]);
 
   /* useEffect(() => {
     const handleRouteChange = (value) => {

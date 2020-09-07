@@ -2,9 +2,9 @@ import { useContext, createContext, useState } from "react";
 
 const StoreContext = createContext();
 
-const AppContextProvider = ({ children }) => {
+export const Provider = ({ children }) => {
   const [appContext, setAppContext] = useState({
-    theme: 'light'
+    theme: "light",
   });
 
   return (
@@ -12,11 +12,6 @@ const AppContextProvider = ({ children }) => {
       {children}
     </StoreContext.Provider>
   );
-}
+};
 
-const useAppContext = () =>  useContext(StoreContext)
-
-export default {
-  AppContextProvider,
-  useAppContext
-}
+export const useAppContext = () => useContext(StoreContext);
