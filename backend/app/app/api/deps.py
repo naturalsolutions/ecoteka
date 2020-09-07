@@ -53,16 +53,22 @@ def get_current_user(
         )
     user_in_db = user.get(db, id=token_data.sub)
     if not user_in_db:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
     return user_in_db
 
 
 def get_current_active_user(
     current_user: User = Depends(get_current_user),
 ) -> User:
-    # if not crud.user.is_verified(current_user):
-    #     raise HTTPException(status_code=400, detail="Inactive user")
-    return user.is_verified(current_user)
+    if not user.is_verified(current_user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="The user account is not verified"
+        )
+    return current_user
 
 
 def get_current_user_if_is_superuser(
