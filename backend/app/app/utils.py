@@ -1,12 +1,24 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import (
+    datetime,
+    timedelta
+)
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import (
+    Any,
+    Dict,
+    Optional
+)
+from pydantic import EmailStr
 
 import emails
 from emails.template import JinjaTemplate
 from jose import jwt
-from app.core import settings
+from app.core import (
+    create_access_token,
+    settings
+)
+import uuid
 
 
 def send_email(
@@ -145,3 +157,115 @@ def send_contact_request_confirmation(
             "last_name": last_name
         },
     )
+
+
+def send_new_contact_notification(
+    email_to: str,
+    contactId: int,
+    first_name: str,
+    last_name: str,
+    email: EmailStr,
+    phone_number: Optional[str],
+    township: Optional[str],
+    position: Optional[str],
+    contact_request: str
+) -> None:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - New contact request"
+    pathToTemplate = (
+        Path(settings.EMAIL_TEMPLATES_DIR)
+        /
+        "new_contact_notification.html"
+    )
+    with open(pathToTemplate) as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "contactId": contactId,
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "phone_number": phone_number,
+            "township": township,
+            "position": position,
+            "contact_request": contact_request
+        },
+    )
+
+
+def send_new_registration_email(
+    email_to: str,
+    full_name: str,
+    password: str
+):
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - Welcome {full_name}"
+    pathToTemplate = (
+        Path(settings.EMAIL_TEMPLATES_DIR)
+        /
+        "new_registration_email.html"
+    )
+    with open(pathToTemplate) as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "full_name": full_name,
+            "email": email_to,
+            "password": password
+        },
+    )
+
+
+def send_new_registration_link_email(
+    email_to: str,
+    full_name: str,
+    link: str
+) -> None:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - Welcome to ecoteka {full_name}"
+    pathToTemplate = (
+        Path(settings.EMAIL_TEMPLATES_DIR)
+        /
+        "new_registration_link.html"
+    )
+    with open(pathToTemplate) as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "email": email_to,
+            "link": link
+        },
+    )
+
+
+def generate_response_for_token(
+    user_id: int,
+    is_superuser: bool
+):
+    access_token_expires = timedelta(
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+        )
+    return {
+        "access_token": create_access_token(
+            subject=user_id,
+            isSuperAdmin=is_superuser,
+            expires_delta=access_token_expires
+        ),
+        "token_type": "bearer",
+    }
+
+
+def generate_registration_link_value() -> str:
+    return str(uuid.uuid4())
