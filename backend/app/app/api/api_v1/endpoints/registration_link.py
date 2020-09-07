@@ -24,8 +24,8 @@ from datetime import (
     datetime,
     timedelta
 )
-from app.core.config import settings
-import uuid
+from app.utils import generate_registration_link_value
+from app.core import settings
 
 router = APIRouter()
 
@@ -48,6 +48,8 @@ def verification(
             detail="This link is no more usable please regenerate a new one"
         )
     else:
+        db.delete(registration_link_in_db)
+        db.commit()
         return {
             "message": f"email { current_user.email } is verified"
         }
@@ -73,7 +75,7 @@ def regenerate_registration_link(
         if registration_link_in_db is None:
             registration_link_tmp = RegistrationLinkCreate(
                 fk_user=current_user.id,
-                value=str(uuid.uuid4()),
+                value=generate_registration_link_value(),
                 creation_date=datetime.datetime.now()
             )
             new_registration_link = registration_link.create(
@@ -98,7 +100,7 @@ def regenerate_registration_link(
             if dateExpiration < curDate:
                 registration_link_tmp = RegistrationLinkUpdate(
                     fk_user=current_user.id,
-                    value=str(uuid.uuid4()),
+                    value=generate_registration_link_value(),
                     creation_date=datetime.datetime.now()
                 )
                 new_registration_link = registration_link.update(
@@ -110,7 +112,7 @@ def regenerate_registration_link(
             elif dateLimitBeforeResendMail < curDate:
                 registration_link_tmp = RegistrationLinkUpdate(
                     fk_user=current_user.id,
-                    value=str(uuid.uuid4()),
+                    value=generate_registration_link_value(),
                     creation_date=datetime.datetime.now()
                 )
                 new_registration_link = registration_link.update(
