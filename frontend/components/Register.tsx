@@ -8,6 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import getConfig from "next/config";
+import api from "../lib/api"
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -117,10 +118,12 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
     }
 
     const url = `${publicRuntimeConfig.apiUrl}/auth/register/`;
-    const response = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
+    const headers = { 'Content-Type': 'application/json' };
+    const response = await api.post(
+      url,
+      headers,
+      JSON.stringify(payload)
+      )
     setIsSending(false);
     const json = await response.json();
     if (response.status == 422) {
