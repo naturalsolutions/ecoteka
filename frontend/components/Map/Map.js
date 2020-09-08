@@ -47,14 +47,6 @@ export default class ETKMap extends Component {
   }
 
   render() {
-    return (
-      <div
-        ref={(el) => (this.mapContainer = el)}
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-      />
-    );
+    return <div ref={(el) => (this.mapContainer = el)} className="etk-map" />;
   }
 }

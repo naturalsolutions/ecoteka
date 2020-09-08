@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
     searchCity: {
       background: "#fff",
       position: "absolute",
-      top: theme.spacing(8),
+      top: theme.spacing(2),
       right: theme.spacing(2),
     },
   })

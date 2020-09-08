@@ -37,9 +37,7 @@ export default function IndexPage({ drawer }) {
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
-  //const [drawerName, setDrawerName] = useState('');
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const theme = useTheme();
   const { appContext, setAppContext } = useAppContext();
 
   useEffect(() => {
@@ -155,20 +153,6 @@ export default function IndexPage({ drawer }) {
     setIsDrawerOpen(true);
   }, [drawer]);
 
-  /* useEffect(() => {
-    const handleRouteChange = (value) => {
-      const url = new URL(value, 'http://anybase/');
-      setDrawerName(url.searchParams.get('drawer'));
-      setIsDrawerOpen(true);
-    };
-
-    router.events.on('routeChangeStart', handleRouteChange);
-
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange);
-    };
-  }, []); */
-
   const renderImport = (
     <ETKImport
       tooltipcontent={[
@@ -232,7 +216,6 @@ export default function IndexPage({ drawer }) {
         >
           <CloseIcon />
         </IconButton>
-        {/* <Toolbar>{appContext.theme}</Toolbar> */}
         {switchRenderDrawer(drawer)}
       </Drawer>
     </Template>

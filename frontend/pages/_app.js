@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import "mapbox-gl/dist/mapbox-gl.css";
+import "../components/Map/map.css";
 import Auth from "../components/Auth";
 
 import { Provider as AppContextProvider } from "../providers/AppContext";
