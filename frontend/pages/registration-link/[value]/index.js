@@ -24,13 +24,15 @@ export default function index() {
         <React.Fragment>
           <ETKSignin
             isOpen={isSigninOpen}
-            onClose={(e) => {
-              if (!session) {
+            onClose={(event, value) => {
+              if (value && value == "cancelByClick") {
                 //redirect to home page
                 router.push("/");
               }
             }}
             titleText="You need to login before activate your account"
+            disableBackdropClick={true}
+            disableEscapeKeyDown={true}
           />
         </React.Fragment>
       ) : (
