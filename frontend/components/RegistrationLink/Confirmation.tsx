@@ -13,6 +13,13 @@ const { publicRuntimeConfig } = getConfig();
 export interface ETKRegistrationLinkConfirmationProps {
   value: string;
   content: string;
+  errorContent?: string;
+}
+
+const defaultProps: ETKRegistrationLinkConfirmationProps= {
+  value: '',
+  content: '',
+  errorContent: 'We can\'t validate your account You gonna be redirected to the homepage'
 }
 
 const useStyles = makeStyles((theme) =>
@@ -71,8 +78,7 @@ const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationP
         {isInError ? (
           <React.Fragment>
             <Typography component="h5" className={classes.error}>
-              We can't validate your account You gonna be redirected to the
-              homepage
+              {props.errorContent}
             </Typography>
             <CircularProgress />
           </React.Fragment>
@@ -88,5 +94,7 @@ const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationP
     </React.Fragment>
   );
 };
+
+ETKRegistrationLinkConfirmation.defaultProps= defaultProps;
 
 export default ETKRegistrationLinkConfirmation;

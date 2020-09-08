@@ -75,6 +75,7 @@ function Properties(props) {
     </Grid>
   ) : (
     <div>No properties</div>
+    //fr <div>Aucune propriété</div>
   );
 }
 

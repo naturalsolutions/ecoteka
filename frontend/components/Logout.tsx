@@ -6,6 +6,11 @@ export interface ETKLogoutProps {
   logoutText: string;
 }
 
+const defaultProps: ETKLogoutProps = {
+  logoutText: "Logout"
+  //fr logoutText: "Déconnexion"
+}
+
 const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
   const { appContext, setAppContext } = useAppContext();
 
@@ -23,5 +28,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
     </Button>
   );
 };
+
+ETKLogout.defaultProps = defaultProps;
 
 export default ETKLogout;

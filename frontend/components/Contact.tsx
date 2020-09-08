@@ -25,6 +25,37 @@ const { publicRuntimeConfig } = getConfig();
 export interface ETKContactProps {
   isOpen: boolean;
   onClose: Function;
+  dialogTile?: string;
+  dialogContentText?: string;
+  dialogContentHint?: string;
+  successMessageContent?: string;
+  buttonHomeContent?: string;
+  buttonCancelContent?: string;
+  buttonSubmitContent?: string;
+  postErrorMessage?: string;
+}
+
+
+const defaultProps:ETKContactProps = {
+  isOpen: false,
+  onClose: ()=>{},
+  dialogTile: "Contact us",
+  //fr dialogTile: "Nous contacter",
+  dialogContentText: "Our team will be happy to answer you",
+  //fr dialogContentText: "Notre équipe sera heureuse de vous répondre",
+  dialogContentHint: "Please fill out this form. We will respond as soon as possible.",
+  //fr dialogContentHint: "Merci de remplir ce formulaire. Nous vous répondrons dans les\nplus brefs délais.",
+  successMessageContent: "Your message has been sent, we will get back to you as soon as possible!",
+  //fr successMessageContent: "Votre message a bien été envoyé, nous vous répondrons dans les\nplus brefs délais !",
+  buttonHomeContent: "Back to Home",
+  //fr  buttonHomeContent: "Retour à l'accueil",
+  buttonCancelContent: "Cancel",
+  //fr buttonCancelContent: "Annuler",
+  buttonSubmitContent: "Send contact request",
+  //fr buttonSubmitContent: "Envoyer la demande de contact"
+  postErrorMessage: "Internal error, please try again later.",
+  //fr postErrorMessage: "Erreur interne, veuillez recommencer plus tard."
+
 }
 
 const useStyles = makeStyles((theme) =>
@@ -55,7 +86,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
   const [form, setForm] = useState(getFormDefault());
   const [isSending, setIsSending] = useState(false);
   const [hasSuccess, setHasSuccess] = useState(false);
-  const [postErrorMessage, setPostErrorMessage] = useState("");
+  const [postErrorMessage, setPostErrorMessage] = useState("" as any);
 
   const handleClose = () => {
     if (isSending) {
@@ -92,12 +123,14 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
         continue;
       }
       if (!form[key].value) {
-        form[key].errorMessage = "Veuillez renseigner ce champs.";
+        form[key].errorMessage = "Please complete this field.";
+        //fr form[key].errorMessage = "Veuillez renseigner ce champs.";
       }
     }
 
     if (!validateEmail(form.email.value)) {
-      form.email.errorMessage = "Veuillez saisir un email valide.";
+      form.email.errorMessage = "Please enter a valid email.";
+      //fr form.email.errorMessage = "Veuillez saisir un email valide.";
     }
 
     setForm({ ...form });
@@ -128,7 +161,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
       setHasSuccess(true);
       setForm({ ...getFormDefault() });
     } else {
-      setPostErrorMessage("Erreur interne, veuillez recommencer plus tard.");
+      setPostErrorMessage(props.postErrorMessage);
     }
   };
 
@@ -155,7 +188,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title">Nous contacter</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">{props.dialogTile}</DialogTitle>
         {hasSuccess ? (
           <React.Fragment>
             <DialogContent>
@@ -163,8 +196,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                 <CheckCircleIcon style={{ fontSize: 40 }} />
               </Typography>
               <Typography align="center">
-                Votre message a bien été envoyé, nous vous répondrons dans les
-                plus brefs délais !
+                {props.successMessageContent}
               </Typography>
             </DialogContent>
             <DialogActions>
@@ -174,7 +206,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                 }}
                 color="primary"
               >
-                Retour à l'accueil
+                {props.buttonHomeContent}
               </Button>
             </DialogActions>
           </React.Fragment>
@@ -182,11 +214,10 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
             <React.Fragment>
               <DialogContent>
                 <Typography component="p" variant="h5">
-                  Notre équipe sera heureuse de vous répondre
+                  {props.dialogContentText}
               </Typography>
                 <Typography>
-                  Merci de remplir ce formulaire. Nous vous répondrons dans les
-                  plus brefs délais.
+                  {props.dialogContentHint}
               </Typography>
                 <form noValidate autoComplete="off">
                   <Grid container spacing={1}>
@@ -321,7 +352,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                     handleClose();
                   }}
                 >
-                  Annuler
+                  {props.buttonCancelContent}
               </Button>
                 <Button
                   onClick={() => {
@@ -330,7 +361,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                   color="primary"
                   variant="contained"
                 >
-                  Envoyer la demande de contact
+                  {props.buttonSubmitContent}
               </Button>
               </DialogActions>
             </React.Fragment>
@@ -374,5 +405,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
     </React.Fragment>
   );
 };
+
+ETKContact.defaultProps= defaultProps;
 
 export default ETKContact;

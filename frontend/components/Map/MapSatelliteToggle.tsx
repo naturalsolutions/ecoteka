@@ -4,6 +4,16 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
 export interface ETKMapSateliteToggleProps {
   onToggle?(active: string): void;
+  buttonMapContent?: string;
+  buttonSatelliteContent?: string;
+}
+
+const defaultProps: ETKMapSateliteToggleProps = {
+  onToggle: ()=> {},
+  buttonMapContent: "Map",
+  //fr buttonMapContent?: "Carte",
+  buttonSatelliteContent: "Satellite",
+  //fr buttonSatelliteContent?: "Satellite"
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,16 +48,18 @@ const ETKMapSateliteToggle: React.FC<ETKMapSateliteToggleProps> = (props) => {
         color={active === "map" ? "primary" : null}
         onClick={() => onClickHandler("map")}
       >
-        Map
+        {props.buttonMapContent}
       </Button>
       <Button
         color={active === "satelite" ? "primary" : null}
         onClick={() => onClickHandler("satelite")}
       >
-        Satelite
+        {props.buttonSatelliteContent}
       </Button>
     </ButtonGroup>
   );
 };
+
+ETKMapSateliteToggle.defaultProps= defaultProps;
 
 export default ETKMapSateliteToggle;

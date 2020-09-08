@@ -16,7 +16,7 @@ const { publicRuntimeConfig } = getConfig();
 
 export interface ETKUploadProps {
   uploadUrl?: string;
-  geofile: Geofile;
+  geofile?: Geofile;
   tooltipcontent: [string];
   extensionsFileAccepted: [string];
   dropzoneText: string;
@@ -26,7 +26,32 @@ export interface ETKUploadProps {
   isReadyToImport: boolean;
   onUploadProgress?(progress: number): void;
   onUploaded?(geofile: Geofile): void;
+  boxContent?: string;
+  fileListHint?: string;
+  buttonCancelContent?: string;
+  buttonUploadContent?: string;
+
 }
+
+const defaultProps: ETKUploadProps = {
+  uploadUrl: `${publicRuntimeConfig.apiUrl}/geo_files/upload`,
+  geofile: undefined,
+  tooltipcontent: [''],
+  extensionsFileAccepted: [''],
+  dropzoneText: '',
+  missingInfo: [''],
+  isUploaded: false,
+  progressBarMessage: '',
+  isReadyToImport: false,
+  boxContent: "Import your data",
+  //fr boxContent: "Import your data",
+  fileListHint: "Files types accepted :",
+  //fr fileListHint: "Types de fichiers acceptés :",
+  buttonCancelContent: "Cancel",
+  //fr buttonCancelContent: "Annuler",
+  buttonUploadContent: "Upload",
+  //fr buttonUploadContent: "Envoi"
+};
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -188,7 +213,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
         <Typography variant="h6">
           <Grid container alignItems="center">
             <Box component="span" mr={1}>
-              Import your data
+              {props.boxContent}
             </Box>
             <HtmlTooltip title={htmlTooltip}>
               <HelpIcon />
@@ -225,7 +250,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                 dropzoneClass={classes.etkDropzone}
               />
               <Typography style={{ marginTop: ".7rem" }}>
-                Files types accepted : {props.extensionsFileAccepted.join(",")}
+                {props.fileListHint} {props.extensionsFileAccepted.join(",")}
               </Typography>
             </Grid>
           ) : null}
@@ -252,7 +277,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                   setLinearProgressValue(0);
                 }}
               >
-                Cancel
+                {props.buttonCancelContent}
               </Button>
               <Button
                 className={classes.submitbtn}
@@ -261,7 +286,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                 variant="contained"
                 onClick={onUploadClick}
               >
-                Upload
+                {props.buttonUploadContent}
               </Button>
             </Grid>
           )}
@@ -271,10 +296,6 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   );
 };
 
-ETKUpload.defaultProps = {
-  uploadUrl: `${publicRuntimeConfig.apiUrl}/geo_files/upload`,
-  missingInfo: [],
-  isReadyToImport: false,
-};
+ETKUpload.defaultProps = defaultProps;
 
 export default ETKUpload;

@@ -16,6 +16,8 @@ export interface ETKSigninProps {
   isOpen: boolean;
   onClose: Function;
   titleText: string;
+  buttonCancelText?: string;
+  buttonConnexionText?: string;
   disableBackdropClick?: boolean;
   disableEscapeKeyDown?: boolean;
 }
@@ -24,6 +26,10 @@ const defaultProps: ETKSigninProps = {
   isOpen: false,
   onClose: ()=>{},
   titleText: "Login",
+  buttonCancelText: 'Cancel',
+  //fr buttonCancelText: 'Annuler',
+  buttonConnexionText: 'Log In',
+  //fr buttonConnexionText: 'Connexion',
   disableBackdropClick: false,
   disableEscapeKeyDown: false,
 }
@@ -173,7 +179,7 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
             handleClose(event, "cancelByClick");
           }}
         >
-          Annuler
+          {props.buttonCancelText}
         </Button>
         <Button
           onClick={() => {
@@ -182,7 +188,7 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
           color="primary"
           variant="contained"
         >
-          Connexion
+          {props.buttonConnexionText}
         </Button>
       </DialogActions>
     </Dialog>

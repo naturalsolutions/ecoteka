@@ -30,7 +30,8 @@ export default function index() {
                 router.push("/");
               }
             }}
-            titleText="You need to login before activate your account"
+            titleText="You need to login before we check your link"
+            //fr titleText="Vous devez vous authentifier avant que l'on puisse verifier votre lien"
             disableBackdropClick={true}
             disableEscapeKeyDown={true}
           />
@@ -39,7 +40,8 @@ export default function index() {
         <React.Fragment>
           <ETKRegistrationLinkConfirmation
             value={value}
-            content="Please wait while we activate your account"
+            content="Please wait while we check your link"
+            //fr content="Merci de patienter pendant que nous verifions votre lien"
           />
         </React.Fragment>
       )}

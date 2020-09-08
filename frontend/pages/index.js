@@ -158,12 +158,16 @@ export default function IndexPage({ drawer }) {
       tooltipcontent={[
         "- Importing data is an action that can take several tens of minutes",
         '- Find the progress of your import in the menu: "History of imports"',
-        "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes",
-        "- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
+        //fr "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes",
+        //fr "- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
       ]}
       extensionsFileAccepted={[".xls", ".xlsx", ".csv", ".geojson", ".zip"]}
-      templateTips={["Do not hesitate to download our template in .xls format"]}
-      dropzoneText={"Drag 'n' drop some files here\nor click to select files"}
+      templateTips={[
+        "Do not hesitate to download our template in .xls format",
+        //fr "N'hésitez pas à télécharger notre template au formal .xls"
+      ]}
+      dropzoneText={"Drag 'n' drop file here\nor click to select file"}
+      //fr dropzoneText={"Déposez votre fichier ici ou cliquez pour le selectionner"}
     />
   );
 

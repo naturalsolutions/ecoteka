@@ -14,6 +14,7 @@ export interface ETKMissingDatasProps {
   titleText: string;
   hintText: string;
   onUpdateGeofile(geofile: ETKGeofile): void;
+  buttonSubmitContent?: string;
 }
 
 interface DataItem {
@@ -25,6 +26,17 @@ interface Data {
   latitude_column?: DataItem;
   longitude_column?: DataItem;
   crs?: DataItem;
+}
+
+const defaultProps: ETKMissingDatasProps = {
+  geoFile: undefined,
+  missingInfo: [],
+  titleText: "The file you upload missing some informations",
+  hintText:
+    "Please define the fields corresponding to the columns of your file",
+  onUpdateGeofile() {},
+  buttonSubmitContent: "Submit",
+  //fr buttonSubmitContent: "Soumettre",
 }
 
 const useStyle = makeStyles((theme) =>
@@ -205,7 +217,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
             disabled={!isReady}
             onClick={onUpdate}
           >
-            Submit
+            {props.buttonSubmitContent}
           </Button>
         </Grid>
       </Grid>
@@ -213,13 +225,6 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   }
 };
 
-ETKMissingDatas.defaultProps = {
-  geoFile: undefined,
-  missingInfo: [],
-  titleText: "The file you upload missing some informations",
-  hintText:
-    "Please define the fields corresponding to the columns of your file",
-  onUpdateGeofile() {},
-};
+ETKMissingDatas.defaultProps = defaultProps;
 
 export default ETKMissingDatas;

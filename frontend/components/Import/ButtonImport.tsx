@@ -8,6 +8,14 @@ const { publicRuntimeConfig } = getConfig();
 export interface ETKButtonImportProps {
   name: string;
   onImported(): void;
+  buttonImportContent?: string;
+}
+
+const defaultProps: ETKButtonImportProps = {
+  name: "",
+  onImported: ()=> {},
+  buttonImportContent: "IMPORT",
+  //fr buttonImportContent: "IMPORTER"
 }
 
 const ETKButtonImport: React.FC<ETKButtonImportProps> = (props) => {
@@ -39,11 +47,11 @@ const ETKButtonImport: React.FC<ETKButtonImportProps> = (props) => {
 
   return (
     <Button variant="contained" color="primary" onClick={onImport}>
-      IMPORTER
+      {props.buttonImportContent}
     </Button>
   );
 };
 
-ETKButtonImport.defaultProps = {};
+ETKButtonImport.defaultProps = defaultProps;
 
 export default ETKButtonImport;

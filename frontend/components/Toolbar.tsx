@@ -30,6 +30,21 @@ export interface ETKToolbarProps {
   onDarkToggle: ETKDarkToggleProps["onToggle"];
 }
 
+const defaultProps: ETKToolbarProps = {
+  logo: '/assets/light/logo.svg',
+  numberOfTrees: "4.6 millions of trees",
+  loginText: 'Login',
+  //fr loginText: 'Login',
+  logoutText: 'Logout',
+  //fr logoutText: 'Déconnexion',
+  registerText: 'Register',
+  //fr registerText: 'S\'inscrire',
+  aboutText: 'About',
+  //fr aboutText: 'Nous contacter',
+  onMenuClick: ()=>{},
+  onDarkToggle: () => {}
+}
+
 const useStyles = makeStyles((theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -238,16 +253,24 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 setIsMenuOpen(!isMenuOpen);
               }}
             >
-              PATRIMOINE VEGETAL
+              PLANT HERITAGE
+              {/*//fr PATRIMOINE VEGETAL */}
             </Button>
             <div className="level-2">
               <Link href="/" passHref>
                 <Button size="small" component="a">
-                  Tous les arbres
+                  All the trees
+                  {/*//fr Tous les arbres */}
                 </Button>
               </Link>
-              <Button size="small">Ajouter un arbre</Button>
-              <Button size="small">Créer un espace de plantation</Button>
+              <Button size="small">
+                Add a tree
+                {/*//fr Ajouter un arbre */}
+              </Button>
+              <Button size="small">
+                Create a planting space
+                {/*//fr Créer un espace de plantation */}
+                </Button>
             </div>
           </div>
           <div>
@@ -259,12 +282,17 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               }}
             >
               INTERVENTIONS
+              {/*//fr INTERVENTIONS */}
             </Button>
             <div className="level-2">
-              <Button size="small">Calendrier des interventions</Button>
+              <Button size="small">
+                Schedule of interventions
+                {/*//fr Calendrier des interventions */}
+                </Button>
               <Link href="/?drawer=intervention_request" passHref>
                 <Button size="small" component="a">
-                  Demander une intervention
+                  Request an intervention
+                  {/*//fr Demander une intervention */}
                 </Button>
               </Link>
             </div>
@@ -277,17 +305,20 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 setIsMenuOpen(!isMenuOpen);
               }}
             >
-              iMPORT DE DONNEES
+              DATA IMPORT
+              {/* iMPORT DE DONNEES */}
             </Button>
             <div className="level-2">
               <Link href="/?drawer=import" passHref>
                 <Button size="small" component="a">
-                  Importer des données
+                  Import your data
+                  {/*//fr Importer vos données */}
                 </Button>
               </Link>
               <Link href="/imports" passHref>
                 <Button size="small" component="a">
-                  Historique des imports
+                  History of imports
+                  {/*//fr Historique des imports */}
                 </Button>
               </Link>
             </div>

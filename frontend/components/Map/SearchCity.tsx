@@ -2,9 +2,17 @@ import { TextField, CircularProgress } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { useState, useEffect, useRef, Fragment } from "react";
+import ETKMapSateliteToggle from "./MapSatelliteToggle";
 
 export interface ETKMapSearchCityProps {
   onChange?(item: {}): void;
+  searchInputPlaceHolder?: string;
+}
+
+const defaultProps:ETKMapSearchCityProps = {
+  onChange: ()=> {},
+  searchInputPlaceHolder: "Search for a city",
+  //fr searchInputPlaceHolder?: "Rechercher une ville"
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -90,7 +98,7 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
         <TextField
           {...params}
           value={value}
-          label="Search for a city"
+          label={props.searchInputPlaceHolder}
           variant="outlined"
           InputProps={{
             ...params.InputProps,
@@ -108,5 +116,7 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
     />
   );
 };
+
+ETKMapSearchCity.defaultProps= defaultProps;
 
 export default ETKMapSearchCity;

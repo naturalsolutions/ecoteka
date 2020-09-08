@@ -16,6 +16,16 @@ export interface ETKRegisterProps {
   isOpen: boolean;
   onClose: Function;
   submitButtonText: string;
+  dialogTitle?: string;
+}
+
+const defaultProps: ETKRegisterProps = {
+  isOpen: false,
+  onClose: ()=>{},
+  submitButtonText: 'Submit',
+  //fr submitButtonText: 'S\'inscrire',
+  dialogTitle: "Register"
+  //fr dialogTitle: "Inscription"
 }
 
 const useStyles = makeStyles((theme) =>
@@ -45,7 +55,6 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
 
 
   const handleClose = () => {
-    console.log("onclose register")
     if (isSending) {
       return;
     }
@@ -86,20 +95,25 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
         continue;
       }
       if (!form[key].value) {
-        form[key].errorMessage = "Veuillez renseigner ce champs.";
+        form[key].errorMessage = "Please complete this field.";
+        //fr form[key].errorMessage = "Veuillez renseigner ce champs.";
       }
     }
 
     if (!validateEmail(form.email.value)) {
-      form.email.errorMessage = "Veuillez saisir un email valide.";
+      form.email.errorMessage = "Please enter a valid email.";
+      //fr form.email.errorMessage = "Veuillez saisir un email valide.";
     }
 
     if (!validatePassword(form.password.value)) {
       form.password.errorMessage = `Password should have more than ${minLengthPassord} characters`
+      //fr form.password.errorMessage = `Le mot de passe doit avoir plus de ${minLengthPassord} caractères`
     }
     else if (!validatePasswordWithPasswordConfirm(form.password.value, form.password_confirm.value)) {
       form.password.errorMessage = "Password and Password confirm are not the same"
+      //fr form.password.errorMessage = "Les mots de passes ne sont pas identiques"
       form.password_confirm.errorMessage = "Password and Password confirm are not the same"
+      //fr form.password_confirm.errorMessage = "Les mots de passes ne sont pas identiques"
     }
 
     setForm({ ...form });
@@ -150,7 +164,7 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
     aria-labelledby="scroll-dialog-title"
     aria-describedby="scroll-dialog-description"
     >
-      <DialogTitle id="scroll-dialog-title">Register</DialogTitle>
+      <DialogTitle id="scroll-dialog-title">{props.dialogTitle}</DialogTitle>
         <React.Fragment>
           <DialogContent>
             <form noValidate autoComplete="off">
@@ -250,10 +264,6 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
 }
 
 
-ETKRegister.defaultProps= {
-  isOpen: false,
-  onClose(){},
-  submitButtonText: 'Submit'
-}
+ETKRegister.defaultProps = defaultProps;
 
 export default ETKRegister;

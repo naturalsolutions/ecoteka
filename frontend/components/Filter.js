@@ -29,6 +29,7 @@ export default function Filter(props) {
             {...params}
             variant="standard"
             label="Filter By Scientific Name"
+            //fr label="Filtrer par nom scientifique"
           />
         )}
       />
