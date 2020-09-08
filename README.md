@@ -128,7 +128,12 @@ configure it and their default values:
 | NS_ECOTEKA_BACKEND_SMTP_USER                      | Login mail                                                                          | user                                 |
 | NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER          | Uploaded files folder                                                               | /app/app/uploaded_files              |
 
-
+### TILE SERVER
+| Key                                   | Description                       |                                            Default value |
+|:--------------------------------------|:----------------------------------|---------------------------------------------------------:|
+| NS_ECOTEKA_TILE_SERVER_IMAGE          | Vector Tile Server Docker Image   | registry.gitlab.com/natural-solutions/vector-tile-server |
+| NS_ECOTEKA_TILE_SERVER_PUBLIC_FOLDER  | Public Vector Tiles Files Folder  |                                           ./tiles/public |
+| NS_ECOTEKA_TILE_SERVER_PRIVATE_FOLDER | Private Vector Tiles Files Folder |                                          ./tiles/private |
 
 [docker]: https://docs.docker.com/get-docker
 [docker-compose]: https://docs.docker.com/compose/install

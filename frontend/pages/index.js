@@ -1,4 +1,4 @@
-import { useState, createRef, useEffect, useContext } from "react";
+import { useState, createRef, useEffect } from "react";
 import { Toolbar, Drawer, makeStyles, useTheme } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
@@ -90,7 +90,7 @@ export default function IndexPage({ drawer }) {
         setIsDrawerOpen(true);
       }
 
-      router.push("/");
+      router.push('/');
       setCurrentGenre(genre);
       setCurrentProperties(feature.properties);
 
