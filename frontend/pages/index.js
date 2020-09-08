@@ -1,5 +1,5 @@
 import { useState, createRef, useEffect } from "react";
-import { Toolbar, Drawer, makeStyles, useTheme } from "@material-ui/core";
+import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { useRouter } from "next/router";

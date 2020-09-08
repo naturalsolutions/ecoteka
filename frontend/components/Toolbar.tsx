@@ -16,7 +16,8 @@ import { useRouter } from "next/router";
 
 import Collapse from "@material-ui/core/Collapse";
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
-import Auth from "./Auth.js";
+
+import { useAppContext } from "../providers/AppContext";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -75,12 +76,12 @@ const useStyles = makeStyles((theme) => ({
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
+  const { appContext } = useAppContext();
 
   const ETKRegister = dynamic(() => import("../components/Register"), {
     ssr: false,
   });
 
-  const { session, setSession } = Auth.useSession();
   const [isSigninOpen, setSigninOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -133,45 +134,10 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   });
 
   const renderWhenSession = () => {
-    const checkIsSuperUser = (session: any): boolean => {
-      let token: [string, string, string];
-      let payload: string;
-      let payloadObj: {
-        exp: number;
-        sub: string;
-        is_superuser: boolean;
-      };
-      let toRet: boolean = false;
-
-      payloadObj = {
-        exp: -1,
-        sub: "",
-        is_superuser: false,
-      };
-      if (session.length) {
-        token = session.split(".");
-      }
-      if (token.length) {
-        payload = atob(token[1]);
-      }
-      if (payload) {
-        payloadObj = JSON.parse(payload);
-      }
-      if (payloadObj) {
-        toRet = payloadObj.is_superuser || false;
-      }
-
-      return toRet;
-    };
-
-    const isSuperUser = checkIsSuperUser(session);
-
-    console.log(isSuperUser);
-
     return (
       <React.Fragment>
         <ETKLogout logoutText={props.logoutText} />
-        {isSuperUser ? (
+        {appContext.user.is_superuser ? (
           <Button
             color="primary"
             onClick={() => {
@@ -211,9 +177,15 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       elevation={4}
     >
       <Toolbar variant="dense" className={classes.toolbar}>
-        {/* <IconButton edge="start" aria-label="menu" onClick={props.onMenuClick}>
-          <MenuIcon />
-        </IconButton> */}
+        {
+          <IconButton
+            edge="start"
+            aria-label="menu"
+            onClick={props.onMenuClick}
+          >
+            <MenuIcon />
+          </IconButton>
+        }
         <img src={props.logo} className={classes.logo} />
         <Hidden smDown>
           <Typography
@@ -226,7 +198,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           </Typography>
         </Hidden>
         <div className={classes.buttons}>
-          {session ? renderWhenSession() : renderWhenNoSession()}
+          {appContext.user ? renderWhenSession() : renderWhenNoSession()}
           <Hidden xsDown>
             <Button
               color="primary"

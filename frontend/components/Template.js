@@ -7,11 +7,7 @@ import ETKToolbar from "./Toolbar";
 import { useAppContext } from "../providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    //display: "flex",
-  },
   content: {
-    //flexGrow: 1,
     position: "relative",
     height: "calc(100vh - 96px)",
     marginTop: 96,
@@ -48,6 +44,7 @@ export default function Template(props) {
     setAppContext({
       theme: mapTheme,
     });
+
     setCurrentTheme(mapTheme);
   };
 
@@ -58,6 +55,9 @@ export default function Template(props) {
           logo={`/assets/${currentTheme}/logo.svg`}
           numberOfTrees="4.6 millions of trees"
           aboutText="About"
+          loginText="Login"
+          logoutText="Logout"
+          registerText="Register"
           onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
           onDarkToggle={onDarkToggleHandler}
         />
