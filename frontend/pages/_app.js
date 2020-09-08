@@ -4,6 +4,8 @@ import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import { Provider as AppContextProvider } from "../providers/AppContext";
+
 export default function MyApp(props) {
   const { Component, pageProps } = props;
 
@@ -25,7 +27,9 @@ export default function MyApp(props) {
         />
       </Head>
       <CssBaseline />
-      <Component {...pageProps} />
+      <AppContextProvider>
+        <Component {...pageProps} />
+      </AppContextProvider>
     </React.Fragment>
   );
 }
