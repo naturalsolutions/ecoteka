@@ -1,10 +1,9 @@
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Auth from './Auth.js';
-
+import Auth from "./Auth.js";
 
 export interface ETKLogoutProps {
-  logoutText:string;
+  logoutText: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -26,18 +25,17 @@ const useStyles = makeStyles((theme) => ({
 
 const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
   const classes = useStyles(props);
-  const { session, setSession } = Auth.useSession()
+  const { session, setSession } = Auth.useSession();
 
   return (
     <Button
       onClick={(e) => {
-        setSession(false)
+        setSession(false);
       }}
     >
       {props.logoutText}
     </Button>
-  )
-
+  );
 };
 
 export default ETKLogout;
