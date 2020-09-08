@@ -28,6 +28,8 @@ services:
     image: ${NS_ECOTEKA_BACKEND_IMAGE}
     networks:
       - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
