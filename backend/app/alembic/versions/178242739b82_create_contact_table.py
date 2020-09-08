@@ -23,7 +23,7 @@ def upgrade():
         sa.Column("first_name", sa.String(), nullable=False),
         sa.Column("last_name", sa.String(), nullable=False),
         sa.Column("email", sa.String(), nullable=True),
-        sa.Column("phone_number",sa.String(), nullable=True),
+        sa.Column("phone_number", sa.String(), nullable=True),
         sa.Column("township", sa.String(), nullable=False),
         sa.Column("position", sa.String(), nullable=True),
         sa.Column("contact_request", sa.String(), nullable=False),
