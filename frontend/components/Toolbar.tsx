@@ -26,24 +26,18 @@ export interface ETKToolbarProps {
   logoutText: string;
   registerText: string;
   aboutText: string;
-  onMenuClick: React.MouseEventHandler<HTMLElement>;
   onDarkToggle: ETKDarkToggleProps["onToggle"];
 }
 
 const defaultProps: ETKToolbarProps = {
-  logo: '/assets/light/logo.svg',
+  logo: "/assets/light/logo.svg",
   numberOfTrees: "4.6 millions of trees",
-  loginText: 'Login',
-  //fr loginText: 'Login',
-  logoutText: 'Logout',
-  //fr logoutText: 'Déconnexion',
-  registerText: 'Register',
-  //fr registerText: 'S\'inscrire',
-  aboutText: 'About',
-  //fr aboutText: 'Nous contacter',
-  onMenuClick: ()=>{},
-  onDarkToggle: () => {}
-}
+  loginText: "Login",
+  logoutText: "Déconnexion",
+  registerText: "S'inscrire",
+  aboutText: "Nous contacter",
+  onDarkToggle: () => {},
+};
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -192,15 +186,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       elevation={4}
     >
       <Toolbar variant="dense" className={classes.toolbar}>
-        {
-          <IconButton
-            edge="start"
-            aria-label="menu"
-            onClick={props.onMenuClick}
-          >
-            <MenuIcon />
-          </IconButton>
-        }
         <img src={props.logo} className={classes.logo} />
         <Hidden smDown>
           <Typography
@@ -253,24 +238,16 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 setIsMenuOpen(!isMenuOpen);
               }}
             >
-              PLANT HERITAGE
-              {/*//fr PATRIMOINE VEGETAL */}
+              PATRIMOINE VEGETAL
             </Button>
             <div className="level-2">
               <Link href="/" passHref>
                 <Button size="small" component="a">
-                  All the trees
-                  {/*//fr Tous les arbres */}
+                  Tous les arbres
                 </Button>
               </Link>
-              <Button size="small">
-                Add a tree
-                {/*//fr Ajouter un arbre */}
-              </Button>
-              <Button size="small">
-                Create a planting space
-                {/*//fr Créer un espace de plantation */}
-                </Button>
+              <Button size="small">Ajouter un arbre</Button>
+              <Button size="small">Créer un espace de plantation</Button>
             </div>
           </div>
           <div>
@@ -282,17 +259,12 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               }}
             >
               INTERVENTIONS
-              {/*//fr INTERVENTIONS */}
             </Button>
             <div className="level-2">
-              <Button size="small">
-                Schedule of interventions
-                {/*//fr Calendrier des interventions */}
-                </Button>
+              <Button size="small">Calendrier des interventions</Button>
               <Link href="/?drawer=intervention_request" passHref>
                 <Button size="small" component="a">
-                  Request an intervention
-                  {/*//fr Demander une intervention */}
+                  Demander une intervention
                 </Button>
               </Link>
             </div>
@@ -305,20 +277,17 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 setIsMenuOpen(!isMenuOpen);
               }}
             >
-              DATA IMPORT
-              {/* iMPORT DE DONNEES */}
+              IMPORT DE DONNEES
             </Button>
             <div className="level-2">
               <Link href="/?drawer=import" passHref>
                 <Button size="small" component="a">
-                  Import your data
-                  {/*//fr Importer vos données */}
+                  Importer vos données
                 </Button>
               </Link>
               <Link href="/imports" passHref>
                 <Button size="small" component="a">
-                  History of imports
-                  {/*//fr Historique des imports */}
+                  Historique des imports
                 </Button>
               </Link>
             </div>

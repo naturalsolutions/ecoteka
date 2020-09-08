@@ -9,11 +9,10 @@ export interface ETKMapSearchCityProps {
   searchInputPlaceHolder?: string;
 }
 
-const defaultProps:ETKMapSearchCityProps = {
-  onChange: ()=> {},
-  searchInputPlaceHolder: "Search for a city",
-  //fr searchInputPlaceHolder?: "Rechercher une ville"
-}
+const defaultProps: ETKMapSearchCityProps = {
+  onChange: () => {},
+  searchInputPlaceHolder: "Rechercher une ville",
+};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -117,6 +116,6 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
   );
 };
 
-ETKMapSearchCity.defaultProps= defaultProps;
+ETKMapSearchCity.defaultProps = defaultProps;
 
 export default ETKMapSearchCity;

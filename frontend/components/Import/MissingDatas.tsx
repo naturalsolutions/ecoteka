@@ -35,9 +35,8 @@ const defaultProps: ETKMissingDatasProps = {
   hintText:
     "Please define the fields corresponding to the columns of your file",
   onUpdateGeofile() {},
-  buttonSubmitContent: "Submit",
-  //fr buttonSubmitContent: "Soumettre",
-}
+  buttonSubmitContent: "Soumettre",
+};
 
 const useStyle = makeStyles((theme) =>
   createStyles({

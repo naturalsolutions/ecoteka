@@ -58,7 +58,6 @@ export default function Template(props) {
           loginText="Login"
           logoutText="Logout"
           registerText="Register"
-          onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
           onDarkToggle={onDarkToggleHandler}
         />
         <main className={classes.content}>{props.children}</main>

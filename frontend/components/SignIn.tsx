@@ -24,15 +24,13 @@ export interface ETKSigninProps {
 
 const defaultProps: ETKSigninProps = {
   isOpen: false,
-  onClose: ()=>{},
+  onClose: () => {},
   titleText: "Login",
-  buttonCancelText: 'Cancel',
-  //fr buttonCancelText: 'Annuler',
-  buttonConnexionText: 'Log In',
-  //fr buttonConnexionText: 'Connexion',
+  buttonCancelText: "Annuler",
+  buttonConnexionText: "Connexion",
   disableBackdropClick: false,
   disableEscapeKeyDown: false,
-}
+};
 
 const ETKSignin: React.FC<ETKSigninProps> = (props) => {
   const { appContext, setAppContext } = useAppContext();
@@ -196,7 +194,6 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
 
   return <Fragment>{props.isOpen ? signupDialog : null}</Fragment>;
 };
-
 
 ETKSignin.defaultProps = defaultProps;
 

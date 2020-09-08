@@ -13,10 +13,9 @@ export interface ETKButtonImportProps {
 
 const defaultProps: ETKButtonImportProps = {
   name: "",
-  onImported: ()=> {},
-  buttonImportContent: "IMPORT",
-  //fr buttonImportContent: "IMPORTER"
-}
+  onImported: () => {},
+  buttonImportContent: "IMPORTER",
+};
 
 const ETKButtonImport: React.FC<ETKButtonImportProps> = (props) => {
   const onImport = async () => {

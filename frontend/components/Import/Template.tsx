@@ -16,20 +16,14 @@ export interface ETKImportTemplateProps {
 
 const defaultProps: ETKImportTemplateProps = {
   isOpen: true,
-  titleText: "A doubt with your file?",
-  //fr titleText: "Un doute avec votre fichier?",
-  hintText: "Make sure your file has the following information",
-  //fr hintText: "Assurez-vous que votre fichier contient les informations suivantes",
-  templateTips: "Do not hesitate to download our template in csv format",
-  //fr templateTips: "N\'hésitez pas à télécharger notre modèle au format csv",
+  titleText: "Un doute avec votre fichier?",
+  hintText:
+    "Assurez-vous que votre fichier contient les informations suivantes",
+  templateTips: "N'hésitez pas à télécharger notre modèle au format csv",
   latitudeText: "Latitude",
-  //fr latitudeText: "Latitude",
   longitudeText: "Longitude",
-  //fr longitudeText: "Longitude",
-  crsText: "Coordinates Reference System",
-  //fr crsText: "Système de Réfèrence de Coordonnées",
-  downloadText: "Download template",
-  //fr downloadText: "TÉLÉCHARGER LE TEMPLATE",
+  crsText: "Système de Réfèrence de Coordonnées",
+  downloadText: "TÉLÉCHARGER LE TEMPLATE",
   linkTemplate: "/assets/template.xslx",
 };
 

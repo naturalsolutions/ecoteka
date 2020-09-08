@@ -9,12 +9,10 @@ export interface ETKMapSateliteToggleProps {
 }
 
 const defaultProps: ETKMapSateliteToggleProps = {
-  onToggle: ()=> {},
-  buttonMapContent: "Map",
-  //fr buttonMapContent?: "Carte",
+  onToggle: () => {},
+  buttonMapContent: "Carte",
   buttonSatelliteContent: "Satellite",
-  //fr buttonSatelliteContent?: "Satellite"
-}
+};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,6 +58,6 @@ const ETKMapSateliteToggle: React.FC<ETKMapSateliteToggleProps> = (props) => {
   );
 };
 
-ETKMapSateliteToggle.defaultProps= defaultProps;
+ETKMapSateliteToggle.defaultProps = defaultProps;
 
 export default ETKMapSateliteToggle;
