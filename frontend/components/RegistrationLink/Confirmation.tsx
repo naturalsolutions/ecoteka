@@ -16,11 +16,12 @@ export interface ETKRegistrationLinkConfirmationProps {
   errorContent?: string;
 }
 
-const defaultProps: ETKRegistrationLinkConfirmationProps= {
-  value: '',
-  content: '',
-  errorContent: 'We can\'t validate your account You gonna be redirected to the homepage'
-}
+const defaultProps: ETKRegistrationLinkConfirmationProps = {
+  value: "",
+  content: "",
+  errorContent:
+    "We can't validate your account You gonna be redirected to the homepage",
+};
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -39,16 +40,16 @@ const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationP
 ) => {
   const classes = useStyles();
   const router = useRouter();
-  const { appContext } = useAppContext();
+  const { user } = useAppContext();
   const [isInError, setIsInError] = useState(false);
 
   useEffect(() => {
-    if (appContext.user) {
+    if (user) {
       setTimeout(() => {
         makeRequest();
       }, 4000);
     }
-  }, [appContext.user]);
+  }, [user]);
 
   const makeRequest = async () => {
     const url = `/registration_link/verification/${props.value}`;
@@ -95,6 +96,6 @@ const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationP
   );
 };
 
-ETKRegistrationLinkConfirmation.defaultProps= defaultProps;
+ETKRegistrationLinkConfirmation.defaultProps = defaultProps;
 
 export default ETKRegistrationLinkConfirmation;

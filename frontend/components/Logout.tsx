@@ -11,16 +11,13 @@ const defaultProps: ETKLogoutProps = {
 };
 
 const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
-  const { appContext, setAppContext } = useAppContext();
+  const { setUser } = useAppContext();
 
   return (
     <Button
       onClick={(e) => {
         apiRest.auth.logout();
-        setAppContext({
-          ...appContext,
-          user: null,
-        });
+        setUser(null);
       }}
     >
       {props.logoutText}

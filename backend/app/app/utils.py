@@ -44,7 +44,7 @@ def send_email(
         smtp_options["password"] = settings.SMTP_PASSWORD
     logging.info((
         f"sending email to {email_to} with smtp config {smtp_options}"
-        )
+    )
     )
     response = message.send(to=email_to, render=environment, smtp=smtp_options)
     logging.info(f"send email result: {response}")
@@ -256,7 +256,7 @@ def generate_response_for_token(
 ):
     access_token_expires = timedelta(
         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-        )
+    )
     return {
         "access_token": create_access_token(
             subject=user_id,
@@ -268,4 +268,6 @@ def generate_response_for_token(
 
 
 def generate_registration_link_value() -> str:
-    return str(uuid.uuid4())
+    # TODO: Create env variable
+    link = settings.EXTERNAL_PATH.replace("/api/v1", "/registration-link.html?value=")
+    return f"{link}{str(uuid.uuid4())}"

@@ -1,7 +1,5 @@
 import { useState, createRef, useEffect } from "react";
 import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
 import { useRouter } from "next/router";
 
 import ETKSidebar from "../components/Sidebar";
@@ -16,17 +14,10 @@ import ETKImport from "../components/Import/Index.tsx";
 import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   main: {
     position: "relative",
     height: "100%",
-  },
-  drawerCloseBtn: {
-    position: "absolute",
-    top: 96,
-    right: 0,
-    zIndex: 1,
-    color: "red",
   },
 }));
 
@@ -38,7 +29,7 @@ export default function IndexPage({ drawer }) {
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const { appContext, setAppContext } = useAppContext();
+  const { appContext, setAppContext, user } = useAppContext();
 
   useEffect(() => {
     toggleMapTheme(appContext.theme);
@@ -122,13 +113,6 @@ export default function IndexPage({ drawer }) {
     });
   };
 
-  const onDarkToggleHandler = (dark) => {
-    const mapTheme = dark ? "light" : "dark";
-
-    setCurrentTheme(mapTheme);
-    toggleMapTheme(mapTheme);
-  };
-
   const onMapSateliteToggleHandler = (active) => {
     mapRef.current.map.setLayoutProperty(
       "satellite",
@@ -147,10 +131,15 @@ export default function IndexPage({ drawer }) {
   };
 
   const router = useRouter();
+  const usersPanels = ["import"];
 
   //TODO ?
   useEffect(() => {
-    setIsDrawerOpen(true);
+    if (!user && usersPanels.includes(drawer)) {
+      setIsDrawerOpen(false);
+    } else {
+      setIsDrawerOpen(true);
+    }
   }, [drawer]);
 
   const renderImport = (
@@ -163,7 +152,9 @@ export default function IndexPage({ drawer }) {
       templateTips={[
         "N'hésitez pas à télécharger notre template au formal .xls",
       ]}
-      dropzoneText={"Déposez votre fichier ici ou cliquez pour le selectionner"}
+      dropzoneText={
+        "Déposez votre fichier ici\nou cliquez pour le selectionner"
+      }
     />
   );
 
@@ -206,16 +197,7 @@ export default function IndexPage({ drawer }) {
         onClose={() => setIsDrawerOpen(false)}
       >
         <Toolbar variant="dense" />
-        <Toolbar variant="dense" />
-        <IconButton
-          size="small"
-          className={classes.drawerCloseBtn}
-          onClick={() => {
-            setIsDrawerOpen(false);
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
+        {user && <Toolbar variant="dense" />}
         {switchRenderDrawer(drawer)}
       </Drawer>
     </Template>

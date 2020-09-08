@@ -8,7 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import getConfig from "next/config";
-import api from "../lib/api";
+import { apiRest } from "../lib/api";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -120,6 +120,7 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
       }
     }
     const payload: any = {};
+
     for (const key in form) {
       if (key in fieldsForFrontValidation) {
         continue;
@@ -127,11 +128,9 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
       payload[key] = form[key].value;
     }
 
-    const url = `${publicRuntimeConfig.apiUrl}/auth/register/`;
-    const headers = { "Content-Type": "application/json" };
-    const response = await api.post(url, headers, JSON.stringify(payload));
+    const { response, json } = await apiRest.auth.register(payload);
     setIsSending(false);
-    const json = await response.json();
+
     if (response.status == 422) {
       // handleError(json);
       console.log("error", json);

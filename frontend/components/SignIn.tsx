@@ -33,7 +33,7 @@ const defaultProps: ETKSigninProps = {
 };
 
 const ETKSignin: React.FC<ETKSigninProps> = (props) => {
-  const { appContext, setAppContext } = useAppContext();
+  const { user, setUser } = useAppContext();
 
   const getFormDefault = () => {
     return {
@@ -104,13 +104,10 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
     }
 
     setIsSending(false);
-    const user = await apiRest.users.me();
+    const newUser = await apiRest.users.me();
 
-    if (user) {
-      setAppContext({
-        ...appContext,
-        user,
-      });
+    if (newUser) {
+      setUser(newUser);
     }
 
     props.onClose();

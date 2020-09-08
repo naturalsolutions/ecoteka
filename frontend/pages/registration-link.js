@@ -7,8 +7,8 @@ import ETKRegistrationLinkConfirmation from "../components/RegistrationLink/Conf
 
 export default function RegistrationLinkPage({ value }) {
   const router = useRouter();
-  const { appContext } = useAppContext();
-  const [isSigninOpen] = useState(!appContext.user);
+  const { user } = useAppContext();
+  const [isSigninOpen] = useState(!user);
 
   return (
     <Grid
@@ -19,7 +19,7 @@ export default function RegistrationLinkPage({ value }) {
       justify="center"
       style={{ minHeight: "100vh" }}
     >
-      {!appContext.user ? (
+      {!user ? (
         <React.Fragment>
           <ETKSignin
             isOpen={isSigninOpen}

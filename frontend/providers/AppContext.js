@@ -4,24 +4,19 @@ import { apiRest as api } from "../lib/api";
 const StoreContext = createContext();
 
 export const Provider = ({ children }) => {
-  const [hasUser, setHasUser] = useState(false);
+  const [user, setUser] = useState();
   const [appContext, setAppContext] = useState({
     theme: "light",
-    user: null,
   });
 
-  if (!appContext.user && api.getToken() && !hasUser) {
-    api.users.me().then((user) => {
-      setHasUser(true);
-      setAppContext({
-        ...appContext,
-        user,
-      });
+  if (!user && api.getToken()) {
+    api.users.me().then((newUser) => {
+      setUser(newUser);
     });
   }
 
   return (
-    <StoreContext.Provider value={{ appContext, setAppContext }}>
+    <StoreContext.Provider value={{ appContext, setAppContext, user, setUser }}>
       {children}
     </StoreContext.Provider>
   );

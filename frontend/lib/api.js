@@ -13,7 +13,7 @@ const api = {
 };
 
 export const apiRest = {
-  auth: Auth(publicRuntimeConfig.apiUrl),
+  auth: Auth(publicRuntimeConfig.apiUrl, api),
   users: Users(api),
   getToken: function () {
     let token = null;
@@ -55,7 +55,7 @@ async function get(path, headers) {
     .catch(handleError);
 }
 
-async function post(url, headers, body) {
+async function post(path, headers, body) {
   const requestOptions = {
     method: "POST",
     headers: {
@@ -64,7 +64,9 @@ async function post(url, headers, body) {
     },
     body: body,
   };
-  return fetch(url, requestOptions).then(handleResponse).catch(handleError);
+  return fetch(`${apiUrl}${path}`, requestOptions)
+    .then(handleResponse)
+    .catch(handleError);
 }
 
 async function put(url, headers, body) {

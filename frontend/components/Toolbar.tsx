@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
-import MenuIcon from "@material-ui/icons/Menu";
 import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -27,6 +25,7 @@ export interface ETKToolbarProps {
   registerText: string;
   aboutText: string;
   onDarkToggle: ETKDarkToggleProps["onToggle"];
+  onMenuClick?(index: string): void;
 }
 
 const defaultProps: ETKToolbarProps = {
@@ -85,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
-  const { appContext } = useAppContext();
+  const { appContext, user } = useAppContext();
 
   const ETKRegister = dynamic(() => import("../components/Register"), {
     ssr: false,
@@ -146,7 +145,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
     return (
       <React.Fragment>
         <ETKLogout logoutText={props.logoutText} />
-        {appContext.user.is_superuser ? (
+        {user.is_superuser ? (
           <Button
             color="primary"
             onClick={() => {
@@ -198,7 +197,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           </Typography>
         </Hidden>
         <div className={classes.buttons}>
-          {appContext.user ? renderWhenSession() : renderWhenNoSession()}
+          {user ? renderWhenSession() : renderWhenNoSession()}
           <Hidden xsDown>
             <Button
               color="primary"
@@ -228,72 +227,74 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         }}
         submitButtonText="Submit"
       />
-      <Collapse in={isMenuOpen} collapsedHeight={48}>
-        <div className={classes.navBar}>
-          <div>
-            <Button
-              color="primary"
-              className={getLevel1ClassNames("patrimony")}
-              onClick={() => {
-                setIsMenuOpen(!isMenuOpen);
-              }}
-            >
-              PATRIMOINE VEGETAL
-            </Button>
-            <div className="level-2">
-              <Link href="/" passHref>
-                <Button size="small" component="a">
-                  Tous les arbres
-                </Button>
-              </Link>
-              <Button size="small">Ajouter un arbre</Button>
-              <Button size="small">Créer un espace de plantation</Button>
+      {user && (
+        <Collapse in={isMenuOpen} collapsedHeight={48}>
+          <div className={classes.navBar}>
+            <div>
+              <Button
+                color="primary"
+                className={getLevel1ClassNames("patrimony")}
+                onClick={() => {
+                  setIsMenuOpen(!isMenuOpen);
+                }}
+              >
+                PATRIMOINE VEGETAL
+              </Button>
+              <div className="level-2">
+                <Link href="/" passHref>
+                  <Button size="small" component="a">
+                    Tous les arbres
+                  </Button>
+                </Link>
+                <Button size="small">Ajouter un arbre</Button>
+                <Button size="small">Créer un espace de plantation</Button>
+              </div>
+            </div>
+            <div>
+              <Button
+                color="primary"
+                className={getLevel1ClassNames("intervention")}
+                onClick={() => {
+                  setIsMenuOpen(!isMenuOpen);
+                }}
+              >
+                INTERVENTIONS
+              </Button>
+              <div className="level-2">
+                <Button size="small">Calendrier des interventions</Button>
+                <Link href="/?drawer=intervention_request" passHref>
+                  <Button size="small" component="a">
+                    Demander une intervention
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div>
+              <Button
+                color="primary"
+                className={getLevel1ClassNames("import")}
+                onClick={() => {
+                  setIsMenuOpen(!isMenuOpen);
+                }}
+              >
+                IMPORT DE DONNEES
+              </Button>
+              <div className="level-2">
+                <Link href="/?drawer=import" passHref>
+                  <Button size="small" component="a">
+                    Importer vos données
+                  </Button>
+                </Link>
+                <Link href="/imports" passHref>
+                  <Button size="small" component="a">
+                    Historique des imports
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
-          <div>
-            <Button
-              color="primary"
-              className={getLevel1ClassNames("intervention")}
-              onClick={() => {
-                setIsMenuOpen(!isMenuOpen);
-              }}
-            >
-              INTERVENTIONS
-            </Button>
-            <div className="level-2">
-              <Button size="small">Calendrier des interventions</Button>
-              <Link href="/?drawer=intervention_request" passHref>
-                <Button size="small" component="a">
-                  Demander une intervention
-                </Button>
-              </Link>
-            </div>
-          </div>
-          <div>
-            <Button
-              color="primary"
-              className={getLevel1ClassNames("import")}
-              onClick={() => {
-                setIsMenuOpen(!isMenuOpen);
-              }}
-            >
-              IMPORT DE DONNEES
-            </Button>
-            <div className="level-2">
-              <Link href="/?drawer=import" passHref>
-                <Button size="small" component="a">
-                  Importer vos données
-                </Button>
-              </Link>
-              <Link href="/imports" passHref>
-                <Button size="small" component="a">
-                  Historique des imports
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </Collapse>
+        </Collapse>
+      )}
       <ETKContact
         isOpen={isContactOpen}
         onClose={() => {
