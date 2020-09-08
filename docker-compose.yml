@@ -47,6 +47,8 @@ services:
       - EXTERNAL_PATH=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
       - FIRST_SUPERUSER_PASSWORD=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_PASSWORD}
       - FIRST_SUPERUSER=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_EMAIL}
+      - FIRST_SUPERUSER_FULLNAME=${NS_ECOTEKA_BACKEND_FIRST_SUPERUSER_FULLNAME}
+      - SUPERUSERS_CONTACT_LIST=${NS_ECOTEKA_BACKEND_SUPERUSERS_CONTACT_LIST}
       - PROJECT_NAME=${NS_ECOTEKA_BACKEND_PROJECT_NAME}
       - ROOT_PATH=${NS_ECOTEKA_BACKEND_BASE_PATH}
       - SERVER_HOST=https://${NS_ECOTEKA_DOMAIN_NAME}
@@ -68,6 +70,17 @@ services:
     environment:
       - API_URL=${NS_ECOTEKA_BACKEND_EXTERNAL_PATH}
       - TOKEN_STORAGE=${NS_ECOTEKA_FRONTEND_TOKEN_STORAGE}
+
+  tile_server:
+    image: ${NS_ECOTEKA_TILE_SERVER_IMAGE}
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tile_server.rule=PathPrefix(`/tiles`)
+    volumes:
+      - ${NS_ECOTEKA_TILE_SERVER_PUBLIC_FOLDER}:/tiles/public
+      - ${NS_ECOTEKA_TILE_SERVER_PRIVATE_FOLDER}:/tiles/private
 
 volumes:
   app-db-data:

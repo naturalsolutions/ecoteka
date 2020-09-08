@@ -1,5 +1,6 @@
 import getConfig from "next/config";
 import { useContext, createContext, useState, useEffect } from "react";
+import api from '../lib/api'
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -40,19 +41,25 @@ const signIn = async (credentials) => {
     return
   }
 
-  const signInUrl = `${apiUrl}/login/access-token`
+  const signInUrl = `${apiUrl}/auth/login/access-token`
 
   const body = new FormData();
 
   body.append('username', username);
   body.append('password', password);
 
+  const headers = {};
   const fetchOptions = {
     method: 'post',
     body: body
-  }
+  };
 
-  const response = await fetch(signInUrl, fetchOptions)
+  const response = await api.post(
+    signInUrl,
+    headers,
+    body
+    )
+
   const data = await response.json()
 
   if (data) {
