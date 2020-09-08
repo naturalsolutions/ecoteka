@@ -204,6 +204,19 @@ export default function IndexPage({ drawer }) {
   };
 
   return (
+<<<<<<< HEAD
+    <ThemeProvider theme={theme}>
+      <div className={classes.root} role="presentation">
+        <ETKToolbar
+          logo={`/assets/${currentTheme}/logo.svg`}
+          numberOfTrees="4.6 millions of trees"
+          loginText="Login"
+          logoutText="Logout"
+          registerText="Register"
+          aboutText="About"
+          onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
+          onDarkToggle={onDarkToggleHandler}
+=======
     <Template>
       <div className={classes.main}>
         <ETKMap
@@ -211,6 +224,7 @@ export default function IndexPage({ drawer }) {
           styleSource="/assets/style.json"
           onMapClick={onMapClick}
           onStyleData={onMapLoaded}
+>>>>>>> aba3643085f5757fbcaceb38efc4611ef1438972
         />
         <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
         <ETKMapGeolocateFab map={mapRef} />
