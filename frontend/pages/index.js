@@ -1,10 +1,9 @@
 import { useState, createRef, useEffect } from "react";
-import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
-import { useRouter } from 'next/router'
+import { Toolbar, Drawer, makeStyles, useTheme } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import { useRouter } from "next/router";
 
-import ETKToolbar from "../components/Toolbar";
 import ETKSidebar from "../components/Sidebar";
 import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
@@ -12,46 +11,40 @@ import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
 import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
+import ETKImport from "../components/Import/Index.tsx";
+
+import Template from "../components/Template";
+import { useAppContext } from "../providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    //display: "flex",
+  main: {
+    position: "relative",
+    height: "100%",
   },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    //flexGrow: 1,
-    position: 'relative',
-    height: "calc(100vh - 96px)",
-    marginTop: 96
+  drawerCloseBtn: {
+    position: "absolute",
+    top: 96,
+    right: 0,
+    zIndex: 1,
+    color: "red",
   },
 }));
 
-export default function Index() {
+export default function IndexPage({ drawer }) {
   const mapRef = createRef();
   const classes = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
-  const [drawerName, setDrawerName] = useState('');
-  const [currentTheme, setCurrentTheme] = useState("light");
-  const theme = createMuiTheme({
-    palette: {
-      type: currentTheme,
-      primary: {
-        main: currentTheme === "light" ? "#01685a" : "#fff",
-      },
-      secondary: {
-        main: "#19857b",
-      },
-      error: {
-        main: red.A400,
-      },
-      background: {
-        default: "#fff",
-      },
-    },
-  });
+  //const [drawerName, setDrawerName] = useState('');
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const theme = useTheme();
+  const { appContext, setAppContext } = useAppContext();
+
+  useEffect(() => {
+    toggleMapTheme(appContext.theme);
+  }, [appContext]);
 
   const onFilterSpecies = (values) => {
     if (!values.length) {
@@ -71,6 +64,11 @@ export default function Index() {
       [e.point.x - 5, e.point.y - 5],
       [e.point.x + 5, e.point.y + 5],
     ];
+
+    router.push({
+      pathname: "/",
+      query: { drawer: null },
+    });
 
     var features = map.queryRenderedFeatures(bbox, {
       layers: ["ecoteka-data", "ecoteka-data-osm"],
@@ -103,6 +101,10 @@ export default function Index() {
   };
 
   const toggleMapTheme = (mapTheme) => {
+    if (!isMapLoaded) {
+      return;
+    }
+
     for (let layer of Object.keys(layersStyle)) {
       for (let property of Object.keys(layersStyle[layer][mapTheme])) {
         mapRef.current.map.setPaintProperty(
@@ -115,8 +117,11 @@ export default function Index() {
   };
 
   const onMapLoaded = (map) => {
-    toggleMapTheme(currentTheme);
     window.dispatchEvent(new Event("resize"));
+    setIsMapLoaded(true);
+    setAppContext({
+      theme: "light",
+    });
   };
 
   const onDarkToggleHandler = (dark) => {
@@ -145,7 +150,12 @@ export default function Index() {
 
   const router = useRouter();
 
+  //TODO ?
   useEffect(() => {
+    setIsDrawerOpen(true);
+  }, [drawer]);
+
+  /* useEffect(() => {
     const handleRouteChange = (value) => {
       const url = new URL(value, 'http://anybase/');
       setDrawerName(url.searchParams.get('drawer'));
@@ -157,22 +167,24 @@ export default function Index() {
     return () => {
       router.events.off('routeChangeStart', handleRouteChange);
     };
-  }, []);
+  }, []); */
 
-  const interventionRequestDrawer = () => {
-    return <div>
-      <h4>hello intervention_request</h4>
-    </div>
-  }
+  const renderImport = (
+    <ETKImport
+      tooltipcontent={[
+        "- Importing data is an action that can take several tens of minutes",
+        '- Find the progress of your import in the menu: "History of imports"',
+        "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes",
+        "- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
+      ]}
+      extensionsFileAccepted={[".xls", ".xlsx", ".csv", ".geojson", ".zip"]}
+      templateTips={["Do not hesitate to download our template in .xls format"]}
+      dropzoneText={"Drag 'n' drop some files here\nor click to select files"}
+    />
+  );
 
-  const importDrawer = () => {
-    return <div>
-      <h4>hello import</h4>
-    </div>
-  }
-
-  const defaultDrawer = () => {
-    return <ETKSidebar
+  const renderSidebar = (
+    <ETKSidebar
       speces={speces}
       activeTab={activeTab}
       currentGenre={currentGenre}
@@ -180,19 +192,19 @@ export default function Index() {
       onFilterSpecies={onFilterSpecies}
       onTabChange={setActiveTab}
     />
-  }
+  );
 
-  const getDrawerContent = () => {
-    const drawers = {
-      intervention_request: interventionRequestDrawer,
-      import: importDrawer,
-      default: defaultDrawer
-    };
-
-    return drawers[drawerName] ? drawers[drawerName]() : drawers.default();
-  }
+  const switchRenderDrawer = (panel) => {
+    switch (panel) {
+      case "import":
+        return renderImport;
+      default:
+        return renderSidebar;
+    }
+  };
 
   return (
+<<<<<<< HEAD
     <ThemeProvider theme={theme}>
       <div className={classes.root} role="presentation">
         <ETKToolbar
@@ -204,19 +216,19 @@ export default function Index() {
           aboutText="About"
           onMenuClick={() => setIsDrawerOpen(!isDrawerOpen)}
           onDarkToggle={onDarkToggleHandler}
+=======
+    <Template>
+      <div className={classes.main}>
+        <ETKMap
+          ref={mapRef}
+          styleSource="/assets/style.json"
+          onMapClick={onMapClick}
+          onStyleData={onMapLoaded}
+>>>>>>> aba3643085f5757fbcaceb38efc4611ef1438972
         />
-
-        <main className={classes.content}>
-          <ETKMap
-            ref={mapRef}
-            styleSource="/assets/style.json"
-            onMapClick={onMapClick}
-            onStyleData={onMapLoaded}
-          />
-          <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
-          <ETKMapGeolocateFab map={mapRef} />
-          <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
-        </main>
+        <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+        <ETKMapGeolocateFab map={mapRef} />
+        <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
       </div>
       <Drawer
         variant="persistent"
@@ -225,8 +237,22 @@ export default function Index() {
       >
         <Toolbar variant="dense" />
         <Toolbar variant="dense" />
-        {getDrawerContent()}
+        <IconButton
+          size="small"
+          className={classes.drawerCloseBtn}
+          onClick={() => {
+            setIsDrawerOpen(false);
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        {/* <Toolbar>{appContext.theme}</Toolbar> */}
+        {switchRenderDrawer(drawer)}
       </Drawer>
-    </ThemeProvider>
+    </Template>
   );
 }
+
+IndexPage.getInitialProps = ({ query: { drawer } }) => {
+  return { drawer };
+};

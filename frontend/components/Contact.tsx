@@ -65,7 +65,6 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
   };
 
   const handleOnEnter = () => {
-    console.log("handleonEnter");
     setHasSuccess(false);
   };
 

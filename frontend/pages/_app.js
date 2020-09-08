@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import "mapbox-gl/dist/mapbox-gl.css";
-import Auth from "../components/Auth"
+import Auth from "../components/Auth";
+
+import { Provider as AppContextProvider } from "../providers/AppContext";
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -27,7 +29,9 @@ export default function MyApp(props) {
       </Head>
       <CssBaseline />
       <Auth.SessionProvider>
-        <Component {...pageProps} />
+        <AppContextProvider>
+          <Component {...pageProps} />
+        </AppContextProvider>
       </Auth.SessionProvider>
     </React.Fragment>
   );
