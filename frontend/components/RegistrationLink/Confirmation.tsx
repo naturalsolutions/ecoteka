@@ -44,7 +44,7 @@ const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationP
   }, [appContext.user]);
 
   const makeRequest = async () => {
-    const url = `${publicRuntimeConfig.apiUrl}/registration_link/verification/${props.value}`;
+    const url = `/registration_link/verification/${props.value}`;
     const headers = { "Content-Type": "application/json" };
 
     try {
