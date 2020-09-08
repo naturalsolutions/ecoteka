@@ -16,6 +16,16 @@ export interface ETKSigninProps {
   isOpen: boolean;
   onClose: Function;
   titleText: string;
+  disableBackdropClick?: boolean;
+  disableEscapeKeyDown?: boolean;
+}
+
+const defaultProps: ETKSigninProps = {
+  isOpen: false,
+  onClose: ()=>{},
+  titleText: "Login",
+  disableBackdropClick: false,
+  disableEscapeKeyDown: false,
 }
 
 const ETKSignin: React.FC<ETKSigninProps> = (props) => {
@@ -31,12 +41,11 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
   const [form, setForm] = useState(getFormDefault());
   const [isSending, setIsSending] = useState(false);
 
-  const handleClose = () => {
-    console.log("onclose signin");
+  const handleClose = (event: object, reason: string) => {
     if (isSending) {
       return;
     }
-    props.onClose && props.onClose();
+    props.onClose && props.onClose(event, reason);
   };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,6 +99,7 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
       return;
     }
 
+    setIsSending(false);
     const user = await apiRest.users.me();
 
     if (user) {
@@ -99,19 +109,20 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
       });
     }
 
-    setIsSending(false);
     props.onClose();
   };
 
   const signupDialog = (
     <Dialog
       open={props.isOpen}
-      onClose={() => {
-        handleClose();
+      onClose={(event: object, reason: string) => {
+        handleClose(event, reason);
       }}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
+      disableBackdropClick={props.disableBackdropClick}
+      disableEscapeKeyDown={props.disableEscapeKeyDown}
     >
       <DialogTitle id="scroll-dialog-title">{props.titleText}</DialogTitle>
       <Fragment>
@@ -158,8 +169,8 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
       </Fragment>
       <DialogActions>
         <Button
-          onClick={() => {
-            handleClose();
+          onClick={(event: object) => {
+            handleClose(event, "cancelByClick");
           }}
         >
           Annuler
@@ -179,5 +190,8 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
 
   return <Fragment>{props.isOpen ? signupDialog : null}</Fragment>;
 };
+
+
+ETKSignin.defaultProps = defaultProps;
 
 export default ETKSignin;
