@@ -211,7 +211,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
             <Grid container>
               <DropzoneArea
                 acceptedFiles={props.extensionsFileAccepted}
-                Icon={GetAppIcon}
+                Icon={GetAppIcon as any}
                 dropzoneText={props.dropzoneText}
                 dropzoneProps={{
                   getFilesFromEvent: onAddFiles,
