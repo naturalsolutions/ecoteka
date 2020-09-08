@@ -43,14 +43,10 @@ const defaultProps: ETKUploadProps = {
   isUploaded: false,
   progressBarMessage: '',
   isReadyToImport: false,
-  boxContent: "Import your data",
-  //fr boxContent: "Import your data",
-  fileListHint: "Files types accepted :",
-  //fr fileListHint: "Types de fichiers acceptés :",
-  buttonCancelContent: "Cancel",
-  //fr buttonCancelContent: "Annuler",
-  buttonUploadContent: "Upload",
-  //fr buttonUploadContent: "Envoi"
+  boxContent: "Importez vos données",
+  fileListHint: "Types de fichiers acceptés :",
+  buttonCancelContent: "Annuler",
+  buttonUploadContent: "Envoi"
 };
 
 const useStyle = makeStyles(() =>
