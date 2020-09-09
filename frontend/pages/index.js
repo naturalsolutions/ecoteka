@@ -191,11 +191,7 @@ export default function IndexPage({ drawer }) {
         <ETKMapGeolocateFab map={mapRef} />
         <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
       </div>
-      <Drawer
-        variant="persistent"
-        open={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-      >
+      <Drawer variant="persistent" open>
         <Toolbar variant="dense" />
         {user && <Toolbar variant="dense" />}
         {switchRenderDrawer(drawer)}

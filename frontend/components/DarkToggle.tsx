@@ -18,9 +18,9 @@ const ETKDarkToggle: React.FC<ETKDarkToggleProps> = (props) => {
 
   return (
     <Grid container alignItems="center">
-      <Brightness3Icon color="secundary" style={{ fontSize: 18 }} />
-      <Switch color="secundary" checked={!dark} onChange={onClickHandler} />
-      <WbSunnyIcon color="secundary" style={{ fontSize: 18 }} />
+      <Brightness3Icon style={{ fontSize: 18 }} />
+      <Switch checked={!dark} onChange={onClickHandler} />
+      <WbSunnyIcon style={{ fontSize: 18 }} />
     </Grid>
   );
 };

@@ -11,6 +11,7 @@ import ErrorIcon from "@material-ui/icons/Error";
 import ETKProgressBar from "./ProgressBar";
 import getConfig from "next/config";
 import Geofile from "../Geofile";
+import { apiRest } from "../../lib/api";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -30,23 +31,22 @@ export interface ETKUploadProps {
   fileListHint?: string;
   buttonCancelContent?: string;
   buttonUploadContent?: string;
-
 }
 
 const defaultProps: ETKUploadProps = {
   uploadUrl: `${publicRuntimeConfig.apiUrl}/geo_files/upload`,
   geofile: undefined,
-  tooltipcontent: [''],
-  extensionsFileAccepted: [''],
-  dropzoneText: '',
-  missingInfo: [''],
+  tooltipcontent: [""],
+  extensionsFileAccepted: [""],
+  dropzoneText: "",
+  missingInfo: [""],
   isUploaded: false,
-  progressBarMessage: '',
+  progressBarMessage: "",
   isReadyToImport: false,
   boxContent: "Importez vos données",
   fileListHint: "Types de fichiers acceptés :",
   buttonCancelContent: "Annuler",
-  buttonUploadContent: "Envoi"
+  buttonUploadContent: "Envoi",
 };
 
 const useStyle = makeStyles(() =>
@@ -136,7 +136,19 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
     }
   }, [props.isUploaded]);
 
+  const htmlTooltip = (
+    <React.Fragment>
+      {props.tooltipcontent.map((row, index) => (
+        <Typography key={`import.upload.title.tooltip.${index}`}>
+          {row}
+        </Typography>
+      ))}
+    </React.Fragment>
+  );
+
   const onAddFiles = async (event) => {
+    setError(null);
+
     const fileList = event.dataTransfer
       ? event.dataTransfer.files
       : event.target.files;
@@ -148,58 +160,46 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
     return [];
   };
 
-  const htmlTooltip = (
-    <React.Fragment>
-      {props.tooltipcontent.map((row, index) => (
-        <Typography key={`import.upload.title.tooltip.${index}`}>
-          {row}
-        </Typography>
-      ))}
-    </React.Fragment>
-  );
+  const onUploadProgress = (e) => {
+    const progress = (e.loaded / e.total) * 100;
+
+    setLinearProgressValue(progress);
+
+    if (props.onUploadProgress) {
+      props.onUploadProgress(progress);
+    }
+  };
+
+  const onUploadLoad = (cXHR) => {
+    setInProgress(false);
+    setXHR(null);
+
+    const response = JSON.parse(cXHR.response);
+
+    if (cXHR.status !== 200) {
+      setError(response.detail);
+      return;
+    }
+
+    props.onUploaded(response);
+  };
+
+  const onUploadError = (cXHR) => {
+    const response = JSON.parse(cXHR.response);
+
+    setError(response.detail);
+    setInProgress(false);
+    setXHR(null);
+  };
 
   const onUploadClick = () => {
-    const formData = new FormData();
+    let newXHR = apiRest.geofiles.upload(file, {
+      onProgress: onUploadProgress,
+      onLoad: onUploadLoad,
+      onError: onUploadError,
+    });
 
-    formData.append("file", file, file.name);
-
-    const xhr = new XMLHttpRequest();
-
-    xhr.upload.onprogress = (event) => {
-      const progress = (event.loaded / event.total) * 100;
-
-      setLinearProgressValue(progress);
-
-      if (props.onUploadProgress) {
-        props.onUploadProgress(progress);
-      }
-    };
-
-    xhr.onload = () => {
-      const response = JSON.parse(xhr.response);
-
-      setInProgress(false);
-      setXHR(null);
-
-      if (xhr.status !== 200) {
-        setError(response.detail);
-        return;
-      }
-
-      props.onUploaded(response);
-    };
-
-    xhr.onerror = () => {
-      const errorResponse = JSON.parse(xhr.response);
-
-      setError(errorResponse.detail);
-      setInProgress(false);
-      setXHR(null);
-    };
-
-    xhr.open("POST", props.uploadUrl, true);
-    xhr.send(formData);
-    setXHR(xhr);
+    setXHR(newXHR);
     setInProgress(true);
   };
 
