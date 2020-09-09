@@ -1,7 +1,7 @@
 """alter user
 
 Revision ID: 40ffce0b7734
-Revises: 178242739b82
+Revises: 1468c7086ae4
 Create Date: 2020-08-03 05:23:27.860879
 
 """

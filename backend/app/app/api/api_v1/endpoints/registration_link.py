@@ -33,7 +33,6 @@ router = APIRouter()
 @router.get("/verification/{activation_link_value}")
 def verification(
     activation_link_value: str,
-    # activation_link_in_db: Registration_Link,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
