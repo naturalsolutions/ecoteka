@@ -15,6 +15,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
 
   return (
     <Button
+      style={{ color: "#fff" }}
       onClick={(e) => {
         apiRest.auth.logout();
         setUser(null);

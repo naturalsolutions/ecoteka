@@ -1,7 +1,8 @@
-import IconButton from "@material-ui/core/IconButton";
-import Brightness4OutlinedIcon from "@material-ui/icons/Brightness4Outlined";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
+import Icon from "@material-ui/core/Icon";
+import WbSunnyIcon from "@material-ui/icons/WbSunny";
+import Brightness3Icon from "@material-ui/icons/Brightness3";
 import { useState } from "react";
+import { Switch, Grid } from "@material-ui/core";
 
 export interface ETKDarkToggleProps {
   onToggle?(dark: boolean): void;
@@ -16,9 +17,11 @@ const ETKDarkToggle: React.FC<ETKDarkToggleProps> = (props) => {
   }
 
   return (
-    <IconButton size="small" onClick={onClickHandler}>
-      {dark ? <Brightness4Icon /> : <Brightness4OutlinedIcon />}
-    </IconButton>
+    <Grid container alignItems="center">
+      <Brightness3Icon color="secundary" style={{ fontSize: 18 }} />
+      <Switch color="secundary" checked={!dark} onChange={onClickHandler} />
+      <WbSunnyIcon color="secundary" style={{ fontSize: 18 }} />
+    </Grid>
   );
 };
 

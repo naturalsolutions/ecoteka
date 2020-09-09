@@ -180,7 +180,6 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
           onClick={() => {
             submit();
           }}
-          color="primary"
           variant="contained"
         >
           {props.buttonConnexionText}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
@@ -45,13 +46,12 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     maxHeight: "40px",
   },
-  buttons: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "flex-end",
-  },
   toolbar: {
-    background: "#CCC",
+    background: "#8b8b8b",
+    color: "#fff",
+  },
+  toolbarButton: {
+    color: "#fff",
   },
   navBar: {
     display: "flex",
@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
-  const { appContext, user } = useAppContext();
+  const { user } = useAppContext();
 
   const ETKRegister = dynamic(() => import("../components/Register"), {
     ssr: false,
@@ -147,7 +147,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         <ETKLogout logoutText={props.logoutText} />
         {user.is_superuser ? (
           <Button
-            color="primary"
+            className={classes.toolbarButton}
             onClick={() => {
               setSigninOpen(false);
               setRegisterOpen(true);
@@ -166,7 +166,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       <React.Fragment>
         <Hidden xsDown>
           <Button
-            color="primary"
+            className={classes.toolbarButton}
             onClick={(e) => {
               setSigninOpen(true);
             }}
@@ -185,22 +185,29 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       elevation={4}
     >
       <Toolbar variant="dense" className={classes.toolbar}>
-        <img src={props.logo} className={classes.logo} />
-        <Hidden smDown>
-          <Typography
-            component="h2"
-            variant="h5"
-            className={classes.numberOfTrees}
-            color="primary"
-          >
-            {props.numberOfTrees}
-          </Typography>
-        </Hidden>
-        <div className={classes.buttons}>
+        <Grid container alignItems="center">
+          <img src={props.logo} className={classes.logo} />
+          <Hidden smDown>
+            <Grid item>
+              <Typography
+                component="h2"
+                variant="h5"
+                className={classes.numberOfTrees}
+              >
+                {props.numberOfTrees}
+              </Typography>
+            </Grid>
+          </Hidden>
+          <Grid item style={{ marginLeft: "1rem" }}>
+            <ETKDarkToggle onToggle={props.onDarkToggle} />
+          </Grid>
+        </Grid>
+
+        <Grid container justify="flex-end">
           {user ? renderWhenSession() : renderWhenNoSession()}
           <Hidden xsDown>
             <Button
-              color="primary"
+              className={classes.toolbarButton}
               onClick={() => {
                 setSigninOpen(false);
                 setRegisterOpen(false);
@@ -210,8 +217,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               {props.aboutText}
             </Button>
           </Hidden>
-          <ETKDarkToggle onToggle={props.onDarkToggle} />
-        </div>
+        </Grid>
       </Toolbar>
       <ETKSignin
         isOpen={isSigninOpen}

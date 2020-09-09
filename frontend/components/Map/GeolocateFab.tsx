@@ -21,9 +21,8 @@ const ETKMapGeolocateFab: React.FC<ETKMapGeolocateFabProps> = (props) => {
 
   return (
     <Fab
-      size="small"
       className={classes.fab}
-      color="primary"
+      color="secondary"
       onClick={async () => {
         await props.map.current?.geolocate?.trigger();
       }}
