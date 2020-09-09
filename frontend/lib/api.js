@@ -1,29 +1,38 @@
 import getConfig from "next/config";
-import Auth from "./auth";
-import Users from "./users";
+import auth from "./auth";
+import users from "./users";
+import geofiles from "./geofiles";
+import trees from "./trees";
 
 const { publicRuntimeConfig } = getConfig();
 const { apiUrl, tokenStorage } = publicRuntimeConfig;
 
+function getToken() {
+  let token = null;
+
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem(tokenStorage);
+  }
+
+  return token;
+}
+
 const api = {
+  url: apiUrl,
   get,
   post,
   put,
   delete: _delete,
+  getAuthorizationHeader,
+  getToken,
 };
 
 export const apiRest = {
-  auth: Auth(publicRuntimeConfig.apiUrl, api),
-  users: Users(api),
-  getToken: function () {
-    let token = null;
-
-    if (typeof window !== "undefined") {
-      token = localStorage.getItem(tokenStorage);
-    }
-
-    return token;
-  },
+  auth: auth(publicRuntimeConfig.apiUrl, api),
+  users: users(api),
+  geofiles: geofiles(api),
+  trees: trees(api),
+  getToken,
 };
 
 function getAuthorizationHeader() {
@@ -69,7 +78,7 @@ async function post(path, headers, body) {
     .catch(handleError);
 }
 
-async function put(url, headers, body) {
+async function put(path, headers, body) {
   const requestOptions = {
     method: "PUT",
     headers: {
@@ -78,7 +87,9 @@ async function put(url, headers, body) {
     },
     body: body,
   };
-  return fetch(url, requestOptions).then(handleResponse).catch(handleError);
+  return fetch(`${apiUrl}${path}`, requestOptions)
+    .then(handleResponse)
+    .catch(handleError);
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
