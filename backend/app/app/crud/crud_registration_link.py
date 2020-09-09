@@ -48,11 +48,21 @@ class CRUDRegistrationLink(
 
         query = db.query(Registration_Link)
         query = query.filter(
-            Registration_Link.fk_user == current_user.id,
             Registration_Link.value == value
         )
         registration_link_in_db = query.first()
-        if registration_link_in_db is not None:
+
+        if (
+            registration_link_in_db is not None
+            and
+            registration_link_in_db.fk_user != current_user.id
+        ):
+            return "you can't validate this link"
+        if (
+            registration_link_in_db is not None
+            and
+            registration_link_in_db.fk_user == current_user.id
+        ):
             logging.info("registration link ok")
             dateExpiration = (
                 registration_link_in_db.creation_date
