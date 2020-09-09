@@ -41,6 +41,11 @@ def verification(
         value=activation_link_value,
         current_user=current_user
     )
+    if registration_link_in_db == "you can't validate this link":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="you can't validate this link"
+        )
     if registration_link_in_db is None:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
