@@ -5,8 +5,7 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import getConfig from "next/config";
 import ETKGeofile from "../Geofile";
-
-const { publicRuntimeConfig } = getConfig();
+import { apiRest } from "../../lib/api";
 
 export interface ETKMissingDatasProps {
   geoFile?: ETKGeofile;
@@ -63,11 +62,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   const classes = useStyle();
   const [isReady, setIsReady] = useState(false);
 
-  const crsColumnChoices = [
-    { value: "1", label: "1" },
-    { value: "2", label: "2" },
-    { value: "3", label: "3" },
-  ];
+  const crsColumnChoices = [{ value: "epsg:4326", label: "EPSG:4326" }];
 
   const onChangeValue = (e) => {
     data[e.target.name] = {
@@ -93,21 +88,9 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
       newGeofile[key] = data[key].value;
     }
 
-    const url = `${publicRuntimeConfig.apiUrl}/geo_files`;
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newGeofile),
-    };
-
-    try {
-      const response = await fetch(`${url}`, requestOptions);
-      const data = await response.json();
-
-      if (200 <= response.status && response.status < 400) {
-        props.onUpdateGeofile(data);
-      }
-    } catch (error) {}
+    const response = await apiRest.geofiles.update(newGeofile);
+    props.onUpdateGeofile(response);
+    setData({});
   };
 
   let latLonChoice = [];

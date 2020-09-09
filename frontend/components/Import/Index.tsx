@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import getConfig from "next/config";
 import ETKGeofile from "../Geofile";
 import ETKImportTemplate from "./Template";
 import ETKMissingData from "./MissingDatas";

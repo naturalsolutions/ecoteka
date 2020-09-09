@@ -1,9 +1,6 @@
-import React, { useState } from "react";
-import { Button, Typography, Grid } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import getConfig from "next/config";
-
-const { publicRuntimeConfig } = getConfig();
+import React from "react";
+import { Button } from "@material-ui/core";
+import { apiRest } from "../../lib/api";
 
 export interface ETKButtonImportProps {
   name: string;
@@ -19,29 +16,17 @@ const defaultProps: ETKButtonImportProps = {
 
 const ETKButtonImport: React.FC<ETKButtonImportProps> = (props) => {
   const onImport = async () => {
-    const urlStartImport = `${publicRuntimeConfig.apiUrl}/trees/import-from-geofile`;
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    };
+    const response = await apiRest.trees.importFromGeofile(props.name);
 
-    const check = async () => {
-      const response = await fetch(
-        `${urlStartImport}?name=${props.name}`,
-        requestOptions
-      );
-      const data = await response.json();
+    console.log(response);
 
-      if (data.status === "importing") {
-        setTimeout(() => {
-          check();
-        }, 5000);
-      }
+    if (response.status === "importing") {
+      setTimeout(() => {
+        onImport();
+      }, 5000);
+    }
 
-      props.onImported();
-    };
-
-    await check();
+    props.onImported();
   };
 
   return (
