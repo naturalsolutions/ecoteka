@@ -236,6 +236,10 @@ def send_new_registration_link_email(
         /
         "new_registration_link.html"
     )
+
+    full_link = settings.EXTERNAL_PATH.replace(
+        "/api/v1", f"/registration-link.html?value={link}")
+
     with open(pathToTemplate) as f:
         template_str = f.read()
     send_email(
@@ -245,7 +249,7 @@ def send_new_registration_link_email(
         environment={
             "project_name": settings.PROJECT_NAME,
             "email": email_to,
-            "link": link
+            "link": full_link
         },
     )
 
@@ -268,6 +272,4 @@ def generate_response_for_token(
 
 
 def generate_registration_link_value() -> str:
-    # TODO: Create env variable
-    link = settings.EXTERNAL_PATH.replace("/api/v1", "/registration-link.html?value=")
-    return f"{link}{str(uuid.uuid4())}"
+    return str(uuid.uuid4())
