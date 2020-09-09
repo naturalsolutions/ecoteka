@@ -18,8 +18,6 @@ const ETKButtonImport: React.FC<ETKButtonImportProps> = (props) => {
   const onImport = async () => {
     const response = await apiRest.trees.importFromGeofile(props.name);
 
-    console.log(response);
-
     if (response.status === "importing") {
       setTimeout(() => {
         onImport();
