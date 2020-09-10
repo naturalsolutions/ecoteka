@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Grid from "@material-ui/core/Grid";
 
-import { apiRest } from "../lib/api";
 import { useAppContext } from "../providers/AppContext.js";
 import ETKSignin from "../components/SignIn";
 import ETKRegistrationLinkConfirmation from "../components/RegistrationLink/Confirmation";
