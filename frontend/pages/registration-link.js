@@ -63,6 +63,7 @@ export default function RegistrationLinkPage({ value }) {
     <Grid container style={{ height: "100vh" }}>
       <ETKRegistrationLinkConfirmation
         value={value}
+        content="Merci de patienter pendant que nous verifions votre lien"
         errorContent={errorContent}
         onSuccess={onSuccess}
         onError={onError}
