@@ -3,34 +3,32 @@ import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import getConfig from "next/config";
-import { useRouter } from "next/router";
-import api from "../../lib/api";
-import { useAppContext } from "../../providers/AppContext";
-
-const { publicRuntimeConfig } = getConfig();
+import { apiRest } from "../../lib/api";
 
 export interface ETKRegistrationLinkConfirmationProps {
   value: string;
   content: string;
-  errorContent?: string;
+  errorContent?: string[];
+  onSuccess?(data?: object): void;
+  onError?(data?: object): void;
 }
 
 const defaultProps: ETKRegistrationLinkConfirmationProps = {
   value: "",
   content: "",
-  errorContent:
-    "We can't validate your account You gonna be redirected to the homepage",
+  errorContent: [
+    "We can't validate your account",
+    "You gonna be redirected to the homepage",
+  ],
 };
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
-    content: {
-      marginRight: "1rem",
-    },
     error: {
-      marginRight: "1rem",
       color: "red",
+    },
+    circularProgress: {
+      marginBottom: "2rem",
     },
   })
 );
@@ -39,57 +37,38 @@ const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationP
   props
 ) => {
   const classes = useStyles();
-  const router = useRouter();
-  const { user } = useAppContext();
-  const [isInError, setIsInError] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      setTimeout(() => {
-        makeRequest();
-      }, 4000);
-    }
-  }, [user]);
 
   const makeRequest = async () => {
-    const url = `/registration_link/verification/${props.value}`;
-    const headers = { "Content-Type": "application/json" };
-
     try {
-      const response = await api.get(url, headers);
+      const response = await apiRest.registrationLink.verification(props.value);
+      const data = await response.json();
+
       if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      if (200 <= response.status && response.status < 400) {
-        const data = response.json();
+        throw new Error(data.detail);
       }
 
-      throw Error(response.statusText);
-    } catch (error) {
-      setIsInError(error);
-      setTimeout(() => {
-        router.push("/");
-      }, 4000);
+      return props.onSuccess(data);
+    } catch (e) {
+      props.onError(e);
     }
   };
 
+  useEffect(() => {
+    makeRequest();
+  }, []);
+
   return (
     <React.Fragment>
-      <Grid container justify="center" alignItems="center">
-        {isInError ? (
-          <React.Fragment>
-            <Typography component="h5" className={classes.error}>
-              {props.errorContent}
-            </Typography>
-            <CircularProgress />
-          </React.Fragment>
+      <Grid container direction="column" justify="center" alignItems="center">
+        <CircularProgress className={classes.circularProgress} />
+        {!props.errorContent ? (
+          <Typography component="h5">{props.content}</Typography>
         ) : (
-          <React.Fragment>
-            <Typography component="h5" className={classes.content}>
-              {props.content}
+          props.errorContent.map((error, index) => (
+            <Typography key={index} component="h5" className={classes.error}>
+              {error}
             </Typography>
-            <CircularProgress />
-          </React.Fragment>
+          ))
         )}
       </Grid>
     </React.Fragment>
