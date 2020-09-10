@@ -45,11 +45,11 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
   const [form, setForm] = useState(getFormDefault());
   const [isSending, setIsSending] = useState(false);
 
-  const handleClose = (event: object, reason: string) => {
+  const handleClose = (event: object, reason: string, user?: object) => {
     if (isSending) {
       return;
     }
-    props.onClose && props.onClose(event, reason);
+    props.onClose && props.onClose(event, reason, user);
   };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +110,7 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
       setUser(newUser);
     }
 
-    props.onClose();
+    handleClose(null, null, newUser);
   };
 
   const signupDialog = (
