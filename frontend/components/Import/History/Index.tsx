@@ -11,6 +11,9 @@ export interface ETKImportHistoryIndexProps {
   title: string;
   importText: string;
   deleteText: string;
+  onSelected?(selected: string[]): void;
+  onDelete?(selected: string[]): void;
+  onImport?(name: string): void;
 }
 
 const defaultProps: ETKImportHistoryIndexProps = {
@@ -19,6 +22,9 @@ const defaultProps: ETKImportHistoryIndexProps = {
   title: "Historique des imports",
   importText: "Importer",
   deleteText: "Supprimer",
+  onSelected: (selected: string[]) => {},
+  onDelete: (selected: string[]) => {},
+  onImport: (name: string) => {},
 };
 
 const useStyles = makeStyles(() =>
@@ -40,6 +46,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
 
   const onSelected = (newSelected) => {
     setSelected(newSelected);
+    props.onSelected(newSelected);
   };
 
   return (
@@ -55,6 +62,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
                 disabled={!Boolean(selected.length === 1)}
                 variant="contained"
                 color="primary"
+                onClick={() => props.onImport(selected.pop())}
               >
                 {props.importText}
               </Button>
@@ -64,6 +72,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
                 disabled={!Boolean(selected.length)}
                 variant="contained"
                 color="primary"
+                onClick={() => props.onDelete(selected)}
               >
                 {props.deleteText}
               </Button>

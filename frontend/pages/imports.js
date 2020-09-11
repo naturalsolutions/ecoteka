@@ -12,16 +12,28 @@ export default function ImportsPage() {
   const [rows, setRows] = useState([]);
   const headers = ["Nom du fichier", "Date de l'import", "Status de l'import"];
 
+  const onDelete = async (selected) => {
+    for (let name of selected) {
+      await apiRest.geofiles.delete(name);
+    }
+
+    await fetchData();
+  };
+
+  const onImport = (id) => {
+    console.log(id);
+  };
+
+  async function fetchData() {
+    const rows = await apiRest.geofiles.getAll();
+    setRows(rows);
+  }
+
   useEffect(() => {
     if (!user && !isLoading) {
       router.push("/");
     } else {
       try {
-        async function fetchData() {
-          const rows = await apiRest.geofiles.getAll();
-          setRows(rows);
-        }
-
         fetchData();
       } catch (e) {}
     }
@@ -29,7 +41,14 @@ export default function ImportsPage() {
 
   return (
     <Template>
-      {user && <ETKImportHistory headers={headers} rows={rows} />}
+      {user && (
+        <ETKImportHistory
+          headers={headers}
+          rows={rows}
+          onDelete={onDelete}
+          onImport={onImport}
+        />
+      )}
     </Template>
   );
 }

@@ -14,7 +14,7 @@ import Geofile from "../../Geofile";
 export interface ETKImportHistoryTableProps {
   headers: [];
   rows?: Geofile[];
-  onSelected?(selection?: number[]): void;
+  onSelected?(selection?: string[]): void;
 }
 
 const defaultProps: ETKImportHistoryTableProps = {
@@ -23,27 +23,27 @@ const defaultProps: ETKImportHistoryTableProps = {
 };
 
 const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
-  const [selected, setSelected] = React.useState([] as number[]);
+  const [selected, setSelected] = React.useState([] as string[]);
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const onSelectAllClick = (e) => {
     if (e.target.checked) {
-      const newSelecteds = props.rows.map((n) => n.id);
-      setSelected(newSelecteds);
+      const newSelected = props.rows.map((n) => n.name);
+      setSelected(newSelected);
       return;
     }
 
     setSelected([]);
   };
 
-  const onRowClick = (e, id) => {
-    const selectedIndex = selected.indexOf(id);
+  const onRowClick = (e, name) => {
+    const selectedIndex = selected.indexOf(name);
 
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -87,15 +87,15 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
         </TableHead>
         <TableBody>
           {props.rows.map((row) => {
-            const isItemSelected = isSelected(row.id);
+            const isItemSelected = isSelected(row.name);
             return (
               <TableRow
                 hover
-                key={row.id}
+                key={row.name}
                 selected={isItemSelected}
                 role="checkbox"
                 aria-checked={isItemSelected}
-                onClick={(e) => onRowClick(e, row.id)}
+                onClick={(e) => onRowClick(e, row.name)}
               >
                 <TableCell>
                   <Checkbox checked={isItemSelected} />

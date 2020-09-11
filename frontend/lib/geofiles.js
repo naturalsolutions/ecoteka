@@ -38,6 +38,16 @@ class Geofiles {
       return newGeofile;
     }
   }
+
+  async delete(name) {
+    const response = await this.api.delete(`/geo_files/${name}`);
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+  }
 }
 
 export default function userFactory(api) {
