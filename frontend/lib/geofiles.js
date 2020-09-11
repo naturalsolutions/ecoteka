@@ -3,6 +3,13 @@ class Geofiles {
     this.api = api;
   }
 
+  async getAll() {
+    const response = await this.api.get("/geo_files");
+    const json = await response.json();
+
+    return json;
+  }
+
   upload(file, { onProgress, onLoad, onError }) {
     const formData = new FormData();
 
@@ -30,6 +37,16 @@ class Geofiles {
 
       return newGeofile;
     }
+  }
+
+  async delete(name) {
+    const response = await this.api.delete(`/geo_files/${name}`);
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
   }
 }
 
