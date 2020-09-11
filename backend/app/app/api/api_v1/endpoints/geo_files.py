@@ -132,6 +132,11 @@ def delete_geo_file(
             detail=f"The geofile with name {name} does not exist in the system",
         )
 
+    try:
+        os.remove(geofile.get_filepath())
+    except OSError:
+        pass
+
     crud.geo_file.remove(db, id=geofile.id)
 
     return name
