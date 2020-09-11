@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Button, Paper } from "@material-ui/core";
 
@@ -36,6 +36,11 @@ const useStyles = makeStyles(() =>
 
 const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
   const classes = useStyles();
+  const [selected, setSelected] = useState([]);
+
+  const onSelected = (newSelected) => {
+    setSelected(newSelected);
+  };
 
   return (
     <Grid className={classes.grid}>
@@ -46,12 +51,20 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
         <Grid item xs={6}>
           <Grid container spacing={1} direction="row-reverse">
             <Grid item>
-              <Button variant="contained" color="primary">
+              <Button
+                disabled={!Boolean(selected.length === 1)}
+                variant="contained"
+                color="primary"
+              >
                 {props.importText}
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="primary">
+              <Button
+                disabled={!Boolean(selected.length)}
+                variant="contained"
+                color="primary"
+              >
                 {props.deleteText}
               </Button>
             </Grid>
@@ -59,7 +72,11 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
         </Grid>
       </Grid>
       <Paper className={classes.table}>
-        <ETKImportHistoryTable rows={props.rows} headers={props.headers} />
+        <ETKImportHistoryTable
+          rows={props.rows}
+          headers={props.headers}
+          onSelected={onSelected}
+        />
       </Paper>
     </Grid>
   );

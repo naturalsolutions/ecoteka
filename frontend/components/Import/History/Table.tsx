@@ -1,5 +1,4 @@
-import React from "react";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import React, { useEffect } from "react";
 import {
   Checkbox,
   Table,
@@ -15,6 +14,7 @@ import Geofile from "../../Geofile";
 export interface ETKImportHistoryTableProps {
   headers: [];
   rows?: Geofile[];
+  onSelected?(selection?: number[]): void;
 }
 
 const defaultProps: ETKImportHistoryTableProps = {
@@ -22,10 +22,46 @@ const defaultProps: ETKImportHistoryTableProps = {
   rows: [],
 };
 
-const useStyles = makeStyles(() => createStyles({}));
-
 const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
-  const classes = useStyles();
+  const [selected, setSelected] = React.useState([] as number[]);
+
+  const isSelected = (id) => selected.indexOf(id) !== -1;
+
+  const onSelectAllClick = (e) => {
+    if (e.target.checked) {
+      const newSelecteds = props.rows.map((n) => n.id);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const onRowClick = (e, id) => {
+    const selectedIndex = selected.indexOf(id);
+
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+  useEffect(() => {
+    if (props.onSelected && typeof props.onSelected === "function") {
+      props.onSelected(selected);
+    }
+  }, [selected]);
 
   return (
     <TableContainer>
@@ -33,7 +69,15 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
         <TableHead>
           <TableRow>
             <TableCell>
-              <Checkbox />
+              <Checkbox
+                indeterminate={
+                  selected.length > 0 && selected.length < props.rows.length
+                }
+                checked={
+                  props.rows.length > 0 && selected.length === props.rows.length
+                }
+                onChange={onSelectAllClick}
+              />
             </TableCell>
             {props.headers.map((header, index) => (
               <TableCell key={`header-${index}`}>{header}</TableCell>
@@ -41,16 +85,26 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell>
-                <Checkbox />
-              </TableCell>
-              <TableCell scope="row">{row.original_name}</TableCell>
-              <TableCell>{row.uploaded_date}</TableCell>
-              <TableCell>{row.status}</TableCell>
-            </TableRow>
-          ))}
+          {props.rows.map((row) => {
+            const isItemSelected = isSelected(row.id);
+            return (
+              <TableRow
+                hover
+                key={row.id}
+                selected={isItemSelected}
+                role="checkbox"
+                aria-checked={isItemSelected}
+                onClick={(e) => onRowClick(e, row.id)}
+              >
+                <TableCell>
+                  <Checkbox checked={isItemSelected} />
+                </TableCell>
+                <TableCell scope="row">{row.original_name}</TableCell>
+                <TableCell>{row.uploaded_date}</TableCell>
+                <TableCell>{row.status}</TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
