@@ -238,7 +238,7 @@ def send_new_registration_link_email(
     )
 
     full_link = settings.EXTERNAL_PATH.replace(
-        "/api/v1", f"/registration-link.html?value={link}")
+        "/api/v1", f"/registration-link?value={link}")
 
     with open(pathToTemplate) as f:
         template_str = f.read()
