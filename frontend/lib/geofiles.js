@@ -4,7 +4,7 @@ class Geofiles {
   }
 
   async getAll() {
-    const response = await this.api.get("/geo_files");
+    const response = await this.api.get("/geo_files/");
     const json = await response.json();
 
     return json;
