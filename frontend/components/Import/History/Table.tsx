@@ -46,7 +46,7 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
               <TableCell>
                 <Checkbox />
               </TableCell>
-              <TableCell scope="row">{row.name}</TableCell>
+              <TableCell scope="row">{row.original_name}</TableCell>
               <TableCell>{row.uploaded_date}</TableCell>
               <TableCell>{row.status}</TableCell>
             </TableRow>
