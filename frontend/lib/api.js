@@ -95,14 +95,16 @@ async function put(path, headers, body) {
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-async function _delete(url) {
+async function _delete(path) {
   const requestOptions = {
     method: "DELETE",
     headers: {
       ...getAuthorizationHeader(),
     },
   };
-  return fetch(url, requestOptions).then(handleResponse).catch(handleError);
+  return fetch(`${apiUrl}${path}`, requestOptions)
+    .then(handleResponse)
+    .catch(handleError);
 }
 
 // helper functions

@@ -22,6 +22,23 @@ from app.core.config import settings
 router = APIRouter()
 
 
+@router.get("/", response_model=List[schemas.GeoFile])
+def read_geo_files(
+    db: Session = Depends(deps.get_db),
+    skip: int = 0,
+    limit: int = 100,
+    current_user: models.User = Depends(deps.get_current_active_user)
+) -> Any:
+    """
+    Retrieve geo files.
+    """
+    geo_files = crud.geo_file.get_multi(db,
+                                        user=current_user,
+                                        skip=skip,
+                                        limit=limit)
+    return geo_files
+
+
 @router.post("/upload", response_model=schemas.GeoFile)
 async def upload_geo_file(
     file: UploadFile = File(...),
@@ -97,15 +114,29 @@ def update_geo_file(
     return geofile
 
 
-@router.get("/", response_model=List[schemas.GeoFile])
-def read_geo_files(
+@router.delete("/{name}")
+def delete_geo_file(
+    name: str,
     db: Session = Depends(deps.get_db),
-    skip: int = 0,
-    limit: int = 100,
     current_user: models.User = Depends(deps.get_current_active_user)
 ) -> Any:
     """
-    Retrieve geo files.
+    Delete one geofile
     """
-    geo_files = crud.geo_file.get_multi(db, skip=skip, limit=limit)
-    return geo_files
+
+    geofile = crud.geo_file.get_by_name(db, name=name)
+
+    if not geofile:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The geofile with name {name} does not exist in the system",
+        )
+
+    try:
+        os.remove(geofile.get_filepath())
+    except OSError:
+        pass
+
+    crud.geo_file.remove(db, id=geofile.id)
+
+    return name
