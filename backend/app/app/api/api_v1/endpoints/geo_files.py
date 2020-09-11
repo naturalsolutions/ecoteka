@@ -107,5 +107,8 @@ def read_geo_files(
     """
     Retrieve geo files.
     """
-    geo_files = crud.geo_file.get_multi(db, skip=skip, limit=limit)
+    geo_files = crud.geo_file.get_multi(db,
+                                        user=current_user,
+                                        skip=skip,
+                                        limit=limit)
     return geo_files
