@@ -7,13 +7,13 @@ import { useAppContext } from "../providers/AppContext";
 import { apiRest } from "../lib/api";
 
 export default function ImportsPage() {
-  const { user } = useAppContext();
+  const { user, isLoading } = useAppContext();
   const router = useRouter();
   const [rows, setRows] = useState([]);
   const headers = ["Nom du fichier", "Date de l'import", "Status de l'import"];
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !isLoading) {
       router.push("/");
     } else {
       try {
@@ -25,7 +25,7 @@ export default function ImportsPage() {
         fetchData();
       } catch (e) {}
     }
-  }, []);
+  }, [isLoading, user]);
 
   return (
     <Template>
