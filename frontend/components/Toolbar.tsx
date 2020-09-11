@@ -6,6 +6,9 @@ import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
+import Popover from '@material-ui/core/Popover';
+import Divider from '@material-ui/core/Divider';
+import MoodIcon from '@material-ui/icons/Mood';
 import dynamic from "next/dynamic";
 import ETKContact from "./Contact";
 import ETKLogout from "./Logout";
@@ -17,6 +20,7 @@ import Collapse from "@material-ui/core/Collapse";
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 
 import { useAppContext } from "../providers/AppContext";
+import { apiRest } from "../lib/api";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -53,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
   toolbarButton: {
     color: "#fff",
   },
+  userInfosPaper: {
+    padding: 10,
+    textAlign: 'center'
+  },
   navBar: {
     display: "flex",
     paddingLeft: 5,
@@ -84,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
-  const { user } = useAppContext();
+  const { user, setUser } = useAppContext();
 
   const ETKRegister = dynamic(() => import("../components/Register"), {
     ssr: false,
@@ -96,6 +104,9 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [curLevel1, setCurLevel1] = useState("patrimony");
+
+  const [userInfosAnchorEl, setUserInfosAnchorEl] = React.useState(null);
+  const isUserInfosOpen = Boolean(userInfosAnchorEl);
 
   const router = useRouter();
 
@@ -141,10 +152,47 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
     matchCurLevel1(window.location.href);
   });
 
+  const renderUserInfos = () => {
+    return <Popover 
+      classes={{
+        paper: classes.userInfosPaper
+      }}
+      open={isUserInfosOpen}
+      anchorEl={userInfosAnchorEl}
+      onClose={() => {
+        setUserInfosAnchorEl(null);
+      }}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+    >
+      <p><MoodIcon /></p>
+      {user.full_name && <p>{user.full_name}</p>}
+      <p>{user.email}</p>
+      <div>
+        <Button
+          onClick={(e) => {
+            apiRest.auth.logout();
+            setUser(null);
+          }}
+        >
+          {props.logoutText}
+        </Button>
+      </div>
+    </Popover>
+  }
+
   const renderWhenSession = () => {
+    //TODO Find something to display in any case ?
+    const displayName = user.full_name || user.email.substr(0, user.email.indexOf('@'));
     return (
       <React.Fragment>
-        <ETKLogout logoutText={props.logoutText} />
+        {/* <ETKLogout logoutText={props.logoutText} /> */}
         {user.is_superuser ? (
           <Button
             className={classes.toolbarButton}
@@ -157,6 +205,20 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
             {props.registerText}
           </Button>
         ) : null}
+        {/* TODO apply theme on backgroundColor */}
+        <Divider orientation="vertical" flexItem style={{
+          backgroundColor: '#FFF'
+        }} />
+        <Button
+            className={classes.toolbarButton}
+            onClick={(e) => {
+              console.log(user);
+              setUserInfosAnchorEl(e.currentTarget);
+            }}
+          >
+          {displayName}
+        </Button>
+        {renderUserInfos()}
       </React.Fragment>
     );
   };
@@ -204,7 +266,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         </Grid>
 
         <Grid container justify="flex-end">
-          {user ? renderWhenSession() : renderWhenNoSession()}
           <Hidden xsDown>
             <Button
               className={classes.toolbarButton}
@@ -217,6 +278,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               {props.aboutText}
             </Button>
           </Hidden>
+          {user ? renderWhenSession() : renderWhenNoSession()}
         </Grid>
       </Toolbar>
       <ETKSignin
