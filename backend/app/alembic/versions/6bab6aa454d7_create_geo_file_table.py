@@ -23,7 +23,9 @@ def upgrade():
     op.create_table(
         "geofile",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("user_id", sa.Integer(), nullable=True),
+        sa.Column("user_id",
+                  sa.Integer(),
+                  nullable=True),
         sa.Column("name", sa.String(42), nullable=False),
         sa.Column("original_name", sa.String(), nullable=False),
         sa.Column("extension", sa.String(7), nullable=False),
@@ -46,7 +48,7 @@ def upgrade():
         sa.Column("imported_date", sa.DateTime, nullable=True),
         sa.Column("importing_start", sa.DateTime, nullable=True),
         sa.Column("public", sa.Boolean(), nullable=False, server_default=sa.false()),
-        sa.ForeignKeyConstraint(['user_id'], ['user.id']),
+        sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete="CASCADE"),
         sa.UniqueConstraint("name"),
         sa.PrimaryKeyConstraint("id"),
     )
