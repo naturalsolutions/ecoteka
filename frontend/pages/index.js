@@ -60,7 +60,7 @@ export default function IndexPage({ drawer }) {
     });
 
     var features = map.queryRenderedFeatures(bbox, {
-      layers: ["ecoteka-data", "ecoteka-data-osm"],
+      layers: ["ecoteka-data"],
     });
 
     if (features.length) {
@@ -183,7 +183,7 @@ export default function IndexPage({ drawer }) {
       <div className={classes.main}>
         <ETKMap
           ref={mapRef}
-          styleSource="/assets/style.json"
+          styleSource="/api/v1/maps/style"
           onMapClick={onMapClick}
           onStyleData={onMapLoaded}
         />

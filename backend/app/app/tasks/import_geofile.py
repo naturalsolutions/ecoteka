@@ -96,7 +96,7 @@ def create_mbtiles(db: Session, geofile: GeoFile):
 
         cmd = "/opt/tippecanoe/tippecanoe"
         target = f"/app/tiles/private/{geofile.name}.mbtiles"
-        os.system(f"{cmd} -P -o {target} {geojson}")
+        os.system(f"{cmd} -P -l {geofile.name} -o {target} {geojson}")
         os.remove(geojson)
 
         conn = sqlite3.connect(target)

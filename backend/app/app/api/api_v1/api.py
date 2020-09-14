@@ -8,7 +8,8 @@ from app.api.api_v1.endpoints import (
     register,
     registration_link,
     geo_files,
-    trees
+    trees,
+    maps
 )
 
 api_router = APIRouter()
@@ -46,9 +47,14 @@ api_router.include_router(
     geo_files.router,
     prefix="/geo_files",
     tags=["geo_files"]
-    )
+)
 api_router.include_router(
     trees.router,
     prefix="/trees",
     tags=["trees"]
-    )
+)
+api_router.include_router(
+    maps.router,
+    prefix="/maps",
+    tags=["maps"]
+)
