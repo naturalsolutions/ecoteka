@@ -134,6 +134,7 @@ def delete_geo_file(
 
     try:
         os.remove(geofile.get_filepath())
+        os.remove(f'{settings.TILES_FOLDER}/private/{geofile.name}.mbtiles')
     except OSError:
         pass
 
