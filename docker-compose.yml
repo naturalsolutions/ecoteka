@@ -30,6 +30,7 @@ services:
       - traefik
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
@@ -62,6 +63,7 @@ services:
       - SMTP_USER=${NS_ECOTEKA_BACKEND_SMTP_USER}
       - UPLOADED_FILES_FOLDER=${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
       - SECRET_KEY=${NS_ECOTEKA_BACKEND_SECRET_KEY}
+      - TILES_FOLDER=${NS_ECOTEKA_BACKEND_TILES_FOLDER}
 
   frontend:
     image: ${NS_ECOTEKA_FRONTEND_IMAGE}

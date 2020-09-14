@@ -1,4 +1,22 @@
+FROM debian:10-slim as tippecanoe
+
+RUN apt-get -y update \
+  && apt-get -y install git build-essential libsqlite3-dev zlib1g-dev
+
+RUN git clone https://github.com/mapbox/tippecanoe.git \
+  && cd tippecanoe \
+  && make -j
+
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
+
+COPY --from=tippecanoe [ \
+  "/tippecanoe/tippecanoe", \
+  "/tippecanoe/tippecanoe-decode", \
+  "/tippecanoe/tippecanoe-enumerate", \
+  "/tippecanoe/tippecanoe-json-tool", \
+  "/tippecanoe/tile-join", \
+  "/opt/tippecanoe/" \
+  ]
 
 RUN pip install --no-cache-dir fastapi==0.61.0 pyjwt SQLAlchemy geoalchemy2 alembic \
   passlib[bcrypt] pydantic[email] emails tenacity psycopg2 python-jose \

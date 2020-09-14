@@ -128,6 +128,8 @@ configure it and their default values:
 | NS_ECOTEKA_BACKEND_SMTP_TLS                       | Rncryption connection with smtp server                                              | True                                 |
 | NS_ECOTEKA_BACKEND_SMTP_USER                      | Login mail                                                                          | user                                 |
 | NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER          | Uploaded files folder                                                               | /app/app/uploaded_files              |
+| NS_ECOTEKA_BACKEND_SECRET_KEY                     | Secret key to generate token                                                        | AQ47ZOIH0nIDn1z013ua8_t_St0kQ9vI     |
+| NS_ECOTEKA_BACKEND_TILES_FOLDER                   | Tiles folder                                                                        | /tiles                               |
 
 ### TILE SERVER
 | Key                                   | Description                       |                                            Default value |
