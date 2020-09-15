@@ -1,8 +1,10 @@
 const assetPrefix = process.env["ASSET_PREFIX"] || "";
 const apiUrl = process.env["API_URL"] || "%api_url%";
-const tokenStorage = process.env["TOKEN_STORAGE"] || "%token_storage%"
+const tokenStorage = process.env["TOKEN_STORAGE"] || "%token_storage%";
 
-let config = {};
+let config = {
+  exportTrailingSlash: true,
+};
 
 // CDN Support with Asset Prefix
 // https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
@@ -14,7 +16,7 @@ config.env = {
 
 config.publicRuntimeConfig = {
   apiUrl,
-  tokenStorage
+  tokenStorage,
 };
 
 module.exports = config;

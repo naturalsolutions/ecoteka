@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Grid from "@material-ui/core/Grid";
 
@@ -6,7 +6,7 @@ import { useAppContext } from "../providers/AppContext.js";
 import ETKSignin from "../components/SignIn";
 import ETKRegistrationLinkConfirmation from "../components/RegistrationLink/Confirmation";
 
-export default function RegistrationLinkPage({ value }) {
+export default function RegistrationLinkPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState();
   const { setUser } = useAppContext();
@@ -61,7 +61,7 @@ export default function RegistrationLinkPage({ value }) {
   const confirmation = (
     <Grid container style={{ height: "100vh" }}>
       <ETKRegistrationLinkConfirmation
-        value={value}
+        value={router.query.value}
         content="Merci de patienter pendant que nous verifions votre lien"
         errorContent={errorContent}
         onSuccess={onSuccess}
@@ -72,7 +72,3 @@ export default function RegistrationLinkPage({ value }) {
 
   return !currentUser ? signIn : confirmation;
 }
-
-RegistrationLinkPage.getInitialProps = ({ query: { value } }) => {
-  return { value };
-};
