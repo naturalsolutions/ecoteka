@@ -1,10 +1,14 @@
+import os
+import sys
 import fiona
 import logging
 import datetime
 from pathlib import Path
 
+import sqlite3
 from sqlalchemy.orm import Session
 import pandas as pd
+import geopandas as gpd
 
 from app.models import GeoFile, GeoFileStatus, Tree
 
@@ -78,4 +82,32 @@ def import_geofile(db: Session, geofile: GeoFile):
     geofile.imported_date = datetime.datetime.utcnow()
     geofile.status = GeoFileStatus.IMPORTED.value
     db.commit()
+
+    create_mbtiles(db, geofile=geofile)
     logging.info(f"imported {geofile.name} geofile")
+
+
+def create_mbtiles(db: Session, geofile: GeoFile):
+    try:
+        geojson = f"/app/tiles/private/{geofile.name}.geojson"
+        sql = f'SELECT * FROM public.tree WHERE geofile_id = {geofile.id}'
+        df = gpd.read_postgis(sql, db.bind)
+        df.to_file(geojson, driver="GeoJSON")
+
+        cmd = "/opt/tippecanoe/tippecanoe"
+        target = f"/app/tiles/private/{geofile.name}.mbtiles"
+        os.system(f"{cmd} -P -o {target} {geojson}")
+        os.remove(geojson)
+
+        conn = sqlite3.connect(target)
+        sql = '''
+            INSERT INTO metadata(name, value) 
+            VALUES(?, ?)
+        '''
+        cur = conn.cursor()
+        cur.execute(sql, ["allowed_users", geofile.user_id])
+        conn.commit()
+        conn.close()
+    except:
+        logging.error(sys.exc_info()[0])
+        raise

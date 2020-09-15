@@ -1,3 +1,12 @@
+FROM debian:10-slim as tippecanoe
+
+RUN apt-get -y update \
+  && apt-get -y install git build-essential libsqlite3-dev zlib1g-dev
+
+RUN git clone https://github.com/mapbox/tippecanoe.git \
+  && cd tippecanoe \
+  && make -j
+
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
 
 ENV TZ=Europe/Paris
