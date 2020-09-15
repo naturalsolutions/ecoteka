@@ -29,7 +29,7 @@ services:
     networks:
       - traefik
     volumes:
-      - /etc/localtime:/etc/localtime:ro
+      - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
