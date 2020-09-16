@@ -16,14 +16,18 @@ from .crud_geo_file import (
 from .crud_tree import (
     tree
 )
+from .crud_organization import (
+    organization
+)
 
 __all__ = [
-    "user",
-    "CRUDBase",
     "contact",
+    "CRUDBase",
     "geo_file",
+    "organization"
     "registration_link",
-    "tree"
+    "tree",
+    "user",
 ]
 
 # For a new basic set of CRUD operations you could just do
