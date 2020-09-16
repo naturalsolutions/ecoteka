@@ -10,8 +10,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import getConfig from "next/config";
 import { apiRest } from "../lib/api";
 
-const { publicRuntimeConfig } = getConfig();
-
 export interface ETKRegisterProps {
   isOpen: boolean;
   onClose: Function;
@@ -36,7 +34,6 @@ const useStyles = makeStyles((theme) =>
 );
 
 const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
-  const classes = useStyles(props);
   const [isSending, setIsSending] = useState(false);
 
   const minLengthPassord = 6;
@@ -44,6 +41,7 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
     return {
       full_name: {} as any,
       email: {} as any,
+      organization: {} as any,
       password: {} as any,
       password_confirm: {} as any,
     };
@@ -190,6 +188,22 @@ const ETKRegister: React.FC<ETKRegisterProps> = (props) => {
                   onChange={onInputChange}
                   error={Boolean(form.email.errorMessage)}
                   helperText={form.email.errorMessage}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="organization"
+                  required
+                  variant="filled"
+                  margin="dense"
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  label="Organization"
+                  fullWidth
+                  onChange={onInputChange}
+                  error={Boolean(form.organization.errorMessage)}
+                  helperText={form.organization.errorMessage}
                 />
               </Grid>
               <Grid item xs={12}>
