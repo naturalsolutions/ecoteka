@@ -58,13 +58,16 @@ def generate_style(
         user_in_db = None
 
         if token:
-            payload = jwt.decode(
-                token,
-                settings.SECRET_KEY,
-                algorithms=[security.ALGORITHM]
-            )
-            token_data = schemas.TokenPayload(**payload)
-            user_in_db = crud.user.get(db, id=token_data.sub)
+            try:
+                payload = jwt.decode(
+                    token,
+                    settings.SECRET_KEY,
+                    algorithms=[security.ALGORITHM]
+                )
+                token_data = schemas.TokenPayload(**payload)
+                user_in_db = crud.user.get(db, id=token_data.sub)
+            except:
+                pass
 
         if user_in_db:
             try:
