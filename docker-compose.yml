@@ -63,6 +63,7 @@ services:
       - UPLOADED_FILES_FOLDER=${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
       - SECRET_KEY=${NS_ECOTEKA_BACKEND_SECRET_KEY}
       - TILES_FOLDER=${NS_ECOTEKA_BACKEND_TILES_FOLDER}
+      - TILES_SERVER=${NS_ECOTEKA_BACKEND_TILES_SERVER}
 
   frontend:
     image: ${NS_ECOTEKA_FRONTEND_IMAGE}
@@ -85,6 +86,8 @@ services:
     volumes:
       - ${NS_ECOTEKA_TILE_SERVER_PUBLIC_FOLDER}:/tiles/public
       - ${NS_ECOTEKA_TILE_SERVER_PRIVATE_FOLDER}:/tiles/private
+    environment:
+      - KEY_SECRET=${NS_ECOTEKA_BACKEND_SECRET_KEY}
 
 volumes:
   app-db-data:
