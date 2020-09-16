@@ -7,12 +7,14 @@ import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
 import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
-import speces from "../public/assets/speces.json";
-import layersStyle from "../public/assets/layersStyle.json";
 import ETKImport from "../components/Import/Index.tsx";
 
 import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
+
+import speces from "../public/assets/speces.json";
+import layersStyle from "../public/assets/layersStyle.json";
+import { apiRest } from "../lib/api";
 
 const useStyles = makeStyles(() => ({
   main: {
@@ -183,7 +185,7 @@ export default function IndexPage({ drawer }) {
       <div className={classes.main}>
         <ETKMap
           ref={mapRef}
-          styleSource="/api/v1/maps/style"
+          styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
           onMapClick={onMapClick}
           onStyleData={onMapLoaded}
         />

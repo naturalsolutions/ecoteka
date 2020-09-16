@@ -86,6 +86,8 @@ services:
     volumes:
       - ${NS_ECOTEKA_TILE_SERVER_PUBLIC_FOLDER}:/tiles/public
       - ${NS_ECOTEKA_TILE_SERVER_PRIVATE_FOLDER}:/tiles/private
+    environment:
+      - KEY_SECRET=${NS_ECOTEKA_BACKEND_SECRET_KEY}
 
 volumes:
   app-db-data:

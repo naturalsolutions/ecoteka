@@ -47,8 +47,9 @@ class GeoFile(Base):
     user = relationship("User")
     organization = relationship("Organization")
 
-    def __init__(self, user_id: int, name: str, extension: str, original_name: str):
+    def __init__(self, user_id: int, organization_id: int, name: str, extension: str, original_name: str):
         self.user_id = user_id
+        self.organization_id = organization_id
         self.name = name
         self.extension = extension
         self.original_name = original_name

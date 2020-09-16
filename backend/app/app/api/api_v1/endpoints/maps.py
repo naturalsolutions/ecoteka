@@ -3,6 +3,7 @@ import uuid
 import json
 from typing import Any, List, Optional
 from pydantic import Json
+from jose import jwt
 
 import sqlite3
 
@@ -19,6 +20,7 @@ from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
+from app.core import security
 
 router = APIRouter()
 
@@ -27,7 +29,10 @@ router = APIRouter()
 def generate_style(
     *,
     db: Session = Depends(deps.get_db),
-    current_user: Optional[models.User] = Depends(deps.get_optional_current_active_user)
+    current_user: Optional[models.User] = Depends(
+        deps.get_optional_current_active_user
+    ),
+    token: Optional[str] = ''
 ) -> Json:
     """
     Generate style
@@ -37,7 +42,7 @@ def generate_style(
         style["sources"]["osm"] = {
             "type": "vector",
             "tiles": [
-                f"{settings.TILES_SERVER}/osm/{{z}}/{{x}}/{{y}}.pbf"
+                f"{settings.TILES_SERVER}/osm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
             ],
             "minzoom": 0,
             "maxzoom": 13
@@ -50,36 +55,49 @@ def generate_style(
             "source-layer": "ecoteka-data"
         })
 
-        if current_user is not None:
-            geofiles = crud.geo_file.get_multi(db, user=current_user)
+        user_in_db = None
 
-            for geofile in geofiles:
-                target = f"/app/tiles/public/{geofile.name}.mbtiles"
-                conn = sqlite3.connect(target)
-                sql = '''
-                    SELECT * FROM metadata 
-                    WHERE name IN ('minzoom', 'maxzoom') 
-                    ORDER BY name DESC
-                '''
-                cur = conn.cursor()
-                cur.execute(sql)
-                minzoom, maxzoom = cur.fetchall()
-                conn.close()
+        if token:
+            payload = jwt.decode(
+                token,
+                settings.SECRET_KEY,
+                algorithms=[security.ALGORITHM]
+            )
+            token_data = schemas.TokenPayload(**payload)
+            user_in_db = crud.user.get(db, id=token_data.sub)
 
-                style["sources"][f"{geofile.name}"] = {
-                    "type": "vector",
-                    "tiles": [
-                        f"{settings.TILES_SERVER}/{geofile.name}/{{z}}/{{x}}/{{y}}.pbf"
-                    ],
-                    "minzoom": int(minzoom[1]),
-                    "maxzoom": int(maxzoom[1])
-                }
+        if user_in_db:
+            organization = crud.organization.get(db, user_in_db.organization_id)
 
-                style["layers"].insert(len(style["layers"]), {
-                    "id": f"ecoteka-{geofile.name}",
-                    "type": "circle",
-                    "source": f"{geofile.name}",
-                    "source-layer": f"{geofile.name}"
-                })
+            if not organization:
+                pass
+
+            target = f"/app/tiles/private/{organization.slug}.mbtiles"
+            conn = sqlite3.connect(target)
+            sql = '''
+                SELECT * FROM metadata 
+                WHERE name IN ('minzoom', 'maxzoom') 
+                ORDER BY name DESC
+            '''
+            cur = conn.cursor()
+            cur.execute(sql)
+            minzoom, maxzoom = cur.fetchall()
+            conn.close()
+
+            style["sources"][f"{organization.slug}"] = {
+                "type": "vector",
+                "tiles": [
+                    f"{settings.TILES_SERVER}/{organization.slug}/{{z}}/{{x}}/{{y}}.pbf?scope=private&token={token}"
+                ],
+                "minzoom": int(minzoom[1]),
+                "maxzoom": int(maxzoom[1])
+            }
+
+            style["layers"].insert(len(style["layers"]), {
+                "id": f"ecoteka-{organization.slug}",
+                "type": "circle",
+                "source": f"{organization.slug}",
+                "source-layer": f"{organization.slug}"
+            })
 
         return style

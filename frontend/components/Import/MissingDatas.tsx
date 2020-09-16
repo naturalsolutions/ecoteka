@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Typography, Grid, Box } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
-import getConfig from "next/config";
 import ETKGeofile from "../Geofile";
 import { apiRest } from "../../lib/api";
 

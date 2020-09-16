@@ -11,6 +11,7 @@ import pandas as pd
 import geopandas as gpd
 
 from app.models import GeoFile, GeoFileStatus, Tree
+from app.crud import organization
 
 
 def import_from_fiona(db: Session, path: Path, geofile: GeoFile):
@@ -21,6 +22,8 @@ def import_from_fiona(db: Session, path: Path, geofile: GeoFile):
 
             tree = Tree(
                 geofile_id=geofile.id,
+                user_id=geofile.user_id,
+                organization_id=geofile.organization_id,
                 geom=f'POINT({x} {y})',
                 properties=properties
             )  # type: ignore
@@ -52,6 +55,8 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
 
         tree = Tree(
             geofile_id=geofile.id,
+            user_id=geofile.user_id,
+            organization_id=geofile.organization_id,
             geom=f'POINT({x} {y})',
             properties=properties
         )  # type: ignore
@@ -89,14 +94,15 @@ def import_geofile(db: Session, geofile: GeoFile):
 
 def create_mbtiles(db: Session, geofile: GeoFile):
     try:
-        geojson = f"/app/tiles/private/{geofile.name}.geojson"
-        sql = f'SELECT * FROM public.tree WHERE geofile_id = {geofile.id}'
+        organization_geofile = organization.get(db, geofile.organization_id)
+        geojson = f"/app/tiles/private/{organization_geofile.slug}.geojson"
+        sql = f'SELECT * FROM public.tree WHERE organization_id = {organization_geofile.id}'
         df = gpd.read_postgis(sql, db.bind)
         df.to_file(geojson, driver="GeoJSON")
 
         cmd = "/opt/tippecanoe/tippecanoe"
-        target = f"/app/tiles/private/{geofile.name}.mbtiles"
-        os.system(f"{cmd} -P -l {geofile.name} -o {target} {geojson}")
+        target = f"/app/tiles/private/{organization_geofile.slug}.mbtiles"
+        os.system(f"{cmd} -P -l {organization_geofile.slug} -o {target} {geojson}")
         os.remove(geojson)
 
         conn = sqlite3.connect(target)
