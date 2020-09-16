@@ -11,8 +11,10 @@ export interface ETKMissingDatasProps {
   missingInfo?: [string?];
   titleText: string;
   hintText: string;
-  onUpdateGeofile(geofile: ETKGeofile): void;
   buttonSubmitContent?: string;
+  buttonCancelText?: string;
+  onCancel?(): void;
+  onUpdateGeofile(geofile: ETKGeofile): void;
 }
 
 interface DataItem {
@@ -34,6 +36,7 @@ const defaultProps: ETKMissingDatasProps = {
     "Please define the fields corresponding to the columns of your file",
   onUpdateGeofile() {},
   buttonSubmitContent: "Soumettre",
+  buttonCancelText: "Annuler",
 };
 
 const useStyle = makeStyles((theme) =>
@@ -53,6 +56,9 @@ const useStyle = makeStyles((theme) =>
     },
     white: {
       color: "#fff",
+    },
+    toolbar: {
+      marginTop: "1rem",
     },
   })
 );
@@ -191,7 +197,10 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
             </Box>
           </form>
         </Grid>
-        <Grid item>
+        <Grid container justify="space-between" className={classes.toolbar}>
+          <Button variant="contained" onClick={props.onCancel}>
+            {props.buttonCancelText}
+          </Button>
           <Button
             variant="contained"
             color="primary"
