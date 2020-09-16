@@ -74,6 +74,7 @@ def generate_style(
                     pass
 
                 target = f"/app/tiles/private/{organization.slug}.mbtiles"
+
                 conn = sqlite3.connect(target)
                 sql = '''
                     SELECT * FROM metadata 
@@ -83,7 +84,6 @@ def generate_style(
                 cur = conn.cursor()
                 cur.execute(sql)
                 minzoom, maxzoom = cur.fetchall()
-                conn.close()
 
                 style["sources"][f"{organization.slug}"] = {
                     "type": "vector",
@@ -97,10 +97,12 @@ def generate_style(
                 style["layers"].insert(len(style["layers"]), {
                     "id": f"ecoteka-{organization.slug}",
                     "type": "circle",
-                    "source": f"{organization.slug}",
-                    "source-layer": f"{organization.slug}"
+                    "source": organization.slug,
+                    "source-layer": organization.slug
                 })
             except:
                 pass
+            finally:
+                conn.close()
 
         return style
