@@ -24,7 +24,7 @@ const defaultProps: ETKImportTemplateProps = {
   longitudeText: "Longitude",
   crsText: "Système de Réfèrence de Coordonnées",
   downloadText: "TÉLÉCHARGER LE TEMPLATE",
-  linkTemplate: "/assets/template.xslx",
+  linkTemplate: "/assets/ecoteka_import_template.xslx",
 };
 
 const useStyle = makeStyles(() =>
