@@ -67,37 +67,40 @@ def generate_style(
             user_in_db = crud.user.get(db, id=token_data.sub)
 
         if user_in_db:
-            organization = crud.organization.get(db, user_in_db.organization_id)
+            try:
+                organization = crud.organization.get(db, user_in_db.organization_id)
 
-            if not organization:
+                if not organization:
+                    pass
+
+                target = f"/app/tiles/private/{organization.slug}.mbtiles"
+                conn = sqlite3.connect(target)
+                sql = '''
+                    SELECT * FROM metadata 
+                    WHERE name IN ('minzoom', 'maxzoom') 
+                    ORDER BY name DESC
+                '''
+                cur = conn.cursor()
+                cur.execute(sql)
+                minzoom, maxzoom = cur.fetchall()
+                conn.close()
+
+                style["sources"][f"{organization.slug}"] = {
+                    "type": "vector",
+                    "tiles": [
+                        f"{settings.TILES_SERVER}/{organization.slug}/{{z}}/{{x}}/{{y}}.pbf?scope=private&token={token}"
+                    ],
+                    "minzoom": int(minzoom[1]),
+                    "maxzoom": int(maxzoom[1])
+                }
+
+                style["layers"].insert(len(style["layers"]), {
+                    "id": f"ecoteka-{organization.slug}",
+                    "type": "circle",
+                    "source": f"{organization.slug}",
+                    "source-layer": f"{organization.slug}"
+                })
+            except:
                 pass
-
-            target = f"/app/tiles/private/{organization.slug}.mbtiles"
-            conn = sqlite3.connect(target)
-            sql = '''
-                SELECT * FROM metadata 
-                WHERE name IN ('minzoom', 'maxzoom') 
-                ORDER BY name DESC
-            '''
-            cur = conn.cursor()
-            cur.execute(sql)
-            minzoom, maxzoom = cur.fetchall()
-            conn.close()
-
-            style["sources"][f"{organization.slug}"] = {
-                "type": "vector",
-                "tiles": [
-                    f"{settings.TILES_SERVER}/{organization.slug}/{{z}}/{{x}}/{{y}}.pbf?scope=private&token={token}"
-                ],
-                "minzoom": int(minzoom[1]),
-                "maxzoom": int(maxzoom[1])
-            }
-
-            style["layers"].insert(len(style["layers"]), {
-                "id": f"ecoteka-{organization.slug}",
-                "type": "circle",
-                "source": f"{organization.slug}",
-                "source-layer": f"{organization.slug}"
-            })
 
         return style
