@@ -7,6 +7,8 @@ from pydantic import BaseModel, Json
 class TreeBase(BaseModel):
     name: str
     geo_file: int
+    user_id: int
+    organization_id: int
     geom: str
     properties: Json
 

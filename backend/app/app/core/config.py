@@ -96,9 +96,11 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_FULLNAME: str
     SUPERUSERS_CONTACT_LIST: Optional[EmailStr] = None
     USERS_OPEN_REGISTRATION: bool = True
+    ORGANIZATION: str = "Ecoteka"
 
     UPLOADED_FILES_FOLDER: Path = Path("/app/app/uploaded_files")
     TILES_FOLDER: Path = Path("/app/tiles")
+    TILES_SERVER: str = 'https://dev.ecoteka.org/tiles'
     GEO_FILES_ALLOWED: str = 'geojson,zip,csv,xls,xlsx'
 
     class Config:

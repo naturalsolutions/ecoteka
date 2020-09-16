@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, Optional
 
 from fastapi import (
     Depends,
@@ -25,8 +25,10 @@ from app.core import (
 )
 from app.db.session import SessionLocal
 
+token_url = f"{settings.ROOT_PATH}/login/access-token"
+
 reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.ROOT_PATH}/login/access-token"
+    tokenUrl=token_url
 )
 
 
@@ -80,3 +82,31 @@ def get_current_user_if_is_superuser(
             detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+reusable_oauth2_optional = OAuth2PasswordBearer(
+    tokenUrl=token_url,
+    auto_error=False
+)
+
+
+def get_optional_current_active_user(
+    db: Session = Depends(get_db),
+    token: Optional[str] = Depends(reusable_oauth2_optional)
+) -> Optional[User]:
+    if token is not None:
+        try:
+            payload = jwt.decode(
+                token,
+                settings.SECRET_KEY,
+                algorithms=[security.ALGORITHM]
+            )
+            token_data = TokenPayload(**payload)
+            user_in_db = user.get(db, id=token_data.sub)
+
+            if user_in_db is not None:
+                return user_in_db
+        except (jwt.JWTError, ValidationError):
+            return None
+
+    return None

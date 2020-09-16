@@ -67,7 +67,8 @@ async def upload_geo_file(
             name=str(unique_name),
             original_name=file.filename,
             extension=extension,
-            user_id=current_user.id
+            user_id=current_user.id,
+            organization_id=current_user.organization_id
         )
 
         geofile_exists = crud.geo_file.get_by_checksum(db, checksum=geofile.checksum)
@@ -125,6 +126,7 @@ def delete_geo_file(
     """
 
     geofile = crud.geo_file.get_by_name(db, name=name)
+    organization = crud.organization.get(db, geofile.organization_id)
 
     if not geofile:
         raise HTTPException(
@@ -134,7 +136,7 @@ def delete_geo_file(
 
     try:
         os.remove(geofile.get_filepath())
-        os.remove(f'{settings.TILES_FOLDER}/private/{geofile.name}.mbtiles')
+        os.remove(f'{settings.TILES_FOLDER}/private/{organization.slug}.mbtiles')
     except OSError:
         pass
 

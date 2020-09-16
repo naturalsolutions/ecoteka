@@ -116,6 +116,7 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
           geoFile={geofile}
           missingInfo={missingInfo}
           onUpdateGeofile={onUpdateGeofile}
+          onCancel={onImported}
           titleText="Le fichier que vous téléchargez manque d'informations"
           hintText="Veuillez définir les champs correspondant aux colonnes de votre fichier"
         />

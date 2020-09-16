@@ -34,28 +34,36 @@ from .tree import (
     TreeUpdate,
     TreeImportFromGeofile
 )
+from .organization import (
+    Organization,
+    OrganizationCreate,
+    OrganizationUpdate
+)
 
 __all__ = [
     "ContactCreate",
     "ContactDB",
-    "ContactUpdate",
     "ContactOut",
+    "ContactUpdate",
     "GeoFile",
     "GeoFileCreate",
     "GeoFileUpdate",
+    "Msg",
+    "Organization",
+    "OrganizationCreate",
+    "OrganizationUpdate",
     "RegistrationLinkCreate",
     "RegistrationLinkDB",
-    "RegistrationLinkUpdate",
     "RegistrationLinkOut",
-    "Msg",
-    "UserCreate",
-    "UserDB",
-    "UserUpdate",
-    "UserOut",
+    "RegistrationLinkUpdate",
     "Token",
     "TokenPayload",
     "Tree",
     "TreeCreate",
-    "TreeUpdate",
     "TreeImportFromGeofile"
+    "TreeUpdate",
+    "UserCreate",
+    "UserDB",
+    "UserOut",
+    "UserUpdate",
 ]

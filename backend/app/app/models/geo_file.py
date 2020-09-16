@@ -24,6 +24,7 @@ class GeoFileStatus(enum.Enum):
 class GeoFile(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('user.id'))
+    organization_id = Column(Integer, ForeignKey('organization.id'))
     name = Column(String, index=True, unique=True, nullable=False)
     original_name = Column(String, nullable=False)
     extension = Column(String, nullable=False)
@@ -43,8 +44,12 @@ class GeoFile(Base):
     importing_start = Column(DateTime, nullable=True)
     public = Column(Boolean, nullable=False, default=False)
 
-    def __init__(self, user_id: int, name: str, extension: str, original_name: str):
+    user = relationship("User")
+    organization = relationship("Organization")
+
+    def __init__(self, user_id: int, organization_id: int, name: str, extension: str, original_name: str):
         self.user_id = user_id
+        self.organization_id = organization_id
         self.name = name
         self.extension = extension
         self.original_name = original_name

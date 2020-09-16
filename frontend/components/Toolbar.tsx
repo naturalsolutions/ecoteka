@@ -177,6 +177,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       <div>
         <Button
           onClick={(e) => {
+            setUserInfosAnchorEl(null);
             apiRest.auth.logout();
             setUser(null);
           }}
@@ -212,7 +213,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         <Button
             className={classes.toolbarButton}
             onClick={(e) => {
-              console.log(user);
               setUserInfosAnchorEl(e.currentTarget);
             }}
           >
