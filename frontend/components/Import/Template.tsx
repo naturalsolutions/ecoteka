@@ -19,12 +19,12 @@ const defaultProps: ETKImportTemplateProps = {
   titleText: "Un doute avec votre fichier?",
   hintText:
     "Assurez-vous que votre fichier contient les informations suivantes",
-  templateTips: "N'hésitez pas à télécharger notre modèle au format csv",
+  templateTips: "N'hésitez pas à télécharger notre modèle au format xlsx",
   latitudeText: "Latitude",
   longitudeText: "Longitude",
   crsText: "Système de Réfèrence de Coordonnées",
   downloadText: "TÉLÉCHARGER LE TEMPLATE",
-  linkTemplate: "/assets/ecoteka_import_template.xslx",
+  linkTemplate: "/assets/ecoteka_import_template.xlsx",
 };
 
 const useStyle = makeStyles(() =>
