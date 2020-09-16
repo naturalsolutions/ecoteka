@@ -29,7 +29,6 @@ services:
     networks:
       - traefik
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
     labels:
       - traefik.enable=true

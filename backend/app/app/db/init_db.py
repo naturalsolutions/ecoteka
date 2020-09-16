@@ -1,10 +1,13 @@
+import slug
 from sqlalchemy.orm import Session
 
 from app.schemas import (
-    UserCreate
+    UserCreate,
+    OrganizationCreate
 )
 from app.crud import (
-    user
+    user,
+    organization
 )
 from app.core.config import settings
 from app.db import base  # noqa: F401
@@ -22,6 +25,15 @@ def init_db(db: Session) -> None:
     # the tables un-commenting the next line
     # Base.metadata.create_all(bind=engine)
 
+    organization_in_db = organization.get_by_name(db, name=settings.ORGANIZATION)
+
+    if not organization_in_db:
+        organization_in = OrganizationCreate(
+            name=settings.ORGANIZATION,
+            slug=slug.slug(settings.ORGANIZATION)
+        )
+        organization_in_db = organization.create(db, obj_in=organization_in)
+
     user_in_db = user.get_by_email(db, email=settings.FIRST_SUPERUSER)
     if not user_in_db:
         user_in = UserCreate(
@@ -32,6 +44,7 @@ def init_db(db: Session) -> None:
         user_in_db = user.create(db, obj_in=user_in)  # noqa: F841
         user_in_db.is_superuser = True
         user_in_db.is_verified = True
+        user_in_db.organization_id = organization_in_db.id
         db.add(user_in_db)
         db.commit()
         db.refresh(user_in_db)
