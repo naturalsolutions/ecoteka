@@ -30,7 +30,7 @@ class Geofiles {
 
   async update(geofile) {
     const body = JSON.stringify(geofile);
-    const response = await this.api.put("/geo_files", {}, body);
+    const response = await this.api.put("/geo_files/", {}, body);
 
     if (response.status === 200) {
       const newGeofile = await response.json();
