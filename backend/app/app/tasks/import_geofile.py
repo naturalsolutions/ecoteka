@@ -6,6 +6,7 @@ import datetime
 from pathlib import Path
 
 import sqlite3
+import numpy as np
 from sqlalchemy.orm import Session
 import pandas as pd
 import geopandas as gpd
@@ -45,6 +46,9 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
     for i in df.index:
         x = df.loc[i, geofile.longitude_column]
         y = df.loc[i, geofile.latitude_column]
+
+        if np.isnan(x) or np.isnan(y):
+            continue
 
         point_columns = [geofile.longitude_column, geofile.latitude_column]
         columns = df.columns.difference(point_columns).to_list()
