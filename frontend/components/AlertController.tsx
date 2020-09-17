@@ -28,8 +28,8 @@ export class ETKAlert extends React.Component<IETKAlert, { open: boolean }> {
   }
 
   render() {
-    const actions = this.props.actions.map(action => (
-      <Button onClick={(e) => { this.dismiss(action.value); }}>{action.label}</Button>
+    const actions = this.props.actions.map((action, idx) => (
+      <Button key={idx} onClick={(e) => { this.dismiss(action.value); }}>{action.label}</Button>
     ));
     return (
       <Dialog open={this.state.open}>
@@ -58,8 +58,9 @@ export default class ETKAlertController extends React.Component<{ props }, { ale
   }
 
   render() {
-    return this.state.alerts.map(alert =>
+    return this.state.alerts.map((alert, idx) =>
       <ETKAlert
+        key={idx}
         title={alert.title}
         message={alert.message}
         actions={alert.actions}
