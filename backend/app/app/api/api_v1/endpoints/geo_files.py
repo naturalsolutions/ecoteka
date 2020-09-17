@@ -141,7 +141,6 @@ def delete_geo_file(
     except OSError:
         pass
 
-    crud.tree.remove_from_geofile(db, geofile_id=geofile.id)
     crud.geo_file.remove(db, id=geofile.id)
 
     return name

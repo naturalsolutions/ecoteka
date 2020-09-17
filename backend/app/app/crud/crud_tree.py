@@ -10,10 +10,7 @@ from app.schemas import TreeCreate, TreeUpdate
 
 
 class CRUDTree(CRUDBase[Tree, TreeCreate, TreeUpdate]):
-    def remove_from_geofile(self, db: Session, *, geofile_id: int):
-        db.query(Tree).filter(Tree.geofile_id == geofile_id).delete()
-        db.commit()
-        return
+    pass
 
 
 tree = CRUDTree(Tree)
