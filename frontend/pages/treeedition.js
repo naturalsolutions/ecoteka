@@ -1,5 +1,6 @@
 import { useState, createRef, useEffect, Component, useCallback } from "react";
 import { makeStyles } from "@material-ui/core";
+import { apiRest as api} from "../lib/api";
 
 import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
@@ -17,11 +18,11 @@ import mapboxgl from "mapbox-gl";
 
 const useStyles = makeStyles(() => ({
   root: {
-    height: '100%'
+    height: '100%',
+    margin: '0px'
   },
-  satelitetoogle: {
-    position: 'relative',
-    bottom: '40px'
+  satToogleWrapper: {
+    position: "absolute"
   }
 }));
 
@@ -32,9 +33,9 @@ export default function TreeEditionPage({ id }) {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const { appContext, setAppContext, user } = useAppContext();
   const initialModel = {
-    cdnom: '',
-    lat: 0,
-    lng: 0
+    scientific_name: '',
+    y: 0,
+    x: 0
   };
   const [model, setModel] = useState(initialModel);
   const [marker, setMarker] = useState();
@@ -42,7 +43,7 @@ export default function TreeEditionPage({ id }) {
 
   useEffect(() => {
     const _m = new mapboxgl.Marker({ draggable: true })
-      .setLngLat([model.lng, model.lat])
+      .setLngLat([model.x, model.y])
       .addTo(mapRef.current.map);
 
     setMarker(_m);
@@ -56,34 +57,58 @@ export default function TreeEditionPage({ id }) {
     if (!marker) {
       return;
     }
-    marker.setLngLat([model.lng, model.lat]);
-  }, [model.lng, model.lat]);
+    marker.setLngLat([model.x, model.y]);
+  }, [model.x, model.y]);
 
 
   const setFormElementValue = (name, value) => {
     setModel({ ...model, [name]: value });
   }
-  const setModelLngLat = (lng, lat) => {
-    setModel({ ...model, lng, lat });
+  const setModelLngLat = (x, y) => {
+    setModel({ ...model, x, y });
   }
 
-  const onFormSubmit = (e) => {
+  const postTree = async (model) => {
+    if (!creating) { return; }
+    try {
+      const response = await api.trees.post(model);
+      id = response.id;
+
+      alertRef.current.create({
+        title: 'Success',
+        message: `Votre arbre a été enregistré. Voulez-vous en enregistrer un autre ?`,
+        actions: [
+          { label: 'oui', value: true },
+          { label: 'non', value: false }
+        ],
+        onDismiss: (v) => {
+          if (v) {
+            setModel(initialModel);
+            setCreating(true);
+          } else {
+            setCreating(false);
+          }
+        }
+      });
+
+    } catch (e) {
+      alertRef.current.create({
+        title: 'Erreur',
+        message: `Une erreur est survenue lors de l'enregistrement de l'arbre\n${e}`,
+        actions: [
+          { label: 'ok', value: true },
+        ]
+      });
+    }
+  }
+
+  const onFormSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    alertRef.current.create({
-      title: 'Success',
-      message: 'Votre arbre a été enregistré. Voulez-vous en enregistrer un autre ?',
-      actions: [
-        { label: 'oui', value: true },
-        { label: 'non', value: false }
-      ],
-      onDismiss: (v) => {
-        if (v) {
-          setModel(initialModel);
-        }
-      }
-    });
+    if (creating) {
+      await postTree(model);
+    }
   }
 
 
@@ -155,23 +180,22 @@ export default function TreeEditionPage({ id }) {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <TextField
-                  name="cdnom"
-                  value={model.cdnom}
-                  required
+                  name="scientific_name"
+                  value={model.scientific_name}
                   variant="filled"
                   margin="dense"
                   InputProps={{
                     disableUnderline: true,
                   }}
-                  label="CD-Nom"
+                  label="Nom scientifique"
                   fullWidth
-                  onChange={(e) => setFormElementValue('cdnom', e.target.value)}
+                  onChange={(e) => setFormElementValue('scientific_name', e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  name="lat"
-                  value={model.lat}
+                  name="y"
+                  value={model.y}
                   type="number"
                   required
                   variant="filled"
@@ -181,13 +205,13 @@ export default function TreeEditionPage({ id }) {
                   }}
                   label="Latitude"
                   fullWidth
-                  onChange={(e) => setFormElementValue('lat', e.target.value)}
+                  onChange={(e) => setFormElementValue('y', e.target.value)}
                 />
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  name="lng"
-                  value={model.lng}
+                  name="x"
+                  value={model.x}
                   type="number"
                   required
                   variant="filled"
@@ -197,13 +221,11 @@ export default function TreeEditionPage({ id }) {
                   }}
                   label="Longitude"
                   fullWidth
-                  onChange={(e) => setFormElementValue('lng', e.target.value)}
+                  onChange={(e) => setFormElementValue('x', e.target.value)}
                 />
               </Grid>
               <Grid item justify="flex-end" alignItems="flex-start">
-                <Button type="submit">
-                  enregistrer
-                </Button>
+                <Button type="submit" variant="contained">{creating ? 'enregistrer' : 'modifier'}</Button>
               </Grid>
             </Grid>
           </form>
@@ -218,7 +240,9 @@ export default function TreeEditionPage({ id }) {
           />
           <ETKMapSearchCity onChange={onMapCitySearch} />
           <ETKMapGeolocateFab map={mapRef} />
-          <ETKMapSateliteToggle onToggle={onMapSateliteToggle} />
+          <div className={classes.satToogleWrapper}>
+            <ETKMapSateliteToggle onToggle={onMapSateliteToggle} />
+          </div>
         </Grid>
       </Grid>
       <ETKAlertController ref={alertRef} />
