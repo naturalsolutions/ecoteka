@@ -10,9 +10,6 @@ const themes = {
       secondary: {
         main: "#19857b",
       },
-      error: {
-        main: red.A400,
-      },
       toolbar: {
         main: "#fff",
       },
@@ -26,9 +23,6 @@ const themes = {
       },
       secondary: {
         main: "#19857b",
-      },
-      error: {
-        main: red.A400,
       },
       toolbar: {
         main: "#000",
