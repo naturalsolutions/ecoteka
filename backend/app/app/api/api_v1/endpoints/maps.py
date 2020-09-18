@@ -42,7 +42,7 @@ def generate_style(
         style["sources"]["osm"] = {
             "type": "vector",
             "tiles": [
-                f"{settings.TILES_SERVER}/ossssm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
+                f"{settings.TILES_SERVER}/osm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
             ],
             "minzoom": 0,
             "maxzoom": 13
