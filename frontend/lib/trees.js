@@ -14,8 +14,15 @@ class Tree {
   async post(model) {
     const url = `trees/add`;
     const response = await this.api.post(url, {}, JSON.stringify(model));
-    
-    return await response.json()
+
+    return await response.json();
+  }
+
+  async getCentroidFromOrganization(organization) {
+    const url = `/trees/get-centroid-organization/${organization}`;
+    const response = await this.api.get(url);
+
+    return await response.json();
   }
 }
 

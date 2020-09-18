@@ -2,7 +2,10 @@ import os
 import datetime
 import enum
 import hashlib
-from json import dumps
+from json import (
+    dumps,
+    loads
+)
 from typing import TYPE_CHECKING
 from pathlib import Path
 
@@ -19,6 +22,7 @@ class GeoFileStatus(enum.Enum):
     UPLOADED = 'uploaded'
     IMPORTED = 'imported'
     IMPORTING = 'importing'
+    ERROR = 'error'
 
 
 class GeoFile(Base):
@@ -64,13 +68,15 @@ class GeoFile(Base):
             return f'{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
 
     def get_longitude_latitude_columns(self):
+        properties = loads(self.properties)
+
         if not self.longitude_column:
-            for i in self.properties:
+            for i in properties:
                 if i in ['longitude', 'long', 'lon', 'lng', 'x']:
                     self.longitude_column = i
 
         if not self.latitude_column:
-            for i in self.properties:
+            for i in properties:
                 if i in ['latitude', 'lat', 'y']:
                     self.latitude_column = i
 

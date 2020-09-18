@@ -59,7 +59,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
           <Grid container spacing={1} direction="row-reverse">
             <Grid item>
               <Button
-                disabled={!Boolean(selected.length === 1)}
+                disabled={!Boolean(selected.length === 1) || !props.rows.length}
                 variant="contained"
                 color="primary"
                 onClick={() => props.onImport(selected.pop())}
@@ -69,7 +69,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
             </Grid>
             <Grid item>
               <Button
-                disabled={!Boolean(selected.length)}
+                disabled={!selected.length || !props.rows.length}
                 variant="contained"
                 color="primary"
                 onClick={() => props.onDelete(selected)}

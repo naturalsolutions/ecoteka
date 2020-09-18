@@ -6,7 +6,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Wikipedia from "./Wikipedia";
-import Filter from "./Filter";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -89,13 +88,11 @@ export interface ETKSidebarProps {
   activeTab: number;
   currentGenre: string;
   currentProperties: any;
-  onFilterSpecies: string;
   onTabChange: Function;
   speces: any[];
 }
 
 const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
-  const classes = useStyles();
   const [activeTab, setActiveTab] = React.useState(props.activeTab);
 
   const handleChange = (event, newValue) => {
@@ -105,22 +102,19 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
   return (
     <React.Fragment>
       <Tabs
+        style={{ width: "400px" }}
         value={activeTab}
         onChange={handleChange}
-        aria-label="simple tabs example"
+        aria-label="sidebar"
       >
         <Tab label="Wikipedia" {...a11yProps(0)} />
         <Tab label="Properties" {...a11yProps(1)} />
-        <Tab label="Filter" {...a11yProps(2)} />
       </Tabs>
       <TabPanel value={activeTab} index={0}>
         <Wikipedia genre={props.currentGenre} />
       </TabPanel>
       <TabPanel value={activeTab} index={1}>
         <Properties properties={props.currentProperties} />
-      </TabPanel>
-      <TabPanel value={activeTab} index={2}>
-        <Filter speces={props.speces} onFilterSpecies={props.onFilterSpecies} />
       </TabPanel>
     </React.Fragment>
   );

@@ -3,7 +3,6 @@ import { Button, Typography, Grid, Box } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 export interface ETKImportTemplateProps {
-  isOpen?: Boolean;
   titleText?: string;
   hintText?: string;
   templateTips?: string;
@@ -15,7 +14,6 @@ export interface ETKImportTemplateProps {
 }
 
 const defaultProps: ETKImportTemplateProps = {
-  isOpen: true,
   titleText: "Un doute avec votre fichier?",
   hintText:
     "Assurez-vous que votre fichier contient les informations suivantes",
@@ -42,7 +40,7 @@ const useStyle = makeStyles(() =>
 const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
   const classes = useStyle();
 
-  return props.isOpen ? (
+  return (
     <React.Fragment>
       <Grid container direction="column" justify="center" alignItems="flex-end">
         <Grid className={classes.content}>
@@ -67,7 +65,7 @@ const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
         </Button>
       </Grid>
     </React.Fragment>
-  ) : null;
+  );
 };
 
 ETKImportTemplate.defaultProps = defaultProps;
