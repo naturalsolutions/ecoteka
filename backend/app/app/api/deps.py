@@ -25,7 +25,7 @@ from app.core import (
 )
 from app.db.session import SessionLocal
 
-token_url = f"{settings.ROOT_PATH}/login/access-token"
+token_url = f"{settings.ROOT_PATH}/auth/login/access-token"
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=token_url

@@ -10,6 +10,13 @@ class Tree {
 
     return geofile;
   }
+
+  async post(model) {
+    const url = `trees/add`;
+    const response = await this.api.post(url, {}, JSON.stringify(model));
+    
+    return await response.json()
+  }
 }
 
 export default function userFactory(api) {

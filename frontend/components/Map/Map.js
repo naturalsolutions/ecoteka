@@ -29,6 +29,11 @@ export default class ETKMap extends Component {
       },
       trackUserLocation: true,
     });
+    this.geolocate.on('geolocate', (e) => {
+      if (this.props.onGeolocate) {
+        this.props.onGeolocate(e);
+      }
+    })
 
     this.map.addControl(this.geolocate);
     this.map.on("click", (e) => this.props.onMapClick(this.map, e));

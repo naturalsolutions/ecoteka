@@ -58,3 +58,20 @@ def import_from_geofile(
     )
 
     return geofile
+
+
+@router.post('/add', response_model=schemas.tree.Tree_xy)
+def add(
+    *,
+    db: Session = Depends(deps.get_db),
+    tree: schemas.TreePost,
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """Manual tree registration"""
+    tree_with_user_info = schemas.TreeCreate(
+        geom=f'POINT({tree.x} {tree.y})',
+        properties=None,
+        user_id=current_user.id,
+        organization_id=current_user.organization_id)
+    
+    return crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
