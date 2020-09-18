@@ -27,11 +27,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function TreeEditionPage({ id }) {
-  const mapRef = createRef(),
-    alertRef = createRef();
+  const mapRef = createRef();
+  const alertRef = createRef();
   const classes = useStyles();
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const { appContext, setAppContext, user } = useAppContext();
+  const {appContext, setAppContext, user} = useAppContext();
+  const [treeId, setTreeId] = useState(id);
   const initialModel = {
     scientific_name: '',
     y: 0,
@@ -39,7 +40,6 @@ export default function TreeEditionPage({ id }) {
   };
   const [model, setModel] = useState(initialModel);
   const [marker, setMarker] = useState();
-  const [creating, setCreating] = useState(!Boolean(id));
 
   useEffect(() => {
     const _m = new mapboxgl.Marker({ draggable: true })
@@ -47,6 +47,8 @@ export default function TreeEditionPage({ id }) {
       .addTo(mapRef.current.map);
 
     setMarker(_m);
+
+    console.log('alert ref', alertRef, mapRef);
   }, []);
 
   useEffect(() => {
@@ -69,10 +71,10 @@ export default function TreeEditionPage({ id }) {
   }
 
   const postTree = async (model) => {
-    if (!creating) { return; }
+    if (treeId) { return; }
     try {
       const response = await api.trees.post(model);
-      id = response.id;
+      
 
       alertRef.current.create({
         title: 'Success',
@@ -84,9 +86,8 @@ export default function TreeEditionPage({ id }) {
         onDismiss: (v) => {
           if (v) {
             setModel(initialModel);
-            setCreating(true);
           } else {
-            setCreating(false);
+            setTreeId(response.id);
           }
         }
       });
@@ -102,11 +103,38 @@ export default function TreeEditionPage({ id }) {
     }
   }
 
+  const patchTree = async (id, model) => {
+    if (!treeId) { return; }
+    try {
+      const response = await api.trees.patch(id, model);
+
+      alertRef.current.create({
+        title: 'Success',
+        message: `Votre arbre a été édité.`,
+        actions: [
+          { label: 'oui', value: true }
+        ],
+        onDismiss: (v) => null
+      });
+
+    } catch (e) {
+      alertRef.current.create({ //refact for reuse
+        title: 'Erreur',
+        message: `Une erreur est survenue lors de l'enregistrement de l'arbre\n${e}`,
+        actions: [
+          { label: 'ok', value: true },
+        ]
+      });
+    }
+  }
+
   const onFormSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (creating) {
+    if (treeId) {
+      await patchTree(treeId, model);
+    } else {
       await postTree(model);
     }
   }
@@ -173,8 +201,8 @@ export default function TreeEditionPage({ id }) {
 
   return (
     <Template>
-      <Grid container spacing={1} xs={12} className={classes.root}>
-        <Grid item xs={4} spacing={1}>
+      <Grid container spacing={1} className={classes.root}>
+        <Grid item xs={4}>
           <h2>Ajouter un arbre</h2>
           <form noValidate autoComplete="off" onSubmit={onFormSubmit}>
             <Grid container spacing={1}>
@@ -224,8 +252,8 @@ export default function TreeEditionPage({ id }) {
                   onChange={(e) => setFormElementValue('x', e.target.value)}
                 />
               </Grid>
-              <Grid item justify="flex-end" alignItems="flex-start">
-                <Button type="submit" variant="contained">{creating ? 'enregistrer' : 'modifier'}</Button>
+              <Grid item>
+                <Button type="submit" variant="contained">{treeId ? 'modifier' : 'enregistrer'}</Button>
               </Grid>
             </Grid>
           </form>
