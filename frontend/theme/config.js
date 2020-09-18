@@ -5,10 +5,10 @@ const themes = {
     palette: {
       type: "light",
       primary: {
-        main: "#01685a",
+        main: "#009688",
       },
       secondary: {
-        main: "#19857b",
+        main: "#6d4c41",
       },
       toolbar: {
         main: "#fff",
@@ -19,10 +19,10 @@ const themes = {
     palette: {
       type: "dark",
       primary: {
-        main: "#fff",
+        main: "#80cbc4",
       },
       secondary: {
-        main: "#19857b",
+        main: "#bcaaa4",
       },
       toolbar: {
         main: "#000",
