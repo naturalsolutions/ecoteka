@@ -171,7 +171,7 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
       {step === "importing" && (
         <ETKImportImporting
           geofile={geofile}
-          importingText={`En important ${geofile.original_name}...`}
+          importingText={`Import en cours ${geofile.original_name}...`}
           onImported={onImported}
         />
       )}
