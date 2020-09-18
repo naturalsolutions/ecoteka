@@ -30,6 +30,7 @@ from .geo_file import (
 )
 from .tree import (
     Tree,
+    TreePost,
     TreeCreate,
     TreeUpdate,
     TreeImportFromGeofile

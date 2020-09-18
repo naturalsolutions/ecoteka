@@ -314,7 +314,9 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                     Tous les arbres
                   </Button>
                 </Link>
-                <Button size="small">Ajouter un arbre</Button>
+                <Link href="/treeedition" passHref>
+                  <Button size="small">Ajouter un arbre</Button>
+                </Link>
                 <Button size="small">Créer un espace de plantation</Button>
               </div>
             </div>
