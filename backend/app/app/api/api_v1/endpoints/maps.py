@@ -42,7 +42,7 @@ def generate_style(
         style["sources"]["osm"] = {
             "type": "vector",
             "tiles": [
-                f"{settings.TILES_SERVER}/osm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
+                f"{settings.TILES_SERVER}/ossssm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
             ],
             "minzoom": 0,
             "maxzoom": 13
@@ -68,6 +68,8 @@ def generate_style(
                 user_in_db = crud.user.get(db, id=token_data.sub)
             except:
                 pass
+
+        conn = None
 
         if user_in_db:
             try:
@@ -106,6 +108,7 @@ def generate_style(
             except:
                 pass
             finally:
-                conn.close()
+                if conn:
+                    conn.close()
 
         return style

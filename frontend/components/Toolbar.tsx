@@ -6,9 +6,9 @@ import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import Popover from '@material-ui/core/Popover';
-import Divider from '@material-ui/core/Divider';
-import MoodIcon from '@material-ui/icons/Mood';
+import Popover from "@material-ui/core/Popover";
+import Divider from "@material-ui/core/Divider";
+import MoodIcon from "@material-ui/icons/Mood";
 import dynamic from "next/dynamic";
 import ETKContact from "./Contact";
 import ETKLogout from "./Logout";
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
   userInfosPaper: {
     padding: 10,
-    textAlign: 'center'
+    textAlign: "center",
   },
   navBar: {
     display: "flex",
@@ -153,44 +153,49 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   });
 
   const renderUserInfos = () => {
-    return <Popover 
-      classes={{
-        paper: classes.userInfosPaper
-      }}
-      open={isUserInfosOpen}
-      anchorEl={userInfosAnchorEl}
-      onClose={() => {
-        setUserInfosAnchorEl(null);
-      }}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-    >
-      <p><MoodIcon /></p>
-      {user.full_name && <p>{user.full_name}</p>}
-      <p>{user.email}</p>
-      <div>
-        <Button
-          onClick={(e) => {
-            setUserInfosAnchorEl(null);
-            apiRest.auth.logout();
-            setUser(null);
-          }}
-        >
-          {props.logoutText}
-        </Button>
-      </div>
-    </Popover>
-  }
+    return (
+      <Popover
+        classes={{
+          paper: classes.userInfosPaper,
+        }}
+        open={isUserInfosOpen}
+        anchorEl={userInfosAnchorEl}
+        onClose={() => {
+          setUserInfosAnchorEl(null);
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <p>
+          <MoodIcon />
+        </p>
+        {user.full_name && <p>{user.full_name}</p>}
+        <p>{user.email}</p>
+        <div>
+          <Button
+            onClick={(e) => {
+              setUserInfosAnchorEl(null);
+              apiRest.auth.logout();
+              setUser(null);
+            }}
+          >
+            {props.logoutText}
+          </Button>
+        </div>
+      </Popover>
+    );
+  };
 
   const renderWhenSession = () => {
     //TODO Find something to display in any case ?
-    const displayName = user.full_name || user.email.substr(0, user.email.indexOf('@'));
+    const displayName =
+      user.full_name || user.email.substr(0, user.email.indexOf("@"));
     return (
       <React.Fragment>
         {/* <ETKLogout logoutText={props.logoutText} /> */}
@@ -207,15 +212,19 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           </Button>
         ) : null}
         {/* TODO apply theme on backgroundColor */}
-        <Divider orientation="vertical" flexItem style={{
-          backgroundColor: '#FFF'
-        }} />
+        <Divider
+          orientation="vertical"
+          flexItem
+          style={{
+            backgroundColor: "#FFF",
+          }}
+        />
         <Button
-            className={classes.toolbarButton}
-            onClick={(e) => {
-              setUserInfosAnchorEl(e.currentTarget);
-            }}
-          >
+          className={classes.toolbarButton}
+          onClick={(e) => {
+            setUserInfosAnchorEl(e.currentTarget);
+          }}
+        >
           {displayName}
         </Button>
         {renderUserInfos()}
@@ -316,26 +325,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 </Link>
                 <Link href="/treeedition" passHref>
                   <Button size="small">Ajouter un arbre</Button>
-                </Link>
-                <Button size="small">Créer un espace de plantation</Button>
-              </div>
-            </div>
-            <div>
-              <Button
-                color="primary"
-                className={getLevel1ClassNames("intervention")}
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-              >
-                INTERVENTIONS
-              </Button>
-              <div className="level-2">
-                <Button size="small">Calendrier des interventions</Button>
-                <Link href="/?drawer=intervention_request" passHref>
-                  <Button size="small" component="a">
-                    Demander une intervention
-                  </Button>
                 </Link>
               </div>
             </div>

@@ -10,7 +10,13 @@ export default function ImportsPage() {
   const { user, isLoading } = useAppContext();
   const router = useRouter();
   const [rows, setRows] = useState([]);
-  const headers = ["Nom du fichier", "Date de l'import", "Status de l'import"];
+  const headers = [
+    "Nom du fichier",
+    "Arbres",
+    "CRS",
+    "Date de l'import",
+    "Status de l'import",
+  ];
 
   const onDelete = async (selected) => {
     try {
