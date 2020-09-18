@@ -1,5 +1,5 @@
 import { useState, createRef, useEffect } from "react";
-import { Toolbar, Drawer, makeStyles } from "@material-ui/core";
+import { Toolbar, Grid, makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
 
 import ETKSidebar from "../components/Sidebar";
@@ -12,7 +12,6 @@ import ETKImport from "../components/Import/Index.tsx";
 import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
 
-import speces from "../public/assets/speces.json";
 import layersStyle from "../public/assets/layersStyle.json";
 import { apiRest } from "../lib/api";
 
@@ -36,19 +35,6 @@ export default function IndexPage({ drawer }) {
   useEffect(() => {
     toggleMapTheme(appContext.theme);
   }, [appContext]);
-
-  const onFilterSpecies = (values) => {
-    if (!values.length) {
-      mapRef.current.map.setFilter("ecoteka-data", null);
-      return;
-    }
-
-    mapRef.current.map.setFilter("ecoteka-data", [
-      "in",
-      "genre_latin",
-      ...values,
-    ]);
-  };
 
   const onMapClick = (map, e) => {
     const bbox = [
@@ -146,6 +132,7 @@ export default function IndexPage({ drawer }) {
 
   const renderImport = (
     <ETKImport
+      map={mapRef}
       tooltipcontent={[
         "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes",
         "- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
@@ -162,11 +149,9 @@ export default function IndexPage({ drawer }) {
 
   const renderSidebar = (
     <ETKSidebar
-      speces={speces}
       activeTab={activeTab}
       currentGenre={currentGenre}
       currentProperties={currentProperties}
-      onFilterSpecies={onFilterSpecies}
       onTabChange={setActiveTab}
     />
   );
@@ -182,22 +167,31 @@ export default function IndexPage({ drawer }) {
 
   return (
     <Template>
-      <div className={classes.main}>
-        <ETKMap
-          ref={mapRef}
-          styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
-          onMapClick={onMapClick}
-          onStyleData={onMapLoaded}
-        />
-        <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
-        <ETKMapGeolocateFab map={mapRef} />
-        <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
-      </div>
-      <Drawer variant="persistent" open>
-        <Toolbar variant="dense" />
-        {user && <Toolbar variant="dense" />}
-        {switchRenderDrawer(drawer)}
-      </Drawer>
+      <Grid
+        container
+        justify="flex-start"
+        alignItems="stretch"
+        className={classes.main}
+      >
+        <Grid
+          item
+          xs
+          style={{ flexBasis: "auto", flexGrow: 0, background: "#fff" }}
+        >
+          {switchRenderDrawer(drawer)}
+        </Grid>
+        <Grid item xs style={{ position: "relative" }}>
+          <ETKMap
+            ref={mapRef}
+            styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
+            onMapClick={onMapClick}
+            onStyleData={onMapLoaded}
+          />
+          <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+          <ETKMapGeolocateFab map={mapRef} />
+          <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
+        </Grid>
+      </Grid>
     </Template>
   );
 }

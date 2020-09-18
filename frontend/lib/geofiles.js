@@ -3,6 +3,13 @@ class Geofiles {
     this.api = api;
   }
 
+  async get(name) {
+    const response = await this.api.get(`/geo_files/${name}`);
+    const json = await response.json();
+
+    return json;
+  }
+
   async getAll() {
     const response = await this.api.get("/geo_files/");
     const json = await response.json();
