@@ -1,6 +1,6 @@
 import { useState, createRef, useEffect, Component, useCallback } from "react";
 import { makeStyles } from "@material-ui/core";
-import { apiRest as api} from "../lib/api";
+import { apiRest as api } from "../lib/api";
 
 import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
@@ -31,7 +31,7 @@ export default function TreeEditionPage({ id }) {
   const alertRef = createRef();
   const classes = useStyles();
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const {appContext, setAppContext, user} = useAppContext();
+  const { appContext, setAppContext, user } = useAppContext();
   const [treeId, setTreeId] = useState(id);
   const initialModel = {
     scientific_name: '',
@@ -40,6 +40,10 @@ export default function TreeEditionPage({ id }) {
   };
   const [model, setModel] = useState(initialModel);
   const [marker, setMarker] = useState();
+  
+  const resetModel = () => {
+    setModel(initialModel);
+  }
 
   useEffect(() => {
     const _m = new mapboxgl.Marker({ draggable: true })
@@ -47,8 +51,6 @@ export default function TreeEditionPage({ id }) {
       .addTo(mapRef.current.map);
 
     setMarker(_m);
-
-    console.log('alert ref', alertRef, mapRef);
   }, []);
 
   useEffect(() => {
@@ -71,10 +73,9 @@ export default function TreeEditionPage({ id }) {
   }
 
   const postTree = async (model) => {
-    if (treeId) { return; }
     try {
       const response = await api.trees.post(model);
-      
+
 
       alertRef.current.create({
         title: 'Success',
@@ -104,7 +105,7 @@ export default function TreeEditionPage({ id }) {
   }
 
   const patchTree = async (id, model) => {
-    if (!treeId) { return; }
+    if (!id) { return; }
     try {
       const response = await api.trees.patch(id, model);
 
@@ -124,6 +125,27 @@ export default function TreeEditionPage({ id }) {
         actions: [
           { label: 'ok', value: true },
         ]
+      });
+    }
+  }
+
+  const deleteTree = (id) => {
+    try {
+      api.trees.delete(id);
+
+      alertRef.current.create({
+        title: 'Success',
+        message: 'L\'arbre a été supprimé.',
+        actions: [{ label: 'ok', value: null }]
+      });
+
+      setTreeId(null);
+      resetModel();
+    } catch (e) {
+      alertRef.current.create({
+        title: 'Erreur',
+        message: `Erreur lors de la suppression de l'arbre ${e}.`,
+        actions: [{ label: 'ok', value: null }]
       });
     }
   }
@@ -199,6 +221,17 @@ export default function TreeEditionPage({ id }) {
     return () => marker.off('dragend', onMarkerDragEnd);
   }, [onMarkerDragEnd]);
 
+  const Controls = (props) => {
+    if (props.id) {
+      return [
+        <Button type="submit" variant="contained" disableElevation>modifier</Button>,
+        <Button variant="contained" disableElevation onClick={e => deleteTree(props.id)}>supprimer</Button>
+      ];
+    } else {
+      return <Button variant="contained" type="submit" disableElevation>ajouter</Button>
+    }
+  }
+
   return (
     <Template>
       <Grid container spacing={1} className={classes.root}>
@@ -252,8 +285,8 @@ export default function TreeEditionPage({ id }) {
                   onChange={(e) => setFormElementValue('x', e.target.value)}
                 />
               </Grid>
-              <Grid item>
-                <Button type="submit" variant="contained">{treeId ? 'modifier' : 'enregistrer'}</Button>
+              <Grid container alignItems="flex-start" justify="flex-end" direction="row">
+                <Controls id={treeId} />
               </Grid>
             </Grid>
           </form>
