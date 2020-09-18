@@ -69,6 +69,8 @@ def generate_style(
             except:
                 pass
 
+        conn = None
+
         if user_in_db:
             try:
                 organization = crud.organization.get(db, user_in_db.organization_id)
@@ -106,6 +108,7 @@ def generate_style(
             except:
                 pass
             finally:
-                conn.close()
+                if conn:
+                    conn.close()
 
         return style

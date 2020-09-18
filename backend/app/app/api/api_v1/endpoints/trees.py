@@ -11,11 +11,16 @@ from fastapi import (
 )
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
+import geopandas as gpd
+import numpy as np
 
 from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
-from app.tasks import import_geofile
+from app.tasks import (
+    import_geofile,
+    create_mbtiles
+)
 
 import logging
 router = APIRouter()
@@ -42,7 +47,7 @@ def import_from_geofile(
     background_tasks: BackgroundTasks
 ) -> Any:
     """
-    import trees from geofile 
+    import trees from geofile
     """
     geofile = crud.geo_file.get_by_name(db, name=name)
 
@@ -129,5 +134,29 @@ def delete(
 ) -> Any:
     """Deletes a tree"""
     if get_tree_if_authorized(db, current_user, tree_id):
-        logging.info(f'tree id {tree_id}')
         return crud.crud_tree.tree.remove(db, id = tree_id).to_xy()
+
+@router.get("/get-centroid-organization/{organization_id}", response_model=schemas.Coordinate)
+def get_center_from_organization(
+    *,
+    db: Session = Depends(deps.get_db),
+    organization_id: int,
+    current_user: models.User = Depends(deps.get_current_active_user)
+) -> Any:
+    """
+    find centroid of Organization
+    """
+    sql = f'SELECT * FROM public.tree WHERE organization_id = {organization_id}'
+    df = gpd.read_postgis(sql, db.bind)
+
+    X = df.geom.apply(lambda p: p.x)
+    Y = df.geom.apply(lambda p: p.y)
+    xCenter = np.sum(X) / len(X)
+    yCenter = np.sum(Y) / len(Y)
+
+    coordinate = schemas.Coordinate(
+        longitude=xCenter,
+        latitude=yCenter,
+    )
+
+    return coordinate

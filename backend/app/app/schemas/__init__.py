@@ -40,12 +40,16 @@ from .organization import (
     OrganizationCreate,
     OrganizationUpdate
 )
+from .coordinate import (
+    Coordinate
+)
 
 __all__ = [
     "ContactCreate",
     "ContactDB",
     "ContactOut",
     "ContactUpdate",
+    "Coordinate",
     "GeoFile",
     "GeoFileCreate",
     "GeoFileUpdate",
