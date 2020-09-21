@@ -11,7 +11,6 @@ import Divider from "@material-ui/core/Divider";
 import MoodIcon from "@material-ui/icons/Mood";
 import dynamic from "next/dynamic";
 import ETKContact from "./Contact";
-import ETKLogout from "./Logout";
 import ETKSignin from "./SignIn";
 import Link from "next/link";
 import { useRouter } from "next/router";
