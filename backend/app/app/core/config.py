@@ -103,6 +103,7 @@ class Settings(BaseSettings):
     TILES_SERVER: str = 'https://dev.ecoteka.org/tiles'
     GEO_FILES_ALLOWED: str = 'geojson,zip,csv,xls,xlsx'
     CELERY_BROKER_URL: str
+    CELERY_BACKEND: str
 
     class Config:
         case_sensitive = True
