@@ -6,8 +6,7 @@ from fastapi import (
     APIRouter,
     Body,
     Depends,
-    HTTPException,
-    BackgroundTasks
+    HTTPException
 )
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
@@ -17,10 +16,12 @@ import numpy as np
 from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
+from app.core.celery_app import celery_app
 from app.tasks import (
     import_geofile,
     create_mbtiles
 )
+from app.worker import celery_app, import_geofile_task, create_mbtiles_task
 
 import logging
 router = APIRouter()
@@ -43,8 +44,7 @@ def import_from_geofile(
     *,
     db: Session = Depends(deps.get_db),
     name: str,
-    current_user: models.User = Depends(deps.get_current_active_user),
-    background_tasks: BackgroundTasks
+    current_user: models.User = Depends(deps.get_current_active_user)
 ) -> Any:
     """
     import trees from geofile
@@ -69,11 +69,7 @@ def import_from_geofile(
             status_code=409,
             detail=f"{geofile.name} has already started an import process")
 
-    background_tasks.add_task(
-        import_geofile,
-        db=db,
-        geofile=geofile
-    )
+    import_geofile_task.delay(name)
 
     return geofile
 
@@ -101,7 +97,10 @@ def add(
         user_id=current_user.id,
         organization_id=current_user.organization_id)
     
-    return crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
+    response = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
+    
+    create_mbtiles_task.delay(current_user.organization_id)
+    return response
 
 @router.patch('/{tree_id}', response_model=schemas.tree.Tree_xy)
 def update(
@@ -115,7 +114,7 @@ def update(
     tree_in_db = get_tree_if_authorized(db, current_user, tree_id)
     json_data: dict = jsonable_encoder(update_data)
 
-    return crud.crud_tree.tree.update(
+    response = crud.crud_tree.tree.update(
         db,
         db_obj=tree_in_db,
         obj_in=dict({
@@ -126,15 +125,21 @@ def update(
         
     ).to_xy()
 
+    create_mbtiles_task.delay(current_user.organization_id)
+    return response
+
 @router.delete('/{tree_id}', response_model=schemas.tree.Tree_xy)
 def delete(
     tree_id: int,
     db: Session = Depends(deps.get_db),
-    current_user: models = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(deps.get_current_active_user)
 ) -> Any:
     """Deletes a tree"""
     if get_tree_if_authorized(db, current_user, tree_id):
-        return crud.crud_tree.tree.remove(db, id = tree_id).to_xy()
+        response = crud.crud_tree.tree.remove(db, id = tree_id).to_xy()
+
+        create_mbtiles_task.delay(current_user.organization_id)
+        return response
 
 @router.get("/get-centroid-organization/{organization_id}", response_model=schemas.Coordinate)
 def get_center_from_organization(

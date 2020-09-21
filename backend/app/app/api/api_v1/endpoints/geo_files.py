@@ -9,8 +9,7 @@ from fastapi import (
     Depends,
     HTTPException,
     File,
-    UploadFile,
-    BackgroundTasks
+    UploadFile
 )
 
 from sqlalchemy.orm import Session
@@ -20,6 +19,7 @@ from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
 from app.tasks import create_mbtiles
+from app.worker import create_mbtiles_task
 
 router = APIRouter()
 
@@ -143,15 +143,13 @@ def delete_geo_file(
     *,
     name: str,
     db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
-    background_tasks: BackgroundTasks
+    current_user: models.User = Depends(deps.get_current_active_user)
 ) -> Any:
     """
     Delete one geofile
     """
 
     geofile = crud.geo_file.get_by_name(db, name=name)
-    organization = crud.organization.get(db, geofile.organization_id)
 
     if not geofile:
         raise HTTPException(
@@ -165,11 +163,6 @@ def delete_geo_file(
         pass
 
     crud.geo_file.remove(db, id=geofile.id)
-
-    background_tasks.add_task(
-        create_mbtiles,
-        db=db,
-        organization=organization,
-    )
+    create_mbtiles_task.delay(geofile.organization_id)
 
     return name
