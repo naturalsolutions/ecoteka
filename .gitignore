@@ -5,3 +5,4 @@ backend/app/app/uploaded_files
 backups
 acme.json
 tiles
+redis

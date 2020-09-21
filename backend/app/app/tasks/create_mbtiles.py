@@ -7,10 +7,11 @@ import sqlite3
 from sqlalchemy.orm import Session
 
 
+from app.core.celery_app import celery_app
 from app.models import Organization
 from app.crud import user
 
-
+@celery_app.task
 def create_mbtiles(db: Session, organization: Organization):
     try:
         geojson = f"/app/tiles/private/{organization.slug}.geojson"

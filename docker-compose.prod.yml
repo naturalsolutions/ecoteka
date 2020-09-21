@@ -90,6 +90,11 @@ services:
     volumes:
       - ./data/uploaded_files:${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
 
+  celery_worker:
+    volumes:
+      - ./data/uploaded_files:${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
+    
+
   frontend:
     labels:
       - traefik.http.routers.frontend.entrypoints=websecure
