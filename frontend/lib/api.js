@@ -23,6 +23,7 @@ const api = {
   get,
   post,
   put,
+  patch,
   delete: _delete,
   getAuthorizationHeader,
   getToken,
@@ -69,6 +70,20 @@ async function get(path, headers) {
 async function post(path, headers, body) {
   const requestOptions = {
     method: "POST",
+    headers: {
+      ...headers,
+      ...getAuthorizationHeader(),
+    },
+    body: body,
+  };
+  return fetch(`${apiUrl}${path}`, requestOptions)
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+async function patch(path, headers, body) {
+  const requestOptions = {
+    method: "PATCH",
     headers: {
       ...headers,
       ...getAuthorizationHeader(),
