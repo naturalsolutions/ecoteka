@@ -13,7 +13,7 @@ class Tree {
 
   async get(id) {
     const url = `trees/${id}`;
-    const response = await this.api.delete(url);
+    const response = await this.api.get(url);
 
     return await response.json();
   }

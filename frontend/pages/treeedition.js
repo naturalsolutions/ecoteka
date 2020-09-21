@@ -46,6 +46,9 @@ export default function TreeEditionPage({ id }) {
   }
 
   useEffect(() => {
+    if (treeId) {
+      getTree(treeId);
+    }
     const _m = new mapboxgl.Marker({ draggable: true })
       .setLngLat([model.x, model.y])
       .addTo(mapRef.current.map);
@@ -70,6 +73,13 @@ export default function TreeEditionPage({ id }) {
   }
   const setModelLngLat = (x, y) => {
     setModel({ ...model, x, y });
+  }
+
+  const getTree = async (id) => {
+    const model = await api.trees.get(id);
+
+    setTreeId(id);
+    setModel(model);
   }
 
   const postTree = async (model) => {
