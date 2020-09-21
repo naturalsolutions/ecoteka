@@ -4,7 +4,6 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 export interface ETKProgressBarProps {
   linearProgressValue: number;
-  message: string;
 }
 
 const useStyle = makeStyles(() =>
@@ -22,15 +21,12 @@ const ETKProgressBar: React.FC<ETKProgressBarProps> = (props) => {
   let properties = {};
 
   return (
-    <React.Fragment>
-      <LinearProgress
-        variant="determinate"
-        value={props.linearProgressValue}
-        {...properties}
-        className={classes.root}
-      />
-      <em>{props.message}</em>
-    </React.Fragment>
+    <LinearProgress
+      variant="determinate"
+      value={props.linearProgressValue}
+      {...properties}
+      className={classes.root}
+    />
   );
 };
 

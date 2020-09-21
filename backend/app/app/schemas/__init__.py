@@ -30,6 +30,7 @@ from .geo_file import (
 )
 from .tree import (
     Tree,
+    TreePost,
     TreeCreate,
     TreeUpdate,
     TreeImportFromGeofile
@@ -39,12 +40,16 @@ from .organization import (
     OrganizationCreate,
     OrganizationUpdate
 )
+from .coordinate import (
+    Coordinate
+)
 
 __all__ = [
     "ContactCreate",
     "ContactDB",
     "ContactOut",
     "ContactUpdate",
+    "Coordinate",
     "GeoFile",
     "GeoFileCreate",
     "GeoFileUpdate",

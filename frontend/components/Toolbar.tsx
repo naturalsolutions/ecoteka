@@ -322,26 +322,8 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                     Tous les arbres
                   </Button>
                 </Link>
-                <Button size="small">Ajouter un arbre</Button>
-                <Button size="small">Créer un espace de plantation</Button>
-              </div>
-            </div>
-            <div>
-              <Button
-                color="primary"
-                className={getLevel1ClassNames("intervention")}
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-              >
-                INTERVENTIONS
-              </Button>
-              <div className="level-2">
-                <Button size="small">Calendrier des interventions</Button>
-                <Link href="/?drawer=intervention_request" passHref>
-                  <Button size="small" component="a">
-                    Demander une intervention
-                  </Button>
+                <Link href="/treeedition" passHref>
+                  <Button size="small">Ajouter un arbre</Button>
                 </Link>
               </div>
             </div>
