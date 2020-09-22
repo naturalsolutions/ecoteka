@@ -24,7 +24,7 @@ __all__ = [
     "contact",
     "CRUDBase",
     "geo_file",
-    "organization"
+    "organization",
     "registration_link",
     "tree",
     "user",

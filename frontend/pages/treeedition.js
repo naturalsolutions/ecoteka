@@ -304,7 +304,7 @@ export default function TreeEditionPage({ id }) {
         <Grid item xs={8}>
           <ETKMap
             ref={mapRef}
-            styleSource="/assets/style.json"
+            styleSource={`/api/v1/maps/style?token=${api.getToken()}`}
             onMapClick={onMapClick}
             onStyleData={onMapLoaded}
             onGeolocate={onGeolocate}
