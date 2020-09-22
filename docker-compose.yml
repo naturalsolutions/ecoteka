@@ -38,6 +38,7 @@ services:
     command: bash /app/worker-start.sh
     volumes:
       - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
+      - ${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}:/app/app/uploaded_files
     labels:
       - traefik.enable=true
       - traefik.http.routers.celery_worker.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
@@ -68,7 +69,6 @@ services:
       - SMTP_PORT=${NS_ECOTEKA_BACKEND_SMTP_PORT}
       - SMTP_TLS=${NS_ECOTEKA_BACKEND_SMTP_TLS}
       - SMTP_USER=${NS_ECOTEKA_BACKEND_SMTP_USER}
-      - UPLOADED_FILES_FOLDER=${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
       - SECRET_KEY=${NS_ECOTEKA_BACKEND_SECRET_KEY}
       - TILES_FOLDER=${NS_ECOTEKA_BACKEND_TILES_FOLDER}
       - TILES_SERVER=${NS_ECOTEKA_BACKEND_TILES_SERVER}
@@ -81,6 +81,7 @@ services:
       - traefik
     volumes:
       - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
+      - ${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}:/app/app/uploaded_files
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.rule=PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
@@ -111,7 +112,6 @@ services:
       - SMTP_PORT=${NS_ECOTEKA_BACKEND_SMTP_PORT}
       - SMTP_TLS=${NS_ECOTEKA_BACKEND_SMTP_TLS}
       - SMTP_USER=${NS_ECOTEKA_BACKEND_SMTP_USER}
-      - UPLOADED_FILES_FOLDER=${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}
       - SECRET_KEY=${NS_ECOTEKA_BACKEND_SECRET_KEY}
       - TILES_FOLDER=${NS_ECOTEKA_BACKEND_TILES_FOLDER}
       - TILES_SERVER=${NS_ECOTEKA_BACKEND_TILES_SERVER}
