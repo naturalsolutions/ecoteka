@@ -9,6 +9,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
+from contextlib import contextmanager
 
 from app.crud import (
     user
@@ -39,6 +40,7 @@ def get_db() -> Generator:
     finally:
         db.close()
 
+dbcontext = contextmanager(get_db)
 
 def get_current_user(
     db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)

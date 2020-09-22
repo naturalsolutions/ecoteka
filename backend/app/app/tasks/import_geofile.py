@@ -12,8 +12,8 @@ from pyproj import Transformer
 
 from app import crud
 from app.models import GeoFile, GeoFileStatus, Tree
+from app.api import deps
 from .create_mbtiles import create_mbtiles
-
 
 def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
     tree = Tree(
@@ -86,8 +86,8 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
             db.commit()
     db.commit()
 
-
 def import_geofile(db: Session, geofile: GeoFile):
+    logging.info('running geofile import task')
     try:
         geofile.status = GeoFileStatus.IMPORTING.value
         geofile.importing_start = datetime.datetime.utcnow()

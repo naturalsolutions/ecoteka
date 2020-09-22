@@ -6,10 +6,8 @@ import geopandas as gpd
 import sqlite3
 from sqlalchemy.orm import Session
 
-
 from app.models import Organization
 from app.crud import user
-
 
 def create_mbtiles(db: Session, organization: Organization):
     try:
