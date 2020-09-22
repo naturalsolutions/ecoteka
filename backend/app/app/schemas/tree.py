@@ -11,6 +11,12 @@ class TreePost(BaseModel):
     scientific_name: Optional[str]
     taxref_id: Optional[int]
 
+class TreePatch(BaseModel):
+    x: Optional[int]
+    y: Optional[int]
+    scientific_name: Optional[str]
+    taxref_id: Optional[int]
+
 class TreeMeta(BaseModel):
     scientific_name: Optional[str]
     taxref_id: Optional[int]

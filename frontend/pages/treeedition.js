@@ -1,6 +1,6 @@
 import { useState, createRef, useEffect, Component, useCallback } from "react";
 import { makeStyles } from "@material-ui/core";
-import { apiRest as api} from "../lib/api";
+import { apiRest as api } from "../lib/api";
 
 import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
@@ -27,11 +27,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function TreeEditionPage({ id }) {
-  const mapRef = createRef(),
-    alertRef = createRef();
+  const mapRef = createRef();
+  const alertRef = createRef();
   const classes = useStyles();
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const { appContext, setAppContext, user } = useAppContext();
+  const [treeId, setTreeId] = useState(id);
   const initialModel = {
     scientific_name: '',
     y: 0,
@@ -39,9 +40,15 @@ export default function TreeEditionPage({ id }) {
   };
   const [model, setModel] = useState(initialModel);
   const [marker, setMarker] = useState();
-  const [creating, setCreating] = useState(!Boolean(id));
+  
+  const resetModel = () => {
+    setModel(initialModel);
+  }
 
   useEffect(() => {
+    if (treeId) {
+      getTree(treeId);
+    }
     const _m = new mapboxgl.Marker({ draggable: true })
       .setLngLat([model.x, model.y])
       .addTo(mapRef.current.map);
@@ -68,11 +75,17 @@ export default function TreeEditionPage({ id }) {
     setModel({ ...model, x, y });
   }
 
+  const getTree = async (id) => {
+    const model = await api.trees.get(id);
+
+    setTreeId(id);
+    setModel(model);
+  }
+
   const postTree = async (model) => {
-    if (!creating) { return; }
     try {
       const response = await api.trees.post(model);
-      id = response.id;
+
 
       alertRef.current.create({
         title: 'Success',
@@ -84,9 +97,8 @@ export default function TreeEditionPage({ id }) {
         onDismiss: (v) => {
           if (v) {
             setModel(initialModel);
-            setCreating(true);
           } else {
-            setCreating(false);
+            setTreeId(response.id);
           }
         }
       });
@@ -102,11 +114,59 @@ export default function TreeEditionPage({ id }) {
     }
   }
 
+  const patchTree = async (id, model) => {
+    if (!id) { return; }
+    try {
+      const response = await api.trees.patch(id, model);
+
+      alertRef.current.create({
+        title: 'Success',
+        message: `Votre arbre a été édité.`,
+        actions: [
+          { label: 'oui', value: true }
+        ],
+        onDismiss: (v) => null
+      });
+
+    } catch (e) {
+      alertRef.current.create({ //refact for reuse
+        title: 'Erreur',
+        message: `Une erreur est survenue lors de l'enregistrement de l'arbre\n${e}`,
+        actions: [
+          { label: 'ok', value: true },
+        ]
+      });
+    }
+  }
+
+  const deleteTree = (id) => {
+    try {
+      api.trees.delete(id);
+
+      alertRef.current.create({
+        title: 'Success',
+        message: 'L\'arbre a été supprimé.',
+        actions: [{ label: 'ok', value: null }]
+      });
+
+      setTreeId(null);
+      resetModel();
+    } catch (e) {
+      alertRef.current.create({
+        title: 'Erreur',
+        message: `Erreur lors de la suppression de l'arbre ${e}.`,
+        actions: [{ label: 'ok', value: null }]
+      });
+    }
+  }
+
   const onFormSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (creating) {
+    if (treeId) {
+      await patchTree(treeId, model);
+    } else {
       await postTree(model);
     }
   }
@@ -171,10 +231,21 @@ export default function TreeEditionPage({ id }) {
     return () => marker.off('dragend', onMarkerDragEnd);
   }, [onMarkerDragEnd]);
 
+  const Controls = (props) => {
+    if (props.id) {
+      return [
+        <Button type="submit" variant="contained" disableElevation>modifier</Button>,
+        <Button variant="contained" disableElevation onClick={e => deleteTree(props.id)}>supprimer</Button>
+      ];
+    } else {
+      return <Button variant="contained" type="submit" disableElevation>ajouter</Button>
+    }
+  }
+
   return (
     <Template>
-      <Grid container spacing={1} xs={12} className={classes.root}>
-        <Grid item xs={4} spacing={1}>
+      <Grid container spacing={1} className={classes.root}>
+        <Grid item xs={4}>
           <h2>Ajouter un arbre</h2>
           <form noValidate autoComplete="off" onSubmit={onFormSubmit}>
             <Grid container spacing={1}>
@@ -224,8 +295,8 @@ export default function TreeEditionPage({ id }) {
                   onChange={(e) => setFormElementValue('x', e.target.value)}
                 />
               </Grid>
-              <Grid item justify="flex-end" alignItems="flex-start">
-                <Button type="submit" variant="contained">{creating ? 'enregistrer' : 'modifier'}</Button>
+              <Grid container alignItems="flex-start" justify="flex-end" direction="row">
+                <Controls id={treeId} />
               </Grid>
             </Grid>
           </form>

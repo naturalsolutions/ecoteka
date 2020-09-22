@@ -11,13 +11,31 @@ from fastapi import (
 )
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
+import geopandas as gpd
+import numpy as np
 
 from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
-from app.tasks import import_geofile
+from app.tasks import (
+    import_geofile,
+    create_mbtiles
+)
 
+import logging
 router = APIRouter()
+
+def get_tree_if_authorized(db: Session, current_user: models.User, tree_id: int):
+    '''Returns a tree if it exists and the user has access rights to it'''
+    tree_in_db = crud.crud_tree.tree.get(db, tree_id)
+    
+    if not tree_in_db:
+        raise HTTPException(status_code=404, detail='Tree does not exist')
+
+    if tree_in_db.organization_id != current_user.organization_id:
+        raise HTTPException(status_code=403, detail='Cannot request a tree that does not belong to your organization')
+
+    return tree_in_db
 
 
 @router.post("/import-from-geofile", response_model=schemas.GeoFile)
@@ -29,7 +47,7 @@ def import_from_geofile(
     background_tasks: BackgroundTasks
 ) -> Any:
     """
-    import trees from geofile 
+    import trees from geofile
     """
     geofile = crud.geo_file.get_by_name(db, name=name)
 
@@ -59,8 +77,16 @@ def import_from_geofile(
 
     return geofile
 
+@router.get('/{tree_id}', response_model=schemas.tree.Tree_xy)
+def get(
+    tree_id: int,
+    db: Session = Depends(deps.get_db),
+    current_user: models = Depends(deps.get_current_active_user)
+) -> Any:
+    """Gets a tree"""
+    return get_tree_if_authorized(db, current_user, tree_id).to_xy()
 
-@router.post('/add', response_model=schemas.tree.Tree_xy)
+@router.post('/', response_model=schemas.tree.Tree_xy)
 def add(
     *,
     db: Session = Depends(deps.get_db),
@@ -69,9 +95,68 @@ def add(
 ) -> Any:
     """Manual tree registration"""
     tree_with_user_info = schemas.TreeCreate(
+        scientific_name = tree.scientific_name,
         geom=f'POINT({tree.x} {tree.y})',
         properties=None,
         user_id=current_user.id,
         organization_id=current_user.organization_id)
     
     return crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
+
+@router.patch('/{tree_id}', response_model=schemas.tree.Tree_xy)
+def update(
+    tree_id: int,
+    *,
+    db: Session = Depends(deps.get_db),
+    update_data: schemas.tree.TreePatch,
+    current_user: models = Depends(deps.get_current_active_user)
+) -> Any:
+    """Update tree info"""
+    tree_in_db = get_tree_if_authorized(db, current_user, tree_id)
+    json_data: dict = jsonable_encoder(update_data)
+
+    return crud.crud_tree.tree.update(
+        db,
+        db_obj=tree_in_db,
+        obj_in=dict({
+            key: json_data[key] for key in json_data if key not in ('x','y')
+            },
+            **(dict(geom = f"POINT({json_data['x']} {json_data['y']})") if json_data['x'] is not None and json_data['y'] is not None else dict())
+        )
+        
+    ).to_xy()
+
+@router.delete('/{tree_id}', response_model=schemas.tree.Tree_xy)
+def delete(
+    tree_id: int,
+    db: Session = Depends(deps.get_db),
+    current_user: models = Depends(deps.get_current_active_user)
+) -> Any:
+    """Deletes a tree"""
+    if get_tree_if_authorized(db, current_user, tree_id):
+        return crud.crud_tree.tree.remove(db, id = tree_id).to_xy()
+
+@router.get("/get-centroid-organization/{organization_id}", response_model=schemas.Coordinate)
+def get_center_from_organization(
+    *,
+    db: Session = Depends(deps.get_db),
+    organization_id: int,
+    current_user: models.User = Depends(deps.get_current_active_user)
+) -> Any:
+    """
+    find centroid of Organization
+    """
+    sql = f'SELECT * FROM public.tree WHERE organization_id = {organization_id}'
+    df = gpd.read_postgis(sql, db.bind)
+
+    X = df.geom.apply(lambda p: p.x)
+    Y = df.geom.apply(lambda p: p.y)
+    xCenter = np.sum(X) / len(X)
+    yCenter = np.sum(Y) / len(Y)
+
+    coordinate = schemas.Coordinate(
+        longitude=xCenter,
+        latitude=yCenter,
+    )
+
+    return coordinate

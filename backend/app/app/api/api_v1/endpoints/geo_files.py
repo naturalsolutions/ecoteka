@@ -9,7 +9,8 @@ from fastapi import (
     Depends,
     HTTPException,
     File,
-    UploadFile
+    UploadFile,
+    BackgroundTasks
 )
 
 from sqlalchemy.orm import Session
@@ -18,6 +19,7 @@ from pydantic import Json
 from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
+from app.tasks import create_mbtiles
 
 router = APIRouter()
 
@@ -36,7 +38,29 @@ def read_geo_files(
                                         user=current_user,
                                         skip=skip,
                                         limit=limit)
+
     return geo_files
+
+
+@router.get("/{name}", response_model=schemas.GeoFile)
+def read_geofile_by_name(
+    *,
+    db: Session = Depends(deps.get_db),
+    name: str,
+    current_user: models.User = Depends(deps.get_current_active_user)
+) -> Any:
+    """
+    Retrieve geo files.
+    """
+    geofile = crud.geo_file.get_by_name(db, name=name)
+
+    if not geofile:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The geofile with name {name} does not exist in the system",
+        )
+
+    return geofile
 
 
 @router.post("/upload", response_model=schemas.GeoFile)
@@ -84,7 +108,6 @@ async def upload_geo_file(
 
         db.add(geofile)
         db.commit()
-
     finally:
         await file.close()
 
@@ -117,9 +140,11 @@ def update_geo_file(
 
 @router.delete("/{name}")
 def delete_geo_file(
+    *,
     name: str,
     db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(deps.get_current_active_user),
+    background_tasks: BackgroundTasks
 ) -> Any:
     """
     Delete one geofile
@@ -136,10 +161,15 @@ def delete_geo_file(
 
     try:
         os.remove(geofile.get_filepath())
-        os.remove(f'{settings.TILES_FOLDER}/private/{organization.slug}.mbtiles')
     except OSError:
         pass
 
     crud.geo_file.remove(db, id=geofile.id)
+
+    background_tasks.add_task(
+        create_mbtiles,
+        db=db,
+        organization=organization,
+    )
 
     return name

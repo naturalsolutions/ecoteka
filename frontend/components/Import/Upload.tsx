@@ -21,16 +21,14 @@ export interface ETKUploadProps {
   tooltipcontent: [string];
   extensionsFileAccepted: [string];
   dropzoneText: string;
-  progressBarMessage: string;
   missingInfo?: [string?];
-  isUploaded: boolean;
-  isReadyToImport: boolean;
-  onUploadProgress?(progress: number): void;
-  onUploaded?(geofile: Geofile): void;
+  step?: string;
   boxContent?: string;
   fileListHint?: string;
   buttonCancelContent?: string;
   buttonUploadContent?: string;
+  onUploadProgress?(progress: number): void;
+  onUploaded?(geofile: Geofile): void;
 }
 
 const defaultProps: ETKUploadProps = {
@@ -40,9 +38,7 @@ const defaultProps: ETKUploadProps = {
   extensionsFileAccepted: [""],
   dropzoneText: "",
   missingInfo: [""],
-  isUploaded: false,
-  progressBarMessage: "",
-  isReadyToImport: false,
+  step: "start",
   boxContent: "Importez vos données",
   fileListHint: "Types de fichiers acceptés :",
   buttonCancelContent: "Annuler",
@@ -131,10 +127,10 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   );
 
   useEffect(() => {
-    if (props.isUploaded) {
+    if (props.step === "uploaded") {
       setFile(null);
     }
-  }, [props.isUploaded]);
+  }, [props.step]);
 
   const htmlTooltip = (
     <React.Fragment>
@@ -218,17 +214,14 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
         </Typography>
       </Grid>
       <Grid container>
-        <ETKProgressBar
-          linearProgressValue={linearProgressValue}
-          message={props.progressBarMessage}
-        />
+        <ETKProgressBar linearProgressValue={linearProgressValue} />
       </Grid>
       <Grid container>
         <Divider />
       </Grid>
       <Grid container>
         <form noValidate autoComplete="off" className={classes.fullwidth}>
-          {!props.isUploaded && !props.missingInfo.length ? (
+          {props.step !== "uploaded" && !props.missingInfo.length ? (
             <Grid container>
               <DropzoneArea
                 acceptedFiles={props.extensionsFileAccepted}
@@ -258,34 +251,36 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
               <Divider className={classes.divider} />
             </React.Fragment>
           ) : null}
-          {file && !(props.missingInfo.length > 0) && !props.isReadyToImport && (
-            <Grid container justify="space-between">
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setFile(null);
-                  setError(null);
+          {file &&
+            !(props.missingInfo.length > 0) &&
+            props.step !== "readyToUpload" && (
+              <Grid container justify="space-between">
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setFile(null);
+                    setError(null);
 
-                  if (xhr?.abort()) {
-                    xhr.abort();
-                  }
+                    if (xhr?.abort()) {
+                      xhr.abort();
+                    }
 
-                  setLinearProgressValue(0);
-                }}
-              >
-                {props.buttonCancelContent}
-              </Button>
-              <Button
-                className={classes.submitbtn}
-                disabled={!file || error !== null || inProgress}
-                color="primary"
-                variant="contained"
-                onClick={onUploadClick}
-              >
-                {props.buttonUploadContent}
-              </Button>
-            </Grid>
-          )}
+                    setLinearProgressValue(0);
+                  }}
+                >
+                  {props.buttonCancelContent}
+                </Button>
+                <Button
+                  className={classes.submitbtn}
+                  disabled={!file || error !== null || inProgress}
+                  color="primary"
+                  variant="contained"
+                  onClick={onUploadClick}
+                >
+                  {props.buttonUploadContent}
+                </Button>
+              </Grid>
+            )}
         </form>
       </Grid>
     </Grid>

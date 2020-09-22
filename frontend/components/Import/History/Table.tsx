@@ -101,8 +101,10 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
                   <Checkbox checked={isItemSelected} />
                 </TableCell>
                 <TableCell scope="row">{row.original_name}</TableCell>
+                <TableCell>{row.count}</TableCell>
+                <TableCell>{row.crs}</TableCell>
                 <TableCell>
-                  {new Date(row.uploaded_date).toLocaleString()}
+                  {new Date(row.imported_date).toLocaleString()}
                 </TableCell>
                 <TableCell>{row.status}</TableCell>
               </TableRow>
