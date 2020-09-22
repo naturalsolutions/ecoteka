@@ -11,10 +11,6 @@ from app.utils import send_new_registration_link_email
 from app.utils import send_new_contact_notification
 from app.utils import send_contact_request_confirmation
 
-@celery_app.task(acks_late=True)
-def test_celery(word: str) -> str:
-    return f"test task return {word}"
-
 @celery_app.task
 def import_geofile_task (geofilename:str):
     with deps.dbcontext() as db:
