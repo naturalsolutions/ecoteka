@@ -48,7 +48,7 @@ export default function IndexPage({ drawer }) {
     });
 
     var features = map.queryRenderedFeatures(bbox, {
-      layers: ["ecoteka-data"],
+      layers: ["ecoteka-data", privateLayer()],
     });
 
     if (features.length) {
@@ -175,8 +175,8 @@ export default function IndexPage({ drawer }) {
       >
         <Grid
           item
-          xs
-          style={{ flexBasis: "auto", flexGrow: 0, background: "#fff" }}
+          xs={3}
+          style={{background: "#fff" }}
         >
           {switchRenderDrawer(drawer)}
         </Grid>
@@ -199,3 +199,7 @@ export default function IndexPage({ drawer }) {
 IndexPage.getInitialProps = ({ query: { drawer } }) => {
   return { drawer };
 };
+function privateLayer() {
+  return "ecoteka-ecoteka";
+}
+
