@@ -46,7 +46,7 @@ export class ETKAlert extends React.Component<IETKAlert, { open: boolean }> {
 /**
  * @todo needs a better implementation to prevent stacking alers on the dom
  */
-export default class ETKAlertController extends React.Component<{ props }, { alerts: IETKAlert[] }> {
+export default class ETKAlertController extends React.Component<{}, { alerts: IETKAlert[] }> {
   constructor(props) {
     super(props);
     this.state = { alerts: [] };
