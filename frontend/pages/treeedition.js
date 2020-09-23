@@ -15,6 +15,7 @@ import { useAppContext } from "../providers/AppContext";
 import TextField from "@material-ui/core/TextField";
 
 import mapboxgl from "mapbox-gl";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,13 +27,14 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export default function TreeEditionPage({ id }) {
+export default function TreeEditionPage() {
+  const router = useRouter();
   const mapRef = createRef();
   const alertRef = createRef();
   const classes = useStyles();
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const { appContext, setAppContext, user } = useAppContext();
-  const [treeId, setTreeId] = useState(id);
+  const [treeId, setTreeId] = useState();
   const initialModel = {
     scientific_name: '',
     y: 0,
@@ -46,15 +48,19 @@ export default function TreeEditionPage({ id }) {
   }
 
   useEffect(() => {
-    if (treeId) {
-      getTree(treeId);
+    const id = router.query.id;
+    if (id) {
+      loadTree(id);
     }
+  }, [router.query]);
+
+  useEffect(() => {
     const _m = new mapboxgl.Marker({ draggable: true })
       .setLngLat([model.x, model.y])
       .addTo(mapRef.current.map);
-
+    
     setMarker(_m);
-  }, []);
+  }, [mapRef.current]);
 
   useEffect(() => {
     onThemeToogle(appContext.theme);
@@ -65,7 +71,7 @@ export default function TreeEditionPage({ id }) {
       return;
     }
     marker.setLngLat([model.x, model.y]);
-  }, [model.x, model.y]);
+  }, [model]);
 
 
   const setFormElementValue = (name, value) => {
@@ -74,8 +80,7 @@ export default function TreeEditionPage({ id }) {
   const setModelLngLat = (x, y) => {
     setModel({ ...model, x, y });
   }
-
-  const getTree = async (id) => {
+  const loadTree = async (id) => {
     const model = await api.trees.get(id);
 
     setTreeId(id);
@@ -85,7 +90,6 @@ export default function TreeEditionPage({ id }) {
   const postTree = async (model) => {
     try {
       const response = await api.trees.post(model);
-
 
       alertRef.current.create({
         title: 'Success',
@@ -113,7 +117,6 @@ export default function TreeEditionPage({ id }) {
       });
     }
   }
-
   const patchTree = async (id, model) => {
     if (!id) { return; }
     try {
@@ -138,7 +141,6 @@ export default function TreeEditionPage({ id }) {
       });
     }
   }
-
   const deleteTree = (id) => {
     try {
       api.trees.delete(id);
@@ -159,7 +161,6 @@ export default function TreeEditionPage({ id }) {
       });
     }
   }
-
   const onFormSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -170,8 +171,6 @@ export default function TreeEditionPage({ id }) {
       await postTree(model);
     }
   }
-
-
   const onThemeToogle = (theme) => {
     if (!isMapLoaded) {
       return;
@@ -187,7 +186,6 @@ export default function TreeEditionPage({ id }) {
       }
     }
   };
-
   const onMapClick = (map, e) => {
     const lngLat = e.lngLat;
     setModelLngLat(lngLat.lng, lngLat.lat);
@@ -233,10 +231,10 @@ export default function TreeEditionPage({ id }) {
 
   const Controls = (props) => {
     if (props.id) {
-      return [
-        <Button type="submit" variant="contained" disableElevation>modifier</Button>,
+      return <React.Fragment>
+        <Button type="submit" variant="contained" disableElevation>modifier</Button>
         <Button variant="contained" disableElevation onClick={e => deleteTree(props.id)}>supprimer</Button>
-      ];
+      </React.Fragment>
     } else {
       return <Button variant="contained" type="submit" disableElevation>ajouter</Button>
     }
@@ -245,7 +243,7 @@ export default function TreeEditionPage({ id }) {
   return (
     <Template>
       <Grid container spacing={1} className={classes.root}>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <h2>Ajouter un arbre</h2>
           <form noValidate autoComplete="off" onSubmit={onFormSubmit}>
             <Grid container spacing={1}>
@@ -301,7 +299,7 @@ export default function TreeEditionPage({ id }) {
             </Grid>
           </form>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs>
           <ETKMap
             ref={mapRef}
             styleSource={`/api/v1/maps/style?token=${api.getToken()}`}
@@ -320,7 +318,3 @@ export default function TreeEditionPage({ id }) {
     </Template>
   );
 }
-
-TreeEditionPage.getInitialProps = ({ query: { id } }) => {
-  return { id };
-};

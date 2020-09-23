@@ -20,7 +20,7 @@ class TreePatch(BaseModel):
 class TreeMeta(BaseModel):
     scientific_name: Optional[str]
     taxref_id: Optional[int]
-    properties: Json
+    properties: Any
     geofile_id: Optional[int]
     user_id: int
     organization_id: int
