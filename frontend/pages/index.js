@@ -47,9 +47,8 @@ export default function IndexPage({ drawer }) {
       query: { drawer: null },
     });
 
-    var features = map.queryRenderedFeatures(bbox, {
-      layers: ["ecoteka-data", privateLayer()],
-    });
+    var features = map.queryRenderedFeatures(bbox)
+      .filter(f => f.layer.type === 'circle');
 
     if (features.length) {
       const feature = features.pop();
@@ -199,7 +198,4 @@ export default function IndexPage({ drawer }) {
 IndexPage.getInitialProps = ({ query: { drawer } }) => {
   return { drawer };
 };
-function privateLayer() {
-  return "ecoteka-ecoteka";
-}
 
