@@ -25,6 +25,13 @@ services:
       dockerfile: Dockerfile
     command: /start-reload.sh
 
+  celery_worker:
+    volumes:
+      - ./backend/app:/app
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
   frontend:
     volumes:
       - ./frontend:/app

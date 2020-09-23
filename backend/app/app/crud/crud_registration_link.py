@@ -90,8 +90,7 @@ class CRUDRegistrationLink(
     def generate_and_insert(
         self,
         db: Session,
-        fk_user: int,
-        background_tasks: BackgroundTasks
+        fk_user: int
     ) -> Registration_Link:
         user_in_db = user.get(db=db, id=fk_user)
         registration_link_tmp = RegistrationLinkCreate(
@@ -108,11 +107,10 @@ class CRUDRegistrationLink(
         db.refresh(new_registration_link)
 
         if settings.EMAILS_ENABLED:
-            background_tasks.add_task(
-                send_new_registration_link_email,
-                email_to=user_in_db.email,
-                full_name=user_in_db.full_name,
-                link=new_registration_link.value
+            send_new_registration_link_email(
+                user_in_db.email,
+                user_in_db.full_name,
+                new_registration_link.value
             )
         return new_registration_link
 

@@ -1,7 +1,6 @@
 import slug
 from fastapi import (
     APIRouter,
-    BackgroundTasks,
     Depends,
     HTTPException,
     status
@@ -32,6 +31,7 @@ from app.utils import (
     generate_response_for_token,
     send_new_registration_email
 )
+from app.worker import send_new_registration_email_task, generate_and_insert_registration_link_task
 
 router = APIRouter()
 
@@ -41,8 +41,7 @@ def register_new_user(
     *,
     db: Session = Depends(get_db),
     user_in: UserCreate,
-    current_user: User = Depends(get_current_user_if_is_superuser),
-    background_tasks: BackgroundTasks
+    current_user: User = Depends(get_current_user_if_is_superuser)
 ) -> UserOut:
     user_in_db = user.get_by_email(db, email=user_in.email)
 
@@ -70,19 +69,13 @@ def register_new_user(
             detail="Something goes wrong",
         )
 
-    background_tasks.add_task(
-        send_new_registration_email,
-        email_to=user_in.email,
-        full_name=user_in.full_name,
-        password=user_in.password
+    send_new_registration_email_task.delay(
+        user_in.email,
+        user_in.full_name,
+        user_in.password
     )
 
-    background_tasks.add_task(
-        registration_link.generate_and_insert,
-        db=db,
-        fk_user=user_in_db.id,
-        background_tasks=background_tasks
-    )
+    generate_and_insert_registration_link_task.delay(user_in.id)
 
     return generate_response_for_token(
         user_id=user_in_db.id,
