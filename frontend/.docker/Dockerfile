@@ -11,7 +11,6 @@ FROM nginx:alpine
 
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/out /usr/share/nginx/html
-# COPY .docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY .docker/docker-entrypoint.sh /docker-entrypoint.sh
 
 EXPOSE 80

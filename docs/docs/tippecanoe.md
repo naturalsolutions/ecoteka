@@ -1,0 +1,23 @@
+# Tippecanoe
+
+![Tippecanoe](/assets/img/tippecanoe-hero.jpeg)
+
+---
+
+**Source Code**: <a href="https://github.com/mapbox/tippecanoe" target="_blank">https://github.com/mapbox/tippecanoe</a>
+
+---
+
+The goal of Tippecanoe is to enable making a scale-independent view of your data, so that at any level from the entire world to a single building, you can see the density and texture of the data rather than a simplification from dropping supposedly unimportant features or clustering or aggregating them.
+
+If you give it all of OpenStreetMap and zoom out, it should give you back something that looks like "All Streets" rather than something that looks like an Interstate road atlas.
+
+If you give it all the building footprints in Los Angeles and zoom out far enough that most individual buildings are no longer discernable, you should still be able to see the extent and variety of development in every neighborhood, not just the largest downtown buildings.
+
+If you give it a collection of years of tweet locations, you should be able to see the shape and relative popularity of every point of interest and every significant travel corridor.
+
+## How to build tippecanoe
+
+```dockerfile hl_lines="1-8"
+{!../../docs_src/backend/Dockerfile!}
+```

@@ -33,3 +33,10 @@ services:
       dockerfile: .docker/Dockerfile.dev
     labels:
       - traefik.http.services.frontend.loadbalancer.server.port=3000
+
+  docs:
+    volumes:
+      - ./docs:/docs
+    build:
+      context: ./
+      dockerfile: ./docs/Dockerfile

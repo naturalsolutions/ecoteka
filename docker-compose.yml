@@ -89,6 +89,16 @@ services:
     environment:
       - KEY_SECRET=${NS_ECOTEKA_BACKEND_SECRET_KEY}
 
+  docs:
+    image: ${NS_ECOTEKA_DOCS_IMAGE}
+    ports:
+      - 3000:8000
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.docs.rule=PathPrefix(`/docs/`)
+
 volumes:
   app-db-data:
 
