@@ -245,7 +245,7 @@ export default function TreeEditionPage({ id }) {
   return (
     <Template>
       <Grid container spacing={1} className={classes.root}>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <h2>Ajouter un arbre</h2>
           <form noValidate autoComplete="off" onSubmit={onFormSubmit}>
             <Grid container spacing={1}>
@@ -301,7 +301,7 @@ export default function TreeEditionPage({ id }) {
             </Grid>
           </form>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs>
           <ETKMap
             ref={mapRef}
             styleSource={`/api/v1/maps/style?token=${api.getToken()}`}
