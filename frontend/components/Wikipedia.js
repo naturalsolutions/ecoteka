@@ -1,4 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Card, CardMedia, CardContent } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  media: {
+    height: 240,
+  },
+});
 
 async function getInformationByProp(prop, genre) {
   const url = `https://en.wikipedia.org/w/api.php?action=query&prop=${prop}&titles=${genre}&formatversion=2&origin=*&format=json`;
@@ -11,6 +19,7 @@ async function getInformationByProp(prop, genre) {
 
   if (prop === "pageimages" && json.hasOwnProperty("query")) {
     const width = 240;
+
     if (json.query.pages && json.query.pages.length) {
       let image = json.query.pages.pop();
 
@@ -21,12 +30,9 @@ async function getInformationByProp(prop, genre) {
 }
 
 export default function Wikipedia(props) {
+  const classes = useStyles();
   const [genre, setGenre] = useState(props.genre);
   const [data, setData] = useState({ image: null, html: null });
-
-  function onThemeChange(theme) {
-    return theme === "light" ? null : { color: "white" };
-  }
 
   useEffect(() => {
     setGenre(props.genre);
@@ -48,13 +54,15 @@ export default function Wikipedia(props) {
         html,
       });
     })(props.genre);
-  }, [props]);
+  }, [props.genre]);
 
   return genre ? (
-    <React.Fragment>
-      <img src={data.image} />
-      <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
-    </React.Fragment>
+    <Card elevation={0}>
+      {data.image && <CardMedia className={classes.media} image={data.image} />}
+      <CardContent>
+        <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
+      </CardContent>
+    </Card>
   ) : (
     <div>No genre</div>
   );

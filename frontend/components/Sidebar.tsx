@@ -1,68 +1,47 @@
 import React, { createRef, useEffect, useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Container,
+  Grid,
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 import Wikipedia from "./Wikipedia";
-import { AccordionSummary, Container, IconButton, Menu, MenuItem, Toolbar } from "@material-ui/core";
-import MuiAccordion from '@material-ui/core/Accordion';
-import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MenuIcon from '@material-ui/icons/Menu';
-import EditLocationIcon from '@material-ui/icons/EditLocation';
-import DeleteIcon from '@material-ui/icons/Delete';
-import {apiRest as api} from '../lib/api';
-import ETKAlertController from './AlertController';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import MenuIcon from "@material-ui/icons/Menu";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import EditLocationIcon from "@material-ui/icons/EditLocation";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ETKAlertController from "./AlertController";
+import { apiRest as api } from "../lib/api";
 import { useRouter } from "next/router";
 
-const useStyles = makeStyles((theme) => ({
-  logo: {
-    maxHeight: "40px",
+const useStyles = makeStyles(() => ({
+  root: {
+    width: "400px",
   },
-  buttons: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "flex-end",
+  toolbarTitle: {
+    flexGrow: 1,
   },
-  numberOfTrees: {
-    width: "100%",
-  },
-  tabPanel: {
-    maxWidth: 500,
-    overflowY: "auto",
-  },
-  propertyValue: {
-    overflowWrap: "break-word",
-  },
-  toolbartitle: {
-    flexGrow: 1
-  }
 }));
 
-const Accordion = withStyles({
-  root: {
-    border: 0,
-    boxShadow: 'none'
-  },
-  expanded: {}
-})(MuiAccordion);
-
-const AccordionDetails = withStyles({
-  root: {
-    flexDirection: 'column',
-    overflowY: 'scroll',
-    height: '600px'
-  }
-})(MuiAccordionDetails)
-
-const isFromPrivateLayer = (properties) => properties ? Boolean(properties.id) : false;
+const isFromPrivateLayer = (properties) =>
+  properties ? Boolean(properties.id) : false;
 
 function Properties(props) {
-  const classes = useStyles();
-
   const renderPrivateTreeProperies = (properties) => (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant="subtitle1">{properties.scientific_name}</Typography>
+        <Typography variant="subtitle1">
+          {properties.scientific_name}
+        </Typography>
       </Grid>
       <Grid item xs={6}>
         <Typography variant="caption">Latitude</Typography> {properties.y}
@@ -74,20 +53,20 @@ function Properties(props) {
   );
 
   const renderPublicTreeProperties = (properties) =>
-  props.properties ? (
-    <Grid container spacing={3}>
-      {Object.keys(props.properties).map((property) => {
-        return (
-          <React.Fragment key={property}>
-            <Grid item xs>
-              <Typography>{property}</Typography> {props.properties[property]}
-            </Grid>
-          </React.Fragment>
-        );
-      })}
-    </Grid>
+    properties ? (
+      <Grid container spacing={3}>
+        {Object.keys(properties).map((property) => {
+          return (
+            <React.Fragment key={property}>
+              <Grid item xs>
+                <Typography>{property}</Typography> {properties[property]}
+              </Grid>
+            </React.Fragment>
+          );
+        })}
+      </Grid>
     ) : (
-    <div>Aucune propriété</div>
+      <div>Aucune propriété</div>
     );
 
   if (isFromPrivateLayer(props.properties)) {
@@ -98,11 +77,8 @@ function Properties(props) {
 }
 
 export interface ETKSidebarProps {
-  activeTab: number;
   currentGenre: string;
   currentProperties: any;
-  onTabChange: Function;
-  speces: any[];
 }
 
 const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
@@ -111,7 +87,7 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
 
   const alertRef = createRef<ETKAlertController>();
 
-  const nullData = {properties: null, genre: null};
+  const nullData = { properties: null, genre: null };
   const [data, setData] = useState(nullData);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -122,90 +98,104 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
     setAnchorEl(null);
   };
   const editTree = (id) => {
-    router.push(`/treeedition?id=${id}`)
-  }
+    router.push(`/treeedition?id=${id}`);
+  };
   const deleteTree = (id) => {
     alertRef.current.create({
-      title: 'Confirmation',
-      message: 'Voulez-vous supprimer cet arbre ?',
+      title: "Confirmation",
+      message: "Voulez-vous supprimer cet arbre ?",
       actions: [
-        {label: 'Oui', value: true},
-        {label: 'Non', value: false}
+        { label: "Oui", value: true },
+        { label: "Non", value: false },
       ],
       onDismiss: (v) => {
-        if (!v) { return; }
+        if (!v) {
+          return;
+        }
 
-        api.trees.delete(id).then(
-          () => alertRef.current.create({
-            title: 'Succès',
+        api.trees.delete(id).then(() =>
+          alertRef.current.create({
+            title: "Succès",
             message: "L'arbre a été supprimé.",
-            actions: [{label: 'Ok', value: true}],
+            actions: [{ label: "Ok", value: true }],
             onDismiss: () => {
               setData(nullData);
               closeMenu();
-            }
+            },
           })
         );
-      }
+      },
     });
-  }
+  };
 
   useEffect(() => {
     closeMenu();
 
     if (isFromPrivateLayer(props.currentProperties)) {
-      api.trees.get(props.currentProperties.id)
-      .then(response => setData({
-        properties: response,
-        genre: response.scientific_name
-      }));
+      api.trees.get(props.currentProperties.id).then((response) =>
+        setData({
+          properties: response,
+          genre: response.scientific_name,
+        })
+      );
     } else {
       setData({
         properties: props.currentProperties,
-        genre: props.currentGenre
+        genre: props.currentGenre,
       });
     }
-  },[props]);
+  }, [props]);
 
-  const menu = isFromPrivateLayer(data.properties) ? 
-    (
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={closeMenu}
-      >
-        <MenuItem onClick={(e) => editTree(data.properties.id)}>
-          <EditLocationIcon />
-          Modifier
-        </MenuItem>
-        <MenuItem onClick={(e) => deleteTree(data.properties.id)}>
-          <DeleteIcon />
-          Supprimer
-        </MenuItem>
-      </Menu>
-    ) : null;
-  
+  const menu = isFromPrivateLayer(data.properties) ? (
+    <Menu
+      id="simple-menu"
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      anchorEl={anchorEl}
+      keepMounted
+      open={Boolean(anchorEl)}
+      onClose={closeMenu}
+    >
+      <MenuItem onClick={(e) => editTree(data.properties.id)}>
+        <EditLocationIcon />
+        Modifier
+      </MenuItem>
+      <MenuItem onClick={(e) => deleteTree(data.properties.id)}>
+        <DeleteIcon />
+        Supprimer
+      </MenuItem>
+    </Menu>
+  ) : null;
+
   return (
-    <React.Fragment>
+    <Paper elevation={0} className={classes.root}>
       <Toolbar>
-        <Typography className={classes.toolbartitle} variant="h6">Fiche de l'arbre</Typography>
-        <IconButton edge="end" color="inherit" aria-label="menu" onClick={openMenu}>
-          <MenuIcon />
+        <Typography className={classes.toolbarTitle} variant="h6">
+          Fiche de l'arbre
+        </Typography>
+        <IconButton
+          edge="end"
+          color="inherit"
+          aria-label="menu"
+          onClick={openMenu}
+        >
+          <MoreVertIcon />
         </IconButton>
       </Toolbar>
+
       <Container>
         <Properties properties={data.properties} />
       </Container>
 
-      <Accordion square>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-        >
-          <Typography variant="h6">
-            Informations Wikipedia
-          </Typography>
+      <Accordion square elevation={0}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h6">Informations Wikipedia</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Wikipedia genre={data.genre} />
@@ -214,7 +204,7 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
 
       {menu}
       <ETKAlertController ref={alertRef} />
-    </React.Fragment>
+    </Paper>
   );
 };
 

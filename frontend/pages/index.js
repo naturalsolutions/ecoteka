@@ -1,5 +1,5 @@
 import { useState, createRef, useEffect } from "react";
-import { Toolbar, Grid, makeStyles } from "@material-ui/core";
+import { Paper, Grid, makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
 
 import ETKSidebar from "../components/Sidebar";
@@ -16,9 +16,19 @@ import layersStyle from "../public/assets/layersStyle.json";
 import { apiRest } from "../lib/api";
 
 const useStyles = makeStyles(() => ({
-  main: {
+  root: {
     position: "relative",
     height: "100%",
+  },
+  sidebar: {
+    height: "100%",
+    overflow: "scroll",
+  },
+  sidebarPaper: {
+    height: "100%",
+  },
+  main: {
+    position: "relative",
   },
 }));
 
@@ -31,6 +41,7 @@ export default function IndexPage({ drawer }) {
   const [activeTab, setActiveTab] = useState(0);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const { appContext, setAppContext, user } = useAppContext();
+  const router = useRouter();
 
   useEffect(() => {
     toggleMapTheme(appContext.theme);
@@ -47,8 +58,9 @@ export default function IndexPage({ drawer }) {
       query: { drawer: null },
     });
 
-    var features = map.queryRenderedFeatures(bbox)
-      .filter(f => f.layer.type === 'circle');
+    var features = map
+      .queryRenderedFeatures(bbox)
+      .filter((f) => f.layer.type === "circle");
 
     if (features.length) {
       const feature = features.pop();
@@ -117,18 +129,6 @@ export default function IndexPage({ drawer }) {
     }
   };
 
-  const router = useRouter();
-  const usersPanels = ["import"];
-
-  //TODO ?
-  useEffect(() => {
-    if (!user && usersPanels.includes(drawer)) {
-      setIsDrawerOpen(false);
-    } else {
-      setIsDrawerOpen(true);
-    }
-  }, [drawer]);
-
   const renderImport = (
     <ETKImport
       map={mapRef}
@@ -170,16 +170,14 @@ export default function IndexPage({ drawer }) {
         container
         justify="flex-start"
         alignItems="stretch"
-        className={classes.main}
+        className={classes.root}
       >
-        <Grid
-          item
-          xs={3}
-          style={{background: "#fff" }}
-        >
-          {switchRenderDrawer(drawer)}
+        <Grid item className={classes.sidebar}>
+          <Paper elevation={0} className={classes.sidebarPaper}>
+            {switchRenderDrawer(drawer)}
+          </Paper>
         </Grid>
-        <Grid item xs style={{ position: "relative" }}>
+        <Grid item xs className={classes.main}>
           <ETKMap
             ref={mapRef}
             styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
@@ -198,4 +196,3 @@ export default function IndexPage({ drawer }) {
 IndexPage.getInitialProps = ({ query: { drawer } }) => {
   return { drawer };
 };
-
