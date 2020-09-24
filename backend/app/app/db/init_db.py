@@ -37,6 +37,8 @@ def init_db(db: Session) -> None:
     user_in_db = user.get_by_email(db, email=settings.FIRST_SUPERUSER)
     if not user_in_db:
         user_in = UserCreate(
+            organization_id=organization_in_db.id,
+            organization=organization_in_db.name,
             full_name=settings.FIRST_SUPERUSER_FULLNAME,
             email=settings.FIRST_SUPERUSER,
             password=settings.FIRST_SUPERUSER_PASSWORD
@@ -44,7 +46,6 @@ def init_db(db: Session) -> None:
         user_in_db = user.create(db, obj_in=user_in)  # noqa: F841
         user_in_db.is_superuser = True
         user_in_db.is_verified = True
-        user_in_db.organization_id = organization_in_db.id
         db.add(user_in_db)
         db.commit()
         db.refresh(user_in_db)
