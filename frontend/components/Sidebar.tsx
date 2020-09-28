@@ -13,12 +13,8 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
+import { MoreVert, EditLocation, Delete, ExpandMore } from "@material-ui/icons";
 import Wikipedia from "./Wikipedia";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MenuIcon from "@material-ui/icons/Menu";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import EditLocationIcon from "@material-ui/icons/EditLocation";
-import DeleteIcon from "@material-ui/icons/Delete";
 import ETKAlertController from "./AlertController";
 import { apiRest as api } from "../lib/api";
 import { useRouter } from "next/router";
@@ -163,11 +159,11 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
       onClose={closeMenu}
     >
       <MenuItem onClick={(e) => editTree(data.properties.id)}>
-        <EditLocationIcon />
+        <EditLocation />
         Modifier
       </MenuItem>
       <MenuItem onClick={(e) => deleteTree(data.properties.id)}>
-        <DeleteIcon />
+        <Delete />
         Supprimer
       </MenuItem>
     </Menu>
@@ -185,7 +181,7 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
           aria-label="menu"
           onClick={openMenu}
         >
-          <MoreVertIcon />
+          <MoreVert />
         </IconButton>
       </Toolbar>
 
@@ -194,7 +190,7 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
       </Container>
 
       <Accordion square elevation={0}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography variant="h6">Informations Wikipedia</Typography>
         </AccordionSummary>
         <AccordionDetails>
