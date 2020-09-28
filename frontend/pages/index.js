@@ -22,7 +22,13 @@ const useStyles = makeStyles(() => ({
   },
   sidebar: {
     height: "100%",
-    overflow: "scroll",
+    overflowY: "scroll",
+    overflowX: "hidden",
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
+    "-ms-overflow-style": "none",
+    "scrollbar-width": "none",
   },
   sidebarPaper: {
     height: "100%",
