@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import ETKGeofile from "../Geofile";
-import ETKImportTemplate from "./Template";
-import ETKMissingData from "./MissingDatas";
-import ETKImported from "./Imported";
-import ETKUpload from "./Upload";
-import ETKError from "./Error";
-import ETKImportImporting from "./Importing";
-import { apiRest } from "../../lib/api";
-import layersStyle from "../../public/assets/layersStyle.json";
+import { Grid } from "@material-ui/core";
 
-export interface ETKImportProps {
+import {
+  ETKSidebarImportTemplate,
+  ETKSidebarImportMissingDatas,
+  ETKSidebarImportImported,
+  ETKSidebarImportUpload,
+  ETKSidebarImportError,
+  ETKSidebarImportImporting,
+  ETKGeofile,
+} from "@/ETKC";
+
+import { apiRest } from "@/lib/api";
+import layersStyle from "@/public/assets/layersStyle.json";
+
+export interface ETKSidebarImportProps {
   width?: Number;
   isOpen: File;
   tooltipcontent: [string];
@@ -38,7 +42,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const ETKImport: React.FC<ETKImportProps> = (props) => {
+const ETKSidebarImport: React.FC<ETKSidebarImportProps> = (props) => {
   const classes = useStyles();
   const [step, setStep] = useState("start");
   const [geofile, setGeofile] = useState<ETKGeofile>();
@@ -143,7 +147,7 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
     >
       {step === "start" && (
         <Grid item>
-          <ETKUpload
+          <ETKSidebarImportUpload
             geofile={geofile}
             tooltipcontent={props.tooltipcontent}
             extensionsFileAccepted={props.extensionsFileAccepted}
@@ -157,7 +161,7 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
 
       {step === "missing-data" && (
         <Grid item style={{ width: "100%" }}>
-          <ETKMissingData
+          <ETKSidebarImportMissingDatas
             geoFile={geofile}
             missingInfo={missingInfo}
             onUpdateGeofile={onUpdateGeofile}
@@ -169,30 +173,30 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
       )}
 
       {step === "importing" && (
-        <ETKImportImporting
+        <ETKSidebarImportImporting
           geofile={geofile}
           importingText={`Import en cours ${geofile.original_name}...`}
           onImported={onImported}
         />
       )}
 
-      {step === "imported" && <ETKImported onReset={onReset} />}
+      {step === "imported" && <ETKSidebarImportImported onReset={onReset} />}
 
-      {step === "error" && <ETKError onReset={onReset} />}
+      {step === "error" && <ETKSidebarImportError onReset={onReset} />}
 
       <Grid item style={{ flexGrow: 1 }}>
         <span>&nbsp;</span>
       </Grid>
 
       <Grid item>
-        <ETKImportTemplate />
+        <ETKSidebarImportTemplate />
       </Grid>
     </Grid>
   );
 };
 
-ETKImport.defaultProps = {
+ETKSidebarImport.defaultProps = {
   width: 500,
 };
 
-export default ETKImport;
+export default ETKSidebarImport;

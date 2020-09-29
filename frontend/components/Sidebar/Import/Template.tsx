@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Typography, Grid, Box } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
-export interface ETKImportTemplateProps {
+export interface ETKSidebarImportTemplateProps {
   titleText?: string;
   hintText?: string;
   templateTips?: string;
@@ -13,7 +13,7 @@ export interface ETKImportTemplateProps {
   linkTemplate?: string;
 }
 
-const defaultProps: ETKImportTemplateProps = {
+const defaultProps: ETKSidebarImportTemplateProps = {
   titleText: "Un doute avec votre fichier?",
   hintText:
     "Assurez-vous que votre fichier contient les informations suivantes",
@@ -37,7 +37,9 @@ const useStyle = makeStyles(() =>
   })
 );
 
-const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
+const ETKSidebarImportTemplate: React.FC<ETKSidebarImportTemplateProps> = (
+  props
+) => {
   const classes = useStyle();
 
   return (
@@ -68,6 +70,6 @@ const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
   );
 };
 
-ETKImportTemplate.defaultProps = defaultProps;
+ETKSidebarImportTemplate.defaultProps = defaultProps;
 
-export default ETKImportTemplate;
+export default ETKSidebarImportTemplate;

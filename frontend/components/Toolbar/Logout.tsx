@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
-import { useAppContext } from "../providers/AppContext.js";
-import { apiRest } from "../lib/api";
+import { useAppContext } from "@/providers/AppContext.js";
+import { apiRest } from "@/lib/api";
 
 export interface ETKLogoutProps {
   logoutText: string;

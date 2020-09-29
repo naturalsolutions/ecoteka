@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
-import Template from "../components/Template";
-import ETKImportHistory from "../components/Import/History/Index";
+import { ETKImportHistory, ETKTemplate } from "@/ETKC";
 import { useAppContext } from "../providers/AppContext";
 import { apiRest } from "../lib/api";
 
@@ -10,7 +8,7 @@ export default function ImportsPage() {
   const { user, isLoading } = useAppContext();
   const router = useRouter();
   const [rows, setRows] = useState([]);
-  const headers = [
+  const headers: string[] = [
     "Nom du fichier",
     "Arbres",
     "CRS",
@@ -50,7 +48,7 @@ export default function ImportsPage() {
   }, [isLoading, user]);
 
   return (
-    <Template>
+    <ETKTemplate>
       {user && (
         <ETKImportHistory
           headers={headers}
@@ -59,6 +57,6 @@ export default function ImportsPage() {
           onImport={onImport}
         />
       )}
-    </Template>
+    </ETKTemplate>
   );
 }

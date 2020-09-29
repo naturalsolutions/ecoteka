@@ -1,23 +1,23 @@
 import React from "react";
-import { Grid, Typography, Button } from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useRouter } from "next/router";
+import { Grid, Typography, Button } from "@material-ui/core";
+import { Error as ErrorIcon } from "@material-ui/icons";
 
-export interface ETKImportImportedProps {
+export interface ETKSidebarImportErrorProps {
   importedText?: string;
   buttonHistoryText?: string;
   buttonResetText?: string;
   onReset?(): void;
 }
 
-const defaultProps: ETKImportImportedProps = {
-  importedText: "Votre fichier a été bien importé",
+const defaultProps: ETKSidebarImportErrorProps = {
+  importedText: "Une erreur s'est glissée dans votre fichier",
   buttonHistoryText: "Historique des imports",
   buttonResetText: "Importer un autre fichier",
   onReset: () => {},
 };
 
-const ETKImportImported: React.FC<ETKImportImportedProps> = (props) => {
+const ETKSidebarImportError: React.FC<ETKSidebarImportErrorProps> = (props) => {
   const router = useRouter();
 
   const onHistoryClick = () => {
@@ -27,10 +27,12 @@ const ETKImportImported: React.FC<ETKImportImportedProps> = (props) => {
   return (
     <Grid container item alignItems="center" direction="column" spacing={2}>
       <Grid item>
-        <Typography variant="h6">{props.importedText}</Typography>
+        <Typography variant="h6" color="error">
+          {props.importedText}
+        </Typography>
       </Grid>
       <Grid item>
-        <CheckCircleIcon color="primary" style={{ fontSize: 120 }} />
+        <ErrorIcon color="error" style={{ fontSize: 120 }} />
       </Grid>
       <Grid item>
         <Button color="primary" variant="contained" onClick={props.onReset}>
@@ -49,6 +51,6 @@ const ETKImportImported: React.FC<ETKImportImportedProps> = (props) => {
   );
 };
 
-ETKImportImported.defaultProps = defaultProps;
+ETKSidebarImportError.defaultProps = defaultProps;
 
-export default ETKImportImported;
+export default ETKSidebarImportError;

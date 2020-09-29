@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles, createStyles, withStyles } from "@material-ui/core/styles";
-import { Tooltip, Box, Grid } from "@material-ui/core";
-import HelpIcon from "@material-ui/icons/Help";
-import Divider from "@material-ui/core/Divider";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { DropzoneArea } from "material-ui-dropzone";
-import GetAppIcon from "@material-ui/icons/GetApp";
-import ErrorIcon from "@material-ui/icons/Error";
-import ETKProgressBar from "./ProgressBar";
 import getConfig from "next/config";
-import Geofile from "../Geofile";
-import { apiRest } from "../../lib/api";
+
+import { DropzoneArea } from "material-ui-dropzone";
+import { makeStyles, createStyles, withStyles } from "@material-ui/core/styles";
+import {
+  Tooltip,
+  Box,
+  Grid,
+  Divider,
+  Button,
+  Typography,
+} from "@material-ui/core";
+
+import {
+  Help as HelpIcon,
+  GetApp as GetAppIcon,
+  Error as ErrorIcon,
+} from "@material-ui/icons";
+
+import { ETKSidebarImportProgressBar, ETKGeofile } from "@/ETKC";
+
+import { apiRest } from "@/lib/api";
 
 const { publicRuntimeConfig } = getConfig();
 
-export interface ETKUploadProps {
+export interface ETKSidebarImportUploadProps {
   uploadUrl?: string;
-  geofile?: Geofile;
+  geofile?: ETKGeofile;
   tooltipcontent: [string];
   extensionsFileAccepted: [string];
   dropzoneText: string;
@@ -28,10 +37,10 @@ export interface ETKUploadProps {
   buttonCancelContent?: string;
   buttonUploadContent?: string;
   onUploadProgress?(progress: number): void;
-  onUploaded?(geofile: Geofile): void;
+  onUploaded?(geofile: ETKGeofile): void;
 }
 
-const defaultProps: ETKUploadProps = {
+const defaultProps: ETKSidebarImportUploadProps = {
   uploadUrl: `${publicRuntimeConfig.apiUrl}/geo_files/upload`,
   geofile: undefined,
   tooltipcontent: [""],
@@ -93,7 +102,9 @@ const HtmlTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-const ETKUpload: React.FC<ETKUploadProps> = (props) => {
+const ETKSidebarImportUpload: React.FC<ETKSidebarImportUploadProps> = (
+  props
+) => {
   const classes = useStyle();
   const [file, setFile] = useState<File>();
   const [linearProgressValue, setLinearProgressValue] = useState(0);
@@ -214,7 +225,9 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
         </Typography>
       </Grid>
       <Grid container>
-        <ETKProgressBar linearProgressValue={linearProgressValue} />
+        <ETKSidebarImportProgressBar
+          linearProgressValue={linearProgressValue}
+        />
       </Grid>
       <Grid container>
         <Divider />
@@ -287,6 +300,6 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   );
 };
 
-ETKUpload.defaultProps = defaultProps;
+ETKSidebarImportUpload.defaultProps = defaultProps;
 
-export default ETKUpload;
+export default ETKSidebarImportUpload;

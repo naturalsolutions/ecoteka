@@ -7,9 +7,7 @@ import "../components/Map/map.css";
 
 import { Provider as AppContextProvider } from "../providers/AppContext";
 
-export default function MyApp(props) {
-  const { Component, pageProps } = props;
-
+export default function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
 

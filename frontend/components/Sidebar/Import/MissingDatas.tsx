@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Button, Typography, Grid, Box } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
+import React, { useState } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
-import ETKGeofile from "../Geofile";
-import { apiRest } from "../../lib/api";
+import {
+  Button,
+  Typography,
+  Grid,
+  Box,
+  TextField,
+  MenuItem,
+} from "@material-ui/core";
+import { ETKGeofile } from "@/ETKC";
+import { apiRest } from "@/lib/api";
 
-export interface ETKMissingDatasProps {
+export interface ETKSidebarImportMissingDatasProps {
   geoFile?: ETKGeofile;
   missingInfo?: [string?];
   titleText: string;
@@ -28,7 +33,7 @@ interface Data {
   crs?: DataItem;
 }
 
-const defaultProps: ETKMissingDatasProps = {
+const defaultProps: ETKSidebarImportMissingDatasProps = {
   geoFile: undefined,
   missingInfo: [],
   titleText: "The file you upload missing some informations",
@@ -63,7 +68,9 @@ const useStyle = makeStyles((theme) =>
   })
 );
 
-const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
+const ETKSidebarImportMissingDatas: React.FC<ETKSidebarImportMissingDatasProps> = (
+  props
+) => {
   const classes = useStyle();
   const [isReady, setIsReady] = useState(false);
 
@@ -215,6 +222,6 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   }
 };
 
-ETKMissingDatas.defaultProps = defaultProps;
+ETKSidebarImportMissingDatas.defaultProps = defaultProps;
 
-export default ETKMissingDatas;
+export default ETKSidebarImportMissingDatas;

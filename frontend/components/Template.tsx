@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import ETKToolbar from "./Toolbar";
-import { useAppContext } from "../providers/AppContext";
-import themeConfig from "../theme/config";
+import { ETKToolbar } from "@/ETKC";
+import { useAppContext } from "@/providers/AppContext";
+import themeConfig from "@/theme/config";
 
 const useStyles = makeStyles({
   content: {
@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Template(props) {
+export default function ETKTemplate(props) {
   const { user, setAppContext } = useAppContext();
   const sizeToolbar = user ? 96 : 48;
   const classes = useStyles();
@@ -39,7 +39,7 @@ export default function Template(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className={classes.root} role="presentation">
+      <div role="presentation">
         <ETKToolbar
           logo={`/assets/${currentTheme}/logo.svg`}
           numberOfTrees="4.6 millions of trees"

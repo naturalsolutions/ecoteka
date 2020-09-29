@@ -9,11 +9,11 @@ import {
   TableBody,
 } from "@material-ui/core";
 
-import Geofile from "../../Geofile";
+import { ETKGeofile } from "@/ETKC";
 
 export interface ETKImportHistoryTableProps {
-  headers: [];
-  rows?: Geofile[];
+  headers: string[];
+  rows?: ETKGeofile[];
   onSelected?(selection?: string[]): void;
 }
 

@@ -9,8 +9,8 @@ export interface IETKAlert {
   title: string;
   message: string;
   actions: { label: string; value: any }[];
-  onDismiss?: (v:any) => void;
-};
+  onDismiss?: (v: any) => void;
+}
 export class ETKAlert extends React.Component<IETKAlert, { open: boolean }> {
   constructor(props) {
     super(props);
@@ -29,15 +29,20 @@ export class ETKAlert extends React.Component<IETKAlert, { open: boolean }> {
 
   render() {
     const actions = this.props.actions.map((action, idx) => (
-      <Button key={idx} onClick={(e) => { this.dismiss(action.value); }}>{action.label}</Button>
+      <Button
+        key={idx}
+        onClick={(e) => {
+          this.dismiss(action.value);
+        }}
+      >
+        {action.label}
+      </Button>
     ));
     return (
       <Dialog open={this.state.open}>
         <DialogTitle>{this.props.title}</DialogTitle>
         <DialogContent>{this.props.message}</DialogContent>
-        <DialogActions>
-          {actions}
-        </DialogActions>
+        <DialogActions>{actions}</DialogActions>
       </Dialog>
     );
   }
@@ -46,7 +51,10 @@ export class ETKAlert extends React.Component<IETKAlert, { open: boolean }> {
 /**
  * @todo needs a better implementation to prevent stacking alers on the dom
  */
-export default class ETKAlertController extends React.Component<{}, { alerts: IETKAlert[] }> {
+export default class ETKAlertController extends React.Component<
+  {},
+  { alerts: IETKAlert[] }
+> {
   constructor(props) {
     super(props);
     this.state = { alerts: [] };
@@ -58,15 +66,14 @@ export default class ETKAlertController extends React.Component<{}, { alerts: IE
   }
 
   render() {
-    return this.state.alerts.map((alert, idx) =>
+    return this.state.alerts.map((alert, idx) => (
       <ETKAlert
         key={idx}
         title={alert.title}
         message={alert.message}
         actions={alert.actions}
         onDismiss={alert.onDismiss}
-      >
-      </ETKAlert>
-    );
+      ></ETKAlert>
+    ));
   }
 }

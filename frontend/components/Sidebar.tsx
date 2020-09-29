@@ -14,9 +14,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import { MoreVert, EditLocation, Delete, ExpandMore } from "@material-ui/icons";
-import Wikipedia from "./Wikipedia";
-import ETKAlertController from "./AlertController";
-import { apiRest as api } from "../lib/api";
+import { ETKSidebarWikipedia } from "@/ETKC";
+import ETKAlertController from "@/components/AlertController";
+import { apiRest as api } from "@/lib/api";
 import { useRouter } from "next/router";
 
 const useStyles = makeStyles(() => ({
@@ -170,7 +170,7 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
   ) : null;
 
   return (
-    <Paper elevation={0} className={classes.root}>
+    <Paper square={true} elevation={0} className={classes.root}>
       <Toolbar>
         <Typography className={classes.toolbarTitle} variant="h6">
           Fiche de l'arbre
@@ -194,7 +194,7 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
           <Typography variant="h6">Informations Wikipedia</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Wikipedia genre={data.genre} />
+          <ETKSidebarWikipedia genre={data.genre} />
         </AccordionDetails>
       </Accordion>
 

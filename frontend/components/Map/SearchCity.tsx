@@ -1,8 +1,7 @@
 import { TextField, CircularProgress } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { useState, useEffect, useRef, Fragment } from "react";
-import ETKMapSateliteToggle from "./MapSatelliteToggle";
+import { useState, useEffect, Fragment } from "react";
 
 export interface ETKMapSearchCityProps {
   onChange?(item: {}): void;

@@ -7,8 +7,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import getConfig from "next/config";
-import { apiRest } from "../lib/api";
-import { useAppContext } from "../providers/AppContext.js";
+import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext.js";
 
 const { publicRuntimeConfig } = getConfig();
 

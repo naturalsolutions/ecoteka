@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Hidden from "@material-ui/core/Hidden";
-import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
-import Popover from "@material-ui/core/Popover";
-import Divider from "@material-ui/core/Divider";
-import MoodIcon from "@material-ui/icons/Mood";
 import dynamic from "next/dynamic";
-import ETKContact from "./Contact";
-import ETKSignin from "./SignIn";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import {
+  AppBar,
+  Button,
+  Collapse,
+  Divider,
+  Grid,
+  Hidden,
+  Popover,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import MoodIcon from "@material-ui/icons/Mood";
 
-import Collapse from "@material-ui/core/Collapse";
-import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
-
-import { useAppContext } from "../providers/AppContext";
-import { apiRest } from "../lib/api";
+import {
+  ETKContact,
+  ETKSignin,
+  ETKDarkToggle,
+  ETKDarkToggleProps,
+} from "@/ETKC";
+import { useAppContext } from "@/providers/AppContext";
+import { apiRest } from "@/lib/api";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -93,7 +97,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
   const { user, setUser } = useAppContext();
 
-  const ETKRegister = dynamic(() => import("../components/Register"), {
+  const ETKRegister = dynamic(() => import("@/components/Register"), {
     ssr: false,
   });
 
@@ -322,7 +326,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                     Tous les arbres
                   </Button>
                 </Link>
-                <Link href="/treeedition" passHref>
+                <Link href="/?panel=add-tree" passHref>
                   <Button size="small">Ajouter un arbre</Button>
                 </Link>
               </div>
@@ -338,7 +342,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 IMPORT DE DONNEES
               </Button>
               <div className="level-2">
-                <Link href="/?drawer=import" passHref>
+                <Link href="/?panel=import" passHref>
                   <Button size="small" component="a">
                     Importer vos données
                   </Button>

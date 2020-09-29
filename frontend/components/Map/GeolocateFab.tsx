@@ -1,5 +1,5 @@
 import { Fab } from "@material-ui/core";
-import MyLocationIcon from "@material-ui/icons/MyLocation";
+import { MyLocation as MyLocationIcon } from "@material-ui/icons";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
 export interface ETKMapGeolocateFabProps {

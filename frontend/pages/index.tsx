@@ -2,14 +2,18 @@ import { useState, createRef, useEffect } from "react";
 import { Paper, Grid, makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
 
-import ETKSidebar from "../components/Sidebar";
-import ETKMap from "../components/Map/Map";
-import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
-import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
-import ETKMapSearchCity from "../components/Map/SearchCity";
-import ETKImport from "../components/Import/Index.tsx";
+import {
+  ETKSidebarAddTree,
+  ETKSidebar,
+  ETKMapGeolocateFab,
+  ETKMapSatelliteToggle,
+  ETKMapSearchCity,
+  ETKSidebarImport,
+  ETKTemplate,
+} from "@/ETKC";
 
-import Template from "../components/Template";
+import ETKMap from "../components/Map/Map";
+
 import { useAppContext } from "../providers/AppContext";
 
 import layersStyle from "../public/assets/layersStyle.json";
@@ -38,13 +42,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function IndexPage({ drawer }) {
+export default function IndexPage() {
   const mapRef = createRef();
   const classes = useStyles();
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [currentGenre, setCurrentGenre] = useState(null);
-  const [currentProperties, setCurrentProperties] = useState(null);
-  const [activeTab, setActiveTab] = useState(0);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const { appContext, setAppContext, user } = useAppContext();
   const router = useRouter();
@@ -53,7 +53,24 @@ export default function IndexPage({ drawer }) {
     toggleMapTheme(appContext.theme);
   }, [appContext]);
 
-  const onMapClick = (map, e) => {
+  const onMapClick = (panel, map, e) => {
+    switch (panel) {
+      case "add-tree":
+        onAddTree(map, e);
+        break;
+      case "import":
+        break;
+      default:
+        onGetInfoClick(map, e);
+        break;
+    }
+  };
+
+  const onAddTree = (map, e) => {
+    alert("aaa");
+  };
+
+  const onGetInfoClick = (map, e) => {
     const bbox = [
       [e.point.x - 5, e.point.y - 5],
       [e.point.x + 5, e.point.y + 5],
@@ -61,37 +78,11 @@ export default function IndexPage({ drawer }) {
 
     router.push({
       pathname: "/",
-      query: { drawer: null },
     });
 
     var features = map
       .queryRenderedFeatures(bbox)
       .filter((f) => f.layer.type === "circle");
-
-    if (features.length) {
-      const feature = features.pop();
-      let genre = null;
-
-      if (feature.properties.genre_latin) {
-        genre = feature.properties.genre_latin.toLowerCase().replace(" ", "_");
-      }
-
-      if (feature.properties.genre) {
-        genre = feature.properties.genre.toLowerCase().replace(" ", "_");
-      }
-
-      if ((genre || feature.properties) && !isDrawerOpen) {
-        setIsDrawerOpen(true);
-      }
-
-      router.push("/");
-      setCurrentGenre(genre);
-      setCurrentProperties(feature.properties);
-
-      if (feature.properties) {
-        setActiveTab(1);
-      }
-    }
   };
 
   const toggleMapTheme = (mapTheme) => {
@@ -118,7 +109,7 @@ export default function IndexPage({ drawer }) {
     });
   };
 
-  const onMapSateliteToggleHandler = (active) => {
+  const onMapSatelliteToggleHandler = (active) => {
     mapRef.current.map.setLayoutProperty(
       "satellite",
       "visibility",
@@ -136,7 +127,7 @@ export default function IndexPage({ drawer }) {
   };
 
   const renderImport = (
-    <ETKImport
+    <ETKSidebarImport
       map={mapRef}
       tooltipcontent={[
         "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes",
@@ -152,12 +143,16 @@ export default function IndexPage({ drawer }) {
     />
   );
 
-  const renderSidebar = (
-    <ETKSidebar
-      activeTab={activeTab}
-      currentGenre={currentGenre}
-      currentProperties={currentProperties}
-      onTabChange={setActiveTab}
+  const renderSidebar = <ETKSidebar />;
+
+  const renderAddTree = (
+    <ETKSidebarAddTree
+      map={mapRef.current}
+      titleText="Ajouter un arble"
+      addText="Ajouter"
+      scientificNameText="Nom scientifique"
+      latitudeText="Latitude"
+      longitudeText="Longitude"
     />
   );
 
@@ -165,13 +160,15 @@ export default function IndexPage({ drawer }) {
     switch (panel) {
       case "import":
         return renderImport;
+      case "add-tree":
+        return renderAddTree;
       default:
         return renderSidebar;
     }
   };
 
   return (
-    <Template>
+    <ETKTemplate>
       <Grid
         container
         justify="flex-start"
@@ -179,26 +176,24 @@ export default function IndexPage({ drawer }) {
         className={classes.root}
       >
         <Grid item className={classes.sidebar}>
-          <Paper elevation={0} className={classes.sidebarPaper}>
-            {switchRenderDrawer(drawer)}
+          <Paper square elevation={0} className={classes.sidebarPaper}>
+            {switchRenderDrawer(router.query?.panel)}
           </Paper>
         </Grid>
         <Grid item xs className={classes.main}>
           <ETKMap
             ref={mapRef}
             styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
-            onMapClick={onMapClick}
+            onMapClick={(map, event) =>
+              onMapClick(router.query?.panel, map, event)
+            }
             onStyleData={onMapLoaded}
           />
           <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
           <ETKMapGeolocateFab map={mapRef} />
-          <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
+          <ETKMapSatelliteToggle onToggle={onMapSatelliteToggleHandler} />
         </Grid>
       </Grid>
-    </Template>
+    </ETKTemplate>
   );
 }
-
-IndexPage.getInitialProps = ({ query: { drawer } }) => {
-  return { drawer };
-};

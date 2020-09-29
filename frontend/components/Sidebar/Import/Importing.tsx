@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, CircularProgress } from "@material-ui/core";
-import Geofile from "../Geofile";
-import { apiRest } from "../../lib/api";
+import { ETKGeofile } from "@/ETKC";
+import { apiRest } from "@/lib/api";
 
 export interface ETKImportImportingProps {
-  geofile: Geofile;
+  geofile: ETKGeofile;
   importingText?: string;
   onImported?(error: boolean): void;
 }
 
 const defaultProps: ETKImportImportingProps = {
-  geofile: {} as Geofile,
+  geofile: {} as ETKGeofile,
   importingText: "En important...",
   onImported: () => {},
 };

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Grid from "@material-ui/core/Grid";
-
+import { ETKSignin, ETKRegistrationLinkConfirmation } from "@/ETKC";
 import { useAppContext } from "../providers/AppContext.js";
-import ETKSignin from "../components/SignIn";
-import ETKRegistrationLinkConfirmation from "../components/RegistrationLink/Confirmation";
+import { apiRest } from "@/lib/api";
 
 export default function RegistrationLinkPage() {
   const router = useRouter();

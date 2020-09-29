@@ -1,6 +1,7 @@
 .env
 .devcontainer
-.vscode/
+.vscode/*
+!.vscode/ecoteka.code-snippets
 backend/app/app/uploaded_files
 uploaded_files
 backups

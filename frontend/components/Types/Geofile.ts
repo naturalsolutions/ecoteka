@@ -1,5 +1,5 @@
 export default interface ETKGeofile {
-  id: number;
+  id: number | null;
   user_id: number;
   organization_id: number;
   name: string;

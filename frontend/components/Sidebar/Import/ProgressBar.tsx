@@ -1,8 +1,8 @@
 import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import { LinearProgress } from "@material-ui/core";
 
-export interface ETKProgressBarProps {
+export interface ETKSidebarImportProgressBarProps {
   linearProgressValue: number;
 }
 
@@ -16,7 +16,9 @@ const useStyle = makeStyles(() =>
   })
 );
 
-const ETKProgressBar: React.FC<ETKProgressBarProps> = (props) => {
+const ETKSidebarImportProgressBar: React.FC<ETKSidebarImportProgressBarProps> = (
+  props
+) => {
   const classes = useStyle();
   let properties = {};
 
@@ -30,6 +32,6 @@ const ETKProgressBar: React.FC<ETKProgressBarProps> = (props) => {
   );
 };
 
-ETKProgressBar.defaultProps = {};
+ETKSidebarImportProgressBar.defaultProps = {};
 
-export default ETKProgressBar;
+export default ETKSidebarImportProgressBar;

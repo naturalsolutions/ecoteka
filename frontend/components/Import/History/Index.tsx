@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Button, Paper } from "@material-ui/core";
-
-import ETKImportHistoryTable from "./Table";
-import Geofile from "../../Geofile";
+import { ETKImportHistoryTable, ETKGeofile } from "@/ETKC";
 
 export interface ETKImportHistoryIndexProps {
-  headers: [];
-  rows?: Geofile[];
-  title: string;
-  importText: string;
-  deleteText: string;
+  headers: string[];
+  rows?: ETKGeofile[];
+  title?: string;
+  importText?: string;
+  deleteText?: string;
   onSelected?(selected: string[]): void;
   onDelete?(selected: string[]): void;
   onImport?(name: string): void;
