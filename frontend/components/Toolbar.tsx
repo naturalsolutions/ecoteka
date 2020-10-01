@@ -19,14 +19,12 @@ import Collapse from "@material-ui/core/Collapse";
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 
 import { useAppContext } from "../providers/AppContext";
-import { apiRest } from "../lib/api";
 import ETKLogout from "./Logout";
 
 export interface ETKToolbarProps {
   logo: string;
   numberOfTrees: string;
   loginText: string;
-  logoutText: string;
   registerText: string;
   aboutText: string;
   onDarkToggle: ETKDarkToggleProps["onToggle"];
@@ -37,7 +35,6 @@ const defaultProps: ETKToolbarProps = {
   logo: "/assets/light/logo.svg",
   numberOfTrees: "4.6 millions of trees",
   loginText: "Login",
-  logoutText: "Déconnexion",
   registerText: "S'inscrire",
   aboutText: "Nous contacter",
   onDarkToggle: () => {},
@@ -92,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
-  const { user, setUser } = useAppContext();
+  const { user } = useAppContext();
 
   const ETKRegister = dynamic(() => import("../components/Register"), {
     ssr: false,
@@ -194,7 +191,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       user.full_name || user.email.substr(0, user.email.indexOf("@"));
     return (
       <React.Fragment>
-        {/* <ETKLogout logoutText={props.logoutText} /> */}
         {user.is_superuser ? (
           <Button
             className={classes.toolbarButton}

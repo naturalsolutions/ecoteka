@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import i18n from "../i18n";
+import "../i18n";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "../components/Map/map.css";
 
 import { Provider as AppContextProvider } from "../providers/AppContext";
 
-const MyApp = ({ Component, pageProps }) => {
+export default function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
 
@@ -32,11 +32,9 @@ const MyApp = ({ Component, pageProps }) => {
       </AppContextProvider>
     </React.Fragment>
   );
-};
+}
 
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,
 };
-
-export default i18n.appWithTranslation(MyApp);

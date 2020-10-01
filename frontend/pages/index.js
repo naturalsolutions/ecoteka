@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { useState, createRef, useEffect } from "react";
 import { Paper, Grid, makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
-import i18n from "../i18n";
 
 import ETKSidebar from "../components/Sidebar";
 import ETKMap from "../components/Map/Map";
@@ -40,7 +39,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const IndexPage = function ({ drawer }) {
+export default function IndexPage({ drawer }) {
   const mapRef = createRef();
   const classes = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -199,14 +198,8 @@ const IndexPage = function ({ drawer }) {
       </Grid>
     </Template>
   );
-};
+}
 
 IndexPage.getInitialProps = ({ query: { drawer } }) => {
   return { drawer };
 };
-
-IndexPage.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default i18n.withTranslation("common")(IndexPage);

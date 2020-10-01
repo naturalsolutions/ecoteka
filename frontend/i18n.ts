@@ -1,10 +1,21 @@
-import NextI18Next from "next-i18next";
-import path from "path";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import Backend from "i18next-http-backend";
+import LanguageDetector from "i18next-browser-languagedetector";
 
-export default new NextI18Next({
-  otherLanguages: ["es", "fr", "en"],
-  defaultLanguage: "fr",
-  browserLanguageDetection: false,
-  serverLanguageDetection: false,
-  localePath: path.resolve("./public/static/locales"),
-});
+i18n
+  .use(Backend)
+  .use(LanguageDetector)
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .init({
+    preload: ["en", "fr", "es"],
+    lng: "fr",
+    fallbackLng: "fr",
+    ns: ["common", "components"],
+    defaultNS: "common",
+    interpolation: {
+      escapeValue: false, // not needed for react as it escapes by default
+    },
+  });
+
+export default i18n;

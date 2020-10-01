@@ -1,19 +1,14 @@
 import { Button } from "@material-ui/core";
 import { useAppContext } from "../providers/AppContext.js";
 import { apiRest } from "../lib/api";
-import i18n from "../i18n";
+import { useTranslation } from "react-i18next";
 
 export interface ETKLogoutProps {
-  logoutText: string;
   onClick?: () => void;
 }
 
-const defaultProps: ETKLogoutProps = {
-  logoutText: "Déconnexion",
-};
-
 const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
-  const { t } = i18n.useTranslation("common");
+  const { t } = useTranslation("components");
   const { setUser } = useAppContext();
 
   return (
@@ -27,11 +22,9 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
         setUser(null);
       }}
     >
-      {t("logout")}
+      {t("Logout.logout")}
     </Button>
   );
 };
-
-ETKLogout.defaultProps = defaultProps;
 
 export default ETKLogout;
