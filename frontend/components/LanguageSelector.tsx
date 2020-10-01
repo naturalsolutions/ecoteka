@@ -1,11 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { FormControl, Select, MenuItem } from "@material-ui/core";
 
-export interface ETKLanguageSelectorProps {
-  onClick?: () => void;
-}
-
-const ETKLanguageSelector: React.FC<ETKLanguageSelectorProps> = (props) => {
+const ETKLanguageSelector: React.FC = () => {
   const { t, i18n } = useTranslation("components");
 
   const onChangeLanguage = (e) => {
