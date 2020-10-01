@@ -7,7 +7,7 @@ class Users {
     try {
       const response = await this.api.get("/users/me");
 
-      if (response) {
+      if (response.ok) {
         const user = await response.json();
 
         if (user.detail) {

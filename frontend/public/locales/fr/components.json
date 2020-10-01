@@ -1,0 +1,47 @@
+{
+  "Logout": {
+    "logout": "Déconnexion"
+  },
+
+  "SignIn": {
+    "title": "Connexion",
+    "buttonCancel": "Annuler",
+    "buttonConnexion": "Connexion",
+    "labelPassword": "Mot de passe",
+    "labelUsername": "Adresse email",
+    "errorMessageServer": "Adresse email ou mot de passe incorrect",
+    "errorMessageEmail": "Veuillez saisir un email valide.",
+    "errorMessageRequiredField": "Veuillez renseigner ce champ."
+  },
+
+  "LanguageSelector": {
+    "en": "Anglais",
+    "fr": "Français",
+    "es": "Espagnol"
+  },
+
+  "Toolbar": {
+    "menu": {
+      "plantHeritage": {
+        "plantHeritage": "Patrimoine Vegetal",
+        "allTrees": "Tous les arbres",
+        "addATree": "Ajouter un arbre"
+      },
+      "dataImport": {
+        "dataImport": "Import de donnees",
+        "importYourData": "Importer vos données",
+        "importHistory": "Historique des imports"
+      }
+    }
+  },
+
+  "Map": {
+    "SearchCity": {
+      "label": "Rechercher une ville"
+    },
+    "SateliteToggle": {
+      "map": "Carte",
+      "satellite": "Satellite"
+    }
+  }
+}

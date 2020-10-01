@@ -9,8 +9,6 @@ import datetime
 from alembic import op
 import sqlalchemy as sa
 
-from app.models.geo_file import GeoFileStatus
-
 
 # revision identifiers, used by Alembic.
 revision = '6bab6aa454d7'
@@ -37,11 +35,10 @@ def upgrade():
         sa.Column("latitude_column", sa.String(), nullable=True),
         sa.Column("properties", sa.JSON(), nullable=True),
         sa.Column("status",
-                  sa.Enum(GeoFileStatus,
-                          values_callable=lambda obj: [e.value for e in obj]),
+                  sa.Enum("uploaded", "imported", "importing", name="geofilestatus"),
                   nullable=False,
-                  default=GeoFileStatus.UPLOADED.value,
-                  server_default=GeoFileStatus.UPLOADED.value),
+                  default='uploaded',
+                  server_default='uploaded'),
         sa.Column("uploaded_date",
                   sa.DateTime,
                   nullable=False),
