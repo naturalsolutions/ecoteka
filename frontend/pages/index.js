@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState, createRef, useEffect } from "react";
 import { Paper, Grid, makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
@@ -7,7 +8,7 @@ import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
 import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
-import ETKImport from "../components/Import/Index.tsx";
+import ETKImport from "../components/Import/Index";
 
 import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
@@ -38,7 +39,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function IndexPage({ drawer }) {
+export default function IndexPage() {
   const mapRef = createRef();
   const classes = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -180,7 +181,7 @@ export default function IndexPage({ drawer }) {
       >
         <Grid item className={classes.sidebar}>
           <Paper elevation={0} className={classes.sidebarPaper}>
-            {switchRenderDrawer(drawer)}
+            {switchRenderDrawer(router.query.drawer)}
           </Paper>
         </Grid>
         <Grid item xs className={classes.main}>
@@ -198,7 +199,3 @@ export default function IndexPage({ drawer }) {
     </Template>
   );
 }
-
-IndexPage.getInitialProps = ({ query: { drawer } }) => {
-  return { drawer };
-};
