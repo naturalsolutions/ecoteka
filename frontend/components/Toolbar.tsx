@@ -20,6 +20,7 @@ import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 
 import { useAppContext } from "../providers/AppContext";
 import { apiRest } from "../lib/api";
+import ETKLogout from "./Logout";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -177,15 +178,11 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         {user.full_name && <p>{user.full_name}</p>}
         <p>{user.email}</p>
         <div>
-          <Button
-            onClick={(e) => {
+          <ETKLogout
+            onClick={() => {
               setUserInfosAnchorEl(null);
-              apiRest.auth.logout();
-              setUser(null);
             }}
-          >
-            {props.logoutText}
-          </Button>
+          />
         </div>
       </Popover>
     );
