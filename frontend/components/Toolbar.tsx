@@ -14,6 +14,7 @@ import ETKContact from "./Contact";
 import ETKSignin from "./SignIn";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 import Collapse from "@material-ui/core/Collapse";
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
@@ -89,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
+  const { t } = useTranslation("components");
   const classes = useStyles();
   const { user } = useAppContext();
 
@@ -329,17 +331,17 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                   setIsMenuOpen(!isMenuOpen);
                 }}
               >
-                IMPORT DE DONNEES
+                {t("Toolbar.menu.dataImport.dataImport")}
               </Button>
               <div className="level-2">
                 <Link href="/?drawer=import" passHref>
                   <Button size="small" component="a">
-                    Importer vos données
+                    {t("Toolbar.menu.dataImport.importYourData")}
                   </Button>
                 </Link>
                 <Link href="/imports" passHref>
                   <Button size="small" component="a">
-                    Historique des imports
+                    {t("Toolbar.menu.dataImport.importHistory")}
                   </Button>
                 </Link>
               </div>

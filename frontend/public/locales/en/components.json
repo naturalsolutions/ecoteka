@@ -18,5 +18,15 @@
     "en": "English",
     "fr": "French",
     "es": "Spanish"
+  },
+
+  "Toolbar": {
+    "menu": {
+      "dataImport": {
+        "dataImport": "Data Import",
+        "importYourData": "Import your data",
+        "importHistory": "Import history"
+      }
+    }
   }
 }
