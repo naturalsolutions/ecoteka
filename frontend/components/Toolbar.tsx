@@ -287,7 +287,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         onClose={(e) => {
           setSigninOpen(false);
         }}
-        titleText="Connexion"
       />
       <ETKRegister
         isOpen={isRegisterOpen}

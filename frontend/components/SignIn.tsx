@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -6,18 +6,14 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import getConfig from "next/config";
 import { apiRest } from "../lib/api";
 import { useAppContext } from "../providers/AppContext.js";
-
-const { publicRuntimeConfig } = getConfig();
+import { useTranslation } from "react-i18next";
 
 export interface ETKSigninProps {
+  titleText?: string;
   isOpen: boolean;
   onClose: Function;
-  titleText: string;
-  buttonCancelText?: string;
-  buttonConnexionText?: string;
   disableBackdropClick?: boolean;
   disableEscapeKeyDown?: boolean;
 }
@@ -25,15 +21,13 @@ export interface ETKSigninProps {
 const defaultProps: ETKSigninProps = {
   isOpen: false,
   onClose: () => {},
-  titleText: "Login",
-  buttonCancelText: "Annuler",
-  buttonConnexionText: "Connexion",
   disableBackdropClick: false,
   disableEscapeKeyDown: false,
 };
 
 const ETKSignin: React.FC<ETKSigninProps> = (props) => {
-  const { user, setUser } = useAppContext();
+  const { setUser } = useAppContext();
+  const { t } = useTranslation("components");
 
   const getFormDefault = () => {
     return {
@@ -71,12 +65,12 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
         continue;
       }
       if (!form[key].value) {
-        form[key].errorMessage = "Veuillez renseigner ce champs.";
+        form[key].errorMessage = t("SignIn.errorMessageRequiredField");
       }
     }
 
     if (!validateEmail(form.username.value)) {
-      form.username.errorMessage = "Veuillez saisir un email valide.";
+      form.username.errorMessage = t("SignIn.errorMessageEmail");
     }
 
     setForm({ ...form });
@@ -97,8 +91,8 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
     const token = await apiRest.auth.accessToken(credentials);
 
     if (!token) {
-      form.username.errorMessage = "Incorrect email or password";
-      form.password.errorMessage = "Incorrect email or password";
+      form.username.errorMessage = t("SignIn.errorMessageServer");
+      form.password.errorMessage = form.username.errorMessage;
       setIsSending(false);
       return;
     }
@@ -125,7 +119,9 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
       disableBackdropClick={props.disableBackdropClick}
       disableEscapeKeyDown={props.disableEscapeKeyDown}
     >
-      <DialogTitle id="scroll-dialog-title">{props.titleText}</DialogTitle>
+      <DialogTitle id="scroll-dialog-title">
+        {props.titleText ? props.titleText : t("SignIn.title")}
+      </DialogTitle>
       <Fragment>
         <DialogContent>
           <form noValidate autoComplete="off">
@@ -139,7 +135,7 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
                   InputProps={{
                     disableUnderline: true,
                   }}
-                  label="Adresse email"
+                  label={t("SignIn.labelUsername")}
                   type="email"
                   fullWidth
                   onChange={onInputChange}
@@ -156,7 +152,7 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
                   InputProps={{
                     disableUnderline: true,
                   }}
-                  label="Mot de passe"
+                  label={t("SignIn.labelPassword")}
                   type="password"
                   fullWidth
                   onChange={onInputChange}
@@ -174,15 +170,16 @@ const ETKSignin: React.FC<ETKSigninProps> = (props) => {
             handleClose(event, "cancelByClick");
           }}
         >
-          {props.buttonCancelText}
+          {t("SignIn.buttonCancel")}
         </Button>
         <Button
+          color="primary"
           onClick={() => {
             submit();
           }}
           variant="contained"
         >
-          {props.buttonConnexionText}
+          {t("SignIn.buttonConnexion")}
         </Button>
       </DialogActions>
     </Dialog>

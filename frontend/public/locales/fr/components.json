@@ -1,5 +1,16 @@
 {
   "Logout": {
     "logout": "Déconnexion"
+  },
+
+  "SignIn": {
+    "title": "Connexion",
+    "buttonCancel": "Annuler",
+    "buttonConnexion": "Connexion",
+    "labelPassword": "Mot de passe",
+    "labelUsername": "Adresse email",
+    "errorMessageServer": "Incorrect email or password",
+    "errorMessageEmail": "Veuillez saisir un email valide.",
+    "errorMessageRequiredField": "Veuillez renseigner ce champs."
   }
 }

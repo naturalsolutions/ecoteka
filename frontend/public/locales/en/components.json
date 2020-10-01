@@ -1,5 +1,16 @@
 {
   "Logout": {
     "logout": "Logout"
+  },
+
+  "SignIn": {
+    "title": "Login",
+    "buttonCancel": "Cancel",
+    "buttonConnexion": "Login",
+    "labelPassword": "Password",
+    "labelUsername": "Email",
+    "errorMessageServer": "Incorrect email or password",
+    "errorMessageEmail": "Email address is invalid",
+    "errorMessageRequiredField": "Field required"
   }
 }

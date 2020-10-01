@@ -1,5 +1,16 @@
 {
   "Logout": {
     "logout": "Cerrar sesión"
+  },
+
+  "SignIn": {
+    "title": "Iniciar sesión",
+    "buttonCancel": "Cancelar",
+    "buttonConnexion": "Iniciar sesión",
+    "labelPassword": "Contraseña",
+    "labelUsername": "Correo electrónico",
+    "errorMessageServer": "Correo electrónico o contraseña incorrectos",
+    "errorMessageEmail": "Correo electrónico no válido",
+    "errorMessageRequiredField": "Campo obligatorio"
   }
 }
