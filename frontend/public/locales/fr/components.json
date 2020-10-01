@@ -9,7 +9,7 @@
     "buttonConnexion": "Connexion",
     "labelPassword": "Mot de passe",
     "labelUsername": "Adresse email",
-    "errorMessageServer": "Incorrect email or password",
+    "errorMessageServer": "Adresse email ou mot de passe incorrect",
     "errorMessageEmail": "Veuillez saisir un email valide.",
     "errorMessageRequiredField": "Veuillez renseigner ce champs."
   }

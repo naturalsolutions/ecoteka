@@ -39,7 +39,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function IndexPage({ drawer }) {
+export default function IndexPage() {
   const mapRef = createRef();
   const classes = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -181,7 +181,7 @@ export default function IndexPage({ drawer }) {
       >
         <Grid item className={classes.sidebar}>
           <Paper elevation={0} className={classes.sidebarPaper}>
-            {switchRenderDrawer(drawer)}
+            {switchRenderDrawer(router.query.drawer)}
           </Paper>
         </Grid>
         <Grid item xs className={classes.main}>
@@ -199,7 +199,3 @@ export default function IndexPage({ drawer }) {
     </Template>
   );
 }
-
-IndexPage.getInitialProps = ({ query: { drawer } }) => {
-  return { drawer };
-};
