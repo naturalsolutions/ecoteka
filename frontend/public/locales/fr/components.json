@@ -11,7 +11,7 @@
     "labelUsername": "Adresse email",
     "errorMessageServer": "Adresse email ou mot de passe incorrect",
     "errorMessageEmail": "Veuillez saisir un email valide.",
-    "errorMessageRequiredField": "Veuillez renseigner ce champs."
+    "errorMessageRequiredField": "Veuillez renseigner ce champ."
   },
 
   "LanguageSelector": {
@@ -23,8 +23,8 @@
   "Toolbar": {
     "menu": {
       "dataImport": {
-        "dataImport": "Import de donnees",
-        "importYourData": "Importa tus datos",
+        "dataImport": "Import de données",
+        "importYourData": "Importer vos données",
         "importHistory": "Historique des imports"
       }
     }
