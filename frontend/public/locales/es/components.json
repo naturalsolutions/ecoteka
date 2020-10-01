@@ -12,5 +12,11 @@
     "errorMessageServer": "Correo electrónico o contraseña incorrectos",
     "errorMessageEmail": "Correo electrónico no válido",
     "errorMessageRequiredField": "Campo obligatorio"
+  },
+
+  "LanguageSelector": {
+    "en": "Ingles",
+    "fr": "Francés",
+    "es": "Español"
   }
 }

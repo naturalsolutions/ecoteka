@@ -12,5 +12,11 @@
     "errorMessageServer": "Adresse email ou mot de passe incorrect",
     "errorMessageEmail": "Veuillez saisir un email valide.",
     "errorMessageRequiredField": "Veuillez renseigner ce champs."
+  },
+
+  "LanguageSelector": {
+    "en": "Anglais",
+    "fr": "Français",
+    "es": "Espagnol"
   }
 }

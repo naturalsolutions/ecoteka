@@ -12,5 +12,11 @@
     "errorMessageServer": "Incorrect email or password",
     "errorMessageEmail": "Email address is invalid",
     "errorMessageRequiredField": "Field required"
+  },
+
+  "LanguageSelector": {
+    "en": "English",
+    "fr": "French",
+    "es": "Spanish"
   }
 }

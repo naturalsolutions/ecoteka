@@ -20,6 +20,7 @@ import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 
 import { useAppContext } from "../providers/AppContext";
 import ETKLogout from "./Logout";
+import ETKLanguageSelector from "./LanguageSelector";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -47,11 +48,11 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     maxHeight: "40px",
   },
-  toolbar: {
-    background: "#8b8b8b",
-    color: "#fff",
+  languageSelector: {
+    marginRight: "3rem",
   },
-  toolbarButton: {
+  toolbar: {
+    background: "#b2dfdc",
     color: "#fff",
   },
   userInfosPaper: {
@@ -193,7 +194,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       <React.Fragment>
         {user.is_superuser ? (
           <Button
-            className={classes.toolbarButton}
             onClick={() => {
               setSigninOpen(false);
               setRegisterOpen(true);
@@ -212,7 +212,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           }}
         />
         <Button
-          className={classes.toolbarButton}
           onClick={(e) => {
             setUserInfosAnchorEl(e.currentTarget);
           }}
@@ -229,7 +228,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       <React.Fragment>
         <Hidden xsDown>
           <Button
-            className={classes.toolbarButton}
             onClick={(e) => {
               setSigninOpen(true);
             }}
@@ -267,9 +265,12 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         </Grid>
 
         <Grid container justify="flex-end">
+          <Grid item className={classes.languageSelector}>
+            <ETKLanguageSelector />
+          </Grid>
+
           <Hidden xsDown>
             <Button
-              className={classes.toolbarButton}
               onClick={() => {
                 setSigninOpen(false);
                 setRegisterOpen(false);
