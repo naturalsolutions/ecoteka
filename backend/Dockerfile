@@ -7,7 +7,7 @@ RUN git clone https://github.com/mapbox/tippecanoe.git \
   && cd tippecanoe \
   && make -j
 
-FROM node:slim as email-templates
+FROM node:alpine as email-templates
 
 COPY ./app/app/email-templates/src /email-templates
 
