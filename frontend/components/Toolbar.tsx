@@ -14,18 +14,19 @@ import ETKContact from "./Contact";
 import ETKSignin from "./SignIn";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 import Collapse from "@material-ui/core/Collapse";
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 
 import { useAppContext } from "../providers/AppContext";
-import { apiRest } from "../lib/api";
+import ETKLogout from "./Logout";
+import ETKLanguageSelector from "./LanguageSelector";
 
 export interface ETKToolbarProps {
   logo: string;
   numberOfTrees: string;
   loginText: string;
-  logoutText: string;
   registerText: string;
   aboutText: string;
   onDarkToggle: ETKDarkToggleProps["onToggle"];
@@ -36,7 +37,6 @@ const defaultProps: ETKToolbarProps = {
   logo: "/assets/light/logo.svg",
   numberOfTrees: "4.6 millions of trees",
   loginText: "Login",
-  logoutText: "Déconnexion",
   registerText: "S'inscrire",
   aboutText: "Nous contacter",
   onDarkToggle: () => {},
@@ -49,11 +49,11 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     maxHeight: "40px",
   },
-  toolbar: {
-    background: "#8b8b8b",
-    color: "#fff",
+  languageSelector: {
+    marginRight: "3rem",
   },
-  toolbarButton: {
+  toolbar: {
+    background: "#b2dfdc",
     color: "#fff",
   },
   userInfosPaper: {
@@ -90,8 +90,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
+  const { t } = useTranslation("components");
   const classes = useStyles();
-  const { user, setUser } = useAppContext();
+  const { user } = useAppContext();
 
   const ETKRegister = dynamic(() => import("../components/Register"), {
     ssr: false,
@@ -177,15 +178,11 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         {user.full_name && <p>{user.full_name}</p>}
         <p>{user.email}</p>
         <div>
-          <Button
-            onClick={(e) => {
+          <ETKLogout
+            onClick={() => {
               setUserInfosAnchorEl(null);
-              apiRest.auth.logout();
-              setUser(null);
             }}
-          >
-            {props.logoutText}
-          </Button>
+          />
         </div>
       </Popover>
     );
@@ -197,10 +194,8 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       user.full_name || user.email.substr(0, user.email.indexOf("@"));
     return (
       <React.Fragment>
-        {/* <ETKLogout logoutText={props.logoutText} /> */}
         {user.is_superuser ? (
           <Button
-            className={classes.toolbarButton}
             onClick={() => {
               setSigninOpen(false);
               setRegisterOpen(true);
@@ -219,7 +214,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           }}
         />
         <Button
-          className={classes.toolbarButton}
           onClick={(e) => {
             setUserInfosAnchorEl(e.currentTarget);
           }}
@@ -236,7 +230,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       <React.Fragment>
         <Hidden xsDown>
           <Button
-            className={classes.toolbarButton}
             onClick={(e) => {
               setSigninOpen(true);
             }}
@@ -274,9 +267,12 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         </Grid>
 
         <Grid container justify="flex-end">
+          <Grid item className={classes.languageSelector}>
+            <ETKLanguageSelector />
+          </Grid>
+
           <Hidden xsDown>
             <Button
-              className={classes.toolbarButton}
               onClick={() => {
                 setSigninOpen(false);
                 setRegisterOpen(false);
@@ -335,17 +331,17 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                   setIsMenuOpen(!isMenuOpen);
                 }}
               >
-                IMPORT DE DONNEES
+                {t("Toolbar.menu.dataImport.dataImport")}
               </Button>
               <div className="level-2">
                 <Link href="/?drawer=import" passHref>
                   <Button size="small" component="a">
-                    Importer vos données
+                    {t("Toolbar.menu.dataImport.importYourData")}
                   </Button>
                 </Link>
                 <Link href="/imports" passHref>
                   <Button size="small" component="a">
-                    Historique des imports
+                    {t("Toolbar.menu.dataImport.importHistory")}
                   </Button>
                 </Link>
               </div>

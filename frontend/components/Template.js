@@ -45,7 +45,6 @@ export default function Template(props) {
           numberOfTrees="4.6 millions of trees"
           aboutText="Nous contacter"
           loginText="Login"
-          logoutText="Logout"
           registerText="Register"
           onDarkToggle={onDarkToggleHandler}
         />
