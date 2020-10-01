@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ButtonGroup, Button } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 export interface ETKMapSateliteToggleProps {
   onToggle?(active: string): void;
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const ETKMapSateliteToggle: React.FC<ETKMapSateliteToggleProps> = (props) => {
+  const { t } = useTranslation("components");
   const classes = useStyles();
   const [active, setActive] = useState("map");
 
@@ -39,20 +41,22 @@ const ETKMapSateliteToggle: React.FC<ETKMapSateliteToggleProps> = (props) => {
   return (
     <ButtonGroup
       disableElevation
-      variant="contained"
+      variant="outlined"
       className={classes.buttonGroup}
     >
       <Button
-        color={active === "map" ? "primary" : null}
+        variant={active === "map" ? "contained" : "outlined"}
+        color="secondary"
         onClick={() => onClickHandler("map")}
       >
-        {props.buttonMapContent}
+        {t("Map.SateliteToggle.map")}
       </Button>
       <Button
-        color={active === "satelite" ? "primary" : null}
+        variant={active === "satelite" ? "contained" : "outlined"}
+        color="secondary"
         onClick={() => onClickHandler("satelite")}
       >
-        {props.buttonSatelliteContent}
+        {t("Map.SateliteToggle.satellite")}
       </Button>
     </ButtonGroup>
   );

@@ -22,11 +22,26 @@
 
   "Toolbar": {
     "menu": {
+      "plantHeritage": {
+        "plantHeritage": "Plant heritage",
+        "allTrees": "All trees",
+        "addATree": "Add a tree"
+      },
       "dataImport": {
         "dataImport": "Data Import",
         "importYourData": "Import your data",
         "importHistory": "Import history"
       }
+    }
+  },
+
+  "Map": {
+    "SearchCity": {
+      "label": "Search for a city"
+    },
+    "SateliteToggle": {
+      "map": "Map",
+      "satellite": "Satellite"
     }
   }
 }

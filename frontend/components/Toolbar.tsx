@@ -310,16 +310,18 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                   setIsMenuOpen(!isMenuOpen);
                 }}
               >
-                PATRIMOINE VEGETAL
+                {t("Toolbar.menu.plantHeritage.plantHeritage")}
               </Button>
               <div className="level-2">
                 <Link href="/" passHref>
                   <Button size="small" component="a">
-                    Tous les arbres
+                    {t("Toolbar.menu.plantHeritage.allTrees")}
                   </Button>
                 </Link>
                 <Link href="/treeedition" passHref>
-                  <Button size="small">Ajouter un arbre</Button>
+                  <Button size="small">
+                    {t("Toolbar.menu.plantHeritage.addATree")}
+                  </Button>
                 </Link>
               </div>
             </div>
