@@ -22,7 +22,6 @@ const useStyles = makeStyles(() => ({
   },
   sidebar: {
     height: "100%",
-    overflow: "scroll",
     overflowY: "scroll",
     overflowX: "hidden",
     "&::-webkit-scrollbar": {

@@ -75,7 +75,7 @@ def register_new_user(
         user_in.password
     )
 
-    generate_and_insert_registration_link_task.delay(user_in.id)
+    generate_and_insert_registration_link_task.delay(user_in_db.id)
 
     return generate_response_for_token(
         user_id=user_in_db.id,

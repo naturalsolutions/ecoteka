@@ -7,13 +7,32 @@ RUN git clone https://github.com/mapbox/tippecanoe.git \
   && cd tippecanoe \
   && make -j
 
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
+FROM node:alpine as email-templates
+
+COPY ./app/app/email-templates/src /email-templates
+
+RUN mkdir -p /email-templates/build \
+  && npx mjml /email-templates/*.mjml -o /email-templates/build
+
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8-slim as builder
+
+RUN apt-get -y update && apt-get -y install libpq-dev build-essential
+
+RUN mkdir /install
+WORKDIR /install
+
+RUN pip install --prefix=/install --no-cache-dir \
+  fastapi==0.61.0 pyjwt SQLAlchemy geoalchemy2 alembic \
+  passlib[bcrypt] pydantic[email] emails tenacity psycopg2-binary python-jose \
+  python-multipart pytest pytest-cov jinja2 geopandas xlrd slug celery redis
+
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8-slim
 
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get -y update && apt-get -y install npm
-
+COPY --from=email-templates /email-templates/build /app/app/email-templates/build
+COPY --from=builder /install /usr/local
 COPY --from=tippecanoe [ \
   "/tippecanoe/tippecanoe", \
   "/tippecanoe/tippecanoe-decode", \
@@ -22,9 +41,5 @@ COPY --from=tippecanoe [ \
   "/tippecanoe/tile-join", \
   "/opt/tippecanoe/" \
   ]
-
-RUN pip install --no-cache-dir fastapi==0.61.0 pyjwt SQLAlchemy geoalchemy2 alembic \
-  passlib[bcrypt] pydantic[email] emails tenacity psycopg2 python-jose \
-  python-multipart pytest pytest-cov jinja2 geopandas xlrd slug celery redis
 
 COPY ./app /app
