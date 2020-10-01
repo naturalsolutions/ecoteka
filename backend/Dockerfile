@@ -28,3 +28,7 @@ RUN pip install --no-cache-dir fastapi==0.61.0 pyjwt SQLAlchemy geoalchemy2 alem
   python-multipart pytest pytest-cov jinja2 geopandas xlrd slug celery redis
 
 COPY ./app /app
+
+COPY ./datas /data
+# will unzip the file and remove the archive
+RUN gunzip /data/TAXREFv13.txt.gz
