@@ -22,4 +22,5 @@ def upgrade():
 
 def downgrade():
     op.execute("UPDATE geofile SET status='importing' WHERE status='error'")
-    op.execute("ALTER TYPE geofilestatus REMOVE VALUE 'error'")
+    op.execute(
+        "DELETE FROM pg_enum WHERE enumtypid='geofilestatus'::regtype AND enumlabel='error'")
