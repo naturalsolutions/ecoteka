@@ -11,6 +11,9 @@ from .organization import (
 from .registration_link import (
     Registration_Link
 )
+from .taxref import (
+    Taxref
+)
 from .tree import (
     Tree
 )
@@ -25,6 +28,7 @@ __all__ = [
     "GeoFileStatus",
     "Organization",
     "Registration_Link",
+    "Taxref",
     "Tree",
     "User",
 ]

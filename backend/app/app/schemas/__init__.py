@@ -28,6 +28,14 @@ from .geo_file import (
     GeoFileCreate,
     GeoFileUpdate
 )
+from .taxref import (
+    TaxrefBase,
+    TaxrefCreate,
+    TaxrefDB,
+    TaxrefForTreesOut,
+    TaxrefOut,
+    TaxrefUpdate
+)
 from .tree import (
     Tree,
     TreePost,
@@ -63,6 +71,12 @@ __all__ = [
     "RegistrationLinkUpdate",
     "Token",
     "TokenPayload",
+    "TaxrefBase",
+    "TaxrefCreate",
+    "TaxrefDB",
+    "TaxrefForTreesOut",
+    "TaxrefOut",
+    "TaxrefUpdate",
     "Tree",
     "TreeCreate",
     "TreeImportFromGeofile"
