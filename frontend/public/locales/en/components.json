@@ -21,6 +21,8 @@
   },
 
   "Toolbar": {
+    "login": "Login",
+    "about": "About",
     "menu": {
       "plantHeritage": {
         "plantHeritage": "Plant heritage",
@@ -43,5 +45,10 @@
       "map": "Map",
       "satellite": "Satellite"
     }
+  },
+
+  "Sidebar": {
+    "treeCard": "Tree Card",
+    "wikipediaInformation": "Wikipedia Information"
   }
 }

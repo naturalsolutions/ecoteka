@@ -26,9 +26,7 @@ import ETKLanguageSelector from "./LanguageSelector";
 export interface ETKToolbarProps {
   logo: string;
   numberOfTrees: string;
-  loginText: string;
   registerText: string;
-  aboutText: string;
   onDarkToggle: ETKDarkToggleProps["onToggle"];
   onMenuClick?(index: string): void;
 }
@@ -36,9 +34,7 @@ export interface ETKToolbarProps {
 const defaultProps: ETKToolbarProps = {
   logo: "/assets/light/logo.svg",
   numberOfTrees: "4.6 millions of trees",
-  loginText: "Login",
   registerText: "S'inscrire",
-  aboutText: "Nous contacter",
   onDarkToggle: () => {},
 };
 
@@ -234,7 +230,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               setSigninOpen(true);
             }}
           >
-            {props.loginText}
+            {t("Toolbar.login")}
           </Button>
         </Hidden>
       </React.Fragment>
@@ -279,7 +275,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 setIsContactOpen(true);
               }}
             >
-              {props.aboutText}
+              {t("Toolbar.about")}
             </Button>
           </Hidden>
           {user ? renderWhenSession() : renderWhenNoSession()}
@@ -360,5 +356,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
     </AppBar>
   );
 };
+
+ETKToolbar.defaultProps = defaultProps;
 
 export default ETKToolbar;

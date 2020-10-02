@@ -18,6 +18,7 @@ import Wikipedia from "./Wikipedia";
 import ETKAlertController from "./AlertController";
 import { apiRest as api } from "../lib/api";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -78,6 +79,7 @@ export interface ETKSidebarProps {
 }
 
 const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
+  const { t } = useTranslation("components");
   const classes = useStyles();
   const router = useRouter();
 
@@ -173,7 +175,7 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
     <Paper elevation={0} className={classes.root}>
       <Toolbar>
         <Typography className={classes.toolbarTitle} variant="h6">
-          Fiche de l'arbre
+          {t("Sidebar.treeCard")}
         </Typography>
         <IconButton
           edge="end"
@@ -191,7 +193,9 @@ const ETKSidebar: React.FC<ETKSidebarProps> = (props) => {
 
       <Accordion square elevation={0}>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography variant="h6">Informations Wikipedia</Typography>
+          <Typography variant="h6">
+            {t("Sidebar.wikipediaInformation")}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Wikipedia genre={data.genre} />
