@@ -43,8 +43,6 @@ export default function Template(props) {
         <ETKToolbar
           logo={`/assets/${currentTheme}/logo.svg`}
           numberOfTrees="4.6 millions of trees"
-          aboutText="Nous contacter"
-          loginText="Login"
           registerText="Register"
           onDarkToggle={onDarkToggleHandler}
         />

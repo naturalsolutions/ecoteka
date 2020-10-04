@@ -21,6 +21,8 @@
   },
 
   "Toolbar": {
+    "login": "Iniciar sesión",
+    "about": "Obtener más información",
     "menu": {
       "plantHeritage": {
         "plantHeritage": "Patrimonio vegetal",
@@ -43,5 +45,10 @@
       "map": "Mapa",
       "satellite": "Satélite"
     }
+  },
+
+  "Sidebar": {
+    "treeCard": "Ficha de árbol",
+    "wikipediaInformation": "Información de Wikipedia"
   }
 }
