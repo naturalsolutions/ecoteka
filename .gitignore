@@ -7,3 +7,5 @@ backups
 acme.json
 tiles
 redis
+.vscode/*
+!.vscode/ecoteka.code-snippets
