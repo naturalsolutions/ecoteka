@@ -25,7 +25,6 @@ import ETKLanguageSelector from "./LanguageSelector";
 
 export interface ETKToolbarProps {
   logo: string;
-  numberOfTrees: string;
   registerText: string;
   onDarkToggle: ETKDarkToggleProps["onToggle"];
   onMenuClick?(index: string): void;
@@ -33,7 +32,6 @@ export interface ETKToolbarProps {
 
 const defaultProps: ETKToolbarProps = {
   logo: "/assets/light/logo.svg",
-  numberOfTrees: "4.6 millions of trees",
   registerText: "S'inscrire",
   onDarkToggle: () => {},
 };
@@ -43,14 +41,14 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
   },
   logo: {
-    maxHeight: "40px",
+    height: "35px",
+    paddingTop: ".3rem",
   },
   languageSelector: {
     marginRight: "3rem",
   },
   toolbar: {
     background: "#b2dfdc",
-    color: "#fff",
   },
   userInfosPaper: {
     padding: 10,
@@ -245,40 +243,41 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
     >
       <Toolbar variant="dense" className={classes.toolbar}>
         <Grid container alignItems="center">
-          <img src={props.logo} className={classes.logo} />
-          <Hidden smDown>
-            <Grid item>
-              <Typography
-                component="h2"
-                variant="h5"
-                className={classes.numberOfTrees}
-              >
-                {props.numberOfTrees}
-              </Typography>
+          <Grid item xs={6}>
+            <Grid container spacing={4} alignItems="center">
+              <Grid item>
+                <img src={props.logo} className={classes.logo} />
+              </Grid>
+              <Grid item>
+                <Typography component="h2" className={classes.numberOfTrees}>
+                  {t("Toolbar.slogan")}
+                </Typography>
+              </Grid>
+              <Grid item style={{ marginLeft: "1rem" }}>
+                <ETKDarkToggle onToggle={props.onDarkToggle} />
+              </Grid>
             </Grid>
-          </Hidden>
-          <Grid item style={{ marginLeft: "1rem" }}>
-            <ETKDarkToggle onToggle={props.onDarkToggle} />
           </Grid>
-        </Grid>
+          <Grid item xs={6}>
+            <Grid container justify="flex-end">
+              <Grid item className={classes.languageSelector}>
+                <ETKLanguageSelector />
+              </Grid>
 
-        <Grid container justify="flex-end">
-          <Grid item className={classes.languageSelector}>
-            <ETKLanguageSelector />
+              <Hidden xsDown>
+                <Button
+                  onClick={() => {
+                    setSigninOpen(false);
+                    setRegisterOpen(false);
+                    setIsContactOpen(true);
+                  }}
+                >
+                  {t("Toolbar.about")}
+                </Button>
+              </Hidden>
+              {user ? renderWhenSession() : renderWhenNoSession()}
+            </Grid>
           </Grid>
-
-          <Hidden xsDown>
-            <Button
-              onClick={() => {
-                setSigninOpen(false);
-                setRegisterOpen(false);
-                setIsContactOpen(true);
-              }}
-            >
-              {t("Toolbar.about")}
-            </Button>
-          </Hidden>
-          {user ? renderWhenSession() : renderWhenNoSession()}
         </Grid>
       </Toolbar>
       <ETKSignin
