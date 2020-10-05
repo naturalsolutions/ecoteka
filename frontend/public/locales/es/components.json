@@ -50,5 +50,20 @@
   "Sidebar": {
     "treeCard": "Ficha de árbol",
     "wikipediaInformation": "Información de Wikipedia"
+  },
+
+  "PanelWelcome": {
+    "tabLabel": "Patrimonio vegetal",
+    "title": "¡Bienvenido a EcoTeka!",
+    "text": "Natural Solutions ha estado desarrollando este servicio de inventario y gestión del patrimonio de árboles desde julio de 2020. ¡Aquí una demostración de nuestra aplicación! Puedes ver en el mapa todos los árboles disponibles del mundo en OpenData.",
+    "CardInfoPanel": {
+      "title": "Número de árboles en el mapa"
+    }
+  },
+
+  "CardAbout": {
+    "title": "¿Eres un/a gestor/a de espacios verdes?",
+    "content": "Puedes contactarnos para saber más y probar las primeras funcionalidades de nuestro inventario de arbolado urbano.",
+    "button": "Saber más"
   }
 }

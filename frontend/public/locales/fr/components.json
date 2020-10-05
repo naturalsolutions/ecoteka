@@ -50,5 +50,20 @@
   "Sidebar": {
     "treeCard": "Fiche de l'arbre",
     "wikipediaInformation": "Informations Wikipedia"
+  },
+
+  "PanelWelcome": {
+    "tabLabel": "Patrimoine Vegetal",
+    "title": "Bienvenue sur EcoTeka!",
+    "text": "Natural Solutions développe ce service d'inventaire et de gestion du patrimoine arboré depuis juillet 2020. Vous êtes ici sur un démonstrateur de notre application ! <br/>Vous pouvez voir sur la carte tous les arbres du monde disponibles en OpenData.",
+    "CardInfoPanel": {
+      "title": "Nombre d'arbres sur la carte"
+    }
+  },
+
+  "CardAbout": {
+    "title": "Vous êtes un.e gestionnaire d'espaces verts ?",
+    "content": "Vous pouvez nous contacter pour en savoir plus et essayer les premières fonctionnalités d'inventaire de patrimoine arboré.",
+    "button": "En savoir plus"
   }
 }
