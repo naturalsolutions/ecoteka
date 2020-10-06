@@ -43,3 +43,5 @@ COPY --from=tippecanoe [ \
   ]
 
 COPY ./app /app
+
+COPY ./data /data
