@@ -15,6 +15,10 @@ const useStyles = makeStyles(() => ({
     width: "25rem",
     padding: "1rem",
   },
+  title: {
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+  },
 }));
 
 interface TabPanelProps {
@@ -40,13 +44,6 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: any) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
 const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
   const { t } = useTranslation("components");
   const classes = useStyles();
@@ -61,25 +58,35 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
       <Tabs
         indicatorColor="secondary"
         textColor="secondary"
-        aria-label="disabled tabs example"
         onChange={handleChange}
         value={value}
       >
-        <Tab label={t("PanelWelcome.tabLabel")} />
+        <Tab
+          label={
+            <Grid container spacing={1}>
+              <Grid item>
+                <AcUnit />
+              </Grid>
+              <Grid item>{t("PanelWelcome.tabLabel")}</Grid>
+            </Grid>
+          }
+        />
       </Tabs>
       <TabPanel value={value} index={0} className={classes.tabPanel}>
         <Grid container direction="column" spacing={2}>
           <Grid item>
-            <Typography variant="h4">{t("PanelWelcome.title")}</Typography>
+            <Typography className={classes.title}>
+              {t("PanelWelcome.title")}
+            </Typography>
           </Grid>
           <Grid item>
-            <Typography>
+            <Typography paragraph={true}>
               <Trans>{t("PanelWelcome.text")}</Trans>
             </Typography>
           </Grid>
           <Grid item>
             <CardInfoPanel
-              iconContent={AcUnit}
+              icon={<AcUnit />}
               title={t("PanelWelcome.CardInfoPanel.title")}
               content="11 million d'arbres"
             />
