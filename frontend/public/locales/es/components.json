@@ -65,5 +65,10 @@
     "title": "¿Eres un/a gestor/a de espacios verdes?",
     "content": "Puedes contactarnos para saber más y probar las primeras funcionalidades de nuestro inventario de arbolado urbano.",
     "button": "Saber más"
+  },
+
+  "ImportHistoryEmpty": {
+    "content": "¡Aún no has realizado ninguna importación! <br/> Siempre hay un comienzo para todo",
+    "button": "Importar mis datos"
   }
 }

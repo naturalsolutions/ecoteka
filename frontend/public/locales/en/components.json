@@ -65,5 +65,10 @@
     "title": "Are you a green space manager ?",
     "content": "You can contact us to learn more and try the first tree-based heritage inventory features.",
     "button": "More informations"
+  },
+
+  "ImportHistoryEmpty": {
+    "content": "You haven't done any import yet! <br/> Everything has a beginning",
+    "button": "Import my data"
   }
 }

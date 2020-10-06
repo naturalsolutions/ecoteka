@@ -3,6 +3,7 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Button, Paper } from "@material-ui/core";
 
 import ETKImportHistoryTable from "./Table";
+import ETKImportHistoryEmpty from "./Empty";
 import Geofile from "../../Geofile";
 
 export interface ETKImportHistoryIndexProps {
@@ -55,37 +56,46 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
         <Grid item xs={6}>
           <Typography variant="h5">{props.title}</Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Grid container spacing={1} direction="row-reverse">
-            <Grid item>
-              <Button
-                disabled={!Boolean(selected.length === 1) || !props.rows.length}
-                variant="contained"
-                color="primary"
-                onClick={() => props.onImport(selected.pop())}
-              >
-                {props.importText}
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                disabled={!selected.length || !props.rows.length}
-                variant="contained"
-                color="primary"
-                onClick={() => props.onDelete(selected)}
-              >
-                {props.deleteText}
-              </Button>
+        {props.rows.length > 0 && (
+          <Grid item xs={6}>
+            <Grid container spacing={1} direction="row-reverse">
+              <Grid item>
+                <Button
+                  disabled={
+                    !Boolean(selected.length === 1) || !props.rows.length
+                  }
+                  variant="contained"
+                  color="primary"
+                  onClick={() => props.onImport(selected.pop())}
+                >
+                  {props.importText}
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Button
+                  disabled={!selected.length || !props.rows.length}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => props.onDelete(selected)}
+                >
+                  {props.deleteText}
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        )}
       </Grid>
       <Paper className={classes.table}>
-        <ETKImportHistoryTable
-          rows={props.rows}
-          headers={props.headers}
-          onSelected={onSelected}
-        />
+        {props.rows.length > 0 ? (
+          <ETKImportHistoryTable
+            rows={props.rows}
+            headers={props.headers}
+            onSelected={onSelected}
+          />
+        ) : (
+          <ETKImportHistoryEmpty />
+        )}
       </Paper>
     </Grid>
   );

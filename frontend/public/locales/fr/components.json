@@ -65,5 +65,10 @@
     "title": "Vous êtes un.e gestionnaire d'espaces verts ?",
     "content": "Vous pouvez nous contacter pour en savoir plus et essayer les premières fonctionnalités d'inventaire de patrimoine arboré.",
     "button": "En savoir plus"
+  },
+
+  "ImportHistoryEmpty": {
+    "content": "Vous n'avez pas encore effectué d'import ! <br/> Il y a un début pour toute chose",
+    "button": "Importer mes données"
   }
 }
