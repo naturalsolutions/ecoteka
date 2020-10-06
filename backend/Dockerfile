@@ -44,6 +44,4 @@ COPY --from=tippecanoe [ \
 
 COPY ./app /app
 
-COPY ./datas /data
-# will unzip the file and remove the archive
-RUN gunzip /data/TAXREFv13.txt.gz
+COPY ./data /data
