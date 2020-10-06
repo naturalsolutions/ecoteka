@@ -180,7 +180,7 @@ export default function IndexPage() {
         className={classes.root}
       >
         <Grid item className={classes.sidebar}>
-          <Paper elevation={0} className={classes.sidebarPaper}>
+          <Paper square elevation={0} className={classes.sidebarPaper}>
             {switchRenderDrawer(router.query.drawer)}
           </Paper>
         </Grid>

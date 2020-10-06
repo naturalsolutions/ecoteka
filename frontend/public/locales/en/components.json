@@ -20,11 +20,8 @@
     "es": "Spanish"
   },
 
-  "Toolbar": {
-    "slogan": "For a greener city!",
-    "login": "Login",
-    "about": "About",
-    "menu": {
+  "Template": {
+    "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Plant heritage",
         "allTrees": "All trees",
@@ -34,8 +31,19 @@
         "dataImport": "Data Import",
         "importYourData": "Import your data",
         "importHistory": "Import history"
+      },
+      "availableSoon": {
+        "availableSoon": "Available Soon !",
+        "requestAnItervention": "Request an intervention",
+        "scheduleOfInterventions": "Schedule of interventions"
       }
     }
+  },
+
+  "Toolbar": {
+    "slogan": "For a greener city!",
+    "login": "Login",
+    "about": "About"
   },
 
   "Map": {
