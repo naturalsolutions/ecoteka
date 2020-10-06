@@ -1,70 +1,69 @@
 import React from "react";
-import { Button, Typography, Grid, Box } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import {
+  Button,
+  Typography,
+  Grid,
+  Box,
+  Card,
+  CardContent,
+  makeStyles,
+} from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 export interface ETKImportTemplateProps {
-  titleText?: string;
-  hintText?: string;
-  templateTips?: string;
-  longitudeText?: string;
-  latitudeText?: string;
-  crsText?: string;
-  downloadText?: string;
   linkTemplate?: string;
 }
 
 const defaultProps: ETKImportTemplateProps = {
-  titleText: "Un doute avec votre fichier?",
-  hintText:
-    "Assurez-vous que votre fichier contient les informations suivantes",
-  templateTips: "N'hésitez pas à télécharger notre modèle au format xlsx",
-  latitudeText: "Latitude",
-  longitudeText: "Longitude",
-  crsText: "Système de Réfèrence de Coordonnées",
-  downloadText: "TÉLÉCHARGER LE TEMPLATE",
   linkTemplate: "/assets/ecoteka_import_template.xlsx",
 };
 
-const useStyle = makeStyles(() =>
-  createStyles({
-    content: {
-      color: "#fff",
-      backgroundColor: "#bbbbbb",
-      borderRadius: "5px",
-      padding: "5px 15px 5px 15px",
-      width: "100%",
-    },
-  })
-);
+const useStyle = makeStyles({
+  content: {
+    backgroundColor: "#b2dfdc",
+  },
+});
 
 const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
+  const { t } = useTranslation("components");
   const classes = useStyle();
 
   return (
-    <React.Fragment>
-      <Grid container direction="column" justify="center" alignItems="flex-end">
-        <Grid className={classes.content}>
-          <Typography variant="h6">{props.titleText}</Typography>
-          {props.hintText}
-          <Grid>
-            <div>- {props.latitudeText}</div>
-            <div>- {props.longitudeText}</div>
-            <div>- {props.crsText}</div>
+    <Grid container direction="column" alignItems="stretch">
+      <Grid item>
+        <Card className={classes.content}>
+          <CardContent>
+            <Typography variant="h6">{t("ImportTemplate.title")}</Typography>
+            <Typography>{t("ImportTemplate.content")}</Typography>
+            <Grid>
+              <Typography>- {t("ImportTemplate.latitude")}</Typography>
+              <Typography>- {t("ImportTemplate.longitude")}</Typography>
+              <Typography>- {t("ImportTemplate.crs")}</Typography>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item>
+        <Box mt={3} mb={1}>
+          <Typography>{t("ImportTemplate.download")}</Typography>
+        </Box>
+      </Grid>
+      <Grid item>
+        <Grid container direction="row-reverse">
+          <Grid item>
+            <Button
+              variant="outlined"
+              size="large"
+              color="secondary"
+              href={props.linkTemplate}
+              target="_blank"
+            >
+              {t("ImportTemplate.button")}
+            </Button>
           </Grid>
         </Grid>
-        <Box mt={3} mb={1}>
-          <Typography>{props.templateTips}</Typography>
-        </Box>
-        <Button
-          variant="outlined"
-          size="large"
-          href={props.linkTemplate}
-          target="_blank"
-        >
-          {props.downloadText}
-        </Button>
       </Grid>
-    </React.Fragment>
+    </Grid>
   );
 };
 

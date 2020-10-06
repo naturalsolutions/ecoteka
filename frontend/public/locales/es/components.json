@@ -59,5 +59,15 @@
   "Sidebar": {
     "treeCard": "Ficha de árbol",
     "wikipediaInformation": "Información de Wikipedia"
+  },
+
+  "ImportTemplate": {
+    "title": "¿Alguna duda sobre tu archivo?",
+    "content": "Asegúrese de que tu archivo contenga la siguiente información:",
+    "button": "Descargar la plantilla",
+    "longitude": "Longitud",
+    "latitude": "Latitud",
+    "crs": "Sistema de Referencia de Coordenadas",
+    "download": "Puedes descargar nuestra plantilla en formato xlsx"
   }
 }
