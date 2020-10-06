@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import AppBar from "@material-ui/core/AppBar";
+import React, { useState } from "react";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -12,11 +11,8 @@ import MoodIcon from "@material-ui/icons/Mood";
 import dynamic from "next/dynamic";
 import ETKContact from "./Contact";
 import ETKSignin from "./SignIn";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 
-import Collapse from "@material-ui/core/Collapse";
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 
 import { useAppContext } from "../providers/AppContext";
@@ -27,7 +23,6 @@ export interface ETKToolbarProps {
   logo: string;
   registerText: string;
   onDarkToggle: ETKDarkToggleProps["onToggle"];
-  onMenuClick?(index: string): void;
 }
 
 const defaultProps: ETKToolbarProps = {
@@ -37,9 +32,6 @@ const defaultProps: ETKToolbarProps = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
   logo: {
     height: "35px",
     paddingTop: ".3rem",
@@ -53,30 +45,6 @@ const useStyles = makeStyles((theme) => ({
   userInfosPaper: {
     padding: 10,
     textAlign: "center",
-  },
-  navBar: {
-    display: "flex",
-    paddingLeft: 5,
-    "& > div": {
-      "&:not(:last-child)": {
-        marginRight: "30px",
-      },
-      "& > button": {
-        minHeight: 48,
-        borderRadius: 0,
-        borderBottom: "2px solid transparent",
-        "&.active": {
-          borderBottomColor: "#000",
-        },
-      },
-    },
-    "& .level-2": {
-      padding: "5px 0",
-      "& .MuiButton-root": {
-        display: "block",
-        textTransform: "none",
-      },
-    },
   },
   numberOfTrees: {
     width: "100%",
@@ -96,55 +64,8 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [curLevel1, setCurLevel1] = useState("patrimony");
-
   const [userInfosAnchorEl, setUserInfosAnchorEl] = React.useState(null);
   const isUserInfosOpen = Boolean(userInfosAnchorEl);
-
-  const router = useRouter();
-
-  //TODO
-  const matchCurLevel1 = (url) => {
-    const urlObj = new URL(url, "http://anybase/");
-    const drawerName = urlObj.searchParams.get("drawer");
-    if (drawerName == "import" || urlObj.pathname == "/imports") {
-      setCurLevel1("import");
-    } else if (drawerName == "intervention_request") {
-      setCurLevel1("intervention");
-    } else {
-      setCurLevel1("patrimony");
-    }
-  };
-
-  useEffect(() => {
-    const handleRouteChange = (url) => {
-      matchCurLevel1(url);
-      setIsMenuOpen(false);
-    };
-
-    router.events.on("routeChangeStart", handleRouteChange);
-
-    return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
-    };
-  }, []);
-
-  const getLevel1ClassNames = (name) => {
-    const classNames = {
-      active: curLevel1 == name,
-    };
-
-    return Object.keys(classNames)
-      .filter((key) => {
-        return Boolean(classNames[key]);
-      })
-      .join(" ");
-  };
-
-  useEffect(() => {
-    matchCurLevel1(window.location.href);
-  });
 
   const renderUserInfos = () => {
     return (
@@ -235,12 +156,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
     );
   };
   return (
-    <AppBar
-      className={classes.appBar}
-      position="fixed"
-      color="inherit"
-      elevation={4}
-    >
+    <React.Fragment>
       <Toolbar variant="dense" className={classes.toolbar}>
         <Grid container alignItems="center">
           <Grid item xs={6}>
@@ -294,65 +210,13 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
         }}
         submitButtonText="Submit"
       />
-      {user && (
-        <Collapse in={isMenuOpen} collapsedHeight={48}>
-          <div className={classes.navBar}>
-            <div>
-              <Button
-                color="primary"
-                className={getLevel1ClassNames("patrimony")}
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-              >
-                {t("Toolbar.menu.plantHeritage.plantHeritage")}
-              </Button>
-              <div className="level-2">
-                <Link href="/" passHref>
-                  <Button size="small" component="a">
-                    {t("Toolbar.menu.plantHeritage.allTrees")}
-                  </Button>
-                </Link>
-                <Link href="/treeedition" passHref>
-                  <Button size="small">
-                    {t("Toolbar.menu.plantHeritage.addATree")}
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div>
-              <Button
-                color="primary"
-                className={getLevel1ClassNames("import")}
-                onClick={() => {
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-              >
-                {t("Toolbar.menu.dataImport.dataImport")}
-              </Button>
-              <div className="level-2">
-                <Link href="/?drawer=import" passHref>
-                  <Button size="small" component="a">
-                    {t("Toolbar.menu.dataImport.importYourData")}
-                  </Button>
-                </Link>
-                <Link href="/imports" passHref>
-                  <Button size="small" component="a">
-                    {t("Toolbar.menu.dataImport.importHistory")}
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </Collapse>
-      )}
       <ETKContact
         isOpen={isContactOpen}
         onClose={() => {
           setIsContactOpen(false);
         }}
       />
-    </AppBar>
+    </React.Fragment>
   );
 };
 

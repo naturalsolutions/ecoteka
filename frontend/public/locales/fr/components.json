@@ -20,11 +20,8 @@
     "es": "Espagnol"
   },
 
-  "Toolbar": {
-    "slogan": "Pour une ville plus verte !",
-    "login": "Connexion",
-    "about": "En savoir plus",
-    "menu": {
+  "Template": {
+    "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Patrimoine Vegetal",
         "allTrees": "Tous les arbres",
@@ -34,8 +31,19 @@
         "dataImport": "Import de donnees",
         "importYourData": "Importer vos données",
         "importHistory": "Historique des imports"
+      },
+      "availableSoon": {
+        "availableSoon": "Bientôt disponible !",
+        "requestAnItervention": "Demander une intervention",
+        "scheduleOfInterventions": "Calendrier des interventions"
       }
     }
+  },
+
+  "Toolbar": {
+    "slogan": "Pour une ville plus verte !",
+    "login": "Connexion",
+    "about": "En savoir plus"
   },
 
   "Map": {
