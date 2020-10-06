@@ -23,12 +23,12 @@
   "Template": {
     "menuItems": {
       "plantHeritage": {
-        "plantHeritage": "Patrimoine Vegetal",
+        "plantHeritage": "Patrimoine Végétal",
         "allTrees": "Tous les arbres",
         "addATree": "Ajouter un arbre"
       },
       "dataImport": {
-        "dataImport": "Import de donnees",
+        "dataImport": "Import de données",
         "importYourData": "Importer vos données",
         "importHistory": "Historique des imports"
       },
