@@ -4,6 +4,7 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { GetApp, Star } from "@material-ui/icons";
 import ETKToolbar from "./Toolbar";
 import ETKMenu, { ETKMenuItem } from "./Menu";
+import ETKDialog from "./Dialog";
 import { useAppContext } from "../providers/AppContext";
 import themeConfig from "../theme/config";
 
@@ -13,7 +14,12 @@ const useStyles = makeStyles({
   },
 });
 
+const TemplateContext = React.createContext(null);
+
+export const useTemplate = () => React.useContext(TemplateContext);
+
 export default function Template(props) {
+  const dialogRef = React.useRef();
   const { user, setAppContext } = useAppContext();
   const sizeToolbar = user ? 96 : 48;
   const classes = useStyles();
@@ -93,19 +99,22 @@ export default function Template(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <div role="presentation">
-        <AppBar position="fixed">
-          <ETKToolbar
-            logo={`/assets/${currentTheme}/logo.svg`}
-            registerText="Register"
-            onDarkToggle={onDarkToggleHandler}
-          />
-          {user && <ETKMenu items={menuItems} />}
-        </AppBar>
-        <main className={classes.content} style={styles}>
-          {props.children}
-        </main>
-      </div>
+      <TemplateContext.Provider value={{ dialog: dialogRef.current }}>
+        <div role="presentation">
+          <AppBar position="fixed">
+            <ETKToolbar
+              logo={`/assets/${currentTheme}/logo.svg`}
+              registerText="Register"
+              onDarkToggle={onDarkToggleHandler}
+            />
+            {user && <ETKMenu items={menuItems} />}
+          </AppBar>
+          <main className={classes.content} style={styles}>
+            {props.children}
+          </main>
+        </div>
+        <ETKDialog ref={dialogRef} />
+      </TemplateContext.Provider>
     </ThemeProvider>
   );
 }

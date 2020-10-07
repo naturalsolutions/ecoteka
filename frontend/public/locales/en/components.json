@@ -1,6 +1,11 @@
 {
   "Logout": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "dialog": {
+      "backHome": "Back to home page",
+      "logout": "Log out",
+      "content": "Are you sure you want to log out?"
+    }
   },
 
   "SignIn": {

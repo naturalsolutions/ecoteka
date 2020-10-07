@@ -1,6 +1,11 @@
 {
   "Logout": {
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "dialog": {
+      "backHome": "Volver a la página de inicio",
+      "logout": "Cerrar sesión",
+      "content": "¿Estás seguro/a de querer cerrar la sesión?"
+    }
   },
 
   "SignIn": {

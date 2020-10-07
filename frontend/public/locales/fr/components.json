@@ -1,6 +1,11 @@
 {
   "Logout": {
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "dialog": {
+      "backHome": "Retour à l'accueil",
+      "logout": "Se deconnecter",
+      "content": "Êtes-vous sur.e de vouloir vous déconnecter ?"
+    }
   },
 
   "SignIn": {
