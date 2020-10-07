@@ -20,10 +20,8 @@
     "es": "Español"
   },
 
-  "Toolbar": {
-    "login": "Iniciar sesión",
-    "about": "Obtener más información",
-    "menu": {
+  "Template": {
+    "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Patrimonio vegetal",
         "allTrees": "Todos los árboles",
@@ -33,8 +31,19 @@
         "dataImport": "Importar datos",
         "importYourData": "Importa tus datos",
         "importHistory": "Historial de importaciones"
+      },
+      "availableSoon": {
+        "availableSoon": "¡Pronto disponible!",
+        "requestAnItervention": "Solicitar una intervención",
+        "scheduleOfInterventions": "Calendario de intervenciones"
       }
     }
+  },
+
+  "Toolbar": {
+    "slogan": "¡Por una ciudad más verde!",
+    "login": "Iniciar sesión",
+    "about": "Obtener más información"
   },
 
   "Map": {
@@ -86,5 +95,15 @@
   "ImportHistoryEmpty": {
     "content": "¡Aún no has realizado ninguna importación! <br/> Siempre hay un comienzo para todo",
     "button": "Importar mis datos"
+  },
+
+  "ImportTemplate": {
+    "title": "¿Alguna duda sobre tu archivo?",
+    "content": "Asegúrese de que tu archivo contenga la siguiente información:",
+    "button": "Descargar la plantilla",
+    "longitude": "Longitud",
+    "latitude": "Latitud",
+    "crs": "Sistema de Referencia de Coordenadas",
+    "download": "Puedes descargar nuestra plantilla en formato xlsx"
   }
 }

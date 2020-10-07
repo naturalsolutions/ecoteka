@@ -19,6 +19,9 @@ from .crud_tree import (
 from .crud_organization import (
     organization
 )
+from .crud_taxref import (
+    taxref
+)
 
 __all__ = [
     "contact",
@@ -26,6 +29,7 @@ __all__ = [
     "geo_file",
     "organization",
     "registration_link",
+    "taxref",
     "tree",
     "user",
 ]

@@ -20,10 +20,8 @@
     "es": "Spanish"
   },
 
-  "Toolbar": {
-    "login": "Login",
-    "about": "About",
-    "menu": {
+  "Template": {
+    "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Plant heritage",
         "allTrees": "All trees",
@@ -33,8 +31,19 @@
         "dataImport": "Data Import",
         "importYourData": "Import your data",
         "importHistory": "Import history"
+      },
+      "availableSoon": {
+        "availableSoon": "Available Soon !",
+        "requestAnItervention": "Request an intervention",
+        "scheduleOfInterventions": "Schedule of interventions"
       }
     }
+  },
+
+  "Toolbar": {
+    "slogan": "For a greener city!",
+    "login": "Login",
+    "about": "About"
   },
 
   "Map": {
@@ -86,5 +95,14 @@
   "ImportHistoryEmpty": {
     "content": "You haven't done any import yet! <br/> Everything has a beginning",
     "button": "Import my data"
+  },
+  "ImportTemplate": {
+    "title": "A doubt with your file?",
+    "content": "Make sure your file contains the following information:",
+    "button": "Download the template",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "crs": "Coordinate Reference System",
+    "download": "Feel free to download our template in xlsx format"
   }
 }
