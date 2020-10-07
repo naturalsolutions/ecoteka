@@ -105,5 +105,16 @@
     "latitude": "Latitude",
     "crs": "Système de Réfèrence de Coordonnées",
     "download": "N'hésitez pas à télécharger notre modèle au format xlsx"
+  },
+
+  "Contact": {
+    "dialogTile": "Nous contacter",
+    "dialogContentText": "Notre équipe sera heureuse de vous répondre",
+    "dialogContentHint": "Merci de remplir ce formulaire. Nous vous répondrons dans les\nplus brefs délais.",
+    "successMessageContent": "Votre message a bien été envoyé, nous vous répondrons dans les\nplus brefs délais !",
+    "buttonHomeContent": "Retour à l'accueil",
+    "buttonCancelContent": "Annuler",
+    "buttonSubmitContent": "Envoyer la demande de contact",
+    "postErrorMessage": "Erreur interne, veuillez recommencer plus tard."
   }
 }
