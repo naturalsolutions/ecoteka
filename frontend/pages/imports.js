@@ -10,13 +10,6 @@ export default function ImportsPage() {
   const { user, isLoading } = useAppContext();
   const router = useRouter();
   const [rows, setRows] = useState([]);
-  const headers = [
-    "Nom du fichier",
-    "Arbres",
-    "CRS",
-    "Date de l'import",
-    "Status de l'import",
-  ];
 
   const onDelete = async (selected) => {
     try {
@@ -52,12 +45,7 @@ export default function ImportsPage() {
   return (
     <Template>
       {user && (
-        <ETKImportHistory
-          headers={headers}
-          rows={rows}
-          onDelete={onDelete}
-          onImport={onImport}
-        />
+        <ETKImportHistory rows={rows} onDelete={onDelete} onImport={onImport} />
       )}
     </Template>
   );

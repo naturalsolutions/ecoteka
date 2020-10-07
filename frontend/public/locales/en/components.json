@@ -61,6 +61,41 @@
     "wikipediaInformation": "Wikipedia Information"
   },
 
+  "PanelWelcome": {
+    "tabLabel": "Plant heritage",
+    "title": "Welcome to EcoTeka !",
+    "text": "Natural Solutions has been developing this plant heritage inventory and management service since July 2020. You are here on a demo of our application! You can see on the map all the trees in the world available in OpenData.",
+    "CardInfoPanel": {
+      "title": "Number of trees on the map"
+    }
+  },
+
+  "CardAbout": {
+    "title": "Are you a green space manager ?",
+    "content": "You can contact us to learn more and try the first tree-based heritage inventory features.",
+    "button": "More informations"
+  },
+
+  "ImportHistoryIndex": {
+    "title": "Imports history",
+    "importText": "Import",
+    "deleteText": "Delete"
+  },
+
+  "ImportHistoryTable": {
+    "headers": {
+      "file": "File name",
+      "trees": "Trees",
+      "crs": "CRS",
+      "importDate": "Import date",
+      "importStatus": "Import status"
+    }
+  },
+
+  "ImportHistoryEmpty": {
+    "content": "You haven't done any import yet! <br/> Everything has a beginning",
+    "button": "Import my data"
+  },
   "ImportTemplate": {
     "title": "A doubt with your file?",
     "content": "Make sure your file contains the following information:",
