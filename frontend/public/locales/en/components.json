@@ -61,6 +61,24 @@
     "wikipediaInformation": "Wikipedia Information"
   },
 
+  "PanelStart": {
+    "title": "You are connected to your account",
+    "content": "You can see the number of trees in OpenData but also the number of trees on your private data layer.",
+    "numberOfTrees": {
+      "title": "Nombre d'arbres sur la carte",
+      "content": "millions of trees"
+    },
+    "numberOfTreesLayer": {
+      "title": "Number of trees in the layer",
+      "content": "of trees"
+    },
+    "card": {
+      "title": "Would you like to add a tree?",
+      "content": "To add trees on your layer you can import a data file. You will soon be able to add a tree manually from our web or mobile interface!",
+      "button": "Import a data file"
+    }
+  },
+
   "PanelWelcome": {
     "tabLabel": "Plant heritage",
     "title": "Welcome to EcoTeka !",

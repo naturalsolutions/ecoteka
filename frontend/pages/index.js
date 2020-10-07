@@ -10,6 +10,7 @@ import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
 import ETKImport from "../components/Import/Index";
 import ETKPanelWelcome from "../components/Panel/Welcome";
+import ETKPanelStart from "../components/Panel/Start";
 
 import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
@@ -170,7 +171,7 @@ export default function IndexPage() {
       case "sidebar":
         return renderSidebar;
       default:
-        return <ETKPanelWelcome />;
+        return user ? <ETKPanelStart /> : <ETKPanelWelcome />;
     }
   };
 

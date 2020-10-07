@@ -61,6 +61,24 @@
     "wikipediaInformation": "Informations Wikipedia"
   },
 
+  "PanelStart": {
+    "title": "Vous êtes connecté.e à votre compte",
+    "content": "Vous pouvez voir le nombre d'arbres en OpenData mais aussi le nombre d'arbre présent sur votre couche privée de données.",
+    "numberOfTrees": {
+      "title": "Nombre d'arbres sur la carte",
+      "content": "millions d'arbres"
+    },
+    "numberOfTreesLayer": {
+      "title": "Nombre d'arbres de la couche",
+      "content": "d'arbres"
+    },
+    "card": {
+      "title": "Vous souhaitez ajouter un arbre ?",
+      "content": "Pour ajouter des arbres sur votre couche vous pouvez importer un fichier de données. Vous pourrez bientôt ajouter un arbre manuellement depuis notre interface web ou mobile !",
+      "button": "Importer un fichier de données"
+    }
+  },
+
   "PanelWelcome": {
     "tabLabel": "Patrimoine Vegetal",
     "title": "Bienvenue sur EcoTeka!",
