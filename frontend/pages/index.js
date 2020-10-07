@@ -9,6 +9,7 @@ import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
 import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
 import ETKImport from "../components/Import/Index";
+import ETKPanelWelcome from "../components/Panel/Welcome";
 
 import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
@@ -166,8 +167,10 @@ export default function IndexPage() {
     switch (panel) {
       case "import":
         return renderImport;
-      default:
+      case "sidebar":
         return renderSidebar;
+      default:
+        return <ETKPanelWelcome />;
     }
   };
 
