@@ -35,9 +35,11 @@ const ETKCardInfoPanel: React.FC<ETKCardInfoPanelProps> = (props) => {
         <Typography className={classes.title}>{props.title}</Typography>
         <CardContent>
           <Grid container spacing={1} alignItems="center">
-            <Grid item>
-              <Avatar>{props.icon}</Avatar>
-            </Grid>
+            {props.icon && (
+              <Grid item>
+                <Avatar>{props.icon}</Avatar>
+              </Grid>
+            )}
             <Grid item>
               <Typography>{props.content}</Typography>
             </Grid>
