@@ -67,6 +67,22 @@
     "button": "More informations"
   },
 
+  "ImportHistoryIndex": {
+    "title": "Imports history",
+    "importText": "Import",
+    "deleteText": "Delete"
+  },
+
+  "ImportHistoryTable": {
+    "headers": {
+      "file": "File name",
+      "trees": "Trees",
+      "crs": "CRS",
+      "importDate": "Import date",
+      "importStatus": "Import status"
+    }
+  },
+
   "ImportHistoryEmpty": {
     "content": "You haven't done any import yet! <br/> Everything has a beginning",
     "button": "Import my data"

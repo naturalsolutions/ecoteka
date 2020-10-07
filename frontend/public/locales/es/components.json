@@ -67,6 +67,22 @@
     "button": "Saber más"
   },
 
+  "ImportHistoryIndex": {
+    "title": "Histórico de importaciones",
+    "importText": "Importar",
+    "deleteText": "Eliminar"
+  },
+
+  "ImportHistoryTable": {
+    "headers": {
+      "file": "Nombre del archivo",
+      "trees": "Árboles",
+      "crs": "CRS",
+      "importDate": "Fecha de la importación",
+      "importStatus": "Estado de la importación"
+    }
+  },
+
   "ImportHistoryEmpty": {
     "content": "¡Aún no has realizado ninguna importación! <br/> Siempre hay un comienzo para todo",
     "button": "Importar mis datos"

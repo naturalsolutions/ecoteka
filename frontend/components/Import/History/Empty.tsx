@@ -1,6 +1,7 @@
 import React from "react";
-import { makeStyles, Grid, Typography, Button } from "@material-ui/core";
+import { makeStyles, Grid, Typography, Button, Box } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
+import { useRouter } from "next/router";
 
 export interface ETKImportHistoryEmptyProps {}
 
@@ -15,16 +16,17 @@ const useStyles = makeStyles(() => ({
     color: "grey",
   },
 
-  GridEmpty: {
-    background: `no-repeat center url('https://image.freepik.com/vecteurs-libre/jeune-femme-afro-personnage-avatar-du-paysage_25030-29987.jpg')`,
-    backgroundSize: "contain",
-    minHeight: "500px",
-    paddingTop: "50px",
+  grid: {
+    height: "100%",
+    width: "100%",
+    background: `no-repeat center url('../assets/background_importhistoryempty.png')`,
+    backgroundSize: "40%",
   },
 }));
 
 const ETKImportHistoryEmpty: React.FC<ETKImportHistoryEmptyProps> = (props) => {
   const classes = useStyles();
+  const router = useRouter();
   const { t } = useTranslation("components");
 
   return (
@@ -34,15 +36,24 @@ const ETKImportHistoryEmpty: React.FC<ETKImportHistoryEmptyProps> = (props) => {
       justify="flex-start"
       alignItems="center"
       spacing={2}
-      className={classes.GridEmpty}
+      className={classes.grid}
     >
       <Grid item>
-        <Typography paragraph align="center" className={classes.content}>
-          <Trans>{t("ImportHistoryEmpty.content")}</Trans>
-        </Typography>
+        <Box mt={15}>
+          <Typography paragraph align="center" className={classes.content}>
+            <Trans>{t("ImportHistoryEmpty.content")}</Trans>
+          </Typography>
+        </Box>
       </Grid>
       <Grid item>
-        <Button variant="contained" color="secondary" size="large">
+        <Button
+          variant="contained"
+          color="secondary"
+          size="large"
+          onClick={() => {
+            router.push("/?drawer=import");
+          }}
+        >
           {t("ImportHistoryEmpty.button")}
         </Button>
       </Grid>
