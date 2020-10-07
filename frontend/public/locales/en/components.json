@@ -104,5 +104,16 @@
     "latitude": "Latitude",
     "crs": "Coordinate Reference System",
     "download": "Feel free to download our template in xlsx format"
+  },
+
+  "Contact": {
+    "dialogTile": "Contact us",
+    "dialogContentText": "Our team will be happy to answer you",
+    "dialogContentHint": "Please fill out this form. We will get back to you as soon as possible.",
+    "successMessageContent": "Your message has been sent, we will get back to you as soon as possible !",
+    "buttonHomeContent": "Back to home",
+    "buttonCancelContent": "Cancel",
+    "buttonSubmitContent": "Send contact request",
+    "postErrorMessage": "Internal error, please try again later."
   }
 }
