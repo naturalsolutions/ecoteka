@@ -9,21 +9,26 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
-export interface ETKCardAboutProps {}
+export interface ETKCardAboutProps {
+  background?: string;
+  buttonVariant?: "text" | "outlined" | "contained";
+}
 
-const defaultProps: ETKCardAboutProps = {};
-
-const useStyles = makeStyles(() => ({
-  root: {
-    background: "#b2dfdc",
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: "1.2rem",
-  },
-}));
+const defaultProps: ETKCardAboutProps = {
+  background: "#b2dfdc",
+  buttonVariant: "outlined",
+};
 
 const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
+  const useStyles = makeStyles(() => ({
+    root: {
+      background: props.background,
+    },
+    title: {
+      fontWeight: "bold",
+      fontSize: "1.2rem",
+    },
+  }));
   const classes = useStyles();
   const { t } = useTranslation("components");
 
@@ -48,7 +53,7 @@ const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
             </Typography>
           </Grid>
           <Grid item>
-            <Button variant="outlined" color="secondary">
+            <Button variant={props.buttonVariant} color="secondary">
               {t("CardAbout.button")}
             </Button>
           </Grid>

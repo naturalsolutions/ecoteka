@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useState, createRef, useEffect } from "react";
 import { Paper, Grid, makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
@@ -11,6 +10,7 @@ import ETKMapSearchCity from "../components/Map/SearchCity";
 import ETKImport from "../components/Import/Index";
 import ETKPanelWelcome from "../components/Panel/Welcome";
 import ETKPanelStart from "../components/Panel/Start";
+import ETKLanding from "../components/Landing";
 
 import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
@@ -49,8 +49,15 @@ export default function IndexPage() {
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const { appContext, setAppContext, user } = useAppContext();
+  const { appContext, setAppContext, user, loading } = useAppContext();
+  const [landing, setLanding] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      setLanding(false);
+    }
+  }, [loading, user]);
 
   useEffect(() => {
     toggleMapTheme(appContext.theme);
@@ -189,13 +196,21 @@ export default function IndexPage() {
           </Paper>
         </Grid>
         <Grid item xs className={classes.main}>
+          {landing && (
+            <ETKLanding
+              setLanding={setLanding}
+              onSearchCity={onSearchCityChangeHandler}
+            />
+          )}
           <ETKMap
             ref={mapRef}
             styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
             onMapClick={onMapClick}
             onStyleData={onMapLoaded}
           />
-          <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+          {!landing && (
+            <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+          )}
           <ETKMapGeolocateFab map={mapRef} />
           <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
         </Grid>
