@@ -136,6 +136,44 @@
     "download": "Puedes descargar nuestra plantilla en formato xlsx"
   },
 
+  "Import": {
+    "Index": {
+      "tooltipContent": "- La importación de datos es una acción que puede requerir varias decenas de minutos <br/> - Busque el progreso de su importación en el menú: \"Historial de importaciones \"",
+      "templateTips": "Puedes descargar nuestra plantilla en formato .xls"
+    },
+    "Error": {
+      "importedText": "Se ha producido un error al procesar tu archivo",
+      "buttonHistoryText": "Historial de importaciones",
+      "buttonResetText": "Importar otro archivo"
+    },
+    "Imported": {
+      "importedText": "Tu archivo se ha importado correctamente",
+      "buttonHistoryText": "Historial de importaciones",
+      "buttonResetText": "Importar otro archivo"
+    },
+    "Importing": {
+      "importingText": "Importando"
+    },
+    "MissingData": {
+      "titleText": "Falta información al archivo que has subido",
+      "hintText": "Define los campos correspondientes a las columnas de tu archivo",
+      "buttonSubmitContent": "Enviar",
+      "buttonCancelText": "Cancelar",
+      "labelColumn": {
+        "lat": "Latitud",
+        "lon": "Longitud",
+        "crs": "Sistema de Referencia de Coordenadas"
+      }
+    },
+    "Upload": {
+      "boxContent": "Importa tus datos",
+      "fileListHint": "Tipos de archivos aceptados:",
+      "buttonCancelContent": "Cancelar",
+      "buttonUploadContent": "Subir",
+      "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo"
+    }
+  },
+
   "Contact": {
     "dialogTile": "Contáctenos",
     "dialogContentText": "Nuestro equipo estará encantado de responderte",

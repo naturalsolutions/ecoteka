@@ -10,14 +10,11 @@ import ETKError from "./Error";
 import ETKImportImporting from "./Importing";
 import { apiRest } from "../../lib/api";
 import layersStyle from "../../public/assets/layersStyle.json";
+import { useTranslation } from "react-i18next";
 
 export interface ETKImportProps {
   width?: Number;
   isOpen: File;
-  tooltipcontent: [string];
-  extensionsFileAccepted: [string];
-  templateTips: string;
-  dropzoneText: string;
   map?: any;
 }
 
@@ -40,6 +37,8 @@ const useStyles = makeStyles((theme) =>
 
 const ETKImport: React.FC<ETKImportProps> = (props) => {
   const classes = useStyles();
+  const { t } = useTranslation("components");
+
   const [step, setStep] = useState("start");
   const [geofile, setGeofile] = useState<ETKGeofile>();
   const [missingInfo, setMissingInfo] = useState<[string?]>([]);
@@ -145,9 +144,6 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
         <Grid item>
           <ETKUpload
             geofile={geofile}
-            tooltipcontent={props.tooltipcontent}
-            extensionsFileAccepted={props.extensionsFileAccepted}
-            dropzoneText={props.dropzoneText}
             missingInfo={missingInfo}
             step={step}
             onUploaded={onUploaded}
@@ -162,18 +158,12 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
             missingInfo={missingInfo}
             onUpdateGeofile={onUpdateGeofile}
             onCancel={onReset}
-            titleText="Le fichier que vous téléchargez manque d'informations"
-            hintText="Veuillez définir les champs correspondant aux colonnes de votre fichier"
           />
         </Grid>
       )}
 
       {step === "importing" && (
-        <ETKImportImporting
-          geofile={geofile}
-          importingText={`Import en cours ${geofile.original_name}...`}
-          onImported={onImported}
-        />
+        <ETKImportImporting geofile={geofile} onImported={onImported} />
       )}
 
       {step === "imported" && <ETKImported onReset={onReset} />}

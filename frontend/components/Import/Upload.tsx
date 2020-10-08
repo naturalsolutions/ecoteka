@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles, withStyles } from "@material-ui/core/styles";
-import { Tooltip, Box, Grid } from "@material-ui/core";
+import {
+  Tooltip,
+  Box,
+  Grid,
+  Divider,
+  Button,
+  Typography,
+} from "@material-ui/core";
 import HelpIcon from "@material-ui/icons/Help";
-import Divider from "@material-ui/core/Divider";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import { DropzoneArea } from "material-ui-dropzone";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import ErrorIcon from "@material-ui/icons/Error";
 import ETKProgressBar from "./ProgressBar";
 import getConfig from "next/config";
+import { useTranslation, Trans } from "react-i18next";
+
 import Geofile from "../Geofile";
 import { apiRest } from "../../lib/api";
 
@@ -18,15 +24,8 @@ const { publicRuntimeConfig } = getConfig();
 export interface ETKUploadProps {
   uploadUrl?: string;
   geofile?: Geofile;
-  tooltipcontent: [string];
-  extensionsFileAccepted: [string];
-  dropzoneText: string;
   missingInfo?: [string?];
   step?: string;
-  boxContent?: string;
-  fileListHint?: string;
-  buttonCancelContent?: string;
-  buttonUploadContent?: string;
   onUploadProgress?(progress: number): void;
   onUploaded?(geofile: Geofile): void;
 }
@@ -34,15 +33,8 @@ export interface ETKUploadProps {
 const defaultProps: ETKUploadProps = {
   uploadUrl: `${publicRuntimeConfig.apiUrl}/geo_files/upload`,
   geofile: undefined,
-  tooltipcontent: [""],
-  extensionsFileAccepted: [""],
-  dropzoneText: "",
   missingInfo: [""],
   step: "start",
-  boxContent: "Importez vos données",
-  fileListHint: "Types de fichiers acceptés :",
-  buttonCancelContent: "Annuler",
-  buttonUploadContent: "Envoi",
 };
 
 const useStyle = makeStyles(() =>
@@ -74,7 +66,7 @@ const useStyle = makeStyles(() =>
       whiteSpace: "pre",
     },
     etkDropzone: {
-      backgroundColor: "#f8f8f8",
+      backgroundColor: "#F0F9F8",
       color: "#707070",
     },
     submitbtn: {
@@ -93,8 +85,11 @@ const HtmlTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
+const ALLOWED_EXTENSIONS = [".xls", ".xlsx", ".csv", ".geojson", ".zip"];
+
 const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   const classes = useStyle();
+  const { t } = useTranslation("components");
   const [file, setFile] = useState<File>();
   const [linearProgressValue, setLinearProgressValue] = useState(0);
   const [error, setError] = useState(null);
@@ -130,16 +125,12 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
     if (props.step === "uploaded") {
       setFile(null);
     }
-  }, [props.step]);
+  }, [t("Import.Upload.step")]);
 
   const htmlTooltip = (
-    <React.Fragment>
-      {props.tooltipcontent.map((row, index) => (
-        <Typography key={`import.upload.title.tooltip.${index}`}>
-          {row}
-        </Typography>
-      ))}
-    </React.Fragment>
+    <Typography>
+      <Trans>{t("Import.Index.tooltipContent")}</Trans>
+    </Typography>
   );
 
   const onAddFiles = async (event) => {
@@ -205,10 +196,10 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
         <Typography variant="h6">
           <Grid container alignItems="center">
             <Box component="span" mr={1}>
-              {props.boxContent}
+              {t("Import.Upload.boxContent")}
             </Box>
             <HtmlTooltip title={htmlTooltip}>
-              <HelpIcon />
+              <HelpIcon color="secondary" />
             </HtmlTooltip>
           </Grid>
         </Typography>
@@ -224,9 +215,9 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
           {props.step !== "uploaded" && !props.missingInfo.length ? (
             <Grid container>
               <DropzoneArea
-                acceptedFiles={props.extensionsFileAccepted}
+                acceptedFiles={ALLOWED_EXTENSIONS}
                 Icon={GetAppIcon as any}
-                dropzoneText={props.dropzoneText}
+                dropzoneText={t("Import.Upload.dropzoneText")}
                 dropzoneProps={{
                   getFilesFromEvent: onAddFiles,
                 }}
@@ -239,7 +230,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                 dropzoneClass={classes.etkDropzone}
               />
               <Typography style={{ marginTop: ".7rem" }}>
-                {props.fileListHint} {props.extensionsFileAccepted.join(",")}
+                {t("Import.Upload.fileListHint")} {ALLOWED_EXTENSIONS.join(",")}
               </Typography>
             </Grid>
           ) : null}
@@ -256,7 +247,6 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
             props.step !== "readyToUpload" && (
               <Grid container justify="space-between">
                 <Button
-                  variant="contained"
                   onClick={() => {
                     setFile(null);
                     setError(null);
@@ -268,16 +258,16 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                     setLinearProgressValue(0);
                   }}
                 >
-                  {props.buttonCancelContent}
+                  {t("Import.Upload.buttonCancelContent")}
                 </Button>
                 <Button
                   className={classes.submitbtn}
                   disabled={!file || error !== null || inProgress}
-                  color="primary"
+                  color="secondary"
                   variant="contained"
                   onClick={onUploadClick}
                 >
-                  {props.buttonUploadContent}
+                  {t("Import.Upload.buttonUploadContent")}
                 </Button>
               </Grid>
             )}
