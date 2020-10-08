@@ -78,7 +78,11 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     }));
 
     return (
-      <Dialog open={isOpen} style={props.styleDialog}>
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        style={props.styleDialog}
+      >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>{content}</DialogContent>
         <DialogActions>{renderActions}</DialogActions>

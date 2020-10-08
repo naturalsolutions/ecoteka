@@ -102,7 +102,13 @@
   "ImportHistoryIndex": {
     "title": "Historique des imports",
     "importText": "Importer",
-    "deleteText": "Supprimer"
+    "deleteText": "Supprimer",
+    "dialog": {
+      "title": "Supprimer",
+      "content": "Êtes-vous sûr.e de vouloir supprimer les fichiers sélectionnés ?",
+      "yes": "Oui",
+      "cancel": "Annuler"
+    }
   },
 
   "ImportHistoryTable": {

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import ETKImportHistoryTable from "./Table";
 import ETKImportHistoryEmpty from "./Empty";
+import { useTemplate } from "../../Template";
 import Geofile from "../../Geofile";
 
 export interface ETKImportHistoryIndexProps {
@@ -36,11 +37,34 @@ const useStyles = makeStyles(() =>
 const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation("components");
+  const { dialog } = useTemplate();
   const [selected, setSelected] = useState([]);
 
   const onSelected = (newSelected) => {
     setSelected(newSelected);
     props.onSelected(newSelected);
+  };
+
+  const onDeleteClick = () => {
+    dialog.open({
+      title: t("ImportHistoryIndex.dialog.title"),
+      content: t("ImportHistoryIndex.dialog.content"),
+      actions: [
+        {
+          label: t("ImportHistoryIndex.dialog.yes"),
+          variant: "outlined",
+          color: "secondary",
+          onClick: () => {
+            props.onDelete(selected);
+          },
+        },
+        {
+          label: t("ImportHistoryIndex.dialog.cancel"),
+          variant: "contained",
+          color: "secondary",
+        },
+      ],
+    });
   };
 
   return (
@@ -53,7 +77,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
         className={classes.gridContainer}
       >
         <Grid item>
-          <Box p={3}>
+          <Box px={3} pt={2}>
             <Grid container alignItems="center">
               <Grid item xs={6}>
                 <Typography variant="h5">
@@ -65,25 +89,26 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
                   <Grid container spacing={1} direction="row-reverse">
                     <Grid item>
                       <Button
+                        disabled={!selected.length || !props.rows.length}
+                        variant="outlined"
+                        color="secondary"
+                        size="large"
+                        onClick={onDeleteClick}
+                      >
+                        {t("ImportHistoryIndex.deleteText")}
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
                         disabled={
                           !Boolean(selected.length === 1) || !props.rows.length
                         }
                         variant="contained"
-                        color="primary"
+                        color="secondary"
+                        size="large"
                         onClick={() => props.onImport(selected.pop())}
                       >
                         {t("ImportHistoryIndex.importText")}
-                      </Button>
-                    </Grid>
-
-                    <Grid item>
-                      <Button
-                        disabled={!selected.length || !props.rows.length}
-                        variant="contained"
-                        color="primary"
-                        onClick={() => props.onDelete(selected)}
-                      >
-                        {t("ImportHistoryIndex.deleteText")}
                       </Button>
                     </Grid>
                   </Grid>

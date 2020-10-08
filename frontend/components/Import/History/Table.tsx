@@ -88,7 +88,9 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
               />
             </TableCell>
             {headers.map((header, index) => (
-              <TableCell key={`header-${index}`}>{t(header)}</TableCell>
+              <TableCell key={`header-${index}`}>
+                <strong>{t(header)}</strong>
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
