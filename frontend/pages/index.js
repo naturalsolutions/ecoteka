@@ -137,22 +137,7 @@ export default function IndexPage() {
     }
   };
 
-  const renderImport = (
-    <ETKImport
-      map={mapRef}
-      tooltipcontent={[
-        "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes",
-        "- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
-      ]}
-      extensionsFileAccepted={[".xls", ".xlsx", ".csv", ".geojson", ".zip"]}
-      templateTips={[
-        "N'hésitez pas à télécharger notre template au formal .xls",
-      ]}
-      dropzoneText={
-        "Déposez votre fichier ici\nou cliquez pour le selectionner"
-      }
-    />
-  );
+  const renderImport = <ETKImport map={mapRef} />;
 
   const renderSidebar = (
     <ETKSidebar

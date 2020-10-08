@@ -106,6 +106,44 @@
     "download": "Feel free to download our template in xlsx format"
   },
 
+  "Import": {
+    "Index": {
+      "tooltipContent": "- Importing data is an action which may require several tens of minutes <br/> - Find the progress of your import in the menu: \"History of imports \"",
+      "templateTips": "Feel free to download our template in .xls format"
+    },
+    "Error": {
+      "importedText": "An error has crept into your file",
+      "buttonHistoryText": "Imports history",
+      "buttonResetText": "Import another file"
+    },
+    "Imported": {
+      "importedText": "Your file has been imported successfully",
+      "buttonHistoryText": "Imports history",
+      "buttonResetText": "Import another file"
+    },
+    "Importing": {
+      "importingText": "By importing..."
+    },
+    "MissingData": {
+      "titleText": "The file you upload missing some informations",
+      "hintText": "Please define the fields corresponding to the columns of your file",
+      "buttonSubmitContent": "Submit",
+      "buttonCancelText": "Cancel",
+      "labelColumn": {
+        "lat": "Latitude",
+        "lon": "Longitude",
+        "crs": "Coordinate Reference System"
+      }
+    },
+    "Upload": {
+      "boxContent": "Import your data",
+      "fileListHint": "File types accepted :",
+      "buttonCancelContent": "Cancel",
+      "buttonUploadContent": "Send",
+      "dropzoneText": "Drop your file here\nor click to select it"
+    }
+  },
+
   "Contact": {
     "dialogTile": "Contact us",
     "dialogContentText": "Our team will be happy to answer you",

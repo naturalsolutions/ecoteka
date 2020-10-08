@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, Typography, Grid, Box } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
+import { TextField, MenuItem } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
+import { useTranslation } from "react-i18next";
+
 import ETKGeofile from "../Geofile";
 import { apiRest } from "../../lib/api";
 
 export interface ETKMissingDatasProps {
   geoFile?: ETKGeofile;
   missingInfo?: [string?];
-  titleText: string;
-  hintText: string;
-  buttonSubmitContent?: string;
-  buttonCancelText?: string;
   onCancel?(): void;
   onUpdateGeofile(geofile: ETKGeofile): void;
 }
@@ -31,12 +28,7 @@ interface Data {
 const defaultProps: ETKMissingDatasProps = {
   geoFile: undefined,
   missingInfo: [],
-  titleText: "The file you upload missing some informations",
-  hintText:
-    "Please define the fields corresponding to the columns of your file",
   onUpdateGeofile() {},
-  buttonSubmitContent: "Soumettre",
-  buttonCancelText: "Annuler",
 };
 
 const useStyle = makeStyles((theme) =>
@@ -65,6 +57,7 @@ const useStyle = makeStyles((theme) =>
 
 const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   const classes = useStyle();
+  const { t } = useTranslation("components");
   const [isReady, setIsReady] = useState(false);
 
   const crsColumnChoices = [{ value: "epsg:4326", label: "EPSG:4326" }];
@@ -138,17 +131,19 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
           <form noValidate autoComplete="off">
             <Box style={{ backgroundColor: "#bbb" }}>
               <Grid item className={classes.white}>
-                <Typography component="h2">{props.titleText}</Typography>
+                <Typography component="h2">
+                  {t("Import.MissingData.titleText")}
+                </Typography>
               </Grid>
               <Grid item className={classes.white}>
-                <p>{props.hintText}</p>
+                <p>{t("Import.MissingData.hintText")}</p>
               </Grid>
               {props.missingInfo.includes("latitude_column") && (
                 <Grid item style={{ marginBottom: ".7rem" }}>
                   <TextField
                     select
                     name="latitude_column"
-                    label="Latitude"
+                    label={t("Import.MissingData.labelColumn.lat")}
                     value={data.latitude_column?.value || ""}
                     onChange={onChangeValue}
                     error={Boolean(data.latitude_column?.error)}
@@ -165,7 +160,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
                   <TextField
                     select
                     name="longitude_column"
-                    label="Longitude"
+                    label={t("Import.MissingData.labelColumn.lon")}
                     value={data.longitude_column?.value || ""}
                     onChange={onChangeValue}
                     error={Boolean(data.longitude_column?.error)}
@@ -182,7 +177,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
                   <TextField
                     select
                     name="crs"
-                    label="Système de Référence de Coordonnées"
+                    label={t("Import.MissingData.labelColumn.crs")}
                     value={data.crs?.value || ""}
                     onChange={onChangeValue}
                     error={Boolean(data.crs?.error)}
@@ -199,7 +194,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
         </Grid>
         <Grid container justify="space-between" className={classes.toolbar}>
           <Button variant="contained" onClick={props.onCancel}>
-            {props.buttonCancelText}
+            {t("Import.MissingData.buttonCancelText")}
           </Button>
           <Button
             variant="contained"
@@ -207,7 +202,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
             disabled={!isReady}
             onClick={onUpdate}
           >
-            {props.buttonSubmitContent}
+            {t("Import.MissingData.buttonSubmitContent")}
           </Button>
         </Grid>
       </Grid>

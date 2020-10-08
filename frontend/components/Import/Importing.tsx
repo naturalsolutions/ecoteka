@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, CircularProgress } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
+
 import Geofile from "../Geofile";
 import { apiRest } from "../../lib/api";
 
 export interface ETKImportImportingProps {
   geofile: Geofile;
-  importingText?: string;
   onImported?(error: boolean): void;
 }
 
 const defaultProps: ETKImportImportingProps = {
   geofile: {} as Geofile,
-  importingText: "En important...",
   onImported: () => {},
 };
 
 const ETKImportImporting: React.FC<ETKImportImportingProps> = (props) => {
   const [isImporting, setIsImporting] = useState(true);
+  const { t } = useTranslation("components");
 
   const check = async () => {
     const response = await apiRest.geofiles.get(props.geofile.name);
@@ -43,7 +44,11 @@ const ETKImportImporting: React.FC<ETKImportImportingProps> = (props) => {
   return (
     <Grid container direction="column" alignItems="stretch" spacing={3}>
       <Grid item>
-        <Typography variant="h6">{props.importingText}</Typography>
+        <Typography variant="h6">
+          {`${t("Import.Importing.importingText")} ${
+            props.geofile.original_name
+          }...`}
+        </Typography>
       </Grid>
       <Grid item>
         <Grid container justify="center">
