@@ -1,14 +1,25 @@
 import React from "react";
-import { Tabs, Tab, Grid, Typography, makeStyles } from "@material-ui/core";
+import {
+  Tabs,
+  Tab,
+  Grid,
+  Typography,
+  makeStyles,
+  Button,
+} from "@material-ui/core";
 import { AcUnit } from "@material-ui/icons";
 import CardAbout from "../Card/About";
 import CardInfoPanel from "../Card/InfoPanel";
 import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";
 
-export interface ETKPanelWelcomeProps {}
+export interface ETKPanelWelcomeProps {
+  collapsed?: boolean;
+}
 
-const defaultProps: ETKPanelWelcomeProps = {};
+const defaultProps: ETKPanelWelcomeProps = {
+  collapsed: true,
+};
 
 const useStyles = makeStyles(() => ({
   tabPanel: {
@@ -18,6 +29,11 @@ const useStyles = makeStyles(() => ({
   title: {
     fontSize: "1.5rem",
     fontWeight: "bold",
+  },
+  collapsedButton: {
+    textTransform: "capitalize",
+    maxWidth: "5rem",
+    lineHeight: ".6rem",
   },
 }));
 
@@ -48,12 +64,13 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
   const { t } = useTranslation("components");
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [collapsed, setCollapsed] = React.useState(props.collapsed);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
 
-  return (
+  return !collapsed ? (
     <React.Fragment>
       <Tabs
         indicatorColor="secondary"
@@ -70,6 +87,7 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
               <Grid item>{t("PanelWelcome.tabLabel")}</Grid>
             </Grid>
           }
+          onClick={() => setCollapsed(!collapsed)}
         />
       </Tabs>
       <TabPanel value={value} index={0} className={classes.tabPanel}>
@@ -97,6 +115,23 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
         </Grid>
       </TabPanel>
     </React.Fragment>
+  ) : (
+    <Button
+      color="secondary"
+      className={classes.collapsedButton}
+      onClick={() => setCollapsed(!collapsed)}
+    >
+      <Grid container direction="column" justify="center" alignItems="center">
+        <Grid item>
+          <AcUnit />
+        </Grid>
+        <Grid item>
+          <Typography variant="caption">
+            {t("PanelWelcome.tabLabel")}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Button>
   );
 };
 

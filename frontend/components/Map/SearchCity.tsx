@@ -5,10 +5,17 @@ import { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
 export interface ETKMapSearchCityProps {
+  style?: React.CSSProperties;
   onChange?(item: {}): void;
 }
 
 const defaultProps: ETKMapSearchCityProps = {
+  style: {
+    position: "absolute",
+    top: "1rem",
+    right: "1rem",
+    width: "300px",
+  },
   onChange: () => {},
 };
 
@@ -16,9 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     searchCity: {
       background: theme.palette.background.default,
-      position: "absolute",
-      top: theme.spacing(2),
-      right: theme.spacing(2),
     },
   })
 );
@@ -87,7 +91,7 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
       getOptionLabel={(option) => option.nom}
       loading={loading}
       value={value}
-      style={{ width: 300 }}
+      style={props.style}
       onChange={onChangeHandler}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
