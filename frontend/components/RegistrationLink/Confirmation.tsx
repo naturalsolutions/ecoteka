@@ -6,7 +6,7 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { apiRest } from "../../lib/api";
 
 export interface ETKRegistrationLinkConfirmationProps {
-  value: string;
+  value: string | string[];
   content: string;
   errorContent?: string[];
   onSuccess?(data?: object): void;
