@@ -1,4 +1,4 @@
-import { useState, createRef, useEffect, Component, useCallback } from "react";
+import React, { useState, createRef, useEffect, useCallback } from "react";
 import { makeStyles } from "@material-ui/core";
 import { apiRest as api } from "../lib/api";
 
@@ -46,8 +46,8 @@ const useStyles = makeStyles(() => ({
 
 export default function TreeEditionPage() {
   const router = useRouter();
-  const mapRef = createRef();
-  const alertRef = createRef();
+  const mapRef = createRef<ETKMap>();
+  const alertRef = createRef<ETKAlertController>();
   const classes = useStyles();
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const { appContext, setAppContext, user } = useAppContext();
@@ -58,7 +58,7 @@ export default function TreeEditionPage() {
     x: 0,
   };
   const [model, setModel] = useState(initialModel);
-  const [marker, setMarker] = useState();
+  const [marker, setMarker] = useState<mapboxgl.Marker>();
 
   const resetModel = () => {
     setModel(initialModel);
@@ -350,7 +350,7 @@ export default function TreeEditionPage() {
           />
           <ETKMapSearchCity onChange={onMapCitySearch} />
           <ETKMapGeolocateFab map={mapRef} />
-          <div className={classes.satToogleWrapper}>
+          <div>
             <ETKMapSateliteToggle onToggle={onMapSateliteToggle} />
           </div>
         </Grid>

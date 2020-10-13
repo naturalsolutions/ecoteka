@@ -21,7 +21,7 @@ const ETKErrorPage: React.FC<ETKErrorPageProps> = (props) => {
     root: {
       height: "100vh",
       width: "100vw",
-      background: `no-repeat url('./assets/background_${props.error}.svg')`,
+      background: `no-repeat url('/assets/background_${props.error}.svg')`,
       backgroundSize: "cover",
       backgroundPosition: "bottom",
     },
@@ -57,7 +57,7 @@ const ETKErrorPage: React.FC<ETKErrorPageProps> = (props) => {
       <figure className={classes.figure}>
         <img
           alt={`Erreur ${props.error}`}
-          src={`./assets/erreur_${props.error}.svg`}
+          src={`/assets/erreur_${props.error}.svg`}
           width="400px"
         />
         {props.children}

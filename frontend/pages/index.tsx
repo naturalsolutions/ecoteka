@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function IndexPage() {
-  const mapRef = createRef();
+  const mapRef = createRef<ETKMap>();
   const classes = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentGenre, setCurrentGenre] = useState(null);
@@ -149,10 +149,8 @@ export default function IndexPage() {
 
   const renderSidebar = (
     <ETKSidebar
-      activeTab={activeTab}
       currentGenre={currentGenre}
       currentProperties={currentProperties}
-      onTabChange={setActiveTab}
     />
   );
 
