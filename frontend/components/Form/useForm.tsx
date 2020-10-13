@@ -4,6 +4,7 @@ import * as yup from "yup";
 import { TextFieldProps, SelectProps } from "@material-ui/core";
 import useTextField from "./useTextField";
 import useSelect from "./useSelect";
+import usePasswordField from "./usePasswordField";
 
 interface useETKFormSchema {
   [key: string]: {
@@ -20,6 +21,7 @@ interface useETKFormProps {
 export default function useETKForm(props: useETKFormProps) {
   const shape = {};
   const textfields = {};
+  const passwordfields = {};
   const selects = {};
 
   for (const field in props.schema) {
@@ -28,6 +30,9 @@ export default function useETKForm(props: useETKFormProps) {
     switch (props.schema[field].type) {
       case "textfield":
         textfields[field] = props.schema[field].component;
+        break;
+      case "passwordfield":
+        passwordfields[field] = props.schema[field].component;
         break;
       case "select":
         selects[field] = props.schema[field].component;
@@ -45,7 +50,8 @@ export default function useETKForm(props: useETKFormProps) {
 
   const a = useTextField({ fields: textfields, ...form });
   const b = useSelect({ fields: selects, ...form });
-  const fields = Object.assign({}, a, b);
+  const c = usePasswordField({fields: passwordfields, ...form});
+  const fields = Object.assign({}, a, b, c);
 
   return {
     fields,

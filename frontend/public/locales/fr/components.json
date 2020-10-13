@@ -48,7 +48,8 @@
   "Toolbar": {
     "slogan": "Pour une ville plus verte !",
     "login": "Connexion",
-    "about": "En savoir plus"
+    "about": "En savoir plus",
+    "register": "Inscription"
   },
 
   "Map": {
@@ -196,5 +197,17 @@
       "technicalServiceManagers": "Directeur de services technique",
       "others": "Autres"
     }
+  },
+  "Register": {
+    "dialogTitle": "Inscription",
+    "cancel": "Annuler",
+    "submit": "Inscrire",
+    "full_name": "Nom complet",
+    "email": "Adresse email",
+    "organization": "Organisation",
+    "password": "Mot de passe",
+    "password_confirm": "Confirmer mot de passe",
+    "registration_completed": "Inscription réussie",
+    "registration_failed": "Une erreur s'est produite lors de l'inscription"
   }
 }

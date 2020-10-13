@@ -48,7 +48,8 @@
   "Toolbar": {
     "slogan": "For a greener city!",
     "login": "Login",
-    "about": "About"
+    "about": "About",
+    "register": "Register"
   },
 
   "Map": {
@@ -197,5 +198,17 @@
       "technicalServiceManagers": "Technical Service Managers",
       "others": "Others"
     }
+  },
+  "Register": {
+    "dialogTitle": "Register",
+    "cancel": "Cancel",
+    "submit": "Register",
+    "full_name": "Full name",
+    "email": "Email",
+    "organization": "Organization",
+    "password": "Password",
+    "password_confirm": "Password confirm",
+    "registration_completed": "Registration completed",
+    "registration_failed": "The registration has failed"
   }
 }

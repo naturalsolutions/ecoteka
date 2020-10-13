@@ -48,7 +48,8 @@
   "Toolbar": {
     "slogan": "¡Por una ciudad más verde!",
     "login": "Iniciar sesión",
-    "about": "Obtener más información"
+    "about": "Obtener más información",
+    "register": "Inscrivir"
   },
 
   "Map": {
@@ -196,5 +197,17 @@
       "technicalServiceManagers": "Director de servicios técnico",
       "others": "Otros"
     }
+  },
+  "Register": {
+    "dialogTitle": "Inscrivir",
+    "cancel": "Cancelar",
+    "submit": "inscrivir",
+    "full_name": "Nombre",
+    "email": "Correo electrónico",
+    "organization": "Organización",
+    "password": "contraseña",
+    "password_confirm": "confirmar contraseña",
+    "registration_completed": "Registro completado",
+    "registration_failed": "El registro ha fallado"
   }
 }

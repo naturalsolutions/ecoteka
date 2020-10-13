@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -10,6 +10,7 @@ import MoodIcon from "@material-ui/icons/Mood";
 import dynamic from "next/dynamic";
 import ETKContactButton from "./Contact/Button";
 import ETKSigninButton from "./SignIn/Button";
+import ETKRegisterButton from "./Register/Button";
 import { useTranslation } from "react-i18next";
 
 import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
@@ -54,10 +55,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const { t } = useTranslation("components");
   const classes = useStyles();
   const { user } = useAppContext();
-
-  const ETKRegister = dynamic(() => import("../components/Register"), {
-    ssr: false,
-  });
 
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [userInfosAnchorEl, setUserInfosAnchorEl] = React.useState(null);
@@ -105,15 +102,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       user.full_name || user.email.substr(0, user.email.indexOf("@"));
     return (
       <React.Fragment>
-        {user.is_superuser ? (
-          <Button
-            onClick={() => {
-              setRegisterOpen(true);
-            }}
-          >
-            {props.registerText}
-          </Button>
-        ) : null}
         {/* TODO apply theme on backgroundColor */}
         <Divider
           orientation="vertical"
@@ -160,19 +148,13 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               </Grid>
 
               <ETKContactButton />
+              {user?.is_superuser && <ETKRegisterButton />}
               {user && renderWhenSession()}
               {!user && <ETKSigninButton />}
             </Grid>
           </Grid>
         </Grid>
       </Toolbar>
-      <ETKRegister
-        isOpen={isRegisterOpen}
-        onClose={() => {
-          setRegisterOpen(false);
-        }}
-        submitButtonText="Submit"
-      />
     </React.Fragment>
   );
 };
