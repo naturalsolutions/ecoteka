@@ -8,6 +8,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
+import ETKContactButton from "../Contact/Button";
 
 export interface ETKCardAboutProps {
   background?: string;
@@ -53,9 +54,7 @@ const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
             </Typography>
           </Grid>
           <Grid item>
-            <Button variant={props.buttonVariant} color="secondary">
-              {t("CardAbout.button")}
-            </Button>
+            <ETKContactButton variant={props.buttonVariant} color="secondary" />
           </Grid>
         </Grid>
       </CardContent>

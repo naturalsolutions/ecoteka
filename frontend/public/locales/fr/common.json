@@ -1,1 +1,9 @@
-{}
+{
+  "buttons": {
+    "backToHome": "Retour à l'accueil"
+  },
+  "errors": {
+    "email": "Veuillez saisir un email valide",
+    "required": "Veuillez renseigner ce champ"
+  }
+}

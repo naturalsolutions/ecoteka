@@ -1,1 +1,9 @@
-{}
+{
+  "buttons": {
+    "backToHome": "Back to home"
+  },
+  "errors": {
+    "email": "Email address is invalid",
+    "required": "Field required"
+  }
+}

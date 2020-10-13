@@ -1,1 +1,9 @@
-{}
+{
+  "buttons": {
+    "backToHome": "Ir a la página de inicio"
+  },
+  "errors": {
+    "email": "Correo electrónico no válido",
+    "required": "Campo obligatorio"
+  }
+}
