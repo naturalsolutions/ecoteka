@@ -9,6 +9,6 @@
   "errors": {
     "email": "Email address is invalid",
     "required": "Field required",
-    "passwords_should_match": "Passwords should match"
+    "passwordsShouldMatch": "Passwords should match"
   }
 }

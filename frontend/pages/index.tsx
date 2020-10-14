@@ -1,5 +1,5 @@
 import { useState, createRef, useEffect } from "react";
-import { Paper, Grid, makeStyles } from "@material-ui/core";
+import { Paper, Grid, makeStyles, Hidden } from "@material-ui/core";
 import { useRouter } from "next/router";
 
 import ETKSidebar from "../components/Sidebar";
@@ -173,11 +173,13 @@ export default function IndexPage() {
         alignItems="stretch"
         className={classes.root}
       >
-        <Grid item className={classes.sidebar}>
-          <Paper square elevation={0} className={classes.sidebarPaper}>
-            {switchRenderDrawer(router.query.drawer)}
-          </Paper>
-        </Grid>
+        <Hidden mdDown>
+          <Grid item className={classes.sidebar}>
+            <Paper square elevation={0} className={classes.sidebarPaper}>
+              {switchRenderDrawer(router.query.drawer)}
+            </Paper>
+          </Grid>
+        </Hidden>
         <Grid item xs className={classes.main}>
           {landing && (
             <ETKLanding

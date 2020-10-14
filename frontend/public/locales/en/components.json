@@ -203,12 +203,12 @@
     "dialogTitle": "Register",
     "cancel": "Cancel",
     "submit": "Register",
-    "full_name": "Full name",
+    "fullName": "Full name",
     "email": "Email",
     "organization": "Organization",
     "password": "Password",
-    "password_confirm": "Password confirm",
-    "registration_completed": "Registration completed",
-    "registration_failed": "The registration has failed"
+    "passwordConfirm": "Password confirm",
+    "registrationCompleted": "Registration completed",
+    "registrationFailed": "The registration has failed"
   }
 }

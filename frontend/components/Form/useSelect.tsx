@@ -4,6 +4,7 @@ import {
   SelectProps,
   Select,
   MenuItem,
+  FormHelperText,
 } from "@material-ui/core";
 import { Controller } from "react-hook-form";
 
@@ -40,13 +41,15 @@ export default function useSelect(props: ETKSelectProps): Fields {
         <Controller
           name={name}
           control={props.control}
-          defaultValue="None"
+          defaultValue={field.defaultValue}
           as={
             <Select
               disableUnderline
               labelId={`select-${name}`}
               label={field.label}
-              defaultValue={field.defaultValue}
+              inputProps={{
+                helperText: props.errors[name]?.message,
+              }}
             >
               {field.items.map((item, id) => (
                 <MenuItem key={`menu-item-${name}-${id}`} value={item.value}>
@@ -56,6 +59,9 @@ export default function useSelect(props: ETKSelectProps): Fields {
             </Select>
           }
         />
+        {Boolean(props.errors[name]) && (
+          <FormHelperText>{props.errors[name]?.message}</FormHelperText>
+        )}
       </FormControl>
     );
   }
