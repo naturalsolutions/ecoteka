@@ -1,8 +1,27 @@
 import { Component } from "react";
 import mapboxgl from "mapbox-gl";
 
-export default class ETKMap extends Component {
-  constructor(props) {
+export interface ETKMapProps {
+  styleSource: string;
+  onGeolocate?(event: Event): void;
+  onStyleData?(map: mapboxgl.Map): void;
+  onMapClick?(map: mapboxgl.Map, event: Event): void;
+}
+
+export default class ETKMap extends Component<
+  ETKMapProps,
+  {
+    zoom: number;
+    lng: number;
+    lat: number;
+    styleSource: string;
+  }
+> {
+  public map: mapboxgl.Map;
+  private geolocate: mapboxgl.GeolocateControl;
+  private mapContainer: HTMLElement;
+
+  constructor(props: ETKMapProps) {
     super(props);
     this.map = null;
     this.geolocate = null;
@@ -20,7 +39,6 @@ export default class ETKMap extends Component {
       style: this.state.styleSource,
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
-      filter: this.props.filter,
     });
 
     this.geolocate = new mapboxgl.GeolocateControl({
@@ -29,18 +47,19 @@ export default class ETKMap extends Component {
       },
       trackUserLocation: true,
     });
-    this.geolocate.on('geolocate', (e) => {
+
+    this.geolocate.on("geolocate", (e) => {
       if (this.props.onGeolocate) {
         this.props.onGeolocate(e);
       }
-    })
+    });
 
     this.map.addControl(this.geolocate);
     this.map.on("click", (e) => this.props.onMapClick(this.map, e));
 
     if (this.props.onStyleData) {
       this.map.once("styledata", () => {
-        this.props.onStyleData();
+        this.props.onStyleData(this.map);
       });
     }
 

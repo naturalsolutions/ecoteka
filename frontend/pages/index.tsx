@@ -1,5 +1,5 @@
 import { useState, createRef, useEffect } from "react";
-import { Paper, Grid, makeStyles } from "@material-ui/core";
+import { Paper, Grid, makeStyles, Hidden } from "@material-ui/core";
 import { useRouter } from "next/router";
 
 import ETKSidebar from "../components/Sidebar";
@@ -39,10 +39,16 @@ const useStyles = makeStyles(() => ({
   main: {
     position: "relative",
   },
+  mapSearchCity: {
+    position: "absolute",
+    top: "1rem",
+    right: "1rem",
+    width: "300px",
+  },
 }));
 
 export default function IndexPage() {
-  const mapRef = createRef();
+  const mapRef = createRef<ETKMap>();
   const classes = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentGenre, setCurrentGenre] = useState(null);
@@ -149,10 +155,8 @@ export default function IndexPage() {
 
   const renderSidebar = (
     <ETKSidebar
-      activeTab={activeTab}
       currentGenre={currentGenre}
       currentProperties={currentProperties}
-      onTabChange={setActiveTab}
     />
   );
 
@@ -175,11 +179,13 @@ export default function IndexPage() {
         alignItems="stretch"
         className={classes.root}
       >
-        <Grid item className={classes.sidebar}>
-          <Paper square elevation={0} className={classes.sidebarPaper}>
-            {switchRenderDrawer(router.query.drawer)}
-          </Paper>
-        </Grid>
+        <Hidden mdDown>
+          <Grid item className={classes.sidebar}>
+            <Paper square elevation={0} className={classes.sidebarPaper}>
+              {switchRenderDrawer(router.query.drawer)}
+            </Paper>
+          </Grid>
+        </Hidden>
         <Grid item xs className={classes.main}>
           {landing && (
             <ETKLanding
@@ -194,7 +200,10 @@ export default function IndexPage() {
             onStyleData={onMapLoaded}
           />
           {!landing && (
-            <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+            <ETKMapSearchCity
+              className={classes.mapSearchCity}
+              onChange={onSearchCityChangeHandler}
+            />
           )}
           <ETKMapGeolocateFab map={mapRef} />
           <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />

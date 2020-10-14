@@ -48,7 +48,8 @@
   "Toolbar": {
     "slogan": "¡Por una ciudad más verde!",
     "login": "Iniciar sesión",
-    "about": "Obtener más información"
+    "about": "Obtener más información",
+    "register": "Inscrivir"
   },
 
   "Map": {
@@ -161,7 +162,7 @@
       "buttonCancelText": "Cancelar",
       "labelColumn": {
         "lat": "Latitud",
-        "lon": "Longitud",
+        "lng": "Longitud",
         "crs": "Sistema de Referencia de Coordenadas"
       }
     },
@@ -175,13 +176,38 @@
   },
 
   "Contact": {
-    "dialogTile": "Contáctenos",
-    "dialogContentText": "Nuestro equipo estará encantado de responderte",
+    "dialogTile": "Obtener más información",
+    "dialogContentText": "¿Te interesa esta plataforma? <br/> ¿Quieres saber más?",
     "dialogContentHint": "Por favor, rellene este formulario. Nos pondremos en contacto contigo lo antes posible.",
     "successMessageContent": "Tu mensaje ha sido enviado, nos pondremos en contacto contigo lo antes posible.",
     "buttonHomeContent": "Volver al inico",
     "buttonCancelContent": "Cancelar",
     "buttonSubmitContent": "Enviar solicitud de contacto",
-    "postErrorMessage": "Error interno. Vuelve a intentarlo más tarde."
+    "postErrorMessage": "Error interno. Vuelve a intentarlo más tarde.",
+    "lastName": "Apellidos",
+    "firstName": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Número de teléfono",
+    "township": "Municipio en el que ejerces",
+    "contactRequest": "Hola, ¿podéis darme más información sobre esta plataforma?",
+    "position": "Puesto que ocupas",
+    "positionItems": {
+      "none": "Ninguno",
+      "greenSpacesManager": "Gestor de espacios verdes",
+      "technicalServiceManagers": "Director de servicios técnico",
+      "others": "Otros"
+    }
+  },
+  "Register": {
+    "dialogTitle": "Inscribir",
+    "cancel": "Cancelar",
+    "submit": "Inscribir",
+    "fullName": "Nombre completo",
+    "email": "Correo electrónico",
+    "organization": "Organización",
+    "password": "Contraseña",
+    "passwordConfirm": "Confirmar contraseña",
+    "registrationCompleted": "Registro completado",
+    "registrationFailed": "El registro ha fallado"
   }
 }
