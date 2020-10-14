@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const mapSearchCityStyle = {
-  width: "500px",
+  width: "300px",
 };
 
 const ETKLanding: React.FC<ETKLandingProps> = (props) => {
@@ -68,14 +68,16 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
           alignItems="center"
         >
           <Grid item>
-            <Box mb={3}>
+            <Box mb={3} p={2}>
               <Typography variant="h3">{t("PanelWelcome.title")}</Typography>
             </Box>
           </Grid>
           <Grid item>
-            <Typography paragraph>
-              <Trans>{t("PanelWelcome.text")}</Trans>
-            </Typography>
+            <Box mb={3} p={2}>
+              <Typography paragraph>
+                <Trans>{t("PanelWelcome.text")}</Trans>
+              </Typography>
+            </Box>
           </Grid>
           <Grid item>
             <Box m={5}>
