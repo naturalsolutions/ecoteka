@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 
 import { apiRest } from "../lib/api.js";
 import { useAppContext } from "../providers/AppContext.js";
-import ETKSignin from "../components/SignIn";
+// import ETKSignin from "../components/SignIn";
 import ETKRegistrationLinkConfirmation from "../components/RegistrationLink/Confirmation";
 
 export default function RegistrationLinkPage() {
@@ -40,7 +40,7 @@ export default function RegistrationLinkPage() {
       style={{ minHeight: "100vh" }}
     >
       <React.Fragment>
-        <ETKSignin
+        {/* <ETKSignin
           isOpen
           onClose={(event, value, newUser) => {
             if (value && value == "cancelByClick") {
@@ -54,7 +54,7 @@ export default function RegistrationLinkPage() {
           titleText="Vous devez vous authentifier avant que l'on puisse verifier votre lien"
           disableBackdropClick={true}
           disableEscapeKeyDown={true}
-        />
+        /> */}
       </React.Fragment>
     </Grid>
   );
