@@ -487,8 +487,12 @@
       "source": "satellite",
       "minzoom": 0,
       "filter": ["all"],
-      "layout": { "visibility": "none" },
-      "paint": { "raster-opacity": 1 }
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "raster-opacity": 1
+      }
     },
     {
       "filter": ["in", "admin_level", 4, 6, 8],
@@ -825,6 +829,12 @@
       "type": "symbol"
     },
     {
+      "id": "ecoteka-data-osm",
+      "type": "circle",
+      "source": "ecoteka-data-osm",
+      "source-layer": "ecoteka-data"
+    },
+    {
       "id": "ecoteka-data",
       "type": "circle",
       "source": "ecoteka-data",
@@ -850,6 +860,12 @@
       ],
       "minzoom": 0,
       "maxzoom": 12
+    },
+    "ecoteka-data-osm": {
+      "type": "vector",
+      "tiles": ["https://dev.ecoteka.org/tiles/osm/{z}/{x}/{y}.pbf"],
+      "minzoom": 0,
+      "maxzoom": 13
     }
   },
   "version": 8,

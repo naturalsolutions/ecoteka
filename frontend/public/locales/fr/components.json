@@ -1,0 +1,187 @@
+{
+  "Logout": {
+    "logout": "Déconnexion",
+    "dialog": {
+      "backHome": "Retour à l'accueil",
+      "logout": "Se deconnecter",
+      "content": "Êtes-vous sur.e de vouloir vous déconnecter ?"
+    }
+  },
+
+  "SignIn": {
+    "title": "Connexion",
+    "buttonCancel": "Annuler",
+    "buttonConnexion": "Connexion",
+    "labelPassword": "Mot de passe",
+    "labelUsername": "Adresse email",
+    "errorMessageServer": "Adresse email ou mot de passe incorrect",
+    "errorMessageEmail": "Veuillez saisir un email valide.",
+    "errorMessageRequiredField": "Veuillez renseigner ce champ."
+  },
+
+  "LanguageSelector": {
+    "en": "Anglais",
+    "fr": "Français",
+    "es": "Espagnol"
+  },
+
+  "Template": {
+    "menuItems": {
+      "plantHeritage": {
+        "plantHeritage": "Patrimoine Végétal",
+        "allTrees": "Tous les arbres",
+        "addATree": "Ajouter un arbre"
+      },
+      "dataImport": {
+        "dataImport": "Import de données",
+        "importYourData": "Importer vos données",
+        "importHistory": "Historique des imports"
+      },
+      "availableSoon": {
+        "availableSoon": "Bientôt disponible !",
+        "requestAnItervention": "Demander une intervention",
+        "scheduleOfInterventions": "Calendrier des interventions"
+      }
+    }
+  },
+
+  "Toolbar": {
+    "slogan": "Pour une ville plus verte !",
+    "login": "Connexion",
+    "about": "En savoir plus"
+  },
+
+  "Map": {
+    "SearchCity": {
+      "label": "Rechercher une ville"
+    },
+    "SateliteToggle": {
+      "map": "Carte",
+      "satellite": "Satellite"
+    }
+  },
+
+  "Sidebar": {
+    "treeCard": "Fiche de l'arbre",
+    "wikipediaInformation": "Informations Wikipedia"
+  },
+
+  "PanelStart": {
+    "title": "Vous êtes connecté.e à votre compte",
+    "content": "Vous pouvez voir le nombre d'arbres en OpenData mais aussi le nombre d'arbre présent sur votre couche privée de données.",
+    "numberOfTrees": {
+      "title": "Nombre d'arbres sur la carte",
+      "content": "millions d'arbres"
+    },
+    "numberOfTreesLayer": {
+      "title": "Nombre d'arbres de la couche",
+      "content": "d'arbres"
+    },
+    "card": {
+      "title": "Vous souhaitez ajouter un arbre ?",
+      "content": "Pour ajouter des arbres sur votre couche vous pouvez importer un fichier de données. Vous pourrez bientôt ajouter un arbre manuellement depuis notre interface web ou mobile !",
+      "button": "Importer un fichier de données"
+    }
+  },
+
+  "PanelWelcome": {
+    "tabLabel": "Patrimoine Végétal",
+    "title": "Bienvenue sur EcoTeka!",
+    "text": "Natural Solutions développe ce service d'inventaire et de gestion du patrimoine arboré depuis juillet 2020. Vous êtes ici sur un démonstrateur de notre application ! <br/>Vous pouvez voir sur la carte tous les arbres du monde disponibles en OpenData.",
+    "CardInfoPanel": {
+      "title": "Nombre d'arbres sur la carte"
+    }
+  },
+
+  "CardAbout": {
+    "title": "Vous êtes un.e gestionnaire d'espaces verts ?",
+    "content": "Vous pouvez nous contacter pour en savoir plus et essayer les premières fonctionnalités d'inventaire de patrimoine arboré.",
+    "button": "En savoir plus"
+  },
+
+  "ImportHistoryIndex": {
+    "title": "Historique des imports",
+    "importText": "Importer",
+    "deleteText": "Supprimer",
+    "dialog": {
+      "title": "Supprimer",
+      "content": "Êtes-vous sûr.e de vouloir supprimer les fichiers sélectionnés ?",
+      "yes": "Oui",
+      "cancel": "Annuler"
+    }
+  },
+
+  "ImportHistoryTable": {
+    "headers": {
+      "file": "Nom du fichier",
+      "trees": "Arbres",
+      "crs": "CRS",
+      "importDate": "Date de l'import",
+      "importStatus": "Status de l'import"
+    }
+  },
+
+  "ImportHistoryEmpty": {
+    "content": "Vous n'avez pas encore effectué d'import ! <br/> Il y a un début pour toute chose",
+    "button": "Importer mes données"
+  },
+
+  "ImportTemplate": {
+    "title": "Un doute avec votre fichier ?",
+    "content": "Assurez-vous que votre fichier contient les informations suivantes:",
+    "button": "Télécharger le template",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "crs": "Système de Réfèrence de Coordonnées",
+    "download": "N'hésitez pas à télécharger notre modèle au format xlsx"
+  },
+
+  "Import": {
+    "Index": {
+      "tooltipContent": "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes<br/>- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
+      "templateTips": "N'hésitez pas à télécharger notre template au format .xls"
+    },
+    "Error": {
+      "importedText": "Une erreur s'est glissée dans votre fichier",
+      "buttonHistoryText": "Historique des imports",
+      "buttonResetText": "Importer un autre fichier"
+    },
+    "Imported": {
+      "importedText": "Votre fichier a été bien importé",
+      "buttonHistoryText": "Historique des imports",
+      "buttonResetText": "Importer un autre fichier"
+    },
+    "Importing": {
+      "importingText": "Import en cours"
+    },
+    "MissingData": {
+      "titleText": "Des infos sont manquantes dans le fichier que vous avez téléchargé",
+      "hintText": "Veuillez définir les champs correspondant aux colonnes de votre fichier",
+      "buttonSubmitContent": "Soumettre",
+      "buttonCancelText": "Annuler",
+      "labelColumn": {
+        "lat": "Latitude",
+        "lon": "Longitude",
+        "crs": "Système de Référence de Coordonnées"
+      }
+    },
+    "Upload": {
+      "boxContent": "Importez vos données",
+      "fileListHint": "Types de fichiers acceptés :",
+      "buttonCancelContent": "Annuler",
+      "buttonUploadContent": "Envoi",
+      "dropzoneText": "Déposez votre fichier ici\nou cliquez pour le selectionner"
+    }
+  },
+
+  "Contact": {
+    "dialogTile": "Nous contacter",
+    "dialogContentText": "Notre équipe sera heureuse de vous répondre",
+    "dialogContentHint": "Merci de remplir ce formulaire. Nous vous répondrons dans les\nplus brefs délais.",
+    "successMessageContent": "Votre message a bien été envoyé, nous vous répondrons dans les\nplus brefs délais !",
+    "buttonHomeContent": "Retour à l'accueil",
+    "buttonCancelContent": "Annuler",
+    "buttonSubmitContent": "Envoyer la demande de contact",
+    "postErrorMessage": "Erreur interne, veuillez recommencer plus tard."
+  }
+}

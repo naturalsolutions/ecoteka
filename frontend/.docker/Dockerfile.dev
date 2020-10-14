@@ -1,0 +1,14 @@
+FROM node:alpine
+
+ARG asset_prefix
+WORKDIR /app
+COPY package.json .
+RUN npm install
+RUN npm install -g npm-check-updates 
+COPY . .
+RUN npx next telemetry disable
+COPY .docker/start-dev.sh /docker-entrypoint.sh
+
+EXPOSE 3000
+
+ENTRYPOINT [ "/docker-entrypoint.sh" ]

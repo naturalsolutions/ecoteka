@@ -1,0 +1,13 @@
+<mjml>
+  <mj-body background-color="#fff">
+    <mj-section>
+      <mj-column>
+        <mj-divider border-color="#555"></mj-divider>
+        <mj-text font-size="20px" color="#555" font-family="helvetica">{{ project_name }} - Contact request</mj-text>
+        <mj-text font-size="16px" color="#555">{{ first_name }} {{last_name}}</mj-text>
+        <mj-text font-size="16px" color="#555">We appreciate your interest for this project</mj-text>
+        <mj-divider border-color="#555" border-width="2px" />
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

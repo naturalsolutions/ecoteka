@@ -1,0 +1,42 @@
+version: "3.3"
+
+services:
+  proxy:
+    ports:
+      - "${NS_ECOTEKA_PROXY_HTTP_PORT}:80"
+      - "${NS_ECOTEKA_PROXY_API_PORT}:8080"
+    command:
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --accesslog
+      - --log
+      - --api
+      - --api.insecure=true
+
+  db:
+    ports:
+      - "${NS_ECOTEKA_DB_PORT}:5432"
+
+  backend:
+    image: ecoteka-backend:dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/app:/app
+    command: /start-reload.sh
+
+  celery_worker:
+    image: ecoteka-backend:dev
+    volumes:
+      - ./backend/app:/app
+
+  frontend:
+    image: ecoteka-frontend:dev
+    build:
+      context: ./frontend
+      dockerfile: .docker/Dockerfile.dev
+    volumes:
+      - ./frontend:/app
+    labels:
+      - traefik.http.services.frontend.loadbalancer.server.port=3000

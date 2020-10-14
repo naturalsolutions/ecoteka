@@ -1,0 +1,11 @@
+.env
+.devcontainer
+.vscode/
+backend/app/app/uploaded_files
+uploaded_files
+backups
+acme.json
+tiles
+redis
+.vscode/*
+!.vscode/ecoteka.code-snippets

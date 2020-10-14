@@ -1,5 +1,12 @@
-import { useEffect, useState } from "react";
-import { Empty, Panel } from "antd";
+import React, { useEffect, useState } from "react";
+import { Card, CardMedia, CardContent } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  media: {
+    height: 240,
+  },
+});
 
 async function getInformationByProp(prop, genre) {
   const url = `https://en.wikipedia.org/w/api.php?action=query&prop=${prop}&titles=${genre}&formatversion=2&origin=*&format=json`;
@@ -12,6 +19,7 @@ async function getInformationByProp(prop, genre) {
 
   if (prop === "pageimages" && json.hasOwnProperty("query")) {
     const width = 240;
+
     if (json.query.pages && json.query.pages.length) {
       let image = json.query.pages.pop();
 
@@ -22,6 +30,7 @@ async function getInformationByProp(prop, genre) {
 }
 
 export default function Wikipedia(props) {
+  const classes = useStyles();
   const [genre, setGenre] = useState(props.genre);
   const [data, setData] = useState({ image: null, html: null });
 
@@ -45,27 +54,16 @@ export default function Wikipedia(props) {
         html,
       });
     })(props.genre);
-  }, [props]);
+  }, [props.genre]);
 
   return genre ? (
-    <div
-      style={{
-        position: "absolute",
-        marginTop: "38px",
-        boxSizing: "border-box",
-        left: 0,
-        top: 0,
-        height: "calc(100% - 38px)",
-        width: "100%",
-        overflowY: "scroll",
-        overflowX: "hidden",
-        padding: "1rem",
-      }}
-    >
-      <img src={data.image} />
-      <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
-    </div>
+    <Card elevation={0}>
+      {data.image && <CardMedia className={classes.media} image={data.image} />}
+      <CardContent>
+        <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
+      </CardContent>
+    </Card>
   ) : (
-    <Empty />
+    <div>No genre</div>
   );
 }

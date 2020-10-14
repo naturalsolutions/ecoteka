@@ -1,52 +1,67 @@
 import { useState, createRef, useEffect } from "react";
-import { Button, Affix } from "antd";
-import Map from "../components/Map";
-import ButtonAbout from "../components/ButtonAbout";
-import ViewMode from "../components/ViewMode";
-import LayoutBase from "../components/Layout/Base";
-import LayoutHeader from "../components/Layout/Header";
-import LayoutSider from "../components/Layout/Sider";
-import LayoutSiderToggle from "../components/Layout/SiderToggle";
-import themeStyle from "../lib/themeStyle";
-import speces from "../public/assets/speces.json";
-import layersStyle from "../public/assets/layersStyle.json";
+import { Paper, Grid, makeStyles } from "@material-ui/core";
+import { useRouter } from "next/router";
 
-export default () => {
+import ETKSidebar from "../components/Sidebar";
+import ETKMap from "../components/Map/Map";
+import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
+import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
+import ETKMapSearchCity from "../components/Map/SearchCity";
+import ETKImport from "../components/Import/Index";
+import ETKPanelWelcome from "../components/Panel/Welcome";
+import ETKPanelStart from "../components/Panel/Start";
+import ETKLanding from "../components/Landing";
+
+import Template from "../components/Template";
+import { useAppContext } from "../providers/AppContext";
+
+import layersStyle from "../public/assets/layersStyle.json";
+import { apiRest } from "../lib/api";
+
+const useStyles = makeStyles(() => ({
+  root: {
+    position: "relative",
+    height: "100%",
+  },
+  sidebar: {
+    height: "100%",
+    overflowY: "scroll",
+    overflowX: "hidden",
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
+    "-ms-overflow-style": "none",
+    "scrollbar-width": "none",
+  },
+  sidebarPaper: {
+    height: "100%",
+  },
+  main: {
+    position: "relative",
+  },
+}));
+
+export default function IndexPage() {
   const mapRef = createRef();
-  const [theme, setTheme] = useState("light");
-  const [isSiderCollapsed, setIsSiderCollapsed] = useState(true);
-  const [filter, setFilter] = useState(null);
+  const classes = useStyles();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState(0);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const { appContext, setAppContext, user, loading } = useAppContext();
+  const [landing, setLanding] = useState(true);
+  const router = useRouter();
 
-  const onFilterSpecies = (values) => {
-    if (!values.length) {
-      mapRef.current.map.setFilter("ecoteka-data", null);
-      return;
+  useEffect(() => {
+    if (!loading && user) {
+      setLanding(false);
     }
+  }, [loading, user]);
 
-    mapRef.current.map.setFilter("ecoteka-data", [
-      "in",
-      "genre_latin",
-      ...values,
-    ]);
-  };
-
-  const onViewModeChange = (viewMode) => {
-    mapRef.current.map.setLayoutProperty(
-      "satellite",
-      "visibility",
-      viewMode === "map" ? "none" : "visible"
-    );
-  };
-
-  const onSearchCityChange = (data) => {
-    mapRef.current.map.setZoom(12);
-    mapRef.current.map.flyTo({
-      center: data.center,
-    });
-  };
+  useEffect(() => {
+    toggleMapTheme(appContext.theme);
+  }, [appContext]);
 
   const onMapClick = (map, e) => {
     const bbox = [
@@ -54,9 +69,14 @@ export default () => {
       [e.point.x + 5, e.point.y + 5],
     ];
 
-    var features = map.queryRenderedFeatures(bbox, {
-      layers: ["ecoteka-data"],
+    router.push({
+      pathname: "/",
+      query: { drawer: null },
     });
+
+    var features = map
+      .queryRenderedFeatures(bbox)
+      .filter((f) => f.layer.type === "circle");
 
     if (features.length) {
       const feature = features.pop();
@@ -70,83 +90,116 @@ export default () => {
         genre = feature.properties.genre.toLowerCase().replace(" ", "_");
       }
 
-      if ((genre || feature.properties) && isSiderCollapsed) {
-        setIsSiderCollapsed(false);
+      if ((genre || feature.properties) && !isDrawerOpen) {
+        setIsDrawerOpen(true);
       }
 
+      router.push("/");
       setCurrentGenre(genre);
       setCurrentProperties(feature.properties);
 
       if (feature.properties) {
-        setActiveTab("3");
+        setActiveTab(1);
       }
     }
   };
 
-  const onLayoutHeaderDarkThemeChange = (darkTheme) => {
-    const newTheme = darkTheme ? "dark" : "light";
+  const toggleMapTheme = (mapTheme) => {
+    if (!isMapLoaded) {
+      return;
+    }
 
     for (let layer of Object.keys(layersStyle)) {
-      for (let property of Object.keys(layersStyle[layer][newTheme])) {
+      for (let property of Object.keys(layersStyle[layer][mapTheme])) {
         mapRef.current.map.setPaintProperty(
           layer,
           property,
-          layersStyle[layer][newTheme][property]
+          layersStyle[layer][mapTheme][property]
         );
       }
     }
-
-    setTheme(newTheme);
-  };
-
-  const onLayoutSiderToggle = () => {
-    setIsSiderCollapsed(!isSiderCollapsed);
-    setTimeout(() => {
-      window.dispatchEvent(new Event("resize"));
-    }, 200);
   };
 
   const onMapLoaded = (map) => {
-    onLayoutHeaderDarkThemeChange(false);
     window.dispatchEvent(new Event("resize"));
+    setIsMapLoaded(true);
+    setAppContext({
+      theme: "light",
+    });
+  };
+
+  const onMapSateliteToggleHandler = (active) => {
+    mapRef.current.map.setLayoutProperty(
+      "satellite",
+      "visibility",
+      active === "map" ? "none" : "visible"
+    );
+  };
+
+  const onSearchCityChangeHandler = (city) => {
+    if (city.centre && city.centre.coordinates) {
+      mapRef.current.map.setZoom(12);
+      mapRef.current.map.flyTo({
+        center: city.centre.coordinates,
+      });
+    }
+  };
+
+  const renderImport = <ETKImport map={mapRef} />;
+
+  const renderSidebar = (
+    <ETKSidebar
+      activeTab={activeTab}
+      currentGenre={currentGenre}
+      currentProperties={currentProperties}
+      onTabChange={setActiveTab}
+    />
+  );
+
+  const switchRenderDrawer = (panel) => {
+    switch (panel) {
+      case "import":
+        return renderImport;
+      case "sidebar":
+        return renderSidebar;
+      default:
+        return user ? <ETKPanelStart /> : <ETKPanelWelcome />;
+    }
   };
 
   return (
-    <LayoutBase
-      header={
-        <LayoutHeader
-          themeStyle={themeStyle(theme).header}
-          logo={`${process.env.assetPrefix}/assets/${theme}/logo.svg`}
-          onDarkThemeChange={onLayoutHeaderDarkThemeChange}
-        />
-      }
-      sider={
-        <LayoutSider
-          width={300}
-          collapsed={isSiderCollapsed}
-          theme={theme}
-          speces={speces}
-          activeTab={activeTab}
-          currentGenre={currentGenre}
-          currentProperties={currentProperties}
-          onFilterSpecies={onFilterSpecies}
-          onSearchCityChange={onSearchCityChange}
-          onTabChange={setActiveTab}
-        />
-      }
-    >
-      <Map
-        ref={mapRef}
-        styleSource="/assets/style.json"
-        filter={filter}
-        onMapClick={onMapClick}
-        onStyleData={onMapLoaded}
-      />
-      <LayoutSiderToggle onToggle={onLayoutSiderToggle} />
-      <Affix style={{ position: "absolute", left: "1rem", bottom: "1.4rem" }}>
-        <ViewMode onChange={onViewModeChange} />
-      </Affix>
-      <ButtonAbout />
-    </LayoutBase>
+    <Template>
+      <Grid
+        container
+        justify="flex-start"
+        alignItems="stretch"
+        className={classes.root}
+      >
+        <Grid item className={classes.sidebar}>
+          <Paper square elevation={0} className={classes.sidebarPaper}>
+            {switchRenderDrawer(router.query.drawer)}
+          </Paper>
+        </Grid>
+        <Grid item xs className={classes.main}>
+          {landing && (
+            <ETKLanding
+              setLanding={setLanding}
+              onSearchCity={onSearchCityChangeHandler}
+            />
+          )}
+          <ETKMap
+            ref={mapRef}
+            styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
+            onMapClick={onMapClick}
+            onStyleData={onMapLoaded}
+          />
+          {!landing && (
+            <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+          )}
+          <ETKMapGeolocateFab map={mapRef} />
+          <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
+        </Grid>
+      </Grid>
+    </Template>
   );
-};
+}
