@@ -39,6 +39,12 @@ const useStyles = makeStyles(() => ({
   main: {
     position: "relative",
   },
+  mapSearchCity: {
+    position: "absolute",
+    top: "1rem",
+    right: "1rem",
+    width: "300px",
+  },
 }));
 
 export default function IndexPage() {
@@ -194,7 +200,10 @@ export default function IndexPage() {
             onStyleData={onMapLoaded}
           />
           {!landing && (
-            <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+            <ETKMapSearchCity
+              className={classes.mapSearchCity}
+              onChange={onSearchCityChangeHandler}
+            />
           )}
           <ETKMapGeolocateFab map={mapRef} />
           <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />

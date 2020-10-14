@@ -47,11 +47,15 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(3),
     right: theme.spacing(3),
   },
+  mapSearchCity: {
+    width: "500px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    mapSearchCity: {
+      width: "300px",
+    },
+  },
 }));
-
-const mapSearchCityStyle = {
-  width: "300px",
-};
 
 const ETKLanding: React.FC<ETKLandingProps> = (props) => {
   const classes = useStyles();
@@ -82,7 +86,7 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
           <Grid item>
             <Box m={5}>
               <ETKMapSearchCity
-                style={mapSearchCityStyle}
+                className={classes.mapSearchCity}
                 onChange={(city) => {
                   props.setLanding(false);
                   props.onSearchCity(city);

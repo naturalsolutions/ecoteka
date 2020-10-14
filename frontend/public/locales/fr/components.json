@@ -162,7 +162,7 @@
       "buttonCancelText": "Annuler",
       "labelColumn": {
         "lat": "Latitude",
-        "lon": "Longitude",
+        "lng": "Longitude",
         "crs": "Système de Référence de Coordonnées"
       }
     },
