@@ -47,11 +47,15 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(3),
     right: theme.spacing(3),
   },
+  mapSearchCity: {
+    width: "500px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    mapSearchCity: {
+      width: "300px",
+    },
+  },
 }));
-
-const mapSearchCityStyle = {
-  width: "500px",
-};
 
 const ETKLanding: React.FC<ETKLandingProps> = (props) => {
   const classes = useStyles();
@@ -68,19 +72,21 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
           alignItems="center"
         >
           <Grid item>
-            <Box mb={3}>
+            <Box mb={3} p={2}>
               <Typography variant="h3">{t("PanelWelcome.title")}</Typography>
             </Box>
           </Grid>
           <Grid item>
-            <Typography paragraph>
-              <Trans>{t("PanelWelcome.text")}</Trans>
-            </Typography>
+            <Box mb={3} p={2}>
+              <Typography paragraph>
+                <Trans>{t("PanelWelcome.text")}</Trans>
+              </Typography>
+            </Box>
           </Grid>
           <Grid item>
             <Box m={5}>
               <ETKMapSearchCity
-                style={mapSearchCityStyle}
+                className={classes.mapSearchCity}
                 onChange={(city) => {
                   props.setLanding(false);
                   props.onSearchCity(city);

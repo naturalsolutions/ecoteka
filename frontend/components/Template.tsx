@@ -99,7 +99,7 @@ export default function Template(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <TemplateContext.Provider value={{ dialog: dialogRef.current }}>
+      <TemplateContext.Provider value={{ dialog: dialogRef.current, theme }}>
         <div role="presentation">
           <AppBar position="fixed">
             <ETKToolbar

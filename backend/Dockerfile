@@ -31,7 +31,6 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8-slim
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY --from=email-templates /email-templates/build /app/app/email-templates/build
 COPY --from=builder /install /usr/local
 COPY --from=tippecanoe [ \
   "/tippecanoe/tippecanoe", \
@@ -45,3 +44,4 @@ COPY --from=tippecanoe [ \
 COPY ./app /app
 
 COPY ./data /data
+COPY --from=email-templates /email-templates/build /app/app/email-templates/build
