@@ -8,12 +8,13 @@ import useSelect from "./useSelect";
 interface useETKFormSchema {
   [key: string]: {
     type: string;
-    component: TextFieldProps | SelectProps;
+    component: any;
     schema: any;
   };
 }
 
 interface useETKFormProps {
+  mode?: "onBlur" | "onChange" | "onSubmit" | "onTouched" | "all";
   schema: useETKFormSchema;
 }
 
@@ -40,6 +41,7 @@ export default function useETKForm(props: useETKFormProps) {
   type useETKFormSchema = yup.InferType<typeof schema>;
 
   const form = useForm<useETKFormSchema>({
+    mode: props.mode || "onSubmit",
     resolver: yupResolver(schema),
   });
 
