@@ -1,35 +1,55 @@
 from enum import Enum
-from typing import Optional, Any
+from typing import Optional, Any, List
 
 from pydantic import BaseModel, Json
 from sqlalchemy import inspect
 
-class TreePost(BaseModel):
-    ''' Schema for tree creation post request data'''
-    x: int
-    y: int
-    scientific_name: Optional[str]
-    taxref_id: Optional[int]
+class TreeJsonBProperties(BaseModel):
+    family: Optional[str]
+    gender: Optional[str]
+    specie: Optional[str]
+    cultivar: Optional[str]
+    vernacularName: Optional[str]
+    townshipCode: Optional[int]
+    zipCode: Optional[int]
+    address: Optional[str]
+    zone: Optional[str]
+    address: Optional[str]
+    etkRegistrationNumber: Optional[str]
+    plantingDate: Optional[str]
+    height: Optional[float]
+    diameter: Optional[float]
+    soilType: Optional[str]
+    rootType: Optional[str]
+    habit: Optional[str]
+    protected: Optional[bool]
+    soilConstraints: Optional[list]
+    aerianConstraint: Optional[bool]
+    lightning: Optional[bool]
+    watering: Optional[list]
+    allergens: Optional[int]
+    remarks: Optional[str]
 
-class TreePatch(BaseModel):
-    x: Optional[int]
-    y: Optional[int]
-    scientific_name: Optional[str]
-    taxref_id: Optional[int]
-
-class TreeMeta(BaseModel):
-    scientific_name: Optional[str]
-    taxref_id: Optional[int]
+class TreeDBMeta(BaseModel):
     properties: Any
     geofile_id: Optional[int]
     user_id: int
     organization_id: int
 
-class Tree_xy(TreePost, TreeMeta):
+class TreePost(TreeJsonBProperties):
+    ''' Schema for tree creation post request data'''
+    x: float
+    y: float
+
+class TreePatch(TreePost):
+    x: Optional[int]
+    y: Optional[int]
+
+class Tree_xy(TreeDBMeta):
     '''Representation of Tree with (x,y) coords instead of geoalchemy.geom-point'''
     id: int
 
-class TreeBase(TreeMeta):
+class TreeBase(TreeDBMeta):
     geom: Any
 
 class TreeCreate(TreeBase):
@@ -38,10 +58,8 @@ class TreeCreate(TreeBase):
 class TreeUpdate(BaseModel):
     pass
 
-
 class TreeImportFromGeofile(BaseModel):
     name: str
-
 
 class Tree(TreeBase):
     id: int
