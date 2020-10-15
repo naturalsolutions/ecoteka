@@ -23,6 +23,7 @@ from app.tasks import (
 )
 from app.worker import celery_app, import_geofile_task, create_mbtiles_task
 
+import json
 import logging
 router = APIRouter()
 
@@ -91,9 +92,8 @@ def add(
 ) -> Any:
     """Manual tree registration"""
     tree_with_user_info = schemas.TreeCreate(
-        scientific_name = tree.scientific_name,
         geom=f'POINT({tree.x} {tree.y})',
-        properties=None,
+        properties=json.dumps(jsonable_encoder(tree)),
         user_id=current_user.id,
         organization_id=current_user.organization_id)
     
@@ -112,17 +112,21 @@ def update(
 ) -> Any:
     """Update tree info"""
     tree_in_db = get_tree_if_authorized(db, current_user, tree_id)
-    json_data: dict = jsonable_encoder(update_data)
+    properties = json.loads(tree_in_db.properties)
 
+    request_data: dict = dict(jsonable_encoder(update_data, exclude_unset=True))
+    request_properties = {
+        key: request_data[key] for key in request_data if key not in ('x','y')
+    }
+
+    properties.update(request_properties)
     response = crud.crud_tree.tree.update(
         db,
         db_obj=tree_in_db,
-        obj_in=dict({
-            key: json_data[key] for key in json_data if key not in ('x','y')
-            },
-            **(dict(geom = f"POINT({json_data['x']} {json_data['y']})") if json_data['x'] is not None and json_data['y'] is not None else dict())
+        obj_in=dict(
+            { 'properties': properties },
+            **(dict(geom = f"POINT({request_data['x']} {request_data['y']})") if request_data['x'] is not None and request_data['y'] is not None else dict())
         )
-        
     ).to_xy()
 
     create_mbtiles_task.delay(current_user.organization_id)

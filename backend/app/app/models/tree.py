@@ -6,12 +6,9 @@ from sqlalchemy.orm import relationship
 from app.schemas.tree import Tree_xy
 from app.db.base_class import Base
 
-
 class Tree(Base):
     id = Column(Integer, primary_key=True, index=True)
     geofile_id = Column(Integer, ForeignKey('geofile.id'))
-    scientific_name = Column(String, nullable=True)
-    taxref_id = Column(Integer, nullable=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     organization_id = Column(Integer, ForeignKey('organization.id'))
     geom = Column('geom', Geometry('POINT'))
