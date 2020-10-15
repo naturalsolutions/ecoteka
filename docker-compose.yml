@@ -35,7 +35,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${NS_ECOTEKA_REDIS_VOLUME}
+      - ${NS_ECOTEKA_REDIS_VOLUME}:/data
 
   celery_worker:
     depends_on:
