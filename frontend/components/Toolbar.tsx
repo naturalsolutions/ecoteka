@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
-import Popover from "@material-ui/core/Popover";
-import Divider from "@material-ui/core/Divider";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Button,
+  Divider,
+  Grid,
+  Hidden,
+  makeStyles,
+  Popover,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 import MoodIcon from "@material-ui/icons/Mood";
-import dynamic from "next/dynamic";
+import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
 import ETKContactButton from "./Contact/Button";
 import ETKSigninButton from "./SignIn/Button";
 import ETKRegisterButton from "./Register/Button";
-import { useTranslation } from "react-i18next";
-
-import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
-
-import { useAppContext } from "../providers/AppContext";
 import ETKLogout from "./Logout";
 import ETKLanguageSelector from "./LanguageSelector";
+import { useAppContext } from "../providers/AppContext";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -56,7 +56,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const classes = useStyles();
   const { user } = useAppContext();
 
-  const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [userInfosAnchorEl, setUserInfosAnchorEl] = React.useState(null);
   const isUserInfosOpen = Boolean(userInfosAnchorEl);
 
@@ -126,33 +125,39 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
     <React.Fragment>
       <Toolbar variant="dense" className={classes.toolbar}>
         <Grid container alignItems="center">
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Grid container spacing={4} alignItems="center">
               <Grid item>
                 <img src={props.logo} className={classes.logo} />
               </Grid>
               <Grid item>
-                <Typography component="h2" className={classes.numberOfTrees}>
-                  {t("Toolbar.slogan")}
-                </Typography>
+                <Hidden mdDown>
+                  <Typography component="h2" className={classes.numberOfTrees}>
+                    {t("Toolbar.slogan")}
+                  </Typography>
+                </Hidden>
               </Grid>
               <Grid item style={{ marginLeft: "1rem" }}>
-                <ETKDarkToggle onToggle={props.onDarkToggle} />
+                <Hidden mdDown>
+                  <ETKDarkToggle onToggle={props.onDarkToggle} />
+                </Hidden>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <Grid container justify="flex-end">
-              <Grid item className={classes.languageSelector}>
-                <ETKLanguageSelector />
-              </Grid>
+          <Hidden mdDown>
+            <Grid item xs={12} md={6}>
+              <Grid container justify="flex-end">
+                <Grid item className={classes.languageSelector}>
+                  <ETKLanguageSelector />
+                </Grid>
 
-              <ETKContactButton />
-              {user?.is_superuser && <ETKRegisterButton />}
-              {user && renderWhenSession()}
-              {!user && <ETKSigninButton />}
+                <ETKContactButton />
+                {user?.is_superuser && <ETKRegisterButton />}
+                {user && renderWhenSession()}
+                {!user && <ETKSigninButton />}
+              </Grid>
             </Grid>
-          </Grid>
+          </Hidden>
         </Grid>
       </Toolbar>
     </React.Fragment>

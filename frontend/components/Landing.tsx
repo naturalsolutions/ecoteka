@@ -1,7 +1,8 @@
 import React from "react";
 import {
   makeStyles,
-  Paper,
+  Card,
+  CardContent,
   Grid,
   Typography,
   Box,
@@ -20,7 +21,7 @@ export interface ETKLandingProps {
 const defaultProps: ETKLandingProps = {};
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  card: {
     position: "absolute",
     height: "100%",
     width: "100%",
@@ -32,12 +33,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "rgba(255, 255, 255, .5)",
     backdropFilter: "blur(2px)",
   },
-  box: {
-    height: "100%",
-    width: "100%",
+  cardContent: {
     position: "relative",
+    height: "100%",
   },
-  content: {
+  grid: {
     margin: "0 auto",
     height: "100%",
     maxWidth: "40rem",
@@ -47,30 +47,46 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(3),
     right: theme.spacing(3),
   },
+  mapSearchCity: {
+    width: "500px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    mapSearchCity: {
+      width: "300px",
+    },
+    closeIcon: {
+      top: theme.spacing(1),
+      right: theme.spacing(1),
+    },
+    card: {
+      overflow: "scroll",
+    },
+    cardContent: {
+      height: "unset",
+      width: "100%",
+      padding: "1rem 0 0 0",
+    },
+  },
 }));
-
-const mapSearchCityStyle = {
-  width: "500px",
-};
 
 const ETKLanding: React.FC<ETKLandingProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation("components");
 
   return (
-    <Paper elevation={0} square className={classes.root}>
-      <Box className={classes.box}>
+    <Card elevation={0} square className={classes.card}>
+      <CardContent className={classes.cardContent}>
         <Grid
-          className={classes.content}
+          className={classes.grid}
           container
           justify="center"
           direction="column"
           alignItems="center"
         >
           <Grid item>
-            <Box mb={3}>
-              <Typography variant="h3">{t("PanelWelcome.title")}</Typography>
-            </Box>
+            <Typography variant="h3" paragraph>
+              {t("PanelWelcome.title")}
+            </Typography>
           </Grid>
           <Grid item>
             <Typography paragraph>
@@ -80,7 +96,7 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
           <Grid item>
             <Box m={5}>
               <ETKMapSearchCity
-                style={mapSearchCityStyle}
+                className={classes.mapSearchCity}
                 onChange={(city) => {
                   props.setLanding(false);
                   props.onSearchCity(city);
@@ -98,8 +114,8 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
         >
           <CloseIcon />
         </IconButton>
-      </Box>
-    </Paper>
+      </CardContent>
+    </Card>
   );
 };
 

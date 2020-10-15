@@ -3,18 +3,18 @@ import { useTranslation } from "react-i18next";
 
 function equalTo(ref: any, msg: any) {
   return yup.mixed().test({
-    name: 'equalTo',
+    name: "equalTo",
     exclusive: false,
-    message: msg || '${path} must be the same as ${reference}',
+    message: msg || "${path} must be the same as ${reference}",
     params: {
       reference: ref.path,
     },
-    test: function(value: any) {
+    test: function (value: any) {
       return value === this.resolve(ref);
     },
   });
 }
-yup.addMethod(yup.string, 'equalTo', equalTo);
+yup.addMethod(yup.string, "equalTo", equalTo);
 
 export default function useRegisterSchema() {
   const { t } = useTranslation(["common", "components"]);
@@ -23,7 +23,7 @@ export default function useRegisterSchema() {
     full_name: {
       type: "textfield",
       component: {
-        label: t("components:Register.full_name"),
+        label: t("components:Register.fullName"),
         required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
@@ -45,9 +45,7 @@ export default function useRegisterSchema() {
         label: t("components:Register.organization"),
         required: true,
       },
-      schema: yup
-        .string()
-        .required(t("common:errors.required")),
+      schema: yup.string().required(t("common:errors.required")),
     },
     password: {
       type: "passwordfield",
@@ -55,20 +53,18 @@ export default function useRegisterSchema() {
         label: t("components:Register.password"),
         required: true,
       },
-      schema: yup
-        .string()
-        .required(t("common:errors.required")),
+      schema: yup.string().required(t("common:errors.required")),
     },
     password_confirm: {
       type: "passwordfield",
       component: {
-        label: t("components:Register.password_confirm"),
+        label: t("components:Register.passwordConfirm"),
         required: true,
       },
       schema: yup
         .string()
-        .equalTo(yup.ref('password'), t("common:errors.passwords_should_match"))
+        .equalTo(yup.ref("password"), t("common:errors.passwordsShouldMatch"))
         .required(t("common:errors.required")),
-    }
+    },
   };
 }

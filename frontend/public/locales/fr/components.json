@@ -162,7 +162,7 @@
       "buttonCancelText": "Annuler",
       "labelColumn": {
         "lat": "Latitude",
-        "lon": "Longitude",
+        "lng": "Longitude",
         "crs": "Système de Référence de Coordonnées"
       }
     },
@@ -202,12 +202,12 @@
     "dialogTitle": "Inscription",
     "cancel": "Annuler",
     "submit": "Inscrire",
-    "full_name": "Nom complet",
+    "fullName": "Nom complet",
     "email": "Adresse email",
     "organization": "Organisation",
     "password": "Mot de passe",
-    "password_confirm": "Confirmer mot de passe",
-    "registration_completed": "Inscription réussie",
-    "registration_failed": "Une erreur s'est produite lors de l'inscription"
+    "passwordConfirm": "Confirmer mot de passe",
+    "registrationCompleted": "Inscription réussie",
+    "registrationFailed": "Une erreur s'est produite lors de l'inscription"
   }
 }

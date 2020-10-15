@@ -162,7 +162,7 @@
       "buttonCancelText": "Cancelar",
       "labelColumn": {
         "lat": "Latitud",
-        "lon": "Longitud",
+        "lng": "Longitud",
         "crs": "Sistema de Referencia de Coordenadas"
       }
     },
@@ -199,15 +199,15 @@
     }
   },
   "Register": {
-    "dialogTitle": "Inscrivir",
+    "dialogTitle": "Inscribir",
     "cancel": "Cancelar",
-    "submit": "inscrivir",
-    "full_name": "Nombre",
+    "submit": "Inscribir",
+    "fullName": "Nombre completo",
     "email": "Correo electrónico",
     "organization": "Organización",
-    "password": "contraseña",
-    "password_confirm": "confirmar contraseña",
-    "registration_completed": "Registro completado",
-    "registration_failed": "El registro ha fallado"
+    "password": "Contraseña",
+    "passwordConfirm": "Confirmar contraseña",
+    "registrationCompleted": "Registro completado",
+    "registrationFailed": "El registro ha fallado"
   }
 }
