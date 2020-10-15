@@ -5,7 +5,7 @@ import { useTemplate } from "../Template";
 import ETKFormSignIn, { ETKFormSignInActions } from "./Form";
 
 interface ETKFormSignInProps extends ButtonProps {
-  open: boolean;
+  open?: boolean;
   dialogTitle?: string;
 }
 
