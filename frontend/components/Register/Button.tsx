@@ -35,28 +35,12 @@ const ETKRegisterButton: React.FC<ButtonProps> = (props) => {
   };
 
   const onSubmitClick = async () => {
-    try {
-      const valid = await formRef.current.submit();
+    const valid = await formRef.current.submit();
 
-      if (valid) {
-        dialog.open({
-          title: t("common:messages.success"),
-          content: (
-            <React.Fragment>
-              {t("components:Register.registrationCompleted")}
-            </React.Fragment>
-          ),
-          actions: [{ label: "ok" }],
-        });
-      }
-    } catch (e) {
+    if (valid) {
       dialog.open({
-        title: t("common:messages.error"),
-        content: (
-          <React.Fragment>
-            {t("components:Register.registrationFailed")}
-          </React.Fragment>
-        ),
+        title: t("common:messages.success"),
+        content: t("components:Register.registrationCompleted"),
         actions: [{ label: "ok" }],
       });
     }
