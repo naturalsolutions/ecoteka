@@ -1,7 +1,8 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import useEtkRegisterSchema from "./Schema";
 import useETKForm from "../Form/useForm";
-import Grid from "@material-ui/core/Grid";
+import { Grid } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { apiRest } from "../../lib/api";
 
 export type ETKFormRegisterActions = {
@@ -15,13 +16,22 @@ const defaultProps: ETKRegisterProps = {};
 const ETKRegisterForm = forwardRef<ETKFormRegisterActions, ETKRegisterProps>(
   (props, ref) => {
     const schema = useEtkRegisterSchema();
-    const { fields, handleSubmit } = useETKForm({ schema: schema });
+    const { fields, handleSubmit, setError, errors } = useETKForm({
+      schema: schema,
+    });
     let isOk = false;
 
     const onSubmit = async (data) => {
-      const { response } = await apiRest.auth.register(data);
+      const { response, json } = await apiRest.auth.register(data);
 
-      isOk = response.isOk;
+      if (!response.ok) {
+        setError("general", {
+          type: "manual",
+          message: json.detail,
+        });
+      }
+
+      isOk = response.ok;
     };
 
     const submit = handleSubmit(onSubmit);
@@ -35,6 +45,11 @@ const ETKRegisterForm = forwardRef<ETKFormRegisterActions, ETKRegisterProps>(
 
     return (
       <Grid container direction="column">
+        {errors.general && (
+          <Grid item>
+            <Alert color="error">{errors.general?.message}</Alert>
+          </Grid>
+        )}
         <Grid item>{fields.full_name}</Grid>
         <Grid item>{fields.email}</Grid>
         <Grid item>{fields.organization}</Grid>

@@ -22,7 +22,7 @@ export interface ETKDialogAction {
 
 export interface ETKDialogProps {
   title?: string;
-  content?: string;
+  content?: string | React.ReactNode;
   actions?: ETKDialogAction[];
   dialogProps?: DialogProps;
 }

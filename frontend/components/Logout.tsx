@@ -62,7 +62,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
   return (
     <Button
       onClick={(e) => {
-        dialog.open({
+        dialog.current.open({
           title: t("Logout.dialog.logout"),
           content: dialogContent,
           actions,
