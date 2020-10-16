@@ -46,7 +46,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
   };
 
   const onDeleteClick = () => {
-    dialog.open({
+    dialog.current.open({
       title: t("ImportHistoryIndex.dialog.title"),
       content: t("ImportHistoryIndex.dialog.content"),
       actions: [

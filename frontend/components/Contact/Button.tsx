@@ -35,8 +35,8 @@ const ETKContactButton: React.FC<ButtonProps> = (props) => {
     ];
 
     if (isOk) {
-      dialog.close();
-      dialog.open({
+      dialog.current.close();
+      dialog.current.open({
         title: t("components:Contact.dialogTile"),
         content: successContent,
         actions: successActions,
@@ -58,7 +58,7 @@ const ETKContactButton: React.FC<ButtonProps> = (props) => {
       },
     ];
 
-    dialog.open({
+    dialog.current.open({
       title: t("components:Contact.dialogTile"),
       content: <ETKFormContact ref={formRef} />,
       actions: dialogActions,
