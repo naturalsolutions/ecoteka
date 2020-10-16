@@ -8,15 +8,15 @@ import ETKRegistrationLinkConfirmation from "../components/RegistrationLink/Conf
 
 export default function RegistrationLinkPage() {
   const router = useRouter();
-  const { user, setUser } = useAppContext();
+  const { user, setUser, isLoading } = useAppContext();
   const [errorContent, setErrorContent] = useState([]);
 
   const onError = (error) => {
     setErrorContent([error.message]);
     setTimeout(() => {
-      apiRest.auth.logout();
       setUser(null);
       router.push("/");
+      apiRest.auth.logout();
     }, 5000);
   };
 
@@ -45,7 +45,9 @@ export default function RegistrationLinkPage() {
 
   return (
     <ETKTemplate>
-      {!user && !errorContent.length ? signIn : confirmation}
+      {isLoading && <div>loading...</div>}
+      {!user && !errorContent.length && signIn}
+      {(user || errorContent.length > 0) && confirmation}
     </ETKTemplate>
   );
 }
