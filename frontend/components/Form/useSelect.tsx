@@ -47,9 +47,6 @@ export default function useSelect(props: ETKSelectProps): Fields {
               disableUnderline
               labelId={`select-${name}`}
               label={field.label}
-              inputProps={{
-                helperText: props.errors[name]?.message,
-              }}
             >
               {field.items.map((item, id) => (
                 <MenuItem key={`menu-item-${name}-${id}`} value={item.value}>

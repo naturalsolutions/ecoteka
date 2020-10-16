@@ -46,7 +46,7 @@ export default function RegistrationLinkPage() {
   return (
     <ETKTemplate>
       {isLoading && <div>loading...</div>}
-      {!user && !errorContent.length && signIn}
+      {!isLoading && !user && !errorContent.length && signIn}
       {(user || errorContent.length > 0) && confirmation}
     </ETKTemplate>
   );

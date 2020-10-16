@@ -17,7 +17,6 @@ const ETKSignInButton: React.FC<ETKFormSignInProps> = (props) => {
   const { t } = useTranslation("components");
   const { dialog } = useTemplate();
   const formRef = useRef<ETKFormSignInActions>();
-  const buttonRef = React.createRef<HTMLButtonElement>();
 
   const { dialogTitle, open, ...buttonProps } = props;
 
@@ -35,13 +34,13 @@ const ETKSignInButton: React.FC<ETKFormSignInProps> = (props) => {
           const isOk = await formRef.current.submit();
 
           if (isOk) {
-            dialog.close();
+            dialog.current.close();
           }
         },
       },
     ];
 
-    dialog.open({
+    dialog.current.open({
       title: dialogTitle || t("SignIn.title"),
       content: <ETKFormSignIn ref={formRef} />,
       actions: dialogActions,
@@ -54,14 +53,13 @@ const ETKSignInButton: React.FC<ETKFormSignInProps> = (props) => {
   };
 
   useEffect(() => {
-    if (open && dialog && buttonRef) {
-      buttonRef.current.click();
+    if (open) {
+      onButtonClick();
     }
-  }, [dialog, buttonRef, open]);
+  }, [open]);
 
   return (
     <Button
-      ref={buttonRef}
       onClick={onButtonClick}
       style={{ display: open ? "none" : "block" }}
       {...buttonProps}

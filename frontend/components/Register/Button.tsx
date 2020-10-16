@@ -11,7 +11,7 @@ const ETKRegisterButton: React.FC<ButtonProps> = (props) => {
   const formRef = useRef<ETKFormRegisterActions>();
 
   const onButtonClick = async () => {
-    dialog.open({
+    dialog.current.open({
       title: t("components:Register.dialogTitle"),
       content: <ETKRegisterForm ref={formRef} />,
       actions: [
@@ -38,7 +38,7 @@ const ETKRegisterButton: React.FC<ButtonProps> = (props) => {
     const valid = await formRef.current.submit();
 
     if (valid) {
-      dialog.open({
+      dialog.current.open({
         title: t("common:messages.success"),
         content: t("components:Register.registrationCompleted"),
         actions: [{ label: "ok" }],
