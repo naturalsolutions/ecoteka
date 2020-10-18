@@ -15,14 +15,9 @@ import numpy as np
 
 from app import crud, models, schemas
 from app.api import deps
-from app.core.config import settings
-from app.core.celery_app import celery_app
-from app.tasks import (
-    import_geofile,
-    create_mbtiles
+from app.core import (
+    celery_app
 )
-from app.worker import celery_app, import_geofile_task, create_mbtiles_task
-
 import logging
 router = APIRouter()
 
@@ -69,7 +64,7 @@ def import_from_geofile(
             status_code=409,
             detail=f"{geofile.name} has already started an import process")
 
-    import_geofile_task.delay(name)
+    celery_app.import_geofile_task.delay(name)
 
     return geofile
 
@@ -91,7 +86,7 @@ def add(
 ) -> Any:
     """Manual tree registration"""
     tree_with_user_info = schemas.TreeCreate(
-        scientific_name = tree.scientific_name,
+        scientific_name=tree.scientific_name,
         geom=f'POINT({tree.x} {tree.y})',
         properties=None,
         user_id=current_user.id,
@@ -99,7 +94,7 @@ def add(
     
     response = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
     
-    create_mbtiles_task.delay(current_user.organization_id)
+    celery_app.create_mbtiles_task.delay(current_user.organization_id)
     return response
 
 @router.patch('/{tree_id}', response_model=schemas.tree.Tree_xy)
@@ -125,7 +120,7 @@ def update(
         
     ).to_xy()
 
-    create_mbtiles_task.delay(current_user.organization_id)
+    celery_app.create_mbtiles_task.delay(current_user.organization_id)
     return response
 
 @router.delete('/{tree_id}', response_model=schemas.tree.Tree_xy)
@@ -138,7 +133,7 @@ def delete(
     if get_tree_if_authorized(db, current_user, tree_id):
         response = crud.crud_tree.tree.remove(db, id = tree_id).to_xy()
 
-        create_mbtiles_task.delay(current_user.organization_id)
+        celery_app.create_mbtiles_task.delay(current_user.organization_id)
         return response
 
 @router.get("/get-centroid-organization/{organization_id}", response_model=schemas.Coordinate)

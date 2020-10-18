@@ -17,9 +17,10 @@ from pydantic import Json
 
 from app import crud, models, schemas
 from app.api import deps
-from app.core.config import settings
-from app.tasks import create_mbtiles
-from app.worker import create_mbtiles_task
+from app.core import (
+    celery_app,
+    settings
+)
 
 router = APIRouter()
 
@@ -163,6 +164,6 @@ def delete_geo_file(
         pass
 
     crud.geo_file.remove(db, id=geofile.id)
-    create_mbtiles_task.delay(geofile.organization_id)
+    celery_app.create_mbtiles_task.delay(geofile.organization_id)
 
     return name

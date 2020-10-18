@@ -1,6 +1,5 @@
 from typing import Optional
 from sqlalchemy.orm import Session
-from fastapi import BackgroundTasks
 from app.crud import (
     CRUDBase,
     user
@@ -18,11 +17,16 @@ from datetime import (
     datetime,
     timedelta
 )
-from app.core import settings
-from app.utils import (
-    generate_registration_link_value,
-    send_new_registration_link_email
+from app.core import (
+    celery_app,
+    settings
 )
+from app.utils import (
+    generate_new_uuid4_value
+)
+# from app.worker import (
+#     send_new_registration_link_email_task
+# )
 import logging
 
 
@@ -95,7 +99,7 @@ class CRUDRegistrationLink(
         user_in_db = user.get(db=db, id=fk_user)
         registration_link_tmp = RegistrationLinkCreate(
             fk_user=fk_user,
-            value=generate_registration_link_value(),
+            value=generate_new_uuid4_value(),
             creation_date=datetime.now()
         )
         new_registration_link = self.create(
@@ -106,12 +110,8 @@ class CRUDRegistrationLink(
         db.commit()
         db.refresh(new_registration_link)
 
-        if settings.EMAILS_ENABLED:
-            send_new_registration_link_email(
-                user_in_db.email,
-                user_in_db.full_name,
-                new_registration_link.value
-            )
+        celery_app.send_new_registration_link_email_task.delay(user_in_db.id)
+
         return new_registration_link
 
 
