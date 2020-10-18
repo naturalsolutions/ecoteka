@@ -2,12 +2,14 @@ import slug
 from sqlalchemy.orm import Session
 
 from app.schemas import (
+    LanguageCreate,
     UserCreate,
     OrganizationCreate
 )
 from app.crud import (
     user,
-    organization
+    organization,
+    language
 )
 from app.core.config import settings
 from app.db import base  # noqa: F401
@@ -50,3 +52,19 @@ def init_db(db: Session) -> None:
         db.add(user_in_db)
         db.commit()
         db.refresh(user_in_db)
+
+    # init languages
+    languagesShoulBeInDb = [
+        {'id': 'en', 'label': 'English'},
+        {'id': 'fr', 'label': 'Français'},
+        {'id': 'es', 'label': 'Español'}
+    ]
+    for lang in languagesShoulBeInDb:
+        language_in_db = language.get(db, id=lang.get('id'))
+        if not language_in_db:
+            language_in = LanguageCreate(**lang)
+            language_in_db = language.create(db, obj_in=language_in)
+            db.add(language_in_db)
+            db.commit()
+            del language_in
+        del language_in_db
