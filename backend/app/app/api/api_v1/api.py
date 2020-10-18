@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.api.api_v1.endpoints import (
     contacts,
+    forgot_password_link,
     login,
     users,
     utils,
@@ -33,6 +34,12 @@ api_router.include_router(
     prefix="/utils",
     tags=["utils"]
 )
+api_router.include_router(
+    forgot_password_link.router,
+    prefix='/forgot-password',
+    tags=["forgot-password"]
+)
+
 api_router.include_router(
     contacts.router,
     prefix="/contacts",
