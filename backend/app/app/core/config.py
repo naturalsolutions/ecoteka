@@ -78,6 +78,8 @@ class Settings(BaseSettings):
             return values["PROJECT_NAME"]
         return v
 
+    EMAIL_REGISTRATION_LINK_BEFORE_NEW_IN_HOURS: int = 0
+    EMAIL_FORGOT_PASSWORD_LINK_EXPIRE_HOURS: int = 24
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
     EMAILS_ENABLED: bool = False
