@@ -7,6 +7,9 @@ from .crud_user import (
 from .crud_contact import (
     contact
 )
+from .crud_forgot_password_link import (
+    forgot_password_link
+)
 from .crud_registration_link import (
     registration_link
 )
@@ -19,11 +22,16 @@ from .crud_tree import (
 from .crud_organization import (
     organization
 )
+from .crud_language import (
+    language
+)
 
 __all__ = [
     "contact",
     "CRUDBase",
+    "forgot_password_link",
     "geo_file",
+    "language",
     "organization",
     "registration_link",
     "tree",
