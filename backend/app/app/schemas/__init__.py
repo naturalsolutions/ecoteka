@@ -68,7 +68,7 @@ __all__ = [
     "ForgotPasswordLinkForm",
     "ForgotPasswordChangeForm",
     "ForgotPasswordLinkOut",
-    "ForgotPasswordLinkUpdate"
+    "ForgotPasswordLinkUpdate",
     "GeoFile",
     "GeoFileCreate",
     "GeoFileUpdate",
@@ -86,8 +86,9 @@ __all__ = [
     "Token",
     "TokenPayload",
     "Tree",
+    "TreePost",
     "TreeCreate",
-    "TreeImportFromGeofile"
+    "TreeImportFromGeofile",
     "TreeUpdate",
     "UserCreate",
     "UserDB",
