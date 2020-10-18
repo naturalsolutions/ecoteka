@@ -1,4 +1,3 @@
-import os
 import fiona
 import logging
 import datetime
@@ -10,10 +9,10 @@ from sqlalchemy.orm import Session
 import pandas as pd
 from pyproj import Transformer
 
-from app import crud
+from app.crud import organization
 from app.models import GeoFile, GeoFileStatus, Tree
-from app.api import deps
 from .create_mbtiles import create_mbtiles
+
 
 def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
     tree = Tree(
@@ -86,6 +85,7 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
             db.commit()
     db.commit()
 
+
 def import_geofile(db: Session, geofile: GeoFile):
     logging.info('running geofile import task')
     try:
@@ -104,8 +104,8 @@ def import_geofile(db: Session, geofile: GeoFile):
             df = pd.read_csv(geofile.get_filepath())
             import_from_dataframe(db, df, geofile.get_filepath(), geofile)
 
-        organization = crud.organization.get(db=db, id=geofile.organization_id)
-        create_mbtiles(db=db, organization=organization)
+        organization_in_db = organization.get(db=db, id=geofile.organization_id)
+        create_mbtiles(db=db, organization=organization_in_db)
 
         geofile.imported_date = datetime.datetime.utcnow()
         geofile.status = GeoFileStatus.IMPORTED.value
