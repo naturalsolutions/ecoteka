@@ -17,6 +17,19 @@ from .contact import (
     ContactUpdate,
     ContactOut
 )
+from .forgot_password_link import (
+    ForgotPasswordLinkCreate,
+    ForgotPasswordLinkDB,
+    ForgotPasswordLinkForm,
+    ForgotPasswordChangeForm,
+    ForgotPasswordLinkOut,
+    ForgotPasswordLinkUpdate
+)
+from .language import (
+    LanguageOut,
+    LanguageCreate,
+    LanguageUpdate
+)
 from .registration_link import (
     RegistrationLinkCreate,
     RegistrationLinkDB,
@@ -50,9 +63,18 @@ __all__ = [
     "ContactOut",
     "ContactUpdate",
     "Coordinate",
+    "ForgotPasswordLinkCreate",
+    "ForgotPasswordLinkDB",
+    "ForgotPasswordLinkForm",
+    "ForgotPasswordChangeForm",
+    "ForgotPasswordLinkOut",
+    "ForgotPasswordLinkUpdate"
     "GeoFile",
     "GeoFileCreate",
     "GeoFileUpdate",
+    "LanguageOut",
+    "LanguageCreate",
+    "LanguageUpdate",
     "Msg",
     "Organization",
     "OrganizationCreate",
@@ -70,5 +92,5 @@ __all__ = [
     "UserCreate",
     "UserDB",
     "UserOut",
-    "UserUpdate",
+    "UserUpdate"
 ]
