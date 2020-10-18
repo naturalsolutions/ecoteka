@@ -254,6 +254,70 @@ def send_new_registration_link_email(
     )
 
 
+def send_new_forgot_password_link_email(
+    email_to: str,
+    full_name: str,
+    link: str,
+    dateCreation: datetime
+) -> None:
+    dateLimit = (
+        dateCreation
+        +
+        timedelta(hours=settings.EMAIL_FORGOT_PASSWORD_LINK_EXPIRE_HOURS)
+    )
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - Request for changing password {full_name}"
+    pathToTemplate = (
+        Path(settings.EMAIL_TEMPLATES_DIR)
+        /
+        "new_forgot_password_link.html"
+    )
+
+    full_link = settings.EXTERNAL_PATH.replace(
+        "/api/v1", f"/forgot-password/{link}")
+
+    with open(pathToTemplate) as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "link": full_link,
+            "dateLimit": dateLimit
+        },
+    )
+
+
+def send_confirmation_password_changed(
+    email_to: str,
+    full_name: str,
+) -> None:
+    project_name = settings.PROJECT_NAME
+    subject = f"{project_name} - Pasword changed {full_name}"
+    pathToTemplate = (
+        Path(settings.EMAIL_TEMPLATES_DIR)
+        /
+        "confirmation_password_changed.html"
+    )
+
+    full_link = settings.EXTERNAL_PATH.replace(
+        "/api/v1", "")
+
+    with open(pathToTemplate) as f:
+        template_str = f.read()
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            "project_name": settings.PROJECT_NAME,
+            "link": full_link
+        },
+    )
+
+
 def generate_response_for_token(
     user_id: int,
     is_superuser: bool
@@ -271,5 +335,5 @@ def generate_response_for_token(
     }
 
 
-def generate_registration_link_value() -> str:
+def generate_new_uuid4_value() -> str:
     return str(uuid.uuid4())
