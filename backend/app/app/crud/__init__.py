@@ -25,6 +25,9 @@ from .crud_organization import (
 from .crud_language import (
     language
 )
+from .crud_taxref import (
+    taxref
+)
 
 __all__ = [
     "contact",
@@ -34,6 +37,7 @@ __all__ = [
     "language",
     "organization",
     "registration_link",
+    "taxref",
     "tree",
     "user",
 ]

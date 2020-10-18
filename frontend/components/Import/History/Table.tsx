@@ -8,21 +8,28 @@ import {
   TableRow,
   TableBody,
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 import Geofile from "../../Geofile";
 
 export interface ETKImportHistoryTableProps {
-  headers: [];
   rows?: Geofile[];
   onSelected?(selection?: string[]): void;
 }
 
 const defaultProps: ETKImportHistoryTableProps = {
-  headers: [],
   rows: [],
 };
 
 const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
+  const { t } = useTranslation("components");
+  const [headers] = React.useState([
+    "ImportHistoryTable.headers.file",
+    "ImportHistoryTable.headers.trees",
+    "ImportHistoryTable.headers.crs",
+    "ImportHistoryTable.headers.importDate",
+    "ImportHistoryTable.headers.importStatus",
+  ]);
   const [selected, setSelected] = React.useState([] as string[]);
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
@@ -80,8 +87,10 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
                 onChange={onSelectAllClick}
               />
             </TableCell>
-            {props.headers.map((header, index) => (
-              <TableCell key={`header-${index}`}>{header}</TableCell>
+            {headers.map((header, index) => (
+              <TableCell key={`header-${index}`}>
+                <strong>{t(header)}</strong>
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>

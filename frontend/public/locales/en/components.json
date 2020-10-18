@@ -1,6 +1,11 @@
 {
   "Logout": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "dialog": {
+      "backHome": "Back to home page",
+      "logout": "Log out",
+      "content": "Are you sure you want to log out?"
+    }
   },
 
   "SignIn": {
@@ -20,11 +25,8 @@
     "es": "Spanish"
   },
 
-  "Toolbar": {
-    "slogan": "For a greener city!",
-    "login": "Login",
-    "about": "About",
-    "menu": {
+  "Template": {
+    "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Plant heritage",
         "allTrees": "All trees",
@@ -34,8 +36,20 @@
         "dataImport": "Data Import",
         "importYourData": "Import your data",
         "importHistory": "Import history"
+      },
+      "availableSoon": {
+        "availableSoon": "Available Soon !",
+        "requestAnItervention": "Request an intervention",
+        "scheduleOfInterventions": "Schedule of interventions"
       }
     }
+  },
+
+  "Toolbar": {
+    "slogan": "For a greener city!",
+    "login": "Login",
+    "about": "About",
+    "register": "Register"
   },
 
   "Map": {
@@ -51,5 +65,150 @@
   "Sidebar": {
     "treeCard": "Tree Card",
     "wikipediaInformation": "Wikipedia Information"
+  },
+
+  "PanelStart": {
+    "title": "You are connected to your account",
+    "content": "You can see the number of trees in OpenData but also the number of trees on your private data layer.",
+    "numberOfTrees": {
+      "title": "Nombre d'arbres sur la carte",
+      "content": "millions of trees"
+    },
+    "numberOfTreesLayer": {
+      "title": "Number of trees in the layer",
+      "content": "of trees"
+    },
+    "card": {
+      "title": "Would you like to add a tree?",
+      "content": "To add trees on your layer you can import a data file. You will soon be able to add a tree manually from our web or mobile interface!",
+      "button": "Import a data file"
+    }
+  },
+
+  "PanelWelcome": {
+    "tabLabel": "Plant heritage",
+    "title": "Welcome to EcoTeka !",
+    "text": "Natural Solutions has been developing this plant heritage inventory and management service since July 2020. You are here on a demo of our application! You can see on the map all the trees in the world available in OpenData.",
+    "CardInfoPanel": {
+      "title": "Number of trees on the map"
+    }
+  },
+
+  "CardAbout": {
+    "title": "Are you a green space manager ?",
+    "content": "You can contact us to learn more and try the first tree-based heritage inventory features.",
+    "button": "More informations"
+  },
+
+  "ImportHistoryIndex": {
+    "title": "Imports history",
+    "importText": "Import",
+    "deleteText": "Delete",
+    "dialog": {
+      "title": "Delete",
+      "content": "Are you sure you want to delete the selected files?",
+      "yes": "Yes",
+      "cancel": "Cancel"
+    }
+  },
+
+  "ImportHistoryTable": {
+    "headers": {
+      "file": "File name",
+      "trees": "Trees",
+      "crs": "CRS",
+      "importDate": "Import date",
+      "importStatus": "Import status"
+    }
+  },
+
+  "ImportHistoryEmpty": {
+    "content": "You haven't done any import yet! <br/> Everything has a beginning",
+    "button": "Import my data"
+  },
+
+  "ImportTemplate": {
+    "title": "A doubt with your file?",
+    "content": "Make sure your file contains the following information:",
+    "button": "Download the template",
+    "longitude": "Longitude",
+    "latitude": "Latitude",
+    "crs": "Coordinate Reference System",
+    "download": "Feel free to download our template in xlsx format"
+  },
+
+  "Import": {
+    "Index": {
+      "tooltipContent": "- Importing data is an action which may require several tens of minutes <br/> - Find the progress of your import in the menu: \"History of imports \"",
+      "templateTips": "Feel free to download our template in .xls format"
+    },
+    "Error": {
+      "importedText": "An error has crept into your file",
+      "buttonHistoryText": "Imports history",
+      "buttonResetText": "Import another file"
+    },
+    "Imported": {
+      "importedText": "Your file has been imported successfully",
+      "buttonHistoryText": "Imports history",
+      "buttonResetText": "Import another file"
+    },
+    "Importing": {
+      "importingText": "By importing..."
+    },
+    "MissingData": {
+      "titleText": "The file you upload missing some informations",
+      "hintText": "Please define the fields corresponding to the columns of your file",
+      "buttonSubmitContent": "Submit",
+      "buttonCancelText": "Cancel",
+      "labelColumn": {
+        "lat": "Latitude",
+        "lng": "Longitude",
+        "crs": "Coordinate Reference System"
+      }
+    },
+    "Upload": {
+      "boxContent": "Import your data",
+      "fileListHint": "File types accepted :",
+      "buttonCancelContent": "Cancel",
+      "buttonUploadContent": "Send",
+      "dropzoneText": "Drop your file here\nor click to select it"
+    }
+  },
+
+  "Contact": {
+    "dialogTile": "About this platform",
+    "dialogContentText": "Are you interested in this platform? <br/> Would you like to know more about it?",
+    "dialogContentHint": "Please fill out this form. We will get back to you as soon as possible.",
+    "successMessageContent": "Your message has been sent, we will get back to you as soon as possible !",
+    "buttonHomeContent": "Back to home",
+    "buttonCancelContent": "Cancel",
+    "buttonSubmitContent": "Send contact request",
+    "postErrorMessage": "Internal error, please try again later.",
+    "lastName": "Last name",
+    "firstName": "First name",
+    "email": "Email",
+    "errorMessageEmail": "Email address is invalid",
+    "phone": "Phone number",
+    "township": "Municipality in which you practice",
+    "contactRequest": "What is your question?",
+    "position": "Position",
+    "positionItems": {
+      "none": "None",
+      "greenSpacesManager": "Green space manager",
+      "technicalServiceManagers": "Technical Service Managers",
+      "others": "Others"
+    }
+  },
+  "Register": {
+    "dialogTitle": "Register",
+    "cancel": "Cancel",
+    "submit": "Register",
+    "fullName": "Full name",
+    "email": "Email",
+    "organization": "Organization",
+    "password": "Password",
+    "passwordConfirm": "Password confirm",
+    "registrationCompleted": "Registration completed",
+    "registrationFailed": "The registration has failed"
   }
 }

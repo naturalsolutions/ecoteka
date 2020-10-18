@@ -1,23 +1,26 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import Grid from "@material-ui/core/Grid";
-import Backdrop from "@material-ui/core/Backdrop";
-import Snackbar from "@material-ui/core/Snackbar";
-import IconButton from "@material-ui/core/IconButton";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  Grid,
+  Backdrop,
+  Snackbar,
+  IconButton,
+  CircularProgress,
+} from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -25,29 +28,11 @@ const { publicRuntimeConfig } = getConfig();
 export interface ETKContactProps {
   isOpen: boolean;
   onClose: Function;
-  dialogTile?: string;
-  dialogContentText?: string;
-  dialogContentHint?: string;
-  successMessageContent?: string;
-  buttonHomeContent?: string;
-  buttonCancelContent?: string;
-  buttonSubmitContent?: string;
-  postErrorMessage?: string;
 }
 
 const defaultProps: ETKContactProps = {
   isOpen: false,
   onClose: () => {},
-  dialogTile: "Nous contacter",
-  dialogContentText: "Notre équipe sera heureuse de vous répondre",
-  dialogContentHint:
-    "Merci de remplir ce formulaire. Nous vous répondrons dans les\nplus brefs délais.",
-  successMessageContent:
-    "Votre message a bien été envoyé, nous vous répondrons dans les\nplus brefs délais !",
-  buttonHomeContent: "Retour à l'accueil",
-  buttonCancelContent: "Annuler",
-  buttonSubmitContent: "Envoyer la demande de contact",
-  postErrorMessage: "Erreur interne, veuillez recommencer plus tard.",
 };
 
 const useStyles = makeStyles((theme) =>
@@ -61,6 +46,7 @@ const useStyles = makeStyles((theme) =>
 
 const ETKContact: React.FC<ETKContactProps> = (props) => {
   const classes = useStyles();
+  const { t } = useTranslation("components");
 
   // TODO: some interface, a schema ?
   const getFormDefault = () => {
@@ -151,7 +137,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
       setHasSuccess(true);
       setForm({ ...getFormDefault() });
     } else {
-      setPostErrorMessage(props.postErrorMessage);
+      setPostErrorMessage(t("Contact.postErrorMessage"));
     }
   };
 
@@ -178,7 +164,9 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title">{props.dialogTile}</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">
+          {t("Contact.dialogTile")}
+        </DialogTitle>
         {hasSuccess ? (
           <React.Fragment>
             <DialogContent>
@@ -186,7 +174,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                 <CheckCircleIcon style={{ fontSize: 40 }} />
               </Typography>
               <Typography align="center">
-                {props.successMessageContent}
+                {t("Contact.successMessageContent")}
               </Typography>
             </DialogContent>
             <DialogActions>
@@ -196,7 +184,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                 }}
                 color="primary"
               >
-                {props.buttonHomeContent}
+                {t("Contact.buttonHomeContent")}
               </Button>
             </DialogActions>
           </React.Fragment>
@@ -204,9 +192,9 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
           <React.Fragment>
             <DialogContent>
               <Typography component="p" variant="h5">
-                {props.dialogContentText}
+                {t("Contact.dialogContentText")}
               </Typography>
-              <Typography>{props.dialogContentHint}</Typography>
+              <Typography>{t("Contact.dialogContentHint")}</Typography>
               <form noValidate autoComplete="off">
                 <Grid container spacing={1}>
                   <Grid item xs={6}>
@@ -340,7 +328,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                   handleClose();
                 }}
               >
-                {props.buttonCancelContent}
+                {t("Contact.buttonCancelContent")}
               </Button>
               <Button
                 onClick={() => {
@@ -349,7 +337,7 @@ const ETKContact: React.FC<ETKContactProps> = (props) => {
                 color="primary"
                 variant="contained"
               >
-                {props.buttonSubmitContent}
+                {t("Contact.buttonSubmitContent")}
               </Button>
             </DialogActions>
           </React.Fragment>

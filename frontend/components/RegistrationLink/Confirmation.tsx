@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import {
+  Grid,
+  Paper,
+  Typography,
+  CircularProgress,
+  makeStyles,
+} from "@material-ui/core";
 import { apiRest } from "../../lib/api";
 
 export interface ETKRegistrationLinkConfirmationProps {
-  value: string;
+  value: string | string[];
   content: string;
   errorContent?: string[];
   onSuccess?(data?: object): void;
@@ -22,16 +25,18 @@ const defaultProps: ETKRegistrationLinkConfirmationProps = {
   ],
 };
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    error: {
-      color: "red",
-    },
-    circularProgress: {
-      marginBottom: "2rem",
-    },
-  })
-);
+const useStyles = makeStyles({
+  paper: {
+    width: "100%",
+    height: "100%",
+  },
+  error: {
+    color: "red",
+  },
+  circularProgress: {
+    marginBottom: "2rem",
+  },
+});
 
 const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationProps> = (
   props
@@ -58,8 +63,14 @@ const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationP
   }, []);
 
   return (
-    <React.Fragment>
-      <Grid container direction="column" justify="center" alignItems="center">
+    <Paper square className={classes.paper}>
+      <Grid
+        className={classes.paper}
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+      >
         <CircularProgress className={classes.circularProgress} />
         {!props.errorContent ? (
           <Typography component="h5">{props.content}</Typography>
@@ -71,7 +82,7 @@ const ETKRegistrationLinkConfirmation: React.FC<ETKRegistrationLinkConfirmationP
           ))
         )}
       </Grid>
-    </React.Fragment>
+    </Paper>
   );
 };
 
