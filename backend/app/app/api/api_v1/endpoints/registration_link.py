@@ -24,8 +24,11 @@ from datetime import (
     datetime,
     timedelta
 )
-from app.utils import generate_registration_link_value
+from app.utils import generate_new_uuid4_value
 from app.core import settings
+from app.worker import (
+    generate_and_insert_registration_link_task
+)
 
 router = APIRouter()
 
@@ -61,80 +64,47 @@ def verification(
     }
 
 
-@router.get("/regenerate/")
+@router.get("/regenerate/", status_code=200)
 def regenerate_registration_link(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-
     if user.is_verified(current_user):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="User is verified"
         )
-    else:
-        print("oopps pas verifié et pas de reg en base")
-        registration_link_in_db = registration_link.get(
-            db=db,
-            fk_user=current_user.id,
-        )
-        if registration_link_in_db is None:
-            registration_link_tmp = RegistrationLinkCreate(
-                fk_user=current_user.id,
-                value=generate_registration_link_value(),
-                creation_date=datetime.datetime.now()
-            )
-            new_registration_link = registration_link.create(
-                db=db,
-                obj_in=registration_link_tmp
-            )
-            # send email
-        else:
-            dateExpiration = (
-                registration_link_in_db.creation_date
-                +
-                timedelta(
-                    days=settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS
-                )
-            )
-            dateLimitBeforeResendMail = (
-                registration_link_in_db.creation_date
-                +
-                timedelta(hours=2)
-            )
-            curDate = datetime.now()
-            if dateExpiration < curDate:
-                registration_link_tmp = RegistrationLinkUpdate(
-                    fk_user=current_user.id,
-                    value=generate_registration_link_value(),
-                    creation_date=datetime.datetime.now()
-                )
-                new_registration_link = registration_link.update(
-                    db=db,
-                    obj_in=registration_link_tmp
-                )
-                # resend mail
-                pass
-            elif dateLimitBeforeResendMail < curDate:
-                registration_link_tmp = RegistrationLinkUpdate(
-                    fk_user=current_user.id,
-                    value=generate_registration_link_value(),
-                    creation_date=datetime.datetime.now()
-                )
-                new_registration_link = registration_link.update(
-                    db=db,
-                    obj_in=registration_link_tmp
-                )
-                # resend mail
-            else:
-                new_registration_link = registration_link_in_db
-                # naaa just resend the mail
 
-    mail = (
-        'your registration link will be send by mail',
-        f'value : {new_registration_link.value}',
-        f'obj : {new_registration_link}'
+    registration_link_in_db = registration_link.get(
+        db=db,
+        fk_user=current_user.id,
     )
+
+    if registration_link_in_db is not None:
+        dateLimitBeforeResendMail = (
+            registration_link_in_db.creation_date
+            +
+            timedelta(
+                hours=settings.EMAIL_REGISTRATION_LINK_BEFORE_NEW_IN_HOURS
+            )
+        )
+        curDate = datetime.now()
+
+        if dateLimitBeforeResendMail > curDate:
+            timeToWait = dateLimitBeforeResendMail - curDate
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"You have to wait {timeToWait} before asking a new registration link"
+            )
+
+        db.delete(registration_link_in_db)
+        db.commit()
+
+    registration_link.generate_and_insert(db=db, fk_user=current_user.id)
+
+
+    # generate_and_insert_registration_link_task(current_user.id)
+
     return {
-        mail
+        'message': 'You will receive a mail with a new registration link'
     }
