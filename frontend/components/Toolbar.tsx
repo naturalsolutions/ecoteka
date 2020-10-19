@@ -21,14 +21,10 @@ import ETKLanguageSelector from "./LanguageSelector";
 
 export interface ETKToolbarProps {
   logo: string;
-  registerText: string;
-  onDarkToggle: ETKDarkToggleProps["onToggle"];
 }
 
 const defaultProps: ETKToolbarProps = {
   logo: "/assets/light/logo.svg",
-  registerText: "S'inscrire",
-  onDarkToggle: () => {},
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -109,25 +105,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       user.full_name || user.email.substr(0, user.email.indexOf("@"));
     return (
       <React.Fragment>
-        {user.is_superuser ? (
-          <Button
-            onClick={() => {
-              setSigninOpen(false);
-              setRegisterOpen(true);
-              setIsContactOpen(false);
-            }}
-          >
-            {props.registerText}
-          </Button>
-        ) : null}
-        {/* TODO apply theme on backgroundColor */}
-        <Divider
-          orientation="vertical"
-          flexItem
-          style={{
-            backgroundColor: "#FFF",
-          }}
-        />
+        <Divider orientation="vertical" flexItem />
         <Button
           onClick={(e) => {
             setUserInfosAnchorEl(e.currentTarget);
@@ -170,7 +148,13 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 </Typography>
               </Grid>
               <Grid item style={{ marginLeft: "1rem" }}>
+<<<<<<< Updated upstream
                 <ETKDarkToggle onToggle={props.onDarkToggle} />
+=======
+                <Hidden mdDown>
+                  <ETKDarkToggle />
+                </Hidden>
+>>>>>>> Stashed changes
               </Grid>
             </Grid>
           </Grid>

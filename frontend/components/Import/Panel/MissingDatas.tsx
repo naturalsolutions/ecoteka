@@ -3,9 +3,11 @@ import { Button, Typography, Grid, Box } from "@material-ui/core";
 import { TextField, MenuItem } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
+import useETKForm from "../../Form/useForm";
+import * as yup from "yup";
 
-import ETKGeofile from "../Geofile";
-import { apiRest } from "../../lib/api";
+import ETKGeofile from "../../Geofile";
+import { apiRest } from "../../../lib/api";
 
 export interface ETKMissingDatasProps {
   geoFile?: ETKGeofile;

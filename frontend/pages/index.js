@@ -8,7 +8,8 @@ import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
 import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
-import ETKImport from "../components/Import/Index";
+import ETKPanel from "../components/Panel";
+import ETKImportPanel from "../components/Import/Panel/Index";
 import ETKPanelWelcome from "../components/Panel/Welcome";
 import ETKPanelStart from "../components/Panel/Start";
 
@@ -24,16 +25,6 @@ const useStyles = makeStyles(() => ({
     height: "100%",
   },
   sidebar: {
-    height: "100%",
-    overflowY: "scroll",
-    overflowX: "hidden",
-    "&::-webkit-scrollbar": {
-      display: "none",
-    },
-    "-ms-overflow-style": "none",
-    "scrollbar-width": "none",
-  },
-  sidebarPaper: {
     height: "100%",
   },
   main: {
@@ -104,7 +95,7 @@ export default function IndexPage() {
 
     for (let layer of Object.keys(layersStyle)) {
       for (let property of Object.keys(layersStyle[layer][mapTheme])) {
-        mapRef.current.map.setPaintProperty(
+        mapRef.current?.map.setPaintProperty(
           layer,
           property,
           layersStyle[layer][mapTheme][property]
@@ -138,23 +129,15 @@ export default function IndexPage() {
     }
   };
 
-  const renderImport = <ETKImport map={mapRef} />;
-
-  const renderSidebar = (
-    <ETKSidebar
-      activeTab={activeTab}
-      currentGenre={currentGenre}
-      currentProperties={currentProperties}
-      onTabChange={setActiveTab}
-    />
-  );
-
   const switchRenderDrawer = (panel) => {
     switch (panel) {
-      case "import":
-        return renderImport;
       case "sidebar":
-        return renderSidebar;
+        return (
+          <ETKSidebar
+            currentGenre={currentGenre}
+            currentProperties={currentProperties}
+          />
+        );
       default:
         return user ? <ETKPanelStart /> : <ETKPanelWelcome />;
     }
@@ -168,11 +151,14 @@ export default function IndexPage() {
         alignItems="stretch"
         className={classes.root}
       >
-        <Grid item className={classes.sidebar}>
-          <Paper square elevation={0} className={classes.sidebarPaper}>
-            {switchRenderDrawer(router.query.drawer)}
-          </Paper>
-        </Grid>
+        <Hidden mdDown>
+          <Grid item className={classes.sidebar}>
+            <ETKPanel
+              context={{ map: mapRef }}
+              panel={router.query.panel as string}
+            />
+          </Grid>
+        </Hidden>
         <Grid item xs className={classes.main}>
           <ETKMap
             ref={mapRef}

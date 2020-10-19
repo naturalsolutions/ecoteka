@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Grid, Typography, CircularProgress } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
-import Geofile from "../Geofile";
-import { apiRest } from "../../lib/api";
+import Geofile from "../../Geofile";
+import { apiRest } from "../../../lib/api";
 
 export interface ETKImportImportingProps {
   geofile: Geofile;

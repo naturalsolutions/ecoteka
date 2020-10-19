@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import ETKGeofile from "../Geofile";
+import ETKGeofile from "../../Geofile";
 import ETKImportTemplate from "./Template";
 import ETKMissingData from "./MissingDatas";
 import ETKImported from "./Imported";
 import ETKUpload from "./Upload";
 import ETKError from "./Error";
 import ETKImportImporting from "./Importing";
-import { apiRest } from "../../lib/api";
-import layersStyle from "../../public/assets/layersStyle.json";
-import { useTranslation } from "react-i18next";
+import { apiRest } from "../../../lib/api";
+import layersStyle from "../../../public/assets/layersStyle.json";
 
 export interface ETKImportProps {
   width?: Number;
@@ -26,8 +25,7 @@ export interface Choice {
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      padding: "1rem",
-      boxSizing: "border-box",
+      maxWidth: "25rem",
     },
     import: {
       alignSelf: "flex-start",
@@ -138,7 +136,6 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
       direction="column"
       justify="center"
       className={classes.root}
-      style={{ width: `${props.width}px`, height: "100%" }}
     >
       {step === "start" && (
         <Grid item>
