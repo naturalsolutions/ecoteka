@@ -7,6 +7,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import { useAppContext } from "../../providers/AppContext";
+import ETKButtonContact from "../Contact/Button";
 
 export interface ETKLayoutDesktopProps {}
 
@@ -31,7 +32,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         <Grid item>
           <BottomNavigation showLabels>
             <BottomNavigationAction label="Recents" />
-            <BottomNavigationAction label="Favorites" onClick={() => {}} />
+            <ETKButtonContact />
           </BottomNavigation>
         </Grid>
       </Grid>
