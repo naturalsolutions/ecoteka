@@ -19,7 +19,7 @@ export default function Template(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <TemplateContext.Provider value={{ dialog: dialogRef.current, theme }}>
+      <TemplateContext.Provider value={{ dialog: dialogRef, theme }}>
         <Hidden mdDown>
           <ETKLayoutDesktop>{props.children}</ETKLayoutDesktop>
         </Hidden>
