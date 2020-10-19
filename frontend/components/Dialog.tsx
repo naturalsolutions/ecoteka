@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  PropTypes,
+  DialogProps,
 } from "@material-ui/core";
 
 export type ETKDialogActions = {
@@ -15,16 +15,16 @@ export type ETKDialogActions = {
 };
 
 export interface ETKDialogAction {
-  onClick?: () => void;
   label: string;
-  noClose: boolean;
+  noClose?: boolean;
+  onClick?: () => void;
 }
 
 export interface ETKDialogProps {
   title?: string;
-  content?: string;
+  content?: string | React.ReactNode;
   actions?: ETKDialogAction[];
-  styleDialog?: object;
+  dialogProps?: DialogProps;
 }
 
 const defaultProps: ETKDialogProps = {
@@ -41,6 +41,9 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     const [content, setContent] = useState<string | React.ReactNode>(
       props.content
     );
+    const [dialogProps, setDialogProps] = useState<DialogProps>(
+      props.dialogProps
+    );
 
     const onActionClick = (e, action) => {
       if (action.onClick) {
@@ -53,7 +56,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     };
 
     const renderActions = actions.map((action, idx) => {
-      const { onClick, label, ...buttonProps } = action;
+      const { onClick, label, noClose, ...buttonProps } = action;
       return (
         <Button
           {...buttonProps}
@@ -70,6 +73,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
         setTitle(openProps.title);
         setContent(openProps.content);
         setActions(openProps.actions);
+        setDialogProps(openProps.dialogProps);
         setIsOpen(true);
       },
       close: () => {
@@ -78,11 +82,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     }));
 
     return (
-      <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        style={props.styleDialog}
-      >
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)} {...dialogProps}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>{content}</DialogContent>
         <DialogActions>{renderActions}</DialogActions>

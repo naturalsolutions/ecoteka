@@ -9,9 +9,9 @@
   },
 
   "SignIn": {
-    "title": "Connexion",
+    "title": "Se connecter",
     "buttonCancel": "Annuler",
-    "buttonConnexion": "Connexion",
+    "buttonConnexion": "Se connecter",
     "labelPassword": "Mot de passe",
     "labelUsername": "Adresse email",
     "errorMessageServer": "Adresse email ou mot de passe incorrect",
@@ -48,7 +48,8 @@
   "Toolbar": {
     "slogan": "Pour une ville plus verte !",
     "login": "Connexion",
-    "about": "En savoir plus"
+    "about": "En savoir plus",
+    "register": "Inscription"
   },
 
   "Map": {
@@ -85,7 +86,7 @@
   },
 
   "PanelWelcome": {
-    "tabLabel": "Patrimoine Vegetal",
+    "tabLabel": "Patrimoine Végétal",
     "title": "Bienvenue sur EcoTeka!",
     "text": "Natural Solutions développe ce service d'inventaire et de gestion du patrimoine arboré depuis juillet 2020. Vous êtes ici sur un démonstrateur de notre application ! <br/>Vous pouvez voir sur la carte tous les arbres du monde disponibles en OpenData.",
     "CardInfoPanel": {
@@ -161,7 +162,7 @@
       "buttonCancelText": "Annuler",
       "labelColumn": {
         "lat": "Latitude",
-        "lon": "Longitude",
+        "lng": "Longitude",
         "crs": "Système de Référence de Coordonnées"
       }
     },
@@ -175,13 +176,38 @@
   },
 
   "Contact": {
-    "dialogTile": "Nous contacter",
-    "dialogContentText": "Notre équipe sera heureuse de vous répondre",
+    "dialogTile": "En savoir plus",
+    "dialogContentText": "Cette plataforme vous intéresse ?<br/>Voulez vous en savoir plus ?",
     "dialogContentHint": "Merci de remplir ce formulaire. Nous vous répondrons dans les\nplus brefs délais.",
-    "successMessageContent": "Votre message a bien été envoyé, nous vous répondrons dans les\nplus brefs délais !",
+    "successMessageContent": "Votre message a bien été envoyé, nous vous répondons dans les\nplus brefs délais !",
     "buttonHomeContent": "Retour à l'accueil",
     "buttonCancelContent": "Annuler",
     "buttonSubmitContent": "Envoyer la demande de contact",
-    "postErrorMessage": "Erreur interne, veuillez recommencer plus tard."
+    "postErrorMessage": "Erreur interne, veuillez recommencer plus tard.",
+    "lastName": "Nom",
+    "firstName": "Prénom",
+    "email": "Adresse email",
+    "phone": "Numéro de téléphone",
+    "township": "Commune dans laquelle vous exercez",
+    "contactRequest": "Bonjour, pouvez-vous m'en dire plus sur cette plateforme ?",
+    "position": "Poste occupé",
+    "positionItems": {
+      "none": "Aucune",
+      "greenSpacesManager": "Gestionaire d'espaces verts",
+      "technicalServiceManagers": "Directeur de services technique",
+      "others": "Autres"
+    }
+  },
+  "Register": {
+    "dialogTitle": "Inscription",
+    "cancel": "Annuler",
+    "submit": "Inscrire",
+    "fullName": "Nom complet",
+    "email": "Adresse email",
+    "organization": "Organisation",
+    "password": "Mot de passe",
+    "passwordConfirm": "Confirmer mot de passe",
+    "registrationCompleted": "Inscription réussie",
+    "registrationFailed": "Une erreur s'est produite lors de l'inscription"
   }
 }

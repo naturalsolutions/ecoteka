@@ -13,7 +13,6 @@ import layersStyle from "../../../public/assets/layersStyle.json";
 
 export interface ETKImportProps {
   width?: Number;
-  isOpen: File;
   map?: any;
 }
 
@@ -35,8 +34,6 @@ const useStyles = makeStyles((theme) =>
 
 const ETKImport: React.FC<ETKImportProps> = (props) => {
   const classes = useStyles();
-  const { t } = useTranslation("components");
-
   const [step, setStep] = useState("start");
   const [geofile, setGeofile] = useState<ETKGeofile>();
   const [missingInfo, setMissingInfo] = useState<[string?]>([]);

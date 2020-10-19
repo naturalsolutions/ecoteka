@@ -1,6 +1,9 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import CommonEN from "./public/locales/en/common.json";
+import CommonES from "./public/locales/es/common.json";
+import CommonFR from "./public/locales/fr/common.json";
 import ComponentsEN from "./public/locales/en/components.json";
 import ComponentsES from "./public/locales/es/components.json";
 import ComponentsFR from "./public/locales/fr/components.json";
@@ -16,12 +19,15 @@ i18n
     defaultNS: "common",
     resources: {
       en: {
+        common: CommonEN,
         components: ComponentsEN,
       },
       es: {
+        common: CommonES,
         components: ComponentsES,
       },
       fr: {
+        common: CommonFR,
         components: ComponentsFR,
       },
     },

@@ -1,6 +1,5 @@
-import PropTypes from "prop-types";
 import { useState, createRef, useEffect } from "react";
-import { Paper, Grid, makeStyles } from "@material-ui/core";
+import { Paper, Grid, makeStyles, Hidden } from "@material-ui/core";
 import { useRouter } from "next/router";
 
 import ETKSidebar from "../components/Sidebar";
@@ -9,9 +8,7 @@ import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
 import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
 import ETKPanel from "../components/Panel";
-import ETKImportPanel from "../components/Import/Panel/Index";
-import ETKPanelWelcome from "../components/Panel/Welcome";
-import ETKPanelStart from "../components/Panel/Start";
+import ETKLanding from "../components/Landing";
 
 import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
@@ -30,18 +27,31 @@ const useStyles = makeStyles(() => ({
   main: {
     position: "relative",
   },
+  mapSearchCity: {
+    position: "absolute",
+    top: "1rem",
+    right: "1rem",
+    width: "300px",
+  },
 }));
 
 export default function IndexPage() {
-  const mapRef = createRef();
+  const mapRef = createRef<ETKMap>();
   const classes = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentGenre, setCurrentGenre] = useState(null);
   const [currentProperties, setCurrentProperties] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const { appContext, setAppContext, user } = useAppContext();
+  const { appContext, setAppContext, user, loading } = useAppContext();
+  const [landing, setLanding] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      setLanding(false);
+    }
+  }, [loading, user]);
 
   useEffect(() => {
     toggleMapTheme(appContext.theme);
@@ -129,20 +139,6 @@ export default function IndexPage() {
     }
   };
 
-  const switchRenderDrawer = (panel) => {
-    switch (panel) {
-      case "sidebar":
-        return (
-          <ETKSidebar
-            currentGenre={currentGenre}
-            currentProperties={currentProperties}
-          />
-        );
-      default:
-        return user ? <ETKPanelStart /> : <ETKPanelWelcome />;
-    }
-  };
-
   return (
     <Template>
       <Grid
@@ -160,13 +156,24 @@ export default function IndexPage() {
           </Grid>
         </Hidden>
         <Grid item xs className={classes.main}>
+          {landing && (
+            <ETKLanding
+              setLanding={setLanding}
+              onSearchCity={onSearchCityChangeHandler}
+            />
+          )}
           <ETKMap
             ref={mapRef}
             styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
             onMapClick={onMapClick}
             onStyleData={onMapLoaded}
           />
-          <ETKMapSearchCity onChange={onSearchCityChangeHandler} />
+          {!landing && (
+            <ETKMapSearchCity
+              className={classes.mapSearchCity}
+              onChange={onSearchCityChangeHandler}
+            />
+          )}
           <ETKMapGeolocateFab map={mapRef} />
           <ETKMapSateliteToggle onToggle={onMapSateliteToggleHandler} />
         </Grid>

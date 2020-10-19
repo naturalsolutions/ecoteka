@@ -5,27 +5,21 @@ import { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
 export interface ETKMapSearchCityProps {
+  className?: string;
+  style?: React.CSSProperties;
   onChange?(item: {}): void;
 }
 
 const defaultProps: ETKMapSearchCityProps = {
+  style: {
+    background: "#ffff",
+  },
+  className: "",
   onChange: () => {},
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    searchCity: {
-      background: theme.palette.background.default,
-      position: "absolute",
-      top: theme.spacing(2),
-      right: theme.spacing(2),
-    },
-  })
-);
-
 const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
   const { t } = useTranslation("components");
-  const classes = useStyles();
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -82,12 +76,12 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
   return (
     <Autocomplete
       freeSolo
-      className={classes.searchCity}
+      className={props.className}
       options={options}
       getOptionLabel={(option) => option.nom}
       loading={loading}
       value={value}
-      style={{ width: 300 }}
+      style={props.style}
       onChange={onChangeHandler}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
