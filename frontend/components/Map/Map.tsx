@@ -1,9 +1,9 @@
 import { Component } from "react";
 import mapboxgl from "mapbox-gl";
+import layersStyle from "../../public/assets/layersStyle.json";
 
 export interface ETKMapProps {
   styleSource: string;
-  onGeolocate?(event: Event): void;
   onStyleData?(map: mapboxgl.Map): void;
   onMapClick?(map: mapboxgl.Map, event: Event): void;
 }
@@ -18,13 +18,11 @@ export default class ETKMap extends Component<
   }
 > {
   public map: mapboxgl.Map;
-  private geolocate: mapboxgl.GeolocateControl;
   private mapContainer: HTMLElement;
 
   constructor(props: ETKMapProps) {
     super(props);
     this.map = null;
-    this.geolocate = null;
     this.state = {
       styleSource: props.styleSource,
       lng: 2.54,
@@ -41,21 +39,15 @@ export default class ETKMap extends Component<
       zoom: this.state.zoom,
     });
 
-    this.geolocate = new mapboxgl.GeolocateControl({
+    const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true,
       },
       trackUserLocation: true,
     });
 
-    this.geolocate.on("geolocate", (e) => {
-      if (this.props.onGeolocate) {
-        this.props.onGeolocate(e);
-      }
-    });
-
-    this.map.addControl(this.geolocate);
-    this.map.on("click", (e) => this.props.onMapClick(this.map, e));
+    this.map.geolocate = geolocate;
+    this.map.addControl(geolocate);
 
     if (this.props.onStyleData) {
       this.map.once("styledata", () => {
@@ -63,11 +55,21 @@ export default class ETKMap extends Component<
       });
     }
 
-    window.addEventListener("orientationchange", (e) => {
-      setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-      }, 200);
+    this.map.on("load", () => {
+      this.loadLayers("light");
     });
+  }
+
+  loadLayers(theme) {
+    for (let layer of Object.keys(layersStyle)) {
+      for (let property of Object.keys(layersStyle[layer][theme])) {
+        this.map.setPaintProperty(
+          layer,
+          property,
+          layersStyle[layer][theme][property]
+        );
+      }
+    }
   }
 
   render() {
