@@ -22,6 +22,21 @@ class Users {
       return Error(e.message);
     }
   }
+
+  async updateMe(form) {
+    try {
+      const response = await this.api.put(
+        `/users/me`,
+        {},
+        JSON.stringify(form)
+      );
+      const json = await response.json();
+
+      return { response, json };
+    } catch (e) {
+      return {};
+    }
+  }
 }
 
 export default function userFactory(api) {
