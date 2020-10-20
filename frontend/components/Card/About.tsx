@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import ETKContactButton from "../Contact/Button";
+import Hidden from '@material-ui/core/Hidden';
 
 export interface ETKCardAboutProps {
   background?: string;
@@ -54,7 +55,9 @@ const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
             </Typography>
           </Grid>
           <Grid item>
-            <ETKContactButton variant={props.buttonVariant} color="secondary" />
+            <Hidden mdDown>
+               <ETKContactButton variant={props.buttonVariant} color="secondary" />
+            </Hidden>
           </Grid>
         </Grid>
       </CardContent>

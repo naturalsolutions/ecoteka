@@ -31,7 +31,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         </Grid>
         <Grid item>
           <BottomNavigation showLabels>
-            <BottomNavigationAction label="Recents" />
+            <BottomNavigationAction label="Patrimoine arboré" />
             <ETKButtonContact />
           </BottomNavigation>
         </Grid>

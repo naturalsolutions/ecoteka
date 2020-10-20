@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
   mapSearchCity: {
     width: "500px",
   },
+  searchBox:{
+    margin: "2rem 0",
+  },
   [theme.breakpoints.down("sm")]: {
     mapSearchCity: {
       width: "300px",
@@ -64,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
     cardContent: {
       height: "unset",
       width: "100%",
-      padding: "1rem 0 0 0",
     },
+    
   },
 }));
 
@@ -89,12 +92,11 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
             </Typography>
           </Grid>
           <Grid item>
-            <Typography paragraph>
+            <Typography>
               <Trans>{t("PanelWelcome.text")}</Trans>
             </Typography>
           </Grid>
-          <Grid item>
-            <Box m={5}>
+          <Grid item className={classes.searchBox}>
               <ETKMapSearchCity
                 className={classes.mapSearchCity}
                 onChange={(city) => {
@@ -102,7 +104,6 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
                   props.onSearchCity(city);
                 }}
               />
-            </Box>
           </Grid>
           <Grid item>
             <ETKAboutCard background="#fff" buttonVariant="contained" />

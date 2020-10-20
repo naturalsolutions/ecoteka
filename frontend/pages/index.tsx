@@ -16,7 +16,7 @@ import { useAppContext } from "../providers/AppContext";
 import layersStyle from "../public/assets/layersStyle.json";
 import { apiRest } from "../lib/api";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: "relative",
     height: "100%",
@@ -32,6 +32,11 @@ const useStyles = makeStyles(() => ({
     top: "1rem",
     right: "1rem",
     width: "300px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    mapSearchCity: {
+      width: "92vw",
+    },
   },
 }));
 
