@@ -6,31 +6,31 @@ export default function useTreeSchema() {
 
   return {
     family: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.family"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     gender: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.gender"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     specie: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.specie"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     cultivar: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.cultivar"),
@@ -98,15 +98,15 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     etkRegistrationNumber: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.etkRegistrationNumber"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     registrationNumber: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.registrationNumber"),
@@ -119,7 +119,7 @@ export default function useTreeSchema() {
       component: {
         label: t("components:Tree.plantingDate"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     height: {
       type: "textfield",
@@ -128,7 +128,7 @@ export default function useTreeSchema() {
         type: "number",
         label: t("components:Tree.height"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     diameter: {
       type: "textfield",
@@ -137,7 +137,7 @@ export default function useTreeSchema() {
         type: "number",
         label: t("components:Tree.diameter"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     soilType: {
       type: "select",
@@ -214,11 +214,17 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     allergens: {
-      type: "textfield",
+      type: "select",
       category: "Autre",
       component: {
-        type: "number",
         label: t("components:Tree.allergens"),
+        items: [
+          { label: "A", value: 0 },
+          { label: "B", value: 1 },
+          { label: "C", value: 2 },
+          { label: "D", value: 3 },
+          { label: "E", value: 4 },
+        ],
       },
       schema: yup.string(),
     },
