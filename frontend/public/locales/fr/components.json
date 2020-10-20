@@ -215,5 +215,57 @@
     "Mobile": {
       "treeHeritage": "Patrimoine arboré"
     }
+  },
+  "Tree" : {
+    "family" : "Famille",
+    "gender" : "Genre",
+    "specie" : "Espèce",
+    "cultivar" : "Cultiver",
+    "latinName" : "Nom vernaculaire",
+    "latitude" : "Latitude",
+    "longitude" : "Longitude",
+    "townshipCode" : "Code commune",
+    "zipCode" : "Code postal",
+    "address" : "Adresse",
+    "zone" : "Découpage en zone",
+    "etkRegistrationNumber" : "Matricule Ecoteka",
+    "registrationNumber" : "Matricule de l'arbre",
+    "plantingDate" : "Date de plantation",
+    "height" : "Hauteur de l'arbre",
+    "diameter" : "Diamètre de l'arbre",
+    "soilType" : {
+      "label" : "Type de sol",
+      "clay" : "Argileux",
+      "silt" : "Limoneux",
+      "limestone" : "Calcaire",
+      "sand" : "Sableux",
+      "acid" : "Acide",
+      "sandyclay" :"Argilo-sableux"
+    },
+    "rootType" : {
+      "label" : "Type d'enracinement",
+      "swivel" : "Pivotant",
+      "tracing" : "Tracant",
+      "oblique" : "Oblique"
+    },
+    "habit" : {
+      "label" : "Port de l'arbre",
+      "free" : "Port libre",
+      "semiFree" : "Semi-libre",
+      "form" : "En formation",
+      "cat" : "Tête de chat",
+      "trumpet" : "En trogne",
+      "curtain" : "Rideau",
+      "pyramid" : "Pyramide",
+      "ball" : "Boule",
+      "cone" : "Cône"
+    },
+    "procted" : "Arbre protégé",
+    "soilConstraints" : "Contraintes au sol",
+    "aerianConstraint" : "Contraintes aériennes",
+    "watering" : "Arrosage",
+    "lightning" : "Présence d'éclairage",
+    "allergens" : "Arbre allergène",
+    "remarks" : "Remarques"
   }
 }

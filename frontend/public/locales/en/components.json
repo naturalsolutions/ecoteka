@@ -215,5 +215,57 @@
     "Mobile":{
       "treeHeritage" : "Tree heritage"
     }
+  },
+  "Tree" : {
+    "family" : "Family",
+    "gender" : "Gender",
+    "specie" : "Specie",
+    "cultivar" : "Cultivar",
+    "latinName" : "Vernacular Name",
+    "latitude" : "Latitude",
+    "longitude" : "Longitude",
+    "townshipCode" : "Town ship code",
+    "zipCode" : "Zip code",
+    "address" : "Adress",
+    "zone" : "Zone cutting",
+    "etkRegistrationNumber" : "Ecoteka registration number",
+    "registrationNumber" : "Tree registration number",
+    "plantingDate" : "Planting date",
+    "height" : "Tree height",
+    "diameter" : "Tree diameter",
+    "soilType" : {
+      "label" : "Soil type",
+      "clay" : "Calyey",
+      "silt" : "Silty",
+      "limestone" : "Limestone",
+      "sand" : "Sandy",
+      "acid" : "Acid",
+      "sandyclay" :"Sandy clay"
+    },
+    "rootType" : {
+      "label" : "Root type",
+      "swivel" : "Swivel",
+      "tracing" : "Tracing",
+      "oblique" : "Oblique"
+    },
+    "habit" : {
+      "label" : "Tree habit",
+      "free" : "Free",
+      "semiFree" : "Semi-free",
+      "form" : "Forming",
+      "cat" : "Caat head",
+      "trumpet" : "Trumpet",
+      "curtain" : "Curtain",
+      "pyramid" : "Pyramid",
+      "ball" : "Ball",
+      "cone" : "Cone"
+    },
+    "procted" : "Protected tree",
+    "soilConstraints" : "Soil constraints",
+    "aerianConstraint" : "Aerian contraints",
+    "watering" : "Watering",
+    "lightning" : "Lighting",
+    "allergens" : "Allergenic tree",
+    "remarks" : "Remarks"
   }
 }
