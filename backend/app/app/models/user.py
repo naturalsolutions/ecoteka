@@ -19,4 +19,4 @@ class User(Base):
     is_superuser = Column(Boolean(), default=False, nullable=False)
     is_verified = Column(Boolean(), default=False, nullable=False)
 
-    organization = relationship("Organization")
+    organization = relationship("Organization", lazy='joined')

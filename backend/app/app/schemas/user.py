@@ -1,4 +1,7 @@
-from typing import Optional
+from typing import (
+    List,
+    Optional
+)
 from pydantic import (
     BaseModel,
     EmailStr
@@ -33,7 +36,29 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
+class OrganizationBase(BaseModel):
+    name: str = ''
+    slug: str = ''
+
+
+class Organization(OrganizationBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
 class UserOut(UserPrimaryKey, UserBase):
+
+    # organization: Organization
+
+    class Config:
+        orm_mode = True
+
+
+class UserMeOut(UserPrimaryKey, UserBase):
+
+    organization: Organization
 
     class Config:
         orm_mode = True

@@ -8,6 +8,7 @@ from .token import (
 from .user import (
     UserCreate,
     UserDB,
+    UserMeOut,
     UserUpdate,
     UserOut
 )

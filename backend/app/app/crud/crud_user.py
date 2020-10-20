@@ -6,9 +6,15 @@ from typing import (
     Union
 )
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import (
+    Session,
+    joinedload
+)
 
-from app.core.security import get_password_hash, verify_password
+from app.core.security import (
+    get_password_hash,
+    verify_password
+)
 from app.crud import (
     CRUDBase
 )
@@ -23,6 +29,13 @@ from app.schemas import (
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
+
+    def me(self, db: Session, *, id: int) -> Optional[User]:
+        query = db.query(User)
+        query = query.filter(User.id == id)
+        query = query.options(joinedload(User.organization))
+        return query.first()
+
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         return db.query(User).filter(User.email == email).first()
 

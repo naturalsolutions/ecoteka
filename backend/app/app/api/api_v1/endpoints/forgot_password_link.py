@@ -44,17 +44,17 @@ def generate_new_forgot_password_link(
     itemForm: ForgotPasswordLinkForm,
     db: Session = Depends(get_db)
 ):
-    user_in_db = user.get_by_email(db, email=itemForm.user_mail)
+    user_in_db = user.get_by_email(db, email=itemForm.email)
 
     if user_in_db is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"This user {itemForm.user_mail} is not found"
+            detail=f"This user {itemForm.email} is not found"
         )
 
     forgot_password_link.generate_and_insert(db=db, itemForm=itemForm)
 
-    celery_app.generate_and_insert_registration_link_task.delay(user_in_db.id)
+    # celery_app.generate_and_insert_registration_link_task.delay(user_in_db.id)
 
     return {
         "message": "your will receive a mail with a link to change your password"
@@ -71,7 +71,7 @@ def use_forgot_password_link_for_update_password(
         db.delete(dbObj)
         db.commit()
 
-    forgot_password_link_in_db = forgot_password_link.get_by_value(value=value)
+    forgot_password_link_in_db = forgot_password_link.get_by_value(db=db, value=value)
 
     if forgot_password_link_in_db is None:
         raise HTTPException(
@@ -109,9 +109,9 @@ def use_forgot_password_link_for_update_password(
         id=forgot_password_link_in_db.fk_user
     )
     obj_in = {"password": passwordChangeForm.new_password}
-    user.update(db_obj=user_in_db, obj_in=obj_in)
+    user.update(db=db, db_obj=user_in_db, obj_in=obj_in)
     cleanLinkInDb(db=db, dbObj=forgot_password_link_in_db)
 
-    celery_app.send_confirmation_password_changed.delay(user_in_db.id)
+    # celery_app.send_confirmation_password_changed.delay(user_in_db.id)
 
     return {"message": "Your password has been changed"}

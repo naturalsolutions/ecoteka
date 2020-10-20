@@ -14,6 +14,7 @@ from pydantic import EmailStr
 from sqlalchemy.orm import Session
 from app.schemas import (
     UserCreate,
+    UserMeOut,
     UserOut,
     UserUpdate
 )
@@ -32,7 +33,9 @@ from app.utils import (
     send_new_account_email
 )
 from app.core import (
-    settings
+    settings,
+    get_password_hash,
+    verify_password
 )
 
 router = APIRouter()
@@ -82,27 +85,48 @@ def create_user(
 def update_user_me(
     *,
     db: Session = Depends(get_db),
-    password: str = Body(None),
     full_name: str = Body(None),
-    email: EmailStr = Body(None),
+    organization_id: int = Body(None),
+    old_password: str = Body(None),
+    new_password: str = Body(None),
+    new_confirm_password: str = Body(None),
     current_user: User = Depends(get_current_user),
 ) -> Any:
     """
     Update own user.
     """
-    current_user_data = jsonable_encoder(current_user)
-    user_in = UserUpdate(**current_user_data)
-    if password is not None:
-        user_in.password = password
+    send_mail_new_password = False
+    current_user_data = UserOut.from_orm(current_user)
+    user_in = UserUpdate(**current_user_data.dict())
+    if old_password is not None:
+        hashed_password = get_password_hash(old_password)
+        if verify_password(old_password, hashed_password) is False:
+            raise HTTPException(
+                status_code=400,
+                detail="Password is wrong",
+            )
+        if new_password != new_confirm_password:
+            raise HTTPException(
+                status_code=400,
+                detail="New password are note are not the same",
+            )
+
+        user_in.password = new_password
+        send_mail_new_password = True
+
     if full_name is not None:
         user_in.full_name = full_name
-    if email is not None:
-        user_in.email = email
+    if organization_id is not None:
+        user_in.organization_id = organization_id
     user_in_db = user.update(db, db_obj=current_user, obj_in=user_in)
+
+    if send_mail_new_password is True:
+        pass  # TODO send new password mail
+
     return user_in_db
 
 
-@router.get("/me", response_model=UserOut)
+@router.get("/me", response_model=UserMeOut)
 def read_user_me(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -110,7 +134,8 @@ def read_user_me(
     """
     Get current user.
     """
-    return current_user
+    me = user.me(db, id=current_user.id)
+    return me
 
 
 @router.get("/{user_id}", response_model=UserOut)

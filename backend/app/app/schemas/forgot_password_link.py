@@ -34,7 +34,7 @@ class ForgotPasswordLinkOut(
 
 
 class ForgotPasswordLinkForm(BaseModel):
-    user_mail: EmailStr
+    email: EmailStr
 
 
 class ForgotPasswordChangeForm(BaseModel):

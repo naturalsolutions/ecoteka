@@ -56,7 +56,7 @@ class CRUDForgotPasswordLink(
         itemForm: ForgotPasswordLinkForm
     ) -> Forgot_Password_Link:
 
-        user_in_db = user.get_by_email(db, email=itemForm.user_mail)
+        user_in_db = user.get_by_email(db, email=itemForm.email)
 
         forgot_password_link_tmp = ForgotPasswordLinkCreate(
             fk_user=user_in_db.id,
@@ -74,14 +74,14 @@ class CRUDForgotPasswordLink(
             obj_in=forgot_password_link_tmp
         )
 
-        if settings.EMAILS_ENABLED:
+        # if settings.EMAILS_ENABLED:
 
-            send_new_forgot_password_link_email(
-                email_to=user_in_db.email,
-                full_name=user_in_db.full_name,
-                link=new_forgot_password_link.value,
-                dateCreation=new_forgot_password_link.creation_date
-            )
+        #     send_new_forgot_password_link_email(
+        #         email_to=user_in_db.email,
+        #         full_name=user_in_db.full_name,
+        #         link=new_forgot_password_link.value,
+        #         dateCreation=new_forgot_password_link.creation_date
+        #     )
 
         return new_forgot_password_link
 
