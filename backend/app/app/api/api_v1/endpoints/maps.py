@@ -102,7 +102,19 @@ def generate_style(
                     "id": f"ecoteka-{organization.slug}",
                     "type": "circle",
                     "source": organization.slug,
-                    "source-layer": organization.slug
+                    "source-layer": organization.slug,
+                    "paint": {
+                        "circle-stroke-width": 1,
+                        "circle-stroke-color": "#fff",
+                        "circle-radius": {
+                            "base": 1.75,
+                            "stops": [
+                                [12, 2],
+                                [22, 180]
+                            ]
+                        },
+                        'circle-color': "#00796a"
+                    }
                 })
             except:
                 pass

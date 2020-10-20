@@ -1,18 +1,15 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ButtonGroup, Button } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
+import ETKMap from "./Map";
 
 export interface ETKMapSateliteToggleProps {
-  onToggle?(active: string): void;
-  buttonMapContent?: string;
-  buttonSatelliteContent?: string;
+  map: React.RefObject<ETKMap>;
 }
 
 const defaultProps: ETKMapSateliteToggleProps = {
-  onToggle: () => {},
-  buttonMapContent: "Carte",
-  buttonSatelliteContent: "Satellite",
+  map: undefined,
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,12 +27,14 @@ const ETKMapSateliteToggle: React.FC<ETKMapSateliteToggleProps> = (props) => {
   const classes = useStyles();
   const [active, setActive] = useState("map");
 
-  function onClickHandler(active) {
-    setActive(active);
+  function onClickHandler(newActive) {
+    setActive(newActive);
 
-    if (props.onToggle) {
-      props.onToggle(active);
-    }
+    props.map.current.map.setLayoutProperty(
+      "satellite",
+      "visibility",
+      newActive === "map" ? "none" : "visible"
+    );
   }
 
   return (
