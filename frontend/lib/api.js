@@ -4,6 +4,9 @@ import users from "./users";
 import geofiles from "./geofiles";
 import trees from "./trees";
 import registrationLink from "./registrationLink";
+import forgotpassword from "./forgotpassword";
+import forgotpasswordlink from './forgotpasswordlink';
+import organizations from './organization';
 
 const { publicRuntimeConfig } = getConfig();
 const { apiUrl, tokenStorage } = publicRuntimeConfig;
@@ -35,6 +38,9 @@ export const apiRest = {
   geofiles: geofiles(api),
   trees: trees(api),
   registrationLink: registrationLink(api),
+  forgotPassword: forgotpassword(api),
+  forgotPasswordLink: forgotpasswordlink(api),
+  organizations: organizations(api),
   getToken,
 };
 
