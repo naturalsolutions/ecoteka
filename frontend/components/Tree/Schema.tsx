@@ -150,7 +150,10 @@ export default function useTreeSchema() {
           { label: t("components:Tree.soilType.limestone"), value: "Calcaire" },
           { label: t("components:Tree.soilType.sand"), value: "Sableux" },
           { label: t("components:Tree.soilType.acid"), value: "Acide" },
-          { label: t("components:Tree.soilType.sandyclay"), value: "Argilo-sableux" },
+          {
+            label: t("components:Tree.soilType.sandyclay"),
+            value: "Argilo-sableux",
+          },
         ],
       },
       schema: yup.string(),
@@ -196,7 +199,7 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     soilConstraints: {
-      type: "select",
+      type: "textfield",
       category: "Environnement extérieur",
       component: {
         multiple: true,
@@ -221,7 +224,7 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     watering: {
-      type: "select",
+      type: "textfield",
       category: "Environnement extérieur",
       component: {
         multiple: true,
