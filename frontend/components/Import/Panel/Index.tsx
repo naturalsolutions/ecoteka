@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import ETKGeofile from "../Geofile";
+import ETKGeofile from "../../Geofile";
 import ETKImportTemplate from "./Template";
 import ETKMissingData from "./MissingDatas";
 import ETKImported from "./Imported";
 import ETKUpload from "./Upload";
 import ETKError from "./Error";
 import ETKImportImporting from "./Importing";
-import { apiRest } from "../../lib/api";
-import layersStyle from "../../public/assets/layersStyle.json";
-
-export interface ETKImportProps {
-  width?: Number;
-  map?: any;
-}
+import { apiRest } from "../../../lib/api";
+import { ETKPanelProps } from "../../Panel";
 
 export interface Choice {
   value?: string;
@@ -24,8 +19,7 @@ export interface Choice {
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      padding: "1rem",
-      boxSizing: "border-box",
+      maxWidth: "25rem",
     },
     import: {
       alignSelf: "flex-start",
@@ -33,7 +27,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const ETKImport: React.FC<ETKImportProps> = (props) => {
+const ETKImport: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
   const [step, setStep] = useState("start");
   const [geofile, setGeofile] = useState<ETKGeofile>();
@@ -90,22 +84,14 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
 
     const { longitude, latitude } = coordinates;
 
-    props.map.current.map.setStyle(
+    props.context?.map.current.map.setStyle(
       `/api/v1/maps/style?token=${apiRest.getToken()}`
     );
 
-    props.map.current.map.on("styledata", () => {
-      for (let layer of Object.keys(layersStyle)) {
-        for (let property of Object.keys(layersStyle[layer]["light"])) {
-          props.map.current.map.setPaintProperty(
-            layer,
-            property,
-            layersStyle[layer]["light"][property]
-          );
-        }
-      }
-      props.map.current.map.setZoom(12);
-      props.map.current.map.flyTo({
+    props.context?.map.current.map.on("styledata", () => {
+      props.context?.map.current.loadLayers("light");
+      props.context?.map.current.map.setZoom(12);
+      props.context?.map.current.map.flyTo({
         center: [longitude, latitude],
       });
     });
@@ -134,7 +120,6 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
       direction="column"
       justify="center"
       className={classes.root}
-      style={{ width: `${props.width}px`, height: "100%" }}
     >
       {step === "start" && (
         <Grid item>
@@ -175,10 +160,6 @@ const ETKImport: React.FC<ETKImportProps> = (props) => {
       </Grid>
     </Grid>
   );
-};
-
-ETKImport.defaultProps = {
-  width: 500,
 };
 
 export default ETKImport;

@@ -16,8 +16,8 @@ import ETKProgressBar from "./ProgressBar";
 import getConfig from "next/config";
 import { useTranslation, Trans } from "react-i18next";
 
-import Geofile from "../Geofile";
-import { apiRest } from "../../lib/api";
+import Geofile from "../../Geofile";
+import { apiRest } from "../../../lib/api";
 
 const { publicRuntimeConfig } = getConfig();
 

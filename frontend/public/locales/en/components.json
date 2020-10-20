@@ -240,5 +240,10 @@
     "passwordConfirm": "Password confirm",
     "registrationCompleted": "Registration completed",
     "registrationFailed": "The registration has failed"
+  },
+  "Layout" :{
+    "Mobile":{
+      "treeHeritage" : "Tree heritage"
+    }
   }
 }
