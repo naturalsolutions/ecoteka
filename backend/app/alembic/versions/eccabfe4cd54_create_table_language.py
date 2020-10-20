@@ -1,7 +1,7 @@
 """add table language
 
 Revision ID: eccabfe4cd54
-Revises: 4231989b78d5
+Revises: 03b1736791f4
 Create Date: 2020-10-04 22:42:33.100116
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'eccabfe4cd54'
-down_revision = '4231989b78d5'
+down_revision = '03b1736791f4'
 branch_labels = None
 depends_on = None
 
