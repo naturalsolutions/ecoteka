@@ -209,5 +209,10 @@
     "passwordConfirm": "Confirmer mot de passe",
     "registrationCompleted": "Inscription réussie",
     "registrationFailed": "Une erreur s'est produite lors de l'inscription"
+  },
+  "Layout" :{
+    "Mobile":{
+      "treeHeritage" : "Patrimoine arboré"
+    }
   }
 }

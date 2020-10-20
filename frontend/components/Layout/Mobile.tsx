@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { useAppContext } from "../../providers/AppContext";
 import ETKButtonContact from "../Contact/Button";
+import { useTranslation } from "react-i18next";
 
 export interface ETKLayoutDesktopProps {}
 
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
   const classes = useStyles();
   const { user } = useAppContext();
+  const { t } = useTranslation("components");
 
   return (
     <Div100vh>
@@ -31,7 +33,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         </Grid>
         <Grid item>
           <BottomNavigation showLabels>
-            <BottomNavigationAction label="Patrimoine arboré" />
+            <BottomNavigationAction label={t("Layout.Mobile.treeHeritage")} />
             <ETKButtonContact />
           </BottomNavigation>
         </Grid>
