@@ -5,6 +5,7 @@ import useETKForm from "../Form/useForm";
 import useETKSignInSchema from "./Schema";
 import { apiRest } from "../../lib/api";
 import { useAppContext } from "../../providers/AppContext.js";
+import ETKForgotPasswordButton from "../ForgotPassword/Button";
 
 export type ETKFormSignInActions = {
   submit: () => Promise<boolean>;
@@ -54,10 +55,13 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
     }));
 
     return (
-      <Grid container direction="column">
-        <Grid item>{fields.username}</Grid>
-        <Grid item>{fields.password}</Grid>
-      </Grid>
+      <React.Fragment>
+        <Grid container direction="column">
+          <Grid item>{fields.username}</Grid>
+          <Grid item>{fields.password}</Grid>
+        </Grid>
+        <ETKForgotPasswordButton/>
+      </React.Fragment>
     );
   }
 );
