@@ -18,6 +18,7 @@ import ETKRegisterButton from "./Register/Button";
 import ETKLogout from "./Logout";
 import ETKLanguageSelector from "./LanguageSelector";
 import { useAppContext } from "../providers/AppContext";
+import ETKProfileButton from "./Settings/Profile/Button";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -79,11 +80,9 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           horizontal: "right",
         }}
       >
-        <p>
-          <MoodIcon />
-        </p>
         {user.full_name && <p>{user.full_name}</p>}
         <p>{user.email}</p>
+        <ETKProfileButton/>
         <div>
           <ETKLogout
             onClick={() => {
