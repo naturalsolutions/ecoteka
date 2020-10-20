@@ -198,6 +198,35 @@
       "others": "Autres"
     }
   },
+  "Profile" :{
+    "buttonTitle": "Modifier mon profil",
+    "dialogTitle": "Modifier mon profil",
+    "cancel": "Cancel",
+    "submit": "Envoyer",
+    "fullName": "Nom complet",
+    "organization": "Organisation",
+    "formCompleted": "Votre profil a été modifié",
+    "formFailed": "Votre profile ne peut être modifié"
+  },
+  "ForgotPassword" :{
+    "buttonTitle": "J'ai oublier mon mot de passe",
+    "dialogTitle": "J'ai oublier mon mot de passe",
+    "cancel": "Annuler",
+    "submit": "Envoyer",
+    "email": "email",
+    "formCompleted": "Vous allez recevoir un mail pour renouveler votre mot de passe",
+    "formFailed": "Cet email ne fait pas partie de notre base de données"
+  },
+  "ForgotPasswordLink" :{
+    "buttonTitle": "Nouveau mot de passe",
+    "dialogTitle": "Nouveau mot de passe",
+    "cancel": "Annuler",
+    "submit": "Envoyer",
+    "password": "Nouveau mot de passe",
+    "passwordConfirm": "Confirmer nouveau mot de passe",
+    "formCompleted": "Votre nouveau mot de passe est enregistré",
+    "formFailed": "Votre nouveau mot de passe n'a pas pu être enregistré"
+  },
   "Register": {
     "dialogTitle": "Inscription",
     "cancel": "Annuler",

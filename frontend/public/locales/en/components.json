@@ -199,6 +199,36 @@
       "others": "Others"
     }
   },
+  "Profile" :{
+    "buttonTitle": "Change my profile",
+    "dialogTitle": "Change my profile",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "password": "New password",
+    "passwordConfirm": "New password confirm",
+    "formCompleted": "Your new pasword has been saved",
+    "formFailed": "Your new pasword can't be saved"
+  },
+  "ForgotPassword" :{
+    "buttonTitle": "I forgot my password",
+    "dialogTitle": "I forgot Password",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "password": "New password",
+    "passwordConfirm": "New password confirm",
+    "formCompleted": "Your new pasword has been saved",
+    "formFailed": "Your new pasword can't be saved"
+  },
+  "ForgotPasswordLink" :{
+    "buttonTitle": "I forgot my password",
+    "dialogTitle": "I forgot Password",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "password": "New password",
+    "passwordConfirm": "New password confirm",
+    "formCompleted": "Your new pasword has been saved",
+    "formFailed": "Your new pasword can't be saved"
+  },
   "Register": {
     "dialogTitle": "Register",
     "cancel": "Cancel",
