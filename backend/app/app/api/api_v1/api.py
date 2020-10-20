@@ -11,6 +11,7 @@ from app.api.api_v1.endpoints import (
     geo_files,
     trees,
     maps,
+    organization,
     taxref
 )
 
@@ -37,8 +38,8 @@ api_router.include_router(
 )
 api_router.include_router(
     forgot_password_link.router,
-    prefix='/forgot-password',
-    tags=["forgot-password"]
+    prefix='/forgot-password-link',
+    tags=["forgot-password-link"]
 )
 
 api_router.include_router(
@@ -65,6 +66,11 @@ api_router.include_router(
     maps.router,
     prefix="/maps",
     tags=["maps"]
+)
+api_router.include_router(
+    organization.router,
+    prefix='/organizations',
+    tags=["organizations"]
 )
 
 api_router.include_router(
