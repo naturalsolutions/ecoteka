@@ -43,7 +43,7 @@ export default function useTreeSchema() {
       component: {
         label: t("components:Tree.latinName"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     y: {
       type: "textfield",
@@ -70,7 +70,10 @@ export default function useTreeSchema() {
         type: "number",
         label: t("components:Tree.townshipCode"),
       },
-      schema: yup.string(),
+      schema: yup
+        .number()
+        .nullable()
+        .transform((v, o) => (o === "" ? null : v)),
     },
     zipCode: {
       type: "textfield",
@@ -79,7 +82,10 @@ export default function useTreeSchema() {
         type: "number",
         label: t("components:Tree.zipCode"),
       },
-      schema: yup.string(),
+      schema: yup
+        .number()
+        .nullable()
+        .transform((v, o) => (o === "" ? null : v)),
     },
     address: {
       type: "textfield",
@@ -128,7 +134,10 @@ export default function useTreeSchema() {
         type: "number",
         label: t("components:Tree.height"),
       },
-      schema: yup.string(),
+      schema: yup
+        .number()
+        .nullable()
+        .transform((v, o) => (o === "" ? null : v)),
     },
     diameter: {
       type: "textfield",
@@ -137,7 +146,10 @@ export default function useTreeSchema() {
         type: "number",
         label: t("components:Tree.diameter"),
       },
-      schema: yup.string(),
+      schema: yup
+        .number()
+        .nullable()
+        .transform((v, o) => (o === "" ? null : v)),
     },
     soilType: {
       type: "select",
@@ -221,7 +233,7 @@ export default function useTreeSchema() {
       component: {
         label: t("components:Tree.lightning"),
       },
-      schema: yup.string(),
+      schema: yup.boolean(),
     },
     watering: {
       type: "textfield",
@@ -245,7 +257,10 @@ export default function useTreeSchema() {
           { label: "E", value: 4 },
         ],
       },
-      schema: yup.string(),
+      schema: yup
+        .number()
+        .nullable()
+        .transform((v, o) => (o === "" ? null : v)),
     },
     remarks: {
       type: "textfield",

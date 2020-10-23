@@ -81,8 +81,8 @@ def generate_style(
 
                 conn = sqlite3.connect(target)
                 sql = '''
-                    SELECT * FROM metadata 
-                    WHERE name IN ('minzoom', 'maxzoom') 
+                    SELECT * FROM metadata
+                    WHERE name IN ('minzoom', 'maxzoom')
                     ORDER BY name DESC
                 '''
                 cur = conn.cursor()
@@ -113,7 +113,12 @@ def generate_style(
                                 [22, 180]
                             ]
                         },
-                        'circle-color': "#00796a"
+                        "circle-color": [
+                            "case",
+                            ["boolean", ["feature-state", "active"], False],
+                            "red",
+                            "#2597e4",
+                        ],
                     }
                 })
             except:

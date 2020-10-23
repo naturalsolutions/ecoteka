@@ -34,6 +34,7 @@ services:
     image: ${NS_ECOTEKA_REDIS_IMAGE}
     networks:
       - traefik
+    restart: always
     volumes:
       - ${NS_ECOTEKA_REDIS_VOLUME}:/data
 
@@ -42,6 +43,7 @@ services:
       - backend
     networks:
       - traefik
+    restart: always
     command: bash /app/worker-start.sh
     volumes:
       - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
@@ -82,6 +84,7 @@ services:
       - redis
     networks:
       - traefik
+    restart: always
     volumes:
       - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
       - ${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}:/app/app/uploaded_files
@@ -126,6 +129,7 @@ services:
       - backend
     networks:
       - traefik
+    restart: always
     labels:
       - traefik.enable=true
       - traefik.http.routers.frontend.rule=PathPrefix(`/`)
@@ -137,6 +141,7 @@ services:
     image: ${NS_ECOTEKA_TILE_SERVER_IMAGE}
     networks:
       - traefik
+    restart: always
     labels:
       - traefik.enable=true
       - traefik.http.routers.tile_server.rule=PathPrefix(`/tiles`)
