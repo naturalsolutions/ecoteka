@@ -10,7 +10,8 @@ from app.api.api_v1.endpoints import (
     geo_files,
     trees,
     maps,
-    taxref
+    taxref,
+    intervention
 )
 
 api_router = APIRouter()
@@ -64,4 +65,10 @@ api_router.include_router(
     taxref.router,
     prefix="/taxref",
     tags=["taxref"]
+)
+
+api_router.include_router(
+    intervention.router,
+    prefix='/interventions',
+    tags=['interventions']
 )
