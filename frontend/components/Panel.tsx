@@ -30,6 +30,7 @@ const ETKPanelPanels = {
   welcome: dynamic(() => import("./Panel/Welcome")),
   import: dynamic(() => import("./Import/Panel/Index")),
   newTree: dynamic(() => import("./Tree/Form")),
+  newIntervention: dynamic(() => import("./Interventions/Form"))
 };
 
 const ETKPanel: React.FC<ETKPanelProps> = (props) => {
