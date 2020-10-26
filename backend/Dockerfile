@@ -7,12 +7,12 @@ RUN git clone https://github.com/mapbox/tippecanoe.git \
   && cd tippecanoe \
   && make -j
 
-FROM node:alpine as email-templates
+FROM node:14-alpine as email-templates
 
 COPY ./app/app/email-templates/src /email-templates
 
-RUN mkdir -p /email-templates/build \
-  && npx mjml /email-templates/*.mjml -o /email-templates/build
+RUN mkdir -p /email-templates/build
+RUN npx mjml /email-templates/*.mjml -o /email-templates/build
 
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8-slim as builder
 
