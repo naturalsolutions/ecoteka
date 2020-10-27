@@ -4,10 +4,14 @@ import { useTranslation } from "react-i18next";
 export type TInterventionType = 
   "pruning"
   | "felling"
-  | "strean_removal" 
-  | "in_depth_diagnostic"
+  | "streanremoval" 
+  | "indepthdiagnostic"
   | "treatment"
   | "surveillance";
+
+export const interventionTypes: TInterventionType[] = [
+  'pruning', 'felling', 'streanremoval', 'indepthdiagnostic', 'treatment', 'surveillance'
+];
 
 export type TRequiredMaterial = 'soil'
   | 'pole'
@@ -30,7 +34,14 @@ export type TRequiredMaterial = 'soil'
   | 'scald'
   | 'lattersurveillance';
 
+export const requiredMaterials: TRequiredMaterial[] = [
+  'pole', 'climb', 'ladder', 'raiser', 'retentionkit', 'foot', 'pull', 'trimmer',
+  'crane', 'coredrill', 'crunchy', 'mecanicshovel', 'canon', 'watering',
+  'amendment', 'tutorrefection', 'colletprotection', 'scald', 'lattersurveillance'
+]
+
 export type TRequiredDocuments = 'dt' | 'trafficpolice';
+export const requiredDocuments: TRequiredDocuments[] = ['dt', 'trafficpolice'];
 
 const requiredMaterial: {[t in TInterventionType]: TRequiredMaterial[]} = {
   pruning: [
@@ -49,13 +60,13 @@ const requiredMaterial: {[t in TInterventionType]: TRequiredMaterial[]} = {
     'raiser',
     'crane'
   ],
-  strean_removal: [
+  streanremoval: [
     'trimmer',
     'coredrill',
     'crunchy',
     'mecanicshovel'
   ],
-  in_depth_diagnostic: [
+  indepthdiagnostic: [
     'soil',
     'climb',
     'ladder',
@@ -76,17 +87,222 @@ const requiredMaterial: {[t in TInterventionType]: TRequiredMaterial[]} = {
   ]
 };
 
+const interventionMethod: {[it in TInterventionType]: string[]} = {
+  indepthdiagnostic: [
+    'restistograph',
+    'tomograph',
+    'computing',
+    'tractiontest',
+    'penetrometer'
+  ],
+  surveillance: [
+    'watering',
+    'amendment',
+    'tutorcheck',
+    'latterverification'
+  ],
+  treatment: [
+    'auxilaryrelease',
+    'biologictreatment'
+  ],
+  streanremoval: [
+    'drilling',
+    'trimming',
+    'grubbing'
+  ],
+  felling: [
+    'live',
+    'rentention',
+    'unmounting'
+  ],
+  pruning: [
+    'pruning',
+    'carpenterremoval',
+    'lightning',
+    'maintenance',
+    'crownraising'
+  ]
+}
+
+function sitem(value, t, tpath) {
+  return {
+    value,
+    label: t(`${tpath}.${value}`)
+  }
+}
+
 function requiredDocumentsItems (it: TInterventionType, t) {
   return ['dt', 'trafficpolice']
-    .map(item => Object({value: item, label: t(`components:Intervention.documents.${item}`)}) )
+    .map(item => sitem(item, t, 'components:Intervention.documents'))
 }
 
 function requiredMaterialItems(it: TInterventionType, t) {
   return requiredMaterial[it]
-    .map(item => Object({value: item, label: t(`components:Intervention.material.${item}`)}))
+    .map(item => sitem(item, t, 'components:Intervention.material'))
 }
 
-export default function useInterventionSchema(it: TInterventionType) {
+export const interventionSteps = [
+  'selection',
+  'validation'
+]
+
+export function useInterventionSelectionSchema() {
+  const { t } = useTranslation(['common', 'components']);
+
+  return {
+    intervention: {
+      type: 'select',
+      components: {
+        items: interventionTypes.map(it => sitem(it, t, 'components:Intervention.types'))   
+      }
+    }
+  }
+}
+
+export function useInterventionTreeSelectionSchema() {
+  const { t } = useTranslation(['common', 'components']);
+
+  return {
+    x: {
+      step: 'selection',
+      type: 'textfield',
+      component: {
+        type: 'number',
+        label: 'longitude'
+      },
+      schema: yup.string().required(t('common:errors.required'))
+    },
+    y: {
+      step: 'selection',
+      type: 'textfield',
+      component: {
+        type: 'number',
+        label: 'latitude'
+      },
+      schema: yup.string().required(t('common:errors.required'))
+    }
+  }
+}
+
+export function useInterventionSchema (it: TInterventionType) {
+  const { t } = useTranslation(['common', 'components'])
+  const interventionSchemas: {[it in TInterventionType]: any} = {
+    pruning: {
+      method: {
+        type: 'select',
+        component: {
+          label: t('components:Intervention.streanremoval.method'),
+          items: interventionMethod.streanremoval.map(m => sitem(m, t, 'components:Intervention.streanremoval'))
+        },
+        schema: yup.string().required(t('common:errors.required'))
+      },
+      comment: {
+        type: 'textfield',
+        component: {
+          label: t('components:Intervention.streanremoval.comment')
+        },
+        schema: yup.string()
+      }
+    },
+    felling: {
+      method: {
+        type: 'select',
+        component: {
+          label: t('components:Intervention.felling.method'),
+          items: interventionMethod.felling.map(m => sitem(m, t, 'components:Intervention.felling'))
+        },
+        schema: yup.string().required(t('common:errors.required'))
+      },
+      comment: {
+        type: 'textfield',
+        component: {
+          label: t('components:Intervention.felling.comment')
+        },
+        schema: yup.string()
+      }
+    },
+    streanremoval: {
+      streandiameter: {
+        type: 'textfield',
+        component: {
+          type: 'number',
+          label: t('components:Intervention.streanremoval.diameter')
+        },
+        schema: yup.string().required(t('common:errors.required'))
+      },
+      method: {
+        type: 'select',
+        component: {
+          label: t('components:Intervention.streanremoval.method'),
+          items: interventionMethod.streanremoval.map(m => sitem(m, t, 'components:Intervention.streanremoval'))
+        },
+        schema: yup.string().required(t('common:errors.required'))
+      }
+    },
+    surveillance: {
+      method: {
+        type: 'select',
+        component: {
+          multiple: true,
+          label: t('components:Intervention.streanremoval.method'),
+          items: interventionMethod.streanremoval.map(m => sitem(m, t, 'components:Intervention.streanremoval'))
+        },
+        schema: yup.string().required(t('common:errors.required'))
+      },
+      comment: {
+        type: 'textfield',
+        component: {
+          label: t('components:Intervention.streanremoval.comment')
+        },
+        schema: yup.string()
+      }
+    },
+    treatment: {
+      method: {
+        type: 'select',
+        component: {
+          label: t('components:Intervention.treatment.method'),
+          items: interventionMethod.treatment.map(m => sitem(m, t, 'components:Intervention.treatment'))
+        },
+        schema: yup.string().required(t('common:errors.required'))
+      },
+      disease: {
+        type: 'textfield',
+        component: {
+          label: t('components:Intervention.treatment.disease')
+        },
+        schema: yup.string().required(t('common:errors.required'))
+      },
+      comment: {
+        type: 'textfield',
+        component: {
+          label: t('components:Intervention.treatment.comment')
+        },
+        schema: yup.string()
+      }
+    },
+    indepthdiagnostic: {
+      method: {
+        type: 'select',
+        component: {
+          label: t('components:Intervention.indepthdiagnostic.method'),
+          multiple: true,
+          items: interventionMethod.indepthdiagnostic.map(m => sitem(m, t, 'components:Intervention.indepthdiagnostic'))
+        },
+        schema: yup.string().required(t('common:errors.required'))
+      },
+      comment: {
+        type: 'textfield',
+        component: {
+          label: t('components:Intervention.indepthdiagnostic.comment')
+        },
+        schema: yup.string()
+      }
+    }
+  }
+}
+
+export default function useInterventionValidationSchema(it: TInterventionType) {
   const { t } = useTranslation(["common", "components"]);
 
   return {
@@ -100,8 +316,9 @@ export default function useInterventionSchema(it: TInterventionType) {
     },
     estimated_cost: {
       step: "validation",
-      type: "number",
+      type: "textfield",
       component: {
+        type: "number",
         label: t("components:Intervention.estimated_cost"),
       },
       schema: yup.string().required(t("common:errors.required")),

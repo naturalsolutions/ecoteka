@@ -221,6 +221,7 @@
     "required_material": "Materiel requis",
     "intervenant": "Intervenant",
     "plan_date_interval" : "Période d'intervention",
+    "estimated_cost": "Coût estimatif",
     "documents": {
       "dt": "DT/DICT",
       "trafficpolice": "Police de circulation"
