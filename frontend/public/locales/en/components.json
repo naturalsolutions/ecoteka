@@ -215,5 +215,10 @@
     "Mobile":{
       "treeHeritage" : "Tree heritage"
     }
+  },
+  "Intervention": {
+    "required_documents": "Required documents",
+    "required_material": "Required material",
+    "intervenant": "Intervenant" 
   }
 }

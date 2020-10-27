@@ -7,7 +7,7 @@ export default function useInterventionSchema() {
   return {
     plan_date_interval: {
       step: "validation",
-      type: "date",
+      type: "daterange",
       component: {
         label: t("components:Intervention.plan_date_interval"),
       },
@@ -27,9 +27,9 @@ export default function useInterventionSchema() {
       component: {
         multiple: true,
         label: t("components:Intervention.required_documents"),
-        options: [
-          "dict",
-          "police de roulage"
+        items: [
+          {label: "dict", value: "dict"},
+          {label: "police de roulage", value: "police_de_roulage"}
         ]
       },
       schema: yup.string().required(t("common:errors.required")),
@@ -43,11 +43,11 @@ export default function useInterventionSchema() {
       },
       schema: yup.string().required(t("common:errors.required"))
     },
-    interveneer: {
+    intervenant: {
       step: "validation",
       type: "textfield",
       component: {
-        label: t("components:Intervention.interveneer")
+        label: t("components:Intervention.intervenant")
       },
       schema: yup.string().required(t("common:errors.required"))
     }

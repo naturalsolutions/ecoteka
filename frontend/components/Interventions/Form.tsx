@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { ETKPanelProps } from "../Panel";
-import { useTranslation } from "react-i18next";
 import useSchema from "./Schema";
 import useETKForm from "../Form/useForm";
 import { Grid } from "@material-ui/core";

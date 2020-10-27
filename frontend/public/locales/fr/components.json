@@ -215,5 +215,11 @@
     "Mobile": {
       "treeHeritage": "Patrimoine arboré"
     }
+  },
+  "Intervention": {
+    "required_documents": "Documents requis",
+    "required_material": "Materiel requis",
+    "intervenant": "Intervenant",
+    "plan_date_interval" : "Période d'intervention"
   }
 }
