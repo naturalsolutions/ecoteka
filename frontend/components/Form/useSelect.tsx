@@ -29,6 +29,7 @@ export default function useSelect(props: ETKSelectProps): Fields {
 
   for (const name in props.fields) {
     const field = props.fields[name];
+    const fieldmultiple = Boolean(field.multiple);
 
     selects[name] = (
       <FormControl
@@ -41,12 +42,14 @@ export default function useSelect(props: ETKSelectProps): Fields {
         <Controller
           name={name}
           control={props.control}
-          defaultValue={field.defaultValue || ""}
+          //defaultValue={field.defaultValue || (fieldmultiple ? [] : '')}
+          defaultValue={fieldmultiple ? [] : field.defaultValue || ''}
           as={
             <Select
               disableUnderline
               labelId={`select-${name}`}
               label={field.label}
+              multiple={fieldmultiple}
             >
               {field.items?.map((item, id) => (
                 <MenuItem key={`menu-item-${name}-${id}`} value={item.value}>
