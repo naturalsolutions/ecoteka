@@ -8,7 +8,7 @@ import { Alert } from "@material-ui/lab";
 const ETKInterventionForm: React.FC<ETKPanelProps> = (props) => {
 
   const [step, setStep] = useState('validation');
-  const schema = useSchema();
+  const schema = useSchema('pruning');
 
   const { fields, handleSubmit, setError, errors } = useETKForm({
     schema: schema,

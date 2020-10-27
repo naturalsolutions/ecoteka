@@ -1,7 +1,92 @@
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 
-export default function useInterventionSchema() {
+export type TInterventionType = 
+  "pruning"
+  | "felling"
+  | "strean_removal" 
+  | "in_depth_diagnostic"
+  | "treatment"
+  | "surveillance";
+
+export type TRequiredMaterial = 'soil'
+  | 'pole'
+  | 'climb'
+  | 'ladder'
+  | 'raiser'
+  | 'retentionkit'
+  | 'foot'
+  | 'pull'
+  | 'trimmer'
+  | 'crane'
+  | 'coredrill'
+  | 'crunchy'
+  | 'mecanicshovel'
+  | 'canon'
+  | 'watering'
+  | 'amendment'
+  | 'tutorrefection'
+  | 'colletprotection'
+  | 'scald'
+  | 'lattersurveillance';
+
+export type TRequiredDocuments = 'dt' | 'trafficpolice';
+
+const requiredMaterial: {[t in TInterventionType]: TRequiredMaterial[]} = {
+  pruning: [
+    'pole',
+    'climb',
+    'ladder',
+    'raiser',
+    'retentionkit'
+  ],
+  felling: [
+    'foot',
+    'pull',
+    'retentionkit',
+    'climb',
+    'ladder',
+    'raiser',
+    'crane'
+  ],
+  strean_removal: [
+    'trimmer',
+    'coredrill',
+    'crunchy',
+    'mecanicshovel'
+  ],
+  in_depth_diagnostic: [
+    'soil',
+    'climb',
+    'ladder',
+    'raiser'
+  ],
+  treatment: [
+    'soil',
+    'climb',
+    'canon'
+  ],
+  surveillance: [
+    'watering',
+    'amendment',
+    'tutorrefection',
+    'colletprotection',
+    'scald',
+    'lattersurveillance'
+  ]
+};
+
+function requiredDocumentsItems (it: TInterventionType, t) {
+  return ['dt', 'trafficpolice']
+    .map(item => Object({value: item, label: t(`components:Intervention.documents.${item}`)}) )
+}
+
+function requiredMaterialItems(it: TInterventionType, t) {
+  return requiredMaterial[it]
+    .map(item => Object({value: item, label: t(`components:Intervention.material.${item}`)}))
+}
+
+export default function useInterventionSchema(it: TInterventionType) {
   const { t } = useTranslation(["common", "components"]);
 
   return {
@@ -27,10 +112,7 @@ export default function useInterventionSchema() {
       component: {
         multiple: true,
         label: t("components:Intervention.required_documents"),
-        items: [
-          {label: "dict", value: "dict"},
-          {label: "police de roulage", value: "police_de_roulage"}
-        ]
+        items: requiredDocumentsItems(it, t)
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -39,6 +121,7 @@ export default function useInterventionSchema() {
       type: "select",
       component: {
         multiple: true,
+        items: requiredMaterialItems(it, t),
         label: t("components:Intervention.required_material")
       },
       schema: yup.string().required(t("common:errors.required"))

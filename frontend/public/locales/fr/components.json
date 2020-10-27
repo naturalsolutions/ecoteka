@@ -220,6 +220,30 @@
     "required_documents": "Documents requis",
     "required_material": "Materiel requis",
     "intervenant": "Intervenant",
-    "plan_date_interval" : "Période d'intervention"
+    "plan_date_interval" : "Période d'intervention",
+    "documents": {
+      "dt": "DT/DICT",
+      "trafficpolice": "Police de circulation"
+    },
+    "material": {
+      "pole": "Perche",
+      "climb": "A la grime",
+      "ladder": "Echelle",
+      "raiser": "Engine élevateur",
+      "retentionkit": "Kit de rétention",
+      "foot": "Pieds",
+      "pull": "A la tire",
+      "trimmer": "Tondeuse",
+      "crane": "Grue",
+      "coredrill": "Carotteuse",
+      "crunchy": "Croqueuse",
+      "mecanicshovel": "Pelle mécanique",
+      "canon": "Au canon",
+      "watering": "Arrosage",
+      "amendment": "Amendement/Apport organique",
+      "collectprotection": "Protection du collet",
+      "scald": "Kit échaudure",
+      "lattersurveillance": "Suveillance ultérieur"
+    }
   }
 }
