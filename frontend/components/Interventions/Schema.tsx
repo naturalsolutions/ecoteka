@@ -13,7 +13,8 @@ export const interventionTypes: TInterventionType[] = [
   'pruning', 'felling', 'streanremoval', 'indepthdiagnostic', 'treatment', 'surveillance'
 ];
 
-export type TRequiredMaterial = 'soil'
+export type TRequiredMaterial = 
+  'soil'
   | 'pole'
   | 'climb'
   | 'ladder'
@@ -32,12 +33,12 @@ export type TRequiredMaterial = 'soil'
   | 'tutorrefection'
   | 'colletprotection'
   | 'scald'
-  | 'lattersurveillance';
+  | 'globalcheck';
 
 export const requiredMaterials: TRequiredMaterial[] = [
   'pole', 'climb', 'ladder', 'raiser', 'retentionkit', 'foot', 'pull', 'trimmer',
   'crane', 'coredrill', 'crunchy', 'mecanicshovel', 'canon', 'watering',
-  'amendment', 'tutorrefection', 'colletprotection', 'scald', 'lattersurveillance'
+  'amendment', 'tutorrefection', 'colletprotection', 'scald', 'globalcheck'
 ]
 
 export type TRequiredDocuments = 'dt' | 'trafficpolice';
@@ -83,13 +84,13 @@ const requiredMaterial: {[t in TInterventionType]: TRequiredMaterial[]} = {
     'tutorrefection',
     'colletprotection',
     'scald',
-    'lattersurveillance'
+    'globalcheck'
   ]
 };
 
 const interventionMethod: {[it in TInterventionType]: string[]} = {
   indepthdiagnostic: [
-    'restistograph',
+    'resistograph',
     'tomograph',
     'computing',
     'tractiontest',
@@ -99,7 +100,7 @@ const interventionMethod: {[it in TInterventionType]: string[]} = {
     'watering',
     'amendment',
     'tutorcheck',
-    'latterverification'
+    'globalcheck'
   ],
   treatment: [
     'auxilaryrelease',
@@ -146,20 +147,23 @@ export const interventionSteps = [
   'validation'
 ]
 
-export function useInterventionSelectionSchema() {
+export function useSelectionSchema(it: TInterventionType) {
   const { t } = useTranslation(['common', 'components']);
 
   return {
     intervention: {
       type: 'select',
-      components: {
+      component: {
+        required: true,
+        label: t('components:Intervention.intervention'),
         items: interventionTypes.map(it => sitem(it, t, 'components:Intervention.types'))   
-      }
+      },
+      schema: yup.string().required(t('common:errors.required'))
     }
   }
 }
 
-export function useInterventionTreeSelectionSchema() {
+export function useTreeSelectionSchema(it: TInterventionType) {
   const { t } = useTranslation(['common', 'components']);
 
   return {
@@ -167,19 +171,21 @@ export function useInterventionTreeSelectionSchema() {
       step: 'selection',
       type: 'textfield',
       component: {
+        required: true,
         type: 'number',
         label: 'longitude'
       },
-      schema: yup.string().required(t('common:errors.required'))
+      schema: yup.number().required(t('common:errors.required'))
     },
     y: {
       step: 'selection',
       type: 'textfield',
       component: {
+        required: true,
         type: 'number',
         label: 'latitude'
       },
-      schema: yup.string().required(t('common:errors.required'))
+      schema: yup.number().required(t('common:errors.required'))
     }
   }
 }
@@ -191,15 +197,15 @@ export function useInterventionSchema (it: TInterventionType) {
       method: {
         type: 'select',
         component: {
-          label: t('components:Intervention.streanremoval.method'),
-          items: interventionMethod.streanremoval.map(m => sitem(m, t, 'components:Intervention.streanremoval'))
+          label: t('components:Intervention.pruning.method'),
+          items: interventionMethod.pruning.map(m => sitem(m, t, 'components:Intervention.pruning'))
         },
         schema: yup.string().required(t('common:errors.required'))
       },
       comment: {
         type: 'textfield',
         component: {
-          label: t('components:Intervention.streanremoval.comment')
+          label: t('components:Intervention.pruning.comment')
         },
         schema: yup.string()
       }
@@ -244,15 +250,15 @@ export function useInterventionSchema (it: TInterventionType) {
         type: 'select',
         component: {
           multiple: true,
-          label: t('components:Intervention.streanremoval.method'),
-          items: interventionMethod.streanremoval.map(m => sitem(m, t, 'components:Intervention.streanremoval'))
+          label: t('components:Intervention.surveillance.method'),
+          items: interventionMethod.surveillance.map(m => sitem(m, t, 'components:Intervention.surveillance'))
         },
         schema: yup.string().required(t('common:errors.required'))
       },
       comment: {
         type: 'textfield',
         component: {
-          label: t('components:Intervention.streanremoval.comment')
+          label: t('components:Intervention.surveillance.comment')
         },
         schema: yup.string()
       }
@@ -261,6 +267,7 @@ export function useInterventionSchema (it: TInterventionType) {
       method: {
         type: 'select',
         component: {
+          required: true,
           label: t('components:Intervention.treatment.method'),
           items: interventionMethod.treatment.map(m => sitem(m, t, 'components:Intervention.treatment'))
         },
@@ -269,6 +276,7 @@ export function useInterventionSchema (it: TInterventionType) {
       disease: {
         type: 'textfield',
         component: {
+          required: true,
           label: t('components:Intervention.treatment.disease')
         },
         schema: yup.string().required(t('common:errors.required'))
@@ -300,14 +308,15 @@ export function useInterventionSchema (it: TInterventionType) {
       }
     }
   }
+
+  return interventionSchemas[it];
 }
 
-export default function useInterventionValidationSchema(it: TInterventionType) {
+export function usePlanningSchema(it: TInterventionType) {
   const { t } = useTranslation(["common", "components"]);
 
   return {
     plan_date_interval: {
-      step: "validation",
       type: "daterange",
       component: {
         label: t("components:Intervention.plan_date_interval"),
@@ -315,16 +324,15 @@ export default function useInterventionValidationSchema(it: TInterventionType) {
       schema: yup.string().required(t("common:errors.required")),
     },
     estimated_cost: {
-      step: "validation",
       type: "textfield",
       component: {
+        required: true,
         type: "number",
         label: t("components:Intervention.estimated_cost"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     required_documents: {
-      step: "validation",
       type: "select",
       component: {
         multiple: true,
@@ -334,7 +342,6 @@ export default function useInterventionValidationSchema(it: TInterventionType) {
       schema: yup.string().required(t("common:errors.required")),
     },
     required_material: {
-      step: "validation",
       type: "select",
       component: {
         multiple: true,
@@ -344,12 +351,28 @@ export default function useInterventionValidationSchema(it: TInterventionType) {
       schema: yup.string().required(t("common:errors.required"))
     },
     intervenant: {
-      step: "validation",
       type: "textfield",
       component: {
+        required: true,
         label: t("components:Intervention.intervenant")
       },
       schema: yup.string().required(t("common:errors.required"))
     }
   }
+}
+
+export type TInterventionStep = 
+  'interventionselection'
+  | 'treeselection'
+  | 'intervention'
+  | 'validation';
+export const steps: TInterventionStep[] = ['interventionselection', 'treeselection', 'intervention', 'validation'];
+
+export const schemaMap: {
+  [step in TInterventionStep]: any
+} = {
+  interventionselection: useSelectionSchema,
+  treeselection: useTreeSelectionSchema,
+  intervention: useInterventionSchema,
+  validation: usePlanningSchema
 }

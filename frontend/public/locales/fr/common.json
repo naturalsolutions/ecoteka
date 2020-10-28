@@ -4,7 +4,10 @@
     "error": "Une erreur s'est produite"
   },
   "buttons": {
-    "backToHome": "Retour à l'accueil"
+    "backToHome": "Retour à l'accueil",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "finish": "Terminer"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",
