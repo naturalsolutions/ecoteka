@@ -5,17 +5,23 @@ import useETKForm from "../Form/useForm";
 import { Button, Grid, makeStyles, Step, StepContent, StepLabel, Stepper, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { apiRest } from '../../lib/api';
+import ETKMap from "../Map/Map";
+import mapboxgl from 'mapbox-gl';
 
 const useStyles = makeStyles(theme => ({
   root: {
     width: 400
+  },
+  steplabel: {
+    cursor: 'pointer'
   }
 }));
 
 type ETKInterventionFormProps = {
   interventiontype: TInterventionType;
   step: TInterventionStep;
-  data: any
+  data: any;
+  map: React.RefObject<ETKMap>;
 };
 
 const commonsteps: TInterventionStep[] = ['interventionselection', 'treeselection'];
@@ -24,6 +30,8 @@ const ETKInterventionForm = forwardRef<{ submit, getValues }, ETKInterventionFor
   (props, ref) => {
     const schema = schemaMap[props.step](props.interventiontype);
     const form = useETKForm({ schema });
+
+    let marker = null;
 
     useEffect(() => {
       const formfields = Object.keys(props.data).filter(field => field in schema);
@@ -37,6 +45,19 @@ const ETKInterventionForm = forwardRef<{ submit, getValues }, ETKInterventionFor
           form.setValue(field, value);
         }
       });
+
+      props.map?.current?.map.on("click", onMapClick);
+      props.map?.current?.map.geolocate.on("geolocate", onGeolocate);
+
+      return () => {
+        props.map?.current?.map.off("click", onMapClick);
+        props.map?.current?.map.geolocate.off("geolocate", onGeolocate);
+
+        if(marker) {
+          marker.remove();
+        }
+      };
+
     }, []);
 
     let valid = false;
@@ -54,6 +75,31 @@ const ETKInterventionForm = forwardRef<{ submit, getValues }, ETKInterventionFor
         return form.getValues();
       }
     }));
+
+    const onMapClick = (e) => {
+      if (props.step === 'treeselection') {
+        const [x, y] = [e.lngLat.lng, e.lngLat.lat]
+        form.setValue('x', x);
+        form.setValue('y', y);
+
+        if(!marker) {
+          marker = new mapboxgl.Marker()
+            .setLngLat([x, y])
+            .addTo(props.map.current.map);
+        } else {
+          marker.setLngLat([x, y]);
+        }
+
+      }
+    }
+    const onGeolocate = (e) => {
+      if (props.step === 'treeselection') {
+        const [x, y] = [e.coords.longitude, e.coords.latitude];
+        form.setValue('x', x);
+        form.setValue('y', y);
+      }
+    }
+
     return (
       <React.Fragment>
         {
@@ -74,7 +120,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(['common', 'components']);
 
-  const [activestep, setActivestep] = useState(3);
+  const [activestep, setActivestep] = useState(0);
   const [interventiontype, setInterventiontype] = useState<TInterventionType>('pruning');
 
   const initialdata = steps.reduce(
@@ -148,57 +194,60 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
 
   return (
     <React.Fragment>
-    <Typography variant="h5">{t('components:Intervention.title')}</Typography>
-    <Stepper orientation="vertical" activeStep={activestep} className={classes.root}>
-      {steps.map(step =>
-        <Step key={step}>
-          <StepLabel>{t(`components:Intervention.steps.${step}`)}</StepLabel>
+      <Typography variant="h5">{t('components:Intervention.title')}</Typography>
+      <Stepper orientation="vertical" activeStep={activestep} className={classes.root}>
+        {steps.map((step, stepidx) =>
+          <Step key={step}>
+            <StepLabel
+              className={classes.steplabel}
+              onClick={(e) => (stepidx < activestep) && setActivestep(stepidx)}
+            >
+              {t(`components:Intervention.steps.${step}`)}
+            </StepLabel>
+            <StepContent>
+              <Grid container direction="column">
+                <ETKInterventionForm
+                  ref={formRefs[step]}
+                  data={data[step]}
+                  interventiontype={interventiontype}
+                  step={step}
+                  map={props.context.map}
+                />
+                <Grid container direction="row" justify="flex-end">
+                  <Button color="secondary" variant="contained" onClick={() => handleNext(step)}>
+                    {activestep === steps.length - 1 ? t('common:buttons.finish') : t('common:buttons.next')}
+                  </Button>
+                </Grid>
+              </Grid>
+            </StepContent>
+          </Step>
+        )}
+        <Step key="finish">
+          <StepLabel>{t(`components:Intervention.steps.finish`)}</StepLabel>
           <StepContent>
             <Grid container direction="column">
-              <ETKInterventionForm
-                ref={formRefs[step]}
-                data={data[step]}
-                interventiontype={interventiontype}
-                step={step}
-              />
-              <Grid container direction="row" justify="flex-end">
-                {activestep !== 0 && (
-                  <Button onClick={() => handlePrevious(step)}>{t('common:buttons.previous')}</Button>
-                )}
-                <Button color="primary" variant="contained" onClick={() => handleNext(step)}>
-                  {activestep === steps.length - 1 ? t('common:buttons.finish') : t('common:buttons.next')}
-                </Button>
+              <Grid>
+                <Typography variant="h6">{t(`components:Intervention.success`)}</Typography>
+              </Grid>
+              <Grid>
+                <Typography>{t('components:Intervention.whatnow')}</Typography>
+                <Grid container direction="row" justify="flex-end">
+                  <Button>
+                    <Typography variant="caption">{t('common:buttons.backToHome')}</Typography>
+                  </Button>
+                  <Button
+                    onClick={e => reset()}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    <Typography variant="caption">{t('components:Intervention.plannew')}</Typography>
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </StepContent>
         </Step>
-      )}
-      <Step key="finish">
-        <StepLabel>{t(`components:Intervention.steps.finish`)}</StepLabel>
-        <StepContent>
-          <Grid container direction="column">
-            <Grid>
-              <Typography variant="h6">{t(`components:Intervention.success`)}</Typography>
-            </Grid>
-            <Grid>
-              <Typography>{t('components:Intervention.whatnow')}</Typography>
-              <Grid container direction="row" justify="flex-end">
-                <Button>
-                  <Typography variant="caption">{t('common:buttons.backToHome')}</Typography>
-                </Button>
-                <Button
-                  onClick={e => reset()}
-                  variant="contained"
-                  color="primary"
-                >
-                  <Typography variant="caption">{t('components:Intervention.plannew')}</Typography>
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-        </StepContent>
-      </Step>
-    </Stepper>
+      </Stepper>
     </React.Fragment>
   )
 }

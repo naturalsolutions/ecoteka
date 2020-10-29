@@ -171,6 +171,7 @@ export function useTreeSelectionSchema(it: TInterventionType) {
       step: 'selection',
       type: 'textfield',
       component: {
+        defaultValue: 0,
         required: true,
         type: 'number',
         label: 'longitude'
@@ -181,6 +182,7 @@ export function useTreeSelectionSchema(it: TInterventionType) {
       step: 'selection',
       type: 'textfield',
       component: {
+        defaultValue: 0,
         required: true,
         type: 'number',
         label: 'latitude'
