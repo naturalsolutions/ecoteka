@@ -87,7 +87,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   }, []);
 
   const handleStepDataValidated = (step: TInterventionStep, stepdata) => {
-    if (step === 'interventionselection' && stepdata.intervention !== interventiontype) {
+    if (step === 'interventionselection' && stepdata.intervention_type !== interventiontype) {
       setInterventiontype(stepdata.intervention);
     }
   }

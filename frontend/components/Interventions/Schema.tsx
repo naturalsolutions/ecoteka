@@ -151,7 +151,7 @@ export function useSelectionSchema(it: TInterventionType) {
   const { t } = useTranslation(['common', 'components']);
 
   return {
-    intervention: {
+    intervention_type: {
       type: 'select',
       component: {
         required: true,

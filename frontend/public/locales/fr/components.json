@@ -219,7 +219,7 @@
   "Intervention": {
     "required_documents": "Documents requis",
     "required_material": "Materiel requis",
-    "intervention": "Type d'intervention",
+    "intervention_type": "Type d'intervention",
     "intervenant": "Intervenant",
     "plan_date_interval" : "Période d'intervention",
     "estimated_cost": "Coût estimatif",
