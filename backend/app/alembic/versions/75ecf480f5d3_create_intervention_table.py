@@ -15,20 +15,22 @@ down_revision = '03b1736791f4'
 branch_labels = None
 depends_on = None
 
-
 def upgrade():
     op.create_table(
         "intervention",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("tree_id",
-                  sa.Integer(),
-                  nullable=True),
-        sa.Column("plan_date_from", sa.Date, nullable=False),
-        sa.Column("plan_date_to", sa.Date, nullable=False),
+        sa.Column("intervention_type", sa.String()),
+        sa.Column("organization_id", sa.Integer(), nullable=False),
+        sa.Column("intervention_period", sa.dialects.postgresql.JSONB()),
+        sa.Column("x", sa.Integer()),
+        sa.Column("y", sa.Integer()),
+        sa.Column("intervenant", sa.String()),
         sa.Column("done", sa.Boolean, nullable=True),
+        sa.Column("estimated_cost", sa.Float()),
+        sa.Column("required_documents", sa.dialects.postgresql.JSONB()),
+        sa.Column("required_material", sa.dialects.postgresql.JSONB()),
         sa.Column("properties", sa.dialects.postgresql.JSONB(), nullable=True),
-        sa.ForeignKeyConstraint(['tree_id'], ['tree.id'], ondelete="CASCADE"),
-        sa.PrimaryKeyConstraint("id"),
+        sa.PrimaryKeyConstraint("id")
     )
     op.create_index(op.f("ix_intervention_id"), "intervention", ["id"], unique=True)
 

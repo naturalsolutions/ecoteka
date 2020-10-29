@@ -19,7 +19,10 @@ def create(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user)
 ):
-    return crud.intervention.create(db, obj_in=request_intervention)
+    return crud.intervention.create(
+        db,
+        obj_in=dict(request_intervention, organization_id = current_user.organization_id)
+    )
 
 @router.get('/{intervention_id}', response_model=schemas.Intervention)
 def get(
