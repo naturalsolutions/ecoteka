@@ -97,6 +97,10 @@ const ETKInterventionForm = forwardRef<{ submit, getValues }, ETKInterventionFor
         const [x, y] = [e.coords.longitude, e.coords.latitude];
         form.setValue('x', x);
         form.setValue('y', y);
+
+        if (marker) {
+          marker.setLngLat([x, y]);
+        }
       }
     }
 
