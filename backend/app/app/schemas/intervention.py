@@ -1,11 +1,11 @@
 from typing import Optional
 from pydantic import BaseModel, Json
 from typing import Any, Set
-from datetime import date
+from datetime import datetime
 
 class InterventionPeriod (BaseModel):
-    startDate: date
-    endDate: date
+    startDate: datetime
+    endDate: datetime
 
 class InterventionBase(BaseModel):
     intervention_type: str

@@ -155,7 +155,7 @@ export function useSelectionSchema(it: TInterventionType) {
       type: 'select',
       component: {
         required: true,
-        label: t('components:Intervention.intervention'),
+        label: t('components:Intervention.intervention_type'),
         items: interventionTypes.map(it => sitem(it, t, 'components:Intervention.types'))   
       },
       schema: yup.string().required(t('common:errors.required'))
@@ -316,10 +316,10 @@ export function usePlanningSchema(it: TInterventionType) {
   const { t } = useTranslation(["common", "components"]);
 
   return {
-    plan_date_interval: {
+    intervention_period: {
       type: "daterange",
       component: {
-        label: t("components:Intervention.plan_date_interval"),
+        label: t("components:Intervention.intervention_period"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },

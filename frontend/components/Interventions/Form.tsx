@@ -2,8 +2,9 @@ import React, { createRef, forwardRef, useEffect, useImperativeHandle, useState 
 import { ETKPanelProps } from "../Panel";
 import { steps, schemaMap, TInterventionType, TInterventionStep } from "./Schema";
 import useETKForm from "../Form/useForm";
-import { Button, Grid, makeStyles, Step, StepContent, StepLabel, Stepper } from "@material-ui/core";
+import { Button, Grid, makeStyles, Step, StepContent, StepLabel, Stepper, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
+import { apiRest } from '../../lib/api';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 type ETKInterventionFormProps = {
   interventiontype: TInterventionType;
   step: TInterventionStep;
-  data: any 
+  data: any
 };
 
 const commonsteps: TInterventionStep[] = ['interventionselection', 'treeselection'];
@@ -26,7 +27,7 @@ const ETKInterventionForm = forwardRef<{ submit, getValues }, ETKInterventionFor
 
     useEffect(() => {
       const formfields = Object.keys(props.data).filter(field => field in schema);
-      
+
       formfields.forEach(field => {
         const value = props.data[field];
 
@@ -73,10 +74,14 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(['common', 'components']);
 
-  const [activestep, setActivestep] = useState(0);
+  const [activestep, setActivestep] = useState(3);
   const [interventiontype, setInterventiontype] = useState<TInterventionType>('pruning');
 
-  const [data, setData] = useState({});
+  const initialdata = steps.reduce(
+    (acc, step) => Object.assign(acc, { [step]: {} }),
+    {}
+  );
+  const [data, setData] = useState(initialdata);
   const [formRefs, setFormRefs] = useState({});
   useEffect(() => {
     const refs = steps.reduce(
@@ -86,10 +91,30 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
     setFormRefs(refs);
   }, []);
 
+  const setStepdata = (step, stepdata) => {
+    setData(Object.assign(data, { [step]: stepdata }))
+  }
+
   const handleStepDataValidated = (step: TInterventionStep, stepdata) => {
     if (step === 'interventionselection' && stepdata.intervention_type !== interventiontype) {
-      setInterventiontype(stepdata.intervention);
+      setInterventiontype(stepdata.intervention_type);
     }
+  }
+
+  const reset = () => {
+    setData(initialdata);
+    setActivestep(0);
+  }
+  const submit = async () => {
+    const payload = steps.filter(step => step != 'intervention')
+      .reduce(
+        (acc, step) => {
+          return Object.assign(acc, data[step]);
+        },
+        { properties: data['intervention'] }
+      );
+
+    const response = await apiRest.interventions.post(payload);
   }
 
   const handleNext = async (step: TInterventionStep) => {
@@ -98,8 +123,13 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
 
     if (isvalid) {
       const formdata = form.getValues();
-      setData(Object.assign(data, formdata));
+      setStepdata(step, formdata);
       handleStepDataValidated(step, formdata);
+
+      if (steps.indexOf(step) === steps.length - 1) {
+        console.log('submiting');
+        await submit();
+      }
       setActivestep(activestep + 1);
     }
   }
@@ -109,7 +139,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
 
     if (isvalid) {
       const formdata = form.getValues();
-      setData(Object.assign(data, formdata));
+      setStepdata(step, formdata);
       handleStepDataValidated(step, formdata);
     }
 
@@ -117,6 +147,8 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   }
 
   return (
+    <React.Fragment>
+    <Typography variant="h5">{t('components:Intervention.title')}</Typography>
     <Stepper orientation="vertical" activeStep={activestep} className={classes.root}>
       {steps.map(step =>
         <Step key={step}>
@@ -125,7 +157,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
             <Grid container direction="column">
               <ETKInterventionForm
                 ref={formRefs[step]}
-                data={data}
+                data={data[step]}
                 interventiontype={interventiontype}
                 step={step}
               />
@@ -141,7 +173,33 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
           </StepContent>
         </Step>
       )}
+      <Step key="finish">
+        <StepLabel>{t(`components:Intervention.steps.finish`)}</StepLabel>
+        <StepContent>
+          <Grid container direction="column">
+            <Grid>
+              <Typography variant="h6">{t(`components:Intervention.success`)}</Typography>
+            </Grid>
+            <Grid>
+              <Typography>{t('components:Intervention.whatnow')}</Typography>
+              <Grid container direction="row" justify="flex-end">
+                <Button>
+                  <Typography variant="caption">{t('common:buttons.backToHome')}</Typography>
+                </Button>
+                <Button
+                  onClick={e => reset()}
+                  variant="contained"
+                  color="primary"
+                >
+                  <Typography variant="caption">{t('components:Intervention.plannew')}</Typography>
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        </StepContent>
+      </Step>
     </Stepper>
+    </React.Fragment>
   )
 }
 

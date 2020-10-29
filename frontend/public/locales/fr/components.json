@@ -217,17 +217,22 @@
     }
   },
   "Intervention": {
+    "title": "Demande d'intervention",
+    "plannew": "Nouvelle demande",
+    "success": "Demande enregistrée",
+    "whatnow": "Que souhaitez vous faire ?",
     "required_documents": "Documents requis",
     "required_material": "Materiel requis",
     "intervention_type": "Type d'intervention",
     "intervenant": "Intervenant",
-    "plan_date_interval" : "Période d'intervention",
+    "intervention_period" : "Période d'intervention",
     "estimated_cost": "Coût estimatif",
     "steps": {
       "interventionselection": "Sur quoi porte votre demande ?",
       "treeselection": "Localisez l'arbre sur lequel intervenir",
       "intervention": "Détails de l'intervention",
-      "validation": "Planifiez votre intervention"
+      "validation": "Planifiez votre intervention",
+      "finish": "Terminer"
     },
     "types": {
       "pruning": "Elagage",
