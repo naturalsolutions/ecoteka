@@ -21,6 +21,7 @@ class GeoFileBase(BaseModel):
     longitude_column: Optional[str] = Field(...)
     latitude_column: Optional[str] = Field(...)
     properties: Optional[Any] = Field(...)
+    mapping_fields: Optional[Any] = Field(...)
     status: GeoFileStatus
     uploaded_date: Optional[datetime] = Field(...)
     imported_date: Optional[datetime] = Field(...)

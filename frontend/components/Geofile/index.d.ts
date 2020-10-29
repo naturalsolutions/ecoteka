@@ -13,6 +13,7 @@ export default interface ETKGeofile {
   longitude_column: string;
   latitude_column: string;
   properties: string;
+  mapping_fields: string;
   uploaded_date: string;
   imported_date: string;
   importing_start: string;
