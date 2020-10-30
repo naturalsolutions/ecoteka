@@ -13,5 +13,19 @@
     "email": "Veuillez saisir un email valide",
     "required": "Veuillez renseigner ce champ",
     "passwordsShouldMatch": "Les mots de passe ne correspondent pas"
-  }
+  },
+  "months": [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre"
+  ]
 }

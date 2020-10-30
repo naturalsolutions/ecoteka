@@ -14,11 +14,13 @@ from app.db.base_class import Base
 
 
 class Intervention(Base):
-    id  = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     organization_id = Column(Integer, ForeignKey('organization.id'))
 
     intervention_type = Column(String)
-    intervention_period = Column(JSONB)
+    intervention_start_date = Column(Date)
+    intervention_end_date = Column(Date)
+    date = Column(Date)
     x = Column(Float)
     y = Column(Float)
     intervenant = Column(String)

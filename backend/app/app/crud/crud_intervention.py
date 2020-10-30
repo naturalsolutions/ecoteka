@@ -5,7 +5,9 @@ from app.schemas import (
 )
 from app.crud.base import CRUDBase
 
+
 class CRUDIntervention (CRUDBase[Intervention, InterventionCreate, InterventionUpdate]):
     pass
+
 
 intervention = CRUDIntervention(Intervention)
