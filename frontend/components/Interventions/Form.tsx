@@ -12,9 +12,21 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: 400
   },
-  steplabel: {
-    cursor: 'pointer'
-  }
+  label: {
+    cursor: 'pointer',
+  },
+  icon: {
+    "&$activeIcon": {
+      color: theme.palette.secondary.main
+    },
+    "&$completedIcon": {
+      color: theme.palette.secondary.main
+    }
+  },
+  activeIcon: {
+    color: theme.palette.secondary.main
+  },
+  completedIcon: {}
 }));
 
 type ETKInterventionFormProps = {
@@ -53,7 +65,7 @@ const ETKInterventionForm = forwardRef<{ submit, getValues }, ETKInterventionFor
         props.map?.current?.map.off("click", onMapClick);
         props.map?.current?.map.geolocate.off("geolocate", onGeolocate);
 
-        if(marker) {
+        if (marker) {
           marker.remove();
         }
       };
@@ -82,7 +94,7 @@ const ETKInterventionForm = forwardRef<{ submit, getValues }, ETKInterventionFor
         form.setValue('x', x);
         form.setValue('y', y);
 
-        if(!marker) {
+        if (!marker) {
           marker = new mapboxgl.Marker()
             .setLngLat([x, y])
             .addTo(props.map.current.map);
@@ -201,9 +213,15 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
       <Typography variant="h5">{t('components:Intervention.title')}</Typography>
       <Stepper orientation="vertical" activeStep={activestep} className={classes.root}>
         {steps.map((step, stepidx) =>
-          <Step key={step}>
+          <Step key={step} className={classes.label}>
             <StepLabel
-              className={classes.steplabel}
+              StepIconProps={{
+                classes: {
+                  root: classes.icon,
+                  active: classes.icon,
+                  completed: classes.completedIcon
+                }
+              }}
               onClick={(e) => (stepidx < activestep) && setActivestep(stepidx)}
             >
               {t(`components:Intervention.steps.${step}`)}
@@ -218,6 +236,11 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                   map={props.context.map}
                 />
                 <Grid container direction="row" justify="flex-end">
+                  {activestep !== 0 && (
+                    <Button onClick={() => handlePrevious(step)}>
+                    {activestep === steps.length - 1 ? t('common:buttons.previous') : t('common:buttons.previous')}
+                  </Button>
+                  )}
                   <Button color="secondary" variant="contained" onClick={() => handleNext(step)}>
                     {activestep === steps.length - 1 ? t('common:buttons.finish') : t('common:buttons.next')}
                   </Button>
@@ -226,8 +249,16 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
             </StepContent>
           </Step>
         )}
-        <Step key="finish">
-          <StepLabel>{t(`components:Intervention.steps.finish`)}</StepLabel>
+        <Step key="finish" className={classes.label}>
+          <StepLabel
+            StepIconProps={{
+              classes: {
+                root: classes.icon,
+                active: classes.icon,
+                completed: classes.completedIcon
+              }
+            }}
+          >{t(`components:Intervention.steps.finish`)}</StepLabel>
           <StepContent>
             <Grid container direction="column">
               <Grid>

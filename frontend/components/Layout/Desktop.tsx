@@ -70,8 +70,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         },
         {
           label: "Template.menuItems.availableSoon.scheduleOfInterventions"
-        },
-        { label: "toto" }
+        }
       ],
     },
   ] as ETKMenuItem[];
