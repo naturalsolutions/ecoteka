@@ -21,11 +21,14 @@ export default function usePasswordField(props: ETKTextFieldProps): Fields {
       inputRef: props.register,
       variant: "filled",
       margin: "dense",
+      InputLabelProps: {
+        shrink: true,
+      },
       InputProps: {
         disableUnderline: true,
       },
       label: field.label,
-      type: 'password',
+      type: "password",
       fullWidth: true,
       error: Boolean(props.errors[name]),
       helperText: props.errors[name]?.message,

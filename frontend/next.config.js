@@ -19,4 +19,12 @@ config.publicRuntimeConfig = {
   tokenStorage,
 };
 
+config.webpack = (configWebpack) => {
+  configWebpack.node = {
+    fs: "empty",
+  };
+
+  return configWebpack;
+};
+
 module.exports = config;

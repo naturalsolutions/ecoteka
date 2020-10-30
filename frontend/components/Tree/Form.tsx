@@ -14,7 +14,7 @@ import useETKForm from "../Form/useForm";
 import { ETKPanelProps } from "../Panel";
 import useETKTreeSchema from "./Schema";
 import { apiRest } from "../../lib/api";
-import { features } from "process";
+import { useTemplate } from "../Template";
 
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -29,26 +29,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const EXCLUDE_MULTIPLE_SELECTION_FIELDS = [
+  "etkRegistrationNumber",
+  "registrationNumber",
+];
+
 const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
-  const schema = useETKTreeSchema();
-  const { fields, handleSubmit, setValue, getValues } = useETKForm({
+  const { dialog } = useTemplate();
+  const [currentAction, setCurrentAction] = useState("selection");
+  const [features, setFeatures] = useState([]);
+  const [selection, setSelection] = useState([]);
+  const schema = useETKTreeSchema({
+    exclude: selection.length <= 1 ? [] : EXCLUDE_MULTIPLE_SELECTION_FIELDS,
+  });
+  const { fields, handleSubmit, setValue, getValues, reset } = useETKForm({
     schema: schema,
   });
-  const [mode, setMode] = useState("edit");
-  const [features, setFeatures] = useState([]);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    await apiRest.trees.patch(selection[0], data);
   };
 
-  const setLngLat = ([lng, lat]) => {
-    setValue("x", lng);
-    setValue("y", lat);
+  const editValues = (values) => {
+    Object.keys(values).map((v) => setValue(v, values[v]));
   };
 
-  const onClick = async (e) => {
-    setLngLat([e.lngLat.lng, e.lngLat.lat]);
+  const onNew = async (e) => {
+    editValues({
+      x: e.lngLat.lng,
+      y: e.lngLat.lat,
+    });
 
     await handleSubmit(async (data) => {
       const response = await apiRest.trees.post(data);
@@ -66,67 +77,176 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
     })();
   };
 
-  const onEdit = (e) => {
-    const features = props.context.map.current.map.queryRenderedFeatures(
+  const onSelection = (e) => {
+    const featuresRendered = props.context.map.current.map.queryRenderedFeatures(
       e.point,
       {
-        layers: ["newTrees", "ecoteka-ecoteka"],
+        layers: ["newTrees"],
       }
     );
 
-    if (!features.length) {
+    if (!featuresRendered.length) {
       return;
     }
 
     let active = true;
+    const feature = featuresRendered[0];
 
-    if (features[0].state.active) {
-      active = !features[0].state.active;
+    if (feature.state.active) {
+      active = !feature.state.active;
     }
 
     props.context.map.current.map.setFeatureState(
       {
-        source: features[0].source,
-        sourceLayer: features[0].sourceLayer,
-        id: features[0].id,
+        source: feature.source,
+        sourceLayer: feature.sourceLayer,
+        id: feature.id,
       },
       {
         active: active,
       }
     );
-  };
 
-  const onDelete = async () => {
-    const featuresRendered = props.context.map.current.map.queryRenderedFeatures(
+    const allFeaturesRendered = props.context.map.current.map.queryRenderedFeatures(
       {
-        layers: ["newTrees", "ecoteka-ecoteka"],
+        layers: ["newTrees"],
       }
     );
 
-    console.log(featuresRendered);
-
-    const featuresToDelete = featuresRendered
-      .filter((f) => f.state.active)
-      .map((f) => f.properties.id);
-
-    for (let i = 0; i < featuresToDelete.length; i++) {
-      await apiRest.trees.delete(featuresToDelete[i]);
-    }
-
-    props.context.map.current.map.setFilter("ecoteka-ecoteka", [
-      "in",
-      "properties.id",
-      ["literal", featuresToDelete],
-    ]);
+    setSelection(
+      allFeaturesRendered
+        .filter((f) => f.state.active)
+        .map((f) => f.properties.id)
+    );
   };
 
-  const onGeolocate = (e) => {
-    setLngLat([e.coords.longitude, e.coords.latitude]);
+  const ACTIONS = {
+    new: {
+      cursor: "crosshair",
+      event: onNew,
+    },
+    selection: {
+      cursor: "",
+      event: onSelection,
+    },
+  };
+
+  const onDelete = async () => {
+    if (selection.length > 0) {
+      dialog.current.open({
+        title: "Eliminar árboles",
+        content: "Seguro que deseas eliminar los árboles seleccionados?",
+        actions: [
+          {
+            label: "si",
+            variant: "outlined",
+            onClick: async () => {
+              setFeatures(
+                features.filter((f) => !selection.includes(f.properties.id))
+              );
+
+              for (const id of selection) {
+                await apiRest.trees.delete(id);
+              }
+
+              setSelection([]);
+              reset();
+            },
+          },
+          {
+            label: "no",
+            color: "primary",
+            variant: "contained",
+          },
+        ],
+      });
+    }
+  };
+
+  const onAction = (type: string) => {
+    if (!ACTIONS.hasOwnProperty(type)) {
+      return;
+    }
+
+    props.context.map.current.map.getCanvas().style.cursor =
+      ACTIONS[type].cursor;
+    setCurrentAction(type);
+  };
+
+  const onInit = async () => {
+    const map = props.context?.map?.current?.map;
+
+    if (!map) {
+      return;
+    }
+
+    map.setStyle(
+      "http://localhost:8000/api/v1/maps/style?base=true&dt=" + Date.now()
+    );
+
+    if (map.getLayer("newTrees")) {
+      return;
+    }
+
+    map.doubleClickZoom.disable();
+    map.boxZoom.disable();
+
+    const response = await fetch(
+      "http://localhost:8000/api/v1/organization/geojson/1"
+    );
+
+    const geojson = await response.json();
+
+    if (geojson.features) {
+      setFeatures(geojson.features);
+    }
+
+    map.addLayer({
+      id: "newTrees",
+      type: "circle",
+      source: {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
+      },
+      paint: {
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff",
+        "circle-radius": {
+          base: 1.75,
+          stops: [[12, 5]],
+        },
+        "circle-color": [
+          "case",
+          ["==", ["feature-state", "active"], true],
+          "red",
+          "#2597e4",
+        ],
+      },
+    });
+  };
+
+  const onExit = () => {
+    const map = props.context?.map?.current?.map;
+
+    map.doubleClickZoom.enable();
+    map.boxZoom.enable();
+    map.setStyle("http://localhost:8000/api/v1/maps/style?dt=" + Date.now());
+    map.removeLayer("newTrees");
   };
 
   useEffect(() => {
+    onInit();
+    return () => {
+      onExit();
+    };
+  }, []);
+
+  useEffect(() => {
     if (features.length) {
-      props.context.map.current.map.getSource("newTrees").setData({
+      props.context?.map?.current?.map?.getSource("newTrees").setData({
         type: "FeatureCollection",
         features: features,
       });
@@ -134,94 +254,57 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
   }, [features]);
 
   useEffect(() => {
-    switch (mode) {
-      case "new":
-        props.context.map.current.map.getCanvas().style.cursor = "crosshair";
-        props.context?.map?.current?.map.on("click", onClick);
-        break;
-      default:
-        props.context.map.current.map.getCanvas().style.cursor = "";
-        props.context?.map?.current?.map.on("click", onEdit);
-        break;
-    }
+    props.context?.map?.current?.map?.on("click", ACTIONS[currentAction].event);
 
     return () => {
-      switch (mode) {
-        case "new":
-          props.context?.map?.current?.map.off("click", onClick);
-          break;
-        default:
-          props.context?.map?.current?.map.off("click", onEdit);
-          break;
-      }
+      props.context?.map?.current?.map?.off(
+        "click",
+        ACTIONS[currentAction].event
+      );
     };
-  }, [mode]);
-
-  useEffect(() => {
-    props.context?.map?.current?.map.on("load", () => {
-      props.context?.map?.current?.map.geolocate.on("geolocate", onGeolocate);
-      props.context?.map?.current?.map.addLayer({
-        id: "newTrees",
-        type: "circle",
-        source: {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [],
-          },
-        },
-        paint: {
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#fff",
-          "circle-radius": {
-            base: 1.75,
-            stops: [
-              [12, 2],
-              [22, 180],
-            ],
-          },
-          "circle-color": [
-            "case",
-            ["==", ["feature-state", "active"], true],
-            "red",
-            "#2597e4",
-          ],
-        },
-      });
-    });
-
-    return () => {
-      props.context?.map?.current?.map.geolocate.off("geolocate", onGeolocate);
-    };
-  }, []);
+  }, [currentAction]);
 
   return (
     <Grid container direction="column" spacing={2} className={classes.grid}>
       <Grid item>
-        <Grid container>
-          <Grid item xs>
-            <Typography variant="h6" className={classes.title}>
-              Ajouter un arbre
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => setMode("new")}
-            >
-              New
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => setMode("edit")}
-            >
-              Edit
-            </Button>
-            <Button variant="outlined" size="small" onClick={() => onDelete()}>
-              Delete
-            </Button>
+        <Grid item xs>
+          <Typography variant="h6" className={classes.title}>
+            Mis árboles
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Grid container spacing={1}>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={() => onAction("new")}
+              >
+                Add
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={() => onAction("selection")}
+              >
+                Selection
+              </Button>
+            </Grid>
+            <Grid item xs></Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                size="small"
+                color="secondary"
+                onClick={() => onDelete()}
+              >
+                Delete
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -230,12 +313,16 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
           <Grid item xs={12}>
             {fields.vernacularName}
           </Grid>
-          <Grid item xs={6}>
-            {fields.y}
-          </Grid>
-          <Grid item xs={6}>
-            {fields.x}
-          </Grid>
+          {selection.length <= 1 && (
+            <Grid item xs={6}>
+              {fields.y}
+            </Grid>
+          )}
+          {selection.length <= 1 && (
+            <Grid item xs={6}>
+              {fields.x}
+            </Grid>
+          )}
         </Grid>
       </Grid>
       <Grid item>

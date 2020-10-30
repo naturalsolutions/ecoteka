@@ -969,7 +969,7 @@
       "text-halo-width": 2
     }
   },
-  "ecoteka-data": {
+  "osm": {
     "light": {
       "circle-radius": {
         "base": 1.75,

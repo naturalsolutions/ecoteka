@@ -20,6 +20,9 @@ export default function useTextField(props: ETKTextFieldProps): Fields {
       inputRef: props.register,
       variant: "filled",
       margin: "dense",
+      InputLabelProps: {
+        shrink: true,
+      },
       InputProps: {
         disableUnderline: true,
       },

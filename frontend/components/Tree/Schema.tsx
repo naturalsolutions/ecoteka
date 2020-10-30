@@ -1,10 +1,14 @@
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 
-export default function useTreeSchema() {
+interface TreeSchemaProps {
+  exclude?: string[];
+}
+
+export default function useTreeSchema(props?: TreeSchemaProps) {
   const { t } = useTranslation(["common", "components"]);
 
-  return {
+  const schema = {
     family: {
       type: "textfield",
       category: "Identité de l'arbre",
@@ -271,4 +275,12 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
   };
+
+  if (props?.exclude) {
+    for (let key of props.exclude) {
+      delete schema[key];
+    }
+  }
+
+  return schema;
 }

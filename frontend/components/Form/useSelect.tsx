@@ -37,7 +37,9 @@ export default function useSelect(props: ETKSelectProps): Fields {
         margin="dense"
         error={Boolean(props.errors[name])}
       >
-        <InputLabel id={`select-${name}`}>{field.label}</InputLabel>
+        <InputLabel id={`select-${name}`} shrink>
+          {field.label}
+        </InputLabel>
         <Controller
           name={name}
           control={props.control}
