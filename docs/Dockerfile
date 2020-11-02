@@ -5,8 +5,8 @@ RUN pip install markdown_include
 COPY ./docs /docs
 COPY ./ /docs_src/
 
-#RUN mkdocs build -f /docs/mkdocs.yml -d /site
+RUN mkdocs build -f /docs/mkdocs.yml -d /site
 
-#FROM nginx:alpine
+FROM nginx:alpine
 
-#COPY --from=builder /site /usr/share/nginx/html/docs
+COPY --from=builder /site /usr/share/nginx/html/docs

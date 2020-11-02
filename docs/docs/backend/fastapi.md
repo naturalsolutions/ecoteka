@@ -1,6 +1,6 @@
 # FastAPI
 
-![FastAPI](/assets/img/fastapi-hero.png)
+![FastAPI](/docs/assets/img/fastapi-hero.png)
 
 ---
 

@@ -1,6 +1,6 @@
 # PostGIS
 
-![PostGIS](/assets/img/postgis-hero.jpg)
+![PostGIS](/docs/assets/img/postgis-hero.jpg)
 
 ---
 

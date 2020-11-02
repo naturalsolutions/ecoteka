@@ -1,6 +1,6 @@
 # Tippecanoe
 
-![Tippecanoe](/assets/img/tippecanoe-hero.jpeg)
+![Tippecanoe](/docs/assets/img/tippecanoe-hero.jpeg)
 
 ---
 

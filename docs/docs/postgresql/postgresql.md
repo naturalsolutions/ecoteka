@@ -1,6 +1,6 @@
 # PostgreSQL
 
-![PostgreSQL](/assets/img/postgresql-hero.png)
+![PostgreSQL](/docs/assets/img/postgresql-hero.png)
 
 ---
 

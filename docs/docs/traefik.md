@@ -1,6 +1,6 @@
 # Proxy - Traefik
 
-![Treafik](/assets/img/traefik-hero.png)
+![Treafik](/docs/assets/img/traefik-hero.png)
 
 ---
 
