@@ -18,26 +18,26 @@ services:
       - "${NS_ECOTEKA_DB_PORT}:5432"
 
   backend:
-    volumes:
-      - ./backend/app:/app
+    image: ecoteka-backend:dev
     build:
       context: ./backend
       dockerfile: Dockerfile
+    volumes:
+      - ./backend/app:/app
     command: /start-reload.sh
 
   celery_worker:
+    image: ecoteka-backend:dev
     volumes:
       - ./backend/app:/app
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
 
   frontend:
-    volumes:
-      - ./frontend:/app
+    image: ecoteka-frontend:dev
     build:
       context: ./frontend
       dockerfile: .docker/Dockerfile.dev
+    volumes:
+      - ./frontend:/app
     labels:
       - traefik.http.services.frontend.loadbalancer.server.port=3000
 

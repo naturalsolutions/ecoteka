@@ -1,0 +1,213 @@
+{
+  "Logout": {
+    "logout": "Cerrar sesión",
+    "dialog": {
+      "backHome": "Volver a la página de inicio",
+      "logout": "Cerrar sesión",
+      "content": "¿Estás seguro/a de querer cerrar la sesión?"
+    }
+  },
+
+  "SignIn": {
+    "title": "Iniciar sesión",
+    "buttonCancel": "Cancelar",
+    "buttonConnexion": "Iniciar sesión",
+    "labelPassword": "Contraseña",
+    "labelUsername": "Correo electrónico",
+    "errorMessageServer": "Correo electrónico o contraseña incorrectos",
+    "errorMessageEmail": "Correo electrónico no válido",
+    "errorMessageRequiredField": "Campo obligatorio"
+  },
+
+  "LanguageSelector": {
+    "en": "Inglés",
+    "fr": "Francés",
+    "es": "Español"
+  },
+
+  "Template": {
+    "menuItems": {
+      "plantHeritage": {
+        "plantHeritage": "Patrimonio vegetal",
+        "allTrees": "Todos los árboles",
+        "addATree": "Añadir un árbol"
+      },
+      "dataImport": {
+        "dataImport": "Importar datos",
+        "importYourData": "Importa tus datos",
+        "importHistory": "Historial de importaciones"
+      },
+      "availableSoon": {
+        "availableSoon": "¡Pronto disponible!",
+        "requestAnItervention": "Solicitar una intervención",
+        "scheduleOfInterventions": "Calendario de intervenciones"
+      }
+    }
+  },
+
+  "Toolbar": {
+    "slogan": "¡Por una ciudad más verde!",
+    "login": "Iniciar sesión",
+    "about": "Obtener más información",
+    "register": "Inscribir"
+  },
+
+  "Map": {
+    "SearchCity": {
+      "label": "Buscar una ciudad"
+    },
+    "SateliteToggle": {
+      "map": "Mapa",
+      "satellite": "Satélite"
+    }
+  },
+
+  "Sidebar": {
+    "treeCard": "Ficha de árbol",
+    "wikipediaInformation": "Información de Wikipedia"
+  },
+
+  "PanelStart": {
+    "title": "Estas conectado/a a tu cuenta",
+    "content": "Puedes ver el número de árboles en OpenData pero también el número de árboles en tu capa privada de datos.",
+    "numberOfTrees": {
+      "title": "Número de árboles en el mapa",
+      "content": "millones de árboles"
+    },
+    "numberOfTreesLayer": {
+      "title": "Número de árboles en la capa",
+      "content": "de árboles"
+    },
+    "card": {
+      "title": "¿Te gustaría añadir un árbol?",
+      "content": "Para añadir árboles a tu capa puedes importar un archivo de datos. ¡Pronto podrás añadir un árbol manualmente desde nuestra interfaz web o móvil!",
+      "button": "Importar un archivo"
+    }
+  },
+
+  "PanelWelcome": {
+    "tabLabel": "Patrimonio vegetal",
+    "title": "¡Bienvenido a EcoTeka!",
+    "text": "Natural Solutions ha estado desarrollando este servicio de inventario y gestión del patrimonio de árboles desde julio de 2020. ¡Aquí una demostración de nuestra aplicación! Puedes ver en el mapa todos los árboles disponibles del mundo en OpenData.",
+    "CardInfoPanel": {
+      "title": "Número de árboles en el mapa"
+    }
+  },
+
+  "CardAbout": {
+    "title": "¿Eres un/a gestor/a de espacios verdes?",
+    "content": "Puedes contactarnos para saber más y probar las primeras funcionalidades de nuestro inventario de arbolado urbano.",
+    "button": "Saber más"
+  },
+
+  "ImportHistoryIndex": {
+    "title": "Histórico de importaciones",
+    "importText": "Importar",
+    "deleteText": "Eliminar",
+    "dialog": {
+      "title": "Eliminar",
+      "content": "¿Seguro que deseas eliminar los archivos seleccionados?",
+      "yes": "Si",
+      "cancel": "Cancelar"
+    }
+  },
+
+  "ImportHistoryTable": {
+    "headers": {
+      "file": "Nombre del archivo",
+      "trees": "Árboles",
+      "crs": "CRS",
+      "importDate": "Fecha de la importación",
+      "importStatus": "Estado de la importación"
+    }
+  },
+
+  "ImportHistoryEmpty": {
+    "content": "¡Aún no has realizado ninguna importación! <br/> Siempre hay un comienzo para todo",
+    "button": "Importar mis datos"
+  },
+
+  "ImportTemplate": {
+    "title": "¿Alguna duda sobre tu archivo?",
+    "content": "Asegúrese de que tu archivo contenga la siguiente información:",
+    "button": "Descargar la plantilla",
+    "longitude": "Longitud",
+    "latitude": "Latitud",
+    "crs": "Sistema de Referencia de Coordenadas",
+    "download": "Puedes descargar nuestra plantilla en formato xlsx"
+  },
+
+  "Import": {
+    "Index": {
+      "tooltipContent": "- La importación de datos es una acción que puede requerir varias decenas de minutos <br/> - Busque el progreso de su importación en el menú: \"Historial de importaciones \"",
+      "templateTips": "Puedes descargar nuestra plantilla en formato .xls"
+    },
+    "Error": {
+      "importedText": "Se ha producido un error al procesar tu archivo",
+      "buttonHistoryText": "Historial de importaciones",
+      "buttonResetText": "Importar otro archivo"
+    },
+    "Imported": {
+      "importedText": "Tu archivo se ha importado correctamente",
+      "buttonHistoryText": "Historial de importaciones",
+      "buttonResetText": "Importar otro archivo"
+    },
+    "Importing": {
+      "importingText": "Importando"
+    },
+    "MissingData": {
+      "titleText": "Falta información al archivo que has subido",
+      "hintText": "Define los campos correspondientes a las columnas de tu archivo",
+      "buttonSubmitContent": "Enviar",
+      "buttonCancelText": "Cancelar",
+      "labelColumn": {
+        "lat": "Latitud",
+        "lng": "Longitud",
+        "crs": "Sistema de Referencia de Coordenadas"
+      }
+    },
+    "Upload": {
+      "boxContent": "Importa tus datos",
+      "fileListHint": "Tipos de archivos aceptados:",
+      "buttonCancelContent": "Cancelar",
+      "buttonUploadContent": "Subir",
+      "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo"
+    }
+  },
+
+  "Contact": {
+    "dialogTile": "Obtener más información",
+    "dialogContentText": "¿Te interesa esta plataforma? <br/> ¿Quieres saber más?",
+    "dialogContentHint": "Por favor, rellene este formulario. Nos pondremos en contacto contigo lo antes posible.",
+    "successMessageContent": "Tu mensaje ha sido enviado, nos pondremos en contacto contigo lo antes posible.",
+    "buttonHomeContent": "Volver al inico",
+    "buttonCancelContent": "Cancelar",
+    "buttonSubmitContent": "Enviar solicitud de contacto",
+    "postErrorMessage": "Error interno. Vuelve a intentarlo más tarde.",
+    "lastName": "Apellidos",
+    "firstName": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Número de teléfono",
+    "township": "Municipio en el que ejerces",
+    "contactRequest": "Hola, ¿podéis darme más información sobre esta plataforma?",
+    "position": "Puesto que ocupas",
+    "positionItems": {
+      "none": "Ninguno",
+      "greenSpacesManager": "Gestor de espacios verdes",
+      "technicalServiceManagers": "Director de servicios técnico",
+      "others": "Otros"
+    }
+  },
+  "Register": {
+    "dialogTitle": "Inscribir",
+    "cancel": "Cancelar",
+    "submit": "Inscribir",
+    "fullName": "Nombre completo",
+    "email": "Correo electrónico",
+    "organization": "Organización",
+    "password": "Contraseña",
+    "passwordConfirm": "Confirmar contraseña",
+    "registrationCompleted": "Registro completado",
+    "registrationFailed": "El registro ha fallado"
+  }
+}

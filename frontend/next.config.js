@@ -3,7 +3,7 @@ const apiUrl = process.env["API_URL"] || "%api_url%";
 const tokenStorage = process.env["TOKEN_STORAGE"] || "%token_storage%";
 
 let config = {
-  exportTrailingSlash: true,
+  trailingSlash: true,
 };
 
 // CDN Support with Asset Prefix

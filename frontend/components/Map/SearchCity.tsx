@@ -1,32 +1,25 @@
 import { TextField, CircularProgress } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { useState, useEffect, useRef, Fragment } from "react";
-import ETKMapSateliteToggle from "./MapSatelliteToggle";
+import { useState, useEffect, Fragment } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface ETKMapSearchCityProps {
+  className?: string;
+  style?: React.CSSProperties;
   onChange?(item: {}): void;
-  searchInputPlaceHolder?: string;
 }
 
 const defaultProps: ETKMapSearchCityProps = {
+  style: {
+    background: "#ffff",
+  },
+  className: "",
   onChange: () => {},
-  searchInputPlaceHolder: "Rechercher une ville",
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    searchCity: {
-      background: "#fff",
-      position: "absolute",
-      top: theme.spacing(2),
-      right: theme.spacing(2),
-    },
-  })
-);
-
 const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
-  const classes = useStyles();
+  const { t } = useTranslation("components");
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -83,12 +76,12 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
   return (
     <Autocomplete
       freeSolo
-      className={classes.searchCity}
+      className={props.className}
       options={options}
       getOptionLabel={(option) => option.nom}
       loading={loading}
       value={value}
-      style={{ width: 300 }}
+      style={props.style}
       onChange={onChangeHandler}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
@@ -97,7 +90,7 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
         <TextField
           {...params}
           value={value}
-          label={props.searchInputPlaceHolder}
+          label={t("Map.SearchCity.label")}
           variant="outlined"
           InputProps={{
             ...params.InputProps,

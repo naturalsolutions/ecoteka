@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
-npm install 
+npm install
 npm run dev

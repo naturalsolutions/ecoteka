@@ -84,11 +84,16 @@ services:
       - HEALTHCHECK_PORT=${NS_ECOTEKA_DB_BACKUPS_HEALTHCHECK_PORT}
 
   backend:
+    image: ${NS_ECOTEKA_BACKEND_IMAGE}
     labels:
       - traefik.http.routers.backend.entrypoints=websecure
       - traefik.http.routers.backend.tls=true
 
+  celery_worker:
+    image: ${NS_ECOTEKA_BACKEND_IMAGE}
+
   frontend:
+    image: ${NS_ECOTEKA_FRONTEND_IMAGE}
     labels:
       - traefik.http.routers.frontend.entrypoints=websecure
       - traefik.http.routers.frontend.tls=true

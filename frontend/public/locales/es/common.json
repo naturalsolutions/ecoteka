@@ -1,0 +1,14 @@
+{
+  "messages": {
+    "success": "Con éxito",
+    "error": "Ha ocurrido un error"
+  },
+  "buttons": {
+    "backToHome": "Ir a la página de inicio"
+  },
+  "errors": {
+    "email": "Correo electrónico no válido",
+    "required": "Campo obligatorio",
+    "passwordsShouldMatch": "Las dos contraseñas no coinciden"
+  }
+}

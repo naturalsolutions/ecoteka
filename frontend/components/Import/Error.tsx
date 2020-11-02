@@ -1,24 +1,21 @@
 import React from "react";
 import { Grid, Typography, Button } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
+import { useTranslation } from "react-i18next";
+
 import { useRouter } from "next/router";
 
 export interface ETKImportErrorProps {
-  importedText?: string;
-  buttonHistoryText?: string;
-  buttonResetText?: string;
   onReset?(): void;
 }
 
 const defaultProps: ETKImportErrorProps = {
-  importedText: "Une erreur s'est glissée dans votre fichier",
-  buttonHistoryText: "Historique des imports",
-  buttonResetText: "Importer un autre fichier",
   onReset: () => {},
 };
 
 const ETKImportError: React.FC<ETKImportErrorProps> = (props) => {
   const router = useRouter();
+  const { t } = useTranslation("components");
 
   const onHistoryClick = () => {
     router.push("/imports");
@@ -28,7 +25,7 @@ const ETKImportError: React.FC<ETKImportErrorProps> = (props) => {
     <Grid container item alignItems="center" direction="column" spacing={2}>
       <Grid item>
         <Typography variant="h6" color="error">
-          {props.importedText}
+          {t("Import.Error.importedText")}
         </Typography>
       </Grid>
       <Grid item>
@@ -36,7 +33,7 @@ const ETKImportError: React.FC<ETKImportErrorProps> = (props) => {
       </Grid>
       <Grid item>
         <Button color="primary" variant="contained" onClick={props.onReset}>
-          {props.buttonResetText}
+          {t("buttonResetText")}
         </Button>
       </Grid>
       <Grid item>
@@ -44,7 +41,7 @@ const ETKImportError: React.FC<ETKImportErrorProps> = (props) => {
       </Grid>
       <Grid item>
         <Button color="primary" variant="contained" onClick={onHistoryClick}>
-          {props.buttonHistoryText}
+          {t("buttonHistoryText")}
         </Button>
       </Grid>
     </Grid>

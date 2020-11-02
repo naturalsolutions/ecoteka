@@ -1,0 +1,14 @@
+{
+  "messages": {
+    "success": "Succès",
+    "error": "Une erreur s'est produite"
+  },
+  "buttons": {
+    "backToHome": "Retour à l'accueil"
+  },
+  "errors": {
+    "email": "Veuillez saisir un email valide",
+    "required": "Veuillez renseigner ce champ",
+    "passwordsShouldMatch": "Les mots de passe ne correspondent pas"
+  }
+}

@@ -9,7 +9,8 @@ from app.api.api_v1.endpoints import (
     registration_link,
     geo_files,
     trees,
-    maps
+    maps,
+    taxref
 )
 
 api_router = APIRouter()
@@ -57,4 +58,10 @@ api_router.include_router(
     maps.router,
     prefix="/maps",
     tags=["maps"]
+)
+
+api_router.include_router(
+    taxref.router,
+    prefix="/taxref",
+    tags=["taxref"]
 )

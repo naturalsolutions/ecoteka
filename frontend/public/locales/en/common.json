@@ -1,0 +1,14 @@
+{
+  "messages": {
+    "success": "Success",
+    "error": "An error occured"
+  },
+  "buttons": {
+    "backToHome": "Back to home"
+  },
+  "errors": {
+    "email": "Email address is invalid",
+    "required": "Field required",
+    "passwordsShouldMatch": "Passwords should match"
+  }
+}
