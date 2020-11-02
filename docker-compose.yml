@@ -148,8 +148,6 @@ services:
 
   docs:
     image: ${NS_ECOTEKA_DOCS_IMAGE}
-    ports:
-      - 3000:8000
     networks:
       - traefik
     labels:
