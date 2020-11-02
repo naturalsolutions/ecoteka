@@ -193,6 +193,7 @@
     "lastName": "Apellidos",
     "firstName": "Nombre",
     "email": "Correo electrónico",
+    "errorMessageEmail": "Correo electrónico no válido.",
     "phone": "Número de teléfono",
     "township": "Municipio en el que ejerces",
     "contactRequest": "Hola, ¿podéis darme más información sobre esta plataforma?",
@@ -275,6 +276,9 @@
   },
 
   "TreeForm": {
-    "buttonDelete": "Eliminar"
+    "dialogDeleteTitle": "Eliminar los árboles seleccionados",
+    "dialogDeleteContent": "¿Seguro que deseas eliminar los árboles seleccionados?",
+    "dialogDeleteActionYes": "Si",
+    "dialogDeleteActionCancel": "No"
   }
 }

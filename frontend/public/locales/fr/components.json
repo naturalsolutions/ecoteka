@@ -193,6 +193,7 @@
     "lastName": "Nom",
     "firstName": "Prénom",
     "email": "Adresse email",
+    "errorMessageEmail": "Adresse email non valide.",
     "phone": "Numéro de téléphone",
     "township": "Commune dans laquelle vous exercez",
     "contactRequest": "Bonjour, pouvez-vous m'en dire plus sur cette plateforme ?",
@@ -273,5 +274,12 @@
     "lightning": "Présence d'éclairage",
     "allergens": "Arbre allergène",
     "remarks": "Remarques"
+  },
+
+  "TreeForm": {
+    "dialogDeleteTitle": "Supprimer les arbres sélectionnés",
+    "dialogDeleteContent": "Êtes-vous sûr de vouloir supprimer les arbres sélectionnés ?",
+    "dialogDeleteActionYes": "Oui",
+    "dialogDeleteActionCancel": "Non"
   }
 }

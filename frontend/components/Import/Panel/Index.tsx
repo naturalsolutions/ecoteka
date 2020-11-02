@@ -90,13 +90,13 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
 
     const { longitude, latitude } = coordinates;
 
-    props.context?.map.current.map.setStyle(
+    props.context?.map?.current?.map?.setStyle(
       `/api/v1/maps/style?token=${apiRest.getToken()}`
     );
 
-    props.context?.map.current.map.on("styledata", () => {
-      props.context?.map.current.map.setZoom(12);
-      props.context?.map.current.map.flyTo({
+    props.context?.map?.current?.map?.on("styledata", () => {
+      props.context?.map?.current?.map?.setZoom(12);
+      props.context?.map?.current?.map?.flyTo({
         center: [longitude, latitude],
       });
     });

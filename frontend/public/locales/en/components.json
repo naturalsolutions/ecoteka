@@ -273,5 +273,12 @@
     "lightning": "Lighting",
     "allergens": "Allergenic tree",
     "remarks": "Remarks"
+  },
+
+  "TreeForm": {
+    "dialogDeleteTitle": "Remove selected trees",
+    "dialogDeleteContent": "Are you sure you want to remove the selected trees?",
+    "dialogDeleteActionYes": "Yes",
+    "dialogDeleteActionCancel": "No"
   }
 }

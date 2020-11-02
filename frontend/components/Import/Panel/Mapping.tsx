@@ -45,7 +45,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
         )) {
           newValues[property] = {
             checkbox: false,
-            select: undefined,
+            select: "",
           };
         }
 
@@ -54,13 +54,15 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
     }
   }, []);
 
-  const menuItems = Object.keys(properties).map((item) => {
-    return (
-      <MenuItem key={`menu-item-${item}`} value={item}>
-        {item}
-      </MenuItem>
-    );
-  });
+  const menuItems = Object.keys(properties)
+    .concat("")
+    .map((item) => {
+      return (
+        <MenuItem key={`menu-item-${item}`} value={item}>
+          {item}
+        </MenuItem>
+      );
+    });
 
   const onChange = (value, property, field) => {
     let newValues = Object.assign({}, values);

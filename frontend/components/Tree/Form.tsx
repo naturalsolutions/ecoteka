@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import getConfig from "next/config";
 import {
   Grid,
   Typography,
@@ -16,9 +17,12 @@ import useETKTreeSchema from "./Schema";
 import { apiRest } from "../../lib/api";
 import { useTemplate } from "../Template";
 
+const { publicRuntimeConfig } = getConfig();
+const { apiUrl } = publicRuntimeConfig;
+
 const useStyles = makeStyles((theme) => ({
   grid: {
-    maxWidth: "25rem",
+    width: "25rem",
   },
   title: {
     fontWeight: "bold",
@@ -37,6 +41,7 @@ const EXCLUDE_MULTIPLE_SELECTION_FIELDS = [
 const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
   const { dialog } = useTemplate();
+  const { t } = useTranslation("components");
   const [currentAction, setCurrentAction] = useState("selection");
   const [features, setFeatures] = useState([]);
   const [selection, setSelection] = useState([]);
@@ -134,11 +139,11 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
   const onDelete = async () => {
     if (selection.length > 0) {
       dialog.current.open({
-        title: "Eliminar árboles",
-        content: "Seguro que deseas eliminar los árboles seleccionados?",
+        title: t("TreeForm.dialogDeleteTitle"),
+        content: t("TreeForm.dialogDeleteContent"),
         actions: [
           {
-            label: "si",
+            label: t("TreeForm.dialogDeleteActionYes"),
             variant: "outlined",
             onClick: async () => {
               setFeatures(
@@ -154,7 +159,7 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
             },
           },
           {
-            label: "no",
+            label: t("TreeForm.dialogDeleteActionCancel"),
             color: "primary",
             variant: "contained",
           },
@@ -180,9 +185,7 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
       return;
     }
 
-    map.setStyle(
-      "http://localhost:8000/api/v1/maps/style?base=true&dt=" + Date.now()
-    );
+    map.setStyle(`${apiUrl}/api/v1/maps/style?base=true&dt=${Date.now()}`);
 
     if (map.getLayer("newTrees")) {
       return;
@@ -191,10 +194,7 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
     map.doubleClickZoom.disable();
     map.boxZoom.disable();
 
-    const response = await fetch(
-      "http://localhost:8000/api/v1/organization/geojson/1"
-    );
-
+    const response = await fetch(`${apiUrl}/api/v1/organization/geojson/1`);
     const geojson = await response.json();
 
     if (geojson.features) {
@@ -233,7 +233,7 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
 
     map.doubleClickZoom.enable();
     map.boxZoom.enable();
-    map.setStyle("http://localhost:8000/api/v1/maps/style?dt=" + Date.now());
+    map.setStyle(`${apiUrl}/api/v1/maps/style?dt=${Date.now()}`);
     map.removeLayer("newTrees");
   };
 
@@ -297,7 +297,7 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
             <Grid item xs></Grid>
             <Grid item>
               <Button
-                variant="contained"
+                variant="outlined"
                 size="small"
                 color="secondary"
                 onClick={() => onDelete()}
