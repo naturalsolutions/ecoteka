@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { Button, Grid, Box, Typography } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
-import { useAppContext } from "../providers/AppContext.js";
+import { useAppContext } from "../providers/AppContext";
 import { apiRest } from "../lib/api";
 import { useTranslation } from "react-i18next";
 import { useTemplate } from "./Template";

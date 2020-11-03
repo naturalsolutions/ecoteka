@@ -1,7 +1,7 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { apiRest as api } from "../lib/api";
 
-const StoreContext = createContext();
+const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
   const [user, setUser] = useState();

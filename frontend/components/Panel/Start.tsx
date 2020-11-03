@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   makeStyles,
@@ -11,6 +11,8 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import CardInfoPanel from "../Card/InfoPanel";
+import { apiRest } from "../../lib/api";
+import { useAppContext } from "../../providers/AppContext";
 
 export interface ETKPanelStartProps {}
 
@@ -29,10 +31,37 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const fetchData = async function (organizationId: number) {
+  try {
+    const response = await apiRest.organization.get(organizationId);
+
+    if (response.ok) {
+      const organization = await response.json();
+
+      return organization;
+    }
+  } catch (e) {}
+};
+
+interface Organization {
+  id: number;
+  name: string;
+  slug: string;
+  total_trees: number;
+}
+
 const ETKPanelStart: React.FC<ETKPanelStartProps> = (props) => {
   const router = useRouter();
   const classes = useStyles();
   const { t } = useTranslation("components");
+  const { user } = useAppContext();
+  const [organization, setOrganization] = useState<Organization>();
+
+  useEffect(() => {
+    fetchData(user.organization_id).then((newOrganization) => {
+      setOrganization(newOrganization);
+    });
+  }, []);
 
   return (
     <Grid container direction="column" spacing={2} className={classes.root}>
@@ -51,7 +80,9 @@ const ETKPanelStart: React.FC<ETKPanelStartProps> = (props) => {
       <Grid item>
         <CardInfoPanel
           title={t("PanelStart.numberOfTreesLayer.title")}
-          content={`0 ${t("PanelStart.numberOfTreesLayer.content")}`}
+          content={`${organization ? organization.total_trees : 0} ${t(
+            "PanelStart.numberOfTreesLayer.content"
+          )}`}
         />
       </Grid>
       <Grid item xs />
