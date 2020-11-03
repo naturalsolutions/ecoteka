@@ -185,7 +185,7 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
       return;
     }
 
-    map.setStyle(`${apiUrl}/api/v1/maps/style?base=true&dt=${Date.now()}`);
+    map.setStyle(`${apiUrl}/maps/style?base=true&dt=${Date.now()}`);
 
     if (map.getLayer("newTrees")) {
       return;
@@ -194,7 +194,7 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
     map.doubleClickZoom.disable();
     map.boxZoom.disable();
 
-    const response = await fetch(`${apiUrl}/api/v1/organization/geojson/1`);
+    const response = await fetch(`${apiUrl}/organization/geojson/1`);
     const geojson = await response.json();
 
     if (geojson.features) {
@@ -231,17 +231,17 @@ const ETKTreeForm: React.FC<ETKPanelProps> = (props) => {
   const onExit = () => {
     const map = props.context?.map?.current?.map;
 
-    map.doubleClickZoom.enable();
-    map.boxZoom.enable();
-    map.setStyle(`${apiUrl}/api/v1/maps/style?dt=${Date.now()}`);
-    map.removeLayer("newTrees");
+    if (map) {
+      map.doubleClickZoom.enable();
+      map.boxZoom.enable();
+      map.setStyle(`${apiUrl}/maps/style?dt=${Date.now()}`);
+      map.removeLayer("newTrees");
+    }
   };
 
   useEffect(() => {
     onInit();
-    return () => {
-      onExit();
-    };
+    return () => onExit();
   }, []);
 
   useEffect(() => {

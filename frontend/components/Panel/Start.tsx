@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const fetchData = async function (organizationId: number) {
+async function fetchData(organizationId: number) {
   try {
     const response = await apiRest.organization.get(organizationId);
 
@@ -41,7 +41,7 @@ const fetchData = async function (organizationId: number) {
       return organization;
     }
   } catch (e) {}
-};
+}
 
 interface Organization {
   id: number;
