@@ -22,6 +22,9 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        BACKEND_BASE_IMAGE: ${NS_ECOTEKA_BACKEND_BASE_IMAGE}
+        
     volumes:
       - ./backend/app:/app
     command: /start-reload.sh

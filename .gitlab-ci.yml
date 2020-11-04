@@ -1,8 +1,22 @@
 stages:
+  - base_dev
   - build_dev
   - deploy_dev
   - build_master
   - deploy_master
+
+base_backend_dev:
+  stage: base_dev
+  image: docker
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-base-dev-latest -f ./backend/Dockerfile.base ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-dev-latest
+    - docker system prune -a -f
+  only:
+    - dev
+  tags:
+    - ns01
 
 build_frontend_dev:
   stage: build_dev
