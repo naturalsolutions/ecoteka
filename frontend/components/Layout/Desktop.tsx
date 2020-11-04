@@ -5,7 +5,7 @@ import ETKToolbar from "../Toolbar";
 import { GetApp, Star } from "@material-ui/icons";
 import { useAppContext } from "../../providers/AppContext";
 
-export interface ETKLayoutDesktopProps { }
+export interface ETKLayoutDesktopProps {}
 
 const defaultProps: ETKLayoutDesktopProps = {};
 
@@ -69,8 +69,10 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
             router.pathname === "/" && router.query.panel === "newIntervention",
         },
         {
-          label: "Template.menuItems.availableSoon.scheduleOfInterventions"
-        }
+          label: "Template.menuItems.availableSoon.scheduleOfInterventions",
+          link: "/schedule_intervention",
+          activator: (router) => router.pathname === "/schedule_intervention",
+        },
       ],
     },
   ] as ETKMenuItem[];

@@ -19,6 +19,9 @@ import {
 import { useTranslation } from "react-i18next";
 import Template from "../components/Template";
 import ScheduleInterventionMonth from "../components/ScheduleIntervention/Month";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import { apiRest } from "../lib/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,36 +77,49 @@ export default function ScheduleInterventionPage() {
 
     for (let i = 0; i < size; i++) {
       const m = getRandomInt(12);
-      const startDate = new Date(`${year}-${m}-${1}`),
-        endDate = new Date(`${year}-${m}-${12}`);
+      const intervention_start_date = new Date(`${year}-${m}-${1}`),
+        intervention_end_date = new Date(`${year}-${m}-${12}`);
 
       result.push({
         intervention_type: itypes[getRandomInt(ninter)],
-        intervention_period: { startDate, endDate },
+        tree_id: 1,
+        intervention_start_date,
+        intervention_end_date,
+        required_documents: [],
+        required_material: [],
         date:
           Math.random() >= 0.5
             ? new Date(`${year}-${m}-${getRandomInt(28)}`)
             : null,
         done: Math.random() >= 0.5,
+        properties: null,
       });
     }
     return result;
   };
 
-  const getCalendarData = (year) => {
-    const result = {},
-      data = mockdata();
+  const getCalendarData = async (year) => {
+    const result = {};
+    const data = await apiRest.interventions.getByYear(year);
 
     data.forEach((it) => {
-      const startmonth = it.intervention_period.startDate.getMonth(),
-        endmonth = it.intervention_period.endDate.getMonth();
+      const r = {
+        ...it,
+        intervention_start_date: new Date(it.intervention_start_date),
+        intervention_end_date: new Date(it.intervention_end_date),
+        date: it.date ? new Date(it.date) : null,
+      };
+      const startmonth = r.intervention_start_date.getMonth(),
+        endmonth = r.intervention_end_date.getMonth();
 
-      result[startmonth] = (result[startmonth] || []).concat(it);
+      result[startmonth] = (result[startmonth] || []).concat(r);
 
       if (startmonth !== endmonth) {
-        result[endmonth] = (result[endmonth] || []).concat(it);
+        result[endmonth] = (result[endmonth] || []).concat(r);
       }
     });
+
+    console.log(result);
 
     return result;
   };
@@ -117,9 +133,10 @@ export default function ScheduleInterventionPage() {
 
     setValues(newValues);
 
-    const newCalendarData = getCalendarData(year);
-
-    setCalendarData(newCalendarData);
+    getCalendarData(year).then((newCalendarData) => {
+      setCalendarData(newCalendarData);
+      console.log("new calendar data", newCalendarData);
+    });
   }, [year]);
 
   const handleCheckboxChange = (e, it: TInterventionType) => {
@@ -131,6 +148,10 @@ export default function ScheduleInterventionPage() {
       setItypes(itypes.filter((i) => i !== it));
     }
   };
+
+  useEffect(() => {
+    console.log(calendarData);
+  }, []);
 
   const renderYearHeader = () => {
     return (
@@ -207,7 +228,9 @@ export default function ScheduleInterventionPage() {
                 <Grid item>{renderYearHeader()}</Grid>
                 <Grid item xs className={classes.gridItems}>
                   <Grid container spacing={2}>
-                    {renderItems()}
+                    <DndProvider backend={HTML5Backend}>
+                      {renderItems()}
+                    </DndProvider>
                   </Grid>
                 </Grid>
               </Grid>

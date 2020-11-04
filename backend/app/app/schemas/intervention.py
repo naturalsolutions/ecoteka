@@ -1,17 +1,16 @@
 from typing import Optional
 from pydantic import BaseModel, Json
 from typing import Any, Set
-from datetime import datetime
+from datetime import date
 
 
 class InterventionBase(BaseModel):
     intervention_type: str
-    x: int
-    y: int
+    tree_id: int
     intervenant: str
-    intervention_start_date: Optional[datetime]
-    intervention_end_date: Optional[datetime]
-    date: Optional[datetime] = None
+    intervention_start_date: Optional[date]
+    intervention_end_date: Optional[date]
+    date: Optional[date]
     done: bool = False
     estimated_cost: int
     required_documents: Set[str] = []
@@ -24,7 +23,17 @@ class InterventionCreate(InterventionBase):
 
 
 class InterventionUpdate(InterventionBase):
-    pass
+    intervention_type: Optional[str]
+    tree_id: Optional[int]
+    intervenant: Optional[str]
+    intervention_start_date: Optional[date]
+    intervention_end_date: Optional[date]
+    date: Optional[date]
+    done: Optional[bool]
+    estimated_cost: Optional[int]
+    required_documents: Optional[Set[str]]
+    required_material: Optional[Set[str]]
+    properties: Optional[Any]
 
 
 class Intervention(InterventionBase):

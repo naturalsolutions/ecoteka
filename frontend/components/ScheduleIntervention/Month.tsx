@@ -3,6 +3,11 @@ import { makeStyles, Grid, Typography, Box } from "@material-ui/core";
 import Calendar from "react-calendar";
 import { useTranslation } from "react-i18next";
 import { useTemplate } from "../Template";
+import { ItemTypes } from "./ItemTypes";
+import { useDrag, useDrop } from "react-dnd";
+import { TIntervention } from "../Interventions/Schema";
+import HeaderTileBox from "./HeaderTileBox";
+import B from "./B";
 
 export interface ETKScheduleInterventionProps {
   idx?: number;
@@ -34,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   titleMonth: {
     fontWeight: "bold",
   },
+  ".react-calendar__month-view__days__day": {
+    position: "relative",
+  },
 }));
 
 const ETKScheduleIntervention: React.FC<ETKScheduleInterventionProps> = (
@@ -52,6 +60,7 @@ const ETKScheduleIntervention: React.FC<ETKScheduleInterventionProps> = (
   };
 
   const renderTileContent = ({ date }) => {
+    return <B key={`date-${date}`} />;
     if (!props.calendarData[date.getMonth()]) {
       return;
     }
@@ -94,16 +103,11 @@ const ETKScheduleIntervention: React.FC<ETKScheduleInterventionProps> = (
     return (
       <Grid container spacing={1}>
         {items.map((item, i) => (
-          <Grid key={`month-intervention-${i}`} item>
-            <Box
-              style={{
-                backgroundColor:
-                  props.interventionColors[item.intervention_type],
-                width: "1rem",
-                height: "1rem",
-              }}
-            />
-          </Grid>
+          <HeaderTileBox
+            key={i}
+            itemId={i}
+            backgroundColor={props.interventionColors[item.intervention_type]}
+          />
         ))}
       </Grid>
     );

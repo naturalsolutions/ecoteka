@@ -9,7 +9,8 @@ from app import crud, models, schemas
 from app.api import deps
 
 from sqlalchemy.orm import Session
-
+from typing import List
+import sqlalchemy as sa
 router = APIRouter()
 
 
@@ -22,7 +23,8 @@ def create(
 ):
     return crud.intervention.create(
         db,
-        obj_in=dict(request_intervention, organization_id=current_user.organization_id)
+        obj_in=dict(request_intervention,
+                    organization_id=current_user.organization_id)
     )
 
 
@@ -36,14 +38,14 @@ def get(
     return crud.intervention.get(db, id=intervention_id)
 
 
-@router.get('/year/{year}', response_model=schemas.Intervention)
+@router.get('/year/{year}', response_model=List[schemas.Intervention])
 def get_year(
-    intervention_id: int,
+    year: int,
     *,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_active_user)
 ):
-    pass
+    return crud.intervention.get_by_year(db, year)
 
 
 @router.patch('/{intervention_id}', response_model=schemas.Intervention)
