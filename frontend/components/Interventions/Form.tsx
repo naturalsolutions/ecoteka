@@ -1,32 +1,52 @@
-import React, { createRef, forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  createRef,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { ETKPanelProps } from "../Panel";
-import { steps, schemaMap, TInterventionType, TInterventionStep } from "./Schema";
+import {
+  steps,
+  schemaMap,
+  TInterventionType,
+  TInterventionStep,
+} from "./Schema";
 import useETKForm from "../Form/useForm";
-import { Button, Grid, makeStyles, Step, StepContent, StepLabel, Stepper, Typography } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  makeStyles,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { apiRest } from '../../lib/api';
+import { apiRest } from "../../lib/api";
 import ETKMap from "../Map/Map";
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from "mapbox-gl";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: 400
+    width: 400,
   },
   label: {
-    cursor: 'pointer',
+    cursor: "pointer",
   },
   icon: {
     "&$activeIcon": {
-      color: theme.palette.secondary.main
+      color: theme.palette.secondary.main,
     },
     "&$completedIcon": {
-      color: theme.palette.secondary.main
-    }
+      color: theme.palette.secondary.main,
+    },
   },
   activeIcon: {
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
-  completedIcon: {}
+  completedIcon: {},
 }));
 
 type ETKInterventionFormProps = {
@@ -36,108 +56,118 @@ type ETKInterventionFormProps = {
   map: React.RefObject<ETKMap>;
 };
 
-const commonsteps: TInterventionStep[] = ['interventionselection', 'treeselection'];
+type ETKInterventionFormHandles = {
+  submit: () => Promise<void>;
+  getValues: () => any;
+};
 
-const ETKInterventionForm = forwardRef<{ submit, getValues }, ETKInterventionFormProps>(
-  (props, ref) => {
-    const schema = schemaMap[props.step](props.interventiontype);
-    const form = useETKForm({ schema });
+const commonsteps: TInterventionStep[] = [
+  "interventionselection",
+  "treeselection",
+];
 
-    let marker = null;
+const ETKInterventionForm = forwardRef<
+  ETKInterventionFormHandles,
+  ETKInterventionFormProps
+>((props, ref) => {
+  const schema = schemaMap[props.step](props.interventiontype);
+  const form = useETKForm({ schema });
 
-    useEffect(() => {
-      const formfields = Object.keys(props.data).filter(field => field in schema);
+  let marker = null;
 
-      formfields.forEach(field => {
-        const value = props.data[field];
-
-        if ((schema[field].component.multiple === true) && (!Array.isArray(value))) {
-          form.setValue(field, [value]);
-        } else {
-          form.setValue(field, value);
-        }
-      });
-
-      props.map?.current?.map.on("click", onMapClick);
-      props.map?.current?.map.geolocate.on("geolocate", onGeolocate);
-
-      return () => {
-        props.map?.current?.map.off("click", onMapClick);
-        props.map?.current?.map.geolocate.off("geolocate", onGeolocate);
-
-        if (marker) {
-          marker.remove();
-        }
-      };
-
-    }, []);
-
-    let valid = false;
-
-    const submit = form.handleSubmit(
-      (data, e) => { valid = true; },
-      (errors, e) => { valid = false; }
+  useEffect(() => {
+    const formfields = Object.keys(props.data).filter(
+      (field) => field in schema
     );
-    useImperativeHandle(ref, () => ({
-      submit: async () => {
-        await submit();
-        return valid;
-      },
-      getValues: () => {
-        return form.getValues();
+
+    formfields.forEach((field) => {
+      const value = props.data[field];
+
+      if (schema[field].component.multiple === true && !Array.isArray(value)) {
+        form.setValue(field, [value]);
+      } else {
+        form.setValue(field, value);
       }
-    }));
+    });
 
-    const onMapClick = (e) => {
-      if (props.step === 'treeselection') {
-        const [x, y] = [e.lngLat.lng, e.lngLat.lat]
-        form.setValue('x', x);
-        form.setValue('y', y);
+    props.map?.current?.map.on("click", onMapClick);
+    props.map?.current?.map.geolocate.on("geolocate", onGeolocate);
 
-        if (!marker) {
-          marker = new mapboxgl.Marker()
-            .setLngLat([x, y])
-            .addTo(props.map.current.map);
-        } else {
-          marker.setLngLat([x, y]);
-        }
+    return () => {
+      props.map?.current?.map.off("click", onMapClick);
+      props.map?.current?.map.geolocate.off("geolocate", onGeolocate);
 
+      if (marker) {
+        marker.remove();
       }
+    };
+  }, []);
+
+  let valid = false;
+
+  const submit = form.handleSubmit(
+    (data, e) => {
+      valid = true;
+    },
+    (errors, e) => {
+      valid = false;
     }
-    const onGeolocate = (e) => {
-      if (props.step === 'treeselection') {
-        const [x, y] = [e.coords.longitude, e.coords.latitude];
-        form.setValue('x', x);
-        form.setValue('y', y);
+  );
+  useImperativeHandle(ref, () => ({
+    submit: async () => {
+      await submit();
+      return valid;
+    },
+    getValues: () => {
+      return form.getValues();
+    },
+  }));
 
-        if (marker) {
-          marker.setLngLat([x, y]);
-        }
-      }
+  const onMapClick = (e) => {
+    if (props.step === "treeselection") {
+      console.log("map clicked event", e);
+      /*const [x, y] = [e.lngLat.lng, e.lngLat.lat];
+      form.setValue("x", x);
+      form.setValue("y", y);
+
+      if (!marker) {
+        marker = new mapboxgl.Marker()
+          .setLngLat([x, y])
+          .addTo(props.map.current.map);
+      } else {
+        marker.setLngLat([x, y]);
+      }*/
     }
+  };
+  const onGeolocate = (e) => {
+    if (props.step === "treeselection") {
+      /*const [x, y] = [e.coords.longitude, e.coords.latitude];
+      form.setValue("x", x);
+      form.setValue("y", y);
 
-    return (
-      <React.Fragment>
-        {
-          Object.keys(schema)
-            .map(
-              (item, idx) => (
-                <Grid key={`form-${idx}`}>
-                  {form.fields[item]}
-                </Grid>
-              )
-            )
-        }
-      </React.Fragment>
-    );
-  });
+      if (marker) {
+        marker.setLngLat([x, y]);
+      }*/
+    }
+  };
+
+  return (
+    <React.Fragment>
+      {Object.keys(schema).map((item, idx) => (
+        <Grid key={`form-${idx}`}>{form.fields[item]}</Grid>
+      ))}
+    </React.Fragment>
+  );
+});
 
 const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
-  const { t } = useTranslation(['common', 'components']);
+  const { t } = useTranslation(["common", "components"]);
 
   const [activestep, setActivestep] = useState(0);
-  const [interventiontype, setInterventiontype] = useState<TInterventionType>('pruning');
+  const [interventiontype, setInterventiontype] = useState<TInterventionType>(
+    "pruning"
+  );
 
   const initialdata = steps.reduce(
     (acc, step) => Object.assign(acc, { [step]: {} }),
@@ -147,37 +177,47 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   const [formRefs, setFormRefs] = useState({});
   useEffect(() => {
     const refs = steps.reduce(
-      (acc, step) => Object.assign(acc, { [step]: formRefs[step] || createRef() }),
+      (acc, step) =>
+        Object.assign(acc, { [step]: formRefs[step] || createRef() }),
       {}
     );
     setFormRefs(refs);
   }, []);
 
   const setStepdata = (step, stepdata) => {
-    setData(Object.assign(data, { [step]: stepdata }))
-  }
+    setData(Object.assign(data, { [step]: stepdata }));
+  };
 
   const handleStepDataValidated = (step: TInterventionStep, stepdata) => {
-    if (step === 'interventionselection' && stepdata.intervention_type !== interventiontype) {
+    if (
+      step === "interventionselection" &&
+      stepdata.intervention_type !== interventiontype
+    ) {
       setInterventiontype(stepdata.intervention_type);
     }
-  }
+  };
 
   const reset = () => {
     setData(initialdata);
     setActivestep(0);
-  }
+  };
   const submit = async () => {
-    const payload = steps.filter(step => step != 'intervention')
+    const daterange = data["validation"].intervention_period;
+    const payload = steps
+      .filter((step) => step != "intervention")
       .reduce(
         (acc, step) => {
           return Object.assign(acc, data[step]);
         },
-        { properties: data['intervention'] }
+        {
+          properties: data["intervention"],
+          intervention_start_date: new Date(daterange.startDate),
+          intervention_end_date: new Date(daterange.endDate),
+        } // c'est moche !!
       );
-
+    console.log("payload", payload);
     const response = await apiRest.interventions.post(payload);
-  }
+  };
 
   const handleNext = async (step: TInterventionStep) => {
     const form = formRefs[step].current;
@@ -189,12 +229,12 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
       handleStepDataValidated(step, formdata);
 
       if (steps.indexOf(step) === steps.length - 1) {
-        console.log('submiting');
+        console.log("submiting");
         await submit();
       }
       setActivestep(activestep + 1);
     }
-  }
+  };
   const handlePrevious = async (step: TInterventionStep) => {
     const form = formRefs[step].current;
     const isvalid = await form.submit();
@@ -206,23 +246,27 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
     }
 
     setActivestep(activestep - 1); //In case of previous, we go backward regardless of the form being valid
-  }
+  };
 
   return (
     <React.Fragment>
-      <Typography variant="h5">{t('components:Intervention.title')}</Typography>
-      <Stepper orientation="vertical" activeStep={activestep} className={classes.root}>
-        {steps.map((step, stepidx) =>
+      <Typography variant="h5">{t("components:Intervention.title")}</Typography>
+      <Stepper
+        orientation="vertical"
+        activeStep={activestep}
+        className={classes.root}
+      >
+        {steps.map((step, stepidx) => (
           <Step key={step} className={classes.label}>
             <StepLabel
               StepIconProps={{
                 classes: {
                   root: classes.icon,
                   active: classes.icon,
-                  completed: classes.completedIcon
-                }
+                  completed: classes.completedIcon,
+                },
               }}
-              onClick={(e) => (stepidx < activestep) && setActivestep(stepidx)}
+              onClick={(e) => stepidx < activestep && setActivestep(stepidx)}
             >
               {t(`components:Intervention.steps.${step}`)}
             </StepLabel>
@@ -238,44 +282,60 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                 <Grid container direction="row" justify="flex-end">
                   {activestep !== 0 && (
                     <Button onClick={() => handlePrevious(step)}>
-                    {activestep === steps.length - 1 ? t('common:buttons.previous') : t('common:buttons.previous')}
-                  </Button>
+                      {activestep === steps.length - 1
+                        ? t("common:buttons.previous")
+                        : t("common:buttons.previous")}
+                    </Button>
                   )}
-                  <Button color="secondary" variant="contained" onClick={() => handleNext(step)}>
-                    {activestep === steps.length - 1 ? t('common:buttons.finish') : t('common:buttons.next')}
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => handleNext(step)}
+                  >
+                    {activestep === steps.length - 1
+                      ? t("common:buttons.finish")
+                      : t("common:buttons.next")}
                   </Button>
                 </Grid>
               </Grid>
             </StepContent>
           </Step>
-        )}
+        ))}
         <Step key="finish" className={classes.label}>
           <StepLabel
             StepIconProps={{
               classes: {
                 root: classes.icon,
                 active: classes.icon,
-                completed: classes.completedIcon
-              }
+                completed: classes.completedIcon,
+              },
             }}
-          >{t(`components:Intervention.steps.finish`)}</StepLabel>
+          >
+            {t(`components:Intervention.steps.finish`)}
+          </StepLabel>
           <StepContent>
             <Grid container direction="column">
               <Grid>
-                <Typography variant="h6">{t(`components:Intervention.success`)}</Typography>
+                <Typography variant="h6">
+                  {t(`components:Intervention.success`)}
+                </Typography>
               </Grid>
               <Grid>
-                <Typography>{t('components:Intervention.whatnow')}</Typography>
+                <Typography>{t("components:Intervention.whatnow")}</Typography>
                 <Grid container direction="row" justify="flex-end">
                   <Button>
-                    <Typography variant="caption">{t('common:buttons.backToHome')}</Typography>
+                    <Typography variant="caption">
+                      {t("common:buttons.backToHome")}
+                    </Typography>
                   </Button>
                   <Button
-                    onClick={e => reset()}
+                    onClick={(e) => reset()}
                     variant="contained"
                     color="secondary"
                   >
-                    <Typography variant="caption">{t('components:Intervention.plannew')}</Typography>
+                    <Typography variant="caption">
+                      {t("components:Intervention.plannew")}
+                    </Typography>
                   </Button>
                 </Grid>
               </Grid>
@@ -284,7 +344,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
         </Step>
       </Stepper>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default ETKInterventionFormStepper;

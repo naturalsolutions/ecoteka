@@ -167,25 +167,14 @@ export function useTreeSelectionSchema(it: TInterventionType) {
   const { t } = useTranslation(["common", "components"]);
 
   return {
-    x: {
-      step: "selection",
+    tree_id: {
       type: "textfield",
       component: {
+        type: "number",
         defaultValue: 0,
         required: true,
         type: "number",
         label: "longitude",
-      },
-      schema: yup.number().required(t("common:errors.required")),
-    },
-    y: {
-      step: "selection",
-      type: "textfield",
-      component: {
-        defaultValue: 0,
-        required: true,
-        type: "number",
-        label: "latitude",
       },
       schema: yup.number().required(t("common:errors.required")),
     },

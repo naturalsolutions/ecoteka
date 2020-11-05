@@ -6,6 +6,7 @@ from sqlalchemy import (
     String,
     Boolean,
     Date,
+    DateTime,
     ForeignKey
 )
 from sqlalchemy.dialects.postgresql import JSONB
@@ -20,9 +21,9 @@ class Intervention(Base):
     intervention_type = Column(String)
     tree_id = Column(Integer)
     intervenant = Column(String)
-    intervention_start_date = Column(Date)
-    intervention_end_date = Column(Date)
-    date = Column(Date)
+    intervention_start_date = Column(DateTime)
+    intervention_end_date = Column(DateTime)
+    date = Column(DateTime)
     done = Column(Boolean)
     estimated_cost = Column(Float)
     required_documents = Column(JSONB)
