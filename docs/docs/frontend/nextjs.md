@@ -26,7 +26,7 @@ In Next.js, a page is a React Component exported from a .js, .jsx, .ts, or .tsx 
 If you create pages/about.js that exports a React component like below, it will be accessible at /about.
 
 ```typescript
-{!../../docs_src/frontend/pages/imports.js!}
+{!../../docs_src/frontend/pages/imports.tsx!}
 ```
 
 ## Custom `App`
