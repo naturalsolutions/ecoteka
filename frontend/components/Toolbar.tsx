@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import MoodIcon from "@material-ui/icons/Mood";
-import ETKDarkToggle, { ETKDarkToggleProps } from "./DarkToggle";
+import ETKDarkToggle from "./DarkToggle";
 import ETKContactButton from "./Contact/Button";
 import ETKSigninButton from "./SignIn/Button";
 import ETKRegisterButton from "./Register/Button";
@@ -21,14 +21,10 @@ import { useAppContext } from "../providers/AppContext";
 
 export interface ETKToolbarProps {
   logo: string;
-  registerText: string;
-  onDarkToggle: ETKDarkToggleProps["onToggle"];
 }
 
 const defaultProps: ETKToolbarProps = {
   logo: "/assets/light/logo.svg",
-  registerText: "S'inscrire",
-  onDarkToggle: () => {},
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -101,14 +97,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
       user.full_name || user.email.substr(0, user.email.indexOf("@"));
     return (
       <React.Fragment>
-        {/* TODO apply theme on backgroundColor */}
-        <Divider
-          orientation="vertical"
-          flexItem
-          style={{
-            backgroundColor: "#FFF",
-          }}
-        />
+        <Divider orientation="vertical" flexItem />
         <Button
           onClick={(e) => {
             setUserInfosAnchorEl(e.currentTarget);
@@ -139,7 +128,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               </Grid>
               <Grid item style={{ marginLeft: "1rem" }}>
                 <Hidden mdDown>
-                  <ETKDarkToggle onToggle={props.onDarkToggle} />
+                  <ETKDarkToggle />
                 </Hidden>
               </Grid>
             </Grid>

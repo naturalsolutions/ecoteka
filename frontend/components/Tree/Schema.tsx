@@ -1,212 +1,234 @@
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 
-
 export default function useTreeSchema() {
   const { t } = useTranslation(["common", "components"]);
 
   return {
     family: {
       type: "select",
+      category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.family"),
-        required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     gender: {
       type: "select",
+      category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.gender"),
-        required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     specie: {
       type: "select",
+      category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.specie"),
-        required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     cultivar: {
       type: "select",
+      category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.cultivar")
+        label: t("components:Tree.cultivar"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     vernacularName: {
       type: "textfield",
+      category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.latinName"),
-        required: true
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     y: {
       type: "textfield",
+      category: "Identité de l'arbre",
       component: {
         type: "number",
         label: t("components:Tree.latitude"),
-        required: true,
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.number().required(t("common:errors.required")),
     },
     x: {
       type: "textfield",
+      category: "Identité de l'arbre",
       component: {
         type: "number",
         label: t("components:Tree.longitude"),
-        required: true,
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.number().required(t("common:errors.required")),
     },
     townshipCode: {
       type: "textfield",
+      category: "Identité de l'arbre",
       component: {
         type: "number",
-        label: t("components:Tree.townshipCode")
+        label: t("components:Tree.townshipCode"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     zipCode: {
       type: "textfield",
+      category: "Identité de l'arbre",
       component: {
         type: "number",
-        label: t("components:Tree.zipCode")
+        label: t("components:Tree.zipCode"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     address: {
       type: "textfield",
+      category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.address")
+        label: t("components:Tree.address"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     zone: {
       type: "textfield",
+      category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.zone"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     etkRegistrationNumber: {
       type: "select",
+      category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.etkRegistrationNumber"),
-        required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     registrationNumber: {
       type: "select",
+      category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.registrationNumber")
+        label: t("components:Tree.registrationNumber"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     plantingDate: {
       type: "textfield",
+      category: "Identité de l'arbre",
       component: {
-        type: "date",
         label: t("components:Tree.plantingDate"),
-        required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     height: {
       type: "textfield",
+      category: "Caractéristiques",
       component: {
         type: "number",
         label: t("components:Tree.height"),
-        required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     diameter: {
       type: "textfield",
+      category: "Caractéristiques",
       component: {
         type: "number",
         label: t("components:Tree.diameter"),
-        required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     soilType: {
       type: "select",
+      category: "Caractéristiques",
       component: {
-        label: t("components:Tree.soilType")
+        label: t("components:Tree.soilType"),
+        items: [
+          { label: "Argileux", value: "Argileux" },
+          { label: "Limoneux", value: "Limoneux" },
+          { label: "Calcaire", value: "Calcaire" },
+          { label: "Sableux", value: "Sableux" },
+          { label: "Acide", value: "Acide" },
+          { label: "Argilo-sableux", value: "Argilo-sableux" },
+        ],
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     rootType: {
       type: "select",
+      category: "Caractéristiques",
       component: {
-        label: t("components:Tree.rootType")
+        label: t("components:Tree.rootType"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     habit: {
       type: "select",
+      category: "Caractéristiques",
       component: {
-        label: t("components:Tree.habit")
+        label: t("components:Tree.habit"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     protected: {
       type: "checkbox",
+      category: "Caractéristiques",
       component: {
-        label: t("components:Tree.protected")
+        label: t("components:Tree.protected"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     soilConstraints: {
       type: "select",
+      category: "Environnement extérieur",
       component: {
         multiple: true,
-        label: t("components:Tree.soilConstraints")
+        label: t("components:Tree.soilConstraints"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     aerianConstraint: {
       type: "checkbox",
+      category: "Environnement extérieur",
       component: {
-        label: t("components:Tree.aerianConstraint")
+        label: t("components:Tree.aerianConstraint"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     lightning: {
       type: "checkbox",
+      category: "Environnement extérieur",
       component: {
-        label: t("components:Tree.lightning")
+        label: t("components:Tree.lightning"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     watering: {
       type: "select",
+      category: "Environnement extérieur",
       component: {
         multiple: true,
-        label: t("components:Tree.watering")
+        label: t("components:Tree.watering"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     allergens: {
       type: "textfield",
+      category: "Autre",
       component: {
         type: "number",
-        label: t("components:Tree.allergens")
+        label: t("components:Tree.allergens"),
       },
-      schema: yup.string()
+      schema: yup.string(),
     },
     remarks: {
       type: "textfield",
+      category: "Autre",
       component: {
-        label: t("components:Tree.remarks")
+        label: t("components:Tree.remarks"),
       },
-      schema: yup.string()
-    }
+      schema: yup.string(),
+    },
   };
 }
