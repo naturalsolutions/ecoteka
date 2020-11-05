@@ -1,0 +1,7 @@
+tiles
+*/node_modules
+.vscode
+.git
+*/.next
+*/out
+*/__pycache__

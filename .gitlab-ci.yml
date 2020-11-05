@@ -30,6 +30,19 @@ build_backend_dev:
   tags:
     - ns01
 
+build_docs_dev:
+  stage: build_dev
+  image: docker
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:docs-dev-latest ./docs
+    - docker push ${CI_REGISTRY_IMAGE}:docs-dev-latest
+    - docker system prune -a -f
+  only:
+    - dev
+  tags:
+    - ns01
+
 build_frontend_master:
   stage: build_master
   image: docker
