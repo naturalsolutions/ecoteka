@@ -3,6 +3,7 @@ import auth from "./auth";
 import users from "./users";
 import geofiles from "./geofiles";
 import trees from "./trees";
+import organization from "./organization";
 import registrationLink from "./registrationLink";
 
 const { publicRuntimeConfig } = getConfig();
@@ -34,6 +35,7 @@ export const apiRest = {
   users: users(api),
   geofiles: geofiles(api),
   trees: trees(api),
+  organization: organization(api),
   registrationLink: registrationLink(api),
   getToken,
 };
