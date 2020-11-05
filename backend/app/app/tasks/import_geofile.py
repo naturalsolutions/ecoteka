@@ -2,6 +2,7 @@ import os
 import fiona
 import logging
 import datetime
+import json
 from pathlib import Path
 from typing import Any
 
@@ -15,13 +16,20 @@ from app.models import GeoFile, GeoFileStatus, Tree
 from app.api import deps
 from .create_mbtiles import create_mbtiles
 
+
 def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
+    mapping_fields = json.loads(geofile.mapping_fields)
+    properties_tree = {}
+
+    for key in mapping_fields:
+        properties_tree[key] = properties[mapping_fields[key]]
+
     tree = Tree(
         geofile_id=geofile.id,
         user_id=geofile.user_id,
         organization_id=geofile.organization_id,
         geom=f'POINT({x} {y})',
-        properties=properties
+        properties=properties_tree
     )  # type: ignore
 
     return tree
@@ -85,6 +93,7 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
         if i % 1000 == 0 and i > 0:
             db.commit()
     db.commit()
+
 
 def import_geofile(db: Session, geofile: GeoFile):
     logging.info('running geofile import task')

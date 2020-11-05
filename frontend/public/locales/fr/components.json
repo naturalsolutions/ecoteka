@@ -137,6 +137,12 @@
     "download": "N'hésitez pas à télécharger notre modèle au format xlsx"
   },
 
+  "ImportPanelMapping": {
+    "title": "Select fields to import",
+    "cancel": "Annuler",
+    "send": "Envoyer"
+  },
+
   "Import": {
     "Index": {
       "tooltipContent": "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes<br/>- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
@@ -187,6 +193,7 @@
     "lastName": "Nom",
     "firstName": "Prénom",
     "email": "Adresse email",
+    "errorMessageEmail": "Adresse email non valide.",
     "phone": "Numéro de téléphone",
     "township": "Commune dans laquelle vous exercez",
     "contactRequest": "Bonjour, pouvez-vous m'en dire plus sur cette plateforme ?",
@@ -215,5 +222,64 @@
     "Mobile": {
       "treeHeritage": "Patrimoine arboré"
     }
+  },
+  "Tree": {
+    "family": "Famille",
+    "gender": "Genre",
+    "specie": "Espèce",
+    "cultivar": "Cultiver",
+    "latinName": "Nom vernaculaire",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "townshipCode": "Code commune",
+    "zipCode": "Code postal",
+    "address": "Adresse",
+    "zone": "Découpage en zone",
+    "etkRegistrationNumber": "Matricule Ecoteka",
+    "registrationNumber": "Matricule de l'arbre",
+    "plantingDate": "Date de plantation",
+    "height": "Hauteur de l'arbre",
+    "diameter": "Diamètre de l'arbre",
+    "soilType": {
+      "label": "Type de sol",
+      "clay": "Argileux",
+      "silt": "Limoneux",
+      "limestone": "Calcaire",
+      "sand": "Sableux",
+      "acid": "Acide",
+      "sandyclay": "Argilo-sableux"
+    },
+    "rootType": {
+      "label": "Type d'enracinement",
+      "swivel": "Pivotant",
+      "tracing": "Tracant",
+      "oblique": "Oblique"
+    },
+    "habit": {
+      "label": "Port de l'arbre",
+      "free": "Port libre",
+      "semiFree": "Semi-libre",
+      "form": "En formation",
+      "cat": "Tête de chat",
+      "trumpet": "En trogne",
+      "curtain": "Rideau",
+      "pyramid": "Pyramide",
+      "ball": "Boule",
+      "cone": "Cône"
+    },
+    "procted": "Arbre protégé",
+    "soilConstraints": "Contraintes au sol",
+    "aerianConstraint": "Contraintes aériennes",
+    "watering": "Arrosage",
+    "lightning": "Présence d'éclairage",
+    "allergens": "Arbre allergène",
+    "remarks": "Remarques"
+  },
+
+  "TreeForm": {
+    "dialogDeleteTitle": "Supprimer les arbres sélectionnés",
+    "dialogDeleteContent": "Êtes-vous sûr de vouloir supprimer les arbres sélectionnés ?",
+    "dialogDeleteActionYes": "Oui",
+    "dialogDeleteActionCancel": "Non"
   }
 }

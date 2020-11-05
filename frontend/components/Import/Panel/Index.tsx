@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import ETKGeofile from "../../Geofile";
 import ETKImportTemplate from "./Template";
 import ETKMissingData from "./MissingDatas";
+import ETKMapping from "./Mapping";
 import ETKImported from "./Imported";
 import ETKUpload from "./Upload";
 import ETKError from "./Error";
@@ -62,11 +63,16 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
       return;
     }
 
-    setStep("uploaded");
+    setStep("mapping");
   };
 
   const onUpdateGeofile = (newGeofile) => {
     setMissingInfo([]);
+    setGeofile(newGeofile);
+    setStep("mapping");
+  };
+
+  const onMapping = (newGeofile) => {
     setGeofile(newGeofile);
     setStep("uploaded");
   };
@@ -84,14 +90,13 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
 
     const { longitude, latitude } = coordinates;
 
-    props.context?.map.current.map.setStyle(
+    props.context?.map?.current?.map?.setStyle(
       `/api/v1/maps/style?token=${apiRest.getToken()}`
     );
 
-    props.context?.map.current.map.on("styledata", () => {
-      props.context?.map.current.loadLayers("light");
-      props.context?.map.current.map.setZoom(12);
-      props.context?.map.current.map.flyTo({
+    props.context?.map?.current?.map?.on("styledata", () => {
+      props.context?.map?.current?.map?.setZoom(12);
+      props.context?.map?.current?.map?.flyTo({
         center: [longitude, latitude],
       });
     });
@@ -141,6 +146,10 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
             onCancel={onReset}
           />
         </Grid>
+      )}
+
+      {step === "mapping" && (
+        <ETKMapping geofile={geofile} onCancel={onReset} onSend={onMapping} />
       )}
 
       {step === "importing" && (

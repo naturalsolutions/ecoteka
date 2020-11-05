@@ -39,6 +39,7 @@ class GeoFile(Base):
     longitude_column = Column(String, nullable=True)
     latitude_column = Column(String, nullable=True)
     properties = Column(JSON, nullable=True)
+    mapping_fields = Column(JSON, nullable=True)
     status = Column(Enum(GeoFileStatus,
                          values_callable=lambda obj: [e.value for e in obj]),
                     nullable=False,
