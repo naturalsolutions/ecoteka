@@ -3,6 +3,7 @@ import auth from "./auth";
 import users from "./users";
 import geofiles from "./geofiles";
 import trees from "./trees";
+import organization from "./organization";
 import registrationLink from "./registrationLink";
 import interventions from './intervention';
 
@@ -35,6 +36,7 @@ export const apiRest = {
   users: users(api),
   geofiles: geofiles(api),
   trees: trees(api),
+  organization: organization(api),
   registrationLink: registrationLink(api),
   interventions: interventions(api),
   getToken,

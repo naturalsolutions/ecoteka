@@ -31,95 +31,113 @@ def generate_style(
     current_user: Optional[models.User] = Depends(
         deps.get_optional_current_active_user
     ),
+    base: Optional[bool] = False,
     token: Optional[str] = ''
 ) -> Json:
     """
     Generate style
     """
-    with open("/app/app/assets/style.json") as style_json:
+    with open("/app/app/assets/styles/light.json") as style_json:
         style = json.load(style_json)
-        style["sources"]["osm"] = {
-            "type": "vector",
-            "tiles": [
-                f"{settings.TILES_SERVER}/osm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
-            ],
-            "minzoom": 0,
-            "maxzoom": 13
-        }
 
-        style["layers"].insert(len(style["layers"]), {
-            "id": "ecoteka-data",
-            "type": "circle",
-            "source": "osm",
-            "source-layer": "ecoteka-data"
-        })
+        if not base:
+            style["sources"]["osm"] = {
+                "type": "vector",
+                "tiles": [
+                    f"{settings.TILES_SERVER}/osm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
+                ],
+                "minzoom": 0,
+                "maxzoom": 13
+            }
 
-        user_in_db = None
+            style["layers"].insert(len(style["layers"]), {
+                "id": "osm",
+                "type": "circle",
+                "source": "osm",
+                "source-layer": "ecoteka-data",
+                "paint": {
+                    "circle-radius": {
+                        "base": 1.75,
+                        "stops": [
+                            [12, 2],
+                            [22, 180]
+                        ]
+                    },
+                    "circle-color": "#6F8F72"
+                }
+            })
 
-        if token:
-            try:
-                payload = jwt.decode(
-                    token,
-                    settings.SECRET_KEY,
-                    algorithms=[security.ALGORITHM]
-                )
-                token_data = schemas.TokenPayload(**payload)
-                user_in_db = crud.user.get(db, id=token_data.sub)
-            except:
-                pass
+            user_in_db = None
 
-        conn = None
-
-        if user_in_db:
-            try:
-                organization = crud.organization.get(db, user_in_db.organization_id)
-
-                if not organization:
+            if token:
+                try:
+                    payload = jwt.decode(
+                        token,
+                        settings.SECRET_KEY,
+                        algorithms=[security.ALGORITHM]
+                    )
+                    token_data = schemas.TokenPayload(**payload)
+                    user_in_db = crud.user.get(db, id=token_data.sub)
+                except:
                     pass
 
-                target = f"/app/tiles/private/{organization.slug}.mbtiles"
+            conn = None
 
-                conn = sqlite3.connect(target)
-                sql = '''
-                    SELECT * FROM metadata 
-                    WHERE name IN ('minzoom', 'maxzoom') 
-                    ORDER BY name DESC
-                '''
-                cur = conn.cursor()
-                cur.execute(sql)
-                minzoom, maxzoom = cur.fetchall()
+            if user_in_db:
+                try:
+                    organization = crud.organization.get(db, user_in_db.organization_id)
 
-                style["sources"][f"{organization.slug}"] = {
-                    "type": "vector",
-                    "tiles": [
-                        f"{settings.TILES_SERVER}/{organization.slug}/{{z}}/{{x}}/{{y}}.pbf?scope=private&token={token}"
-                    ],
-                    "minzoom": int(minzoom[1]),
-                    "maxzoom": int(maxzoom[1])
-                }
+                    if not organization:
+                        pass
 
-                style["layers"].insert(len(style["layers"]), {
-                    "id": f"ecoteka-{organization.slug}",
-                    "type": "circle",
-                    "source": organization.slug,
-                    "source-layer": organization.slug,
-                    "paint": {
-                        "circle-stroke-width": 1,
-                        "circle-stroke-color": "#fff",
-                        "circle-radius": {
-                            "base": 1.75,
-                            "stops": [
-                                [12, 2],
-                                [22, 180]
-                            ]
-                        },
-                        'circle-color': "#00796a"
+                    target = f"/app/tiles/private/{organization.slug}.mbtiles"
+
+                    conn = sqlite3.connect(target)
+                    sql = '''
+                        SELECT * FROM metadata
+                        WHERE name IN ('minzoom', 'maxzoom')
+                        ORDER BY name DESC
+                    '''
+                    cur = conn.cursor()
+                    cur.execute(sql)
+                    minzoom, maxzoom = cur.fetchall()
+
+                    style["sources"][f"{organization.slug}"] = {
+                        "type": "vector",
+                        "tiles": [
+                            f"{settings.TILES_SERVER}/{organization.slug}/{{z}}/{{x}}/{{y}}.pbf?scope=private&token={token}"
+                        ],
+                        "minzoom": int(minzoom[1]),
+                        "maxzoom": int(maxzoom[1])
                     }
-                })
-            except:
-                pass
-            finally:
-                if conn:
-                    conn.close()
+
+                    style["layers"].insert(len(style["layers"]), {
+                        "id": f"ecoteka-{organization.slug}",
+                        "type": "circle",
+                        "source": organization.slug,
+                        "source-layer": organization.slug,
+                        "paint": {
+                            "circle-stroke-width": 1,
+                            "circle-stroke-color": "#fff",
+                            "circle-radius": {
+                                "base": 1.75,
+                                "stops": [
+                                    [12, 2],
+                                    [22, 180]
+                                ]
+                            },
+                            "circle-color": [
+                                "case",
+                                ["boolean", ["feature-state", "active"], False],
+                                "red",
+                                "#2597e4",
+                            ],
+                        }
+                    })
+                except:
+                    pass
+                finally:
+                    if conn:
+                        conn.close()
 
         return style

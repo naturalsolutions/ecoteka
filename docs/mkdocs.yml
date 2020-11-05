@@ -1,0 +1,54 @@
+site_name: EcoTeka - Pour une ville plus vert !
+site_url: http://localhost:8000/docs/
+repo_url: https://gitlab.com/natural-solutions/ecoteka
+repo_name: natural-solutions/ecoteka
+theme:
+  name: "material"
+  palette:
+    primary: "green"
+
+nav:
+  - EcoTeka: index.md
+  - Installation: installation.md
+  - Project Structure: project-structure.md
+  - Docker:
+      - docker/index.md
+      - docker/docker-compose.md
+  - Proxy: traefik.md
+  - PostgreSQL:
+      - postgresql/postgresql.md
+      - postgresql/postgis.md
+  - Tippecanoe: tippecanoe.md
+  - Tile Server: tile_server/index.md
+  - Backend:
+      - backend/index.md
+      - backend/fastapi.md
+      - backend/sqlalchemy.md
+      - backend/alembic.md
+      - backend/celery.md
+  - Frontend:
+      - frontend/index.md
+      - frontend/react.md
+      - frontend/nextjs.md
+      - frontend/material_ui.md
+      - frontend/mapbox.md
+  - Environment Variables: environment-variables.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - markdown_include.include:
+      base_path: docs
+  - admonition
+  - codehilite
+  - extra
+  - pymdownx.highlight:
+      linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format ""
+  - pymdownx.tabbed

@@ -54,22 +54,6 @@ export default class ETKMap extends Component<
         this.props.onStyleData(this.map);
       });
     }
-
-    this.map.on("load", () => {
-      this.loadLayers("light");
-    });
-  }
-
-  loadLayers(theme) {
-    for (let layer of Object.keys(layersStyle)) {
-      for (let property of Object.keys(layersStyle[layer][theme])) {
-        this.map.setPaintProperty(
-          layer,
-          property,
-          layersStyle[layer][theme][property]
-        );
-      }
-    }
   }
 
   render() {

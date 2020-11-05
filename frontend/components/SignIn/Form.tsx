@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import useETKForm from "../Form/useForm";
 import useETKSignInSchema from "./Schema";
 import { apiRest } from "../../lib/api";
-import { useAppContext } from "../../providers/AppContext.js";
+import { useAppContext } from "../../providers/AppContext";
 
 export type ETKFormSignInActions = {
   submit: () => Promise<boolean>;

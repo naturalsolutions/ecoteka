@@ -2,16 +2,19 @@ from fastapi import APIRouter
 
 from app.api.api_v1.endpoints import (
     contacts,
+    geo_files,
     login,
-    users,
-    utils,
+    maps,
+    organization,
     register,
     registration_link,
-    geo_files,
+    taxref,
     trees,
     maps,
     taxref,
-    intervention
+    intervention,
+    users,
+    utils,
 )
 
 api_router = APIRouter()
@@ -71,4 +74,10 @@ api_router.include_router(
     intervention.router,
     prefix='/interventions',
     tags=['interventions']
+)
+
+api_router.include_router(
+    organization.router,
+    prefix="/organization",
+    tags=["organization"]
 )

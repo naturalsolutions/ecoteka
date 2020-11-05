@@ -137,6 +137,12 @@
     "download": "Puedes descargar nuestra plantilla en formato xlsx"
   },
 
+  "ImportPanelMapping": {
+    "title": "Seleccionar campos a importar",
+    "cancel": "Cancelar",
+    "send": "Enviar"
+  },
+
   "Import": {
     "Index": {
       "tooltipContent": "- La importación de datos es una acción que puede requerir varias decenas de minutos <br/> - Busque el progreso de su importación en el menú: \"Historial de importaciones \"",
@@ -187,6 +193,7 @@
     "lastName": "Apellidos",
     "firstName": "Nombre",
     "email": "Correo electrónico",
+    "errorMessageEmail": "Correo electrónico no válido.",
     "phone": "Número de teléfono",
     "township": "Municipio en el que ejerces",
     "contactRequest": "Hola, ¿podéis darme más información sobre esta plataforma?",
@@ -210,9 +217,68 @@
     "registrationCompleted": "Registro completado",
     "registrationFailed": "El registro ha fallado"
   },
-  "Layout" :{
-    "Mobile":{
-      "treeHeritage" : "Patrimonio arbóreo"
+  "Layout": {
+    "Mobile": {
+      "treeHeritage": "Patrimonio arbóreo"
     }
+  },
+  "Tree": {
+    "family": "Family",
+    "gender": "Gender",
+    "specie": "Specie",
+    "cultivar": "Cultivar",
+    "latinName": "Vernacular Name",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "townshipCode": "Town ship code",
+    "zipCode": "Zip code",
+    "address": "Adress",
+    "zone": "Zone cutting",
+    "etkRegistrationNumber": "Ecoteka registration number",
+    "registrationNumber": "Tree registration number",
+    "plantingDate": "Planting date",
+    "height": "Tree height",
+    "diameter": "Tree diameter",
+    "soilType": {
+      "label": "Soil type",
+      "clay": "Calyey",
+      "silt": "Silty",
+      "limestone": "Limestone",
+      "sand": "Sandy",
+      "acid": "Acid",
+      "sandyclay": "Sandy clay"
+    },
+    "rootType": {
+      "label": "Root type",
+      "swivel": "Swivel",
+      "tracing": "Tracing",
+      "oblique": "Oblique"
+    },
+    "habit": {
+      "label": "Tree habit",
+      "free": "Free",
+      "semiFree": "Semi-free",
+      "form": "Forming",
+      "cat": "Caat head",
+      "trumpet": "Trumpet",
+      "curtain": "Curtain",
+      "pyramid": "Pyramid",
+      "ball": "Ball",
+      "cone": "Cone"
+    },
+    "procted": "Protected tree",
+    "soilConstraints": "Soil constraints",
+    "aerianConstraint": "Aerian contraints",
+    "watering": "Watering",
+    "lightning": "Lighting",
+    "allergens": "Allergenic tree",
+    "remarks": "Remarks"
+  },
+
+  "TreeForm": {
+    "dialogDeleteTitle": "Eliminar los árboles seleccionados",
+    "dialogDeleteContent": "¿Seguro que deseas eliminar los árboles seleccionados?",
+    "dialogDeleteActionYes": "Si",
+    "dialogDeleteActionCancel": "No"
   }
 }

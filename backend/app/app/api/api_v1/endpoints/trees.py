@@ -27,15 +27,17 @@ import json
 import logging
 router = APIRouter()
 
+
 def get_tree_if_authorized(db: Session, current_user: models.User, tree_id: int):
     '''Returns a tree if it exists and the user has access rights to it'''
     tree_in_db = crud.crud_tree.tree.get(db, tree_id)
-    
+
     if not tree_in_db:
         raise HTTPException(status_code=404, detail='Tree does not exist')
 
     if tree_in_db.organization_id != current_user.organization_id:
-        raise HTTPException(status_code=403, detail='Cannot request a tree that does not belong to your organization')
+        raise HTTPException(
+            status_code=403, detail='Cannot request a tree that does not belong to your organization')
 
     return tree_in_db
 
@@ -74,6 +76,7 @@ def import_from_geofile(
 
     return geofile
 
+
 @router.get('/{tree_id}', response_model=schemas.tree.Tree_xy)
 def get(
     tree_id: int,
@@ -82,6 +85,7 @@ def get(
 ) -> Any:
     """Gets a tree"""
     return get_tree_if_authorized(db, current_user, tree_id).to_xy()
+
 
 @router.post('/', response_model=schemas.tree.Tree_xy)
 def add(
@@ -96,11 +100,12 @@ def add(
         properties=json.dumps(jsonable_encoder(tree)),
         user_id=current_user.id,
         organization_id=current_user.organization_id)
-    
+
     response = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
-    
+
     create_mbtiles_task.delay(current_user.organization_id)
     return response
+
 
 @router.patch('/{tree_id}', response_model=schemas.tree.Tree_xy)
 def update(
@@ -116,7 +121,7 @@ def update(
 
     request_data: dict = dict(jsonable_encoder(update_data, exclude_unset=True))
     request_properties = {
-        key: request_data[key] for key in request_data if key not in ('x','y')
+        key: request_data[key] for key in request_data if key not in ('x', 'y')
     }
 
     properties.update(request_properties)
@@ -124,13 +129,14 @@ def update(
         db,
         db_obj=tree_in_db,
         obj_in=dict(
-            { 'properties': properties },
-            **(dict(geom = f"POINT({request_data['x']} {request_data['y']})") if request_data['x'] is not None and request_data['y'] is not None else dict())
+            {'properties': properties},
+            **(dict(geom=f"POINT({request_data['x']} {request_data['y']})") if request_data['x'] is not None and request_data['y'] is not None else dict())
         )
     ).to_xy()
 
     create_mbtiles_task.delay(current_user.organization_id)
     return response
+
 
 @router.delete('/{tree_id}', response_model=schemas.tree.Tree_xy)
 def delete(
@@ -140,10 +146,11 @@ def delete(
 ) -> Any:
     """Deletes a tree"""
     if get_tree_if_authorized(db, current_user, tree_id):
-        response = crud.crud_tree.tree.remove(db, id = tree_id).to_xy()
+        response = crud.crud_tree.tree.remove(db, id=tree_id).to_xy()
 
         create_mbtiles_task.delay(current_user.organization_id)
         return response
+
 
 @router.get("/get-centroid-organization/{organization_id}", response_model=schemas.Coordinate)
 def get_center_from_organization(

@@ -4,6 +4,7 @@ from typing import Optional, Any, List
 from pydantic import BaseModel, Json
 from sqlalchemy import inspect
 
+
 class TreeJsonBProperties(BaseModel):
     family: Optional[str]
     gender: Optional[str]
@@ -14,7 +15,6 @@ class TreeJsonBProperties(BaseModel):
     zipCode: Optional[int]
     address: Optional[str]
     zone: Optional[str]
-    address: Optional[str]
     etkRegistrationNumber: Optional[str]
     plantingDate: Optional[str]
     height: Optional[float]
@@ -23,12 +23,13 @@ class TreeJsonBProperties(BaseModel):
     rootType: Optional[str]
     habit: Optional[str]
     protected: Optional[bool]
-    soilConstraints: Optional[list]
+    soilConstraints: Optional[str]
     aerianConstraint: Optional[bool]
     lightning: Optional[bool]
-    watering: Optional[list]
+    watering: Optional[str]
     allergens: Optional[int]
     remarks: Optional[str]
+
 
 class TreeDBMeta(BaseModel):
     properties: Any
@@ -36,30 +37,38 @@ class TreeDBMeta(BaseModel):
     user_id: int
     organization_id: int
 
+
 class TreePost(TreeJsonBProperties):
     ''' Schema for tree creation post request data'''
     x: float
     y: float
 
+
 class TreePatch(TreePost):
     x: Optional[int]
     y: Optional[int]
+
 
 class Tree_xy(TreeDBMeta):
     '''Representation of Tree with (x,y) coords instead of geoalchemy.geom-point'''
     id: int
 
+
 class TreeBase(TreeDBMeta):
     geom: Any
+
 
 class TreeCreate(TreeBase):
     pass
 
+
 class TreeUpdate(BaseModel):
     pass
 
+
 class TreeImportFromGeofile(BaseModel):
     name: str
+
 
 class Tree(TreeBase):
     id: int

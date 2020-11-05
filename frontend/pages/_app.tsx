@@ -1,17 +1,18 @@
+import type { AppProps } from "next/app";
+
 import React from "react";
-import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n";
 import "mapbox-gl/dist/mapbox-gl.css";
-import "../components/Map/map.css";
 import "react-calendar/dist/Calendar.css";
-import Template from "../components/Template";
+import Template from "@/components/Template";
+import "@/components/Map/map.css";
 
-import { Provider as AppContextProvider } from "../providers/AppContext";
+import { Provider as AppContextProvider } from "@/providers/AppContext";
 
-export default function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   React.useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
 
@@ -41,7 +42,4 @@ export default function MyApp({ Component, pageProps }) {
   );
 }
 
-MyApp.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  pageProps: PropTypes.object.isRequired,
-};
+export default MyApp;
