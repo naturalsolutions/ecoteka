@@ -25,6 +25,14 @@ class Intervention {
     return await response.json();
   }
 
+  async plan(id, date) {
+    console.log(id, date);
+    const url = `${this.basepath}/${id}`;
+    const response = await this.api.patch(url, {}, JSON.stringify({ date }));
+
+    return response;
+  }
+
   async delete(id) {
     const url = `${this.basepath}/${id}`;
     const response = await this.api.delete(url);

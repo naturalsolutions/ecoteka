@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
   box: {
     width: "1rem",
     height: "1rem",
-  }
+  },
 }));
 
 const ETKScheduleIternventionHeaderTileBox: React.FC<ETKScheduleIternventionHeaderTileBoxProps> = (
@@ -26,7 +26,7 @@ const ETKScheduleIternventionHeaderTileBox: React.FC<ETKScheduleIternventionHead
 ) => {
   const classes = useStyles();
   const [{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.BOX },
+    item: { type: ItemTypes.BOX, id: props.itemId },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -39,7 +39,6 @@ const ETKScheduleIternventionHeaderTileBox: React.FC<ETKScheduleIternventionHead
         className={classes.box}
         style={{
           backgroundColor: props.backgroundColor,
-          
         }}
       />
     </Grid>

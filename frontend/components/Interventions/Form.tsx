@@ -27,6 +27,8 @@ import { useTranslation } from "react-i18next";
 import { apiRest } from "../../lib/api";
 import ETKMap from "../Map/Map";
 import mapboxgl from "mapbox-gl";
+import { useAppContext } from "@/providers/AppContext";
+import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,10 +56,11 @@ type ETKInterventionFormProps = {
   step: TInterventionStep;
   data: any;
   map: React.RefObject<ETKMap>;
+  organization: any;
 };
 
 type ETKInterventionFormHandles = {
-  submit: () => Promise<void>;
+  submit: () => Promise<boolean>;
   getValues: () => any;
 };
 
@@ -72,8 +75,6 @@ const ETKInterventionForm = forwardRef<
 >((props, ref) => {
   const schema = schemaMap[props.step](props.interventiontype);
   const form = useETKForm({ schema });
-
-  let marker = null;
 
   useEffect(() => {
     const formfields = Object.keys(props.data).filter(
@@ -90,16 +91,12 @@ const ETKInterventionForm = forwardRef<
       }
     });
 
-    props.map?.current?.map.on("click", onMapClick);
-    props.map?.current?.map.geolocate.on("geolocate", onGeolocate);
+    props.map?.current?.map.on("click", (e) =>
+      onMapClick(props.map.current.map, e)
+    );
 
     return () => {
       props.map?.current?.map.off("click", onMapClick);
-      props.map?.current?.map.geolocate.off("geolocate", onGeolocate);
-
-      if (marker) {
-        marker.remove();
-      }
     };
   }, []);
 
@@ -113,6 +110,7 @@ const ETKInterventionForm = forwardRef<
       valid = false;
     }
   );
+
   useImperativeHandle(ref, () => ({
     submit: async () => {
       await submit();
@@ -123,31 +121,19 @@ const ETKInterventionForm = forwardRef<
     },
   }));
 
-  const onMapClick = (e) => {
+  const onMapClick = (map, e) => {
     if (props.step === "treeselection") {
-      console.log("map clicked event", e);
-      /*const [x, y] = [e.lngLat.lng, e.lngLat.lat];
-      form.setValue("x", x);
-      form.setValue("y", y);
+      var bbox = [
+        [e.point.x - 5, e.point.y - 5],
+        [e.point.x + 5, e.point.y + 5],
+      ];
+      var features = map.queryRenderedFeatures(bbox, {
+        layers: [`ecoteka-${props.organization.slug}`],
+      });
 
-      if (!marker) {
-        marker = new mapboxgl.Marker()
-          .setLngLat([x, y])
-          .addTo(props.map.current.map);
-      } else {
-        marker.setLngLat([x, y]);
-      }*/
-    }
-  };
-  const onGeolocate = (e) => {
-    if (props.step === "treeselection") {
-      /*const [x, y] = [e.coords.longitude, e.coords.latitude];
-      form.setValue("x", x);
-      form.setValue("y", y);
-
-      if (marker) {
-        marker.setLngLat([x, y]);
-      }*/
+      if (features.length) {
+        form.setValue("tree_id", features[0].properties.id);
+      }
     }
   };
 
@@ -163,6 +149,8 @@ const ETKInterventionForm = forwardRef<
 const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
+  const { user } = useAppContext();
+  const [organization, setOrganization] = useState<any>({});
 
   const [activestep, setActivestep] = useState(0);
   const [interventiontype, setInterventiontype] = useState<TInterventionType>(
@@ -183,6 +171,13 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
     );
     setFormRefs(refs);
   }, []);
+
+  useEffect(() => {
+    apiRest.organization
+      .get(user.organization_id)
+      .then((org) => org.json())
+      .then((jsonorg) => setOrganization(jsonorg));
+  }, [user]);
 
   const setStepdata = (step, stepdata) => {
     setData(Object.assign(data, { [step]: stepdata }));
@@ -215,7 +210,6 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
           intervention_end_date: new Date(daterange.endDate),
         } // c'est moche !!
       );
-    console.log("payload", payload);
     const response = await apiRest.interventions.post(payload);
   };
 
@@ -278,6 +272,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                   interventiontype={interventiontype}
                   step={step}
                   map={props.context.map}
+                  organization={organization}
                 />
                 <Grid container direction="row" justify="flex-end">
                   {activestep !== 0 && (
@@ -324,9 +319,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                 <Typography>{t("components:Intervention.whatnow")}</Typography>
                 <Grid container direction="row" justify="flex-end">
                   <Button>
-                    <Typography variant="caption">
-                      {t("common:buttons.backToHome")}
-                    </Typography>
+                    <HomeIcon />
                   </Button>
                   <Button
                     onClick={(e) => reset()}

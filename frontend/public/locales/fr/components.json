@@ -234,6 +234,7 @@
     "intervenant": "Intervenant",
     "intervention_period": "Période d'intervention",
     "estimated_cost": "Coût estimatif",
+    "tree_id": "Arbre",
     "steps": {
       "interventionselection": "Sur quoi porte votre demande ?",
       "treeselection": "Localisez l'arbre sur lequel intervenir",

@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
     width: "100%",
+
+    "& .react-calendar__month-view__days__day": {
+      position: "relative",
+    },
   },
   gridMain: {
     height: "100%",
@@ -61,42 +65,9 @@ function to2d(n) {
 export default function ScheduleInterventionPage() {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
-  const [values, setValues] = useState([]);
   const [year, setYear] = useState(new Date().getFullYear());
   const [itypes, setItypes] = useState(interventionTypes);
   const [calendarData, setCalendarData] = useState({} as any);
-
-  const mockdata = () => {
-    const size = 30;
-    const result = [];
-    const ninter = itypes.length;
-
-    function getRandomInt(max) {
-      return Math.floor(Math.random() * Math.floor(max));
-    }
-
-    for (let i = 0; i < size; i++) {
-      const m = getRandomInt(12);
-      const intervention_start_date = new Date(`${year}-${m}-${1}`),
-        intervention_end_date = new Date(`${year}-${m}-${12}`);
-
-      result.push({
-        intervention_type: itypes[getRandomInt(ninter)],
-        tree_id: 1,
-        intervention_start_date,
-        intervention_end_date,
-        required_documents: [],
-        required_material: [],
-        date:
-          Math.random() >= 0.5
-            ? new Date(`${year}-${m}-${getRandomInt(28)}`)
-            : null,
-        done: Math.random() >= 0.5,
-        properties: null,
-      });
-    }
-    return result;
-  };
 
   const getCalendarData = async (year) => {
     const result = {};
@@ -112,30 +83,19 @@ export default function ScheduleInterventionPage() {
       const startmonth = r.intervention_start_date.getMonth(),
         endmonth = r.intervention_end_date.getMonth();
 
-      result[startmonth] = (result[startmonth] || []).concat(r);
-
-      if (startmonth !== endmonth) {
-        result[endmonth] = (result[endmonth] || []).concat(r);
+      for (let i = startmonth; i <= endmonth; i++) {
+        result[i] = (result[i] || []).concat(r);
       }
     });
 
-    console.log(result);
+    console.log("get calendar data", result);
 
     return result;
   };
 
   useEffect(() => {
-    const newValues = [];
-
-    for (let m = 0; m < 12; m++) {
-      newValues[m] = new Date(`${year}-${to2d(m + 1)}-01`);
-    }
-
-    setValues(newValues);
-
     getCalendarData(year).then((newCalendarData) => {
       setCalendarData(newCalendarData);
-      console.log("new calendar data", newCalendarData);
     });
   }, [year]);
 
@@ -149,9 +109,11 @@ export default function ScheduleInterventionPage() {
     }
   };
 
-  useEffect(() => {
-    console.log(calendarData);
-  }, []);
+  const onInterventionPlanified = async () => {
+    const newCalendarData = await getCalendarData(year);
+
+    setCalendarData(newCalendarData);
+  };
 
   const renderYearHeader = () => {
     return (
@@ -181,10 +143,10 @@ export default function ScheduleInterventionPage() {
         <ScheduleInterventionMonth
           key={`schedule-intervention-month-${i}`}
           idx={i}
-          calendarData={calendarData}
+          calendarData={calendarData[i]}
           interventionColors={interventionColors}
           itypes={itypes}
-          values={values}
+          onInterventionPlanified={onInterventionPlanified}
         />
       );
     }

@@ -7,14 +7,14 @@ import { ItemTypes } from "./ItemTypes";
 import { useDrag, useDrop } from "react-dnd";
 import { TIntervention } from "../Interventions/Schema";
 import HeaderTileBox from "./HeaderTileBox";
-import B from "./B";
+import Tile from "./Tile";
 
 export interface ETKScheduleInterventionProps {
   idx?: number;
-  values?: any;
   calendarData?: any;
   interventionColors?: any;
   itypes?: any;
+  onInterventionPlanified?(intervention: any, month: number): void;
 }
 
 const defaultProps: ETKScheduleInterventionProps = {};
@@ -44,6 +44,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//Renvoie une date au format yyyy-mm-dd
+function dateToString(date: Date) {
+  function to2d(d: number) {
+    return d < 10 ? "0" + d : String(d);
+  }
+
+  return `${date.getFullYear()}-${to2d(date.getMonth() + 1)}-${to2d(
+    date.getDate()
+  )}`;
+}
+
+function dateEqual(d1: Date, d2: Date) {
+  return dateToString(d1) === dateToString(d2);
+}
+
 const ETKScheduleIntervention: React.FC<ETKScheduleInterventionProps> = (
   props
 ) => {
@@ -53,45 +68,15 @@ const ETKScheduleIntervention: React.FC<ETKScheduleInterventionProps> = (
 
   const onClickDay = () => {
     dialog.current.open({
-      title: "Title",
-      content: "ddd",
-      actions: [{ label: "ssss" }],
+      title: "Titldfsfsde",
+      date: "test",
+      item: "item",
+      onInterventionPlanified: props.onInterventionPlanified,
     });
   };
 
-  const renderTileContent = ({ date }) => {
-    return <B key={`date-${date}`} />;
-    if (!props.calendarData[date.getMonth()]) {
-      return;
-    }
-
-    const items = props.calendarData[date.getMonth()].filter(
-      (item) =>
-        item.date?.getDate() === date.getDate() &&
-        Boolean(item.date) &&
-        props.itypes.includes(item.intervention_type)
-    );
-
-    return (
-      <Grid container>
-        {items.map((item, i) => (
-          <Box
-            key={`tile-content-${i}`}
-            style={{
-              backgroundColor: props.interventionColors[item.intervention_type],
-              width: "5px",
-              height: "5px",
-              margin: "0 2px 2px 0",
-              borderRadius: item.done ? "50%" : "unset",
-            }}
-          />
-        ))}
-      </Grid>
-    );
-  };
-
   const renderMonthInterventionBoxes = (month: number) => {
-    const items = props.calendarData[month]?.filter(
+    const items = props.calendarData?.filter(
       (item) =>
         !Boolean(item.date) && props.itypes.includes(item.intervention_type)
     );
@@ -105,7 +90,7 @@ const ETKScheduleIntervention: React.FC<ETKScheduleInterventionProps> = (
         {items.map((item, i) => (
           <HeaderTileBox
             key={i}
-            itemId={i}
+            itemId={item.id}
             backgroundColor={props.interventionColors[item.intervention_type]}
           />
         ))}
@@ -128,10 +113,25 @@ const ETKScheduleIntervention: React.FC<ETKScheduleInterventionProps> = (
         </Grid>
         <Grid item>
           <Calendar
-            tileContent={renderTileContent}
+            tileContent={({ date }) => {
+              let item;
+
+              if (props.calendarData && props.calendarData.length) {
+                item = props.calendarData
+                  .filter((i) => {
+                    if (!i.date) return false;
+                    console.log(
+                      i.date.toDateString() === new Date(date).toDateString()
+                    );
+                    i.date.toDateString() === new Date(date).toDateString();
+                  })
+                  .pop();
+              }
+
+              // renderTileContent(date, item);
+            }}
             showNavigation={false}
             view="month"
-            activeStartDate={props.values[props.idx]}
             onClickDay={() => onClickDay()}
           />
         </Grid>

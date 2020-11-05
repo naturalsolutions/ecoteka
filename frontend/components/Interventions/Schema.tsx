@@ -171,10 +171,12 @@ export function useTreeSelectionSchema(it: TInterventionType) {
       type: "textfield",
       component: {
         type: "number",
-        defaultValue: 0,
+        defaultValue: null,
         required: true,
-        type: "number",
-        label: "longitude",
+        label: t("components:Intervention.tree_id"),
+        InputLabelProps: {
+          shrink: true,
+        },
       },
       schema: yup.number().required(t("common:errors.required")),
     },
