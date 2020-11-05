@@ -1,7 +1,6 @@
 import type { AppProps } from "next/app";
 
 import React from "react";
-import PropTypes from "prop-types";
 import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { I18nextProvider } from "react-i18next";

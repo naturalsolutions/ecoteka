@@ -1,4 +1,4 @@
-import ErrorPage from "../components/ErrorPage";
+import ErrorPage from "@/components/ErrorPage";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
