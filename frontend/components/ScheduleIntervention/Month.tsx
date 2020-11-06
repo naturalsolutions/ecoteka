@@ -120,15 +120,15 @@ const ETKScheduleIntervention: React.FC<ETKScheduleInterventionProps> = (
                 item = props.calendarData
                   .filter((i) => {
                     if (!i.date) return false;
-                    console.log(
-                      i.date.toDateString() === new Date(date).toDateString()
-                    );
-                    i.date.toDateString() === new Date(date).toDateString();
+                    return i.date.toDateString() === new Date(date).toDateString();
                   })
                   .pop();
               }
 
-              // renderTileContent(date, item);
+              return <Tile
+                date={date}
+                item={item}
+                onInterventionPlanified={props.onInterventionPlanified} />
             }}
             showNavigation={false}
             view="month"

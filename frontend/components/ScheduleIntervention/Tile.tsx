@@ -38,7 +38,7 @@ const ETKScheduleInterventionTile: React.FC<ETKScheduleInterventionTileProps> = 
           const date = new Date(props.date);
           props.onInterventionPlanified(internention, date.getMonth());
         }
-      } catch (e) {}
+      } catch (e) { }
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -47,7 +47,7 @@ const ETKScheduleInterventionTile: React.FC<ETKScheduleInterventionTileProps> = 
 
   return (
     <Box className={classes.box} ref={drop}>
-      {props.item && props.item.date && props.item.date === props.date && (
+      {props.item && (
         <Box
           key={`tile-content-${props.item.id}`}
           style={{
