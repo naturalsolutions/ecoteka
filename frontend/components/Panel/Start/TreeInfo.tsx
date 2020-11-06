@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles, Grid, Table, TableCell, TableBody, TableRow, TableContainer, Paper } from "@material-ui/core";
+import { makeStyles, Grid, Table, TableCell, TableBody, TableRow, TableContainer, Paper, IconButton, Typography } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import Wikipedia from "@/components/Panel/Start/Wikipedia";
 
 export interface ETKPanelStartTreeInfoProps {
   tree: any;
-  coordinates: [number, number]
+  coordinates: [number, number],
+  onClose?(): void
 }
 
 const defaultProps: ETKPanelStartTreeInfoProps = {
@@ -46,6 +48,20 @@ const ETKPanelStartTreeInfo: React.FC<ETKPanelStartTreeInfoProps> = (props) => {
   }, [props.tree])
 
   return <Grid container className={classes.root} direction="column" spacing={2}>
+    <Grid item>
+      <Grid container alignItems="center">
+        <Grid item xs>
+          <Typography variant="h6">Info</Typography>
+        </Grid>
+        <Grid item>
+          <IconButton
+            onClick={props.onClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+    </Grid>
     <Grid item>
       <TableContainer component={Paper}>
         <Table size="small">
