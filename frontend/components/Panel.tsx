@@ -27,7 +27,6 @@ const useStyles = makeStyles(() => ({
 
 const ETKPanelPanels = {
   start: dynamic(() => import("./Panel/Start/Index")),
-  welcome: dynamic(() => import("./Panel/Welcome")),
   import: dynamic(() => import("./Import/Panel/Index")),
   newTree: dynamic(() => import("./Tree/Form")),
 };
@@ -38,11 +37,7 @@ const ETKPanel: React.FC<ETKPanelProps> = (props) => {
   let panel = props.panel;
 
   if (!panel) {
-    panel = user ? "start" : "welcome";
-  }
-
-  if (!user) {
-    panel = "welcome";
+    panel = "start";
   }
 
   const Panel = ETKPanelPanels[panel];
