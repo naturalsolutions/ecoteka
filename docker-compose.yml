@@ -146,13 +146,13 @@ services:
     environment:
       - KEY_SECRET=${NS_ECOTEKA_BACKEND_SECRET_KEY}
 
-  docs:
-    image: ${NS_ECOTEKA_DOCS_IMAGE}
-    networks:
-      - traefik
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.docs.rule=PathPrefix(`/docs/`)
+  # docs:
+  #   image: ${NS_ECOTEKA_DOCS_IMAGE}
+  #   networks:
+  #     - traefik
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.docs.rule=PathPrefix(`/docs/`)
 
 volumes:
   app-db-data:
