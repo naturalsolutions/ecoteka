@@ -63,7 +63,5 @@ export default function Wikipedia(props) {
         <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
       </CardContent>
     </Card>
-  ) : (
-    <div>No genre</div>
-  );
+  ) : null;
 }
