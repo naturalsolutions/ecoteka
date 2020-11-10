@@ -4,7 +4,6 @@ import {
   Select,
   InputLabel,
   FormControl,
-  Checkbox,
   MenuItem,
   Typography,
   Button,
@@ -22,8 +21,8 @@ export interface ETKImportPanelMappingProps {
 
 const defaultProps: ETKImportPanelMappingProps = {
   geofile: undefined,
-  onCancel: () => {},
-  onSend: () => {},
+  onCancel: () => { },
+  onSend: () => { },
 };
 
 const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
@@ -43,14 +42,11 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
         for (let property of Object.keys(treeSchema).filter(
           (f) => !["x", "y"].includes(f)
         )) {
-          newValues[property] = {
-            checkbox: false,
-            select: "",
-          };
+          newValues[property] = "";
         }
 
         setValues(newValues);
-      } catch (e) {}
+      } catch (e) { }
     }
   }, []);
 
@@ -64,10 +60,12 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
       );
     });
 
-  const onChange = (value, property, field) => {
+  const onChange = (value, property) => {
     let newValues = Object.assign({}, values);
 
-    newValues[property][field] = value;
+    console.log(newValues);
+
+    newValues[property] = value;
     setValues(newValues);
   };
 
@@ -75,17 +73,20 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
     let data = {};
 
     for (let value in values) {
-      if (values[value].checkbox && values[value].select) {
-        data[value] = values[value].select;
+      if (values[value] && values[value] !== "") {
+        data[value] = values[value];
       }
     }
 
-    const newGeofile = { ...props.geofile } as Geofile;
+    if (Object.keys(data).length > 0) {
+      const newGeofile = { ...props.geofile } as Geofile;
 
-    newGeofile.mapping_fields = JSON.stringify(data);
-    const response = await apiRest.geofiles.update(newGeofile);
-
-    props.onSend(response);
+      newGeofile.mapping_fields = JSON.stringify(data);
+      const response = await apiRest.geofiles.update(newGeofile);
+      props.onSend(response);
+    } else {
+      props.onSend(props.geofile)
+    }
   };
 
   return (
@@ -97,41 +98,30 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
       </Grid>
       {Object.keys(treeSchema).map((property) => {
         return (
-          values[property] && (
-            <Grid key={`field-${property}`} item xs>
-              <Grid container>
-                <Grid item>
-                  <Checkbox
-                    value={values[property].checkbox}
+          <Grid key={`field-${property}`} item xs>
+            <Grid container>
+              <Grid item xs>
+                <FormControl
+                  size="small"
+                  fullWidth
+                  variant="outlined"
+                >
+                  <InputLabel>
+                    {treeSchema[property].component.label}
+                  </InputLabel>
+                  <Select
+                    name={property}
+                    value={values[property]}
                     onChange={(e) =>
-                      onChange(e.target.checked, property, "checkbox")
+                      onChange(e.target.value, property)
                     }
-                  />
-                </Grid>
-                <Grid item xs>
-                  <FormControl
-                    disabled={!values[property].checkbox}
-                    size="small"
-                    fullWidth
-                    variant="outlined"
                   >
-                    <InputLabel>
-                      {treeSchema[property].component.label}
-                    </InputLabel>
-                    <Select
-                      name={property}
-                      value={values[property].select}
-                      onChange={(e) =>
-                        onChange(e.target.value, property, "select")
-                      }
-                    >
-                      {menuItems}
-                    </Select>
-                  </FormControl>
-                </Grid>
+                    {menuItems}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
-          )
+          </Grid>
         );
       })}
       <Grid item>
