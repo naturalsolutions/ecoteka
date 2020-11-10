@@ -10,7 +10,7 @@ export interface ETKImportErrorProps {
 }
 
 const defaultProps: ETKImportErrorProps = {
-  onReset: () => {},
+  onReset: () => { },
 };
 
 const ETKImportError: React.FC<ETKImportErrorProps> = (props) => {
@@ -33,7 +33,7 @@ const ETKImportError: React.FC<ETKImportErrorProps> = (props) => {
       </Grid>
       <Grid item>
         <Button color="primary" variant="contained" onClick={props.onReset}>
-          {t("buttonResetText")}
+          {t("Import.Error.buttonResetText")}
         </Button>
       </Grid>
       <Grid item>
@@ -41,7 +41,7 @@ const ETKImportError: React.FC<ETKImportErrorProps> = (props) => {
       </Grid>
       <Grid item>
         <Button color="primary" variant="contained" onClick={onHistoryClick}>
-          {t("buttonHistoryText")}
+          {t("Import.Error.buttonHistoryText")}
         </Button>
       </Grid>
     </Grid>
