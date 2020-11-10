@@ -15,7 +15,7 @@ export interface ETKImportTemplateProps {
 }
 
 const defaultProps: ETKImportTemplateProps = {
-  linkTemplate: "/assets/ecoteka_import_template.xlsx",
+  linkTemplate: "https://raw.githubusercontent.com/NaturalSolutions/schema-arbre/v0.2.0/exemple-valide.xlsx",
 };
 
 const useStyle = makeStyles({

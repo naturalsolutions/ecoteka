@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.0]: Add tree fields
+
+- Changed the path of the import template to the new tree schema example.
+
 ## [v0.3.0]: Create/Edit a new tree with the scientific name
 
 - Create user account
