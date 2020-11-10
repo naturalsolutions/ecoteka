@@ -1,4 +1,5 @@
 import os
+import traceback
 import fiona
 import logging
 import datetime
@@ -18,11 +19,14 @@ from .create_mbtiles import create_mbtiles
 
 
 def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
-    mapping_fields = json.loads(geofile.mapping_fields)
     properties_tree = {}
 
-    for key in mapping_fields:
-        properties_tree[key] = properties[mapping_fields[key]]
+    if geofile.mapping_fields:
+        mapping_fields = json.loads(geofile.mapping_fields)
+
+        for key in mapping_fields:
+            properties_key = mapping_fields[key]
+            properties_tree[key] = properties[properties_key]
 
     tree = Tree(
         geofile_id=geofile.id,
@@ -86,7 +90,7 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
             x, y = transformer.transform(x, y)
 
         point_columns = [geofile.longitude_column, geofile.latitude_column]
-        properties = df.loc[i].to_json()
+        properties = df.loc[i]
         tree = create_tree(geofile, x, y, properties)
         db.add(tree)
 
@@ -122,5 +126,7 @@ def import_geofile(db: Session, geofile: GeoFile):
 
         logging.info(f"imported {geofile.name} geofile")
     except:
+        traceback.print_exc()
+
         geofile.status = 'error'
         db.commit()

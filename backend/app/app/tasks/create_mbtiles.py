@@ -25,7 +25,8 @@ def create_mbtiles(db: Session, organization: Organization):
                 f"{cmd} -P -l {organization.slug} -o {target} --force --generate-ids --maximum-zoom=g --drop-densest-as-needed --extend-zooms-if-still-dropping {geojson}")
             shutil.move(target, target.replace('_tmp', ''))
             os.remove(geojson)
-        else:
+
+        if os.path.isfile(target):
             os.remove(target)
     except:
         logging.error(sys.exc_info()[0])

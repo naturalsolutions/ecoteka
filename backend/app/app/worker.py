@@ -11,16 +11,18 @@ from app.utils import send_new_registration_link_email
 from app.utils import send_new_contact_notification
 from app.utils import send_contact_request_confirmation
 
+
 @celery_app.task
-def import_geofile_task (geofilename:str):
+def import_geofile_task(geofilename: str):
     with deps.dbcontext() as db:
         geofile = crud.geo_file.get_by_name(db, name=geofilename)
 
         import_geofile(db, geofile)
         return 'import completed'
 
+
 @celery_app.task
-def create_mbtiles_task (organization_id: int):
+def create_mbtiles_task(organization_id: int):
     with deps.dbcontext() as db:
         print(f'creating tiles for organization {organization_id}')
         organization = crud.organization.get(db, organization_id)
@@ -28,21 +30,25 @@ def create_mbtiles_task (organization_id: int):
         create_mbtiles(db, organization)
         return f'organization {organization_id} tiles generated'
 
+
 @celery_app.task
-def send_new_registration_email_task(email_to:str, full_name:str, password:str):
+def send_new_registration_email_task(email_to: str, full_name: str, password: str):
     send_new_registration_email(email_to, full_name, password)
     return 'ok'
 
+
 @celery_app.task
-def send_new_registration_link_email_task(email_to:str, full_name: str, link:str):
+def send_new_registration_link_email_task(email_to: str, full_name: str, link: str):
     send_new_registration_link_email(email_to, full_name, link)
     return 'ok'
+
 
 @celery_app.task
 def generate_and_insert_registration_link_task(user_id: int):
     with deps.dbcontext() as db:
         crud.registration_link.generate_and_insert(db, user_id)
         return 'ok'
+
 
 @celery_app.task
 def send_new_contact_notification_task(contact_id):
@@ -61,6 +67,7 @@ def send_new_contact_notification_task(contact_id):
         )
         return 'contact notification sent'
 
+
 @celery_app.task
 def send_contact_request_confirmation_task(contact_id: int):
     with deps.dbcontext() as db:
@@ -72,5 +79,3 @@ def send_contact_request_confirmation_task(contact_id: int):
         )
 
     return 'contact request confirmation task completed'
-
-
