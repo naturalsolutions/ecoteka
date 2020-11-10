@@ -36,7 +36,7 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
 
   const checkMissingInfo = (geofileToCheck: ETKGeofile): [string?] => {
     const driversToCheck = ["CSV", "Excel"];
-    const keysToCheck = ["crs", "latitude_column", "longitude_column"];
+    const keysToCheck = ["latitude_column", "longitude_column"];
     const keysMissing = [] as [string?];
 
     if (
