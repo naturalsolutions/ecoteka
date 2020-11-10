@@ -143,7 +143,7 @@ export default function useTreeSchema() {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.soilType"),
+        label: t("components:Tree.soilType.label"),
         items: [
           { label: "Argileux", value: "Argileux" },
           { label: "Limoneux", value: "Limoneux" },
@@ -159,7 +159,7 @@ export default function useTreeSchema() {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.rootType"),
+        label: t("components:Tree.rootType.label"),
       },
       schema: yup.string(),
     },
@@ -167,7 +167,7 @@ export default function useTreeSchema() {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.habit"),
+        label: t("components:Tree.habit.label"),
       },
       schema: yup.string(),
     },

@@ -30,6 +30,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
   const treeSchema = useTreeSchema();
   const [properties, setProperties] = useState({});
   const [values, setValues] = useState({});
+  const fields = Object.keys(treeSchema).filter((f) => !["x", "y"].includes(f));
 
   useEffect(() => {
     if (props.geofile.properties) {
@@ -63,8 +64,6 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
   const onChange = (value, property) => {
     let newValues = Object.assign({}, values);
 
-    console.log(newValues);
-
     newValues[property] = value;
     setValues(newValues);
   };
@@ -96,34 +95,29 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
           {t("ImportPanelMapping.title")}
         </Typography>
       </Grid>
-      {Object.keys(treeSchema).map((property) => {
-        return (
-          <Grid key={`field-${property}`} item xs>
-            <Grid container>
-              <Grid item xs>
-                <FormControl
-                  size="small"
-                  fullWidth
-                  variant="outlined"
-                >
-                  <InputLabel>
-                    {treeSchema[property].component.label}
-                  </InputLabel>
-                  <Select
-                    name={property}
-                    value={values[property]}
-                    onChange={(e) =>
-                      onChange(e.target.value, property)
-                    }
-                  >
-                    {menuItems}
-                  </Select>
-                </FormControl>
+      {Object.keys(values).length > 0 &&
+        fields.map((property) => {
+          return (
+            <Grid key={`field-${property}`} item xs>
+              <Grid container>
+                <Grid item xs>
+                  <FormControl size="small" fullWidth variant="outlined">
+                    <InputLabel>
+                      {treeSchema[property].component.label}
+                    </InputLabel>
+                    <Select
+                      name={property}
+                      value={values[property]}
+                      onChange={(e) => onChange(e.target.value, property)}
+                    >
+                      {menuItems}
+                    </Select>
+                  </FormControl>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        );
-      })}
+          );
+        })}
       <Grid item>
         <Grid container>
           <Button variant="outlined" onClick={props.onCancel}>
