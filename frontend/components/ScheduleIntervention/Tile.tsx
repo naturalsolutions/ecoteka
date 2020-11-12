@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import { useDrop } from "react-dnd";
+import { DragObjectWithType } from "react-dnd/lib/interfaces/hooksApi";
 import { ItemTypes } from "./ItemTypes";
 import { apiRest } from "@/lib/api";
 
@@ -20,13 +21,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+interface InterventionType extends DragObjectWithType {
+  id: number;
+};
+
 const ETKScheduleInterventionTile: React.FC<ETKScheduleInterventionTileProps> = (
   props
 ) => {
   const classes = useStyles();
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.BOX,
-    drop: async function (newItem) {
+    drop: async function (newItem: InterventionType) {
       try {
         const response = await apiRest.interventions.plan(
           newItem.id,
@@ -38,7 +43,7 @@ const ETKScheduleInterventionTile: React.FC<ETKScheduleInterventionTileProps> = 
           const date = new Date(props.date);
           props.onInterventionPlanified(internention, date.getMonth());
         }
-      } catch (e) { }
+      } catch (e) {}
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -46,9 +51,9 @@ const ETKScheduleInterventionTile: React.FC<ETKScheduleInterventionTileProps> = 
   });
 
   return (
-    <Box className={classes.box} ref={drop}>
+    <div className={classes.box} ref={drop}>
       {props.item && (
-        <Box
+        <div
           key={`tile-content-${props.item.id}`}
           style={{
             backgroundColor: "black",
@@ -59,7 +64,7 @@ const ETKScheduleInterventionTile: React.FC<ETKScheduleInterventionTileProps> = 
           }}
         />
       )}
-    </Box>
+    </div>
   );
 };
 

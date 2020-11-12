@@ -26,7 +26,6 @@ class Intervention {
   }
 
   async plan(id, date) {
-    console.log(id, date);
     const url = `${this.basepath}/${id}`;
     const response = await this.api.patch(url, {}, JSON.stringify({ date }));
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Grid, Box } from "@material-ui/core";
+import { makeStyles, Grid } from "@material-ui/core";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "./ItemTypes";
 
@@ -25,7 +25,7 @@ const ETKScheduleIternventionHeaderTileBox: React.FC<ETKScheduleIternventionHead
   props
 ) => {
   const classes = useStyles();
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     item: { type: ItemTypes.BOX, id: props.itemId },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -34,7 +34,7 @@ const ETKScheduleIternventionHeaderTileBox: React.FC<ETKScheduleIternventionHead
 
   return (
     <Grid key={`month-intervention-${props.itemId}`} item>
-      <Box
+      <div
         ref={drag}
         className={classes.box}
         style={{

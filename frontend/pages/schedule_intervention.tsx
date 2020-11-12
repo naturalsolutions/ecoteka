@@ -88,8 +88,6 @@ export default function ScheduleInterventionPage() {
       }
     });
 
-    console.log("get calendar data", result);
-
     return result;
   };
 

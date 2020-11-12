@@ -223,9 +223,9 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
       handleStepDataValidated(step, formdata);
 
       if (steps.indexOf(step) === steps.length - 1) {
-        console.log("submiting");
         await submit();
       }
+
       setActivestep(activestep + 1);
     }
   };
