@@ -5,6 +5,7 @@ import geofiles from "./geofiles";
 import trees from "./trees";
 import organization from "./organization";
 import registrationLink from "./registrationLink";
+import interventions from './intervention';
 
 const { publicRuntimeConfig } = getConfig();
 const { apiUrl, tokenStorage } = publicRuntimeConfig;
@@ -37,6 +38,7 @@ export const apiRest = {
   trees: trees(api),
   organization: organization(api),
   registrationLink: registrationLink(api),
+  interventions: interventions(api),
   getToken,
 };
 

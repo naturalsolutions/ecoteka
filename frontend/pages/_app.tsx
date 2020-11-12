@@ -6,6 +6,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n";
 import "mapbox-gl/dist/mapbox-gl.css";
+import "react-calendar/dist/Calendar.css";
+import Template from "@/components/Template";
 import "@/components/Map/map.css";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";
@@ -31,7 +33,9 @@ function MyApp({ Component, pageProps }) {
       <CssBaseline />
       <I18nextProvider i18n={i18n}>
         <AppContextProvider>
-          <Component {...pageProps} />
+          <Template>
+            <Component {...pageProps} />
+          </Template>
         </AppContextProvider>
       </I18nextProvider>
     </React.Fragment>

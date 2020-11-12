@@ -52,6 +52,12 @@ from .coordinate import (
     Coordinate
 )
 
+from .intervention import (
+    Intervention,
+    InterventionCreate,
+    InterventionUpdate
+)
+
 __all__ = [
     "ContactCreate",
     "ContactDB",

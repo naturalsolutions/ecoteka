@@ -10,5 +10,19 @@
     "email": "Email address is invalid",
     "required": "Field required",
     "passwordsShouldMatch": "Passwords should match"
-  }
+  },
+  "months": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ]
 }

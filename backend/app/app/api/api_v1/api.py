@@ -10,6 +10,9 @@ from app.api.api_v1.endpoints import (
     registration_link,
     taxref,
     trees,
+    maps,
+    taxref,
+    intervention,
     users,
     utils,
 )
@@ -65,6 +68,12 @@ api_router.include_router(
     taxref.router,
     prefix="/taxref",
     tags=["taxref"]
+)
+
+api_router.include_router(
+    intervention.router,
+    prefix='/interventions',
+    tags=['interventions']
 )
 
 api_router.include_router(
