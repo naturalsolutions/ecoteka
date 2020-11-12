@@ -7,7 +7,7 @@ COPY . .
 RUN npx next telemetry disable
 RUN npm run build && npm run export
 
-FROM nginx:lst-alpine
+FROM nginx:alpine
 
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/out /usr/share/nginx/html
