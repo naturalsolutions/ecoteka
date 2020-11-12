@@ -70,8 +70,8 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         },
         {
           label: "Template.menuItems.availableSoon.scheduleOfInterventions",
-          link: "/schedule_intervention",
-          activator: (router) => router.pathname === "/schedule_intervention",
+          link: "/schedule-intervention",
+          activator: (router) => router.pathname === "/schedule-intervention",
         },
       ],
     },

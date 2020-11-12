@@ -1,4 +1,4 @@
-FROM node:14-alpine as builder
+FROM node:lts-alpine as builder
 
 WORKDIR /app
 COPY package.json .
@@ -7,7 +7,7 @@ COPY . .
 RUN npx next telemetry disable
 RUN npm run build && npm run export
 
-FROM nginx:14-alpine
+FROM nginx:lst-alpine
 
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/out /usr/share/nginx/html
