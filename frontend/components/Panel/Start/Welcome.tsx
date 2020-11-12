@@ -8,8 +8,8 @@ import {
   Button,
 } from "@material-ui/core";
 import { AcUnit } from "@material-ui/icons";
-import CardAbout from "../Card/About";
-import CardInfoPanel from "../Card/InfoPanel";
+import CardAbout from "@/components/Card/About";
+import CardInfoPanel from "@/components/Card/InfoPanel";
 import { useTranslation } from "react-i18next";
 import { Trans } from "react-i18next";
 
@@ -116,23 +116,23 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
       </TabPanel>
     </React.Fragment>
   ) : (
-    <Button
-      color="secondary"
-      className={classes.collapsedButton}
-      onClick={() => setCollapsed(!collapsed)}
-    >
-      <Grid container direction="column" justify="center" alignItems="center">
-        <Grid item>
-          <AcUnit />
+      <Button
+        color="secondary"
+        className={classes.collapsedButton}
+        onClick={() => setCollapsed(!collapsed)}
+      >
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Grid item>
+            <AcUnit />
+          </Grid>
+          <Grid item>
+            <Typography variant="caption">
+              {t("PanelWelcome.tabLabel")}
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item>
-          <Typography variant="caption">
-            {t("PanelWelcome.tabLabel")}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Button>
-  );
+      </Button>
+    );
 };
 
 ETKPanelWelcome.defaultProps = defaultProps;

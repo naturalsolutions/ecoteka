@@ -93,7 +93,7 @@ class GeoFile(Base):
             df = pd.read_excel(self.get_filepath())
             self.count = len(df.index)
             self.driver = 'Excel'
-            self.crs = None
+            self.crs = 'epsg:4326'
             self.properties = dumps(df.dtypes.astype(str).to_dict())
             self.get_longitude_latitude_columns()
 
@@ -101,7 +101,7 @@ class GeoFile(Base):
             df = pd.read_csv(self.get_filepath())
             self.count = len(df.index)
             self.driver = 'CSV'
-            self.crs = None
+            self.crs = 'epsg:4326'
             self.properties = dumps(df.dtypes.astype(str).to_dict())
             self.get_longitude_latitude_columns()
 

@@ -26,8 +26,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ETKPanelPanels = {
-  start: dynamic(() => import("./Panel/Start")),
-  welcome: dynamic(() => import("./Panel/Welcome")),
+  start: dynamic(() => import("./Panel/Start/Index")),
   import: dynamic(() => import("./Import/Panel/Index")),
   newTree: dynamic(() => import("./Tree/Form")),
   newIntervention: dynamic(() => import("./Interventions/Form"))
@@ -39,11 +38,7 @@ const ETKPanel: React.FC<ETKPanelProps> = (props) => {
   let panel = props.panel;
 
   if (!panel) {
-    panel = user ? "start" : "welcome";
-  }
-
-  if (!user) {
-    panel = "welcome";
+    panel = "start";
   }
 
   const Panel = ETKPanelPanels[panel];
@@ -51,12 +46,12 @@ const ETKPanel: React.FC<ETKPanelProps> = (props) => {
   return isLoading ? (
     <Panel />
   ) : (
-    <Card elevation={0} square className={classes.paper}>
-      <CardContent>
-        <Panel context={props.context} />
-      </CardContent>
-    </Card>
-  );
+      <Card elevation={0} square className={classes.paper}>
+        <CardContent>
+          <Panel context={props.context} />
+        </CardContent>
+      </Card>
+    );
 };
 
 ETKPanel.defaultProps = defaultProps;
