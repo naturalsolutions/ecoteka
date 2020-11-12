@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import ETKGeofile from "../../Geofile";
-import ETKImportTemplate from "./Template";
-import ETKMissingData from "./MissingDatas";
-import ETKMapping from "./Mapping";
-import ETKImported from "./Imported";
-import ETKUpload from "./Upload";
-import ETKError from "./Error";
-import ETKImportImporting from "./Importing";
-import { apiRest } from "../../../lib/api";
-import { ETKPanelProps } from "../../Panel";
+import { makeStyles, createStyles, Box, Grid } from "@material-ui/core";
+import ETKGeofile from "@/components/Geofile";
+import ETKImportTemplate from "@/components/Import/Panel/Template";
+import ETKMissingData from "@/components/Import/Panel/MissingDatas";
+import ETKMapping from "@/components/Import/Panel/Mapping";
+import ETKImported from "@/components/Import/Panel/Imported";
+import ETKUpload from "@/components/Import/Panel/Upload";
+import ETKError from "@/components/Import/Panel/Error";
+import ETKImportImporting from "@/components/Import/Panel/Importing";
+import { apiRest } from "@/lib/api";
+import { ETKPanelProps } from "@/components/Panel";
 
 export interface Choice {
   value?: string;
@@ -20,6 +19,7 @@ export interface Choice {
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
+      minWidth: "25rem",
       maxWidth: "25rem",
     },
     import: {
@@ -160,13 +160,13 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
 
       {step === "error" && <ETKError onReset={onReset} />}
 
-      <Grid item style={{ flexGrow: 1 }}>
-        <span>&nbsp;</span>
-      </Grid>
-
-      <Grid item>
-        <ETKImportTemplate />
-      </Grid>
+      {step === "start" && (
+        <Grid item>
+          <Box mt={5}>
+            <ETKImportTemplate />
+          </Box>
+        </Grid>
+      )}
     </Grid>
   );
 };

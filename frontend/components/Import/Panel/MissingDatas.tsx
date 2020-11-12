@@ -105,7 +105,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
     return null;
   } else {
     return (
-      <Grid container direction="column" spacing={1}>
+      <Grid className={classes.root} container direction="column" spacing={1}>
         <Grid item>
           <Card elevation={0} className={classes.card}>
             <CardContent>
