@@ -22,6 +22,7 @@ from .crud_organization import (
 from .crud_taxref import (
     taxref
 )
+from .crud_intervention import intervention
 
 __all__ = [
     "contact",
@@ -32,6 +33,7 @@ __all__ = [
     "taxref",
     "tree",
     "user",
+    "intervention"
 ]
 
 # For a new basic set of CRUD operations you could just do

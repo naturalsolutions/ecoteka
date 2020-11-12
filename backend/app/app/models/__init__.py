@@ -20,6 +20,7 @@ from .tree import (
 from .user import (
     User
 )
+from .intervention import Intervention
 
 
 __all__ = [
@@ -31,4 +32,5 @@ __all__ = [
     "Taxref",
     "Tree",
     "User",
+    "Intervention"
 ]

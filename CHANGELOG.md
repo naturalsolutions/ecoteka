@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5.0]: Manage tree interventions
+
+- Add intervention
+- Schedule Intervention
+
 ## [v0.4.0]: Add tree fields
 
 - Changed the path of the import template to the new tree schema example.

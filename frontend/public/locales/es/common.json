@@ -10,5 +10,19 @@
     "email": "Correo electrónico no válido",
     "required": "Campo obligatorio",
     "passwordsShouldMatch": "Las dos contraseñas no coinciden"
-  }
+  },
+  "months": [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre"
+  ]
 }

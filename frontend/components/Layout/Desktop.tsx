@@ -61,16 +61,17 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
     {
       label: "Template.menuItems.availableSoon.availableSoon",
       icon: <Star viewBox="0 -4 24 24" />,
-      disabled: true,
-      highlighted: true,
       children: [
         {
           label: "Template.menuItems.availableSoon.requestAnItervention",
-          disabled: true,
+          link: "/?panel=newIntervention",
+          activator: (router) =>
+            router.pathname === "/" && router.query.panel === "newIntervention",
         },
         {
           label: "Template.menuItems.availableSoon.scheduleOfInterventions",
-          disabled: true,
+          link: "/schedule_intervention",
+          activator: (router) => router.pathname === "/schedule_intervention",
         },
       ],
     },

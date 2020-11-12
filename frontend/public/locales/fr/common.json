@@ -4,11 +4,28 @@
     "error": "Une erreur s'est produite"
   },
   "buttons": {
-    "backToHome": "Retour à l'accueil"
+    "backToHome": "Retour à l'accueil",
+    "previous": "Précédent",
+    "next": "Ok",
+    "finish": "Terminer"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",
     "required": "Veuillez renseigner ce champ",
     "passwordsShouldMatch": "Les mots de passe ne correspondent pas"
-  }
+  },
+  "months": [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre"
+  ]
 }
