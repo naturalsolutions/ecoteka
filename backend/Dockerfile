@@ -1,11 +1,4 @@
-FROM debian:10-slim as tippecanoe
-
-RUN apt-get -y update \
-  && apt-get -y install git build-essential libsqlite3-dev zlib1g-dev
-
-RUN git clone https://github.com/mapbox/tippecanoe.git \
-  && cd tippecanoe \
-  && make -j
+FROM registry.gitlab.com/natural-solutions/tippecanoe:latest as tippecanoe
 
 FROM node:lts-alpine as email-templates
 
@@ -33,11 +26,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY --from=builder /install /usr/local
 COPY --from=tippecanoe [ \
-  "/tippecanoe/tippecanoe", \
-  "/tippecanoe/tippecanoe-decode", \
-  "/tippecanoe/tippecanoe-enumerate", \
-  "/tippecanoe/tippecanoe-json-tool", \
-  "/tippecanoe/tile-join", \
+  "/usr/local/bin/tippecanoe", \
+  "/usr/local/bin/tippecanoe-decode", \
+  "/usr/local/bin/tippecanoe-enumerate", \
+  "/usr/local/bin/tippecanoe-json-tool", \
+  "/usr/local/bin/tile-join", \
   "/opt/tippecanoe/" \
   ]
 
