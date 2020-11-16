@@ -12,6 +12,7 @@ from app.crud import (
 from app.core.config import settings
 from app.db import base  # noqa: F401
 
+import logging
 # make sure all SQL Alchemy models
 # are imported (app.db.base) before initializing DB
 # otherwise, SQL Alchemy might fail to initialize relationships properly
@@ -33,6 +34,34 @@ def init_db(db: Session) -> None:
             slug=slug.slug(settings.ORGANIZATION)
         )
         organization_in_db = organization.create(db, obj_in=organization_in)
+
+
+    planet = organization.get_by_name(db, name='planet')
+    if not planet:
+        planet = organization.create(
+            db,
+            obj_in=OrganizationCreate(
+                name='planet',
+                slug=slug.slug('planet'),
+            )
+        )
+
+    logging.info('planet path ' + str(planet.path))
+
+    for continent in ('europe', 'africa', 'asia','central-america','north-america','south-america','oceania','russia'):
+        c = organization.get_by_name(db, name=continent)
+        if not c:
+            organization.create(
+                db,
+                obj_in=OrganizationCreate(
+                    name=continent,
+                    slug=slug.slug(continent),
+                    parent_path=str(planet.path),
+                )
+            )
+
+    logging.info('planet teams')
+    logging.info(organization.get_teams(db, path='planet'))
 
     user_in_db = user.get_by_email(db, email=settings.FIRST_SUPERUSER)
 
