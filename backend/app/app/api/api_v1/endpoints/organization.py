@@ -11,22 +11,25 @@ from fastapi import (
     Depends,
     HTTPException
 )
+from app.core import (
+    get_current_user,
+    get_current_active_user
+)
+from app.api import get_db
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
-from app.api import deps
-from app.core.config import settings
-from app.core import security
 
 router = APIRouter()
 
+
 @router.post('/', response_model=schemas.Organization)
-def create_organization (
+def create_organization(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     organization: schemas.OrganizationCreate,
-    current_user: models.User = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user)
 ):
     return crud.organization.create(db, obj_in=organization).to_schema()
 
@@ -34,8 +37,8 @@ def create_organization (
 def update_organization(
     id: int,
     *,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_user),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
     organization: schemas.OrganizationUpdate
 ):
     org = crud.organization.get(db, id=id)
@@ -53,7 +56,7 @@ def update_organization(
 def get_organization_by_id(
     *,
     id: int,
-    db: Session = Depends(deps.get_db)
+    db: Session = Depends(get_db)
 ) -> Optional[schemas.Organization]:
     """
     get one organization by id
@@ -80,8 +83,8 @@ def get_organization_by_id(
 def get_teams(
     id: int,
     *,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_user)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
 ):
     return [
         org.to_schema() for org in crud.organization.get_teams(db, parent_id=id)
@@ -91,7 +94,7 @@ def get_teams(
 def generate_style(
     *,
     organization_id: int,
-    db: Session = Depends(deps.get_db)
+    db: Session = Depends(get_db)
 ) -> Any:
     """
     generate geojson from organization
