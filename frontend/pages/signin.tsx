@@ -5,7 +5,6 @@ import Template from "../components/Template";
 import { useRouter } from "next/router";
 
 export default function SignInPage() {
-
   const formRef = useRef<ETKFormSignInActions>();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -15,12 +14,11 @@ export default function SignInPage() {
     const isOk = await formRef.current.submit();
     setIsLoading(false);
     if (isOk) {
-      router.push('/');
+      router.back();
     }
-  }
+  };
 
   return (
-
     <Template>
       <Grid
         container
@@ -28,7 +26,7 @@ export default function SignInPage() {
         justify="center"
         alignItems="center"
         style={{
-          height: "100%"
+          height: "100%",
         }}
       >
         <Card>
@@ -36,9 +34,14 @@ export default function SignInPage() {
             <ETKFormSignIn ref={formRef}></ETKFormSignIn>
           </CardContent>
           <CardActions className="actions">
-            <Button onClick={() => {
-              onSubmit();
-            }} disabled={isLoading}>OK</Button>
+            <Button
+              onClick={() => {
+                onSubmit();
+              }}
+              disabled={isLoading}
+            >
+              OK
+            </Button>
             {isLoading && <CircularProgress></CircularProgress>}
           </CardActions>
         </Card>
