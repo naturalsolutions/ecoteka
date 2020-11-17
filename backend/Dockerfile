@@ -18,7 +18,7 @@ RUN pip install --no-warn-script-location --prefix=/install --no-cache-dir \
   fastapi==0.61.0 fastapi-jwt-auth SQLAlchemy geoalchemy2 alembic \
   passlib[bcrypt] pydantic[email] emails tenacity psycopg2-binary python-jose \
   python-multipart pytest pytest-cov jinja2 geopandas xlrd slug celery redis \
-  sqlalchemy-utils
+  sqlalchemy-utils casbin casbin_sqlalchemy_adapter
 
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8-slim
 
