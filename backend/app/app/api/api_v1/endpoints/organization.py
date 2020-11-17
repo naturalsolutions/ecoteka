@@ -107,3 +107,14 @@ def generate_style(
     geojson = json.loads(data)
 
     return geojson
+
+@router.get("/{id}/parents", response_model=List[schemas.Organization])
+def get_parent_organizations(
+    id: int,
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user)
+):
+    return [
+        org.to_schema() for org in crud.organization.get_parents(db, parent_id=id)
+    ]

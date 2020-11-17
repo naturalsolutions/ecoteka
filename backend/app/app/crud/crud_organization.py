@@ -58,5 +58,16 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
     def get_total_tree_by_id(self, db: Session, *, id: int) -> Optional[int]:
         return db.query(Tree).filter(Tree.organization_id == id).count()
 
+    def get_parents(self, db: Session, *, id: int):
+        org = self.get(db, id=id)
+
+        if not org:
+            return []
+
+        return (
+            db.query(Organization)
+            .filter(Organization.path.ancestor_of(org.path))
+        )
+
 
 organization = CRUDOrganization(Organization)
