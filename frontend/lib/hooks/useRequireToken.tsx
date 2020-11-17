@@ -6,7 +6,6 @@ const { publicRuntimeConfig } = getConfig();
 const { tokenStorage } = publicRuntimeConfig;
 
 export function useRequireToken(redirectUrl = "/signin") {
-  console.log(tokenStorage);
   let token: any = undefined;
   if (typeof localStorage !== "undefined" && localStorage.getItem(tokenStorage)) {
     token = localStorage.getItem(tokenStorage);

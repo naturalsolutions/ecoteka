@@ -5,12 +5,11 @@ interface MembersTabProps {
 }
 
 const MembersTab: FC<MembersTabProps> = (props) => {
-
   return (
-    <Box m={1}>
-        MembersTab
+    <Box>
+      ///
     </Box>
   );
 };
 
-export default TeamsTab;
+export default MembersTab;

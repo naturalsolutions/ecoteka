@@ -30,6 +30,7 @@
     "react-hook-form": "^6.9.5",
     "react-hook-form-resolvers": "0.0.1",
     "react-i18next": "^11.7.3",
+    "react-query": "^2.26.2",
     "yup": "^0.29.3"
   },
   "devDependencies": {
