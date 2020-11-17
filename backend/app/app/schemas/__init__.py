@@ -28,7 +28,8 @@ from .registration_link import (
 from .geo_file import (
     GeoFile,
     GeoFileCreate,
-    GeoFileUpdate
+    GeoFileUpdate,
+    GeoFileStatus
 )
 from .taxref import (
     TaxrefBase,
@@ -69,6 +70,7 @@ __all__ = [
     "GeoFile",
     "GeoFileCreate",
     "GeoFileUpdate",
+    "GeoFileStatus",
     "Msg",
     "Organization",
     "OrganizationCreate",

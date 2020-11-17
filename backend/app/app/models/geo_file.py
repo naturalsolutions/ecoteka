@@ -1,6 +1,5 @@
 import os
 import datetime
-import enum
 import hashlib
 from json import (
     dumps,
@@ -14,15 +13,9 @@ from sqlalchemy.orm import relationship
 import fiona
 import pandas as pd
 
-from app.db.base_class import Base
 from app.core.config import settings
-
-
-class GeoFileStatus(enum.Enum):
-    UPLOADED = 'uploaded'
-    IMPORTED = 'imported'
-    IMPORTING = 'importing'
-    ERROR = 'error'
+from app.db.base_class import Base
+from app.schemas import GeoFileStatus
 
 
 class GeoFile(Base):

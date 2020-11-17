@@ -4,16 +4,16 @@ from fastapi import (
     status
 )
 from fastapi.security import OAuth2PasswordBearer
-
 from fastapi_jwt_auth import AuthJWT
 from pydantic.typing import Optional
 from sqlalchemy.orm import Session
-from app.api import get_db
 from app.core import (
     settings,
     verify_password,
     get_password_hash
 )
+from app.api import get_db
+
 from app.schemas import TokenPayload
 from app.models import User
 from app.crud import user
