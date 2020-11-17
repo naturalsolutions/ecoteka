@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useRouter } from "next/router";
 import { useRequireToken } from "@/lib/hooks/useRequireToken";
 import { Box, Container } from "@material-ui/core";
-import { Header, Breadcrumb } from "@/components/Organization";
+import { Header, Breadcrumb, Tabs } from "@/components/Organization";
 
 interface OrganizationProps {}
 
@@ -19,6 +19,7 @@ const Organization: FC<OrganizationProps> = (props) => {
     <Container maxWidth="md">
       <Breadcrumb path={path} />
       <Header />
+      <Tabs />
     </Container>
   );
 };

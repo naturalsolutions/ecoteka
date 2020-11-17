@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Tabs, Tab } from "@material-ui/core";
+import { Paper, Tabs as MUITabs, Tab } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
@@ -19,11 +19,11 @@ const Tabs: FC<TabsProps> = (props) => {
   };
   return (
     <Paper className={classes.root}>
-      <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
+      <MUITabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
         <Tab label="Informations Générales" />
         <Tab label="Équipes" />
         <Tab label="Membres" />
-      </Tabs>
+      </MUITabs>
     </Paper>
   );
 };
