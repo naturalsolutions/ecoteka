@@ -19,7 +19,6 @@ enforcer = casbin.Enforcer(source_file, adapter, True)
 unless = [
     '/api/v1/docs',
     '/api/v1/openapi.json',
-    '/api/v1/users',
     '/api/v1/auth/login'
 ]
 
