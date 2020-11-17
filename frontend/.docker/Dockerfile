@@ -1,6 +1,7 @@
-FROM node:lts-alpine as builder
-
+FROM node:15-buster-slim as builder
 WORKDIR /app
+RUN apt-get update \
+    && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 COPY package.json .
 RUN npm install 
 COPY . .
