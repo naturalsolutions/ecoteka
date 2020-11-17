@@ -4,6 +4,7 @@ from sqlalchemy import (
     Index,
     String,
     func,
+    inspect
 )
 from app.db.base_class import Base
 from geoalchemy2 import Geometry
@@ -14,7 +15,10 @@ from sqlalchemy.orm import (
     foreign,
     remote,
 )
+from fastapi.encoders import jsonable_encoder
+from app import schemas
 
+import logging
 
 def strfltee(s: str, replacements=(" ", "-")):
     result = s
@@ -44,9 +48,18 @@ class Organization(Base):
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 
-    def __init__(self, name, slug: str, working_area=None, parent=None):
+    def __init__(self, name: str, slug: str, config=None, working_area=None, parent=None):
         self.name = name
         self.slug = slug
+        self.config = config
         self.working_area = working_area
         _path = strfltee(slug)
         self.path = _path if parent is None else parent.path + _path
+
+    def to_schema(self):
+
+        return schemas.Organization (
+            **{c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs if c.key != 'path'},
+            path=str(self.path)
+        )
+    

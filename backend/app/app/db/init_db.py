@@ -46,8 +46,6 @@ def init_db(db: Session) -> None:
             )
         )
 
-    logging.info('planet path ' + str(planet.path))
-
     for continent in ('europe', 'africa', 'asia','central-america','north-america','south-america','oceania','russia'):
         c = organization.get_by_name(db, name=continent)
         if not c:
@@ -56,12 +54,9 @@ def init_db(db: Session) -> None:
                 obj_in=OrganizationCreate(
                     name=continent,
                     slug=slug.slug(continent),
-                    parent_path=str(planet.path),
+                    parent_id=planet.id,
                 )
             )
-
-    logging.info('planet teams')
-    logging.info(organization.get_teams(db, path='planet'))
 
     user_in_db = user.get_by_email(db, email=settings.FIRST_SUPERUSER)
 

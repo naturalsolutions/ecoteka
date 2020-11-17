@@ -16,17 +16,18 @@ from sqlalchemy_utils import Ltree, LtreeType
 class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUpdate]):
     def create(self, db: Session, *, obj_in: OrganizationCreate) -> Organization:
         parent = (
-            self.get_by_path(db, path=obj_in.parent_path)
-            if obj_in.parent_path
+            self.get(db, id=obj_in.parent_id)
+            if obj_in.parent_id
             else None
         )
 
-        obj_in_data = jsonable_encoder(obj_in, exclude=["parent_path"])
-        db_obj = Organization(**obj_in_data, parent=parent)
-        db.add(db_obj)
+        obj_in_data = jsonable_encoder(obj_in, exclude=["parent_id"])
+        org = Organization(**obj_in_data, parent=parent)
+
+        db.add(org)
         db.commit()
-        db.refresh(db_obj)
-        return db_obj
+        db.refresh(org)
+        return org
 
     def get_by_name(self, db: Session, *, name: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.name == name).first()
@@ -34,14 +35,21 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
     def get_by_path(self, db: Session, *, path: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.path == Ltree(path)).one()
 
-    def get_teams(self, db: Session, *, path: str) -> List[Organization]:
+    def get_teams(self, db: Session, *, parent_id: int) -> List[Organization]:
+        '''returns sub-organization (teams) given the the parent'''
         # positble alternative: select * from organization o where o.path ~ 'planet.*{1}';
+        
+        parent = self.get(db, id = parent_id)
+
+        if not parent:
+            return []
+        
         return (
             db.query(Organization)
             .filter(
                 and_(
-                    func.nlevel(Organization.path) == (func.nlevel(path) + 1),
-                    Organization.path.descendant_of(Ltree(path)),
+                    func.nlevel(Organization.path) == (func.nlevel(str(parent.path)) + 1),
+                    Organization.path.descendant_of(parent.path),
                 )
             )
             .all()
