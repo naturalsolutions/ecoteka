@@ -11,8 +11,8 @@ import geoalchemy2 as ga
 
 
 # revision identifiers, used by Alembic.
-revision = 'f8cb04c99a4f'
-down_revision = '011e8614a185'
+revision = "f8cb04c99a4f"
+down_revision = "011e8614a185"
 branch_labels = None
 depends_on = None
 
@@ -20,28 +20,33 @@ from sqlalchemy_utils import LtreeType
 
 
 def upgrade():
-    op.execute('CREATE EXTENSION ltree')
+    op.execute("CREATE EXTENSION ltree")
     op.add_column(
-        'organization',
-        sa.Column('working_area', ga.Geometry('MULTIPOLYGON'), nullable=True),
+        "organization",
+        sa.Column("working_area", ga.Geometry("MULTIPOLYGON"), nullable=True),
     )
     op.add_column(
-        'organization',
-        sa.Column('path', LtreeType()),
+        "organization",
+        sa.Column("path", LtreeType()),
     )
     op.add_column(
-        'organization',
+        "organization",
         sa.Column("config", sa.dialects.postgresql.JSONB(), nullable=True),
     )
 
-    op.create_index(op.f("ix_organization_path"), "organization", ["path"], unique=True)
-
+    # read: http://patshaughnessy.net/2017/12/13/saving-a-tree-in-postgres-using-ltree
+    op.create_index(
+        op.f("ix_organization_path"),
+        "organization",
+        ["path"],
+        postgresql_using="gist",
+    )
 
 
 def downgrade():
     op.drop_index(op.f("ix_organization_path"), table_name="organization")
-    op.drop_column('organization', 'working_area')
-    op.drop_column('organization', 'path')
-    op.drop_column('organization', 'config')
+    op.drop_column("organization", "working_area")
+    op.drop_column("organization", "path")
+    op.drop_column("organization", "config")
 
-    op.execute('DROP EXTENSION ltree')
+    op.execute("DROP EXTENSION ltree")
