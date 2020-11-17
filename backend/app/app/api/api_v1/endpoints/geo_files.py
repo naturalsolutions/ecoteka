@@ -16,8 +16,13 @@ from sqlalchemy.orm import Session
 from pydantic import Json
 
 from app import crud, models, schemas
-from app.api import deps
-from app.core.config import settings
+from app.api import (
+    get_db
+)
+from app.core import (
+    settings,
+    get_current_active_user
+)
 from app.tasks import create_mbtiles
 from app.worker import create_mbtiles_task
 
@@ -26,10 +31,10 @@ router = APIRouter()
 
 @router.get("/", response_model=List[schemas.GeoFile])
 def read_geo_files(
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user)
 ) -> Any:
     """
     Retrieve geo files.
@@ -45,9 +50,9 @@ def read_geo_files(
 @router.get("/{name}", response_model=schemas.GeoFile)
 def read_geofile_by_name(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     name: str,
-    current_user: models.User = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user)
 ) -> Any:
     """
     Retrieve geo files.
@@ -66,8 +71,8 @@ def read_geofile_by_name(
 @router.post("/upload", response_model=schemas.GeoFile)
 async def upload_geo_file(
     file: UploadFile = File(...),
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user)
 ):
     """
     Upload a geo file
@@ -117,9 +122,9 @@ async def upload_geo_file(
 @router.put("/", response_model=schemas.GeoFile)
 def update_geo_file(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     geofile_in: schemas.GeoFileUpdate,
-    current_user: models.User = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user)
 ) -> Any:
     """
     Update geo file.
@@ -142,8 +147,8 @@ def update_geo_file(
 def delete_geo_file(
     *,
     name: str,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user)
 ) -> Any:
     """
     Delete one geofile

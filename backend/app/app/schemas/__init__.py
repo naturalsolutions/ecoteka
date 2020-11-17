@@ -2,7 +2,9 @@ from .msg import (
     Msg
 )
 from .token import (
-    Token,
+    AccessToken,
+    RefreshToken,
+    RefreshTokenIn,
     TokenPayload
 )
 from .user import (
@@ -75,7 +77,9 @@ __all__ = [
     "RegistrationLinkDB",
     "RegistrationLinkOut",
     "RegistrationLinkUpdate",
-    "Token",
+    "RefreshToken",
+    "RefreshTokenIn",
+    "AccessToken",
     "TokenPayload",
     "TaxrefBase",
     "TaxrefCreate",

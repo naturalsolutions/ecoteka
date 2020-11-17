@@ -1,20 +1,18 @@
-from datetime import datetime
-from uuid import UUID
 from typing import Optional, Any
-
-from pydantic import BaseModel, Field
-from sqlalchemy_utils import LtreeType, Ltree
+from pydantic import BaseModel
 
 
 # Shared properties
 class OrganizationBase(BaseModel):
     name: str = ''
     slug: str = ''
-    working_area : Optional[Any]
+    working_area: Optional[Any]
     config: Optional[Any]
+
 
 class OrganizationCreate(OrganizationBase):
     parent_id: Optional[int]
+
 
 class OrganizationUpdate(OrganizationBase):
     pass

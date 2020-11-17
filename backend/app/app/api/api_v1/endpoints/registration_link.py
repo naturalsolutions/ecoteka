@@ -16,8 +16,7 @@ from app.schemas import (
     RegistrationLinkUpdate
 )
 from app.api import (
-    get_db,
-    get_current_user
+    get_db
 )
 from sqlalchemy.orm import Session
 from datetime import (
@@ -25,7 +24,10 @@ from datetime import (
     timedelta
 )
 from app.utils import generate_registration_link_value
-from app.core import settings
+from app.core import (
+    settings,
+    get_current_user
+)
 
 router = APIRouter()
 
