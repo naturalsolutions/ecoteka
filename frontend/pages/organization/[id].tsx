@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRequireToken } from "@/lib/hooks/useRequireToken";
 import { Box, Container } from "@material-ui/core";
 import { Header, Breadcrumb, Tabs } from "@/components/Organization";
-import { apiRest } from "@/lib/api"
+import { apiRest } from "@/lib/api";
 import { useQuery } from "react-query";
 
 export type TOrganization = {
@@ -12,7 +12,7 @@ export type TOrganization = {
   slug: string;
   path: string;
   config: any;
-}
+};
 
 interface OrganizationProps {}
 
@@ -29,7 +29,13 @@ function useOrganizationParents(query) {
 const Organization: FC<OrganizationProps> = (props) => {
   const router = useRouter();
   const token = useRequireToken();
-  const { status: parentStatus , isLoading: parentsIsLoading, data: path, error: parentsError, isFetching: parentsIsFetching  } = useOrganizationParents(router.query.id);
+  const {
+    status: parentStatus,
+    isLoading: parentsIsLoading,
+    data: path,
+    error: parentsError,
+    isFetching: parentsIsFetching,
+  } = useOrganizationParents(router.query.id);
 
   if (!token) {
     return <div>Récupération de votre session...</div>;
