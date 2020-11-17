@@ -14,8 +14,13 @@ import geopandas as gpd
 import numpy as np
 
 from app import crud, models, schemas
-from app.api import deps
-from app.core.config import settings
+from app.api import get_db
+from app.core import (
+    settings,
+    get_current_user,
+    get_current_active_user,
+    get_optional_current_active_user
+)
 from app.core.celery_app import celery_app
 from app.tasks import (
     import_geofile,
@@ -45,9 +50,9 @@ def get_tree_if_authorized(db: Session, current_user: models.User, tree_id: int)
 @router.post("/import-from-geofile", response_model=schemas.GeoFile)
 def import_from_geofile(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     name: str,
-    current_user: models.User = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user)
 ) -> Any:
     """
     import trees from geofile
@@ -80,8 +85,8 @@ def import_from_geofile(
 @router.get('/{tree_id}', response_model=schemas.tree.Tree_xy)
 def get(
     tree_id: int,
-    db: Session = Depends(deps.get_db),
-    current_user: models = Depends(deps.get_current_active_user)
+    db: Session = Depends(get_db),
+    current_user: models = Depends(get_current_active_user)
 ) -> Any:
     """Gets a tree"""
     return get_tree_if_authorized(db, current_user, tree_id).to_xy()
@@ -90,9 +95,9 @@ def get(
 @router.post('/', response_model=schemas.tree.Tree_xy)
 def add(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     tree: schemas.TreePost,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """Manual tree registration"""
     tree_with_user_info = schemas.TreeCreate(
@@ -111,9 +116,9 @@ def add(
 def update(
     tree_id: int,
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     update_data: schemas.tree.TreePatch,
-    current_user: models = Depends(deps.get_current_active_user)
+    current_user: models = Depends(get_current_active_user)
 ) -> Any:
     """Update tree info"""
     tree_in_db = get_tree_if_authorized(db, current_user, tree_id)
@@ -141,8 +146,8 @@ def update(
 @router.delete('/{tree_id}', response_model=schemas.tree.Tree_xy)
 def delete(
     tree_id: int,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user)
 ) -> Any:
     """Deletes a tree"""
     if get_tree_if_authorized(db, current_user, tree_id):
@@ -155,9 +160,9 @@ def delete(
 @router.get("/get-centroid-organization/{organization_id}", response_model=schemas.Coordinate)
 def get_center_from_organization(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     organization_id: int,
-    current_user: models.User = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user)
 ) -> Any:
     """
     find centroid of Organization

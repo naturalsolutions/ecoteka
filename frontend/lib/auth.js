@@ -16,7 +16,7 @@ class Auth {
       body.append("username", username);
       body.append("password", password);
 
-      const response = await fetch(`${this.url}/auth/login/access-token`, {
+      const response = await fetch(`${this.url}/auth/login`, {
         method: "POST",
         body,
       });

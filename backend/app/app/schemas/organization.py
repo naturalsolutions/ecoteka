@@ -9,7 +9,6 @@ from pydantic import BaseModel, Field
 class OrganizationBase(BaseModel):
     name: str = ''
     slug: str = ''
-    total_trees: Optional[int] = 0
 
 
 class OrganizationCreate(OrganizationBase):
@@ -25,6 +24,7 @@ class OrganizationUpdate(OrganizationBase):
 
 class Organization(OrganizationBase):
     id: int
+    total_trees: Optional[int] = 0
 
     class Config:
         orm_mode = True

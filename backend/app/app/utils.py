@@ -15,7 +15,6 @@ import emails
 from emails.template import JinjaTemplate
 from jose import jwt
 from app.core import (
-    create_access_token,
     settings
 )
 import uuid
@@ -252,23 +251,6 @@ def send_new_registration_link_email(
             "link": full_link
         },
     )
-
-
-def generate_response_for_token(
-    user_id: int,
-    is_superuser: bool
-):
-    access_token_expires = timedelta(
-        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-    )
-    return {
-        "access_token": create_access_token(
-            subject=user_id,
-            isSuperAdmin=is_superuser,
-            expires_delta=access_token_expires
-        ),
-        "token_type": "bearer",
-    }
 
 
 def generate_registration_link_value() -> str:

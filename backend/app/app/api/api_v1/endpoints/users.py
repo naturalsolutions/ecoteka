@@ -24,17 +24,20 @@ from app.crud import (
     user
 )
 from app.api import (
-    get_db,
+    get_db
+)
+from app.core import (
     get_current_user,
     get_current_user_if_is_superuser
 )
+from fastapi_jwt_auth import AuthJWT
 from app.utils import (
     send_new_account_email
 )
 from app.core import (
     settings
 )
-
+import logging
 router = APIRouter()
 
 
@@ -44,10 +47,12 @@ def read_users(
     skip: int = 0,
     limit: int = 100,
     # current_user: User = Depends(get_current_user_if_is_superuser),
+    Authorize: AuthJWT = Depends()
 ) -> Any:
     """
     Retrieve users.
     """
+    Authorize.jwt_required()
     users = user.get_multi(db, skip=skip, limit=limit)
     return users
 

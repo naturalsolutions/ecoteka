@@ -16,7 +16,9 @@ from app.schemas import (
 )
 from sqlalchemy.orm import Session
 from app.api import (
-    get_db,
+    get_db
+)
+from app.core import (
     get_current_active_user
 )
 from app.crud import (
