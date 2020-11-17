@@ -17,8 +17,13 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
-from app.api import deps
-from app.core.config import settings
+from app.api import get_db
+from app.core import (
+    settings,
+    get_current_active_user,
+    get_current_user,
+    get_optional_current_active_user
+)
 from app.core import security
 
 router = APIRouter()
@@ -27,9 +32,9 @@ router = APIRouter()
 @router.get("/style")
 def generate_style(
     *,
-    db: Session = Depends(deps.get_db),
+    db: Session = Depends(get_db),
     current_user: Optional[models.User] = Depends(
-        deps.get_optional_current_active_user
+        get_optional_current_active_user
     ),
     base: Optional[bool] = False,
     token: Optional[str] = ''
