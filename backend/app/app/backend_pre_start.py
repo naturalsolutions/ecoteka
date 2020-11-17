@@ -3,8 +3,8 @@ import os
 
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
 
-from app.db.session import SessionLocal
 from app.core.config import settings
+from app.db.session import SessionLocal
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -1,10 +1,15 @@
 from datetime import datetime
 from uuid import UUID
 from typing import Optional, Any
-
+import enum
 from pydantic import BaseModel, Field, Json
 
-from app.models.geo_file import GeoFileStatus
+
+class GeoFileStatus(enum.Enum):
+    UPLOADED = 'uploaded'
+    IMPORTED = 'imported'
+    IMPORTING = 'importing'
+    ERROR = 'error'
 
 
 # Shared properties
