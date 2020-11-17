@@ -113,7 +113,7 @@ def update(
     *,
     db: Session = Depends(deps.get_db),
     update_data: schemas.tree.TreePatch,
-    current_user: models = Depends(deps.get_current_active_user)
+    current_user: models.User = Depends(deps.get_current_active_user)
 ) -> Any:
     """Update tree info"""
     tree_in_db = get_tree_if_authorized(db, current_user, tree_id)
