@@ -18,18 +18,22 @@ export type TOrganization = {
 interface OrganizationProps {}
 
 function useOrganizationParents(id) {
-  return useQuery("organizationParents", async () => {
-    const path = await apiRest.organization.parents(id);
-    return path;
-  }, {
-    enabled: Boolean(id) // We accept that id could not be 0
-  });
+  return useQuery(
+    "organizationParents",
+    async () => {
+      const path = await apiRest.organization.parents(id);
+      return path;
+    },
+    {
+      enabled: Boolean(id), // We accept that id could not be 0
+    }
+  );
 }
 
 const Organization: FC<OrganizationProps> = (props) => {
   const router = useRouter();
   const token = useRequireToken();
-  const { status, data:path, error, isFetching } = useOrganizationParents(router.query.id);
+  const { status, data: path, error, isFetching } = useOrganizationParents(router.query.id);
   /* const {
     status: parentStatus,
     isLoading: parentsIsLoading,
@@ -45,7 +49,7 @@ const Organization: FC<OrganizationProps> = (props) => {
     <Container maxWidth="md">
       {path && <Breadcrumb path={path} />}
       <Header />
-      <Tabs organization={[...(path||[])].pop()} />
+      <Tabs organization={path?.slice(-1)[0]} />
     </Container>
   );
 };

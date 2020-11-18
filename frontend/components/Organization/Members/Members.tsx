@@ -2,13 +2,18 @@ import { FC, Fragment, useState, useEffect } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery } from "react-query";
 import { makeStyles } from "@material-ui/core/styles";
-import { apiRest } from "@/lib/api";
-import { Box, Button, Toolbar, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
-import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon } from "@material-ui/icons";
+// import { apiRest } from "@/lib/api";
+import { getMembers } from "@/lib/mock/fakeApi";
+import { Box, Button, Toolbar, FormControl, InputLabel, Select, MenuItem, useMediaQuery } from "@material-ui/core";
+import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { useTemplate } from "@/components/Template";
+import { useTranslation } from "react-i18next";
+import { CellGridSelectRenderer } from "@/components/Organization";
+import { AddMembers } from "@/components/Organization/Members";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import "ag-grid-community/dist/styles/ag-theme-material.css";
 
 interface MembersProps {
   organization: TOrganization;
@@ -27,28 +32,6 @@ function EditBtnRenderer(props) {
     </Button>
   );
 }
-
-const SelectRoleRenderer: FC = (props) => {
-  const [role, setRole] = useState("");
-  const classes = useStyles();
-
-  const handleChange = (event) => {
-    setRole(event.target.value);
-  };
-  return (
-    <FormControl className={classes.formControl}>
-      <InputLabel id="demo-simple-select-outlined-label">Rôle</InputLabel>
-      <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={role} onChange={handleChange} label="Age">
-        <MenuItem value="">
-          <em>Aucun</em>
-        </MenuItem>
-        <MenuItem value={"admin"}>Administrateur</MenuItem>
-        <MenuItem value={"reader"}>Éditeur</MenuItem>
-        <MenuItem value={"guest"}>Invité</MenuItem>
-      </Select>
-    </FormControl>
-  );
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,11 +57,19 @@ const useStyles = makeStyles((theme) => ({
 
 const Members: FC<MembersProps> = (props) => {
   const classes = useStyles();
+  const { dialog, theme } = useTemplate();
+  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const { t } = useTranslation(["components", "common"]);
   const { status, data, error, isFetching } = useQuery(
     "members",
     async () => {
-      const data = await apiRest.organization.members(props.organization.id);
-      return data;
+      try {
+        const data = await getMembers();
+        console.log(data);
+        return data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     {
       enabled: Boolean(props.organization),
@@ -102,14 +93,35 @@ const Members: FC<MembersProps> = (props) => {
     gridApi.setRowData(data);
   }
 
+  function onSubmitMembers() {
+    alert("new members");
+  }
+
   function addMember() {
-    const member = {
-      id: 2,
-      email: "new@ecoteka.natural-solutions.eu",
-      full_name: "New member",
-    };
-    const newData = [member, ...data];
-    gridApi.setRowData(newData);
+    const dialogActions = [
+      {
+        label: t("components:Organization.Members.buttonCancelContent"),
+      },
+      {
+        label: t("components:Organization.Members.buttonSubmitContent"),
+        variant: "contained",
+        color: "secondary",
+        noClose: true,
+        onClick: onSubmitMembers,
+      },
+    ];
+
+    dialog.current.open({
+      title: t("components:Organization.Members.dialogTile"),
+      content: <AddMembers />,
+      actions: dialogActions,
+      dialogProps: {
+        maxWidth: "sm",
+        fullWidth: true,
+        fullScreen: matches,
+        disableBackdropClick: true,
+      },
+    });
   }
 
   function onSelectionChanged() {
@@ -127,14 +139,11 @@ const Members: FC<MembersProps> = (props) => {
     <Fragment>
       <Toolbar className={classes.toolbar}>
         <Box className={classes.root} />
-        <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<ArchiveIcon />}>
-          Archiver
-        </Button>
-        <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<DeleteIcon />}>
-          Supprimer
+        <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<BlockIcon />}>
+          Retirer du groupe
         </Button>
         <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={addMember}>
-          Ajouter un membre
+          Ajouter des membres
         </Button>
       </Toolbar>
       {data && (
@@ -148,7 +157,7 @@ const Members: FC<MembersProps> = (props) => {
             onSelectionChanged={onSelectionChanged}
             frameworkComponents={{
               editBtnRenderer: EditBtnRenderer,
-              selectRoleRenderer: SelectRoleRenderer,
+              selectRoleRenderer: CellGridSelectRenderer,
             }}
           >
             <AgGridColumn
@@ -163,8 +172,38 @@ const Members: FC<MembersProps> = (props) => {
             ></AgGridColumn>
             <AgGridColumn field="email" resizable sortable filter></AgGridColumn>
             <AgGridColumn field="full_name" resizable sortable filter></AgGridColumn>
-            <AgGridColumn field="role" cellRenderer="selectRoleRenderer" />
-            <AgGridColumn field="actions" cellRenderer="editBtnRenderer" />
+            <AgGridColumn
+              field="role"
+              cellRenderer="selectRoleRenderer"
+              cellRendererParams={{
+                placeholder: "Définir le rôle...",
+                items: [
+                  {
+                    label: "Propriétaire",
+                    value: "owner",
+                  },
+                  {
+                    label: "Manager",
+                    value: "manager",
+                  },
+                  {
+                    label: "Contributeur",
+                    value: "contributor",
+                  },
+                  {
+                    label: "Lecteur",
+                    value: "reader",
+                  },
+                  {
+                    label: "Invité",
+                    value: "guest",
+                  },
+                ],
+                onChange: (params, newValue, oldValue) => {
+                  console.log(params.data.id, params.data.role);
+                },
+              }}
+            />
           </AgGridReact>
         </div>
       )}

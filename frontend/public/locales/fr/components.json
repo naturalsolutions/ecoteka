@@ -377,14 +377,12 @@
     "allergens": "Arbre allergène",
     "remarks": "Remarques"
   },
-
   "TreeForm": {
     "dialogDeleteTitle": "Supprimer les arbres sélectionnés",
     "dialogDeleteContent": "Êtes-vous sûr de vouloir supprimer les arbres sélectionnés ?",
     "dialogDeleteActionYes": "Oui",
     "dialogDeleteActionCancel": "Non"
   },
-  
   "Team": {
     "name": "Nom",
     "slug": "Slug",
@@ -392,5 +390,12 @@
     "dialogContentText": "Vous allez ajouter un équipe dans l'organisation courante.",
     "buttonSubmitContent": "Envoyer",
     "buttonCancelContent": "Annuler"
+  }, 
+  "Organization" : {
+    "Members" : {
+      "dialogTile": "Ajouter des membres à votre organisation",
+      "buttonCancelContent": "Annuler",
+      "buttonSubmitContent": "Inviter"
+    }
   }
 }
