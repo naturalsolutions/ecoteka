@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { apiRest } from "../lib/api.js";
-import { useAppContext } from "../providers/AppContext.js";
+import { useAppContext } from "../providers/AppContext";
 import ETKTemplate from "../components/Template";
 import ETKSigninButton from "../components/SignIn/Button";
 import ETKRegistrationLinkConfirmation from "../components/RegistrationLink/Confirmation";

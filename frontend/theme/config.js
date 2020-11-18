@@ -18,10 +18,6 @@ const themes = {
   dark: {
     palette: {
       type: "dark",
-      action: {
-        active: "rgba(255,255,255,.8)",
-        hover: "#fff",
-      },
       background: {
         default: "#222",
       },

@@ -1,4 +1,4 @@
-import { TextField, CircularProgress } from "@material-ui/core";
+import { TextField, CircularProgress, makeStyles } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
@@ -13,12 +13,16 @@ export interface ETKMapSearchCityProps {
 
 const defaultProps: ETKMapSearchCityProps = {
   map: undefined,
-  style: {
-    background: "#ffff",
-  },
+  style: {},
   className: "",
   onChange: () => {},
 };
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.default,
+  },
+}));
 
 const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
   const { t } = useTranslation("components");
@@ -26,6 +30,7 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const classes = useStyles();
 
   useEffect(() => {
     let active = true;
@@ -106,6 +111,7 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
           variant="outlined"
           InputProps={{
             ...params.InputProps,
+            className: classes.root,
             endAdornment: (
               <Fragment>
                 {loading ? (
