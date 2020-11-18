@@ -42,7 +42,7 @@ def generate_style(
     """
     Generate style
     """
-    with open("/app/app/assets/styles/light.json") as style_json:
+    with open("/app/app/assets/styles/dark.json") as style_json:
         style = json.load(style_json)
 
         if not base:
