@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Tabs, Tab, Box } from "@material-ui/core";
-import { TabPanel, GeneralInfoTab, MembersTab } from "@/components/Organization";
+import { TabPanel, GeneralInfoTab, Members } from "@/components/Organization";
 import { TOrganization } from "@/pages/organization/[id]";
 import Teams from "./Teams";
 
@@ -20,7 +20,6 @@ const ETKTabs: FC<TabsProps> = (props) => {
   const [value, setValue] = useState("general");
 
   const handleChange = (event, newValue) => {
-    console.log(newValue);
     setValue(newValue);
   };
   return (
@@ -47,7 +46,7 @@ const ETKTabs: FC<TabsProps> = (props) => {
         <Teams organization={props.organization} value={value} index="teams" />
       </TabPanel>
       <TabPanel value={value} index="members">
-        <MembersTab organization={props.organization} />
+        <Members organization={props.organization} value={value} index="members" />
       </TabPanel>
     </>
   );
