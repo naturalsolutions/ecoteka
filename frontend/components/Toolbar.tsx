@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import MoodIcon from "@material-ui/icons/Mood";
-import ETKDarkToggle from "./DarkToggle";
 import ETKContactButton from "./Contact/Button";
 import ETKSigninButton from "./SignIn/Button";
 import ETKRegisterButton from "./Register/Button";
@@ -24,7 +23,7 @@ export interface ETKToolbarProps {
 }
 
 const defaultProps: ETKToolbarProps = {
-  logo: "/assets/light/logo.svg",
+  logo: "/assets/dark/logo.svg",
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +31,8 @@ const useStyles = makeStyles((theme) => ({
     height: "35px",
     paddingTop: ".3rem",
   },
-  languageSelector: {
-    marginRight: "3rem",
-  },
   toolbar: {
-    background: "#b2dfdc",
+    backgroundColor: theme.palette.secondary.main,
   },
   userInfosPaper: {
     padding: 10,
@@ -112,31 +108,30 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
 
   return (
     <React.Fragment>
-      <Toolbar variant="dense" className={classes.toolbar}>
+      <Toolbar className={classes.toolbar} variant="dense">
         <Grid container alignItems="center">
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={6}>
             <Grid container spacing={4} alignItems="center">
               <Grid item>
                 <img src={props.logo} className={classes.logo} />
               </Grid>
               <Grid item>
-                <Hidden mdDown>
-                  <Typography component="h2" className={classes.numberOfTrees}>
+                <Hidden smDown>
+                  <Typography
+                    color="textPrimary"
+                    component="h2"
+                    className={classes.numberOfTrees}
+                  >
                     {t("Toolbar.slogan")}
                   </Typography>
                 </Hidden>
               </Grid>
-              <Grid item style={{ marginLeft: "1rem" }}>
-                <Hidden mdDown>
-                  <ETKDarkToggle />
-                </Hidden>
-              </Grid>
             </Grid>
           </Grid>
-          <Hidden mdDown>
-            <Grid item xs={12} md={6}>
+          <Hidden smDown>
+            <Grid item xs={12} sm={6}>
               <Grid container justify="flex-end">
-                <Grid item className={classes.languageSelector}>
+                <Grid item>
                   <ETKLanguageSelector />
                 </Grid>
 

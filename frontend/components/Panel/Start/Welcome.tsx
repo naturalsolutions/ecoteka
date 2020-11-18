@@ -73,8 +73,8 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
   return !collapsed ? (
     <React.Fragment>
       <Tabs
-        indicatorColor="secondary"
-        textColor="secondary"
+        indicatorColor="primary"
+        textColor="primary"
         onChange={handleChange}
         value={value}
       >
@@ -93,7 +93,7 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
       <TabPanel value={value} index={0} className={classes.tabPanel}>
         <Grid container direction="column" spacing={2}>
           <Grid item>
-            <Typography className={classes.title}>
+            <Typography color="primary" className={classes.title}>
               {t("PanelWelcome.title")}
             </Typography>
           </Grid>
@@ -116,23 +116,23 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
       </TabPanel>
     </React.Fragment>
   ) : (
-      <Button
-        color="secondary"
-        className={classes.collapsedButton}
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        <Grid container direction="column" justify="center" alignItems="center">
-          <Grid item>
-            <AcUnit />
-          </Grid>
-          <Grid item>
-            <Typography variant="caption">
-              {t("PanelWelcome.tabLabel")}
-            </Typography>
-          </Grid>
+    <Button
+      color="primary"
+      className={classes.collapsedButton}
+      onClick={() => setCollapsed(!collapsed)}
+    >
+      <Grid container direction="column" justify="center" alignItems="center">
+        <Grid item>
+          <AcUnit />
         </Grid>
-      </Button>
-    );
+        <Grid item>
+          <Typography variant="caption">
+            {t("PanelWelcome.tabLabel")}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Button>
+  );
 };
 
 ETKPanelWelcome.defaultProps = defaultProps;

@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import ETKContactButton from "../Contact/Button";
-import Hidden from '@material-ui/core/Hidden';
+import Hidden from "@material-ui/core/Hidden";
 
 export interface ETKCardAboutProps {
   background?: string;
@@ -23,19 +23,19 @@ const defaultProps: ETKCardAboutProps = {
 
 const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
   const useStyles = makeStyles(() => ({
-    root: {
-      background: props.background,
-    },
     title: {
       fontWeight: "bold",
       fontSize: "1.2rem",
+    },
+    contactButton: {
+      opacity: 0.8,
     },
   }));
   const classes = useStyles();
   const { t } = useTranslation("components");
 
   return (
-    <Card className={classes.root}>
+    <Card>
       <CardContent>
         <Grid
           container
@@ -56,7 +56,11 @@ const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
           </Grid>
           <Grid item>
             <Hidden mdDown>
-               <ETKContactButton variant={props.buttonVariant} color="secondary" />
+              <ETKContactButton
+                className={classes.contactButton}
+                variant={props.buttonVariant}
+                color="primary"
+              />
             </Hidden>
           </Grid>
         </Grid>

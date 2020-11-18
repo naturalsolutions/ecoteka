@@ -18,14 +18,21 @@ const themes = {
   dark: {
     palette: {
       type: "dark",
+      action: {
+        active: "rgba(255,255,255,.8)",
+        hover: "#fff",
+      },
+      background: {
+        default: "#222",
+      },
+      text: {
+        primary: "#fff",
+      },
       primary: {
-        main: "#80cbc4",
+        main: "#AFE9A1",
       },
       secondary: {
-        main: "#bcaaa4",
-      },
-      toolbar: {
-        main: "#000",
+        main: "#344966",
       },
     },
   },

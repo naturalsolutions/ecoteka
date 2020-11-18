@@ -199,7 +199,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
               {t("Import.Upload.boxContent")}
             </Box>
             <HtmlTooltip title={htmlTooltip}>
-              <HelpIcon color="secondary" />
+              <HelpIcon color="primary" />
             </HtmlTooltip>
           </Grid>
         </Typography>
@@ -263,7 +263,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                 <Button
                   className={classes.submitbtn}
                   disabled={!file || error !== null || inProgress}
-                  color="secondary"
+                  color="primary"
                   variant="contained"
                   onClick={onUploadClick}
                 >

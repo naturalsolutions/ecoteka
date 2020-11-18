@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { Button, Grid, Box, Typography } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
-import { useAppContext } from "../providers/AppContext.js";
+import { useAppContext } from "../providers/AppContext";
 import { apiRest } from "../lib/api";
 import { useTranslation } from "react-i18next";
 import { useTemplate } from "./Template";
@@ -32,7 +32,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
   const actions = [
     {
       label: t("Logout.dialog.backHome"),
-      color: "secondary",
+      color: "primary",
       variant: "text",
       size: "large",
       onClick: () => {
@@ -45,7 +45,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
     },
     {
       label: t("Logout.dialog.logout"),
-      color: "secondary",
+      color: "primary",
       variant: "contained",
       size: "large",
       onClick: () => {

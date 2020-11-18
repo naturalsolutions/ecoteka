@@ -22,7 +22,6 @@ const useStyles = makeStyles({
 
 const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
   const classes = useStyles();
-  const { user } = useAppContext();
   const { t } = useTranslation("components");
 
   return (

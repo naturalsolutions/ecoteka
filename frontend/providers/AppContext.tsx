@@ -7,7 +7,7 @@ export const Provider = ({ children }) => {
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [appContext, setAppContext] = useState({
-    theme: "light",
+    theme: "dark",
   });
 
   useEffect(() => {

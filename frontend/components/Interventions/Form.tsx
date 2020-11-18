@@ -39,14 +39,14 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     "&$activeIcon": {
-      color: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
     },
     "&$completedIcon": {
-      color: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
     },
   },
   activeIcon: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
   },
   completedIcon: {},
 }));
@@ -283,7 +283,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                     </Button>
                   )}
                   <Button
-                    color="secondary"
+                    color="primary"
                     variant="contained"
                     onClick={() => handleNext(step)}
                   >
@@ -324,7 +324,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                   <Button
                     onClick={(e) => reset()}
                     variant="contained"
-                    color="secondary"
+                    color="primary"
                   >
                     <Typography variant="caption">
                       {t("components:Intervention.plannew")}

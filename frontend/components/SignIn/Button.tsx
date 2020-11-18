@@ -28,7 +28,7 @@ const ETKSignInButton: React.FC<ETKFormSignInProps> = (props) => {
       {
         label: t("SignIn.buttonConnexion"),
         variant: "contained",
-        color: "secondary",
+        color: "primary",
         noClose: true,
         onClick: async () => {
           const isOk = await formRef.current.submit();

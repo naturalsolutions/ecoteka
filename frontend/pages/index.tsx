@@ -57,7 +57,7 @@ export default function IndexPage() {
         alignItems="stretch"
         className={classes.root}
       >
-        <Hidden mdDown>
+        <Hidden smDown>
           <Grid item className={classes.sidebar}>
             <ETKPanel
               context={{ map: mapRef }}

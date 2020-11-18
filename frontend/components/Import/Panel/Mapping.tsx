@@ -21,8 +21,8 @@ export interface ETKImportPanelMappingProps {
 
 const defaultProps: ETKImportPanelMappingProps = {
   geofile: undefined,
-  onCancel: () => { },
-  onSend: () => { },
+  onCancel: () => {},
+  onSend: () => {},
 };
 
 const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
@@ -47,7 +47,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
         }
 
         setValues(newValues);
-      } catch (e) { }
+      } catch (e) {}
     }
   }, []);
 
@@ -84,7 +84,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
       const response = await apiRest.geofiles.update(newGeofile);
       props.onSend(response);
     } else {
-      props.onSend(props.geofile)
+      props.onSend(props.geofile);
     }
   };
 
@@ -124,7 +124,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
             {t("ImportPanelMapping.cancel")}
           </Button>
           <Grid item xs></Grid>
-          <Button variant="contained" color="secondary" onClick={onSend}>
+          <Button variant="contained" color="primary" onClick={onSend}>
             {t("ImportPanelMapping.send")}
           </Button>
         </Grid>

@@ -22,7 +22,7 @@ const ETKRegisterButton: React.FC<ButtonProps> = (props) => {
           label: t("components:Register.submit"),
           noClose: true,
           variant: "contained",
-          color: "secondary",
+          color: "primary",
           onClick: onSubmitClick,
         },
       ],

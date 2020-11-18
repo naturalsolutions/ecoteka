@@ -14,17 +14,17 @@ import { useAppContext } from "@/providers/AppContext";
 import CardInfoPanel from "@/components/Card/InfoPanel";
 import { useRouter } from "next/router";
 
-export interface ETKPanelStartGeneralInfoProps { }
+export interface ETKPanelStartGeneralInfoProps {}
 
 const defaultProps: ETKPanelStartGeneralInfoProps = {};
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: "25rem",
     height: "100%",
   },
   card: {
-    background: "#b2dfdc",
+    backgroundColor: theme.palette.secondary.main,
   },
   cardTitle: {
     fontWeight: "bold",
@@ -40,7 +40,7 @@ async function fetchData(organizationId: number) {
 
       return organization;
     }
-  } catch (e) { }
+  } catch (e) {}
 }
 
 interface Organization {
@@ -50,13 +50,14 @@ interface Organization {
   total_trees: number;
 }
 
-const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (props) => {
+const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (
+  props
+) => {
   const router = useRouter();
   const classes = useStyles();
   const { user } = useAppContext();
   const [organization, setOrganization] = useState<Organization>();
   const { t } = useTranslation("components");
-
 
   useEffect(() => {
     fetchData(user.organization_id).then((newOrganization) => {
@@ -64,59 +65,61 @@ const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (props
     });
   }, []);
 
-  return (<Grid container direction="column" spacing={2} className={classes.root}>
-    <Grid item>
-      <Typography variant="h5">{t("PanelStart.title")}</Typography>
-    </Grid>
-    <Grid item>
-      <Typography>{t("PanelStart.content")}</Typography>
-    </Grid>
-    <Grid item>
-      <CardInfoPanel
-        title={t("PanelStart.numberOfTrees.title")}
-        content={`11 ${t("PanelStart.numberOfTrees.content")}`}
-      />
-    </Grid>
-    <Grid item>
-      <CardInfoPanel
-        title={t("PanelStart.numberOfTreesLayer.title")}
-        content={`${organization ? organization.total_trees : 0} ${t(
-          "PanelStart.numberOfTreesLayer.content"
-        )}`}
-      />
-    </Grid>
-    <Grid item xs />
-    <Grid item>
-      <Card className={classes.card}>
-        <CardContent>
-          <Grid container direction="column" alignItems="center" spacing={2}>
-            <Grid item>
-              <Typography className={classes.cardTitle} variant="h6">
-                {t("PanelStart.card.title")}
-              </Typography>
+  return (
+    <Grid container direction="column" spacing={2} className={classes.root}>
+      <Grid item>
+        <Typography variant="h5">{t("PanelStart.title")}</Typography>
+      </Grid>
+      <Grid item>
+        <Typography>{t("PanelStart.content")}</Typography>
+      </Grid>
+      <Grid item>
+        <CardInfoPanel
+          title={t("PanelStart.numberOfTrees.title")}
+          content={`11 ${t("PanelStart.numberOfTrees.content")}`}
+        />
+      </Grid>
+      <Grid item>
+        <CardInfoPanel
+          title={t("PanelStart.numberOfTreesLayer.title")}
+          content={`${organization ? organization.total_trees : 0} ${t(
+            "PanelStart.numberOfTreesLayer.content"
+          )}`}
+        />
+      </Grid>
+      <Grid item xs />
+      <Grid item>
+        <Card className={classes.card}>
+          <CardContent>
+            <Grid container direction="column" alignItems="center" spacing={2}>
+              <Grid item>
+                <Typography className={classes.cardTitle} variant="h6">
+                  {t("PanelStart.card.title")}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography>{t("PanelStart.card.content")}</Typography>
+              </Grid>
+              <Grid item>
+                <Box mt={2}>
+                  <Button
+                    color="primary"
+                    size="large"
+                    variant="outlined"
+                    onClick={() => {
+                      router.push("/?panel=import");
+                    }}
+                  >
+                    {t("PanelStart.card.button")}
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Typography>{t("PanelStart.card.content")}</Typography>
-            </Grid>
-            <Grid item>
-              <Box mt={2}>
-                <Button
-                  color="secondary"
-                  size="large"
-                  variant="outlined"
-                  onClick={() => {
-                    router.push("/?panel=import");
-                  }}
-                >
-                  {t("PanelStart.card.button")}
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Grid>
     </Grid>
-  </Grid>);
+  );
 };
 
 ETKPanelStartGeneralInfo.defaultProps = defaultProps;

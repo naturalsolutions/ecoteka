@@ -20,10 +20,10 @@ export default function Template(props) {
   return (
     <ThemeProvider theme={theme}>
       <TemplateContext.Provider value={{ dialog: dialogRef, theme }}>
-        <Hidden smDown>
+        <Hidden only={["xs", "sm"]}>
           <ETKLayoutDesktop>{props.children}</ETKLayoutDesktop>
         </Hidden>
-        <Hidden mdUp>
+        <Hidden only={["md", "lg", "xl"]}>
           <ETKLayoutMobile>{props.children}</ETKLayoutMobile>
         </Hidden>
         <ETKDialog ref={dialogRef} />

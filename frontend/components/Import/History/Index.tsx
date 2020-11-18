@@ -53,7 +53,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
         {
           label: t("ImportHistoryIndex.dialog.yes"),
           variant: "outlined",
-          color: "secondary",
+          color: "primary",
           onClick: () => {
             props.onDelete(selected);
           },
@@ -61,7 +61,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
         {
           label: t("ImportHistoryIndex.dialog.cancel"),
           variant: "contained",
-          color: "secondary",
+          color: "primary",
         },
       ],
     });
@@ -91,7 +91,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
                       <Button
                         disabled={!selected.length || !props.rows.length}
                         variant="outlined"
-                        color="secondary"
+                        color="primary"
                         size="large"
                         onClick={onDeleteClick}
                       >
@@ -104,7 +104,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
                           !Boolean(selected.length === 1) || !props.rows.length
                         }
                         variant="contained"
-                        color="secondary"
+                        color="primary"
                         size="large"
                         onClick={() => props.onImport(selected.pop())}
                       >

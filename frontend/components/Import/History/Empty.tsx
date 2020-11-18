@@ -48,7 +48,7 @@ const ETKImportHistoryEmpty: React.FC<ETKImportHistoryEmptyProps> = (props) => {
       <Grid item>
         <Button
           variant="contained"
-          color="secondary"
+          color="primary"
           size="large"
           onClick={() => {
             router.push("/?panel=import");

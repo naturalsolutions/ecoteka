@@ -37,7 +37,7 @@ const ETKContactButton: React.FC<ButtonProps> = (props) => {
     const successActions = [
       {
         label: t("common:buttons.backToHome"),
-        color: "secondary",
+        color: "primary",
         variant: "contained",
       },
     ];
@@ -60,7 +60,7 @@ const ETKContactButton: React.FC<ButtonProps> = (props) => {
       {
         label: t("components:Contact.buttonSubmitContent"),
         variant: "contained",
-        color: "secondary",
+        color: "primary",
         noClose: true,
         onClick: onSubmitClick,
       },

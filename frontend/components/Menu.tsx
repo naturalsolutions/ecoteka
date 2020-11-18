@@ -176,8 +176,8 @@ const ETKMenu: React.FC<ETKMenuProps> = (props) => {
         <Tabs
           value={value}
           onChange={handleChange}
-          indicatorColor="secondary"
-          textColor="secondary"
+          indicatorColor="primary"
+          textColor="primary"
         >
           {tree.map((item, index) => renderTab(item, index))}
         </Tabs>

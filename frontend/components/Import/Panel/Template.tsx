@@ -15,14 +15,15 @@ export interface ETKImportTemplateProps {
 }
 
 const defaultProps: ETKImportTemplateProps = {
-  linkTemplate: "https://raw.githubusercontent.com/NaturalSolutions/schema-arbre/v0.2.0/exemple-valide.xlsx",
+  linkTemplate:
+    "https://raw.githubusercontent.com/NaturalSolutions/schema-arbre/v0.2.0/exemple-valide.xlsx",
 };
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme) => ({
   content: {
-    backgroundColor: "#b2dfdc",
+    backgroundColor: theme.palette.secondary.main,
   },
-});
+}));
 
 const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
   const { t } = useTranslation("components");
@@ -54,7 +55,7 @@ const ETKImportTemplate: React.FC<ETKImportTemplateProps> = (props) => {
             <Button
               variant="outlined"
               size="large"
-              color="secondary"
+              color="primary"
               href={props.linkTemplate}
               target="_blank"
             >

@@ -45,14 +45,14 @@ const ETKMapSateliteToggle: React.FC<ETKMapSateliteToggleProps> = (props) => {
     >
       <Button
         variant={active === "map" ? "contained" : "outlined"}
-        color="secondary"
+        color="primary"
         onClick={() => onClickHandler("map")}
       >
         {t("Map.SateliteToggle.map")}
       </Button>
       <Button
         variant={active === "satelite" ? "contained" : "outlined"}
-        color="secondary"
+        color="primary"
         onClick={() => onClickHandler("satelite")}
       >
         {t("Map.SateliteToggle.satellite")}
