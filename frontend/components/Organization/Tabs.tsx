@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Tabs, Tab, Box } from "@material-ui/core";
 import { TabPanel, GeneralInfoTab, Members } from "@/components/Organization";
 import { TOrganization } from "@/pages/organization/[id]";
-import Teams from "./Teams";
+import Teams from "./Teams/Teams";
 
 const useStyles = makeStyles({
   root: {

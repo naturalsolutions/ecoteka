@@ -10,6 +10,11 @@ class Organization {
     return await response.json();
   }
 
+  async post(body) {
+    const url = `/organization/`;
+    return await this.api.post(url, {}, JSON.stringify(body));
+  }
+
   async members(id) {
     const url = `/users`;
     const response = await this.api.get(url);

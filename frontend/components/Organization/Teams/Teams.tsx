@@ -1,13 +1,17 @@
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useRef, useState } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery } from "react-query";
 import { apiRest } from "@/lib/api"
-import { Box, Button, Toolbar } from "@material-ui/core";
+import { Box, Button, makeStyles, Toolbar } from "@material-ui/core";
+import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon } from "@material-ui/icons";
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import CellGridSelectRenderer from "./CellGridSelectRenderer";
+import CellGridSelectRenderer from "../CellGridSelectRenderer";
+import { useTemplate } from "@/components/Template";
+import ETKFormTeam, { ETKFormTeamActions } from "./Form";
+import { useTranslation } from "react-i18next";
 
 interface TeamsProps {
   organization: TOrganization;
@@ -21,7 +25,34 @@ function EditBtnRenderer(props) {
   }}>Edit</Button>
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+  toolbar: {
+    flexDirection: "row",
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+}));
+
 const Teams: FC<TeamsProps> = (props) => {
+  const classes = useStyles();
+  const { dialog, theme } = useTemplate();
+  const formRef = useRef<ETKFormTeamActions>();
+  const { t } = useTranslation(["components", "common"]);
+
   const { status, data, error, isFetching } = useQuery("teams", async () => {
     const data = await apiRest.organization.teams(props.organization.id);
     return data;
@@ -30,6 +61,7 @@ const Teams: FC<TeamsProps> = (props) => {
   });
 
   const [gridApi, setGridApi] = useState(null);
+  const [enableActions, setEnableActions] = useState(true);
 
   const isVisible = props.value == props.index;
   if (isVisible && gridApi) {
@@ -49,13 +81,48 @@ const Teams: FC<TeamsProps> = (props) => {
     console.log(gridApi.getSelectedNodes());
   }
 
+  function openAddItem() {
+    const dialogActions = [
+      {
+        label: t("components:Team.buttonCancelContent"),
+      },
+      {
+        label: t("components:Team.buttonSubmitContent"),
+        variant: "contained",
+        color: "secondary",
+        noClose: true,
+        onClick: addItem,
+      },
+    ];
+
+    dialog.current.open({
+      title: t("components:Team.dialogTile"),
+      content: <ETKFormTeam ref={formRef} parent_id={props.organization.id} />,
+      actions: dialogActions
+    });
+  }
+
+  const addItem = async () => {
+    const isOk = await formRef.current.submit();
+    if (isOk) {
+      dialog.current.close();
+      //Refresh data
+    }
+  };
+
   return (
     <Fragment>
-      <Toolbar>
-        <Box display="flex-end" flexDirection="column" flexGrow={1} alignItems="end">
-          <Button onClick={groupAction}>Group action</Button>
-          <Button onClick={test}>Add</Button>
-        </Box>
+      <Toolbar className={classes.toolbar}>
+        <Box className={classes.root} />
+        <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<ArchiveIcon />}>
+          Archiver
+        </Button>
+        <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<DeleteIcon />}>
+          Supprimer
+        </Button>
+        <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={openAddItem}>
+          Ajouter une équipe
+        </Button>
       </Toolbar>
       {data &&
         <div className="ag-theme-alpine" style={{ width: '100%' }}>
@@ -79,9 +146,9 @@ const Teams: FC<TeamsProps> = (props) => {
               headerCheckboxSelection={true}
               checkboxSelection={true}></AgGridColumn>
             <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
-            {/* <AgGridColumn field="slug" resizable sortable filter></AgGridColumn> */}
+            <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
             <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
-            <AgGridColumn field="slug" cellRenderer="selectRenderer" cellRendererParams={{
+            {/* <AgGridColumn field="slug" cellRenderer="selectRenderer" cellRendererParams={{
               placeholder: "Select...",
               items: [{
                 label: "Europe",
@@ -100,7 +167,7 @@ const Teams: FC<TeamsProps> = (props) => {
                 console.log(params.data.id, params.data.slug);
               }
             }} />
-            <AgGridColumn cellRenderer="editBtnRenderer" />
+            <AgGridColumn cellRenderer="editBtnRenderer" /> */}
           </AgGridReact>
         </div>
       }
