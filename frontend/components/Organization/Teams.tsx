@@ -10,8 +10,8 @@ import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 interface TeamsProps {
   organization: TOrganization;
-  value: number;
-  index: number;
+  value: string;
+  index: string;
 }
 
 function EditBtnRenderer(props) {

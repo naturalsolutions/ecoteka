@@ -1,10 +1,9 @@
 import React, { FC, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Tabs, Tab, Box } from "@material-ui/core";
-import { GeneralInfoTab } from "@/components/Organization/Tab/GeneralInfoTab";
+import { TabPanel, GeneralInfoTab, MembersTab } from "@/components/Organization";
 import { TOrganization } from "@/pages/organization/[id]";
 import Teams from "./Teams";
-
 
 const useStyles = makeStyles({
   root: {
@@ -13,49 +12,44 @@ const useStyles = makeStyles({
 });
 
 interface TabsProps {
-  organization: TOrganization
-}
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {children}
-    </div>
-  );
+  organization: TOrganization;
 }
 
 const ETKTabs: FC<TabsProps> = (props) => {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState("general");
 
   const handleChange = (event, newValue) => {
+    console.log(newValue);
     setValue(newValue);
   };
   return (
-    <Paper className={classes.root}>
-      <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
-        <Tab label="Informations Générales" />
-        <Tab label="Équipes" />
-        <Tab label="Membres" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
+    <>
+      <Paper className={classes.root}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+          scrollButtons="on"
+          aria-label="organization tabs"
+        >
+          <Tab label="Informations Générales" value="general" />
+          <Tab label="Équipes" value="teams" />
+          <Tab label="Membres" value="members" />
+        </Tabs>
+      </Paper>
+      <TabPanel value={value} index="general">
         <GeneralInfoTab organization={props.organization} />
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Teams organization={props.organization} value={value} index={1} />
+      <TabPanel value={value} index="teams">
+        <Teams organization={props.organization} value={value} index="teams" />
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
+      <TabPanel value={value} index="members">
+        <MembersTab organization={props.organization} />
       </TabPanel>
-    </Paper>
+    </>
   );
 };
 
