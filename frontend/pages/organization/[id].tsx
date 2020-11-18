@@ -7,11 +7,12 @@ import { apiRest } from "@/lib/api";
 import { useQuery } from "react-query";
 
 export type TOrganization = {
-  id: number;
-  name: string;
-  slug: string;
-  path: string;
-  config: any;
+  id?: number;
+  name?: string;
+  slug?: string;
+  path?: string;
+  config?: any;
+  parent_id?: number;
 };
 
 interface OrganizationProps {}

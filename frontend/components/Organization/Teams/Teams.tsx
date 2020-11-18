@@ -1,6 +1,6 @@
 import { FC, Fragment, useRef, useState } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
-import { useQuery } from "react-query";
+import { useQuery, useQueryCache } from "react-query";
 import { apiRest } from "@/lib/api"
 import { Box, Button, makeStyles, Toolbar } from "@material-ui/core";
 import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon } from "@material-ui/icons";
@@ -53,6 +53,7 @@ const Teams: FC<TeamsProps> = (props) => {
   const formRef = useRef<ETKFormTeamActions>();
   const { t } = useTranslation(["components", "common"]);
 
+  const cache = useQueryCache();
   const { status, data, error, isFetching } = useQuery("teams", async () => {
     const data = await apiRest.organization.teams(props.organization.id);
     return data;
@@ -81,7 +82,7 @@ const Teams: FC<TeamsProps> = (props) => {
     console.log(gridApi.getSelectedNodes());
   }
 
-  function openAddItem() {
+  function openForm(organization?) {
     const dialogActions = [
       {
         label: t("components:Team.buttonCancelContent"),
@@ -97,7 +98,9 @@ const Teams: FC<TeamsProps> = (props) => {
 
     dialog.current.open({
       title: t("components:Team.dialogTile"),
-      content: <ETKFormTeam ref={formRef} parent_id={props.organization.id} />,
+      content: <ETKFormTeam ref={formRef} organization={organization || {
+        parent_id: props.organization.id
+      }} />,
       actions: dialogActions
     });
   }
@@ -106,7 +109,8 @@ const Teams: FC<TeamsProps> = (props) => {
     const isOk = await formRef.current.submit();
     if (isOk) {
       dialog.current.close();
-      //Refresh data
+      //TODO Add a row to the array instead of reload the complete collection
+      cache.invalidateQueries('teams');
     }
   };
 
@@ -120,7 +124,7 @@ const Teams: FC<TeamsProps> = (props) => {
         <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<DeleteIcon />}>
           Supprimer
         </Button>
-        <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={openAddItem}>
+        <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={() => { openForm() }}>
           Ajouter une équipe
         </Button>
       </Toolbar>
@@ -133,7 +137,11 @@ const Teams: FC<TeamsProps> = (props) => {
             rowSelection="multiple"
             suppressRowClickSelection
             frameworkComponents={{
-              editBtnRenderer: EditBtnRenderer,
+              editBtnRenderer: (params) => {
+                return <Button onClick={() => {
+                  openForm(params.data);
+                }}>Edit</Button>
+              },
               selectRenderer: CellGridSelectRenderer
             }}>
             <AgGridColumn
@@ -148,26 +156,7 @@ const Teams: FC<TeamsProps> = (props) => {
             <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
             <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
             <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
-            {/* <AgGridColumn field="slug" cellRenderer="selectRenderer" cellRendererParams={{
-              placeholder: "Select...",
-              items: [{
-                label: "Europe",
-                value: 'europe'
-              }, {
-                label: "Toto",
-                value: 'toto'
-              }, {
-                label: "Tata",
-                value: 'tata'
-              }, {
-                label: "Titi",
-                value: 'titi'
-              }],
-              onChange: (params, newValue, oldValue) => {
-                console.log(params.data.id, params.data.slug);
-              }
-            }} />
-            <AgGridColumn cellRenderer="editBtnRenderer" /> */}
+            <AgGridColumn cellRenderer="editBtnRenderer" />
           </AgGridReact>
         </div>
       }

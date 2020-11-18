@@ -1,10 +1,11 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useEtkTeamSchema from "./Schema";
 import getConfig from "next/config";
 import { apiRest } from "@/lib/api"
+import { TOrganization } from "@/pages/organization/[id]";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -13,7 +14,7 @@ export type ETKFormTeamActions = {
 };
 
 export interface ETKFormTeamProps {
-  parent_id?: number;
+  organization?: TOrganization
 }
 
 const defaultProps: ETKFormTeamProps = {};
@@ -22,22 +23,37 @@ const ETKFormTeam = forwardRef<ETKFormTeamActions, ETKFormTeamProps>(
   (props, ref) => {
     const { t } = useTranslation("components");
     const schema = useEtkTeamSchema();
-    const { fields, handleSubmit } = useETKForm({ schema: schema });
+    const form = useETKForm({ schema: schema });
     let isOk = false;
+    const isNew = !Boolean(props.organization?.id);
+
+    // Why a useEffect to make setValue works ?
+    useEffect(() => {
+      if (!isNew) {
+        for (let key in props.organization) {
+          if (schema.hasOwnProperty(key)) {
+            form.setValue(key, props.organization[key]);
+          }
+        }
+      }
+    }, []);
 
     const onSubmit = async (data) => {
       console.log(props)
       data = {
         ...data,
-        parent_id: props.parent_id
+        parent_id: props.organization.parent_id
       };
-      const response = await apiRest.organization.post(data);
+      const response = isNew ?
+        await apiRest.organization.post(data) :
+        await apiRest.organization.patch(props.organization.id, data);
+      //We could do that (and more) inapi
       if (response.ok) {
         isOk = true;
       }
     };
 
-    const submit = handleSubmit(onSubmit);
+    const submit = form.handleSubmit(onSubmit);
 
     useImperativeHandle(ref, () => ({
       submit: async () => {
@@ -53,8 +69,8 @@ const ETKFormTeam = forwardRef<ETKFormTeamActions, ETKFormTeamProps>(
             <Trans>{t("Team.dialogContentText")}</Trans>
           </Typography>
         </Grid>
-        <Grid item>{fields.name}</Grid>
-        <Grid item>{fields.slug}</Grid>
+        <Grid item>{form.fields.name}</Grid>
+        <Grid item>{form.fields.slug}</Grid>
       </Grid>
     );
   }

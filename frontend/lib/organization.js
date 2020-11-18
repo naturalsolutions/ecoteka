@@ -15,6 +15,13 @@ class Organization {
     return await this.api.post(url, {}, JSON.stringify(body));
   }
 
+  async patch(id, body) {
+    const url = `/organization/${id}`;
+    body = { ...body };
+    delete body.id;
+    return await this.api.patch(url, {}, JSON.stringify(body));
+  }
+
   async members(id) {
     const url = `/users`;
     const response = await this.api.get(url);
