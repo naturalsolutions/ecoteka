@@ -1,12 +1,13 @@
-import { FC, Fragment, useState, useEffect } from "react";
+import { FC, Fragment, useState } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery } from "react-query";
 import { apiRest } from "@/lib/api"
-import { Box, Button, MenuItem, Select, Toolbar } from "@material-ui/core";
+import { Box, Button, Toolbar } from "@material-ui/core";
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import CellGridSelectRenderer from "./CellGridSelectRenderer";
 
 interface TeamsProps {
   organization: TOrganization;
@@ -18,35 +19,6 @@ function EditBtnRenderer(props) {
   return <Button onClick={() => {
     console.log(props);
   }}>Edit</Button>
-}
-
-function SelectRenderer(props) {
-  const items = props.colDef.cellRendererParams?.items;
-  const initValue = items?.find(item => {
-    return item.value == props.data.slug;
-  })?.value || '';
-
-  const [value, setValue] = useState(initValue);
-
-  function handleChange(e) {
-    const newValue = e.target.value;
-    setValue(newValue);
-    props.setValue(newValue);
-  }
-
-  return <Select
-    value={value}
-    displayEmpty
-    onChange={handleChange}
-    autoWidth
-  >
-    <MenuItem value="" disabled>
-      {props.colDef.cellRendererParams?.placeholder}
-    </MenuItem>
-    {items.map((item, i) => {
-      return <MenuItem value={item.value} key={i}>{item.label}</MenuItem>
-    })}
-  </Select>
 }
 
 const Teams: FC<TeamsProps> = (props) => {
@@ -95,7 +67,7 @@ const Teams: FC<TeamsProps> = (props) => {
             suppressRowClickSelection
             frameworkComponents={{
               editBtnRenderer: EditBtnRenderer,
-              selectRenderer: SelectRenderer
+              selectRenderer: CellGridSelectRenderer
             }}>
             <AgGridColumn
               field="id"
@@ -123,7 +95,10 @@ const Teams: FC<TeamsProps> = (props) => {
               }, {
                 label: "Titi",
                 value: 'titi'
-              }]
+              }],
+              onChange: (params, newValue, oldValue) => {
+                console.log(params.data.id, params.data.slug);
+              }
             }} />
             <AgGridColumn cellRenderer="editBtnRenderer" />
           </AgGridReact>

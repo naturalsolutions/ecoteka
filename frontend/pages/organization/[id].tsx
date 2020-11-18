@@ -44,7 +44,7 @@ const Organization: FC<OrganizationProps> = (props) => {
     <Container maxWidth="md">
       {path && <Breadcrumb path={path} />}
       <Header />
-      <Tabs organization={path?.pop()} />
+      <Tabs organization={[...(path||[])].pop()} />
     </Container>
   );
 };
