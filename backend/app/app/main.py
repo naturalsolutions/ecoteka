@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from starlette.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
 from fastapi_jwt_auth.exceptions import AuthJWTException
 from app.core import (
     authjwt_exception_handler,
     settings
 )
 from app.api.api_v1.api import api_router
+from app.core.middlewares.authorization import AuthorizationMiddleware
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -17,7 +17,6 @@ app = FastAPI(
     }
 )
 
-app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
@@ -30,5 +29,8 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+app.add_middleware(AuthorizationMiddleware)
+
 
 app.include_router(api_router)
