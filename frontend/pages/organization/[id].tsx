@@ -23,13 +23,15 @@ function useOrganizationParents(query) {
     }
     const path = await apiRest.organization.parents(query);
     return path;
+  }, {
+    enabled: Boolean(query)
   });
 }
 
 const Organization: FC<OrganizationProps> = (props) => {
   const router = useRouter();
   const token = useRequireToken();
-  const { status: parentStatus , isLoading: parentsIsLoading, data: path, error: parentsError, isFetching: parentsIsFetching  } = useOrganizationParents(router.query.id);
+  const { status, data:path, error, isFetching } = useOrganizationParents(router.query.id);
 
   if (!token) {
     return <div>Récupération de votre session...</div>;
@@ -38,7 +40,7 @@ const Organization: FC<OrganizationProps> = (props) => {
     <Container maxWidth="md">
       {path && <Breadcrumb path={path} />}
       <Header />
-      <Tabs organization={!path ? null : path.splice(-1)} />
+      <Tabs organization={path?.pop()} />
     </Container>
   );
 };
