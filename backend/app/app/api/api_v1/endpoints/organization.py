@@ -103,7 +103,6 @@ def get_members(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    import logging
     t = text("SELECT v0 AS user_id, v1 as role FROM casbin_rule WHERE v2 = :org_id")
     user_ids = db.execute(t, {'org_id':str(organization_id)})
 
