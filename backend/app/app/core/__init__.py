@@ -26,4 +26,5 @@ __all__ = [
     "get_password_hash",
     "settings",
     "verify_password",
+    "authorization"
 ]

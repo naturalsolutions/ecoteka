@@ -10,6 +10,8 @@ from app.crud import (
     organization
 )
 from app.db import base  # noqa: F401
+from app.core.security import enforcer
+import logging
 
 # make sure all SQL Alchemy models
 # are imported (app.db.base) before initializing DB
@@ -33,31 +35,7 @@ def init_db(db: Session) -> None:
         )
         organization_in_db = organization.create(db, obj_in=organization_in)
 
-
-    planet = organization.get_by_name(db, name='planet')
-    if not planet:
-        planet = organization.create(
-            db,
-            obj_in=OrganizationCreate(
-                name='planet',
-                slug=slug.slug('planet'),
-            )
-        )
-
-    for continent in ('europe', 'africa', 'asia','central-america','north-america','south-america','oceania','russia'):
-        c = organization.get_by_name(db, name=continent)
-        if not c:
-            organization.create(
-                db,
-                obj_in=OrganizationCreate(
-                    name=continent,
-                    slug=slug.slug(continent),
-                    parent_id=planet.id,
-                )
-            )
-
     user_in_db = user.get_by_email(db, email=settings.FIRST_SUPERUSER)
-
     if not user_in_db:
         user_in = UserCreate(
             organization_id=organization_in_db.id,
@@ -73,3 +51,26 @@ def init_db(db: Session) -> None:
         db.add(user_in_db)
         db.commit()
         db.refresh(user_in_db)
+
+    planet = organization.get_by_name(db, name='planet')
+    if not planet:
+        planet = organization.create(
+            db,
+            obj_in=OrganizationCreate(
+                name='planet',
+                slug=slug.slug('planet'),
+            )
+        )
+    
+
+    for continent in ('europe', 'africa', 'asia','central-america','north-america','south-america','oceania','russia'):
+        c = organization.get_by_name(db, name=continent)
+        if not c:
+            c = organization.create(
+                db,
+                obj_in=OrganizationCreate(
+                    name=continent,
+                    slug=slug.slug(continent),
+                    parent_id=planet.id,
+                )
+            )

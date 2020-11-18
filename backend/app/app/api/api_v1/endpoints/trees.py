@@ -7,8 +7,9 @@ import numpy as np
 
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import get_current_active_user
+from app.core import get_current_active_user, get_current_user
 from app.worker import import_geofile_task, create_mbtiles_task
+from app.core.security import authorization
 
 import json
 
@@ -29,6 +30,7 @@ def get_tree_if_authorized(db: Session, current_user: models.User, tree_id: int)
         )
 
     return tree_in_db
+
 
 
 @router.post("/import-from-geofile", response_model=schemas.GeoFile)
@@ -152,9 +154,10 @@ def delete(
 )
 def get_center_from_organization(
     *,
+    auth = Depends(authorization('trees:get_center_from_organization')),
     db: Session = Depends(get_db),
     organization_id: int,
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_user),
 ) -> Any:
     """
     find centroid of Organization

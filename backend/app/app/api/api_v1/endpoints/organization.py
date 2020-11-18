@@ -18,8 +18,10 @@ from app.core import (
 from app.api import get_db
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import text 
 
 from app import crud, models, schemas
+from app.core.security import enforcer, authorization
 
 router = APIRouter()
 
@@ -33,15 +35,16 @@ def create_organization(
 ):
     return crud.organization.create(db, obj_in=organization).to_schema()
 
-@router.patch("/{id}", response_model=schemas.Organization)
+@router.patch("/{organization_id}", response_model=schemas.Organization)
 def update_organization(
-    id: int,
+    organization_id: int,
     *,
+    auth = Depends(authorization('organizations:update')),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
     organization: schemas.OrganizationUpdate
 ):
-    org = crud.organization.get(db, id=id)
+    org = crud.organization.get(db, id=organization_id)
 
     if not org:
         raise HTTPException(status_code=404, detail="Organization not found")
@@ -52,22 +55,23 @@ def update_organization(
         obj_in=jsonable_encoder(organization, exclude_unset=True)
     )
 
-@router.get("/{id}")
-def get_organization_by_id(
+@router.get("/{organization_id}")
+def get_one(
     *,
-    id: int,
-    db: Session = Depends(get_db)
+    auth = Depends(authorization('organizations:get_one')),
+    organization_id: int,
+    db: Session = Depends(get_db),
 ) -> Optional[schemas.Organization]:
     """
     get one organization by id
     """
-    organization_in_db = crud.organization.get(db, id=id)
+    organization_in_db = crud.organization.get(db, id=organization_id)
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
 
     total_trees = crud.organization.get_total_tree_by_id(
-        db, id=id)
+        db, id=organization_id)
 
     if not total_trees:
         total_trees = 0
@@ -79,21 +83,72 @@ def get_organization_by_id(
 
     return organization_response
 
-@router.get("/{id}/teams", response_model=List[schemas.Organization])
+@router.get("/{organization_id}/teams", response_model=List[schemas.Organization])
 def get_teams(
-    id: int,
+    organization_id: int,
     *,
+    auth = Depends(authorization('organizations:get_teams')),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
     return [
-        org.to_schema() for org in crud.organization.get_teams(db, parent_id=id)
+        org.to_schema() for org in crud.organization.get_teams(db, parent_id=organization_id)
     ]
 
-@router.get("/geojson/{organization_id}")
-def generate_style(
+@router.get("/{organization_id}/members")
+def get_members(
+    organization_id: int,
+    *,
+    auth = Depends(authorization('organizations:get_members')),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    import logging
+    t = text("SELECT v0 AS user_id, v1 as role FROM casbin_rule WHERE v2 = :org_id")
+    user_ids = db.execute(t, {'org_id':str(organization_id)})
+
+    result = []
+    for (userid, role) in user_ids:
+        user_in_db = crud.user.get(db, id=int(userid))
+
+        if user_in_db:
+            result.append(dict(user_in_db.as_dict(), role=role))
+
+    return result
+
+@router.patch("/{organization_id}/members/{user_id}/role")
+def update_member_role(
+    organization_id: int,
+    user_id: int,
+    *,
+    role: str = Body(...),
+    auth = Depends(authorization('organizations:edit_member')),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    user = crud.user.get(db, id = user_id)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    current_roles = enforcer.get_roles_for_user_in_domain(str(user_id), str(organization_id))
+
+    for current_role in current_roles:
+        enforcer.delete_roles_for_user_in_domain(str(user_id), current_role, str(organization_id))
+    
+    enforcer.add_role_for_user_in_domain(str(user_id), role, str(organization_id))
+
+    return dict(
+        user.as_dict(),
+        role = role
+    )
+    
+
+@router.get("{organization_id}/geojson")
+def get_geojson(
     *,
     organization_id: int,
+    auth = Depends(authorization('organizations:get_geojson')),
     db: Session = Depends(get_db)
 ) -> Any:
     """

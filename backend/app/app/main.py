@@ -7,7 +7,6 @@ from app.core import (
     settings
 )
 from app.api.api_v1.api import api_router
-from app.core.middlewares.authorization import AuthorizationMiddleware
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -29,8 +28,6 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-
-app.add_middleware(AuthorizationMiddleware)
 
 
 app.include_router(api_router)
