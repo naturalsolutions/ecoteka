@@ -2,7 +2,7 @@ import { FC, Fragment, useState, useEffect } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery } from "react-query";
 import { apiRest } from "@/lib/api"
-import { Box, Button, Toolbar } from "@material-ui/core";
+import { Box, Button, MenuItem, Select, Toolbar } from "@material-ui/core";
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -18,6 +18,35 @@ function EditBtnRenderer(props) {
   return <Button onClick={() => {
     console.log(props);
   }}>Edit</Button>
+}
+
+function SelectRenderer(props) {
+  const items = props.colDef.cellRendererParams?.items;
+  const initValue = items?.find(item => {
+    return item.value == props.data.slug;
+  })?.value || '';
+
+  const [value, setValue] = useState(initValue);
+
+  function handleChange(e) {
+    const newValue = e.target.value;
+    setValue(newValue);
+    props.setValue(newValue);
+  }
+
+  return <Select
+    value={value}
+    displayEmpty
+    onChange={handleChange}
+    autoWidth
+  >
+    <MenuItem value="" disabled>
+      {props.colDef.cellRendererParams?.placeholder}
+    </MenuItem>
+    {items.map((item, i) => {
+      return <MenuItem value={item.value} key={i}>{item.label}</MenuItem>
+    })}
+  </Select>
 }
 
 const Teams: FC<TeamsProps> = (props) => {
@@ -52,7 +81,7 @@ const Teams: FC<TeamsProps> = (props) => {
     <Fragment>
       <Toolbar>
         <Box display="flex-end" flexDirection="column" flexGrow={1} alignItems="end">
-        <Button onClick={groupAction}>Group action</Button>
+          <Button onClick={groupAction}>Group action</Button>
           <Button onClick={test}>Add</Button>
         </Box>
       </Toolbar>
@@ -65,7 +94,8 @@ const Teams: FC<TeamsProps> = (props) => {
             rowSelection="multiple"
             suppressRowClickSelection
             frameworkComponents={{
-              editBtnRenderer: EditBtnRenderer
+              editBtnRenderer: EditBtnRenderer,
+              selectRenderer: SelectRenderer
             }}>
             <AgGridColumn
               field="id"
@@ -77,9 +107,25 @@ const Teams: FC<TeamsProps> = (props) => {
               headerCheckboxSelection={true}
               checkboxSelection={true}></AgGridColumn>
             <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
-            <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
+            {/* <AgGridColumn field="slug" resizable sortable filter></AgGridColumn> */}
             <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
-            <AgGridColumn cellRenderer="editBtnRenderer"/>
+            <AgGridColumn field="slug" cellRenderer="selectRenderer" cellRendererParams={{
+              placeholder: "Select...",
+              items: [{
+                label: "Europe",
+                value: 'europe'
+              }, {
+                label: "Toto",
+                value: 'toto'
+              }, {
+                label: "Tata",
+                value: 'tata'
+              }, {
+                label: "Titi",
+                value: 'titi'
+              }]
+            }} />
+            <AgGridColumn cellRenderer="editBtnRenderer" />
           </AgGridReact>
         </div>
       }
