@@ -18,10 +18,14 @@ from app.core import (
 from app.api import get_db
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import text 
+from sqlalchemy.sql import text
 
 from app import crud, models, schemas
-from app.core.security import enforcer, authorization
+from app.core.security import (
+    enforcer,
+    authorization,
+    get_current_user
+)
 
 router = APIRouter()
 
@@ -169,8 +173,8 @@ def get_geojson(
 def get_parent_organizations(
     id: int,
     *,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_user)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
 ):
     return [
         org.to_schema() for org in crud.organization.get_path(db, id=id)
