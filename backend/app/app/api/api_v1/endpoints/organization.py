@@ -26,6 +26,7 @@ from app.core.security import (
     authorization,
     get_current_user
 )
+from passlib import pwd
 
 router = APIRouter()
 
@@ -117,6 +118,34 @@ def get_members(
             result.append(dict(user_in_db.as_dict(), role=role))
 
     return result
+
+@router.post("/{organization_id}/members")
+def add_members(
+    organization_id: int,
+    *,
+    emails: List[str] = Body(...),
+    auth = Depends(authorization('organizations:get_members')),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    org_members = get_members(organization_id, auth=auth, db=db, current_user=current_user)
+    emails_to_add = (email for email in emails if email not in (u.get('email') for u in org_members))
+
+    for email in emails_to_add:
+        user = crud.user.get_by_email(db, email=email)
+
+        if not user:
+            user = crud.user.create(db, obj_in=schemas.UserCreate(
+                full_name=email,
+                email=email,
+                password=pwd.genword()
+            ))
+        enforcer.add_role_for_user_in_domain(str(user.id), 'guest', str(organization_id))
+
+    return [
+        user for user in get_members(organization_id, auth=auth, db=db, current_user=current_user)
+        if user.get('email') in emails
+    ]
 
 @router.patch("/{organization_id}/members/{user_id}/role")
 def update_member_role(

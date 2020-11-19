@@ -12,7 +12,6 @@ class UserPrimaryKey(BaseModel):
 # Shared properties
 class UserBase(BaseModel):
     email: Optional[EmailStr] = None
-    organization_id: int
     status: str = None
     is_superuser: bool = False
     full_name: Optional[str] = None
@@ -23,8 +22,6 @@ class UserBase(BaseModel):
 class UserCreate(BaseModel):
     full_name: str
     email: EmailStr
-    organization: str
-    organization_id: Optional[int]
     password: str
 
 
