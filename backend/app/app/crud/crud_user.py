@@ -8,7 +8,7 @@ from typing import (
 
 from sqlalchemy.orm import Session
 
-from app.core import get_password_hash, verify_password
+from app.core import get_password_hash, verify_password, settings
 from app.crud import (
     CRUDBase
 )
@@ -19,6 +19,9 @@ from app.schemas import (
     UserCreate,
     UserUpdate,
     UserOut
+)
+from app.utils import (
+    send_new_account_email
 )
 
 
@@ -37,13 +40,19 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
         db_obj = User(
             email=obj_in.email,
-            organization_id=obj_in.organization_id,
             hashed_password=get_password_hash(obj_in.password),
             full_name=obj_in.full_name
         )
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
+
+        if settings.EMAILS_ENABLED and db_obj.email:
+            send_new_account_email(
+                email_to=db_obj.email,
+                username=db_obj.email,
+                password=obj_in.password
+            )
         return db_obj
 
     def get_multi(

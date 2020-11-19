@@ -38,8 +38,8 @@ def init_db(db: Session) -> None:
     user_in_db = user.get_by_email(db, email=settings.FIRST_SUPERUSER)
     if not user_in_db:
         user_in = UserCreate(
-            organization_id=organization_in_db.id,
-            organization=organization_in_db.name,
+            #organization_id=organization_in_db.id,
+            #organization=organization_in_db.name,
             full_name=settings.FIRST_SUPERUSER_FULLNAME,
             email=settings.FIRST_SUPERUSER,
             password=settings.FIRST_SUPERUSER_PASSWORD,

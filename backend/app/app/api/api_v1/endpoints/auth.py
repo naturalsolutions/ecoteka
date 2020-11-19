@@ -164,18 +164,19 @@ def register_new_user(
             detail="The user with this username already exists in the system.",
         )
 
-    organization_user = organization.get_by_name(db, name=user_in.organization)
+    ## Users should not be matched to organization during registration
+    # organization_user = organization.get_by_name(db, name=user_in.organization)
 
-    if not organization_user:
-        organization_user_in = OrganizationCreate(
-            name=user_in.organization,
-            slug=slug.slug(user_in.organization)
-        )
-        organization_user = organization.create(
-            db=db,
-            obj_in=organization_user_in)
+    # if not organization_user:
+    #     organization_user_in = OrganizationCreate(
+    #         name=user_in.organization,
+    #         slug=slug.slug(user_in.organization)
+    #     )
+    #     organization_user = organization.create(
+    #         db=db,
+    #         obj_in=organization_user_in)
 
-    user_in.organization_id = organization_user.id
+    # user_in.organization_id = organization_user.id
     user_in_db = user.create(db, obj_in=user_in)
 
     if not (user_in_db):
