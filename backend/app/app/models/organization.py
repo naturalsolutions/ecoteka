@@ -48,12 +48,12 @@ class Organization(Base):
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 
-    def __init__(self, name: str, slug: str=None, config=None, working_area=None, parent=None):
+    def __init__(self, name: str, config=None, working_area=None, parent=None):
         self.name = name
         self.slug = slugmodule.slug(name)
         self.config = config
         self.working_area = working_area
-        _path = strfltee(slug)
+        _path = strfltee(self.slug)
         self.path = _path if parent is None else parent.path + _path
 
     def to_schema(self):
