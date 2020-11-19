@@ -16,6 +16,9 @@ from sqlalchemy.sql import text
 from app import crud, models, schemas
 from app.core.security import enforcer, authorization, get_current_user
 
+from pydantic import EmailStr
+from passlib import pwd
+
 router = APIRouter()
 
 
@@ -114,7 +117,7 @@ def get_members(
 def add_members(
     organization_id: int,
     *,
-    emails: List[str] = Body(...),
+    emails: List[EmailStr] = Body(...),
     auth = Depends(authorization('organizations:add_members')),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
