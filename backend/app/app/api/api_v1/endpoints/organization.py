@@ -115,7 +115,7 @@ def add_members(
     organization_id: int,
     *,
     emails: List[str] = Body(...),
-    auth = Depends(authorization('organizations:get_members')),
+    auth = Depends(authorization('organizations:add_members')),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
