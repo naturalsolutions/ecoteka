@@ -65,7 +65,6 @@ const Members: FC<MembersProps> = (props) => {
     async () => {
       try {
         const data = await getMembers();
-        console.log(data);
         return data;
       } catch (error) {
         console.log(error);
