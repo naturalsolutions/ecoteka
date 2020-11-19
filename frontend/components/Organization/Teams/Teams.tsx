@@ -1,4 +1,4 @@
-import { FC, Fragment, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery, useQueryCache } from "react-query";
 import { apiRest } from "@/lib/api"
@@ -64,6 +64,12 @@ const Teams: FC<TeamsProps> = (props) => {
   const [gridApi, setGridApi] = useState(null);
   const [enableActions, setEnableActions] = useState(true);
 
+  useEffect(() => {
+    if (gridApi) {
+      gridApi.setRowData(data || [])
+    }
+  }, [gridApi, data]);
+
   const isVisible = props.value == props.index;
   if (isVisible && gridApi) {
     gridApi.sizeColumnsToFit();
@@ -128,38 +134,36 @@ const Teams: FC<TeamsProps> = (props) => {
           Ajouter une équipe
         </Button>
       </Toolbar>
-      {data &&
-        <div className="ag-theme-alpine" style={{ width: '100%' }}>
-          <AgGridReact
-            onGridReady={onGridReady}
-            rowData={data}
-            domLayout="autoHeight"
-            rowSelection="multiple"
-            suppressRowClickSelection
-            frameworkComponents={{
-              editBtnRenderer: (params) => {
-                return <Button onClick={() => {
-                  openForm(params.data);
-                }}>Edit</Button>
-              },
-              selectRenderer: CellGridSelectRenderer
-            }}>
-            <AgGridColumn
-              field="id"
-              resizable
-              sortable
-              filter
-              width={100}
-              suppressSizeToFit={true}
-              headerCheckboxSelection={true}
-              checkboxSelection={true}></AgGridColumn>
-            <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
-            <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
-            <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
-            <AgGridColumn cellRenderer="editBtnRenderer" />
-          </AgGridReact>
-        </div>
-      }
+      <div className="ag-theme-alpine" style={{ width: '100%' }}>
+        <AgGridReact
+          onGridReady={onGridReady}
+          domLayout="autoHeight"
+          rowSelection="multiple"
+          suppressRowClickSelection
+          frameworkComponents={{
+            editBtnRenderer: (params) => {
+              return <Button onClick={() => {
+                openForm(params.data);
+              }}>Edit</Button>
+            },
+            selectRenderer: CellGridSelectRenderer
+          }}>
+          <AgGridColumn
+            field="id"
+            resizable
+            sortable
+            filter
+            width={100}
+            suppressSizeToFit={true}
+            headerCheckboxSelection={true}
+            checkboxSelection={true}></AgGridColumn>
+          <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
+          <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
+          <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
+          <AgGridColumn cellRenderer="editBtnRenderer" />
+        </AgGridReact>
+      </div>
+
     </Fragment>
   );
 };
