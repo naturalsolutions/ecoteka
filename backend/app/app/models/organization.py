@@ -49,7 +49,7 @@ class Organization(Base):
         self.slug = slugmodule.slug(name)
         self.config = config
         self.working_area = working_area
-        self.path = Ltree(str(_id)) if parent is None else parent.path or Ltree('_') + Ltree(str(_id))
+        self.path = Ltree(str(_id)) if parent is None else parent.path + Ltree(self.slug) if parent.path else Ltree('_') + Ltree(str(_id))
 
     def to_schema(self):
         return schemas.Organization(
