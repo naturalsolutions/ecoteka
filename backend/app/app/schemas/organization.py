@@ -5,7 +5,6 @@ from pydantic import BaseModel
 # Shared properties
 class OrganizationBase(BaseModel):
     name: str = ""
-    slug: str = ""
     config: Optional[Any]
 
 

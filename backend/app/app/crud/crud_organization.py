@@ -12,6 +12,8 @@ from app.schemas.organization import OrganizationCreate, OrganizationUpdate
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy_utils import Ltree, LtreeType
 
+import slug as slugmodule
+
 
 class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUpdate]):
     def create(self, db: Session, *, obj_in: OrganizationCreate) -> Organization:
@@ -24,6 +26,28 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
         db.commit()
         db.refresh(org)
         return org
+
+    def update(
+        self,
+        db: Session,
+        *,
+        db_obj: Organization,
+        obj_in: Union[OrganizationUpdate, Dict[str, Any]]
+    ) -> Organization:
+        obj_data = db_obj.as_dict()
+        if isinstance(obj_in, dict):
+            update_data = obj_in
+        else:
+            update_data = obj_in.dict(exclude_unset=True)
+        for field in obj_data:
+            if field in update_data:
+                setattr(db_obj, field, update_data[field])
+
+        db_obj.slug = slugmodule.slug(db_obj.name)
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
 
     def get_by_name(self, db: Session, *, name: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.name == name).first()
