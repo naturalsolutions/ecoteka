@@ -17,7 +17,7 @@ from sqlalchemy.orm import (
 )
 from fastapi.encoders import jsonable_encoder
 from app import schemas
-
+import slug as slugmodule
 import logging
 
 def strfltee(s: str, replacements=(" ", "-")):
@@ -48,9 +48,9 @@ class Organization(Base):
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 
-    def __init__(self, name: str, slug: str, config=None, working_area=None, parent=None):
+    def __init__(self, name: str, slug: str=None, config=None, working_area=None, parent=None):
         self.name = name
-        self.slug = slug
+        self.slug = slugmodule.slug(name)
         self.config = config
         self.working_area = working_area
         _path = strfltee(slug)
