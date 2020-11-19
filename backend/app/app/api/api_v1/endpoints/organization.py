@@ -141,6 +141,31 @@ def add_members(
         if user.get('email') in (invite.email for invite in invites)
     ]
 
+@router.delete("/{organization_id}/members/{user_id}")
+def remove_member(
+    organization_id: int,
+    user_id: int,
+    *,
+    auth = Depends(authorization('organizations:remove_member')),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    user = crud.user.get(db, id=user_id)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    current_roles = enforcer.get_roles_for_user_in_domain(
+        str(user_id), str(organization_id)
+    )
+
+    for current_role in current_roles:
+        enforcer.delete_roles_for_user_in_domain(
+            str(user_id), current_role, str(organization_id)
+        )
+
+    return True
+
 @router.patch("/{organization_id}/members/{user_id}/role")
 def update_member_role(
     organization_id: int,

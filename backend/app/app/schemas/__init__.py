@@ -12,7 +12,8 @@ from .user import (
     UserDB,
     UserUpdate,
     UserOut,
-    UserInvite
+    UserInvite,
+    UserWithRole
 )
 from .contact import (
     ContactCreate,
@@ -98,5 +99,6 @@ __all__ = [
     "UserDB",
     "UserOut",
     "UserUpdate",
-    "UserInvite"
+    "UserInvite",
+    "UserWithRole"
 ]

@@ -45,3 +45,6 @@ class UserDB(UserPrimaryKey, UserBase):
 class UserInvite(BaseModel):
     email: EmailStr
     role: Optional[str]
+
+class UserWithRole(UserOut):
+    role: Optional[str]
