@@ -42,6 +42,15 @@ class Organization {
 
     return await response.json();
   }
+
+  async workingArea(id, file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const url = `/organization/${id}/working_area`;
+    const response = await this.api.post(url, {}, formData);
+
+    return await response.json();
+  }
 }
 
 export default function userFactory(api) {

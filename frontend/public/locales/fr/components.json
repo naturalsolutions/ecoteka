@@ -393,6 +393,13 @@
     "buttonSubmitContent": "Envoyer",
     "buttonCancelContent": "Annuler"
   }, 
+  "TeamArea": {
+    "file": "Fichier",
+    "dialogTitle": "Editer l'emprise",
+    "dialogContentText": "Utilisez ce formulaire pour éditer l'emprise.",
+    "buttonSubmitContent": "Envoyer",
+    "buttonCancelContent": "Annuler"
+  }, 
   "Organization" : {
     "Members" : {
       "dialogTile": "Ajouter des membres à votre organisation",

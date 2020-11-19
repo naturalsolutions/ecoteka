@@ -2,8 +2,8 @@ import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery, useQueryCache } from "react-query";
 import { apiRest } from "@/lib/api"
-import { Box, Button, makeStyles, Toolbar } from "@material-ui/core";
-import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon } from "@material-ui/icons";
+import { Box, Button, IconButton, makeStyles, Toolbar } from "@material-ui/core";
+import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon, Edit } from "@material-ui/icons";
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -12,17 +12,12 @@ import CellGridSelectRenderer from "../CellGridSelectRenderer";
 import { useTemplate } from "@/components/Template";
 import ETKFormTeam, { ETKFormTeamActions } from "./Form";
 import { useTranslation } from "react-i18next";
+import ETKFormTeamArea from "../TeamArea/Form";
 
 interface TeamsProps {
   organization: TOrganization;
   value: string;
   index: string;
-}
-
-function EditBtnRenderer(props) {
-  return <Button onClick={() => {
-    console.log(props);
-  }}>Edit</Button>
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -79,15 +74,6 @@ const Teams: FC<TeamsProps> = (props) => {
     setGridApi(params.api);
   }
 
-  function test() {
-    data[2].name = 'toto';
-    gridApi.setRowData(data);
-  }
-
-  function groupAction() {
-    console.log(gridApi.getSelectedNodes());
-  }
-
   function openForm(organization?) {
     const isNew = !Boolean(organization);
     const dialogActions = [
@@ -121,6 +107,36 @@ const Teams: FC<TeamsProps> = (props) => {
     }
   };
 
+  function openArea(organization) {
+    const dialogActions = [
+      {
+        label: t("components:TeamArea.buttonCancelContent"),
+      },
+      {
+        label: t("components:TeamArea.buttonSubmitContent"),
+        variant: "contained",
+        color: "secondary",
+        noClose: true,
+        onClick: editWorkingArea,
+      },
+    ];
+
+    dialog.current.open({
+      title: t("components:TeamArea.dialogTitle"),
+      content: <ETKFormTeamArea ref={formRef} organization={organization} />,
+      actions: dialogActions
+    });
+  }
+
+  const editWorkingArea = async () => {
+    const isOk = await formRef.current.submit();
+    if (isOk) {
+      dialog.current.close();
+      //TODO Add a row to the array instead of reload the complete collection
+      cache.invalidateQueries('teams');
+    }
+  };
+
   return (
     <Fragment>
       <Toolbar className={classes.toolbar}>
@@ -142,10 +158,25 @@ const Teams: FC<TeamsProps> = (props) => {
           rowSelection="multiple"
           suppressRowClickSelection
           frameworkComponents={{
-            editBtnRenderer: (params) => {
-              return <Button onClick={() => {
-                openForm(params.data);
-              }}>Edit</Button>
+            actionsRenderer: (params) => {
+              return <Fragment>
+                <Button
+                  size="small"
+                  color="secondary"
+                  onClick={() => {
+                    openArea(params.data);
+                  }}>
+                  Area
+                </Button>
+                <IconButton
+                  size="small"
+                  color="secondary"
+                  onClick={() => {
+                    openForm(params.data);
+                  }}>
+                  <Edit />
+                </IconButton>
+              </Fragment>
             },
             selectRenderer: CellGridSelectRenderer
           }}>
@@ -161,7 +192,12 @@ const Teams: FC<TeamsProps> = (props) => {
           <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
           <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
           <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
-          <AgGridColumn cellRenderer="editBtnRenderer" />
+          <AgGridColumn
+            cellRenderer="actionsRenderer"
+            cellStyle={{
+              'text-align': 'right'
+            }}
+          />
         </AgGridReact>
       </div>
 
