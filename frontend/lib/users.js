@@ -5,7 +5,7 @@ class Users {
 
   async me() {
     try {
-      const response = await this.api.get("/users/me/");
+      const response = await this.api.get("/users/me");
 
       if (response.ok) {
         const user = await response.json();

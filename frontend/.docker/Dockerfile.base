@@ -11,10 +11,9 @@ COPY package.json .
 
 RUN npm install
 RUN npm install -g npm-check-updates 
+RUN npx next telemetry disable
 
 COPY . .
-
-RUN npx next telemetry disable
 
 EXPOSE 3000
 
