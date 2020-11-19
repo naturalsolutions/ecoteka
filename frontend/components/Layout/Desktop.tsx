@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 
 const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
   const classes = useStyles();
-  const { user, appContext } = useAppContext();
+  const { user } = useAppContext();
   const sizeToolbar = user ? 96 : 48;
   const styles = {
     height: `calc(100vh - ${sizeToolbar}px)`,
@@ -80,7 +80,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
   return (
     <div role="presentation">
       <AppBar position="fixed">
-        <ETKToolbar logo={`/assets/${appContext.theme}/logo.svg`} />
+        <ETKToolbar logo={`/assets/dark/logo.svg`} />
         {user && <ETKMenu items={menuItems} />}
       </AppBar>
       <main className={classes.content} style={styles}>
