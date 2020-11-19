@@ -43,13 +43,22 @@ class Organization {
     return await response.json();
   }
 
-  async workingArea(id, file) {
+  async workingArea(id, file, { onProgress, onLoad, onError }) {
     const formData = new FormData();
-    formData.append('file', file);
-    const url = `/organization/${id}/working_area`;
-    const response = await this.api.post(url, {}, formData);
+    formData.append('file', file, file.name);
 
-    return await response.json();
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = (e) => onProgress(e);
+    xhr.onload = () => onLoad(xhr);
+    xhr.onerror = () => onError(xhr);
+
+    const url = `${this.api.url}/organization/${id}/working_area`;
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Authorization", `Bearer ${this.api.getToken()}`);
+    xhr.send(formData);
+
+    return xhr;
   }
 }
 

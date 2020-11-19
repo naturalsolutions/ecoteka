@@ -383,6 +383,11 @@
     "dialogDeleteActionYes": "Oui",
     "dialogDeleteActionCancel": "Non"
   },
+  "Teams": {
+    "buttonAdd": "Ajouter une équipe",
+    "tooltipWorkingAreaEdit": "Editer l'emprise",
+    "tooltipInfoEdit": "Editer les informations"
+  },
   "Team": {
     "name": "Nom",
     "slug": "Slug",
@@ -394,9 +399,8 @@
     "buttonCancelContent": "Annuler"
   }, 
   "TeamArea": {
-    "file": "Fichier",
     "dialogTitle": "Editer l'emprise",
-    "dialogContentText": "Utilisez ce formulaire pour éditer l'emprise.",
+    "dialogContentText": "Extension acceptés : zip, geojson",
     "buttonSubmitContent": "Envoyer",
     "buttonCancelContent": "Annuler"
   }, 
