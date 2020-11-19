@@ -25,13 +25,6 @@ class Tree {
     return await response.json();
   }
 
-  async getCentroidFromOrganization(organization) {
-    const url = `/trees/get-centroid-organization/${organization}`;
-    const response = await this.api.get(url);
-
-    return await response.json();
-  }
-
   async patch(id, model) {
     const url = `/trees/${id}`;
     const response = await this.api.patch(url, {}, JSON.stringify(model));
