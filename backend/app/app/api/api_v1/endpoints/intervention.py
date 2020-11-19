@@ -17,6 +17,8 @@ from app.crud import (
 )
 from app.api import get_db
 from app.core import (
+    authorization,
+    set_policies,
     get_current_active_user
 )
 
@@ -25,10 +27,21 @@ from typing import List
 
 router = APIRouter()
 
+policies = {
+    'interventions:create': ['owner', 'manager', 'contributor'],
+    'interventions:get': ['owner', 'manager', 'contributor', 'reader'],
+    'interventions:get_year': ['owner', 'manager', 'contributor', 'reader'],
+    'interventions:update': ['owner', 'manager', 'contributor'],
+    'interventions:delete': ['owner', 'manager', 'contributor']
+}
+set_policies(policies)
+
 
 @router.post('/', response_model=Intervention)
 def create(
+    organization_id: int,
     *,
+    auth=Depends(authorization('interventions:create')),
     request_intervention: InterventionCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
@@ -42,8 +55,10 @@ def create(
 
 @router.get('/{intervention_id}', response_model=Intervention)
 def get(
+    organization_id: int,
     intervention_id: int,
     *,
+    auth=Depends(authorization('interventions:get')),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
@@ -52,8 +67,10 @@ def get(
 
 @router.get('/year/{year}', response_model=List[Intervention])
 def get_year(
+    organization_id: int,
     year: int,
     *,
+    auth=Depends(authorization('interventions:get_year')),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
@@ -62,8 +79,10 @@ def get_year(
 
 @router.patch('/{intervention_id}', response_model=Intervention)
 def update(
+    organization_id: int,
     intervention_id: int,
     *,
+    auth=Depends(authorization('interventions:update')),
     request_intervention: InterventionUpdate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
@@ -77,8 +96,10 @@ def update(
 
 @router.delete('/{intervention_id}', response_model=Intervention)
 def delete(
+    organization_id: int,
     id: int,
     *,
+    auth=Depends(authorization('interventions:delete')),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
