@@ -4,9 +4,8 @@ from pydantic import BaseModel
 
 # Shared properties
 class OrganizationBase(BaseModel):
-    name: str = ''
-    slug: str = ''
-    working_area: Optional[Any]
+    name: str = ""
+    slug: str = ""
     config: Optional[Any]
 
 
@@ -24,6 +23,7 @@ class OrganizationUpdate(OrganizationBase):
 class Organization(OrganizationBase):
     id: int
     path: Optional[Any]
+    has_working_area: bool = False
     total_trees: Optional[int] = 0
 
     class Config:

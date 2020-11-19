@@ -15,11 +15,7 @@ from sqlalchemy_utils import Ltree, LtreeType
 
 class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUpdate]):
     def create(self, db: Session, *, obj_in: OrganizationCreate) -> Organization:
-        parent = (
-            self.get(db, id=obj_in.parent_id)
-            if obj_in.parent_id
-            else None
-        )
+        parent = self.get(db, id=obj_in.parent_id) if obj_in.parent_id else None
 
         obj_in_data = jsonable_encoder(obj_in, exclude=["parent_id"])
         org = Organization(**obj_in_data, parent=parent)
@@ -36,19 +32,20 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
         return db.query(Organization).filter(Organization.path == Ltree(path)).one()
 
     def get_teams(self, db: Session, *, parent_id: int) -> List[Organization]:
-        '''returns sub-organization (teams) given the the parent'''
+        """returns sub-organization (teams) given the the parent"""
         # positble alternative: select * from organization o where o.path ~ 'planet.*{1}';
-        
-        parent = self.get(db, id = parent_id)
+
+        parent = self.get(db, id=parent_id)
 
         if not parent:
             return []
-        
+
         return (
             db.query(Organization)
             .filter(
                 and_(
-                    func.nlevel(Organization.path) == (func.nlevel(str(parent.path)) + 1),
+                    func.nlevel(Organization.path)
+                    == (func.nlevel(str(parent.path)) + 1),
                     Organization.path.descendant_of(parent.path),
                 )
             )

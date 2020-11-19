@@ -1,11 +1,4 @@
-from sqlalchemy import (
-    Column,
-    Integer,
-    Index,
-    String,
-    func,
-    inspect
-)
+from sqlalchemy import Column, Integer, Index, String, func, inspect
 from app.db.base_class import Base
 from geoalchemy2 import Geometry
 from sqlalchemy_utils import LtreeType, Ltree
@@ -19,6 +12,7 @@ from fastapi.encoders import jsonable_encoder
 from app import schemas
 
 import logging
+
 
 def strfltee(s: str, replacements=(" ", "-")):
     result = s
@@ -48,7 +42,9 @@ class Organization(Base):
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 
-    def __init__(self, name: str, slug: str, config=None, working_area=None, parent=None):
+    def __init__(
+        self, name: str, slug: str, config=None, working_area=None, parent=None
+    ):
         self.name = name
         self.slug = slug
         self.config = config
@@ -57,9 +53,12 @@ class Organization(Base):
         self.path = _path if parent is None else parent.path + _path
 
     def to_schema(self):
-
-        return schemas.Organization (
-            **{c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs if c.key != 'path'},
+        return schemas.Organization(
+            **{
+                c.key: getattr(self, c.key)
+                for c in inspect(self).mapper.column_attrs
+                if not c.key in ["path", "working_area"]
+            },
+            has_working_area=bool(self.working_area),
             path=str(self.path)
         )
-    
