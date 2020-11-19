@@ -271,11 +271,11 @@ async def upload_working_area(
         await file.close()
 
 
-@router.get("{organization_id}/working_area")
+@router.get("/{organization_id}/working_area")
 def get_working_area(
     *,
     organization_id: int,
-    auth=Depends(authorization("organizations:get_working_area")),
+    # auth=Depends(authorization("organizations:get_working_area")),
     db: Session = Depends(get_db),
 ) -> Any:
     """
