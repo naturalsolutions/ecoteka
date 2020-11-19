@@ -3,7 +3,6 @@ import { Grid, makeStyles, Hidden } from "@material-ui/core";
 import { useRouter } from "next/router";
 import ETKMap from "../components/Map/Map";
 import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
-import ETKMapSateliteToggle from "../components/Map/MapSatelliteToggle";
 import ETKMapSearchCity from "../components/Map/SearchCity";
 import ETKPanel from "../components/Panel";
 import ETKLanding from "../components/Landing";
@@ -77,7 +76,6 @@ export default function IndexPage() {
             <ETKMapSearchCity className={classes.mapSearchCity} map={mapRef} />
           )}
           <ETKMapGeolocateFab map={mapRef} />
-          <ETKMapSateliteToggle map={mapRef} />
         </Grid>
       </Grid>
     </Template>

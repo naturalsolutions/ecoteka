@@ -13,14 +13,14 @@ const useStyles = makeStyles(() => ({
     fontStyle: "italic",
     fontWeight: "bold",
     letterSpacing: "2px",
-    color: "grey",
   },
 
   grid: {
     height: "100%",
     width: "100%",
     background: `no-repeat center url('../assets/background_importhistoryempty.png')`,
-    backgroundSize: "40%",
+    backgroundPosition: "center",
+    backgroundSize: "contain",
   },
 }));
 

@@ -76,7 +76,7 @@ const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (
       <Grid item>
         <CardInfoPanel
           title={t("PanelStart.numberOfTrees.title")}
-          content={`11 ${t("PanelStart.numberOfTrees.content")}`}
+          content={`14.5 ${t("PanelStart.numberOfTrees.content")}`}
         />
       </Grid>
       <Grid item>

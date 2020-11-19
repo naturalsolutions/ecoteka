@@ -106,7 +106,7 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
             <CardInfoPanel
               icon={<AcUnit />}
               title={t("PanelWelcome.CardInfoPanel.title")}
-              content="11 million d'arbres"
+              content="14.5 million d'arbres"
             />
           </Grid>
           <Grid item>

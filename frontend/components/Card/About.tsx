@@ -21,21 +21,25 @@ const defaultProps: ETKCardAboutProps = {
   buttonVariant: "outlined",
 };
 
+const useStyles = makeStyles((theme) => ({
+  title: {
+    fontWeight: "bold",
+    fontSize: "1.2rem",
+  },
+  contactButton: {
+    opacity: 0.8,
+  },
+  card: {
+    backgroundColor: theme.palette.secondary.main,
+  },
+}));
+
 const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
-  const useStyles = makeStyles(() => ({
-    title: {
-      fontWeight: "bold",
-      fontSize: "1.2rem",
-    },
-    contactButton: {
-      opacity: 0.8,
-    },
-  }));
   const classes = useStyles();
   const { t } = useTranslation("components");
 
   return (
-    <Card>
+    <Card className={classes.card}>
       <CardContent>
         <Grid
           container

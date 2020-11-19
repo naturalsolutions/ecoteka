@@ -65,10 +65,7 @@ const useStyle = makeStyles(() =>
     etkDropzoneText: {
       whiteSpace: "pre",
     },
-    etkDropzone: {
-      backgroundColor: "#F0F9F8",
-      color: "#707070",
-    },
+    etkDropzone: {},
     submitbtn: {
       alignSelf: "flex-end",
     },

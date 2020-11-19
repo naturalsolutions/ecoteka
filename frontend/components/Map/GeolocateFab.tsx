@@ -26,7 +26,7 @@ const ETKMapGeolocateFab: React.FC<ETKMapGeolocateFabProps> = (props) => {
         await props.map.current?.map.geolocate?.trigger();
       }}
     >
-      <MyLocationIcon />
+      <MyLocationIcon color="secondary" />
     </Fab>
   );
 };
