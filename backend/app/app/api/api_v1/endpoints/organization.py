@@ -334,7 +334,7 @@ def get_path(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return [org.to_schema() for org in organization.get_path(db, id=id)]
+    return [org.to_schema() for org in organization.get_path(db, id=organization_id)]
 
 
 @router.get(
