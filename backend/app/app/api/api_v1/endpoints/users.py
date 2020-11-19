@@ -116,10 +116,6 @@ def read_user_me(
     """
     Get current user.
     """
-
-    security.enforcer.add_role_for_user_in_domain(str(current_user.id),'admin', '1')
-    test = security.enforcer.get_roles_for_user_in_domain(str(current_user.id), '1')
-
     logging.info(f"current user {current_user.id} roles {test}")
     return current_user
 
