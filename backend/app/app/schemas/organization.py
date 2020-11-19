@@ -24,6 +24,7 @@ class Organization(OrganizationBase):
     id: int
     path: Optional[Any]
     has_working_area: bool = False
+    slug: Optional[str]
     total_trees: Optional[int] = 0
 
     class Config:
