@@ -76,12 +76,12 @@ def create_user(
             detail="The user with this username already exists in the system.",
         )
     user_in_db = user.create(db, obj_in=user_in)
-    if settings.EMAILS_ENABLED and user_in.email:
-        send_new_account_email(
-            email_to=user_in.email,
-            username=user_in.email,
-            password=user_in.password
-        )
+    # if settings.EMAILS_ENABLED and user_in.email:
+    #     send_new_account_email(
+    #         email_to=user_in.email,
+    #         username=user_in.email,
+    #         password=user_in.password
+    #     )
     return user_in_db
 
 

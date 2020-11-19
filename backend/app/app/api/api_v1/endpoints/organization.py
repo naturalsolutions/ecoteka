@@ -16,6 +16,9 @@ from sqlalchemy.sql import text
 from app import crud, models, schemas
 from app.core.security import enforcer, authorization, get_current_user
 
+from pydantic import EmailStr
+from passlib import pwd
+
 router = APIRouter()
 
 
@@ -110,6 +113,58 @@ def get_members(
 
     return result
 
+@router.post("/{organization_id}/members")
+def add_members(
+    organization_id: int,
+    *,
+    invites: List[schemas.UserInvite] = Body(...),
+    auth = Depends(authorization('organizations:add_members')),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    org_members = get_members(organization_id, auth=auth, db=db, current_user=current_user)
+    users_to_add = (invite for invite in invites if invite.email not in (u.get('email') for u in org_members))
+
+    for invite in users_to_add:
+        user = crud.user.get_by_email(db, email=invite.email)
+
+        if not user:
+            user = crud.user.create(db, obj_in=schemas.UserCreate(
+                full_name=invite.email,
+                email=invite.email,
+                password=pwd.genword()
+            ))
+        enforcer.add_role_for_user_in_domain(str(user.id), invite.role if invite.role else 'guest', str(organization_id))
+
+    return [
+        user for user in get_members(organization_id, auth=auth, db=db, current_user=current_user)
+        if user.get('email') in (invite.email for invite in invites)
+    ]
+
+@router.delete("/{organization_id}/members/{user_id}")
+def remove_member(
+    organization_id: int,
+    user_id: int,
+    *,
+    auth = Depends(authorization('organizations:remove_member')),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    user = crud.user.get(db, id=user_id)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    current_roles = enforcer.get_roles_for_user_in_domain(
+        str(user_id), str(organization_id)
+    )
+
+    for current_role in current_roles:
+        enforcer.delete_roles_for_user_in_domain(
+            str(user_id), current_role, str(organization_id)
+        )
+
+    return True
 
 @router.patch("/{organization_id}/members/{user_id}/role")
 def update_member_role(
@@ -173,55 +228,6 @@ def get_parent_organizations(
     return [org.to_schema() for org in crud.organization.get_path(db, id=id)]
 
 
-@router.get("/{organization_id}/working_area")
-async def upload_working_area(
-    file: UploadFile = File(...),
-    *,
-    organization_id: int,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    """
-    Upload a geo file
-    """
-    try:
-        filename_parts = os.path.splitext(file.filename)
-        extension = filename_parts[1][1:]
-
-        if not extension in ["zip", "geojson"]:
-            raise HTTPException(status_code=415, detail="File format unsupported")
-
-        unique_name = uuid.uuid4()
-        unique_filename = f"{unique_name}.{extension}"
-        copy_filename = f"{settings.UPLOADED_FILES_FOLDER}/{unique_filename}"
-        copy_file = await file.read()
-
-        with open(copy_filename, "wb") as f:
-            f.write(copy_file)  # type: ignore
-
-        c = fiona.open(copy_filename)
-        record = next(iter(c))
-
-        if not record["geometry"]["type"]:
-            raise HTTPException(status_code=415, detail="File unsupported")
-
-        organization_in_db = crud.organization.get(db, id=organization_id)
-
-        if not organization_in_db:
-            raise HTTPException(status_code=404, detail="Organization not found")
-
-        working_area = shape(record["geometry"]).wkt
-        organization = crud.organization.update(
-            db,
-            db_obj=organization_in_db,
-            obj_in={"working_area": working_area},
-        )
-
-        return organization.to_schema()
-    finally:
-        await file.close()
-
-
 @router.post("/{organization_id}/working_area", response_model=schemas.Organization)
 async def upload_working_area(
     file: UploadFile = File(...),
@@ -271,7 +277,7 @@ async def upload_working_area(
         await file.close()
 
 
-@router.get("{organization_id}/working_area")
+@router.get("/{organization_id}/working_area")
 def get_working_area(
     *,
     organization_id: int,
