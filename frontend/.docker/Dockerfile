@@ -1,4 +1,5 @@
 FROM registry.gitlab.com/natural-solutions/ecoteka:frontend-base as builder
+COPY . .
 RUN npm run build && npm run export
 
 FROM nginx:alpine
