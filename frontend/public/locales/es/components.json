@@ -280,5 +280,16 @@
     "dialogDeleteContent": "¿Seguro que deseas eliminar los árboles seleccionados?",
     "dialogDeleteActionYes": "Si",
     "dialogDeleteActionCancel": "No"
+  },
+  
+  "Team": {
+    "name": "Apelido",
+    "slug": "Slug",
+    "dialogTitleCreate": "Ajouter une équipe",
+    "dialogTitleEdit": "Modifier une équipe",
+    "dialogContentTextCreate": "Vous allez ajouter une équipe dans l'organisation courante.",
+    "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'équipe.",
+    "buttonSubmitContent": "Enviar",
+    "buttonCancelContent": "Cancelar"
   }
 }

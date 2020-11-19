@@ -14,6 +14,8 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^3.2.10",
+    "ag-grid-community": "^24.1.0",
+    "ag-grid-react": "^24.1.1",
     "i18next": "^19.8.2",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",
@@ -30,6 +32,7 @@
     "react-hook-form": "^6.9.5",
     "react-hook-form-resolvers": "0.0.1",
     "react-i18next": "^11.7.3",
+    "react-query": "^2.26.2",
     "yup": "^0.29.3"
   },
   "devDependencies": {

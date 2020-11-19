@@ -287,5 +287,16 @@
     "dialogDeleteContent": "Are you sure you want to remove the selected trees?",
     "dialogDeleteActionYes": "Yes",
     "dialogDeleteActionCancel": "No"
+  },
+  
+  "Team": {
+    "name": "Name",
+    "slug": "Slug",
+    "dialogTitleCreate": "Add a team",
+    "dialogTitleEdit": "Update a team",
+    "dialogContentTextCreate": "You will add a team in the current organization.",
+    "dialogContentTextEdit": "Use this form to update a team.",
+    "buttonSubmitContent": "Send",
+    "buttonCancelContent": "Cancel"
   }
 }

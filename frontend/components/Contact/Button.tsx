@@ -1,12 +1,5 @@
 import React, { useRef } from "react";
-import {
-  Button,
-  ButtonProps,
-  BottomNavigationAction,
-  Grid,
-  Typography,
-  useMediaQuery,
-} from "@material-ui/core";
+import { Button, ButtonProps, BottomNavigationAction, Grid, Typography, useMediaQuery } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useTranslation } from "react-i18next";
 import { useTemplate } from "../Template";
@@ -23,10 +16,7 @@ const ETKContactButton: React.FC<ButtonProps> = (props) => {
     const successContent = (
       <Grid container direction="column" alignItems="center">
         <Grid item>
-          <CheckCircleIcon
-            color={theme.palette.success.main}
-            fontSize="large"
-          />
+          <CheckCircleIcon color={theme.palette.success.main} fontSize="large" />
         </Grid>
         <Grid item>
           <Typography>{t("Contact.successMessageContent")}</Typography>
@@ -80,11 +70,7 @@ const ETKContactButton: React.FC<ButtonProps> = (props) => {
   };
 
   return matches ? (
-    <BottomNavigationAction
-      label={t("Toolbar.about")}
-      onClick={onButtonClick}
-      {...props}
-    />
+    <BottomNavigationAction label={t("Toolbar.about")} onClick={onButtonClick} {...props} />
   ) : (
     <Button onClick={onButtonClick} {...props}>
       {t("Toolbar.about")}
