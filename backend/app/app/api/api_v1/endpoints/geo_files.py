@@ -3,26 +3,14 @@ import uuid
 import json
 from typing import Any, List
 
-from fastapi import (
-    APIRouter,
-    Body,
-    Depends,
-    HTTPException,
-    File,
-    UploadFile
-)
+from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
 
 from sqlalchemy.orm import Session
 from pydantic import Json
 
 from app import crud, models, schemas
-from app.api import (
-    get_db
-)
-from app.core import (
-    settings,
-    get_current_active_user
-)
+from app.api import get_db
+from app.core import settings, get_current_active_user
 from app.tasks import create_mbtiles
 from app.worker import create_mbtiles_task
 
@@ -34,15 +22,12 @@ def read_geo_files(
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """
     Retrieve geo files.
     """
-    geo_files = crud.geo_file.get_multi(db,
-                                        user=current_user,
-                                        skip=skip,
-                                        limit=limit)
+    geo_files = crud.geo_file.get_multi(db, user=current_user, skip=skip, limit=limit)
 
     return geo_files
 
@@ -52,7 +37,7 @@ def read_geofile_by_name(
     *,
     db: Session = Depends(get_db),
     name: str,
-    current_user: models.User = Depends(get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """
     Retrieve geo files.
@@ -72,7 +57,7 @@ def read_geofile_by_name(
 async def upload_geo_file(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user),
 ):
     """
     Upload a geo file
@@ -97,7 +82,7 @@ async def upload_geo_file(
             original_name=file.filename,
             extension=extension,
             user_id=current_user.id,
-            organization_id=current_user.organization_id
+            organization_id=current_user.organization_id,
         )
 
         geofile_exists = crud.geo_file.get_by_checksum(db, checksum=geofile.checksum)
@@ -106,7 +91,8 @@ async def upload_geo_file(
             os.remove(geofile.get_filepath(extended=False))
             raise HTTPException(
                 status_code=400,
-                detail=f"The geofile with the {geofile.checksum} checksum already exists in the system.")
+                detail=f"The geofile with the {geofile.checksum} checksum already exists in the system.",
+            )
 
         if not geofile.is_valid():
             raise HTTPException(status_code=415, detail="File corrupt")
@@ -124,7 +110,7 @@ def update_geo_file(
     *,
     db: Session = Depends(get_db),
     geofile_in: schemas.GeoFileUpdate,
-    current_user: models.User = Depends(get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """
     Update geo file.
@@ -148,7 +134,7 @@ def delete_geo_file(
     *,
     name: str,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """
     Delete one geofile
