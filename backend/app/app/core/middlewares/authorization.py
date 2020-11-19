@@ -14,7 +14,7 @@ import logging
 # TODO: add to settings
 source_file = '/app/app/core/middlewares/authorization-model.conf'
 adapter = casbin_sqlalchemy_adapter.Adapter(engine)
-enforcer = casbin.Enforcer(source_file, adapter, True)
+enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, True)
 
 unless = [
     '/api/v1/docs',
