@@ -117,28 +117,28 @@ def get_members(
 def add_members(
     organization_id: int,
     *,
-    emails: List[EmailStr] = Body(...),
+    invites: List[schemas.UserInvite] = Body(...),
     auth = Depends(authorization('organizations:add_members')),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
     org_members = get_members(organization_id, auth=auth, db=db, current_user=current_user)
-    emails_to_add = (email for email in emails if email not in (u.get('email') for u in org_members))
+    users_to_add = (invite for invite in invites if invite.email not in (u.get('email') for u in org_members))
 
-    for email in emails_to_add:
-        user = crud.user.get_by_email(db, email=email)
+    for invite in users_to_add:
+        user = crud.user.get_by_email(db, email=invite.email)
 
         if not user:
             user = crud.user.create(db, obj_in=schemas.UserCreate(
-                full_name=email,
-                email=email,
+                full_name=invite.email,
+                email=invite.email,
                 password=pwd.genword()
             ))
-        enforcer.add_role_for_user_in_domain(str(user.id), 'guest', str(organization_id))
+        enforcer.add_role_for_user_in_domain(str(user.id), invite.role if invite.role else 'guest', str(organization_id))
 
     return [
         user for user in get_members(organization_id, auth=auth, db=db, current_user=current_user)
-        if user.get('email') in emails
+        if user.get('email') in (invite.email for invite in invites)
     ]
 
 @router.patch("/{organization_id}/members/{user_id}/role")

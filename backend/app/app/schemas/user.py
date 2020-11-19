@@ -41,3 +41,7 @@ class UserDB(UserPrimaryKey, UserBase):
 
     class Config:
         orm_mode = True
+
+class UserInvite(BaseModel):
+    email: EmailStr
+    role: Optional[str]
