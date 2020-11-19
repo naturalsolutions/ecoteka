@@ -17,13 +17,12 @@ from app.crud import (
 )
 from app.api import get_db
 from app.core import (
-    get_current_active_user,
-    get_current_user
+    get_current_active_user
 )
 
 from sqlalchemy.orm import Session
 from typing import List
-import sqlalchemy as sa
+
 router = APIRouter()
 
 
