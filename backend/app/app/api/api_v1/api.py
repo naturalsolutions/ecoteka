@@ -58,7 +58,7 @@ api_router.include_router(
 
 api_router.include_router(
     intervention.router,
-    prefix='/interventions',
+    prefix='/organization/{organization_id}/interventions',
     tags=['interventions']
 )
 
