@@ -66,7 +66,7 @@ const ETKFormTeam = forwardRef<ETKFormTeamActions, ETKFormTeamProps>(
       <Grid container direction="column">
         <Grid item>
           <Typography variant="h5" paragraph>
-            <Trans>{t("Team.dialogContentText")}</Trans>
+            <Trans>{t(`Team.dialogContentText${isNew ? 'Create' : 'Edit'}`)}</Trans>
           </Typography>
         </Grid>
         <Grid item>{form.fields.name}</Grid>

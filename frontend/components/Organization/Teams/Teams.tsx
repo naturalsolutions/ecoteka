@@ -89,6 +89,7 @@ const Teams: FC<TeamsProps> = (props) => {
   }
 
   function openForm(organization?) {
+    const isNew = !Boolean(organization);
     const dialogActions = [
       {
         label: t("components:Team.buttonCancelContent"),
@@ -103,7 +104,7 @@ const Teams: FC<TeamsProps> = (props) => {
     ];
 
     dialog.current.open({
-      title: t("components:Team.dialogTile"),
+      title: t(`components:Team.dialogTitle${isNew ? 'Create' : 'Edit'}`),
       content: <ETKFormTeam ref={formRef} organization={organization || {
         parent_id: props.organization.id
       }} />,
