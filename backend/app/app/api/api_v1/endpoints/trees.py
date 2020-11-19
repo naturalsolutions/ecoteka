@@ -2,18 +2,26 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
-import geopandas as gpd
-import numpy as np
-
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import get_current_active_user, get_current_user
+from app.core import (
+    set_policies,
+    authorization,
+    get_current_active_user
+)
 from app.worker import import_geofile_task, create_mbtiles_task
-from app.core.security import authorization
 
 import json
 
 router = APIRouter()
+policies = {
+    'trees:get': ['owner', 'manager', 'contributor', 'reader'],
+    'trees:add': ['owner', 'manager', 'contributor'],
+    'trees:update': ['owner', 'manager', 'contributor'],
+    'trees:delete': ['owner', 'manager', 'contributor'],
+    'trees:import_from_geofile':  ['owner', 'manager', 'contributor']
+}
+set_policies(policies)
 
 
 def get_tree_if_authorized(db: Session, current_user: models.User, tree_id: int):
@@ -32,10 +40,11 @@ def get_tree_if_authorized(db: Session, current_user: models.User, tree_id: int)
     return tree_in_db
 
 
-
 @router.post("/import-from-geofile", response_model=schemas.GeoFile)
 def import_from_geofile(
+    organization_id: int,
     *,
+    auth=Depends(authorization('trees:import_from_geofile')),
     db: Session = Depends(get_db),
     name: str,
     current_user: models.User = Depends(get_current_active_user),
@@ -71,7 +80,9 @@ def import_from_geofile(
 
 @router.get("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def get(
+    organization_id: int,
     tree_id: int,
+    auth=Depends(authorization('trees:get')),
     db: Session = Depends(get_db),
     current_user: models = Depends(get_current_active_user),
 ) -> Any:
@@ -81,7 +92,9 @@ def get(
 
 @router.post("/", response_model=schemas.tree.Tree_xy)
 def add(
+    organization_id: int,
     *,
+    auth=Depends(authorization('trees:add')),
     db: Session = Depends(get_db),
     tree: schemas.TreePost,
     current_user: models.User = Depends(get_current_active_user),
@@ -102,8 +115,10 @@ def add(
 
 @router.patch("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def update(
+    organization_id: int,
     tree_id: int,
     *,
+    auth=Depends(authorization('trees:update')),
     db: Session = Depends(get_db),
     update_data: schemas.tree.TreePatch,
     current_user: models = Depends(get_current_active_user),
@@ -137,7 +152,9 @@ def update(
 
 @router.delete("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def delete(
+    organization_id: int,
     tree_id: int,
+    auth=Depends(authorization('trees:delete')),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
@@ -147,32 +164,3 @@ def delete(
 
         create_mbtiles_task.delay(current_user.organization_id)
         return response
-
-
-@router.get(
-    "/get-centroid-organization/{organization_id}", response_model=schemas.Coordinate
-)
-def get_center_from_organization(
-    *,
-    auth = Depends(authorization('trees:get_center_from_organization')),
-    db: Session = Depends(get_db),
-    organization_id: int,
-    current_user: models.User = Depends(get_current_user),
-) -> Any:
-    """
-    find centroid of Organization
-    """
-    sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_id}"
-    df = gpd.read_postgis(sql, db.bind)
-
-    X = df.geom.apply(lambda p: p.x)
-    Y = df.geom.apply(lambda p: p.y)
-    xCenter = np.sum(X) / len(X)
-    yCenter = np.sum(Y) / len(Y)
-
-    coordinate = schemas.Coordinate(
-        longitude=xCenter,
-        latitude=yCenter,
-    )
-
-    return coordinate
