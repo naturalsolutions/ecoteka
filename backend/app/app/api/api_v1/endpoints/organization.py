@@ -4,6 +4,8 @@ import uuid
 from typing import Any, List, Optional
 import fiona
 from shapely.geometry import shape
+from shapely.geometry.geo import mapping
+from geoalchemy2.shape import to_shape
 from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
 from app.core import get_current_user, get_current_active_user, settings
 from app.api import get_db
@@ -156,9 +158,9 @@ def get_geojson(
     sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_in_db.id}"
     df = gpd.read_postgis(sql, db.bind)
     data = df.to_json()
-    geojson = json.loads(data)
+    response = json.loads(data)
 
-    return geojson
+    return response
 
 
 @router.get("/{id}/path", response_model=List[schemas.Organization])
@@ -169,6 +171,55 @@ def get_parent_organizations(
     current_user: models.User = Depends(get_current_user),
 ):
     return [org.to_schema() for org in crud.organization.get_path(db, id=id)]
+
+
+@router.get("/{organization_id}/working_area")
+async def upload_working_area(
+    file: UploadFile = File(...),
+    *,
+    organization_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    """
+    Upload a geo file
+    """
+    try:
+        filename_parts = os.path.splitext(file.filename)
+        extension = filename_parts[1][1:]
+
+        if not extension in ["zip", "geojson"]:
+            raise HTTPException(status_code=415, detail="File format unsupported")
+
+        unique_name = uuid.uuid4()
+        unique_filename = f"{unique_name}.{extension}"
+        copy_filename = f"{settings.UPLOADED_FILES_FOLDER}/{unique_filename}"
+        copy_file = await file.read()
+
+        with open(copy_filename, "wb") as f:
+            f.write(copy_file)  # type: ignore
+
+        c = fiona.open(copy_filename)
+        record = next(iter(c))
+
+        if not record["geometry"]["type"]:
+            raise HTTPException(status_code=415, detail="File unsupported")
+
+        organization_in_db = crud.organization.get(db, id=organization_id)
+
+        if not organization_in_db:
+            raise HTTPException(status_code=404, detail="Organization not found")
+
+        working_area = shape(record["geometry"]).wkt
+        organization = crud.organization.update(
+            db,
+            db_obj=organization_in_db,
+            obj_in={"working_area": working_area},
+        )
+
+        return organization.to_schema()
+    finally:
+        await file.close()
 
 
 @router.post("/{organization_id}/working_area", response_model=schemas.Organization)
@@ -218,3 +269,23 @@ async def upload_working_area(
         return organization.to_schema()
     finally:
         await file.close()
+
+
+@router.get("{organization_id}/working_area")
+def get_working_area(
+    *,
+    organization_id: int,
+    auth=Depends(authorization("organizations:get_working_area")),
+    db: Session = Depends(get_db),
+) -> Any:
+    """
+    get working_area geojson from one organization
+    """
+    organization_in_db = crud.organization.get(db, id=organization_id)
+
+    if not organization_in_db:
+        raise HTTPException(status_code=404, detail="Organization not found")
+
+    shape = to_shape(organization_in_db.working_area)
+
+    return {"type": "Feature", "geometry": mapping(shape), "properties": {}}

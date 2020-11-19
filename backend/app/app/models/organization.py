@@ -4,18 +4,15 @@ from app.db.session import engine
 from geoalchemy2 import Geometry
 from sqlalchemy_utils import LtreeType, Ltree
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import (
-    relationship,
-    foreign,
-    remote
-)
+from sqlalchemy.orm import relationship, foreign, remote
 from sqlalchemy import Sequence
 from fastapi.encoders import jsonable_encoder
 from app import schemas
 import slug as slugmodule
 import logging
 
-id_seq = Sequence('organization_id_seq')
+id_seq = Sequence("organization_id_seq")
+
 
 def strfltee(s: str, replacements=(" ", "-")):
     result = s
@@ -24,7 +21,6 @@ def strfltee(s: str, replacements=(" ", "-")):
         result = result.replace(repl, "")
 
     return Ltree(result)
-
 
 
 class Organization(Base):
@@ -46,9 +42,6 @@ class Organization(Base):
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 
-    def __init__(
-        self, name: str, slug: str, config=None, working_area=None, parent=None
-    ):
     def __init__(self, name: str, config=None, working_area=None, parent=None):
         _id = engine.execute(id_seq)
         self.id = _id
