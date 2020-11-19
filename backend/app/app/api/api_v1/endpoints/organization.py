@@ -27,7 +27,8 @@ from app.schemas import (
     Organization,
     OrganizationCreate,
     OrganizationUpdate,
-    Coordinate
+    Coordinate,
+    UserOut
 )
 from app.models import (
     User
@@ -64,6 +65,7 @@ def create_organization(
     )
     return new_organization
 
+
 @router.patch("/{organization_id}", response_model=Organization)
 def update_organization(
     organization_id: int,
@@ -83,6 +85,7 @@ def update_organization(
         db_obj=org,
         obj_in=jsonable_encoder(organization, exclude_unset=True)
     )
+
 
 @router.get("/{organization_id}")
 def get_one(
@@ -112,6 +115,7 @@ def get_one(
 
     return organization_response
 
+
 @router.get("/{organization_id}/teams", response_model=List[Organization])
 def get_teams(
     organization_id: int,
@@ -123,6 +127,7 @@ def get_teams(
     return [
         org.to_schema() for org in organization.get_teams(db, parent_id=organization_id)
     ]
+
 
 @router.get("/{organization_id}/members")
 def get_members(
@@ -144,31 +149,73 @@ def get_members(
 
     return result
 
+
 @router.patch("/{organization_id}/members/{user_id}/role")
 def update_member_role(
     organization_id: int,
     user_id: int,
     *,
     role: str = Body(...),
-    auth = Depends(authorization('organizations:edit_member')),
+    auth=Depends(authorization('organizations:edit_member')),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    user = user.get(db, id = user_id)
+    roles_order = ['owner', 'manager', 'contributor', 'reader', 'guest']
 
-    if not user:
+    if role not in roles_order:
+        raise HTTPException(
+            status_code=400,
+            detail=f"This role : {role} does not exist"
+        )
+
+    user_in_db = user.get(db, id=user_id)
+
+    if not user_in_db:
         raise HTTPException(status_code=404, detail="User not found")
 
-    current_roles = enforcer.get_roles_for_user_in_domain(str(user_id), str(organization_id))
+    # Convert to sqlalchemy obj to UserOut schema for hidding password
+    user_in_db = UserOut(**user_in_db.as_dict())
 
-    for current_role in current_roles:
-        enforcer.delete_roles_for_user_in_domain(str(user_id), current_role, str(organization_id))
-    
-    enforcer.add_role_for_user_in_domain(str(user_id), role, str(organization_id))
+    current_user_roles = enforcer.get_roles_for_user_in_domain(
+        str(current_user.id),
+        str(organization_id)
+    )
+
+    if len(current_user_roles) > 0:
+        current_user_role = current_user_roles[0]
+
+    if roles_order.index(current_user_role) > roles_order.index(role):
+        raise HTTPException(
+            status_code=403,
+            detail="You can only set roles below yours"
+        )
+
+    user_roles = enforcer.get_roles_for_user_in_domain(str(user_id), str(organization_id))
+
+    # No role for this user (it's a post)
+    if len(user_roles) == 0:
+        enforcer.add_role_for_user_in_domain(str(user_id), role, str(organization_id))
+        # need ro reload new policy
+        enforcer.load_policy()
+
+    # Role exist for this user (it's a patch)
+    if len(user_roles) > 0:
+        user_role = user_roles[0]
+        if roles_order.index(current_user_role) > roles_order.index(user_role):
+            raise HTTPException(
+                    status_code=403,
+                    detail="You can't edit a role above yours"
+                )
+
+        enforcer.delete_roles_for_user_in_domain(str(user_id),  user_role, str(organization_id))
+        enforcer.add_role_for_user_in_domain(str(user_id), role, str(organization_id))
+        # need ro reload handle new policy
+        enforcer.load_policy()
+
 
     return dict(
-        user.as_dict(),
-        role = role
+        user_in_db,
+        role=role
     )
 
 
