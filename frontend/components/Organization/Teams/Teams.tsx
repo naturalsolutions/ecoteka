@@ -1,13 +1,13 @@
 import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery, useQueryCache } from "react-query";
-import { apiRest } from "@/lib/api"
+import { apiRest } from "@/lib/api";
 import { Box, Button, makeStyles, Toolbar } from "@material-ui/core";
 import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon } from "@material-ui/icons";
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-material.css";
 import CellGridSelectRenderer from "../CellGridSelectRenderer";
 import { useTemplate } from "@/components/Template";
 import ETKFormTeam, { ETKFormTeamActions } from "./Form";
@@ -20,9 +20,15 @@ interface TeamsProps {
 }
 
 function EditBtnRenderer(props) {
-  return <Button onClick={() => {
-    console.log(props);
-  }}>Edit</Button>
+  return (
+    <Button
+      onClick={() => {
+        console.log(props);
+      }}
+    >
+      Edit
+    </Button>
+  );
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -54,19 +60,23 @@ const Teams: FC<TeamsProps> = (props) => {
   const { t } = useTranslation(["components", "common"]);
 
   const cache = useQueryCache();
-  const { status, data, error, isFetching } = useQuery("teams", async () => {
-    const data = await apiRest.organization.teams(props.organization.id);
-    return data;
-  }, {
-    enabled: Boolean(props.organization)
-  });
+  const { status, data, error, isFetching } = useQuery(
+    "teams",
+    async () => {
+      const data = await apiRest.organization.teams(props.organization.id);
+      return data;
+    },
+    {
+      enabled: Boolean(props.organization),
+    }
+  );
 
   const [gridApi, setGridApi] = useState(null);
   const [enableActions, setEnableActions] = useState(true);
 
   useEffect(() => {
     if (gridApi) {
-      gridApi.setRowData(data || [])
+      gridApi.setRowData(data || []);
     }
   }, [gridApi, data]);
 
@@ -80,7 +90,7 @@ const Teams: FC<TeamsProps> = (props) => {
   }
 
   function test() {
-    data[2].name = 'toto';
+    data[2].name = "toto";
     gridApi.setRowData(data);
   }
 
@@ -104,11 +114,18 @@ const Teams: FC<TeamsProps> = (props) => {
     ];
 
     dialog.current.open({
-      title: t(`components:Team.dialogTitle${isNew ? 'Create' : 'Edit'}`),
-      content: <ETKFormTeam ref={formRef} organization={organization || {
-        parent_id: props.organization.id
-      }} />,
-      actions: dialogActions
+      title: t(`components:Team.dialogTitle${isNew ? "Create" : "Edit"}`),
+      content: (
+        <ETKFormTeam
+          ref={formRef}
+          organization={
+            organization || {
+              parent_id: props.organization.id,
+            }
+          }
+        />
+      ),
+      actions: dialogActions,
     });
   }
 
@@ -117,7 +134,7 @@ const Teams: FC<TeamsProps> = (props) => {
     if (isOk) {
       dialog.current.close();
       //TODO Add a row to the array instead of reload the complete collection
-      cache.invalidateQueries('teams');
+      cache.invalidateQueries("teams");
     }
   };
 
@@ -131,11 +148,20 @@ const Teams: FC<TeamsProps> = (props) => {
         <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<DeleteIcon />}>
           Supprimer
         </Button>
-        <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={() => { openForm() }}>
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          className={classes.button}
+          startIcon={<AddIcon />}
+          onClick={() => {
+            openForm();
+          }}
+        >
           Ajouter une équipe
         </Button>
       </Toolbar>
-      <div className="ag-theme-alpine" style={{ width: '100%' }}>
+      <div className="ag-theme-material" style={{ width: "100%" }}>
         <AgGridReact
           onGridReady={onGridReady}
           domLayout="autoHeight"
@@ -143,12 +169,19 @@ const Teams: FC<TeamsProps> = (props) => {
           suppressRowClickSelection
           frameworkComponents={{
             editBtnRenderer: (params) => {
-              return <Button onClick={() => {
-                openForm(params.data);
-              }}>Edit</Button>
+              return (
+                <Button
+                  onClick={() => {
+                    openForm(params.data);
+                  }}
+                >
+                  Edit
+                </Button>
+              );
             },
-            selectRenderer: CellGridSelectRenderer
-          }}>
+            selectRenderer: CellGridSelectRenderer,
+          }}
+        >
           <AgGridColumn
             field="id"
             resizable
@@ -157,14 +190,14 @@ const Teams: FC<TeamsProps> = (props) => {
             width={100}
             suppressSizeToFit={true}
             headerCheckboxSelection={true}
-            checkboxSelection={true}></AgGridColumn>
+            checkboxSelection={true}
+          ></AgGridColumn>
           <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
           <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
           <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
           <AgGridColumn cellRenderer="editBtnRenderer" />
         </AgGridReact>
       </div>
-
     </Fragment>
   );
 };

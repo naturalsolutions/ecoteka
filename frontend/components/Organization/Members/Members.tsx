@@ -146,7 +146,7 @@ const Members: FC<MembersProps> = (props) => {
         </Button>
       </Toolbar>
       {data && (
-        <div className="ag-theme-alpine" style={{ width: "100%" }}>
+        <div className="ag-theme-material" style={{ width: "100%" }}>
           <AgGridReact
             onGridReady={onGridReady}
             rowData={data}
