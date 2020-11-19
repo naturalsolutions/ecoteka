@@ -29,7 +29,6 @@ from app.core.security import (
 
 router = APIRouter()
 
-
 @router.post('/', response_model=schemas.Organization)
 def create_organization(
     *,
