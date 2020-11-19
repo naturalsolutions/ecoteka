@@ -3,11 +3,8 @@ import { Grid, Typography } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useEtkTeamSchema from "./Schema";
-import getConfig from "next/config";
 import { apiRest } from "@/lib/api"
 import { TOrganization } from "@/pages/organization/[id]";
-
-const { publicRuntimeConfig } = getConfig();
 
 export type ETKFormTeamActions = {
   submit: () => Promise<boolean>;
@@ -70,7 +67,6 @@ const ETKFormTeam = forwardRef<ETKFormTeamActions, ETKFormTeamProps>(
           </Typography>
         </Grid>
         <Grid item>{form.fields.name}</Grid>
-        <Grid item>{form.fields.slug}</Grid>
       </Grid>
     );
   }

@@ -12,14 +12,6 @@ export default function useEtkTeamSchema() {
         required: true,
       },
       schema: yup.string().required(t("common:errors.required")),
-    },
-    slug: {
-      type: "textfield",
-      component: {
-        label: t("components:Team.slug"),
-        required: true,
-      },
-      schema: yup.string().required(t("common:errors.required")),
     }
   };
 }
