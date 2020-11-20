@@ -1,10 +1,14 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
+  Avatar,
+  Box,
   Button,
+  Card,
   Divider,
   Grid,
   Hidden,
+  Link,
   makeStyles,
   Popover,
   Toolbar,
@@ -17,6 +21,8 @@ import ETKRegisterButton from "./Register/Button";
 import ETKLogout from "./Logout";
 import ETKLanguageSelector from "./LanguageSelector";
 import { useAppContext } from "../providers/AppContext";
+import { Router } from "@material-ui/icons";
+import { useRouter } from "next/router";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -51,6 +57,8 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const [userInfosAnchorEl, setUserInfosAnchorEl] = React.useState(null);
   const isUserInfosOpen = Boolean(userInfosAnchorEl);
 
+  const router = useRouter();
+
   const renderUserInfos = () => {
     return (
       <Popover
@@ -71,18 +79,33 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           horizontal: "right",
         }}
       >
-        <p>
-          <MoodIcon />
-        </p>
-        {user.full_name && <p>{user.full_name}</p>}
-        <p>{user.email}</p>
-        <div>
-          <ETKLogout
-            onClick={() => {
-              setUserInfosAnchorEl(null);
-            }}
-          />
-        </div>
+        <Grid container direction="column" spacing={1}>
+          <Grid item>
+            <Grid container direction="row" alignItems="center" spacing={2}>
+              <Grid item>
+                <Avatar>{user.full_name.split(' ').slice(0, 2).map(s => s[0].toUpperCase())}</Avatar>
+              </Grid>
+              <Grid item xs>
+                {user.email}
+              </Grid>
+            </Grid>
+          </Grid>
+          <Box mt={2} mb={1}>
+            <Divider />
+          </Box>
+          <Grid>
+            <Button onClick={() => router.push(`/organization/${user.organizations[0].id}`)}>
+              {t("Toolbar.myOrganizations")}
+            </Button>
+          </Grid>
+          <Grid item>
+            <ETKLogout
+              onClick={() => {
+                setUserInfosAnchorEl(null);
+              }}
+            />
+          </Grid>
+        </Grid>
       </Popover>
     );
   };

@@ -7,7 +7,6 @@
       "content": "Êtes-vous sur.e de vouloir vous déconnecter ?"
     }
   },
-
   "SignIn": {
     "title": "Se connecter",
     "buttonCancel": "Annuler",
@@ -18,13 +17,11 @@
     "errorMessageEmail": "Veuillez saisir un email valide.",
     "errorMessageRequiredField": "Veuillez renseigner ce champ."
   },
-
   "LanguageSelector": {
     "en": "Anglais",
     "fr": "Français",
     "es": "Espagnol"
   },
-
   "Template": {
     "menuItems": {
       "plantHeritage": {
@@ -44,14 +41,13 @@
       }
     }
   },
-
   "Toolbar": {
     "slogan": "Pour une ville plus verte !",
     "login": "Connexion",
     "about": "En savoir plus",
-    "register": "Inscription"
+    "register": "Inscription",
+    "myOrganizations": "Mes organisations"
   },
-
   "Map": {
     "SearchCity": {
       "label": "Rechercher une ville"
@@ -61,12 +57,10 @@
       "satellite": "Satellite"
     }
   },
-
   "Sidebar": {
     "treeCard": "Fiche de l'arbre",
     "wikipediaInformation": "Informations Wikipedia"
   },
-
   "PanelStart": {
     "title": "Vous êtes connecté.e à votre compte",
     "content": "Vous pouvez voir le nombre d'arbres en OpenData mais aussi le nombre d'arbre présent sur votre couche privée de données.",
@@ -84,7 +78,6 @@
       "button": "Importer un fichier de données"
     }
   },
-
   "PanelWelcome": {
     "tabLabel": "Patrimoine Végétal",
     "title": "Bienvenue sur EcoTeka!",
@@ -93,13 +86,11 @@
       "title": "Nombre d'arbres sur la carte"
     }
   },
-
   "CardAbout": {
     "title": "Vous êtes un.e gestionnaire d'espaces verts ?",
     "content": "Vous pouvez nous contacter pour en savoir plus et essayer les premières fonctionnalités d'inventaire de patrimoine arboré.",
     "button": "En savoir plus"
   },
-
   "ImportHistoryIndex": {
     "title": "Historique des imports",
     "importText": "Importer",
@@ -111,7 +102,6 @@
       "cancel": "Annuler"
     }
   },
-
   "ImportHistoryTable": {
     "headers": {
       "file": "Nom du fichier",
@@ -121,12 +111,10 @@
       "importStatus": "Status de l'import"
     }
   },
-
   "ImportHistoryEmpty": {
     "content": "Vous n'avez pas encore effectué d'import ! <br/> Il y a un début pour toute chose",
     "button": "Importer mes données"
   },
-
   "ImportTemplate": {
     "title": "Un doute avec votre fichier ?",
     "content": "Assurez-vous que votre fichier contient les informations suivantes:",
@@ -136,13 +124,11 @@
     "crs": "Système de Réfèrence de Coordonnées",
     "download": "N'hésitez pas à télécharger notre modèle au format xlsx"
   },
-
   "ImportPanelMapping": {
     "title": "Select fields to import",
     "cancel": "Annuler",
     "send": "Envoyer"
   },
-
   "Import": {
     "Index": {
       "tooltipContent": "- Importer des données est une action qui peut nécessiter plusieurs dizaines de minutes<br/>- Retrouvez l'état d'avancement de votre import dans le menu : \"Historique des imports\"",
@@ -180,7 +166,6 @@
       "dropzoneText": "Déposez votre fichier ici\nou cliquez pour le selectionner"
     }
   },
-
   "Contact": {
     "dialogTile": "En savoir plus",
     "dialogContentText": "Cette plataforme vous intéresse ?<br/>Voulez vous en savoir plus ?",
@@ -205,7 +190,6 @@
       "others": "Autres"
     }
   },
-
   "Register": {
     "dialogTitle": "Inscription",
     "cancel": "Annuler",
@@ -324,7 +308,6 @@
       "globalcheck": "Vérification globale de l'arbre"
     }
   },
-
   "Tree": {
     "family": "Famille",
     "gender": "Genre",
@@ -398,15 +381,15 @@
     "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'équipe.",
     "buttonSubmitContent": "Envoyer",
     "buttonCancelContent": "Annuler"
-  }, 
+  },
   "TeamArea": {
     "dialogTitle": "Editer l'emprise",
     "dialogContentText": "Extension acceptés : zip, geojson",
     "buttonSubmitContent": "Envoyer",
     "buttonCancelContent": "Annuler"
-  }, 
-  "Organization" : {
-    "Members" : {
+  },
+  "Organization": {
+    "Members": {
       "dialogAddMemberTitle": "Ajouter des membres à votre organisation",
       "dialogDdetachMembersTitle": "Retirer des membres à votre organisation",
       "cancel": "Annuler",
