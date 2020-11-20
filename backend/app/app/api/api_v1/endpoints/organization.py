@@ -89,7 +89,7 @@ def update_organization(
     auth=Depends(authorization("organizations:update")),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-    organization: OrganizationUpdate,
+    organization_in: OrganizationUpdate,
 ):
     org = organization.get(db, id=organization_id)
 
@@ -99,7 +99,7 @@ def update_organization(
     return organization.update(
         db,
         db_obj=org,
-        obj_in=jsonable_encoder(organization, exclude_unset=True),
+        obj_in=jsonable_encoder(organization_in, exclude_unset=True),
     )
 
 
