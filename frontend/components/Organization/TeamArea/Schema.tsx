@@ -1,17 +1,18 @@
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 
-export default function useEtkTeamSchema() {
+export default function useEtkTeamAreaSchema() {
   const { t } = useTranslation(["common", "components"]);
 
   return {
-    name: {
+    file: {
       type: "textfield",
       component: {
-        label: t("components:Team.name"),
+        label: t("components:TeamArea.file"),
         required: true,
+        type: 'file'
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.mixed() //TODO
     }
   };
 }

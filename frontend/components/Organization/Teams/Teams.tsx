@@ -1,10 +1,10 @@
 import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery, useQueryCache } from "react-query";
-import { apiRest } from "@/lib/api";
-import { Box, Button, makeStyles, Toolbar } from "@material-ui/core";
-import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon } from "@material-ui/icons";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { apiRest } from "@/lib/api"
+import { Box, Button, IconButton, makeStyles, Toolbar, Tooltip } from "@material-ui/core";
+import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon, Edit, PhotoSizeSelectSmall } from "@material-ui/icons";
+import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
@@ -12,23 +12,12 @@ import CellGridSelectRenderer from "../CellGridSelectRenderer";
 import { useTemplate } from "@/components/Template";
 import ETKFormTeam, { ETKFormTeamActions } from "./Form";
 import { useTranslation } from "react-i18next";
+import ETKFormTeamArea, { ETKFormTeamAreaActions } from "../TeamArea/Form";
 
 interface TeamsProps {
   organization: TOrganization;
   value: string;
   index: string;
-}
-
-function EditBtnRenderer(props) {
-  return (
-    <Button
-      onClick={() => {
-        console.log(props);
-      }}
-    >
-      Edit
-    </Button>
-  );
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +45,8 @@ const useStyles = makeStyles((theme) => ({
 const Teams: FC<TeamsProps> = (props) => {
   const classes = useStyles();
   const { dialog, theme } = useTemplate();
-  const formRef = useRef<ETKFormTeamActions>();
+  const formEditRef = useRef<ETKFormTeamActions>();
+  const formAreaRef = useRef<ETKFormTeamAreaActions>();
   const { t } = useTranslation(["components", "common"]);
 
   const cache = useQueryCache();
@@ -89,15 +79,6 @@ const Teams: FC<TeamsProps> = (props) => {
     setGridApi(params.api);
   }
 
-  function test() {
-    data[2].name = "toto";
-    gridApi.setRowData(data);
-  }
-
-  function groupAction() {
-    console.log(gridApi.getSelectedNodes());
-  }
-
   function openForm(organization?) {
     const isNew = !Boolean(organization);
     const dialogActions = [
@@ -114,27 +95,52 @@ const Teams: FC<TeamsProps> = (props) => {
     ];
 
     dialog.current.open({
-      title: t(`components:Team.dialogTitle${isNew ? "Create" : "Edit"}`),
-      content: (
-        <ETKFormTeam
-          ref={formRef}
-          organization={
-            organization || {
-              parent_id: props.organization.id,
-            }
-          }
-        />
-      ),
-      actions: dialogActions,
+      title: t(`components:Team.dialogTitle${isNew ? 'Create' : 'Edit'}`),
+      content: <ETKFormTeam ref={formEditRef} organization={organization || {
+        parent_id: props.organization.id
+      }} />,
+      actions: dialogActions
     });
   }
 
   const addItem = async () => {
-    const isOk = await formRef.current.submit();
+    const isOk = await formEditRef.current.submit();
     if (isOk) {
       dialog.current.close();
       //TODO Add a row to the array instead of reload the complete collection
       cache.invalidateQueries("teams");
+    }
+  };
+
+  function openArea(organization) {
+    const dialogActions = [
+      {
+        label: t("components:TeamArea.buttonCancelContent"),
+      },
+      {
+        label: t("components:TeamArea.buttonSubmitContent"),
+        variant: "contained",
+        color: "secondary",
+        noClose: true,
+        onClick: editWorkingArea,
+      },
+    ];
+
+    dialog.current.open({
+      title: t("components:TeamArea.dialogTitle"),
+      content: <ETKFormTeamArea ref={formAreaRef} organization={organization} />,
+      actions: dialogActions
+    });
+  }
+
+  const editWorkingArea = async () => {
+    console.log('la')
+    const isOk = await formAreaRef.current.submit();
+    console.log(isOk);
+    if (isOk) {
+      dialog.current.close();
+      //TODO Add a row to the array instead of reload the complete collection
+      cache.invalidateQueries('teams');
     }
   };
 
@@ -148,17 +154,8 @@ const Teams: FC<TeamsProps> = (props) => {
         <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<DeleteIcon />}>
           Supprimer
         </Button>
-        <Button
-          variant="contained"
-          size="small"
-          color="primary"
-          className={classes.button}
-          startIcon={<AddIcon />}
-          onClick={() => {
-            openForm();
-          }}
-        >
-          Ajouter une équipe
+        <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={() => { openForm() }}>
+          {t("Teams.buttonAdd")}
         </Button>
       </Toolbar>
       <div className="ag-theme-material" style={{ width: "100%" }}>
@@ -168,16 +165,29 @@ const Teams: FC<TeamsProps> = (props) => {
           rowSelection="multiple"
           suppressRowClickSelection
           frameworkComponents={{
-            editBtnRenderer: (params) => {
-              return (
-                <Button
-                  onClick={() => {
-                    openForm(params.data);
-                  }}
-                >
-                  Edit
-                </Button>
-              );
+            actionsRenderer: (params) => {
+              return <Fragment>
+                <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
+                  <IconButton
+                    size="small"
+                    color="secondary"
+                    onClick={() => {
+                      openArea(params.data);
+                    }}>
+                    <PhotoSizeSelectSmall />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={t("Teams.tooltipInfoEdit")}>
+                  <IconButton
+                    size="small"
+                    color="secondary"
+                    onClick={() => {
+                      openForm(params.data);
+                    }}>
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+              </Fragment>
             },
             selectRenderer: CellGridSelectRenderer,
           }}
@@ -195,7 +205,12 @@ const Teams: FC<TeamsProps> = (props) => {
           <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
           <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
           <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
-          <AgGridColumn cellRenderer="editBtnRenderer" />
+          <AgGridColumn
+            cellRenderer="actionsRenderer"
+            cellStyle={{
+              'text-align': 'right'
+            }}
+          />
         </AgGridReact>
       </div>
     </Fragment>

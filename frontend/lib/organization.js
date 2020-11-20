@@ -43,6 +43,23 @@ class Organization {
     return await response.json();
   }
 
+  async workingArea(id, file, { onProgress, onLoad, onError }) {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = (e) => onProgress(e);
+    xhr.onload = () => onLoad(xhr);
+    xhr.onerror = () => onError(xhr);
+
+    const url = `${this.api.url}/organization/${id}/working_area`;
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Authorization", `Bearer ${this.api.getToken()}`);
+    xhr.send(formData);
+
+    return xhr;
+  }
   async getCentroidFromOrganization(id) {
     const url = `/organization/${id}/get-centroid-organization`;
     const response = await this.api.get(url);
