@@ -407,9 +407,13 @@
   }, 
   "Organization" : {
     "Members" : {
-      "dialogTile": "Ajouter des membres à votre organisation",
-      "buttonCancelContent": "Annuler",
-      "buttonSubmitContent": "Inviter"
+      "dialogAddMemberTitle": "Ajouter des membres à votre organisation",
+      "dialogDdetachMembersTitle": "Retirer des membres à votre organisation",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "done": "Terminer",
+      "confirm": "Confirmer",
+      "invite": "Inviter"
     }
   }
 }
