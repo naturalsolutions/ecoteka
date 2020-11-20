@@ -13,12 +13,14 @@ from app.core import (
 )
 from app.api import get_db
 from app.models import User
-from app.crud import user
+from app.crud import user, organization as crud_organization
 import casbin
 import casbin_sqlalchemy_adapter
 from app.db.session import (
     engine
 )
+from sqlalchemy import text
+from app.schemas import CurrentUSer
 
 
 token_url = f"{settings.ROOT_PATH}/auth/login"
@@ -152,3 +154,22 @@ def set_policies(policies):
         roles = policies[key]
         for role in roles:
             enforcer.add_policy([role, action])
+
+
+def get_current_user_with_organizations(current_user = Depends(get_current_user), db: Session = Depends(get_db)):
+    import pprint
+    query = text(
+        "SELECT v2 FROM casbin_rule WHERE ptype=:ptype AND v0=:user"
+    )
+
+    pprint.pprint(current_user.as_dict())
+
+    result= CurrentUSer(
+        **current_user.as_dict(),
+        organizations= [
+            crud_organization.get(db, id=row[0]).to_current_user_schema() for row in db.execute(query, {"ptype": "g", "user": str(current_user.id)})
+        ]
+    )
+
+    return result
+

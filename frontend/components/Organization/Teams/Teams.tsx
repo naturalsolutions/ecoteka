@@ -40,16 +40,6 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-  },
-  agGridWrapper: {
-    '& .ag-cell': {
-      '&.no-focus': {
-        'border': 'none !important'
-      },
-      '&.align-right .ag-cell-wrapper': {
-        'justify-content': 'right'
-      },
-    }
   }
 }));
 
@@ -174,7 +164,7 @@ const Teams: FC<TeamsProps> = (props) => {
           {t("Teams.buttonAdd")}
         </Button>
       </Toolbar>
-      <div className={`${classes.agGridWrapper} ag-theme-material`} style={{ width: '100%' }}>
+      <div className="ag-theme-material" style={{ width: '100%' }}>
         <AgGridReact
           onGridReady={onGridReady}
           domLayout="autoHeight"
