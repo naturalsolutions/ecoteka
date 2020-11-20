@@ -1,53 +1,105 @@
 import json
 import os
 import uuid
-from typing import Any, List, Optional
 import fiona
+import numpy as np
+from typing import Any, List, Optional
+import geopandas as gpd
 from shapely.geometry import shape
 from shapely.geometry.geo import mapping
 from geoalchemy2.shape import to_shape
+from passlib import pwd
 from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
-from app.core import get_current_user, get_current_active_user, settings
-from app.api import get_db
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
+from app.api import get_db
+from app.core import (
+    settings,
+    enforcer,
+    set_policies,
+    authorization,
+    get_current_user,
+    get_current_active_user,
+)
+from app.crud import organization, user
+from app.schemas import (
+    Organization,
+    OrganizationCreate,
+    OrganizationUpdate,
+    Coordinate,
+    UserOut,
+    UserInvite,
+    UserCreate,
+)
+from app.models import User
 
-from app import crud, models, schemas
-from app.core.security import enforcer, authorization, get_current_user
-
-from pydantic import EmailStr
-from passlib import pwd
 
 router = APIRouter()
 
+policies = {
+    "organizations:get_one": ["owner", "manager", "contributor", "reader"],
+    "organizations:get_teams": ["owner", "manager", "contributor", "reader"],
+    "organizations:get_members": ["owner", "manager", "contributor", "reader"],
+    "organizations:add_members": ["owner", "manager"],
+    "organizations:remove_member": ["owner", "manager"],
+    "organizations:update": ["owner"],
+    "organizations:edit_member": ["owner", "manager"],
+    "organizations:get_geojson": ["owner", "manager", "contributor", "reader"],
+    "organizations:get_path": ["owner", "manager", "contributor", "reader"],
+    "organization:get_center_from_organization": [
+        "owner",
+        "manager",
+        "contributor",
+        "reader",
+    ],
+    "organizations:upload_working_area": ["owner"],
+    "organizations:get_working_area": [
+        "owner",
+        "manager",
+        "contributor",
+        "reader",
+    ],
+}
+set_policies(policies)
 
-@router.post("/", response_model=schemas.Organization)
+
+@router.post("/", response_model=Organization)
 def create_organization(
     *,
     db: Session = Depends(get_db),
-    organization: schemas.OrganizationCreate,
-    current_user: models.User = Depends(get_current_active_user),
+    organization_in: OrganizationCreate,
+    current_user: User = Depends(get_current_active_user),
 ):
-    return crud.organization.create(db, obj_in=organization).to_schema()
+    new_organization = organization.create(
+        db, obj_in=organization_in
+    ).to_schema()
+    enforcer.add_role_for_user_in_domain(
+        str(current_user.id), "owner", str(new_organization.id)
+    )
+    enforcer.load_policy()
+
+    return new_organization
 
 
-@router.patch("/{organization_id}", response_model=schemas.Organization)
+@router.patch("/{organization_id}", response_model=Organization)
 def update_organization(
     organization_id: int,
     *,
     auth=Depends(authorization("organizations:update")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-    organization: schemas.OrganizationUpdate,
+    current_user: User = Depends(get_current_user),
+    organization: OrganizationUpdate,
 ):
-    org = crud.organization.get(db, id=organization_id)
+    org = organization.get(db, id=organization_id)
 
     if not org:
         raise HTTPException(status_code=404, detail="Organization not found")
 
-    return crud.organization.update(
-        db, db_obj=org, obj_in=jsonable_encoder(organization, exclude_unset=True)
+    return organization.update(
+        db,
+        db_obj=org,
+        obj_in=jsonable_encoder(organization, exclude_unset=True),
     )
 
 
@@ -57,39 +109,41 @@ def get_one(
     auth=Depends(authorization("organizations:get_one")),
     organization_id: int,
     db: Session = Depends(get_db),
-) -> Optional[schemas.Organization]:
+) -> Optional[Organization]:
     """
     get one organization by id
     """
-    organization_in_db = crud.organization.get(db, id=organization_id)
+    organization_in_db = organization.get(db, id=organization_id)
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
 
-    total_trees = crud.organization.get_total_tree_by_id(db, id=organization_id)
+    total_trees = organization.get_total_tree_by_id(db, id=organization_id)
 
     if not total_trees:
         total_trees = 0
 
-    organization_response = schemas.Organization(
-        **jsonable_encoder(organization_in_db.to_schema(), exclude=["total_trees"]),
+    organization_response = Organization(
+        **jsonable_encoder(
+            organization_in_db.to_schema(), exclude=["total_trees"]
+        ),
         total_trees=total_trees,
     )
 
     return organization_response
 
 
-@router.get("/{organization_id}/teams", response_model=List[schemas.Organization])
+@router.get("/{organization_id}/teams", response_model=List[Organization])
 def get_teams(
     organization_id: int,
     *,
     auth=Depends(authorization("organizations:get_teams")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
     return [
         org.to_schema()
-        for org in crud.organization.get_teams(db, parent_id=organization_id)
+        for org in organization.get_teams(db, parent_id=organization_id)
     ]
 
 
@@ -99,60 +153,81 @@ def get_members(
     *,
     auth=Depends(authorization("organizations:get_members")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
-    t = text("SELECT v0 AS user_id, v1 as role FROM casbin_rule WHERE v2 = :org_id")
+    t = text(
+        "SELECT v0 AS user_id, v1 as role FROM casbin_rule WHERE v2 = :org_id"
+    )
     user_ids = db.execute(t, {"org_id": str(organization_id)})
 
     result = []
     for (userid, role) in user_ids:
-        user_in_db = crud.user.get(db, id=int(userid))
+        user_in_db = user.get(db, id=int(userid))
 
         if user_in_db:
             result.append(dict(user_in_db.as_dict(), role=role))
 
     return result
 
+
 @router.post("/{organization_id}/members")
 def add_members(
     organization_id: int,
     *,
-    invites: List[schemas.UserInvite] = Body(...),
-    auth = Depends(authorization('organizations:add_members')),
+    invites: List[UserInvite] = Body(...),
+    auth=Depends(authorization("organizations:add_members")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
-    org_members = get_members(organization_id, auth=auth, db=db, current_user=current_user)
-    users_to_add = (invite for invite in invites if invite.email not in (u.get('email') for u in org_members))
+    org_members = get_members(
+        organization_id, auth=auth, db=db, current_user=current_user
+    )
+    users_to_add = (
+        invite
+        for invite in invites
+        if invite.email not in (u.get("email") for u in org_members)
+    )
 
     for invite in users_to_add:
-        user = crud.user.get_by_email(db, email=invite.email)
+        user_in_db = user.get_by_email(db, email=invite.email)
 
-        if not user:
-            user = crud.user.create(db, obj_in=schemas.UserCreate(
-                full_name=invite.email,
-                email=invite.email,
-                password=pwd.genword()
-            ))
-        enforcer.add_role_for_user_in_domain(str(user.id), invite.role if invite.role else 'guest', str(organization_id))
+        if not user_in_db:
+            user_in_db = user.create(
+                db,
+                obj_in=UserCreate(
+                    full_name=invite.email,
+                    email=invite.email,
+                    password=pwd.genword(),
+                ),
+            )
+        enforcer.add_role_for_user_in_domain(
+            str(user.id),
+            invite.role if invite.role else "guest",
+            str(organization_id),
+        )
+        enforcer.load_policy()
 
     return [
-        user for user in get_members(organization_id, auth=auth, db=db, current_user=current_user)
-        if user.get('email') in (invite.email for invite in invites)
+        user
+        for user in get_members(
+            organization_id, auth=auth, db=db, current_user=current_user
+        )
+        if user.get("email") in (invite.email for invite in invites)
     ]
+
 
 @router.delete("/{organization_id}/members/{user_id}")
 def remove_member(
     organization_id: int,
     user_id: int,
     *,
-    auth = Depends(authorization('organizations:remove_member')),
+    auth=Depends(authorization("organizations:remove_member")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
-    user = crud.user.get(db, id=user_id)
+    user_in_db = user.get(db, id=user_id)
 
-    if not user:
+    if not user_in_db:
         raise HTTPException(status_code=404, detail="User not found")
 
     current_roles = enforcer.get_roles_for_user_in_domain(
@@ -166,6 +241,7 @@ def remove_member(
 
     return True
 
+
 @router.patch("/{organization_id}/members/{user_id}/role")
 def update_member_role(
     organization_id: int,
@@ -174,25 +250,57 @@ def update_member_role(
     role: str = Body(...),
     auth=Depends(authorization("organizations:edit_member")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
-    user = crud.user.get(db, id=user_id)
+    roles_order = ["owner", "manager", "contributor", "reader"]
 
-    if not user:
+    if role not in roles_order:
+        raise HTTPException(
+            status_code=400, detail=f"This role : {role} does not exist"
+        )
+
+    user_in_db = user.get(db, id=user_id)
+
+    if not user_in_db:
         raise HTTPException(status_code=404, detail="User not found")
 
-    current_roles = enforcer.get_roles_for_user_in_domain(
+    # Convert to sqlalchemy obj to UserOut schema for hidding password
+    user_in_db = UserOut(**user_in_db.as_dict())
+
+    current_user_roles = enforcer.get_roles_for_user_in_domain(
+        str(current_user.id), str(organization_id)
+    )
+
+    if len(current_user_roles) > 0:
+        current_user_role = current_user_roles[0]
+
+    if roles_order.index(current_user_role) > roles_order.index(role):
+        raise HTTPException(
+            status_code=403, detail="You can only set roles below yours"
+        )
+
+    user_roles = enforcer.get_roles_for_user_in_domain(
         str(user_id), str(organization_id)
     )
 
-    for current_role in current_roles:
+    # Role exist for this user (it's a patch)
+    if len(user_roles) > 0:
+        user_role = user_roles[0]
+        if roles_order.index(current_user_role) > roles_order.index(user_role):
+            raise HTTPException(
+                status_code=403, detail="You can't edit a role above yours"
+            )
+
         enforcer.delete_roles_for_user_in_domain(
-            str(user_id), current_role, str(organization_id)
+            str(user_id), user_role, str(organization_id)
         )
+        enforcer.add_role_for_user_in_domain(
+            str(user_id), role, str(organization_id)
+        )
+        # need ro reload handle new policy
+        enforcer.load_policy()
 
-    enforcer.add_role_for_user_in_domain(str(user_id), role, str(organization_id))
-
-    return dict(user.as_dict(), role=role)
+    return dict(user_in_db, role=role)
 
 
 @router.get("{organization_id}/geojson")
@@ -205,7 +313,7 @@ def get_geojson(
     """
     generate geojson from organization
     """
-    organization_in_db = crud.organization.get(db, id=organization_id)
+    organization_in_db = organization.get(db, id=organization_id)
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
@@ -218,23 +326,54 @@ def get_geojson(
     return response
 
 
-@router.get("/{id}/path", response_model=List[schemas.Organization])
-def get_parent_organizations(
-    id: int,
+@router.get("/{organization_id}/path", response_model=List[Organization])
+def get_path(
+    organization_id: int,
+    auth=Depends(authorization("organizations:get_path")),
     *,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
-    return [org.to_schema() for org in crud.organization.get_path(db, id=id)]
+    return [org.to_schema() for org in organization.get_path(db, id=organization_id)]
 
 
-@router.post("/{organization_id}/working_area", response_model=schemas.Organization)
+@router.get(
+    "/{organization_id}/get-centroid-organization", response_model=Coordinate
+)
+def get_center_from_organization(
+    *,
+    auth=Depends(authorization("organization:get_center_from_organization")),
+    db: Session = Depends(get_db),
+    organization_id: int,
+    current_user: User = Depends(get_current_user),
+) -> Any:
+    """
+    find centroid of Organization
+    """
+    sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_id}"
+    df = gpd.read_postgis(sql, db.bind)
+
+    X = df.geom.apply(lambda p: p.x)
+    Y = df.geom.apply(lambda p: p.y)
+    xCenter = np.sum(X) / len(X)
+    yCenter = np.sum(Y) / len(Y)
+
+    coordinate = Coordinate(
+        longitude=xCenter,
+        latitude=yCenter,
+    )
+
+    return coordinate
+
+
+@router.post("/{organization_id}/working_area", response_model=Organization)
 async def upload_working_area(
     file: UploadFile = File(...),
     *,
     organization_id: int,
+    auth=Depends(authorization("organizations:upload_working_area")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Upload a geo file
@@ -243,8 +382,10 @@ async def upload_working_area(
         filename_parts = os.path.splitext(file.filename)
         extension = filename_parts[1][1:]
 
-        if not extension in ["zip", "geojson"]:
-            raise HTTPException(status_code=415, detail="File format unsupported")
+        if extension not in ["zip", "geojson"]:
+            raise HTTPException(
+                status_code=415, detail="File format unsupported"
+            )
 
         unique_name = uuid.uuid4()
         unique_filename = f"{unique_name}.{extension}"
@@ -260,20 +401,22 @@ async def upload_working_area(
         if not record["geometry"]["type"]:
             raise HTTPException(status_code=415, detail="File unsupported")
 
-        organization_in_db = crud.organization.get(db, id=organization_id)
+        organization_in_db = organization.get(db, id=organization_id)
 
         if not organization_in_db:
-            raise HTTPException(status_code=404, detail="Organization not found")
+            raise HTTPException(
+                status_code=404, detail="Organization not found"
+            )
 
         working_area = shape(record["geometry"]).wkt
-        organization = crud.organization.update(
+        return organization.update(
             db,
             db_obj=organization_in_db,
             obj_in={"working_area": working_area},
-        )
+        ).to_schema()
 
-        return organization.to_schema()
     finally:
+        os.remove(copy_filename)
         await file.close()
 
 
@@ -287,7 +430,7 @@ def get_working_area(
     """
     get working_area geojson from one organization
     """
-    organization_in_db = crud.organization.get(db, id=organization_id)
+    organization_in_db = organization.get(db, id=organization_id)
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")

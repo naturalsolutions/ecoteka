@@ -60,6 +60,12 @@ class Organization {
 
     return xhr;
   }
+  async getCentroidFromOrganization(id) {
+    const url = `/organization/${id}/get-centroid-organization`;
+    const response = await this.api.get(url);
+
+    return await response.json();
+  }
 }
 
 export default function userFactory(api) {

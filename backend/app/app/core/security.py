@@ -8,15 +8,10 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi_jwt_auth import AuthJWT
 from pydantic.typing import Optional
 from sqlalchemy.orm import Session
-from sqlalchemy.engine import Engine
 from app.core import (
-    settings,
-    verify_password,
-    get_password_hash
+    settings
 )
 from app.api import get_db
-
-from app.schemas import TokenPayload
 from app.models import User
 from app.crud import user
 import casbin
@@ -65,6 +60,7 @@ def generate_refresh_token_response(
     #     'refresh_token': refresh_token,
     #     "token_type": "Bearer"
     # }
+
 
 def get_current_user(
     db: Session = Depends(get_db),
@@ -126,19 +122,33 @@ def get_optional_current_active_user(
 
     return None
 
+
 source_file = '/app/app/core/authorization-model.conf'
 adapter = casbin_sqlalchemy_adapter.Adapter(engine)
 enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, True)
 
-enforcer.add_role_for_user_in_domain('1', 'admin', '1')
-enforcer.add_role_for_user_in_domain('2', 'reader', '1')
+# enforcer.add_role_for_user_in_domain('1', 'admin', '1')
+# enforcer.add_role_for_user_in_domain('2', 'reader', '1')
+
 
 def authorization(action: str):
-    def decorated(request: Request, organization_id, user = Depends(get_current_user)):
+    def decorated(
+        request: Request,
+        organization_id,
+        user=Depends(get_current_user)
+    ):
         if not enforcer.enforce(str(user.id), str(organization_id), action):
             raise HTTPException(
-                status_code=403, 
+                status_code=403,
                 detail="The user doesn't have enough privileges"
             )
 
     return decorated
+
+
+def set_policies(policies):
+    for key in policies:
+        action = key
+        roles = policies[key]
+        for role in roles:
+            enforcer.add_policy([role, action])

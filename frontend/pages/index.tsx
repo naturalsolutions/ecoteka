@@ -6,8 +6,6 @@ import ETKMapGeolocateFab from "../components/Map/GeolocateFab";
 import ETKMapSearchCity from "../components/Map/SearchCity";
 import ETKPanel from "../components/Panel";
 import ETKLanding from "../components/Landing";
-
-import Template from "../components/Template";
 import { useAppContext } from "../providers/AppContext";
 import { apiRest } from "../lib/api";
 
@@ -49,35 +47,33 @@ export default function IndexPage() {
   }, [isLoading, user]);
 
   return (
-    <Template>
-      <Grid
-        container
-        justify="flex-start"
-        alignItems="stretch"
-        className={classes.root}
-      >
-        <Hidden smDown>
-          <Grid item className={classes.sidebar}>
-            <ETKPanel
-              context={{ map: mapRef }}
-              panel={router.query.panel as string}
-            />
-          </Grid>
-        </Hidden>
-        <Grid item xs className={classes.main}>
-          {!user && landing && (
-            <ETKLanding map={mapRef} setLanding={setLanding} />
-          )}
-          <ETKMap
-            ref={mapRef}
-            styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
+    <Grid
+      container
+      justify="flex-start"
+      alignItems="stretch"
+      className={classes.root}
+    >
+      <Hidden smDown>
+        <Grid item className={classes.sidebar}>
+          <ETKPanel
+            context={{ map: mapRef }}
+            panel={router.query.panel as string}
           />
-          {!landing && (
-            <ETKMapSearchCity className={classes.mapSearchCity} map={mapRef} />
-          )}
-          <ETKMapGeolocateFab map={mapRef} />
         </Grid>
+      </Hidden>
+      <Grid item xs className={classes.main}>
+        {!user && landing && (
+          <ETKLanding map={mapRef} setLanding={setLanding} />
+        )}
+        <ETKMap
+          ref={mapRef}
+          styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
+        />
+        {!landing && (
+          <ETKMapSearchCity className={classes.mapSearchCity} map={mapRef} />
+        )}
+        <ETKMapGeolocateFab map={mapRef} />
       </Grid>
-    </Template>
+    </Grid>
   );
 }

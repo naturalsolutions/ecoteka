@@ -84,7 +84,7 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
 
     setStep("imported");
 
-    const coordinates = await apiRest.trees.getCentroidFromOrganization(
+    const coordinates = await apiRest.organization.getCentroidFromOrganization(
       geofile.organization_id
     );
 

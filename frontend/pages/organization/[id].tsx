@@ -33,7 +33,9 @@ function useOrganizationParents(id) {
 const Organization: FC<OrganizationProps> = (props) => {
   const router = useRouter();
   const token = useRequireToken();
-  const { status, data: path, error, isFetching } = useOrganizationParents(router.query.id);
+  const { status, data: path, error, isFetching } = useOrganizationParents(
+    router.query.id
+  );
   /* const {
     status: parentStatus,
     isLoading: parentsIsLoading,
@@ -46,7 +48,7 @@ const Organization: FC<OrganizationProps> = (props) => {
     return <div>Récupération de votre session...</div>;
   }
   return (
-    <Container maxWidth="md">
+    <Container>
       {path && <Breadcrumb path={path} />}
       <Header />
       <Tabs organization={[...(path || [])]?.pop()} />

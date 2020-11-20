@@ -41,7 +41,7 @@ api_router.include_router(
 )
 api_router.include_router(
     trees.router,
-    prefix="/trees",
+    prefix="/organization/{organization_id}/trees",
     tags=["trees"]
 )
 api_router.include_router(
@@ -58,7 +58,7 @@ api_router.include_router(
 
 api_router.include_router(
     intervention.router,
-    prefix='/interventions',
+    prefix='/organization/{organization_id}/interventions',
     tags=['interventions']
 )
 

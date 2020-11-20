@@ -13,9 +13,7 @@ export const useTemplate = () => React.useContext(TemplateContext);
 
 export default function Template(props) {
   const dialogRef = React.useRef();
-  const { appContext } = useAppContext();
-
-  const theme = createMuiTheme(themeConfig(appContext.theme));
+  const theme = createMuiTheme(themeConfig("dark"));
 
   return (
     <ThemeProvider theme={theme}>

@@ -7,7 +7,6 @@ from fastapi import (
     APIRouter,
     Body,
     Depends,
-    Request,
     HTTPException
 )
 from fastapi.encoders import jsonable_encoder
@@ -36,10 +35,9 @@ from app.utils import (
     send_new_account_email
 )
 from app.core import (
-    settings,
-    security
+    settings
 )
-import logging
+
 router = APIRouter()
 
 
@@ -107,6 +105,7 @@ def update_user_me(
         user_in.email = email
     user_in_db = user.update(db, db_obj=current_user, obj_in=user_in)
     return user_in_db
+
 
 @router.get("/me", response_model=UserOut)
 def read_user_me(

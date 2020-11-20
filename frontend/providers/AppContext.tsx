@@ -6,9 +6,6 @@ const StoreContext = createContext({} as any);
 export const Provider = ({ children }) => {
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [appContext, setAppContext] = useState({
-    theme: "dark",
-  });
 
   useEffect(() => {
     if (!user && api.getToken()) {
@@ -29,9 +26,7 @@ export const Provider = ({ children }) => {
   }, []);
 
   return (
-    <StoreContext.Provider
-      value={{ appContext, setAppContext, user, setUser, isLoading }}
-    >
+    <StoreContext.Provider value={{ user, setUser, isLoading }}>
       {children}
     </StoreContext.Provider>
   );
