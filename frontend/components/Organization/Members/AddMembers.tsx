@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import { Box, Button, Chip, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
 import { Send as SendIcon } from "@material-ui/icons";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { apiRest } from "@/lib/api";
 
 const useStyles = makeStyles((theme) => ({
   chipsContainer: {
@@ -18,7 +19,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddMember: FC = (props) => {
+interface AddMemberProps {
+  organizationID: number;
+}
+
+const AddMember: FC<AddMemberProps> = ({ organizationID }) => {
   const classes = useStyles();
   const [error, setError] = useState(null);
   const { register, control, handleSubmit, getValues, setValue } = useForm();
@@ -91,8 +96,12 @@ const AddMember: FC = (props) => {
     return /[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/.test(email);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    const { members } = data;
+    // alert(JSON.stringify(members));
+    const response = await apiRest.organization.addMembers(organizationID, members);
+    console.log(response);
   };
 
   const roles = [
