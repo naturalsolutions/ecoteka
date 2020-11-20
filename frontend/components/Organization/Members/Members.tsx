@@ -81,32 +81,47 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
     setGridApi(params.api);
   }
 
-  function test() {
-    data[2].name = "toto";
-    gridApi.setRowData(data);
-  }
-
-  function onSubmitMembers() {
-    alert("new members");
+  function onDetachMembers() {
+    alert("Confirm detachMembers");
   }
 
   function addMember() {
     const dialogActions = [
       {
-        label: t("components:Organization.Members.buttonCancelContent"),
-      },
-      {
-        label: t("components:Organization.Members.buttonSubmitContent"),
-        variant: "contained",
-        color: "secondary",
-        noClose: true,
-        onClick: onSubmitMembers,
+        label: t("components:Organization.Members.done"),
       },
     ];
 
     dialog.current.open({
-      title: t("components:Organization.Members.dialogTile"),
+      title: t("components:Organization.Members.dialogAddMemberTitle"),
       content: <AddMembers organizationID={organization.id} />,
+      actions: dialogActions,
+      dialogProps: {
+        maxWidth: "sm",
+        fullWidth: true,
+        fullScreen: matches,
+        disableBackdropClick: true,
+      },
+    });
+  }
+
+  function detachMembers() {
+    const dialogActions = [
+      {
+        label: t("components:Organization.Members.cancel"),
+      },
+      {
+        label: t("components:Contact.confirm"),
+        variant: "contained",
+        color: "error",
+        noClose: true,
+        onClick: onDetachMembers,
+      },
+    ];
+
+    dialog.current.open({
+      title: t("components:Organization.Members.dialogDdetachMembersTitle"),
+      content: <div>Action irréversible!</div>,
       actions: dialogActions,
       dialogProps: {
         maxWidth: "sm",
@@ -132,7 +147,15 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
     <Fragment>
       <Toolbar className={classes.toolbar}>
         <Box className={classes.root} />
-        <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<BlockIcon />}>
+        <Button
+          variant="contained"
+          size="small"
+          disabled={enableActions}
+          color="secondary"
+          className={classes.button}
+          startIcon={<BlockIcon />}
+          onClick={detachMembers}
+        >
           Retirer du groupe
         </Button>
         <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={addMember}>
@@ -155,16 +178,14 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
             }}
           >
             <AgGridColumn
-              field="id"
+              field="email"
               resizable
               sortable
               filter
-              width={100}
               suppressSizeToFit={true}
               headerCheckboxSelection={true}
               checkboxSelection={true}
             ></AgGridColumn>
-            <AgGridColumn field="email" resizable sortable filter></AgGridColumn>
             <AgGridColumn field="full_name" resizable sortable filter></AgGridColumn>
             <AgGridColumn
               field="role"
