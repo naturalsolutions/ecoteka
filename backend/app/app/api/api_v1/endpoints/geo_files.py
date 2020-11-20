@@ -10,15 +10,35 @@ from pydantic import Json
 
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import settings, get_current_active_user
+from app.core import (
+    settings,
+    set_policies,
+    authorization,
+    get_current_active_user,
+)
 from app.tasks import create_mbtiles
 from app.worker import create_mbtiles_task
 
 router = APIRouter()
+policies = {
+    "geofiles:read_geo_files": ["owner", "manager", "contributor", "reader"],
+    "geofiles:read_geofile_by_name": [
+        "owner",
+        "manager",
+        "contributor",
+        "reader",
+    ],
+    "geofiles:upload_geo_file": ["owner", "manager", "contributor"],
+    "geofiles:update_geo_file": ["owner", "manager", "contributor"],
+    "geofiles:delete_geo_file": ["owner", "manager", "contributor"],
+}
+set_policies(policies)
 
 
 @router.get("/", response_model=List[schemas.GeoFile])
 def read_geo_files(
+    organization_id: int,
+    auth=Depends(authorization("geofiles:read_geo_files")),
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
@@ -27,13 +47,17 @@ def read_geo_files(
     """
     Retrieve geo files.
     """
-    geo_files = crud.geo_file.get_multi(db, user=current_user, skip=skip, limit=limit)
+    geo_files = crud.geo_file.get_multi(
+        db, user=current_user, skip=skip, limit=limit
+    )
 
     return geo_files
 
 
 @router.get("/{name}", response_model=schemas.GeoFile)
 def read_geofile_by_name(
+    organization_id: int,
+    auth=Depends(authorization("geofiles:read_geofile_by_name")),
     *,
     db: Session = Depends(get_db),
     name: str,
@@ -55,6 +79,8 @@ def read_geofile_by_name(
 
 @router.post("/upload", response_model=schemas.GeoFile)
 async def upload_geo_file(
+    organization_id: int,
+    auth=Depends(authorization("geofiles:upload_geo_file")),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_active_user),
@@ -67,7 +93,9 @@ async def upload_geo_file(
         extension = filename_parts[1][1:]
 
         if not extension in settings.GEO_FILES_ALLOWED:
-            raise HTTPException(status_code=415, detail="File format unsupported")
+            raise HTTPException(
+                status_code=415, detail="File format unsupported"
+            )
 
         unique_name = uuid.uuid4()
         unique_filename = f"{unique_name}.{extension}"
@@ -82,10 +110,12 @@ async def upload_geo_file(
             original_name=file.filename,
             extension=extension,
             user_id=current_user.id,
-            organization_id=current_user.organization_id,
+            organization_id=organization_id,
         )
 
-        geofile_exists = crud.geo_file.get_by_checksum(db, checksum=geofile.checksum)
+        geofile_exists = crud.geo_file.get_by_checksum(
+            db, checksum=geofile.checksum
+        )
 
         if geofile_exists:
             os.remove(geofile.get_filepath(extended=False))
@@ -107,6 +137,8 @@ async def upload_geo_file(
 
 @router.put("/", response_model=schemas.GeoFile)
 def update_geo_file(
+    organization_id: int,
+    auth=Depends(authorization("geofiles:update_geo_file")),
     *,
     db: Session = Depends(get_db),
     geofile_in: schemas.GeoFileUpdate,
@@ -131,6 +163,8 @@ def update_geo_file(
 
 @router.delete("/{name}")
 def delete_geo_file(
+    organization_id: int,
+    auth=Depends(authorization("geofiles:delete_geo_file")),
     *,
     name: str,
     db: Session = Depends(get_db),
