@@ -5,6 +5,7 @@ import { TabPanel, GeneralInfoTab } from "@/components/Organization";
 import { Members } from "@/components/Organization/Members";
 import { TOrganization } from "@/pages/organization/[id]";
 import Teams from "./Teams/Teams";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles({
   root: {
@@ -14,14 +15,17 @@ const useStyles = makeStyles({
 
 interface TabsProps {
   organization: TOrganization;
+  activeTab: string;
 }
 
-const ETKTabs: FC<TabsProps> = (props) => {
+const ETKTabs: FC<TabsProps> = ({ organization, activeTab }) => {
   const classes = useStyles();
-  const [value, setValue] = useState("general");
+  const router = useRouter();
+  const [value, setValue] = useState(activeTab || "general");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    router.push(`/organization/${organization.id}?t=${newValue}`);
   };
   return (
     <>
@@ -41,13 +45,13 @@ const ETKTabs: FC<TabsProps> = (props) => {
         </Tabs>
       </Paper>
       <TabPanel value={value} index="general">
-        <GeneralInfoTab organization={props.organization} />
+        <GeneralInfoTab organization={organization} />
       </TabPanel>
       <TabPanel value={value} index="teams">
-        <Teams organization={props.organization} value={value} index="teams" />
+        <Teams organization={organization} value={value} index="teams" />
       </TabPanel>
       <TabPanel value={value} index="members">
-        <Members organization={props.organization} value={value} index="members" />
+        <Members organization={organization} value={value} index="members" />
       </TabPanel>
     </>
   );

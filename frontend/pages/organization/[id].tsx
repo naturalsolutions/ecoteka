@@ -48,6 +48,7 @@ const Organization: FC<OrganizationProps> = (props) => {
   const token = useRequireToken();
   const { data: path } = useOrganizationParents(router.query.id);
   const { status, data: organization, error, isFetching } = useOrganization(router.query.id);
+
   /* const {
     status: parentStatus,
     isLoading: parentsIsLoading,
@@ -55,8 +56,6 @@ const Organization: FC<OrganizationProps> = (props) => {
     error: parentsError,
     isFetching: parentsIsFetching,
   } = useOrganizationParents(router.query.id); */
-
-  console.log(path, organization);
 
   if (!token) {
     return <div>Récupération de votre session...</div>;
@@ -73,7 +72,7 @@ const Organization: FC<OrganizationProps> = (props) => {
       {path && <Breadcrumb path={path} />}
       <Header />
       {/* <Tabs organization={[...(path || [])]?.pop()} /> */}
-      <Tabs organization={organization} />
+      <Tabs organization={organization} activeTab={router.query.t} />
     </Container>
   );
 };

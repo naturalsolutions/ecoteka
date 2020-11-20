@@ -97,11 +97,8 @@ const AddMember: FC<AddMemberProps> = ({ organizationID }) => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     const { members } = data;
-    // alert(JSON.stringify(members));
     const response = await apiRest.organization.addMembers(organizationID, members);
-    console.log(response);
   };
 
   const roles = [

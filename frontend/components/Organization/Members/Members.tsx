@@ -15,15 +15,7 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
 
 function EditBtnRenderer(props) {
-  return (
-    <Button
-      onClick={() => {
-        console.log(props);
-      }}
-    >
-      Edit
-    </Button>
-  );
+  return <Button onClick={() => {}}>Edit</Button>;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -133,8 +125,6 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   }
 
   function onSelectionChanged() {
-    // console.log("selectedNodes", gridApi.getSelectedNodes());
-    // console.log("selectedRows", gridApi.getSelectedRows());
     const selectedRows = gridApi.getSelectedRows();
     setEnableActions(selectedRows.length > 0 ? false : true);
   }
@@ -215,7 +205,7 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
                   },
                 ],
                 onChange: (params, newValue, oldValue) => {
-                  console.log(params.data.id, params.data.role);
+                  console.log("[TODO]: HTTP request to patch member role", params.data.id, params.data.role);
                 },
               }}
             />
