@@ -11,5 +11,6 @@ export interface IUser {
   full_name: string;
   is_superuser: boolean;
   is_verified: boolean;
+  currentOrganization?: IOrganization;
   organizations: IOrganization[];
 }
