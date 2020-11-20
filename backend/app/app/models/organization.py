@@ -51,12 +51,15 @@ class Organization(Base):
         self.working_area = working_area
         self.path = Ltree(str(_id)) if parent is None else (parent.path or Ltree('_')) + Ltree(str(_id))
 
+    def to_current_user_schema(self):
+        return self.to_schema()
+
     def to_schema(self):
         return schemas.Organization(
             **{
                 c.key: getattr(self, c.key)
                 for c in inspect(self).mapper.column_attrs
-                if not c.key in ["path", "working_area"]
+                if not c.key in ["path", "working_area", "config"]
             },
             has_working_area=bool(self.working_area),
             path=str(self.path)
