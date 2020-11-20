@@ -19,7 +19,7 @@ interface OrganizationProps {}
 
 function useOrganizationParents(id) {
   return useQuery(
-    "organizationParents",
+    `organizationParents_${id}`,
     async () => {
       const path = await apiRest.organization.parents(id);
       return path;
@@ -32,7 +32,7 @@ function useOrganizationParents(id) {
 
 function useOrganization(id) {
   return useQuery(
-    "organizationCurrentNode",
+    `organizationCurrentNode_${id}`,
     async () => {
       const organization = await apiRest.organization.get(id);
       return organization;

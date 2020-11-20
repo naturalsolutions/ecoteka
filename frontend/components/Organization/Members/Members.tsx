@@ -59,7 +59,7 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const { t } = useTranslation(["components", "common"]);
   const { status, data, error, isFetching } = useQuery(
-    "members",
+    `members_${organization.id}`,
     async () => {
       const data = await apiRest.organization.members(organization.id);
       return data;

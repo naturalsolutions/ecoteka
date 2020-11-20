@@ -63,7 +63,7 @@ const Teams: FC<TeamsProps> = (props) => {
 
   const cache = useQueryCache();
   const { status, data, error, isFetching } = useQuery(
-    "teams",
+    `teams_${props.organization.id}`,
     async () => {
       const data = await apiRest.organization.teams(props.organization.id);
       return data;
