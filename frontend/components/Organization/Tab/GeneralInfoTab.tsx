@@ -21,7 +21,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   return (
     <Grid container alignItems="stretch">
       <Grid item xs={6}>
-        {organization.name}
+        {organization?.name}
       </Grid>
       <Grid item xs={6} className={classes.map}>
         <Map styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`} />
