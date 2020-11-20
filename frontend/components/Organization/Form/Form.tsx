@@ -7,7 +7,7 @@ import { apiRest } from "@/lib/api"
 import { IOrganization } from "@/index.d"
 
 export type ETKFormOrganizationActions = {
-  submit: () => Promise<boolean>;
+  submit: () => Promise<IOrganization>;
 };
 
 export interface ETKFormOrganizationProps {
@@ -24,7 +24,6 @@ const ETKFormOrganization = forwardRef<ETKFormOrganizationActions, ETKFormOrgani
     const { t } = useTranslation("components");
     const schema = useEtkOrganizationSchema();
     const form = useETKForm({ schema: schema });
-    let isOk = false;
     const isNew = !Boolean(props.organization?.id);
 
     // Why a useEffect to make setValue works ?
@@ -38,29 +37,23 @@ const ETKFormOrganization = forwardRef<ETKFormOrganizationActions, ETKFormOrgani
       }
     }, []);
 
-    const onSubmit = async (data) => {
-      console.log(props)
-      data = {
-        ...data
-      };
-      if (isNew) {
-        data.parent_id = props.organization.parent_id;
-      }
-      const response = isNew ?
-        await apiRest.organization.post(data) :
-        await apiRest.organization.patch(props.organization.id, data);
-      //We could do that (and more) inapi
-      if (response.ok) {
-        isOk = true;
-      }
-    };
-
-    const submit = form.handleSubmit(onSubmit);
-
     useImperativeHandle(ref, () => ({
-      submit: async () => {
-        await submit();
-        return isOk;
+      submit: () => {
+        return new Promise((resolve, reject) => {
+          form.handleSubmit(async (data) => {
+            data = {
+              ...data
+            };
+            if (isNew) {
+              data.parent_id = props.organization.parent_id;
+            }
+            const response = isNew ?
+              await apiRest.organization.post(data) :
+              await apiRest.organization.patch(props.organization.id, data);
+            
+            resolve(response);
+          })();
+        });
       },
     }));
 
