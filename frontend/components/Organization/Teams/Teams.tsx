@@ -7,8 +7,8 @@ import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon, Edit, Pho
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import { useRouter } from 'next/router'
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-material.css";
 import CellGridSelectRenderer from "../CellGridSelectRenderer";
 import { useTemplate } from "@/components/Template";
 import ETKFormTeam, { ETKFormTeamActions } from "./Form";
@@ -62,19 +62,23 @@ const Teams: FC<TeamsProps> = (props) => {
   const router = useRouter();
 
   const cache = useQueryCache();
-  const { status, data, error, isFetching } = useQuery("teams", async () => {
-    const data = await apiRest.organization.teams(props.organization.id);
-    return data;
-  }, {
-    enabled: Boolean(props.organization)
-  });
+  const { status, data, error, isFetching } = useQuery(
+    "teams",
+    async () => {
+      const data = await apiRest.organization.teams(props.organization.id);
+      return data;
+    },
+    {
+      enabled: Boolean(props.organization),
+    }
+  );
 
   const [gridApi, setGridApi] = useState(null);
   const [enableActions, setEnableActions] = useState(true);
 
   useEffect(() => {
     if (gridApi) {
-      gridApi.setRowData(data || [])
+      gridApi.setRowData(data || []);
     }
   }, [gridApi, data]);
 
@@ -116,7 +120,7 @@ const Teams: FC<TeamsProps> = (props) => {
     if (isOk) {
       dialog.current.close();
       //TODO Add a row to the array instead of reload the complete collection
-      cache.invalidateQueries('teams');
+      cache.invalidateQueries("teams");
     }
   };
 
@@ -170,7 +174,7 @@ const Teams: FC<TeamsProps> = (props) => {
           {t("Teams.buttonAdd")}
         </Button>
       </Toolbar>
-      <div className={`${classes.agGridWrapper} ag-theme-alpine`} style={{ width: '100%' }}>
+      <div className={`${classes.agGridWrapper} ag-theme-material`} style={{ width: '100%' }}>
         <AgGridReact
           onGridReady={onGridReady}
           domLayout="autoHeight"
@@ -213,8 +217,9 @@ const Teams: FC<TeamsProps> = (props) => {
                 </Tooltip>
               </Fragment>
             },
-            selectRenderer: CellGridSelectRenderer
-          }}>
+            selectRenderer: CellGridSelectRenderer,
+          }}
+        >
           <AgGridColumn
             field="name"
             resizable
@@ -229,7 +234,6 @@ const Teams: FC<TeamsProps> = (props) => {
           />
         </AgGridReact>
       </div>
-
     </Fragment>
   );
 };

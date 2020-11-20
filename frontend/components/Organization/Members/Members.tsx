@@ -2,8 +2,7 @@ import { FC, Fragment, useState, useEffect } from "react";
 import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery } from "react-query";
 import { makeStyles } from "@material-ui/core/styles";
-// import { apiRest } from "@/lib/api";
-import { getMembers } from "@/lib/mock/fakeApi";
+import { apiRest } from "@/lib/api";
 import { Box, Button, Toolbar, FormControl, InputLabel, Select, MenuItem, useMediaQuery } from "@material-ui/core";
 import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
@@ -14,12 +13,6 @@ import { AddMembers } from "@/components/Organization/Members";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
-
-interface MembersProps {
-  organization: TOrganization;
-  value: string;
-  index: string;
-}
 
 function EditBtnRenderer(props) {
   return (
@@ -54,8 +47,13 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
 }));
+interface MembersProps {
+  organization: TOrganization;
+  value: string;
+  index: string;
+}
 
-const Members: FC<MembersProps> = (props) => {
+const Members: FC<MembersProps> = ({ organization, value, index }) => {
   const classes = useStyles();
   const { dialog, theme } = useTemplate();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -63,22 +61,18 @@ const Members: FC<MembersProps> = (props) => {
   const { status, data, error, isFetching } = useQuery(
     "members",
     async () => {
-      try {
-        const data = await getMembers();
-        return data;
-      } catch (error) {
-        console.log(error);
-      }
+      const data = await apiRest.organization.members(organization.id);
+      return data;
     },
     {
-      enabled: Boolean(props.organization),
+      enabled: Boolean(organization),
     }
   );
 
   const [gridApi, setGridApi] = useState(null);
   const [enableActions, setEnableActions] = useState(true);
 
-  const isVisible = props.value == props.index;
+  const isVisible = value == index;
   if (isVisible && gridApi) {
     gridApi.sizeColumnsToFit();
   }
@@ -112,7 +106,7 @@ const Members: FC<MembersProps> = (props) => {
 
     dialog.current.open({
       title: t("components:Organization.Members.dialogTile"),
-      content: <AddMembers />,
+      content: <AddMembers organizationID={organization.id} />,
       actions: dialogActions,
       dialogProps: {
         maxWidth: "sm",
@@ -146,7 +140,7 @@ const Members: FC<MembersProps> = (props) => {
         </Button>
       </Toolbar>
       {data && (
-        <div className="ag-theme-alpine" style={{ width: "100%" }}>
+        <div className="ag-theme-material" style={{ width: "100%" }}>
           <AgGridReact
             onGridReady={onGridReady}
             rowData={data}
