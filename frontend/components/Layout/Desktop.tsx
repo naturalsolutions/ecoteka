@@ -12,6 +12,7 @@ const defaultProps: ETKLayoutDesktopProps = {};
 const useStyles = makeStyles({
   content: {
     position: "relative",
+    backgroundColor: "#666666",
   },
 });
 
@@ -30,14 +31,12 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         {
           label: "Template.menuItems.plantHeritage.allTrees",
           link: "/",
-          activator: (router) =>
-            router.pathname === "/" && router.query.panel === undefined,
+          activator: (router) => router.pathname === "/" && router.query.panel === undefined,
         },
         {
           label: "Template.menuItems.plantHeritage.addATree",
           link: "/?panel=newTree",
-          activator: (router) =>
-            router.pathname === "/" && router.query.panel === "newTree",
+          activator: (router) => router.pathname === "/" && router.query.panel === "newTree",
         },
       ],
     },
@@ -48,8 +47,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         {
           label: "Template.menuItems.dataImport.importYourData",
           link: "/?panel=import",
-          activator: (router) =>
-            router.pathname === "/" && router.query.panel === "import",
+          activator: (router) => router.pathname === "/" && router.query.panel === "import",
         },
         {
           label: "Template.menuItems.dataImport.importHistory",
@@ -65,8 +63,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         {
           label: "Template.menuItems.availableSoon.requestAnItervention",
           link: "/?panel=newIntervention",
-          activator: (router) =>
-            router.pathname === "/" && router.query.panel === "newIntervention",
+          activator: (router) => router.pathname === "/" && router.query.panel === "newIntervention",
         },
         {
           label: "Template.menuItems.availableSoon.scheduleOfInterventions",

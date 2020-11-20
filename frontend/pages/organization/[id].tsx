@@ -6,16 +6,7 @@ import { Header, Breadcrumb, Tabs } from "@/components/Organization";
 import { apiRest } from "@/lib/api";
 import { useQuery } from "react-query";
 
-export type TOrganization = {
-  id?: number;
-  name?: string;
-  slug?: string;
-  path?: string;
-  config?: any;
-  parent_id?: number;
-};
-
-interface OrganizationProps {}
+interface OrganizationProps { }
 
 function useOrganizationParents(id) {
   return useQuery(
@@ -48,6 +39,7 @@ const Organization: FC<OrganizationProps> = (props) => {
   const token = useRequireToken();
   const { data: path } = useOrganizationParents(router.query.id);
   const { status, data: organization, error, isFetching } = useOrganization(router.query.id);
+
   /* const {
     status: parentStatus,
     isLoading: parentsIsLoading,
@@ -71,7 +63,7 @@ const Organization: FC<OrganizationProps> = (props) => {
       {path && <Breadcrumb path={path} />}
       <Header />
       {/* <Tabs organization={[...(path || [])]?.pop()} /> */}
-      <Tabs organization={organization} />
+      <Tabs organization={organization} activeTab={router.query.t} />
     </Container>
   );
 };

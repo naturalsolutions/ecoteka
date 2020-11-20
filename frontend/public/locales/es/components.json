@@ -7,7 +7,6 @@
       "content": "¿Estás seguro/a de querer cerrar la sesión?"
     }
   },
-
   "SignIn": {
     "title": "Iniciar sesión",
     "buttonCancel": "Cancelar",
@@ -18,13 +17,11 @@
     "errorMessageEmail": "Correo electrónico no válido",
     "errorMessageRequiredField": "Campo obligatorio"
   },
-
   "LanguageSelector": {
     "en": "Inglés",
     "fr": "Francés",
     "es": "Español"
   },
-
   "Template": {
     "menuItems": {
       "plantHeritage": {
@@ -44,14 +41,13 @@
       }
     }
   },
-
   "Toolbar": {
     "slogan": "¡Por una ciudad más verde!",
     "login": "Iniciar sesión",
     "about": "Obtener más información",
-    "register": "Inscribir"
+    "register": "Registrar",
+    "myOrganizations": "Mis organizaciones"
   },
-
   "Map": {
     "SearchCity": {
       "label": "Buscar una ciudad"
@@ -61,12 +57,10 @@
       "satellite": "Satélite"
     }
   },
-
   "Sidebar": {
     "treeCard": "Ficha de árbol",
     "wikipediaInformation": "Información de Wikipedia"
   },
-
   "PanelStart": {
     "title": "Estas conectado/a a tu cuenta",
     "content": "Puedes ver el número de árboles en OpenData pero también el número de árboles en tu capa privada de datos.",
@@ -84,7 +78,6 @@
       "button": "Importar un archivo"
     }
   },
-
   "PanelWelcome": {
     "tabLabel": "Patrimonio vegetal",
     "title": "¡Bienvenido a EcoTeka!",
@@ -93,13 +86,11 @@
       "title": "Número de árboles en el mapa"
     }
   },
-
   "CardAbout": {
     "title": "¿Eres un/a gestor/a de espacios verdes?",
     "content": "Puedes contactarnos para saber más y probar las primeras funcionalidades de nuestro inventario de arbolado urbano.",
     "button": "Saber más"
   },
-
   "ImportHistoryIndex": {
     "title": "Histórico de importaciones",
     "importText": "Importar",
@@ -111,7 +102,6 @@
       "cancel": "Cancelar"
     }
   },
-
   "ImportHistoryTable": {
     "headers": {
       "file": "Nombre del archivo",
@@ -121,12 +111,10 @@
       "importStatus": "Estado de la importación"
     }
   },
-
   "ImportHistoryEmpty": {
     "content": "¡Aún no has realizado ninguna importación! <br/> Siempre hay un comienzo para todo",
     "button": "Importar mis datos"
   },
-
   "ImportTemplate": {
     "title": "¿Alguna duda sobre tu archivo?",
     "content": "Asegúrese de que tu archivo contenga la siguiente información:",
@@ -136,13 +124,11 @@
     "crs": "Sistema de Referencia de Coordenadas",
     "download": "Puedes descargar nuestra plantilla en formato xlsx"
   },
-
   "ImportPanelMapping": {
     "title": "Seleccionar campos a importar",
     "cancel": "Cancelar",
     "send": "Enviar"
   },
-
   "Import": {
     "Index": {
       "tooltipContent": "- La importación de datos es una acción que puede requerir varias decenas de minutos <br/> - Busque el progreso de su importación en el menú: \"Historial de importaciones \"",
@@ -180,7 +166,6 @@
       "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo"
     }
   },
-
   "Contact": {
     "dialogTile": "Obtener más información",
     "dialogContentText": "¿Te interesa esta plataforma? <br/> ¿Quieres saber más?",
@@ -274,21 +259,18 @@
     "allergens": "Allergenic tree",
     "remarks": "Remarks"
   },
-
   "TreeForm": {
     "dialogDeleteTitle": "Eliminar los árboles seleccionados",
     "dialogDeleteContent": "¿Seguro que deseas eliminar los árboles seleccionados?",
     "dialogDeleteActionYes": "Si",
     "dialogDeleteActionCancel": "No"
   },
-
   "Teams": {
     "buttonAdd": "Add a team",
     "tooltipWorkingAreaEdit": "Edit working area",
     "tooltipInfoEdit": "Edit informations",
     "tooltipLink": "Open the page"
   },
-
   "Team": {
     "name": "Apelido",
     "slug": "Slug",
@@ -306,7 +288,7 @@
     "dialogTitleEdit": "Update the organisation",
     "dialogContentTextCreate": "Use this form to create an organisation.",
     "dialogContentTextEdit": "Use this form to update the organisation.",
-    "TeamArea": {
+    "WorkingArea": {
       "dialogTitle": "Edit working area",
       "dialogContentText": "Accept : zip, geojson"
     },

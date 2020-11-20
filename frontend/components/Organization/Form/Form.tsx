@@ -4,14 +4,14 @@ import { useTranslation, Trans } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useEtkOrganizationSchema from "@/components/Organization/Form/Schema";
 import { apiRest } from "@/lib/api"
-import { TOrganization } from "@/pages/organization/[id]";
+import { IOrganization } from "@/index.d"
 
 export type ETKFormOrganizationActions = {
   submit: () => Promise<boolean>;
 };
 
 export interface ETKFormOrganizationProps {
-  organization?: TOrganization,
+  organization?: IOrganization,
   translationNode?: string,
 }
 
