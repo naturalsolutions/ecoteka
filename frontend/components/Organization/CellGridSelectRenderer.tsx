@@ -2,10 +2,7 @@ import { MenuItem, Select } from "@material-ui/core";
 import { useState } from "react";
 
 const CellGridSelectRenderer = (props) => {
-  //   console.log(props);
   const items = props.colDef.cellRendererParams?.items;
-  //   const initValue = props.value
-  console.log(props.getValue());
   const initValue =
     items?.find((item) => {
       return item.value == props.getValue();
