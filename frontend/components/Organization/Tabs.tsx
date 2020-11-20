@@ -14,8 +14,8 @@ const useStyles = makeStyles({
 });
 
 interface TabsProps {
-  organization: IOrganization;
-  activeTab: string;
+  organization: TOrganization;
+  activeTab: string | string[];
 }
 
 const ETKTabs: FC<TabsProps> = ({ organization, activeTab }) => {
