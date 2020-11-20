@@ -3,7 +3,7 @@ import { createStyles, Divider, Grid, makeStyles, Typography } from "@material-u
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { useTranslation, Trans } from "react-i18next";
 import { apiRest } from "@/lib/api"
-import { TOrganization } from "@/pages/organization/[id]";
+import { IOrganization } from "@/index.d"
 import { DropzoneArea } from "material-ui-dropzone";
 import { Error } from "@material-ui/icons";
 
@@ -12,7 +12,7 @@ export type ETKFormTeamAreaActions = {
 };
 
 export interface ETKFormTeamAreaProps {
-  organization: TOrganization
+  organization: IOrganization
 }
 
 const useStyle = makeStyles(() =>
@@ -172,13 +172,13 @@ const ETKFormTeamArea = forwardRef<ETKFormTeamAreaActions, ETKFormTeamAreaProps>
           />
         </Grid>
         {file ? (
-            <React.Fragment>
-              <Grid container alignItems="center">
-                {ETKFiles}
-              </Grid>
-              <Divider className={classes.divider} />
-            </React.Fragment>
-          ) : null}
+          <React.Fragment>
+            <Grid container alignItems="center">
+              {ETKFiles}
+            </Grid>
+            <Divider className={classes.divider} />
+          </React.Fragment>
+        ) : null}
       </Grid>
     );
   }

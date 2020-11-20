@@ -1,5 +1,5 @@
 import { FC, Fragment, useState, useEffect } from "react";
-import { TOrganization } from "@/pages/organization/[id]";
+import { IOrganization } from "@/index.d"
 import { useQuery } from "react-query";
 import { makeStyles } from "@material-ui/core/styles";
 import { apiRest } from "@/lib/api";
@@ -15,7 +15,7 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
 
 function EditBtnRenderer(props) {
-  return <Button onClick={() => {}}>Edit</Button>;
+  return <Button onClick={() => { }}>Edit</Button>;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 interface MembersProps {
-  organization: TOrganization;
+  organization: IOrganization;
   value: string;
   index: string;
 }

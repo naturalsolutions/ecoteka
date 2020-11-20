@@ -1,4 +1,4 @@
-import { TOrganization } from "@/pages/organization/[id]";
+import { IOrganization } from "@/index.d"
 import React, { FC } from "react";
 import { Grid, Box } from "@material-ui/core";
 import Map from "@/components/Map/Map";
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface IGeneralInfoTab {
-  organization: TOrganization;
+  organization: IOrganization;
 }
 
 const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {

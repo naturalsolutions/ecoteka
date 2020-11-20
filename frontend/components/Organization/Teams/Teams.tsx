@@ -1,5 +1,5 @@
 import { FC, Fragment, useEffect, useRef, useState } from "react";
-import { TOrganization } from "@/pages/organization/[id]";
+import { IOrganization } from "@/index.d"
 import { useQuery, useQueryCache } from "react-query";
 import { apiRest } from "@/lib/api"
 import { Box, Button, IconButton, makeStyles, Toolbar, Tooltip } from "@material-ui/core";
@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import ETKFormTeamArea, { ETKFormTeamAreaActions } from "../TeamArea/Form";
 
 interface TeamsProps {
-  organization: TOrganization;
+  organization: IOrganization;
   value: string;
   index: string;
 }

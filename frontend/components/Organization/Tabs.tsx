@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Tabs, Tab, Box } from "@material-ui/core";
 import { TabPanel, GeneralInfoTab } from "@/components/Organization";
 import { Members } from "@/components/Organization/Members";
-import { TOrganization } from "@/pages/organization/[id]";
+import { IOrganization } from "@/index.d"
 import Teams from "./Teams/Teams";
 import { useRouter } from "next/router";
 
@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 });
 
 interface TabsProps {
-  organization: TOrganization;
+  organization: IOrganization;
   activeTab: string;
 }
 

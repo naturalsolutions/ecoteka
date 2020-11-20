@@ -4,14 +4,14 @@ import { useTranslation, Trans } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useEtkTeamSchema from "./Schema";
 import { apiRest } from "@/lib/api"
-import { TOrganization } from "@/pages/organization/[id]";
+import { IOrganization } from "@/index.d"
 
 export type ETKFormTeamActions = {
   submit: () => Promise<boolean>;
 };
 
 export interface ETKFormTeamProps {
-  organization?: TOrganization
+  organization?: IOrganization
 }
 
 const defaultProps: ETKFormTeamProps = {};

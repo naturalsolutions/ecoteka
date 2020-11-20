@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import { Breadcrumbs, Link, Box, Typography } from "@material-ui/core";
-import { TOrganization } from "@/pages/organization/[id]";
+import { IOrganization } from "@/index.d"
 
 interface BreadcrumbProps {
-  path: TOrganization[];
+  path: IOrganization[];
 }
 
 const Breadcrumb: FC<BreadcrumbProps> = ({ path }) => {
