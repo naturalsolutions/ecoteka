@@ -12,6 +12,7 @@ from .user import (
     UserDB,
     UserUpdate,
     UserOut,
+    CurrentUSer,
     UserInvite,
     UserWithRole
 )
@@ -51,7 +52,8 @@ from .tree import (
 from .organization import (
     Organization,
     OrganizationCreate,
-    OrganizationUpdate
+    OrganizationUpdate,
+    OrganizationCurrentUser
 )
 from .coordinate import (
     Coordinate
@@ -98,7 +100,9 @@ __all__ = [
     "UserCreate",
     "UserDB",
     "UserOut",
+    "CurrentUSer",
     "UserUpdate",
     "UserInvite",
-    "UserWithRole"
+    "UserWithRole",
+    "OrganizationCurrentUser"
 ]

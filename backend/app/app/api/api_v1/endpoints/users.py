@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 from app.schemas import (
     UserCreate,
     UserOut,
+    CurrentUSer,
     UserUpdate
 )
 from app.models import (
@@ -36,6 +37,10 @@ from app.utils import (
 )
 from app.core import (
     settings
+)
+from app.core.security import (
+    enforcer,
+    get_current_user_with_organizations
 )
 
 router = APIRouter()
@@ -107,15 +112,16 @@ def update_user_me(
     return user_in_db
 
 
-@router.get("/me", response_model=UserOut)
+@router.get("/me")#, response_model=UserMeOut)
 def read_user_me(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    user_with_organizations = Depends(get_current_user_with_organizations)
 ) -> Any:
     """
     Get current user.
     """
-    return current_user
+
+    return user_with_organizations
 
 
 @router.get("/{user_id}", response_model=UserOut)
