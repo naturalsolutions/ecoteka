@@ -52,8 +52,9 @@ const Teams: FC<TeamsProps> = (props) => {
   const router = useRouter();
 
   const cache = useQueryCache();
+  const queryName = `teams_${props.organization.id}`
   const { status, data, error, isFetching } = useQuery(
-    `teams_${props.organization.id}`,
+    queryName,
     async () => {
       const data = await apiRest.organization.teams(props.organization.id);
       return data;
@@ -110,7 +111,7 @@ const Teams: FC<TeamsProps> = (props) => {
     if (isOk) {
       dialog.current.close();
       //TODO Add a row to the array instead of reload the complete collection
-      cache.invalidateQueries("teams");
+      cache.invalidateQueries(queryName);
     }
   };
 
