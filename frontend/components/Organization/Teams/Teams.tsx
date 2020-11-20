@@ -6,8 +6,8 @@ import { Box, Button, IconButton, makeStyles, Toolbar, Tooltip } from "@material
 import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon, Edit, PhotoSizeSelectSmall } from "@material-ui/icons";
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-material.css";
 import CellGridSelectRenderer from "../CellGridSelectRenderer";
 import { useTemplate } from "@/components/Template";
 import ETKFormTeam, { ETKFormTeamActions } from "./Form";
@@ -50,19 +50,23 @@ const Teams: FC<TeamsProps> = (props) => {
   const { t } = useTranslation(["components", "common"]);
 
   const cache = useQueryCache();
-  const { status, data, error, isFetching } = useQuery("teams", async () => {
-    const data = await apiRest.organization.teams(props.organization.id);
-    return data;
-  }, {
-    enabled: Boolean(props.organization)
-  });
+  const { status, data, error, isFetching } = useQuery(
+    "teams",
+    async () => {
+      const data = await apiRest.organization.teams(props.organization.id);
+      return data;
+    },
+    {
+      enabled: Boolean(props.organization),
+    }
+  );
 
   const [gridApi, setGridApi] = useState(null);
   const [enableActions, setEnableActions] = useState(true);
 
   useEffect(() => {
     if (gridApi) {
-      gridApi.setRowData(data || [])
+      gridApi.setRowData(data || []);
     }
   }, [gridApi, data]);
 
@@ -104,7 +108,7 @@ const Teams: FC<TeamsProps> = (props) => {
     if (isOk) {
       dialog.current.close();
       //TODO Add a row to the array instead of reload the complete collection
-      cache.invalidateQueries('teams');
+      cache.invalidateQueries("teams");
     }
   };
 
@@ -154,7 +158,7 @@ const Teams: FC<TeamsProps> = (props) => {
           {t("Teams.buttonAdd")}
         </Button>
       </Toolbar>
-      <div className="ag-theme-alpine" style={{ width: '100%' }}>
+      <div className="ag-theme-material" style={{ width: "100%" }}>
         <AgGridReact
           onGridReady={onGridReady}
           domLayout="autoHeight"
@@ -185,8 +189,9 @@ const Teams: FC<TeamsProps> = (props) => {
                 </Tooltip>
               </Fragment>
             },
-            selectRenderer: CellGridSelectRenderer
-          }}>
+            selectRenderer: CellGridSelectRenderer,
+          }}
+        >
           <AgGridColumn
             field="id"
             resizable
@@ -195,7 +200,8 @@ const Teams: FC<TeamsProps> = (props) => {
             width={100}
             suppressSizeToFit={true}
             headerCheckboxSelection={true}
-            checkboxSelection={true}></AgGridColumn>
+            checkboxSelection={true}
+          ></AgGridColumn>
           <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
           <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
           <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
@@ -207,7 +213,6 @@ const Teams: FC<TeamsProps> = (props) => {
           />
         </AgGridReact>
       </div>
-
     </Fragment>
   );
 };

@@ -30,12 +30,24 @@ function useOrganizationParents(id) {
   );
 }
 
+function useOrganization(id) {
+  return useQuery(
+    "organizationCurrentNode",
+    async () => {
+      const organization = await apiRest.organization.get(id);
+      return organization;
+    },
+    {
+      enabled: Boolean(id), // We accept that id could not be 0
+    }
+  );
+}
+
 const Organization: FC<OrganizationProps> = (props) => {
   const router = useRouter();
   const token = useRequireToken();
-  const { status, data: path, error, isFetching } = useOrganizationParents(
-    router.query.id
-  );
+  const { data: path } = useOrganizationParents(router.query.id);
+  const { status, data: organization, error, isFetching } = useOrganization(router.query.id);
   /* const {
     status: parentStatus,
     isLoading: parentsIsLoading,
@@ -44,14 +56,24 @@ const Organization: FC<OrganizationProps> = (props) => {
     isFetching: parentsIsFetching,
   } = useOrganizationParents(router.query.id); */
 
+  console.log(path, organization);
+
   if (!token) {
     return <div>Récupération de votre session...</div>;
+  }
+  if (!path || !organization) {
+    return <div>Récupération des données de l'organisation...</div>;
+  }
+  if (path.detail === "Signature has expired" || organization.detail === "Signature has expired") {
+    router.push("/signin");
+    return <div>Signature has expired...</div>;
   }
   return (
     <Container>
       {path && <Breadcrumb path={path} />}
       <Header />
-      <Tabs organization={[...(path || [])]?.pop()} />
+      {/* <Tabs organization={[...(path || [])]?.pop()} /> */}
+      <Tabs organization={organization} />
     </Container>
   );
 };
