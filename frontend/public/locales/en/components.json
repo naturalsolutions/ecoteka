@@ -302,19 +302,19 @@
     "dialogTitleCreate": "Add a team",
     "dialogTitleEdit": "Update a team",
     "dialogContentTextCreate": "You will add a team in the current organization.",
-    "dialogContentTextEdit": "Use this form to update a team.",
-    "buttonSubmitContent": "Send",
-    "buttonCancelContent": "Cancel"
-  },
-
-  "TeamArea": {
-    "dialogTitle": "Edit working area",
-    "dialogContentText": "Accept : zip, geojson",
-    "buttonSubmitContent": "Send",
-    "buttonCancelContent": "Cancel"
+    "dialogContentTextEdit": "Use this form to update a team."
   },
   
   "Organization" : {
+    "name": "Apelido",
+    "dialogTitleCreate": "Add an organisation",
+    "dialogTitleEdit": "Update the organisation",
+    "dialogContentTextCreate": "Use this form to create an organisation.",
+    "dialogContentTextEdit": "Use this form to update the organisation.",
+    "WorkingArea": {
+      "dialogTitle": "Edit working area",
+      "dialogContentText": "Accept : zip, geojson"
+    },
     "Members" : {
       "dialogTile": "Add members to your organisation",
       "buttonCancelContent": "Cancel",

@@ -299,15 +299,17 @@
     "buttonSubmitContent": "Enviar",
     "buttonCancelContent": "Cancelar"
   },
-
-  "TeamArea": {
-    "dialogTitle": "Edit working area",
-    "dialogContentText": "Accept : zip, geojson",
-    "buttonSubmitContent": "Send",
-    "buttonCancelContent": "Cancel"
-  },
   
   "Organization" : {
+    "name": "Apelido",
+    "dialogTitleCreate": "Add an organisation",
+    "dialogTitleEdit": "Update the organisation",
+    "dialogContentTextCreate": "Use this form to create an organisation.",
+    "dialogContentTextEdit": "Use this form to update the organisation.",
+    "TeamArea": {
+      "dialogTitle": "Edit working area",
+      "dialogContentText": "Accept : zip, geojson"
+    },
     "Members" : {
       "dialogTile": "Add members to your organisation",
       "buttonCancelContent": "Cancel",

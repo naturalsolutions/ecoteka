@@ -1,14 +1,14 @@
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 
-export default function useEtkTeamAreaSchema() {
+export default function useEtkWorkingAreaSchema() {
   const { t } = useTranslation(["common", "components"]);
 
   return {
     file: {
       type: "textfield",
       component: {
-        label: t("components:TeamArea.file"),
+        label: t("components:Organization.WorkingArea.file"),
         required: true,
         type: 'file'
       },

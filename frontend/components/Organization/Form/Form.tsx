@@ -2,24 +2,27 @@ import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
-import useEtkTeamSchema from "./Schema";
+import useEtkOrganizationSchema from "@/components/Organization/Form/Schema";
 import { apiRest } from "@/lib/api"
 import { TOrganization } from "@/pages/organization/[id]";
 
-export type ETKFormTeamActions = {
+export type ETKFormOrganizationActions = {
   submit: () => Promise<boolean>;
 };
 
-export interface ETKFormTeamProps {
-  organization?: TOrganization
+export interface ETKFormOrganizationProps {
+  organization?: TOrganization,
+  translationNode?: string,
 }
 
-const defaultProps: ETKFormTeamProps = {};
+const defaultProps: ETKFormOrganizationProps = {
+  translationNode: 'Organization'
+};
 
-const ETKFormTeam = forwardRef<ETKFormTeamActions, ETKFormTeamProps>(
+const ETKFormOrganization = forwardRef<ETKFormOrganizationActions, ETKFormOrganizationProps>(
   (props, ref) => {
     const { t } = useTranslation("components");
-    const schema = useEtkTeamSchema();
+    const schema = useEtkOrganizationSchema();
     const form = useETKForm({ schema: schema });
     let isOk = false;
     const isNew = !Boolean(props.organization?.id);
@@ -38,9 +41,11 @@ const ETKFormTeam = forwardRef<ETKFormTeamActions, ETKFormTeamProps>(
     const onSubmit = async (data) => {
       console.log(props)
       data = {
-        ...data,
-        parent_id: props.organization.parent_id
+        ...data
       };
+      if (isNew) {
+        data.parent_id = props.organization.parent_id;
+      }
       const response = isNew ?
         await apiRest.organization.post(data) :
         await apiRest.organization.patch(props.organization.id, data);
@@ -63,7 +68,7 @@ const ETKFormTeam = forwardRef<ETKFormTeamActions, ETKFormTeamProps>(
       <Grid container direction="column">
         <Grid item>
           <Typography variant="h5" paragraph>
-            <Trans>{t(`Team.dialogContentText${isNew ? 'Create' : 'Edit'}`)}</Trans>
+            <Trans>{t(`${props.translationNode}.dialogContentText${isNew ? 'Create' : 'Edit'}`)}</Trans>
           </Typography>
         </Grid>
         <Grid item>{form.fields.name}</Grid>
@@ -72,6 +77,6 @@ const ETKFormTeam = forwardRef<ETKFormTeamActions, ETKFormTeamProps>(
   }
 );
 
-ETKFormTeam.defaultProps = defaultProps;
+ETKFormOrganization.defaultProps = defaultProps;
 
-export default ETKFormTeam;
+export default ETKFormOrganization;

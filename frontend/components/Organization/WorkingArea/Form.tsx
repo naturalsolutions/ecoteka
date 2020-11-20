@@ -7,11 +7,11 @@ import { TOrganization } from "@/pages/organization/[id]";
 import { DropzoneArea } from "material-ui-dropzone";
 import { Error } from "@material-ui/icons";
 
-export type ETKFormTeamAreaActions = {
+export type ETKFormWorkingAreaActions = {
   submit: () => Promise<boolean>;
 };
 
-export interface ETKFormTeamAreaProps {
+export interface ETKFormWorkingAreaProps {
   organization: TOrganization
 }
 
@@ -50,7 +50,7 @@ const useStyle = makeStyles(() =>
   })
 );
 
-const ETKFormTeamArea = forwardRef<ETKFormTeamAreaActions, ETKFormTeamAreaProps>(
+const ETKFormWorkingArea = forwardRef<ETKFormWorkingAreaActions, ETKFormWorkingAreaProps>(
   (props, ref) => {
     const classes = useStyle();
     const [file, setFile] = useState<File>();
@@ -70,14 +70,12 @@ const ETKFormTeamArea = forwardRef<ETKFormTeamAreaActions, ETKFormTeamAreaProps>
             setInProgress(false);
             setXHR(null);
 
-            const response = JSON.parse(cXHR.response);
-
             if (cXHR.status !== 200) {
-              setError(response.detail);
-              return reject(response.detail);
+              setError(cXHR.response);
+              return reject(cXHR.response);
             }
             isOk = true;
-            resolve(response);
+            resolve(JSON.parse(cXHR.response));
           },
           onError: (cXHR) => {
             const response = JSON.parse(cXHR.response);
@@ -151,7 +149,7 @@ const ETKFormTeamArea = forwardRef<ETKFormTeamAreaActions, ETKFormTeamAreaProps>
       <Grid container direction="column">
         <Grid item>
           <Typography variant="h5" paragraph>
-            <Trans>{t('TeamArea.dialogContentText')}</Trans>
+            <Trans>{t('Organization.WorkingArea.dialogContentText')}</Trans>
           </Typography>
         </Grid>
         <Grid item>
@@ -184,4 +182,4 @@ const ETKFormTeamArea = forwardRef<ETKFormTeamAreaActions, ETKFormTeamAreaProps>
   }
 );
 
-export default ETKFormTeamArea;
+export default ETKFormWorkingArea;

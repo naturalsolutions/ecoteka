@@ -56,8 +56,6 @@ const Organization: FC<OrganizationProps> = (props) => {
     isFetching: parentsIsFetching,
   } = useOrganizationParents(router.query.id); */
 
-  console.log(path, organization);
-
   if (!token) {
     return <div>Récupération de votre session...</div>;
   }

@@ -390,22 +390,21 @@
     "tooltipLink": "Voir la page"
   },
   "Team": {
-    "name": "Nom",
-    "slug": "Slug",
     "dialogTitleCreate": "Ajouter une équipe",
     "dialogTitleEdit": "Modifier une équipe",
     "dialogContentTextCreate": "Vous allez ajouter une équipe dans l'organisation courante.",
-    "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'équipe.",
-    "buttonSubmitContent": "Envoyer",
-    "buttonCancelContent": "Annuler"
-  }, 
-  "TeamArea": {
-    "dialogTitle": "Editer l'emprise",
-    "dialogContentText": "Extension acceptés : zip, geojson",
-    "buttonSubmitContent": "Envoyer",
-    "buttonCancelContent": "Annuler"
+    "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'équipe."
   }, 
   "Organization" : {
+    "name": "Nom",
+    "dialogTitleCreate": "Ajouter une organisation",
+    "dialogTitleEdit": "Modifier l'organisation",
+    "dialogContentTextCreate": "Utilisez ce formulaire pour créer une organisation.",
+    "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'organisation.",
+    "WorkingArea": {
+      "dialogTitle": "Editer l'emprise",
+      "dialogContentText": "Extension acceptés : zip, geojson"
+    },
     "Members" : {
       "dialogAddMemberTitle": "Ajouter des membres à votre organisation",
       "dialogDdetachMembersTitle": "Retirer des membres à votre organisation",

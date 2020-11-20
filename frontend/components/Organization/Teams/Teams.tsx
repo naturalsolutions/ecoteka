@@ -9,11 +9,11 @@ import { useRouter } from 'next/router'
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
-import CellGridSelectRenderer from "../CellGridSelectRenderer";
+import CellGridSelectRenderer from "@/components/Organization/CellGridSelectRenderer";
 import { useTemplate } from "@/components/Template";
-import ETKFormTeam, { ETKFormTeamActions } from "./Form";
+import ETKFormOrganization, { ETKFormOrganizationActions } from "@/components/Organization/Form/Form";
+import ETKFormWorkingArea, { ETKFormWorkingAreaActions } from "@/components/Organization/WorkingArea/Form";
 import { useTranslation } from "react-i18next";
-import ETKFormTeamArea, { ETKFormTeamAreaActions } from "../TeamArea/Form";
 
 interface TeamsProps {
   organization: TOrganization;
@@ -46,8 +46,8 @@ const useStyles = makeStyles((theme) => ({
 const Teams: FC<TeamsProps> = (props) => {
   const classes = useStyles();
   const { dialog, theme } = useTemplate();
-  const formEditRef = useRef<ETKFormTeamActions>();
-  const formAreaRef = useRef<ETKFormTeamAreaActions>();
+  const formEditRef = useRef<ETKFormOrganizationActions>();
+  const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
   const router = useRouter();
 
@@ -86,10 +86,10 @@ const Teams: FC<TeamsProps> = (props) => {
     const isNew = !Boolean(organization);
     const dialogActions = [
       {
-        label: t("components:Team.buttonCancelContent"),
+        label: t("common:buttons.cancel"),
       },
       {
-        label: t("components:Team.buttonSubmitContent"),
+        label: t("common:buttons.send"),
         variant: "contained",
         color: "secondary",
         noClose: true,
@@ -99,7 +99,7 @@ const Teams: FC<TeamsProps> = (props) => {
 
     dialog.current.open({
       title: t(`components:Team.dialogTitle${isNew ? 'Create' : 'Edit'}`),
-      content: <ETKFormTeam ref={formEditRef} organization={organization || {
+      content: <ETKFormOrganization ref={formEditRef} organization={organization || {
         parent_id: props.organization.id
       }} />,
       actions: dialogActions
@@ -118,10 +118,10 @@ const Teams: FC<TeamsProps> = (props) => {
   function openArea(organization) {
     const dialogActions = [
       {
-        label: t("components:TeamArea.buttonCancelContent"),
+        label: t("common:buttons.cancel"),
       },
       {
-        label: t("components:TeamArea.buttonSubmitContent"),
+        label: t("common:buttons.send"),
         variant: "contained",
         color: "secondary",
         noClose: true,
@@ -130,16 +130,14 @@ const Teams: FC<TeamsProps> = (props) => {
     ];
 
     dialog.current.open({
-      title: t("components:TeamArea.dialogTitle"),
-      content: <ETKFormTeamArea ref={formAreaRef} organization={organization} />,
+      title: t("components:Organization.WorkingArea.dialogTitle"),
+      content: <ETKFormWorkingArea ref={formAreaRef} organization={organization} />,
       actions: dialogActions
     });
   }
 
   const editWorkingArea = async () => {
-    console.log('la')
     const isOk = await formAreaRef.current.submit();
-    console.log(isOk);
     if (isOk) {
       dialog.current.close();
       //TODO Add a row to the array instead of reload the complete collection
