@@ -6,7 +6,7 @@ import i18n from "../i18n";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "react-calendar/dist/Calendar.css";
 import Template from "@/components/Template";
-import "@/components/Map/map.css";
+import "@/styles/global.css";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";
 
