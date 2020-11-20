@@ -386,7 +386,8 @@
   "Teams": {
     "buttonAdd": "Ajouter une équipe",
     "tooltipWorkingAreaEdit": "Editer l'emprise",
-    "tooltipInfoEdit": "Editer les informations"
+    "tooltipInfoEdit": "Editer les informations",
+    "tooltipLink": "Voir la page"
   },
   "Team": {
     "name": "Nom",

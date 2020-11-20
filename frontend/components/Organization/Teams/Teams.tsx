@@ -3,8 +3,9 @@ import { TOrganization } from "@/pages/organization/[id]";
 import { useQuery, useQueryCache } from "react-query";
 import { apiRest } from "@/lib/api"
 import { Box, Button, IconButton, makeStyles, Toolbar, Tooltip } from "@material-ui/core";
-import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon, Edit, PhotoSizeSelectSmall } from "@material-ui/icons";
+import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon, Edit, PhotoSizeSelectSmall, Visibility } from "@material-ui/icons";
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import { useRouter } from 'next/router'
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -40,6 +41,16 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  agGridWrapper: {
+    '& .ag-cell': {
+      '&.no-focus': {
+        'border': 'none !important'
+      },
+      '&.align-right .ag-cell-wrapper': {
+        'justify-content': 'right'
+      },
+    }
+  }
 }));
 
 const Teams: FC<TeamsProps> = (props) => {
@@ -48,6 +59,7 @@ const Teams: FC<TeamsProps> = (props) => {
   const formEditRef = useRef<ETKFormTeamActions>();
   const formAreaRef = useRef<ETKFormTeamAreaActions>();
   const { t } = useTranslation(["components", "common"]);
+  const router = useRouter();
 
   const cache = useQueryCache();
   const { status, data, error, isFetching } = useQuery("teams", async () => {
@@ -140,6 +152,10 @@ const Teams: FC<TeamsProps> = (props) => {
     }
   };
 
+  const openTeamPage = (id) => {
+    router.push(`/organization/${id}`);
+  }
+
   return (
     <Fragment>
       <Toolbar className={classes.toolbar}>
@@ -154,12 +170,13 @@ const Teams: FC<TeamsProps> = (props) => {
           {t("Teams.buttonAdd")}
         </Button>
       </Toolbar>
-      <div className="ag-theme-alpine" style={{ width: '100%' }}>
+      <div className={`${classes.agGridWrapper} ag-theme-alpine`} style={{ width: '100%' }}>
         <AgGridReact
           onGridReady={onGridReady}
           domLayout="autoHeight"
           rowSelection="multiple"
           suppressRowClickSelection
+          enableCellTextSelection
           frameworkComponents={{
             actionsRenderer: (params) => {
               return <Fragment>
@@ -183,27 +200,32 @@ const Teams: FC<TeamsProps> = (props) => {
                     <Edit />
                   </IconButton>
                 </Tooltip>
+                <Tooltip title={t("Teams.tooltipLink")}>
+                  <IconButton
+                    size="small"
+                    color="secondary"
+                    onClick={() => {
+                      openTeamPage(params.data.id);
+                    }}
+                  >
+                    <Visibility />
+                  </IconButton>
+                </Tooltip>
               </Fragment>
             },
             selectRenderer: CellGridSelectRenderer
           }}>
           <AgGridColumn
-            field="id"
+            field="name"
             resizable
             sortable
             filter
-            width={100}
-            suppressSizeToFit={true}
             headerCheckboxSelection={true}
-            checkboxSelection={true}></AgGridColumn>
-          <AgGridColumn field="name" resizable sortable filter></AgGridColumn>
-          <AgGridColumn field="slug" resizable sortable filter></AgGridColumn>
-          <AgGridColumn field="path" resizable sortable filter></AgGridColumn>
+            checkboxSelection={true}
+          ></AgGridColumn>
           <AgGridColumn
             cellRenderer="actionsRenderer"
-            cellStyle={{
-              'text-align': 'right'
-            }}
+            cellClass="no-focus align-right"
           />
         </AgGridReact>
       </div>

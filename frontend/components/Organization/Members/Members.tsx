@@ -153,6 +153,7 @@ const Members: FC<MembersProps> = (props) => {
             domLayout="autoHeight"
             rowSelection="multiple"
             suppressRowClickSelection
+            enableCellTextSelection
             onSelectionChanged={onSelectionChanged}
             frameworkComponents={{
               editBtnRenderer: EditBtnRenderer,
