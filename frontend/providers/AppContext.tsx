@@ -8,7 +8,7 @@ export const Provider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user && api.getToken()) {
+    if (!user) {
       api.users
         .me()
         .then((newUser) => {
