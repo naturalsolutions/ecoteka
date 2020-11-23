@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import ETKContactButton from "./Contact/Button";
-import ETKSigninButton from "./SignIn/Button";
 import ETKRegisterButton from "./Register/Button";
 import ETKLogout from "./Logout";
 import ETKLanguageSelector from "./LanguageSelector";
@@ -152,12 +151,14 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               <Grid item>
                 <img src={props.logo} className={classes.logo} />
               </Grid>
-              <Grid item>
-                <OrganizationSelect
-                  user={user}
-                  onChange={handleOrganizationSelectChange}
-                />
-              </Grid>
+              {user && (
+                <Grid item>
+                  <OrganizationSelect
+                    user={user}
+                    onChange={handleOrganizationSelectChange}
+                  />
+                </Grid>
+              )}
               <Grid item>
                 <Hidden smDown>
                   <Typography
@@ -181,7 +182,9 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 <ETKContactButton />
                 {user?.is_superuser && <ETKRegisterButton />}
                 {user && renderWhenSession()}
-                {!user && <ETKSigninButton />}
+                {!user && (
+                  <Button href="/signin">{t("SignIn.buttonConnexion")}</Button>
+                )}
               </Grid>
             </Grid>
           </Hidden>
