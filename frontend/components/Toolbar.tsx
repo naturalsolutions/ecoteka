@@ -4,25 +4,23 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
   Divider,
   Grid,
   Hidden,
-  Link,
   makeStyles,
   Popover,
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import MoodIcon from "@material-ui/icons/Mood";
 import ETKContactButton from "./Contact/Button";
 import ETKSigninButton from "./SignIn/Button";
 import ETKRegisterButton from "./Register/Button";
 import ETKLogout from "./Logout";
 import ETKLanguageSelector from "./LanguageSelector";
 import { useAppContext } from "../providers/AppContext";
-import { Router } from "@material-ui/icons";
 import { useRouter } from "next/router";
+import OrganizationSelect from "@/components/Organization/Select";
+import { IOrganization } from "@/index";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -52,12 +50,19 @@ const useStyles = makeStyles((theme) => ({
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const { t } = useTranslation("components");
   const classes = useStyles();
-  const { user } = useAppContext();
+  const { user, setUser } = useAppContext();
 
   const [userInfosAnchorEl, setUserInfosAnchorEl] = React.useState(null);
   const isUserInfosOpen = Boolean(userInfosAnchorEl);
 
   const router = useRouter();
+
+  const handleOrganizationSelectChange = (organization: IOrganization) => {
+    const newUser = { ...user };
+
+    newUser.currentOrganization = organization;
+    setUser(newUser);
+  };
 
   const renderUserInfos = () => {
     return (
@@ -83,7 +88,12 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           <Grid item>
             <Grid container direction="row" alignItems="center" spacing={2}>
               <Grid item>
-                <Avatar>{user.full_name.split(' ').slice(0, 2).map(s => s[0].toUpperCase())}</Avatar>
+                <Avatar>
+                  {user.full_name
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((s) => s[0].toUpperCase())}
+                </Avatar>
               </Grid>
               <Grid item xs>
                 {user.email}
@@ -94,7 +104,11 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
             <Divider />
           </Box>
           <Grid>
-            <Button onClick={() => router.push(`/organization/${user.organizations[0].id}`)}>
+            <Button
+              onClick={() =>
+                router.push(`/organization/${user.organizations[0].id}`)
+              }
+            >
               {t("Toolbar.myOrganizations")}
             </Button>
           </Grid>
@@ -137,6 +151,12 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
             <Grid container spacing={4} alignItems="center">
               <Grid item>
                 <img src={props.logo} className={classes.logo} />
+              </Grid>
+              <Grid item>
+                <OrganizationSelect
+                  user={user}
+                  onChange={handleOrganizationSelectChange}
+                />
               </Grid>
               <Grid item>
                 <Hidden smDown>
