@@ -157,12 +157,9 @@ def set_policies(policies):
 
 
 def get_current_user_with_organizations(current_user = Depends(get_current_user), db: Session = Depends(get_db)):
-    import pprint
     query = text(
         "SELECT v2 FROM casbin_rule WHERE ptype=:ptype AND v0=:user"
     )
-
-    pprint.pprint(current_user.as_dict())
 
     result= CurrentUSer(
         **current_user.as_dict(),

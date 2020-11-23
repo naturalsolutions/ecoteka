@@ -31,7 +31,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
           {props.children}
         </Grid>
         <Grid item>
-          <BottomNavigation showLabels>
+          <BottomNavigation>
             <BottomNavigationAction label={t("Layout.Mobile.treeHeritage")} />
             <ETKButtonContact />
           </BottomNavigation>
