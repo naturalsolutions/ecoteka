@@ -11,6 +11,7 @@ from .user import (
     UserDB,
     UserUpdate,
     UserOut,
+    CurrentUSer,
     UserInvite,
     UserWithRole,
 )
@@ -31,9 +32,13 @@ from .taxref import (
     TaxrefUpdate,
 )
 from .tree import Tree, TreePost, TreeCreate, TreeUpdate, TreeImportFromGeofile
-from .organization import Organization, OrganizationCreate, OrganizationUpdate
+from .organization import (
+    Organization,
+    OrganizationCreate,
+    OrganizationUpdate,
+    OrganizationCurrentUser,
+)
 from .coordinate import Coordinate
-
 from .intervention import Intervention, InterventionCreate, InterventionUpdate
 
 __all__ = [
@@ -66,13 +71,19 @@ __all__ = [
     "TaxrefOut",
     "TaxrefUpdate",
     "Tree",
+    "TreePost",
     "TreeCreate",
     "TreeImportFromGeofile",
     "TreeUpdate",
     "UserCreate",
     "UserDB",
     "UserOut",
+    "CurrentUSer",
     "UserUpdate",
     "UserInvite",
     "UserWithRole",
+    "OrganizationCurrentUser",
+    "Intervention",
+    "InterventionCreate",
+    "InterventionUpdate",
 ]

@@ -7,7 +7,9 @@
     "backToHome": "Retour à l'accueil",
     "previous": "Précédent",
     "next": "Ok",
-    "finish": "Terminer"
+    "finish": "Terminer",
+    "send": "Envoyer",
+    "cancel": "Annuler"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",

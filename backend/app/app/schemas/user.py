@@ -1,8 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import (
     BaseModel,
     EmailStr
 )
+from app.schemas.organization import OrganizationCurrentUser
+import sqlalchemy
 
 
 class UserPrimaryKey(BaseModel):
@@ -31,10 +33,11 @@ class UserUpdate(UserBase):
 
 
 class UserOut(UserPrimaryKey, UserBase):
-
     class Config:
         orm_mode = True
 
+class CurrentUSer(UserOut):
+    organizations: List[OrganizationCurrentUser]
 
 class UserDB(UserPrimaryKey, UserBase):
     hashed_password: str

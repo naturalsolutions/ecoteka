@@ -29,7 +29,7 @@ const ETKPanelPanels = {
   start: dynamic(() => import("./Panel/Start/Index")),
   import: dynamic(() => import("./Import/Panel/Index")),
   newTree: dynamic(() => import("./Tree/Form")),
-  newIntervention: dynamic(() => import("./Interventions/Form"))
+  newIntervention: dynamic(() => import("./Interventions/Form")),
 };
 
 const ETKPanel: React.FC<ETKPanelProps> = (props) => {
@@ -46,12 +46,12 @@ const ETKPanel: React.FC<ETKPanelProps> = (props) => {
   return isLoading ? (
     <Panel />
   ) : (
-      <Card elevation={0} square className={classes.paper}>
-        <CardContent>
-          <Panel context={props.context} />
-        </CardContent>
-      </Card>
-    );
+    <Card elevation={0} square className={classes.paper}>
+      <CardContent>
+        <Panel context={props.context} />
+      </CardContent>
+    </Card>
+  );
 };
 
 ETKPanel.defaultProps = defaultProps;

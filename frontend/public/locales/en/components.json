@@ -26,6 +26,7 @@
   },
 
   "Template": {
+    "organizationSelect": "Select an organization",
     "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Plant heritage",
@@ -292,29 +293,30 @@
   "Teams": {
     "buttonAdd": "Add a team",
     "tooltipWorkingAreaEdit": "Edit working area",
-    "tooltipInfoEdit": "Edit informations"
+    "tooltipInfoEdit": "Edit informations",
+    "tooltipLink": "Open the page"
   },
-  
+
   "Team": {
     "name": "Name",
     "slug": "Slug",
     "dialogTitleCreate": "Add a team",
     "dialogTitleEdit": "Update a team",
     "dialogContentTextCreate": "You will add a team in the current organization.",
-    "dialogContentTextEdit": "Use this form to update a team.",
-    "buttonSubmitContent": "Send",
-    "buttonCancelContent": "Cancel"
+    "dialogContentTextEdit": "Use this form to update a team."
   },
 
-  "TeamArea": {
-    "dialogTitle": "Edit working area",
-    "dialogContentText": "Accept : zip, geojson",
-    "buttonSubmitContent": "Send",
-    "buttonCancelContent": "Cancel"
-  },
-  
-  "Organization" : {
-    "Members" : {
+  "Organization": {
+    "name": "Apelido",
+    "dialogTitleCreate": "Add an organisation",
+    "dialogTitleEdit": "Update the organisation",
+    "dialogContentTextCreate": "Use this form to create an organisation.",
+    "dialogContentTextEdit": "Use this form to update the organisation.",
+    "WorkingArea": {
+      "dialogTitle": "Edit working area",
+      "dialogContentText": "Accept : zip, geojson"
+    },
+    "Members": {
       "dialogTile": "Add members to your organisation",
       "buttonCancelContent": "Cancel",
       "buttonSubmitContent": "Invite"

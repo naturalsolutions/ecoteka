@@ -1,6 +1,5 @@
 import { Component } from "react";
 import mapboxgl from "mapbox-gl";
-import layersStyle from "../../public/assets/layersStyle.json";
 
 export interface ETKMapProps {
   styleSource: string;

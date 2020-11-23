@@ -1,7 +1,6 @@
 from typing import Optional, Any
 from pydantic import BaseModel
 
-
 # Shared properties
 class OrganizationBase(BaseModel):
     name: str = ""
@@ -28,3 +27,7 @@ class Organization(OrganizationBase):
 
     class Config:
         orm_mode = True
+
+
+class OrganizationCurrentUser(Organization):
+    pass

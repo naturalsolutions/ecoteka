@@ -163,6 +163,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   );
   const [data, setData] = useState(initialdata);
   const [formRefs, setFormRefs] = useState({});
+
   useEffect(() => {
     const refs = steps.reduce(
       (acc, step) =>
@@ -173,6 +174,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log(user);
     apiRest.organization
       .get(user.organization_id)
       .then((org) => org.json())

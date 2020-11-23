@@ -1,6 +1,6 @@
-import { FC, Fragment, useState, useEffect } from "react";
-import { TOrganization } from "@/pages/organization/[id]";
-import { useQuery } from "react-query";
+import { FC, Fragment, useState, useRef, useEffect } from "react";
+import { IOrganization } from "@/index.d";
+import { useQuery, useQueryCache } from "react-query";
 import { makeStyles } from "@material-ui/core/styles";
 import { apiRest } from "@/lib/api";
 import { Box, Button, Toolbar, FormControl, InputLabel, Select, MenuItem, useMediaQuery } from "@material-ui/core";
@@ -9,21 +9,13 @@ import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import { useTemplate } from "@/components/Template";
 import { useTranslation } from "react-i18next";
 import { CellGridSelectRenderer } from "@/components/Organization";
-import { AddMembers } from "@/components/Organization/Members";
+import AddMembers, { AddMembersActions } from "@/components/Organization/Members/AddMembers";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
 
 function EditBtnRenderer(props) {
-  return (
-    <Button
-      onClick={() => {
-        console.log(props);
-      }}
-    >
-      Edit
-    </Button>
-  );
+  return <Button onClick={() => {}}>Edit</Button>;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -48,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 interface MembersProps {
-  organization: TOrganization;
-  value: string;
+  organization: IOrganization;
+  value: string | string[];
   index: string;
 }
 
@@ -58,8 +50,10 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   const { dialog, theme } = useTemplate();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const { t } = useTranslation(["components", "common"]);
+  const formAddMembersRef = useRef<AddMembersActions>();
+  const cache = useQueryCache();
   const { status, data, error, isFetching } = useQuery(
-    "members",
+    `members_${organization.id}`,
     async () => {
       const data = await apiRest.organization.members(organization.id);
       return data;
@@ -81,32 +75,63 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
     setGridApi(params.api);
   }
 
-  function test() {
-    data[2].name = "toto";
-    gridApi.setRowData(data);
-  }
-
-  function onSubmitMembers() {
-    alert("new members");
+  function onDetachMembers() {
+    alert("Confirm detachMembers");
   }
 
   function addMember() {
     const dialogActions = [
       {
-        label: t("components:Organization.Members.buttonCancelContent"),
+        label: t("components:Organization.Members.done"),
       },
       {
-        label: t("components:Organization.Members.buttonSubmitContent"),
+        label: t("common:buttons.send"),
         variant: "contained",
         color: "secondary",
         noClose: true,
-        onClick: onSubmitMembers,
+        onClick: inviteMembers,
       },
     ];
 
     dialog.current.open({
-      title: t("components:Organization.Members.dialogTile"),
-      content: <AddMembers organizationID={organization.id} />,
+      title: t("components:Organization.Members.dialogAddMemberTitle"),
+      content: <AddMembers ref={formAddMembersRef} organizationID={organization.id} />,
+      actions: dialogActions,
+      dialogProps: {
+        maxWidth: "sm",
+        fullWidth: true,
+        fullScreen: matches,
+        disableBackdropClick: true,
+      },
+    });
+  }
+
+  const inviteMembers = async () => {
+    console.log("inviteMembers");
+    const res = await formAddMembersRef.current.submit();
+    if (res.ok) {
+      dialog.current.close();
+      cache.invalidateQueries(`members_${organization.id}`);
+    }
+  };
+
+  function detachMembers() {
+    const dialogActions = [
+      {
+        label: t("components:Organization.Members.cancel"),
+      },
+      {
+        label: t("components:Contact.confirm"),
+        variant: "contained",
+        color: "error",
+        noClose: true,
+        onClick: onDetachMembers,
+      },
+    ];
+
+    dialog.current.open({
+      title: t("components:Organization.Members.dialogDdetachMembersTitle"),
+      content: <div>Action irréversible!</div>,
       actions: dialogActions,
       dialogProps: {
         maxWidth: "sm",
@@ -118,8 +143,6 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   }
 
   function onSelectionChanged() {
-    // console.log("selectedNodes", gridApi.getSelectedNodes());
-    // console.log("selectedRows", gridApi.getSelectedRows());
     const selectedRows = gridApi.getSelectedRows();
     setEnableActions(selectedRows.length > 0 ? false : true);
   }
@@ -132,7 +155,15 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
     <Fragment>
       <Toolbar className={classes.toolbar}>
         <Box className={classes.root} />
-        <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<BlockIcon />}>
+        <Button
+          variant="contained"
+          size="small"
+          disabled={enableActions}
+          color="secondary"
+          className={classes.button}
+          startIcon={<BlockIcon />}
+          onClick={detachMembers}
+        >
           Retirer du groupe
         </Button>
         <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={addMember}>
@@ -147,6 +178,7 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
             domLayout="autoHeight"
             rowSelection="multiple"
             suppressRowClickSelection
+            enableCellTextSelection
             onSelectionChanged={onSelectionChanged}
             frameworkComponents={{
               editBtnRenderer: EditBtnRenderer,
@@ -154,16 +186,14 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
             }}
           >
             <AgGridColumn
-              field="id"
+              field="email"
               resizable
               sortable
               filter
-              width={100}
               suppressSizeToFit={true}
               headerCheckboxSelection={true}
               checkboxSelection={true}
             ></AgGridColumn>
-            <AgGridColumn field="email" resizable sortable filter></AgGridColumn>
             <AgGridColumn field="full_name" resizable sortable filter></AgGridColumn>
             <AgGridColumn
               field="role"
@@ -193,7 +223,7 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
                   },
                 ],
                 onChange: (params, newValue, oldValue) => {
-                  console.log(params.data.id, params.data.role);
+                  console.log("[TODO]: HTTP request to patch member role", params.data.id, params.data.role);
                 },
               }}
             />

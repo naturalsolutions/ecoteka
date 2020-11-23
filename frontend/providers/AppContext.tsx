@@ -1,18 +1,23 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { apiRest as api } from "../lib/api";
+import { IUser } from "@/index";
+import { apiRest as api } from "@/lib/api";
 
 const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<IUser>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
       api.users
         .me()
-        .then((newUser) => {
-          setUser(newUser);
+        .then((currentUser: IUser) => {
+          if (currentUser.organizations.length === 1) {
+            currentUser.currentOrganization = currentUser.organizations[0];
+          }
+
+          setUser(currentUser);
         })
         .catch((e) => {
           setUser(null);
