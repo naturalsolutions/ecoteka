@@ -54,7 +54,7 @@ function clean_storage() {
   localStorage.removeItem(refreshTokenStorage)
 }
 
-async function getPayload(token) {
+function getPayload(token) {
   let payload = null;
   try {
     let raw_base64_payload = token.split('.')[1]
@@ -67,16 +67,20 @@ async function getPayload(token) {
   return payload
 }
 
-async function tokenStillValid(token) {
+function tokenStillValid(token) {
   let payload;
 
   payload = getPayload(token);
   if (payload && 'exp' in payload) {
     let now = new Date().getTime()
     let expirationDate = payload['exp'] * 1000
-    if (now + 5000 < expirationDate) {
+
+    if (now < (expirationDate - 5000)) {
       return true
     }
+    // if token will expire in less than 5 sec
+    // we act like he is no more valid
+
   }
 
   return false
@@ -107,36 +111,34 @@ async function getNewAccessToken(refreshToken) {
 }
 
 async function getAuthorizationHeader() {
-  let token;
+  let access_token;
   let headers = {};
   let refresh_token;
 
   if (typeof window !== "undefined") {
     refresh_token = localStorage.getItem(refreshTokenStorage);
   }
-
   if (refresh_token) {
     if (tokenStillValid(refresh_token)) {
-
       if (typeof window !== "undefined") {
-        token = localStorage.getItem(tokenStorage);
+        access_token = localStorage.getItem(tokenStorage);
       }
-      if (token) {
+      if (access_token) {
         // access token in local storage
-        if (tokenStillValid(token)) {
+        if (tokenStillValid(access_token)) {
           // Access token still valid we return it
           headers = {
             Authorization: `Bearer ${getToken()}`
           };
           return headers;
         }
-      } else {
-        // try to fetch a new valid access token
-        await getNewAccessToken(refresh_token);
-        token = localStorage.getItem(tokenStorage);
-        return {
-          Authorization: `Bearer ${getToken()}`
-        }
+        localStorage.removeItem(tokenStorage);
+      }
+      // try to fetch a new valid access token
+      await getNewAccessToken(refresh_token);
+      access_token = localStorage.getItem(tokenStorage);
+      return {
+        Authorization: `Bearer ${getToken()}`
       }
     } else {
       clean_storage()
