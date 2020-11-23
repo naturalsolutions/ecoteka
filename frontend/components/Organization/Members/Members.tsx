@@ -10,6 +10,7 @@ import { useTemplate } from "@/components/Template";
 import { useTranslation } from "react-i18next";
 import { CellGridSelectRenderer } from "@/components/Organization";
 import AddMembers, { AddMembersActions } from "@/components/Organization/Members/AddMembers";
+import MembersTable from "@/components/Organization/Members/MembersTable";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
@@ -170,66 +171,7 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
           Ajouter des membres
         </Button>
       </Toolbar>
-      {data && (
-        <div className="ag-theme-material" style={{ width: "100%" }}>
-          <AgGridReact
-            onGridReady={onGridReady}
-            rowData={data}
-            domLayout="autoHeight"
-            rowSelection="multiple"
-            suppressRowClickSelection
-            enableCellTextSelection
-            onSelectionChanged={onSelectionChanged}
-            frameworkComponents={{
-              editBtnRenderer: EditBtnRenderer,
-              selectRoleRenderer: CellGridSelectRenderer,
-            }}
-          >
-            <AgGridColumn
-              field="email"
-              resizable
-              sortable
-              filter
-              suppressSizeToFit={true}
-              headerCheckboxSelection={true}
-              checkboxSelection={true}
-            ></AgGridColumn>
-            <AgGridColumn field="full_name" resizable sortable filter></AgGridColumn>
-            <AgGridColumn
-              field="role"
-              cellRenderer="selectRoleRenderer"
-              cellRendererParams={{
-                placeholder: "Définir le rôle...",
-                items: [
-                  {
-                    label: "Propriétaire",
-                    value: "owner",
-                  },
-                  {
-                    label: "Manager",
-                    value: "manager",
-                  },
-                  {
-                    label: "Contributeur",
-                    value: "contributor",
-                  },
-                  {
-                    label: "Lecteur",
-                    value: "reader",
-                  },
-                  {
-                    label: "Invité",
-                    value: "guest",
-                  },
-                ],
-                onChange: (params, newValue, oldValue) => {
-                  console.log("[TODO]: HTTP request to patch member role", params.data.id, params.data.role);
-                },
-              }}
-            />
-          </AgGridReact>
-        </div>
-      )}
+      {data && <MembersTable rows={data} />}
     </Fragment>
   );
 };

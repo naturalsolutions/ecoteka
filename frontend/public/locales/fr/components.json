@@ -395,7 +395,15 @@
       "close": "Fermer",
       "done": "Terminer",
       "confirm": "Confirmer",
-      "invite": "Inviter"
+      "invite": "Inviter",
+      "Table": {
+        "headers": {
+          "email": "Email",
+          "name": "Nom complet",
+          "role": "Rôle",
+          "status": "Statut"
+        }
+      }
     }
   }
 }

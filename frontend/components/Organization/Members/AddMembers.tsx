@@ -27,7 +27,7 @@ interface IMemberProps {
 }
 
 export type AddMembersActions = {
-  submit: () => Promise<IMemberProps[]>;
+  submit: () => Promise<Boolean>;
 };
 
 export interface AddMembersProps {
@@ -107,19 +107,13 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) =
     return /[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/.test(email);
   };
 
-  const onSubmit = async (data) => {
-    const { members } = data;
-    const response = await apiRest.organization.addMembers(props.organizationID, members);
-    return response;
-  };
-
   useImperativeHandle(ref, () => ({
     submit: () => {
       return new Promise((resolve, reject) => {
         handleSubmit(async (data) => {
           const { members } = data;
-          const response = await apiRest.organization.addMembers(props.organizationID, members);
-          resolve(response);
+          await apiRest.organization.addMembers(props.organizationID, members);
+          resolve();
         })();
       });
     },
@@ -146,7 +140,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) =
 
   return (
     <Box width="full">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         <TextField
           fullWidth
           name="main"

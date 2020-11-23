@@ -2,8 +2,8 @@ import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { createStyles, Divider, Grid, makeStyles, Typography } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { useTranslation, Trans } from "react-i18next";
-import { apiRest } from "@/lib/api"
-import { IOrganization } from "@/index.d"
+import { apiRest } from "@/lib/api";
+import { IOrganization } from "@/index.d";
 import { DropzoneArea } from "material-ui-dropzone";
 import { Error } from "@material-ui/icons";
 
@@ -12,7 +12,7 @@ export type ETKFormWorkingAreaActions = {
 };
 
 export interface ETKFormWorkingAreaProps {
-  organization: IOrganization
+  organization: IOrganization;
 }
 
 const useStyle = makeStyles(() =>
@@ -50,136 +50,132 @@ const useStyle = makeStyles(() =>
   })
 );
 
-const ETKFormWorkingArea = forwardRef<ETKFormWorkingAreaActions, ETKFormWorkingAreaProps>(
-  (props, ref) => {
-    const classes = useStyle();
-    const [file, setFile] = useState<File>();
-    const [linearProgressValue, setLinearProgressValue] = useState(0);
-    const [error, setError] = useState(null);
-    const [inProgress, setInProgress] = useState(false);
-    const [xhr, setXHR] = useState(null);
+const ETKFormWorkingArea = forwardRef<ETKFormWorkingAreaActions, ETKFormWorkingAreaProps>((props, ref) => {
+  const classes = useStyle();
+  const [file, setFile] = useState<File>();
+  const [linearProgressValue, setLinearProgressValue] = useState(0);
+  const [error, setError] = useState(null);
+  const [inProgress, setInProgress] = useState(false);
+  const [xhr, setXHR] = useState(null);
 
-    const { t } = useTranslation("components");
-    let isOk = false;
+  const { t } = useTranslation("components");
+  let isOk = false;
 
-    const submit = () => {
-      return new Promise((resolve, reject) => {
-        let newXHR = apiRest.organization.workingArea(props.organization.id, file, {
-          onProgress: onUploadProgress,
-          onLoad: (cXHR) => {
-            setInProgress(false);
-            setXHR(null);
+  const submit = () => {
+    return new Promise((resolve, reject) => {
+      let newXHR = apiRest.organization.workingArea(props.organization.id, file, {
+        onProgress: onUploadProgress,
+        onLoad: (cXHR) => {
+          setInProgress(false);
+          setXHR(null);
 
-            if (cXHR.status !== 200) {
-              setError(cXHR.response);
-              return reject(cXHR.response);
-            }
-            isOk = true;
-            resolve(JSON.parse(cXHR.response));
-          },
-          onError: (cXHR) => {
-            const response = JSON.parse(cXHR.response);
+          if (cXHR.status !== 200) {
+            setError(cXHR.response);
+            return reject(cXHR.response);
+          }
+          isOk = true;
+          resolve(JSON.parse(cXHR.response));
+        },
+        onError: (cXHR) => {
+          const response = JSON.parse(cXHR.response);
 
-            setError(response.detail);
-            setInProgress(false);
-            setXHR(null);
+          setError(response.detail);
+          setInProgress(false);
+          setXHR(null);
 
-            reject(response.detail);
-          },
-        });
-
-        setXHR(newXHR);
-        setInProgress(true);
+          reject(response.detail);
+        },
       });
+
+      setXHR(newXHR);
+      setInProgress(true);
+    });
+  };
+
+  useImperativeHandle(ref, () => ({
+    submit: async () => {
+      await submit();
+      return isOk;
+    },
+  }));
+
+  const onAddFiles = async (event) => {
+    setError(null);
+
+    const fileList = event.dataTransfer ? event.dataTransfer.files : event.target.files;
+
+    if (fileList.length) {
+      setFile(fileList[0]);
     }
 
-    useImperativeHandle(ref, () => ({
-      submit: async () => {
-        await submit();
-        return isOk;
-      },
-    }));
+    return [];
+  };
 
-    const onAddFiles = async (event) => {
-      setError(null);
+  const onUploadProgress = (e) => {
+    const progress = (e.loaded / e.total) * 100;
 
-      const fileList = event.dataTransfer
-        ? event.dataTransfer.files
-        : event.target.files;
+    setLinearProgressValue(progress);
+  };
 
-      if (fileList.length) {
-        setFile(fileList[0]);
-      }
-
-      return [];
-    };
-
-    const onUploadProgress = (e) => {
-      const progress = (e.loaded / e.total) * 100;
-
-      setLinearProgressValue(progress);
-    };
-
-    const ETKFiles = (
-      <React.Fragment key={file?.name}>
-        {file && !error && (
-          <Grid direction="row" container alignItems="center">
-            <Grid item xs={2}>
-              <GetAppIcon className={classes.iconFileUploaded} />
-            </Grid>
-            <Grid item xs={10}>
-              {file?.name}
-            </Grid>
+  const ETKFiles = (
+    <React.Fragment key={file?.name}>
+      {file && !error && (
+        <Grid direction="row" container alignItems="center">
+          <Grid item xs={2}>
+            <GetAppIcon className={classes.iconFileUploaded} />
           </Grid>
-        )}
-        {error && (
-          <Grid direction="row" container alignItems="center">
-            <Grid item xs={2}>
-              <Error className={classes.iconErrorUploaded} />
-            </Grid>
-            <Grid item xs={10}>
-              <span>{error}</span>
-            </Grid>
+          <Grid item xs={10}>
+            {file?.name}
           </Grid>
-        )}
-      </React.Fragment>
-    );
+        </Grid>
+      )}
+      {error && (
+        <Grid direction="row" container alignItems="center">
+          <Grid item xs={2}>
+            <Error className={classes.iconErrorUploaded} />
+          </Grid>
+          <Grid item xs={10}>
+            <span>{error}</span>
+          </Grid>
+        </Grid>
+      )}
+    </React.Fragment>
+  );
 
-    return (
-      <Grid container direction="column">
-        <Grid item>
-          <Typography variant="h5" paragraph>
-            <Trans>{t('Organization.WorkingArea.dialogContentText')}</Trans>
-          </Typography>
-        </Grid>
-        <Grid item>
-          <DropzoneArea
-            acceptedFiles={[".geojson", ".zip"]}
-            Icon={GetAppIcon as any}
-            dropzoneText={t("Import.Upload.dropzoneText")}
-            dropzoneProps={{
-              getFilesFromEvent: onAddFiles,
-            }}
-            showPreviewsInDropzone={false}
-            showFileNames={true}
-            showAlerts={["error"]}
-            maxFileSize={50000000} //50MB
-            filesLimit={1}
-            dropzoneParagraphClass={classes.etkDropzoneText}
-            dropzoneClass={classes.etkDropzone}
-          />
-        </Grid>
-        {file ? (
-          <React.Fragment>
-            <Grid container alignItems="center">
-              {ETKFiles}
-            </Grid>
-            <Divider className={classes.divider} />
-          </React.Fragment>
-        ) : null}
+  return (
+    <Grid container direction="column">
+      <Grid item>
+        <Typography variant="h5" paragraph>
+          <Trans>{t("Organization.WorkingArea.dialogContentText")}</Trans>
+        </Typography>
       </Grid>
-    );
-  }
-);
+      <Grid item>
+        <DropzoneArea
+          acceptedFiles={[".geojson", ".zip"]}
+          Icon={GetAppIcon as any}
+          dropzoneText={t("Import.Upload.dropzoneText")}
+          dropzoneProps={{
+            getFilesFromEvent: onAddFiles,
+          }}
+          showPreviewsInDropzone={false}
+          showFileNames={true}
+          showAlerts={["error"]}
+          maxFileSize={50000000} //50MB
+          filesLimit={1}
+          dropzoneParagraphClass={classes.etkDropzoneText}
+          dropzoneClass={classes.etkDropzone}
+        />
+      </Grid>
+      {file ? (
+        <React.Fragment>
+          <Grid container alignItems="center">
+            {ETKFiles}
+          </Grid>
+          <Divider className={classes.divider} />
+        </React.Fragment>
+      ) : null}
+    </Grid>
+  );
+});
 
 export default ETKFormWorkingArea;

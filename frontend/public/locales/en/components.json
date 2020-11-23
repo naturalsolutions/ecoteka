@@ -316,9 +316,21 @@
       "dialogContentText": "Accept : zip, geojson"
     },
     "Members" : {
-      "dialogTile": "Add members to your organisation",
-      "buttonCancelContent": "Cancel",
-      "buttonSubmitContent": "Invite"
+      "dialogAddMemberTitle": "Add members to your organization",
+      "dialogDdetachMembersTitle": "Detach members from your organization",
+      "cancel": "Cancel",
+      "close": "Close",
+      "done": "Done",
+      "confirm": "Confirm",
+      "invite": "Invite",
+      "Table": {
+        "headers": {
+          "email": "Email",
+          "name": "Name",
+          "role": "Role",
+          "status": "Status"
+        }
+      }
     }
   }
 }
