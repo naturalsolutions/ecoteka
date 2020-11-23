@@ -59,7 +59,7 @@ class Organization {
 
   async workingArea(id, file, { onProgress, onLoad, onError }) {
     const formData = new FormData();
-    formData.append('file', file, file.name);
+    formData.append("file", file, file.name);
 
     const xhr = new XMLHttpRequest();
 

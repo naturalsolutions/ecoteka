@@ -1,6 +1,6 @@
-import { FC, Fragment, useState, useEffect } from "react";
-import { IOrganization } from "@/index.d"
-import { useQuery } from "react-query";
+import { FC, Fragment, useState, useRef, useEffect } from "react";
+import { IOrganization } from "@/index.d";
+import { useQuery, useQueryCache } from "react-query";
 import { makeStyles } from "@material-ui/core/styles";
 import { apiRest } from "@/lib/api";
 import { Box, Button, Toolbar, FormControl, InputLabel, Select, MenuItem, useMediaQuery } from "@material-ui/core";
@@ -9,13 +9,13 @@ import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import { useTemplate } from "@/components/Template";
 import { useTranslation } from "react-i18next";
 import { CellGridSelectRenderer } from "@/components/Organization";
-import { AddMembers } from "@/components/Organization/Members";
+import AddMembers, { AddMembersActions } from "@/components/Organization/Members/AddMembers";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
 
 function EditBtnRenderer(props) {
-  return <Button onClick={() => { }}>Edit</Button>;
+  return <Button onClick={() => {}}>Edit</Button>;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 interface MembersProps {
   organization: IOrganization;
-  value: string;
+  value: string | string[];
   index: string;
 }
 
@@ -50,6 +50,8 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   const { dialog, theme } = useTemplate();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const { t } = useTranslation(["components", "common"]);
+  const formAddMembersRef = useRef<AddMembersActions>();
+  const cache = useQueryCache();
   const { status, data, error, isFetching } = useQuery(
     `members_${organization.id}`,
     async () => {
@@ -82,11 +84,18 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
       {
         label: t("components:Organization.Members.done"),
       },
+      {
+        label: t("common:buttons.send"),
+        variant: "contained",
+        color: "secondary",
+        noClose: true,
+        onClick: inviteMembers,
+      },
     ];
 
     dialog.current.open({
       title: t("components:Organization.Members.dialogAddMemberTitle"),
-      content: <AddMembers organizationID={organization.id} />,
+      content: <AddMembers ref={formAddMembersRef} organizationID={organization.id} />,
       actions: dialogActions,
       dialogProps: {
         maxWidth: "sm",
@@ -96,6 +105,15 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
       },
     });
   }
+
+  const inviteMembers = async () => {
+    console.log("inviteMembers");
+    const res = await formAddMembersRef.current.submit();
+    if (res.ok) {
+      dialog.current.close();
+      cache.invalidateQueries(`members_${organization.id}`);
+    }
+  };
 
   function detachMembers() {
     const dialogActions = [

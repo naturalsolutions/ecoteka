@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { forwardRef, useState, useEffect, useImperativeHandle } from "react";
 import { Box, Button, Chip, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
 import { Send as SendIcon } from "@material-ui/icons";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
@@ -19,11 +19,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface AddMemberProps {
+interface IMemberProps {
+  email: string;
+  role: string;
+  status: string;
+  id: number;
+}
+
+export type AddMembersActions = {
+  submit: () => Promise<IMemberProps[]>;
+};
+
+export interface AddMembersProps {
   organizationID: number;
 }
 
-const AddMember: FC<AddMemberProps> = ({ organizationID }) => {
+const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) => {
   const classes = useStyles();
   const [error, setError] = useState(null);
   const { register, control, handleSubmit, getValues, setValue } = useForm();
@@ -98,8 +109,21 @@ const AddMember: FC<AddMemberProps> = ({ organizationID }) => {
 
   const onSubmit = async (data) => {
     const { members } = data;
-    const response = await apiRest.organization.addMembers(organizationID, members);
+    const response = await apiRest.organization.addMembers(props.organizationID, members);
+    return response;
   };
+
+  useImperativeHandle(ref, () => ({
+    submit: () => {
+      return new Promise((resolve, reject) => {
+        handleSubmit(async (data) => {
+          const { members } = data;
+          const response = await apiRest.organization.addMembers(props.organizationID, members);
+          resolve(response);
+        })();
+      });
+    },
+  }));
 
   const roles = [
     {
@@ -168,12 +192,9 @@ const AddMember: FC<AddMemberProps> = ({ organizationID }) => {
             );
           })}
         </Box>
-        <Button type="submit" variant="contained" color="secondary" endIcon={<SendIcon />}>
-          Inviter
-        </Button>
       </form>
     </Box>
   );
-};
+});
 
-export default AddMember;
+export default AddMembers;
