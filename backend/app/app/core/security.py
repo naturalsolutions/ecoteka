@@ -34,7 +34,7 @@ def get_config():
     return Settings()
 
 
-def generate_refresh_token_response(
+def generate_access_token_and_refresh_token_response(
     user_id: int,
     is_superuser: bool,
     # Authorize: AuthJWT = Depends()
@@ -42,19 +42,34 @@ def generate_refresh_token_response(
     Authorize = AuthJWT()
     user_claims = {"is_superuser": is_superuser}
 
-    # refresh_token = Authorize.create_refresh_token(
-    #     subject=str(user_id),
-    #     user_claims=user_claims
-    # )
+    refresh_token = Authorize.create_refresh_token(
+        subject=str(user_id), user_claims=user_claims
+    )
     access_token = Authorize.create_access_token(
         subject=str(user_id), user_claims=user_claims
     )
-    return {"access_token": access_token, "token_type": "Bearer"}
-    # logging.info(f"refresh: {refresh_token}")
-    # return {
-    #     'refresh_token': refresh_token,
-    #     "token_type": "Bearer"
-    # }
+    return {
+        "access_token": access_token,
+        "token_type": "Bearer",
+        "refresh_token": refresh_token,
+    }
+
+
+def get_current_user_with_refresh_token(
+    db: Session = Depends(get_db),
+    Authorize: AuthJWT = Depends(),
+    token: str = Depends(reusable_oauth2),
+) -> User:
+    Authorize.jwt_refresh_token_required()
+    current_user_id = Authorize.get_jwt_subject()
+    user_in_db = user.get(db, id=current_user_id)
+
+    if not user_in_db:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    return user_in_db
 
 
 def get_current_user(

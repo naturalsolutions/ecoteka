@@ -1,42 +1,17 @@
-from typing import (
-    Any,
-    List
-)
+from typing import Any, List
 
-from fastapi import (
-    APIRouter,
-    Body,
-    Depends,
-    HTTPException
-)
+from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic import EmailStr
 from sqlalchemy.orm import Session
-from app.schemas import (
-    UserCreate,
-    UserOut,
-    UserUpdate
-)
-from app.models import (
-    User
-)
-from app.crud import (
-    user
-)
-from app.api import (
-    get_db
-)
-from app.core import (
-    get_current_user,
-    get_current_user_if_is_superuser
-)
+from app.schemas import UserCreate, UserOut, UserUpdate
+from app.models import User
+from app.crud import user
+from app.api import get_db
+from app.core import get_current_user, get_current_user_if_is_superuser
 from fastapi_jwt_auth import AuthJWT
-from app.utils import (
-    send_new_account_email
-)
-from app.core import (
-    settings
-)
+from app.utils import send_new_account_email
+from app.core import settings
 
 router = APIRouter()
 
@@ -46,8 +21,8 @@ def read_users(
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    # current_user: User = Depends(get_current_user_if_is_superuser),
-    Authorize: AuthJWT = Depends()
+    current_user: User = Depends(get_current_user_if_is_superuser),
+    Authorize: AuthJWT = Depends(),
 ) -> Any:
     """
     Retrieve users.
