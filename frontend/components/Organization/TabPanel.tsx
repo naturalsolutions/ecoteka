@@ -3,8 +3,8 @@ import { Box } from "@material-ui/core";
 
 interface TabPanelProps {
   children: any;
-  index: String;
-  value: String;
+  index: string;
+  value: string | string[];
   props?: any;
 }
 

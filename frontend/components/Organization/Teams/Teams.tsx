@@ -1,11 +1,11 @@
 import { FC, Fragment, useEffect, useRef, useState } from "react";
-import { IOrganization } from "@/index.d"
+import { IOrganization } from "@/index.d";
 import { useQuery, useQueryCache } from "react-query";
-import { apiRest } from "@/lib/api"
+import { apiRest } from "@/lib/api";
 import { Box, Button, IconButton, makeStyles, Toolbar, Tooltip } from "@material-ui/core";
 import { Delete as DeleteIcon, Archive as ArchiveIcon, Add as AddIcon, Edit, PhotoSizeSelectSmall, Visibility } from "@material-ui/icons";
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import { useRouter } from 'next/router'
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { useRouter } from "next/router";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-material.css";
@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 
 interface TeamsProps {
   organization: IOrganization;
-  value: string;
+  value: string | string[];
   index: string;
 }
 
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-  }
+  },
 }));
 
 const Teams: FC<TeamsProps> = (props) => {
@@ -52,7 +52,7 @@ const Teams: FC<TeamsProps> = (props) => {
   const router = useRouter();
 
   const cache = useQueryCache();
-  const queryName = `teams_${props.organization.id}`
+  const queryName = `teams_${props.organization.id}`;
   const { status, data, error, isFetching } = useQuery(
     queryName,
     async () => {
@@ -98,11 +98,18 @@ const Teams: FC<TeamsProps> = (props) => {
     ];
 
     dialog.current.open({
-      title: t(`components:Team.dialogTitle${isNew ? 'Create' : 'Edit'}`),
-      content: <ETKFormOrganization ref={formEditRef} organization={organization || {
-        parent_id: props.organization.id
-      }} />,
-      actions: dialogActions
+      title: t(`components:Team.dialogTitle${isNew ? "Create" : "Edit"}`),
+      content: (
+        <ETKFormOrganization
+          ref={formEditRef}
+          organization={
+            organization || {
+              parent_id: props.organization.id,
+            }
+          }
+        />
+      ),
+      actions: dialogActions,
     });
   }
 
@@ -132,7 +139,7 @@ const Teams: FC<TeamsProps> = (props) => {
     dialog.current.open({
       title: t("components:Organization.WorkingArea.dialogTitle"),
       content: <ETKFormWorkingArea ref={formAreaRef} organization={organization} />,
-      actions: dialogActions
+      actions: dialogActions,
     });
   }
 
@@ -141,13 +148,13 @@ const Teams: FC<TeamsProps> = (props) => {
     if (isOk) {
       dialog.current.close();
       //TODO Add a row to the array instead of reload the complete collection
-      cache.invalidateQueries('teams');
+      cache.invalidateQueries("teams");
     }
   };
 
   const openTeamPage = (id) => {
     router.push(`/organization/${id}`);
-  }
+  };
 
   return (
     <Fragment>
@@ -159,11 +166,20 @@ const Teams: FC<TeamsProps> = (props) => {
         <Button variant="contained" size="small" disabled={enableActions} color="secondary" className={classes.button} startIcon={<DeleteIcon />}>
           Supprimer
         </Button>
-        <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={() => { openForm() }}>
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          className={classes.button}
+          startIcon={<AddIcon />}
+          onClick={() => {
+            openForm();
+          }}
+        >
           {t("Teams.buttonAdd")}
         </Button>
       </Toolbar>
-      <div className="ag-theme-material" style={{ width: '100%' }}>
+      <div className="ag-theme-material" style={{ width: "100%" }}>
         <AgGridReact
           onGridReady={onGridReady}
           domLayout="autoHeight"
@@ -172,55 +188,49 @@ const Teams: FC<TeamsProps> = (props) => {
           enableCellTextSelection
           frameworkComponents={{
             actionsRenderer: (params) => {
-              return <Fragment>
-                <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
-                  <IconButton
-                    size="small"
-                    color="secondary"
-                    onClick={() => {
-                      openArea(params.data);
-                    }}>
-                    <PhotoSizeSelectSmall />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title={t("Teams.tooltipInfoEdit")}>
-                  <IconButton
-                    size="small"
-                    color="secondary"
-                    onClick={() => {
-                      openForm(params.data);
-                    }}>
-                    <Edit />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title={t("Teams.tooltipLink")}>
-                  <IconButton
-                    size="small"
-                    color="secondary"
-                    onClick={() => {
-                      openTeamPage(params.data.id);
-                    }}
-                  >
-                    <Visibility />
-                  </IconButton>
-                </Tooltip>
-              </Fragment>
+              return (
+                <Fragment>
+                  <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
+                    <IconButton
+                      size="small"
+                      color="secondary"
+                      onClick={() => {
+                        openArea(params.data);
+                      }}
+                    >
+                      <PhotoSizeSelectSmall />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title={t("Teams.tooltipInfoEdit")}>
+                    <IconButton
+                      size="small"
+                      color="secondary"
+                      onClick={() => {
+                        openForm(params.data);
+                      }}
+                    >
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title={t("Teams.tooltipLink")}>
+                    <IconButton
+                      size="small"
+                      color="secondary"
+                      onClick={() => {
+                        openTeamPage(params.data.id);
+                      }}
+                    >
+                      <Visibility />
+                    </IconButton>
+                  </Tooltip>
+                </Fragment>
+              );
             },
             selectRenderer: CellGridSelectRenderer,
           }}
         >
-          <AgGridColumn
-            field="name"
-            resizable
-            sortable
-            filter
-            headerCheckboxSelection={true}
-            checkboxSelection={true}
-          ></AgGridColumn>
-          <AgGridColumn
-            cellRenderer="actionsRenderer"
-            cellClass="no-focus align-right"
-          />
+          <AgGridColumn field="name" resizable sortable filter headerCheckboxSelection={true} checkboxSelection={true}></AgGridColumn>
+          <AgGridColumn cellRenderer="actionsRenderer" cellClass="no-focus align-right" />
         </AgGridReact>
       </div>
     </Fragment>
