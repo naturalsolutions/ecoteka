@@ -48,7 +48,7 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
         {getDisplayNameFromUser(user)}
       </Button>
       <Popover
-        open={anchorEl}
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={() => {
           setAnchorEl(null);
