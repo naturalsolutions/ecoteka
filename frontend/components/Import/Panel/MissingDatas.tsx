@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, Typography, Grid, makeStyles } from "@material-ui/core";
-import { Card, CardContent } from "@material-ui/core";
+import { Button, Typography, Grid } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import useETKForm from "../../Form/useForm";
 import * as yup from "yup";
 
-import ETKGeofile from "../../Geofile";
-import { apiRest } from "../../../lib/api";
+import useETKForm from "@/components/Form/useForm";
+import ETKGeofile from "@/components/Geofile";
+import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKMissingDatasProps {
   geoFile?: ETKGeofile;
@@ -21,13 +21,9 @@ const defaultProps: ETKMissingDatasProps = {
   onUpdateGeofile() {},
 };
 
-const useStyle = makeStyles({
-  card: {},
-});
-
 const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   const { t } = useTranslation("components");
-  const classes = useStyle();
+  const { user } = useAppContext();
   const crsColumnChoices = [
     { value: "epsg:4326", label: "EPSG:4326" },
     { value: "epsg:3949", label: "Lambert 9" },
@@ -99,7 +95,10 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
       newGeofile[key] = data[key];
     }
 
-    const response = await apiRest.geofiles.update(newGeofile);
+    const response = await apiRest.geofiles.update(
+      user.currentOrganization.id,
+      newGeofile
+    );
     props.onUpdateGeofile(response);
   };
 
@@ -109,23 +108,19 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
     return (
       <Grid container direction="column" spacing={1}>
         <Grid item>
-          <Card elevation={0} className={classes.card}>
-            <CardContent>
-              <Grid container direction="column">
-                <Grid item>
-                  <Typography component="h2">
-                    {t("Import.MissingData.titleText")}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <p>{t("Import.MissingData.hintText")}</p>
-                </Grid>
-                <Grid item>{fields.latitude_column}</Grid>
-                <Grid item>{fields.longitude_column}</Grid>
-                <Grid item>{fields.crs}</Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+          <Grid container direction="column">
+            <Grid item>
+              <Typography component="h2">
+                {t("Import.MissingData.titleText")}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <p>{t("Import.MissingData.hintText")}</p>
+            </Grid>
+            <Grid item>{fields.latitude_column}</Grid>
+            <Grid item>{fields.longitude_column}</Grid>
+            <Grid item>{fields.crs}</Grid>
+          </Grid>
         </Grid>
         <Grid item>
           <Grid container justify="space-between">
