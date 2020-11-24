@@ -7,8 +7,14 @@ import organization from "./organization";
 import registrationLink from "./registrationLink";
 import interventions from './intervention';
 
-const { publicRuntimeConfig } = getConfig();
-const { apiUrl, tokenStorage } = publicRuntimeConfig;
+const {
+  publicRuntimeConfig
+} = getConfig();
+const {
+  apiUrl,
+  tokenStorage,
+  refreshTokenStorage
+} = publicRuntimeConfig;
 
 function getToken() {
   let token = null;
@@ -42,19 +48,107 @@ export const apiRest = {
   getToken,
 };
 
-function getAuthorizationHeader() {
-  let token;
+
+function clean_storage() {
+  localStorage.removeItem(tokenStorage);
+  localStorage.removeItem(refreshTokenStorage)
+}
+
+function getPayload(token) {
+  let payload = null;
+  try {
+    let raw_base64_payload = token.split('.')[1]
+    payload = JSON.parse(atob(raw_base64_payload))
+
+  } catch (error) {
+    payload = null
+  }
+
+  return payload
+}
+
+function tokenStillValid(token) {
+  let payload;
+
+  payload = getPayload(token);
+  if (payload && 'exp' in payload) {
+    let now = new Date().getTime()
+    let expirationDate = payload['exp'] * 1000
+
+    if (now < (expirationDate - 5000)) {
+      return true
+    }
+    // if token will expire in less than 5 sec
+    // we act like he is no more valid
+
+  }
+
+  return false
+
+}
+
+
+async function getNewAccessToken(refreshToken) {
+  const path = '/auth/access_token'
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${refreshToken}`
+    },
+    body: null,
+  };
+
+  await fetch(`${apiUrl}${path}`, requestOptions)
+    .then(async function (response) {
+      const resp = await response.json()
+      const newAccessToken = resp['access_token']
+      localStorage.setItem(tokenStorage, newAccessToken);
+    })
+    .catch(async function (error) {
+      clean_storage()
+    });
+
+}
+
+async function getAuthorizationHeader() {
+  let access_token;
   let headers = {};
+  let refresh_token;
 
   if (typeof window !== "undefined") {
-    token = localStorage.getItem(tokenStorage);
+    refresh_token = localStorage.getItem(refreshTokenStorage);
+  }
+  if (refresh_token) {
+    if (tokenStillValid(refresh_token)) {
+      if (typeof window !== "undefined") {
+        access_token = localStorage.getItem(tokenStorage);
+      }
+      if (access_token) {
+        // access token in local storage
+        if (tokenStillValid(access_token)) {
+          // Access token still valid we return it
+          headers = {
+            Authorization: `Bearer ${getToken()}`
+          };
+          return headers;
+        }
+        localStorage.removeItem(tokenStorage);
+      }
+      // try to fetch a new valid access token
+      await getNewAccessToken(refresh_token);
+      access_token = localStorage.getItem(tokenStorage);
+      return {
+        Authorization: `Bearer ${getToken()}`
+      }
+    } else {
+      clean_storage()
+      //refresh token no more valid need to login
+    }
+  } else {
+    clean_storage()
+    //no refresh token need to login
   }
 
-  if (token) {
-    headers = { Authorization: `Bearer ${token}` };
-  }
-
-  return headers;
 }
 
 async function get(path, headers) {
@@ -62,7 +156,7 @@ async function get(path, headers) {
     method: "GET",
     headers: {
       ...headers,
-      ...getAuthorizationHeader(),
+      ...await getAuthorizationHeader(),
     },
   };
 
@@ -76,7 +170,7 @@ async function post(path, headers, body) {
     method: "POST",
     headers: {
       ...headers,
-      ...getAuthorizationHeader(),
+      ...await getAuthorizationHeader(),
     },
     body: body,
   };
@@ -90,7 +184,7 @@ async function patch(path, headers, body) {
     method: "PATCH",
     headers: {
       ...headers,
-      ...getAuthorizationHeader(),
+      ...await getAuthorizationHeader(),
     },
     body: body,
   };
@@ -104,7 +198,7 @@ async function put(path, headers, body) {
     method: "PUT",
     headers: {
       ...headers,
-      ...getAuthorizationHeader(),
+      ...await getAuthorizationHeader(),
     },
     body: body,
   };
@@ -118,7 +212,7 @@ async function _delete(path) {
   const requestOptions = {
     method: "DELETE",
     headers: {
-      ...getAuthorizationHeader(),
+      ...await getAuthorizationHeader(),
     },
   };
   return fetch(`${apiUrl}${path}`, requestOptions)

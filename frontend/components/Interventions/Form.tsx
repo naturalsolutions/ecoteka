@@ -150,7 +150,6 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { user } = useAppContext();
-  const [organization, setOrganization] = useState<any>({});
 
   const [activestep, setActivestep] = useState(0);
   const [interventiontype, setInterventiontype] = useState<TInterventionType>(
@@ -172,14 +171,6 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
     );
     setFormRefs(refs);
   }, []);
-
-  useEffect(() => {
-    console.log(user);
-    apiRest.organization
-      .get(user.organization_id)
-      .then((org) => org.json())
-      .then((jsonorg) => setOrganization(jsonorg));
-  }, [user]);
 
   const setStepdata = (step, stepdata) => {
     setData(Object.assign(data, { [step]: stepdata }));
@@ -274,7 +265,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                   interventiontype={interventiontype}
                   step={step}
                   map={props.context.map}
-                  organization={organization}
+                  organization={user.currentOrganization}
                 />
                 <Grid container direction="row" justify="flex-end">
                   {activestep !== 0 && (

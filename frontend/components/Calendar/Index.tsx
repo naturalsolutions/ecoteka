@@ -17,8 +17,10 @@ export interface CalendarProps {}
 
 const defaultProps: CalendarProps = {};
 
-const useStyles = makeStyles(() => ({
-  root: {},
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.default,
+  },
 }));
 
 const TODAY = new Date();
@@ -51,7 +53,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   };
 
   return (
-    <Paper square>
+    <Paper square className={classes.root}>
       <Grid container>
         <Grid item>
           <Filter interventionColors={INTERVENTION_COLORS} />
@@ -75,17 +77,14 @@ const Calendar: React.FC<CalendarProps> = (props) => {
             </IconButton>
           </Grid>
           <Divider />
-          <Box mt={1}>
-            <Grid
-              container
-              spacing={1}
-              direction="row"
-              justify="flex-start"
-              alignItems="stretch"
-            >
-              {renderMonths()}
-            </Grid>
-          </Box>
+          <Grid
+            container
+            direction="row"
+            justify="flex-start"
+            alignItems="stretch"
+          >
+            {renderMonths()}
+          </Grid>
         </Grid>
       </Grid>
     </Paper>

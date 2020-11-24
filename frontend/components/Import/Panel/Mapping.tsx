@@ -9,9 +9,9 @@ import {
   Button,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import Geofile from "../../Geofile";
-import useTreeSchema from "../../Tree/Schema";
-import { apiRest } from "../../../lib/api";
+import Geofile from "@/components/Geofile";
+import useTreeSchema from "@/components/Tree/Schema";
+import { apiRest } from "@/lib/api";
 
 export interface ETKImportPanelMappingProps {
   geofile?: Geofile;

@@ -17,5 +17,11 @@ class AccessToken(BaseModel):
     token_type: str
 
 
+class AccessAndRefreshToken(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
+
+
 class TokenPayload(BaseModel):
     sub: Optional[int] = None

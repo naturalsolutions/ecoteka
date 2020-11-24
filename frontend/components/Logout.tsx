@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useTemplate } from "./Template";
 
 export interface ETKLogoutProps {
+  buttonProps?: any;
   onClick?: () => void;
 }
 
@@ -61,6 +62,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
 
   return (
     <Button
+      {...props.buttonProps}
       onClick={(e) => {
         dialog.current.open({
           title: t("Logout.dialog.logout"),

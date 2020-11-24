@@ -12,17 +12,14 @@ import HelpIcon from "@material-ui/icons/Help";
 import { DropzoneArea } from "material-ui-dropzone";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import ErrorIcon from "@material-ui/icons/Error";
-import ETKProgressBar from "./ProgressBar";
-import getConfig from "next/config";
+import ETKProgressBar from "@/components/Import/Panel/ProgressBar";
 import { useTranslation, Trans } from "react-i18next";
+import { useAppContext } from "@/providers/AppContext";
 
-import Geofile from "../../Geofile";
-import { apiRest } from "../../../lib/api";
-
-const { publicRuntimeConfig } = getConfig();
+import Geofile from "@/components/Geofile";
+import { apiRest } from "@/lib/api";
 
 export interface ETKUploadProps {
-  uploadUrl?: string;
   geofile?: Geofile;
   missingInfo?: [string?];
   step?: string;
@@ -31,7 +28,6 @@ export interface ETKUploadProps {
 }
 
 const defaultProps: ETKUploadProps = {
-  uploadUrl: `${publicRuntimeConfig.apiUrl}/geo_files/upload`,
   geofile: undefined,
   missingInfo: [""],
   step: "start",
@@ -92,6 +88,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   const [error, setError] = useState(null);
   const [inProgress, setInProgress] = useState(false);
   const [xhr, setXHR] = useState(null);
+  const { user } = useAppContext();
 
   const ETKFiles = (
     <React.Fragment key={file?.name}>
@@ -177,7 +174,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   };
 
   const onUploadClick = () => {
-    let newXHR = apiRest.geofiles.upload(file, {
+    let newXHR = apiRest.geofiles.upload(user.currentOrganization.id, file, {
       onProgress: onUploadProgress,
       onLoad: onUploadLoad,
       onError: onUploadError,

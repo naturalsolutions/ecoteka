@@ -48,6 +48,8 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
           keysMissing.push(keysToCheck[i]);
         }
       }
+
+      keysMissing.push("crs");
     }
 
     return keysMissing;

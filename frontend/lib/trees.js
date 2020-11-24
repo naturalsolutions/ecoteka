@@ -3,8 +3,8 @@ class Tree {
     this.api = api;
   }
 
-  async importFromGeofile(name) {
-    const url = `/trees/import-from-geofile?name=${name}`;
+  async importFromGeofile(organizationId, name) {
+    const url = `/organization/${organizationId}/trees/import-from-geofile?name=${name}`;
     const response = await this.api.post(url);
     const geofile = await response.json();
 
