@@ -2,9 +2,10 @@ import { useState } from "react";
 
 export default function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (!window) {
+    if (typeof window === "undefined") {
       return null;
     }
+
     try {
       const item = window.localStorage.getItem(key);
 
@@ -16,9 +17,10 @@ export default function useLocalStorage<T>(key: string, initialValue: T) {
   });
 
   const setValue = (value: T) => {
-    if (!window) {
+    if (typeof window !== "undefined") {
       return;
     }
+
     try {
       setStoredValue(value);
 

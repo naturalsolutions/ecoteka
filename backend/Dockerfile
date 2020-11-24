@@ -1,5 +1,3 @@
-FROM registry.gitlab.com/natural-solutions/tippecanoe:latest as tippecanoe
-
 FROM node:lts-alpine as email-templates
 
 COPY ./app/app/email-templates/src /email-templates
@@ -15,7 +13,7 @@ ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY --from=builder /install /usr/local
-COPY --from=tippecanoe [ \
+COPY --from=builder [ \
   "/usr/local/bin/tippecanoe", \
   "/usr/local/bin/tippecanoe-decode", \
   "/usr/local/bin/tippecanoe-enumerate", \
