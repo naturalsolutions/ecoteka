@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Grid, Typography, CircularProgress } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
-import Geofile from "../../Geofile";
-import { apiRest } from "../../../lib/api";
+import Geofile from "@/components/Geofile";
+import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportImportingProps {
   geofile: Geofile;
@@ -18,9 +19,13 @@ const defaultProps: ETKImportImportingProps = {
 const ETKImportImporting: React.FC<ETKImportImportingProps> = (props) => {
   const [isImporting, setIsImporting] = useState(true);
   const { t } = useTranslation("components");
+  const { user } = useAppContext();
 
   const check = async () => {
-    const response = await apiRest.geofiles.get(props.geofile.name);
+    const response = await apiRest.geofiles.get(
+      user.currentOrganization.id,
+      props.geofile.name
+    );
 
     if (response.status === "imported" || !isImporting) {
       setIsImporting(false);
