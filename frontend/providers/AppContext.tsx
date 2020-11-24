@@ -1,25 +1,24 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { IUser } from "..";
-import { apiRest as api } from "../lib/api";
+import { IUser } from "@/index";
+import { apiRest as api } from "@/lib/api";
+import useLocalStorage from "@/lib/hooks/useLocalStorage";
 
 const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
-  const [user, setUser] = useState<IUser>();
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useLocalStorage<IUser>("user", null);
 
   useEffect(() => {
-    if (!user && api.getToken()) {
+    if (!user) {
       api.users
         .me()
         .then((currentUser: IUser) => {
+          if (currentUser.organizations.length === 1) {
+            currentUser.currentOrganization = currentUser.organizations[0];
+          }
+
           setUser(currentUser);
-
-          currentUser.currentOrganization = currentUser.organizations.sort(
-            (o1, o2) => o1.path < o2.path ? -1 : o1.path === o2.path ? 0 : 1
-          )[0];
-
-          return currentUser;
         })
         .catch((e) => {
           setUser(null);

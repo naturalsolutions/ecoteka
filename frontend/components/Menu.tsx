@@ -15,11 +15,11 @@ import { useTranslation } from "react-i18next";
 
 export interface ETKMenuItem {
   label: string;
-  link: string | undefined;
-  icon: any;
-  children: ETKMenuItem[] | undefined;
-  disabled: boolean | undefined;
-  highlighted: boolean | undefined;
+  link?: string | undefined;
+  icon?: any;
+  children?: ETKMenuItem[] | undefined;
+  disabled?: boolean | undefined;
+  highlighted?: boolean | undefined;
   activator?(router: any): boolean;
 }
 

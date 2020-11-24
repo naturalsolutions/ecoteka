@@ -26,6 +26,7 @@
   },
 
   "Template": {
+    "organizationSelect": "Select an organization",
     "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Plant heritage",
@@ -301,7 +302,7 @@
       }
     }
   },
-  
+
   "Team": {
     "name": "Name",
     "slug": "Slug",
@@ -310,8 +311,8 @@
     "dialogContentTextCreate": "You will add a team in the current organization.",
     "dialogContentTextEdit": "Use this form to update a team."
   },
-  
-  "Organization" : {
+
+  "Organization": {
     "name": "Apelido",
     "dialogTitleCreate": "Add an organisation",
     "dialogTitleEdit": "Update the organisation",

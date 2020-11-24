@@ -1,28 +1,22 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Avatar,
-  Box,
   Button,
-  Card,
   Divider,
   Grid,
   Hidden,
-  Link,
   makeStyles,
-  Popover,
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import MoodIcon from "@material-ui/icons/Mood";
-import ETKContactButton from "./Contact/Button";
-import ETKSigninButton from "./SignIn/Button";
-import ETKRegisterButton from "./Register/Button";
-import ETKLogout from "./Logout";
-import ETKLanguageSelector from "./LanguageSelector";
-import { useAppContext } from "../providers/AppContext";
-import { Router } from "@material-ui/icons";
+import ETKContactButton from "@/components/Contact/Button";
+import ETKRegisterButton from "@/components/Register/Button";
+import ETKLanguageSelector from "@/components/LanguageSelector";
+import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
+import OrganizationSelect from "@/components/Organization/Select";
+import { IOrganization } from "@/index";
+import UserMainMenuButton from "@/components/User/MainMenuButton";
 
 export interface ETKToolbarProps {
   logo: string;
@@ -40,10 +34,6 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     backgroundColor: theme.palette.secondary.main,
   },
-  userInfosPaper: {
-    padding: 10,
-    textAlign: "center",
-  },
   numberOfTrees: {
     width: "100%",
   },
@@ -52,80 +42,26 @@ const useStyles = makeStyles((theme) => ({
 const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
   const { t } = useTranslation("components");
   const classes = useStyles();
-  const { user } = useAppContext();
-
-  const [userInfosAnchorEl, setUserInfosAnchorEl] = React.useState(null);
-  const isUserInfosOpen = Boolean(userInfosAnchorEl);
-
+  const { user, setUser } = useAppContext();
   const router = useRouter();
 
-  const renderUserInfos = () => {
-    return (
-      <Popover
-        classes={{
-          paper: classes.userInfosPaper,
-        }}
-        open={isUserInfosOpen}
-        anchorEl={userInfosAnchorEl}
-        onClose={() => {
-          setUserInfosAnchorEl(null);
-        }}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <Grid container direction="column" spacing={1}>
-          <Grid item>
-            <Grid container direction="row" alignItems="center" spacing={2}>
-              <Grid item>
-                <Avatar>{user.full_name.split(' ').slice(0, 2).map(s => s[0].toUpperCase())}</Avatar>
-              </Grid>
-              <Grid item xs>
-                {user.email}
-              </Grid>
-            </Grid>
-          </Grid>
-          <Box mt={2} mb={1}>
-            <Divider />
-          </Box>
-          <Grid>
-            <Button onClick={() => router.push(`/organization/${user.organizations[0].id}`)}>
-              {t("Toolbar.myOrganizations")}
-            </Button>
-          </Grid>
-          <Grid item>
-            <ETKLogout
-              onClick={() => {
-                setUserInfosAnchorEl(null);
-              }}
-            />
-          </Grid>
-        </Grid>
-      </Popover>
-    );
+  const handleOrganizationSelectChange = (organization: IOrganization) => {
+    const newUser = { ...user };
+
+    newUser.currentOrganization = organization;
+    setUser(newUser);
+  };
+
+  const handleSignInClick = () => {
+    router.push("/signin");
   };
 
   const renderWhenSession = () => {
-    //TODO Find something to display in any case ?
-    const displayName =
-      user.full_name || user.email.substr(0, user.email.indexOf("@"));
     return (
-      <React.Fragment>
+      <>
         <Divider orientation="vertical" flexItem />
-        <Button
-          onClick={(e) => {
-            setUserInfosAnchorEl(e.currentTarget);
-          }}
-        >
-          {displayName}
-        </Button>
-        {renderUserInfos()}
-      </React.Fragment>
+        <UserMainMenuButton />
+      </>
     );
   };
 
@@ -138,6 +74,14 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               <Grid item>
                 <img src={props.logo} className={classes.logo} />
               </Grid>
+              {user && (
+                <Grid item>
+                  <OrganizationSelect
+                    user={user}
+                    onChange={handleOrganizationSelectChange}
+                  />
+                </Grid>
+              )}
               <Grid item>
                 <Hidden smDown>
                   <Typography
@@ -161,7 +105,11 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 <ETKContactButton />
                 {user?.is_superuser && <ETKRegisterButton />}
                 {user && renderWhenSession()}
-                {!user && <ETKSigninButton />}
+                {!user && (
+                  <Button onClick={handleSignInClick}>
+                    {t("SignIn.buttonConnexion")}
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </Hidden>

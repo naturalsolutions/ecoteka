@@ -23,6 +23,7 @@
     "es": "Espagnol"
   },
   "Template": {
+    "organizationSelect": "Sélectionner une organisation",
     "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Patrimoine Végétal",
@@ -383,8 +384,8 @@
     "dialogTitleEdit": "Modifier une équipe",
     "dialogContentTextCreate": "Vous allez ajouter une équipe dans l'organisation courante.",
     "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'équipe."
-  }, 
-  "Organization" : {
+  },
+  "Organization": {
     "name": "Nom",
     "dialogTitleCreate": "Ajouter une organisation",
     "dialogTitleEdit": "Modifier l'organisation",
@@ -394,7 +395,7 @@
       "dialogTitle": "Editer l'emprise",
       "dialogContentText": "Extension acceptés : zip, geojson"
     },
-    "Members" : {
+    "Members": {
       "dialogAddMemberTitle": "Ajouter des membres à votre organisation",
       "dialogDdetachMembersTitle": "Retirer des membres à votre organisation",
       "cancel": "Annuler",

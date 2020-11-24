@@ -1,23 +1,12 @@
 import slug
 from typing import Any
-from fastapi import (
-    APIRouter,
-    Body,
-    Depends,
-    HTTPException,
-    status
-)
-from fastapi.security import (
-    OAuth2PasswordRequestForm
-)
+from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_jwt_auth import AuthJWT
 from sqlalchemy.orm import Session
 
 # rom app import crud, models, schemas
-from app.crud import (
-    organization,
-    user
-)
+from app.crud import organization, user
 from app.models import User
 from app.schemas import (
     AccessToken,
@@ -27,24 +16,24 @@ from app.schemas import (
     RefreshTokenIn,
     UserCreate,
     UserOut,
+    AccessAndRefreshToken,
 )
-from app.api import (
-    get_db
-)
+from app.api import get_db
 from app.core import (
     get_current_user,
     get_password_hash,
-    generate_refresh_token_response,
-    get_current_user_if_is_superuser
+    generate_access_token_and_refresh_token_response,
+    get_current_user_if_is_superuser,
+    get_current_user_with_refresh_token,
 )
 from app.utils import (
     generate_password_reset_token,
     send_reset_password_email,
-    verify_password_reset_token
+    verify_password_reset_token,
 )
 from app.worker import (
     send_new_registration_email_task,
-    generate_and_insert_registration_link_task
+    generate_and_insert_registration_link_task,
 )
 import logging
 
@@ -52,10 +41,10 @@ import logging
 router = APIRouter()
 
 
-@router.post("/login", response_model=AccessToken)
+@router.post("/login", response_model=AccessAndRefreshToken)
 def login_and_get_refresh_token(
     db: Session = Depends(get_db),
-    form_data: OAuth2PasswordRequestForm = Depends()
+    form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> Any:
     """
     OAuth2 compatible token login, get an access token for future requests
@@ -65,40 +54,30 @@ def login_and_get_refresh_token(
     )
     if not user_in_db:
         raise HTTPException(
-            status_code=400,
-            detail="Incorrect email or password"
+            status_code=400, detail="Incorrect email or password"
         )
 
-    return generate_refresh_token_response(
-        user_id=user_in_db.id,
-        is_superuser=user_in_db.is_superuser
+    return generate_access_token_and_refresh_token_response(
+        user_id=user_in_db.id, is_superuser=user_in_db.is_superuser
     )
 
 
-@router.post("/refresh_token", operation_id="authorize")
+@router.post("/access_token", response_model=AccessToken)
 def get_access_token(
-    # JAVI : current_user: User = Depends(get_current_user_if_is_superuser),
-    Authorize: AuthJWT = Depends()
+    current_user: User = Depends(get_current_user_with_refresh_token),
+    Authorize: AuthJWT = Depends(),
 ):
-    Authorize.jwt_refresh_token_required()
-    current_user = Authorize.get_jwt_subject()
     logging.info(f"token authorization find : {current_user}")
 
     access_token = Authorize.create_access_token(
-        subject=current_user,
-        fresh=False
-        )
+        subject=current_user.id, fresh=False
+    )
 
-    return {
-        "access_token": access_token,
-        "token_type": "Bearer"
-    }
+    return {"access_token": access_token, "token_type": "Bearer"}
 
 
 @router.post("/login/test-token", response_model=UserOut)
-def test_token(
-    current_user: User = Depends(get_current_user)
-) -> Any:
+def test_token(current_user: User = Depends(get_current_user)) -> Any:
     """
     Test access token
     """
@@ -154,7 +133,7 @@ def register_new_user(
     *,
     db: Session = Depends(get_db),
     user_in: UserCreate,
-    current_user: User = Depends(get_current_user_if_is_superuser)
+    current_user: User = Depends(get_current_user_if_is_superuser),
 ) -> UserOut:
     user_in_db = user.get_by_email(db, email=user_in.email)
 
@@ -186,17 +165,13 @@ def register_new_user(
         )
 
     send_new_registration_email_task.delay(
-        user_in.email,
-        user_in.full_name,
-        user_in.password
+        user_in.email, user_in.full_name, user_in.password
     )
 
     generate_and_insert_registration_link_task.delay(user_in_db.id)
 
-    return {
-        "msg": "user created"
-    }
-    # return generate_refresh_token_response(
+    return {"msg": "user created"}
+    # return generate_access_token_and_refresh_token_response(
     #     user_id=user_in_db.id,
     #     is_superuser=user_in_db.is_superuser
     # )

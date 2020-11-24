@@ -3,7 +3,6 @@ import {
   makeStyles,
   Grid,
   Typography,
-  Divider,
   Card,
   CardContent,
   CardHeader,
@@ -67,7 +66,13 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
 
     range(6).map((i) => {
       rows.push(
-        <Grid container key={`row-${i}`} alignItems="stretch" spacing={1}>
+        <Grid
+          container
+          key={`row-${i}`}
+          alignItems="stretch"
+          spacing={1}
+          wrap="nowrap"
+        >
           {range(7).map((j) => {
             if (i === 0 && j < firstDay - 1) {
               return <Grid xs item key={`day-${i}-${j}`} />;

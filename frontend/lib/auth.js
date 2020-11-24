@@ -1,7 +1,12 @@
 import getConfig from "next/config";
 
-const { publicRuntimeConfig } = getConfig();
-const { tokenStorage } = publicRuntimeConfig;
+const {
+  publicRuntimeConfig
+} = getConfig();
+const {
+  tokenStorage,
+  refreshTokenStorage
+} = publicRuntimeConfig;
 
 class Auth {
   constructor(url, api) {
@@ -9,7 +14,10 @@ class Auth {
     this.api = api;
   }
 
-  async accessToken({ username, password }) {
+  async accessToken({
+    username,
+    password
+  }) {
     try {
       const body = new FormData();
 
@@ -21,11 +29,16 @@ class Auth {
         body,
       });
 
-      const { access_token: accessToken } = await response.json();
+      const resp = await response.json()
+      const accessToken = resp['access_token']
+      const refreshToken = resp['refresh_token']
 
       localStorage.setItem(tokenStorage, accessToken);
+      localStorage.setItem(refreshTokenStorage, refreshToken);
 
-      return accessToken;
+      return {
+        access_token: accessToken
+      };
     } catch (e) {
       return e.message;
     }
@@ -34,13 +47,15 @@ class Auth {
   async register(data) {
     try {
       const response = await this.api.post(
-        "/auth/register/",
-        {},
+        "/auth/register/", {},
         JSON.stringify(data)
       );
       const json = await response.json();
 
-      return { response, json };
+      return {
+        response,
+        json
+      };
     } catch (e) {
       return {};
     }
@@ -48,6 +63,7 @@ class Auth {
 
   logout() {
     localStorage.removeItem(tokenStorage);
+    localStorage.removeItem(refreshTokenStorage)
   }
 }
 

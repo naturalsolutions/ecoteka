@@ -1,5 +1,15 @@
 import { useRef, useState } from "react";
-import { Box, Button, Card, CardActions, CardContent, CircularProgress, Container, Grid, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 import ETKFormSignIn, { ETKFormSignInActions } from "../components/SignIn/Form";
 import Template from "../components/Template";
 import { useRouter } from "next/router";
@@ -49,9 +59,7 @@ export default function SignInPage() {
               <Button
                 color="primary"
                 variant="contained"
-                onClick={() => {
-                  onSubmit();
-                }}
+                onClick={onSubmit}
                 disabled={isLoading}
               >
                 {isLoading ? <CircularProgress size={30} /> : "Connexion"}

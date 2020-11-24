@@ -23,6 +23,7 @@
     "es": "Español"
   },
   "Template": {
+    "organizationSelect": "Seleccionar una organización",
     "menuItems": {
       "plantHeritage": {
         "plantHeritage": "Patrimonio vegetal",
@@ -287,8 +288,8 @@
     "buttonSubmitContent": "Enviar",
     "buttonCancelContent": "Cancelar"
   },
-  
-  "Organization" : {
+
+  "Organization": {
     "name": "Apelido",
     "dialogTitleCreate": "Add an organisation",
     "dialogTitleEdit": "Update the organisation",

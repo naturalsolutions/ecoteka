@@ -24,55 +24,65 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
     height: `calc(100vh - ${sizeToolbar}px)`,
     marginTop: sizeToolbar,
   };
-  const menuItems = [
-    {
-      label: "Template.menuItems.plantHeritage.plantHeritage",
-      children: [
-        {
-          label: "Template.menuItems.plantHeritage.allTrees",
-          link: "/",
-          activator: (router) => router.pathname === "/" && router.query.panel === undefined,
-        },
-        {
-          label: "Template.menuItems.plantHeritage.addATree",
-          link: "/?panel=newTree",
-          activator: (router) => router.pathname === "/" && router.query.panel === "newTree",
-        },
-      ],
-    },
-    {
-      label: "Template.menuItems.dataImport.dataImport",
-      icon: <GetApp viewBox="0 -4 24 24" />,
-      children: [
-        {
-          label: "Template.menuItems.dataImport.importYourData",
-          link: "/?panel=import",
-          activator: (router) => router.pathname === "/" && router.query.panel === "import",
-        },
-        {
-          label: "Template.menuItems.dataImport.importHistory",
-          link: "/imports",
-          activator: (router) => router.pathname === "/imports",
-        },
-      ],
-    },
-    {
-      label: "Template.menuItems.availableSoon.availableSoon",
-      icon: <Star viewBox="0 -4 24 24" />,
-      children: [
-        {
-          label: "Template.menuItems.availableSoon.requestAnItervention",
-          link: "/?panel=newIntervention",
-          activator: (router) => router.pathname === "/" && router.query.panel === "newIntervention",
-        },
-        {
-          label: "Template.menuItems.availableSoon.scheduleOfInterventions",
-          link: "/schedule-intervention",
-          activator: (router) => router.pathname === "/schedule-intervention",
-        },
-      ],
-    },
-  ] as ETKMenuItem[];
+  let menuItems = [];
+
+  if (user) {
+    menuItems = [
+      {
+        label: "Template.menuItems.plantHeritage.plantHeritage",
+        children: [
+          {
+            label: "Template.menuItems.plantHeritage.allTrees",
+            link: "/",
+            activator: (router) =>
+              router.pathname === "/" && router.query.panel === undefined,
+          },
+          {
+            label: "Template.menuItems.plantHeritage.addATree",
+            link: "/?panel=newTree",
+            activator: (router) =>
+              router.pathname === "/" && router.query.panel === "newTree",
+          },
+        ],
+      },
+      {
+        label: "Template.menuItems.dataImport.dataImport",
+        icon: <GetApp viewBox="0 -4 24 24" />,
+        children: [
+          {
+            label: "Template.menuItems.dataImport.importYourData",
+            link: "/?panel=import",
+            activator: (router) =>
+              router.pathname === "/" && router.query.panel === "import",
+          },
+          {
+            label: "Template.menuItems.dataImport.importHistory",
+            link: "/imports",
+            activator: (router) => router.pathname === "/imports",
+          },
+        ],
+      },
+      {
+        label: "Template.menuItems.availableSoon.availableSoon",
+        icon: <Star viewBox="0 -4 24 24" />,
+        children: [
+          {
+            label: "Template.menuItems.availableSoon.requestAnItervention",
+            link: "/?panel=newIntervention",
+            activator: (router) =>
+              router.pathname === "/" &&
+              router.query.panel === "newIntervention",
+          },
+          {
+            label: "Template.menuItems.availableSoon.scheduleOfInterventions",
+            link: `/calendar/${user?.currentOrganization?.id}`,
+            activator: (router) =>
+              router.pathname === `/calendar/${user?.currentOrganization?.id}`,
+          },
+        ],
+      },
+    ] as ETKMenuItem[];
+  }
 
   return (
     <div role="presentation">
