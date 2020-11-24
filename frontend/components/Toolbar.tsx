@@ -82,17 +82,6 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                   />
                 </Grid>
               )}
-              <Grid item>
-                <Hidden smDown>
-                  <Typography
-                    color="textPrimary"
-                    component="h2"
-                    className={classes.numberOfTrees}
-                  >
-                    {t("Toolbar.slogan")}
-                  </Typography>
-                </Hidden>
-              </Grid>
             </Grid>
           </Grid>
           <Hidden smDown>
