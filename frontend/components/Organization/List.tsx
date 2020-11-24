@@ -1,7 +1,6 @@
 import React from "react";
-import { List, ListItem, makeStyles } from "@material-ui/core";
+import { List, ListItem } from "@material-ui/core";
 import { IOrganization } from "@/index";
-import { useAppContext } from "@/providers/AppContext";
 
 export interface OrganizationListProps {
   organizations?: IOrganization[];

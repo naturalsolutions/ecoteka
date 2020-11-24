@@ -7,7 +7,7 @@ const Header: FC<HeaderProps> = (props) => {
   return (
     <Box display="flex" flexDirection="row-reverse">
       <Box m={1}>
-        <Button variant="contained" color="primary" disabled>
+        <Button variant="contained" color="primary" href={`/?panel=import`}>
           Importer des données
         </Button>
       </Box>

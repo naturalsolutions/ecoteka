@@ -1,12 +1,13 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { IUser } from "@/index";
 import { apiRest as api } from "@/lib/api";
+import useLocalStorage from "@/lib/hooks/useLocalStorage";
 
 const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
-  const [user, setUser] = useState<IUser>();
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useLocalStorage<IUser>("user", null);
 
   useEffect(() => {
     if (!user) {

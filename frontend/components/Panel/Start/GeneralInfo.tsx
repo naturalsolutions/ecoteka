@@ -56,14 +56,7 @@ const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (
   const router = useRouter();
   const classes = useStyles();
   const { user } = useAppContext();
-  const [organization, setOrganization] = useState<Organization>();
   const { t } = useTranslation("components");
-
-  useEffect(() => {
-    fetchData(user.organization_id).then((newOrganization) => {
-      setOrganization(newOrganization);
-    });
-  }, []);
 
   return (
     <Grid container direction="column" spacing={2} className={classes.root}>
@@ -82,7 +75,7 @@ const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (
       <Grid item>
         <CardInfoPanel
           title={t("PanelStart.numberOfTreesLayer.title")}
-          content={`${organization ? organization.total_trees : 0} ${t(
+          content={`${user.currentOrganization?.total_trees || 0} ${t(
             "PanelStart.numberOfTreesLayer.content"
           )}`}
         />
