@@ -26,8 +26,17 @@ interface IMemberProps {
   id: number;
 }
 
+type AddMembersActionsProps = {
+  ok: Boolean;
+  redirected: Boolean;
+  status: Number;
+  statusText: String;
+  type: String;
+  url: String;
+};
+
 export type AddMembersActions = {
-  submit: () => Promise<Boolean>;
+  submit: () => Promise<AddMembersActionsProps>;
 };
 
 export interface AddMembersProps {
@@ -112,8 +121,8 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) =
       return new Promise((resolve, reject) => {
         handleSubmit(async (data) => {
           const { members } = data;
-          await apiRest.organization.addMembers(props.organizationID, members);
-          resolve();
+          const response = await apiRest.organization.addMembers(props.organizationID, members);
+          resolve(response);
         })();
       });
     },

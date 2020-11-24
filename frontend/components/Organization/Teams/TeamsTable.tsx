@@ -17,25 +17,32 @@ import {
   Box,
   Snackbar,
   SnackbarProps,
+  Tooltip,
 } from "@material-ui/core";
 import MuiAlert, { AlertProps, Color } from "@material-ui/lab/Alert";
-import { Block as BlockIcon, MoreHoriz as MoreHorizIcon } from "@material-ui/icons";
+import { Edit, MoreHoriz as MoreHorizIcon, PhotoSizeSelectSmall, Visibility, Archive as ArchiveIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
+import { Fragment } from "react";
 
-interface IMemberProps {
+interface IOrganizationProps {
   id: number;
-  email: string;
+  has_working_area: boolean;
   name?: string;
-  role: string;
-  status: string;
+  path?: string;
+  slug: string;
+  total_trees: number;
+  config?: any;
 }
 
-export interface ETKOrganizationMemberTableProps {
-  rows?: IMemberProps[];
+export interface ETKOrganizationTeamsTableProps {
+  rows?: IOrganizationProps[];
   onSelected?(selection?: number[]): void;
+  openArea?(data?: IOrganizationProps): void;
+  openForm?(data?: IOrganizationProps): void;
+  openTeamPage?(data_id?: number): void;
 }
 
-const defaultProps: ETKOrganizationMemberTableProps = {
+const defaultProps: ETKOrganizationTeamsTableProps = {
   rows: [],
 };
 
@@ -75,54 +82,9 @@ const SnackAlert: React.FC<SnackAlertProps> = ({ open, severity, message = "" })
   );
 };
 
-const SelectRenderer: React.FC<SelectRendererProps> = ({ value, handleChange }) => {
-  const placeholder = "Définir le rôle";
-  const roles = [
-    {
-      label: "Propriétaire",
-      value: "owner",
-    },
-    {
-      label: "Manager",
-      value: "manager",
-    },
-    {
-      label: "Contributeur",
-      value: "contributor",
-    },
-    {
-      label: "Lecteur",
-      value: "reader",
-    },
-    {
-      label: "Invité",
-      value: "guest",
-    },
-  ];
-  return (
-    <Select value={value} displayEmpty onChange={handleChange} autoWidth>
-      <MenuItem value="" disabled>
-        {placeholder}
-      </MenuItem>
-      {roles.map((role, i) => {
-        return (
-          <MenuItem value={role.value} key={i}>
-            {role.label}
-          </MenuItem>
-        );
-      })}
-    </Select>
-  );
-};
-
-const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
+const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
   const { t } = useTranslation("components");
-  const [headers] = React.useState([
-    "Organization.Members.Table.headers.email",
-    "Organization.Members.Table.headers.name",
-    "Organization.Members.Table.headers.status",
-    "Organization.Members.Table.headers.role",
-  ]);
+  const [headers] = React.useState(["Teams.Table.headers.name", "Teams.Table.headers.actions"]);
   const [selected, setSelected] = useState([] as number[]);
   const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
@@ -136,19 +98,18 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
     setActionsMenuAnchorEl(null);
   };
 
-  const detachMembers = () => {
-    setAlertMesagge(`TODO: AJAX call to detach members with IDS: [${selected.join(", ")}]`);
+  const deleteTeams = () => {
+    setAlertMesagge(`TODO: AJAX call to delete Teams with IDS: [${selected.join(", ")}]`);
     setOpenAlert(true);
     setActionsMenuAnchorEl(null);
     setTimeout(() => setOpenAlert(false), 3000);
   };
 
-  const handleUserRoleChange = (userID) => {
-    setAlertMesagge(`TODO: AJAX call to change role for User#${userID}`);
+  const discardTeams = () => {
+    setAlertMesagge(`TODO: AJAX call to discard (sof_delete) teams with IDS: [${selected.join(", ")}]`);
     setOpenAlert(true);
     setActionsMenuAnchorEl(null);
     setTimeout(() => setOpenAlert(false), 3000);
-    console.log("change role", userID);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -209,11 +170,17 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
                       </IconButton>
                       <Menu id="membersActionsMenu" anchorEl={actionsMenuAnchorEl} open={Boolean(actionsMenuAnchorEl)} onClose={handleClose}>
                         <MenuList>
-                          <MenuItem onClick={detachMembers}>
+                          <MenuItem onClick={discardTeams}>
                             <ListItemIcon>
-                              <BlockIcon />
+                              <ArchiveIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Retirer du groupe" />
+                            <ListItemText primary="Archiver" />
+                          </MenuItem>
+                          <MenuItem onClick={deleteTeams}>
+                            <ListItemIcon>
+                              <DeleteIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Delete" />
                           </MenuItem>
                         </MenuList>
                       </Menu>
@@ -236,11 +203,43 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
                   <TableCell style={{ minWidth: "96px", maxWidth: "96px" }}>
                     <Checkbox checked={isItemSelected} color="primary" onClick={(e) => onRowClick(e, row.id)} />
                   </TableCell>
-                  <TableCell scope="row">{row.email}</TableCell>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.status}</TableCell>
                   <TableCell>
-                    <SelectRenderer value={row.role} handleChange={() => handleUserRoleChange(row.id)} />
+                    <Fragment>
+                      <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => {
+                            props.openArea(row);
+                          }}
+                        >
+                          <PhotoSizeSelectSmall />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={t("Teams.tooltipInfoEdit")}>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => {
+                            props.openForm(row);
+                          }}
+                        >
+                          <Edit />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={t("Teams.tooltipLink")}>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => {
+                            props.openTeamPage(row.id);
+                          }}
+                        >
+                          <Visibility />
+                        </IconButton>
+                      </Tooltip>
+                    </Fragment>
                   </TableCell>
                 </TableRow>
               );
@@ -252,6 +251,6 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
   );
 };
 
-ETKMembersTable.defaultProps = defaultProps;
+ETKTeamsTable.defaultProps = defaultProps;
 
-export default ETKMembersTable;
+export default ETKTeamsTable;

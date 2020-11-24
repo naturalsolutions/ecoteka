@@ -108,11 +108,12 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   }
 
   const inviteMembers = async () => {
-    console.log("inviteMembers");
     const res = await formAddMembersRef.current.submit();
     if (res.ok) {
       dialog.current.close();
       cache.invalidateQueries(`members_${organization.id}`);
+    } else {
+      // TODO: useAlert() with status and statusText
     }
   };
 

@@ -269,7 +269,13 @@
     "buttonAdd": "Add a team",
     "tooltipWorkingAreaEdit": "Edit working area",
     "tooltipInfoEdit": "Edit informations",
-    "tooltipLink": "Open the page"
+    "tooltipLink": "Open the page",
+    "Table": {
+      "headers": {
+        "name": "Name",
+        "actions": "Actions"
+      }
+    }
   },
   "Team": {
     "name": "Apelido",
