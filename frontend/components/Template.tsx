@@ -8,6 +8,7 @@ import ETKLayoutDesktop from "@/components/Layout/Desktop";
 import ETKLayoutMobile from "@/components/Layout/Mobile";
 import OrganizationList from "@/components/Organization/List";
 import { useTranslation } from "react-i18next";
+import Snackbars from "@/components/Snackbars";
 
 const TemplateContext = React.createContext(null);
 
@@ -15,6 +16,7 @@ export const useTemplate = () => React.useContext(TemplateContext);
 
 export default function Template(props) {
   const dialogRef = React.useRef();
+  const snackRef = React.useRef();
   const theme = createMuiTheme(themeConfig("dark"));
   const { isLoading, user, setUser } = useAppContext();
   const { t } = useTranslation(["components"]);
@@ -48,7 +50,9 @@ export default function Template(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <TemplateContext.Provider value={{ dialog: dialogRef, theme }}>
+      <TemplateContext.Provider
+        value={{ dialog: dialogRef, theme, snackbar: snackRef }}
+      >
         <Hidden only={["xs", "sm"]}>
           {!isLoading && <ETKLayoutDesktop>{props.children}</ETKLayoutDesktop>}
         </Hidden>
@@ -56,6 +60,7 @@ export default function Template(props) {
           {isLoading && <ETKLayoutMobile>{props.children}</ETKLayoutMobile>}
         </Hidden>
         <ETKDialog ref={dialogRef} />
+        <Snackbars ref={snackRef} />
       </TemplateContext.Provider>
     </ThemeProvider>
   );

@@ -11,7 +11,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { apiRest } from "@/lib/api";
 import { IOrganization } from "@/index.d";
 import { DropzoneArea } from "material-ui-dropzone";
-import { Error } from "@material-ui/icons";
+import { useTemplate } from "@/components/Template";
 
 export type ETKFormWorkingAreaActions = {
   submit: () => Promise<boolean>;
@@ -63,17 +63,28 @@ const ETKFormWorkingArea = forwardRef<
   const classes = useStyle();
   const [file, setFile] = useState<File>();
   const [linearProgressValue, setLinearProgressValue] = useState(0);
-  const [error, setError] = useState(null);
   const [inProgress, setInProgress] = useState(false);
   const [xhr, setXHR] = useState(null);
+  const { snackbar } = useTemplate();
 
   const { t } = useTranslation("components");
   let isOk = false;
 
+  const openError = (message: string) => {
+    snackbar.current.open({
+      message: message,
+      severity: "error",
+    });
+  };
+
   const submit = () => {
     if (!file) {
+      openError("Veuillez sélectionner un fichier");
       return Promise.reject(false);
     }
+    snackbar.current.open({
+      message: "Envoi en cours...",
+    });
     return new Promise((resolve, reject) => {
       let newXHR = apiRest.organization.postWorkingArea(
         props.organization.id,
@@ -85,7 +96,7 @@ const ETKFormWorkingArea = forwardRef<
             setXHR(null);
 
             if (cXHR.status !== 200) {
-              setError(cXHR.response);
+              openError(cXHR.response);
               return reject(cXHR.response);
             }
             isOk = true;
@@ -94,7 +105,7 @@ const ETKFormWorkingArea = forwardRef<
           onError: (cXHR) => {
             const response = JSON.parse(cXHR.response);
 
-            setError(response.detail);
+            openError(response.detail);
             setInProgress(false);
             setXHR(null);
 
@@ -120,8 +131,6 @@ const ETKFormWorkingArea = forwardRef<
   }));
 
   const onAddFiles = async (event) => {
-    setError(null);
-
     const fileList = event.dataTransfer
       ? event.dataTransfer.files
       : event.target.files;
@@ -141,23 +150,13 @@ const ETKFormWorkingArea = forwardRef<
 
   const ETKFiles = (
     <React.Fragment key={file?.name}>
-      {file && !error && (
+      {file && (
         <Grid direction="row" container alignItems="center">
           <Grid item xs={2}>
             <GetAppIcon className={classes.iconFileUploaded} />
           </Grid>
           <Grid item xs={10}>
             {file?.name}
-          </Grid>
-        </Grid>
-      )}
-      {error && (
-        <Grid direction="row" container alignItems="center">
-          <Grid item xs={2}>
-            <Error className={classes.iconErrorUploaded} />
-          </Grid>
-          <Grid item xs={10}>
-            <span>{error}</span>
           </Grid>
         </Grid>
       )}

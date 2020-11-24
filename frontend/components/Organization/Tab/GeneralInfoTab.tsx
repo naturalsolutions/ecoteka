@@ -26,7 +26,7 @@ interface IGeneralInfoTab {
 
 const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const classes = useStyles();
-  const { dialog, theme } = useTemplate();
+  const { dialog, snackbar } = useTemplate();
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
@@ -133,6 +133,10 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
     const isOk = await formAreaRef.current.submit();
     if (isOk) {
       dialog.current.close();
+      snackbar.current.open({
+        message: "Succès de l'envoi.",
+        severity: "success",
+      });
       cache.invalidateQueries(queryName);
     }
   };
