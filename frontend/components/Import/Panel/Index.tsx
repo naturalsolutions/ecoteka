@@ -10,6 +10,7 @@ import ETKError from "@/components/Import/Panel/Error";
 import ETKImportImporting from "@/components/Import/Panel/Importing";
 import { apiRest } from "@/lib/api";
 import { ETKPanelProps } from "@/components/Panel";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface Choice {
   value?: string;
@@ -33,10 +34,11 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
   const [step, setStep] = useState("start");
   const [geofile, setGeofile] = useState<ETKGeofile>();
   const [missingInfo, setMissingInfo] = useState<[string?]>([]);
+  const { user } = useAppContext();
 
   const checkMissingInfo = (geofileToCheck: ETKGeofile): [string?] => {
     const driversToCheck = ["CSV", "Excel"];
-    const keysToCheck = ["latitude_column", "longitude_column"];
+    const keysToCheck = ["latitude_column", "longitude_column", "crs"];
     const keysMissing = [] as [string?];
 
     if (

@@ -22,15 +22,17 @@ const defaultProps: ETKMissingDatasProps = {
 };
 
 const useStyle = makeStyles({
-  card: {
-    backgroundColor: "#b2dfdc",
-  },
+  card: {},
 });
 
 const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   const { t } = useTranslation("components");
   const classes = useStyle();
-  const crsColumnChoices = [{ value: "epsg:4326", label: "EPSG:4326" }];
+  const crsColumnChoices = [
+    { value: "epsg:4326", label: "EPSG:4326" },
+    { value: "epsg:3949", label: "Lambert 9" },
+    { value: "epsg:2154", label: "Lambert 93" },
+  ];
   let latLonChoice = [];
   let properties = [];
 

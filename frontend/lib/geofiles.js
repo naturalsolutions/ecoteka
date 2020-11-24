@@ -17,7 +17,7 @@ class Geofiles {
     return json;
   }
 
-  upload(file, { onProgress, onLoad, onError }) {
+  upload(organizationId, file, { onProgress, onLoad, onError }) {
     const formData = new FormData();
 
     formData.append("file", file, file.name);
@@ -28,7 +28,11 @@ class Geofiles {
     xhr.onload = () => onLoad(xhr);
     xhr.onerror = () => onError(xhr);
 
-    xhr.open("POST", `${this.api.url}/geo_files/upload`, true);
+    xhr.open(
+      "POST",
+      `${this.api.url}/organization/${organizationId}/geo_files/upload`,
+      true
+    );
     xhr.setRequestHeader("Authorization", `Bearer ${this.api.getToken()}`);
     xhr.send(formData);
 

@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  makeStyles,
   Grid,
   Popover,
   Avatar,
@@ -20,35 +19,30 @@ export interface UserMainMenuButtonProps {}
 
 const defaultProps: UserMainMenuButtonProps = {};
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
 const getDisplayNameFromUser = (user: IUser) => {
   return user.full_name || user.email.substr(0, user.email.indexOf("@"));
 };
 
 const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
-  const classes = useStyles();
-  const [anchorEl, setanchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const { user } = useAppContext();
   const { t } = useTranslation("components");
   const router = useRouter();
 
   const handlerMyOrganizationClick = () => {
-    setanchorEl(null);
+    setAnchorEl(null);
     router.push(`/organization/${user.currentOrganization?.id}`);
   };
 
   const handlerLogoutClick = () => {
-    setanchorEl(null);
+    setAnchorEl(null);
   };
 
   return (
     <>
       <Button
         onClick={(e) => {
-          setanchorEl(e.currentTarget);
+          setAnchorEl(e.currentTarget);
         }}
       >
         {getDisplayNameFromUser(user)}
@@ -57,7 +51,7 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
         open={anchorEl}
         anchorEl={anchorEl}
         onClose={() => {
-          setanchorEl(null);
+          setAnchorEl(null);
         }}
         anchorOrigin={{
           vertical: "bottom",
