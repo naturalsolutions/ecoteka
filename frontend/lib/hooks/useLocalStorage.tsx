@@ -2,6 +2,9 @@ import { useState } from "react";
 
 export default function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
+    if (!window) {
+      return null;
+    }
     try {
       const item = window.localStorage.getItem(key);
 
@@ -13,6 +16,9 @@ export default function useLocalStorage<T>(key: string, initialValue: T) {
   });
 
   const setValue = (value: T) => {
+    if (!window) {
+      return;
+    }
     try {
       setStoredValue(value);
 
