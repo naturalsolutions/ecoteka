@@ -14,7 +14,7 @@ export default function ImportsPage() {
   const onDelete = async (selected) => {
     try {
       for (let name of selected) {
-        await apiRest.geofiles.delete(name);
+        await apiRest.geofiles.delete(user.currentOrganization.id, name);
       }
 
       await fetchData();
@@ -23,12 +23,12 @@ export default function ImportsPage() {
 
   const onImport = async (name) => {
     try {
-      await apiRest.trees.importFromGeofile(name);
+      await apiRest.trees.importFromGeofile(user.currentOrganization.id, name);
     } catch (e) {}
   };
 
   async function fetchData() {
-    const rows = await apiRest.geofiles.getAll();
+    const rows = await apiRest.geofiles.getAll(user.currentOrganization.id);
     setRows(rows);
   }
 

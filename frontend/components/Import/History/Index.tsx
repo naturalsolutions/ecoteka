@@ -7,6 +7,7 @@ import ETKImportHistoryTable from "./Table";
 import ETKImportHistoryEmpty from "./Empty";
 import { useTemplate } from "../../Template";
 import Geofile from "../../Geofile";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportHistoryIndexProps {
   rows?: Geofile[];
@@ -39,6 +40,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
   const { t } = useTranslation("components");
   const { dialog } = useTemplate();
   const [selected, setSelected] = useState([]);
+  const { user } = useAppContext();
 
   const onSelected = (newSelected) => {
     setSelected(newSelected);

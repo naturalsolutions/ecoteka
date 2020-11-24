@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
-import Geofile from "../../Geofile";
+import Geofile from "@/components/Geofile";
 
 export interface ETKImportHistoryTableProps {
   rows?: Geofile[];

@@ -3,15 +3,19 @@ class Geofiles {
     this.api = api;
   }
 
-  async get(name) {
-    const response = await this.api.get(`/geo_files/${name}`);
+  async get(organizationId, name) {
+    const response = await this.api.get(
+      `/organization/${organizationId}/geo_files/${name}`
+    );
     const json = await response.json();
 
     return json;
   }
 
-  async getAll() {
-    const response = await this.api.get("/geo_files/");
+  async getAll(organizationId) {
+    const response = await this.api.get(
+      `/organization/${organizationId}/geo_files/`
+    );
     const json = await response.json();
 
     return json;
@@ -39,9 +43,13 @@ class Geofiles {
     return xhr;
   }
 
-  async update(geofile) {
+  async update(organizationId, geofile) {
     const body = JSON.stringify(geofile);
-    const response = await this.api.put("/geo_files/", {}, body);
+    const response = await this.api.put(
+      `/organization/${organizationId}/geo_files/`,
+      {},
+      body
+    );
 
     if (response.status === 200) {
       const newGeofile = await response.json();
@@ -50,8 +58,10 @@ class Geofiles {
     }
   }
 
-  async delete(name) {
-    const response = await this.api.delete(`/geo_files/${name}`);
+  async delete(organizationId, name) {
+    const response = await this.api.delete(
+      `/organization/${organizationId}/geo_files/${name}`
+    );
 
     if (response.status === 200) {
       return true;
