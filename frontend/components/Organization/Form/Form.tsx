@@ -7,7 +7,7 @@ import { apiRest } from "@/lib/api"
 import { IOrganization } from "@/index.d"
 
 export type ETKFormOrganizationActions = {
-  submit: () => Promise<IOrganization>;
+  submit: () => Promise<any>;
 };
 
 export interface ETKFormOrganizationProps {
