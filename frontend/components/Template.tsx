@@ -30,6 +30,10 @@ export default function Template(props) {
   useEffect(() => {
     if (!isLoading && user && !user.currentOrganization && dialogRef) {
       dialogRef.current?.open({
+        dialogProps: {
+          disableBackdropClick: true,
+          disableEscapeKeyDown: true,
+        },
         title: t("Template.organizationSelect"),
         content: (
           <OrganizationList

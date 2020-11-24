@@ -1,5 +1,5 @@
 import React from "react";
-import { List, ListItem } from "@material-ui/core";
+import { List, ListItem, ListItemText } from "@material-ui/core";
 import { IOrganization } from "@/index";
 
 export interface OrganizationListProps {
@@ -11,13 +11,8 @@ const OrganizationList: React.FC<OrganizationListProps> = (props) => {
   return (
     <List>
       {props.organizations.map((o) => (
-        <ListItem
-          key={`li-${o.id}`}
-          dense
-          button
-          onClick={() => props.onChange(o)}
-        >
-          {o.name}
+        <ListItem key={`li-${o.id}`} button onClick={() => props.onChange(o)}>
+          <ListItemText>{o.name}</ListItemText>
         </ListItem>
       ))}
     </List>
