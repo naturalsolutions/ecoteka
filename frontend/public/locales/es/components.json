@@ -270,7 +270,13 @@
     "buttonAdd": "Add a team",
     "tooltipWorkingAreaEdit": "Edit working area",
     "tooltipInfoEdit": "Edit informations",
-    "tooltipLink": "Open the page"
+    "tooltipLink": "Open the page",
+    "Table": {
+      "headers": {
+        "name": "Name",
+        "actions": "Actions"
+      }
+    }
   },
   "Team": {
     "name": "Apelido",
@@ -293,10 +299,22 @@
       "dialogTitle": "Edit working area",
       "dialogContentText": "Accept : zip, geojson"
     },
-    "Members": {
-      "dialogTile": "Add members to your organisation",
-      "buttonCancelContent": "Cancel",
-      "buttonSubmitContent": "Invite"
+    "Members" : {
+      "dialogAddMemberTitle": "Ajouter des membres à votre organisation",
+      "dialogDdetachMembersTitle": "Retirer des membres à votre organisation",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "done": "Terminer",
+      "confirm": "Confirmer",
+      "invite": "Inviter",
+      "Table": {
+        "headers": {
+          "email": "Email",
+          "name": "Name",
+          "role": "Role",
+          "status": "Status"
+        }
+      }
     }
   }
 }

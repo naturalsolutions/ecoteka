@@ -294,7 +294,13 @@
     "buttonAdd": "Add a team",
     "tooltipWorkingAreaEdit": "Edit working area",
     "tooltipInfoEdit": "Edit informations",
-    "tooltipLink": "Open the page"
+    "tooltipLink": "Open the page",
+    "Table": {
+      "headers": {
+        "name": "Name",
+        "actions": "Actions"
+      }
+    }
   },
 
   "Team": {
@@ -316,10 +322,22 @@
       "dialogTitle": "Edit working area",
       "dialogContentText": "Accept : zip, geojson"
     },
-    "Members": {
-      "dialogTile": "Add members to your organisation",
-      "buttonCancelContent": "Cancel",
-      "buttonSubmitContent": "Invite"
+    "Members" : {
+      "dialogAddMemberTitle": "Add members to your organization",
+      "dialogDdetachMembersTitle": "Detach members from your organization",
+      "cancel": "Cancel",
+      "close": "Close",
+      "done": "Done",
+      "confirm": "Confirm",
+      "invite": "Invite",
+      "Table": {
+        "headers": {
+          "email": "Email",
+          "name": "Name",
+          "role": "Role",
+          "status": "Status"
+        }
+      }
     }
   }
 }

@@ -371,7 +371,13 @@
     "buttonAdd": "Ajouter une équipe",
     "tooltipWorkingAreaEdit": "Editer l'emprise",
     "tooltipInfoEdit": "Editer les informations",
-    "tooltipLink": "Voir la page"
+    "tooltipLink": "Voir la page",
+    "Table": {
+      "headers": {
+        "name": "Nom",
+        "actions": "Actions"
+      }
+    }
   },
   "Team": {
     "dialogTitleCreate": "Ajouter une équipe",
@@ -396,7 +402,15 @@
       "close": "Fermer",
       "done": "Terminer",
       "confirm": "Confirmer",
-      "invite": "Inviter"
+      "invite": "Inviter",
+      "Table": {
+        "headers": {
+          "email": "Email",
+          "name": "Nom complet",
+          "role": "Rôle",
+          "status": "Statut"
+        }
+      }
     }
   }
 }
