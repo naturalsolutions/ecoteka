@@ -1,13 +1,16 @@
 import { IOrganization } from "@/index.d"
-import React, { FC, useRef } from "react";
-import { Grid, Box, Button } from "@material-ui/core";
+import React, { createRef, FC, useEffect, useRef, useState } from "react";
+import { Grid, Button } from "@material-ui/core";
 import Map from "@/components/Map/Map";
+import ETKMap from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTemplate } from "@/components/Template";
 import ETKFormOrganization, { ETKFormOrganizationActions } from "../Form/Form";
 import ETKFormWorkingArea, { ETKFormWorkingAreaActions } from "../WorkingArea/Form";
 import { useTranslation } from "react-i18next";
+import { useQuery, useQueryCache } from "react-query";
+import { bbox } from "@turf/turf";
 
 const useStyles = makeStyles((theme) => ({
   map: {
@@ -25,6 +28,48 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
+  const mapRef = createRef<ETKMap>();
+  const [isMapReady, setIsMapReady] = useState(false);
+  const cache = useQueryCache();
+
+  const queryName = `working_area_${organization.id}`;
+  const { status, data: workingArea, error, isFetching } = useQuery(
+    queryName,
+    async () => {
+      const data = await apiRest.organization.getWorkingArea(organization.id);
+
+      return data;
+    },
+    {
+      enabled: Boolean(organization),
+    }
+  );
+
+  useEffect(() => {
+    if (mapRef.current && isMapReady && workingArea) {
+      if (workingArea.geometry) {
+        const map = mapRef.current.map;
+        map.fitBounds(bbox(workingArea.geometry));
+        if (map.getSource(queryName)) {
+          map.removeLayer(queryName);
+          map.removeSource(queryName);
+        }
+        map.addSource(queryName, {
+          type: 'geojson',
+          data: workingArea
+        })
+        map.addLayer({
+          id: queryName,
+          source: queryName,
+          type: 'fill',
+          paint: {
+            'fill-color': '#0000FF',
+            'fill-opacity': 0.5
+          }
+        });
+      }
+    }
+  }, [mapRef, workingArea]);
 
   function openForm() {
     const dialogActions = [
@@ -82,7 +127,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
     const isOk = await formAreaRef.current.submit();
     if (isOk) {
       dialog.current.close();
-      //TODO update map
+      cache.invalidateQueries(queryName);
     }
   };
 
@@ -102,7 +147,12 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
         </div>
       </Grid>
       <Grid item xs={6} className={classes.map}>
-        <Map styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`} />
+        <Map
+          styleSource="/assets/base.json"
+          ref={mapRef}
+          onStyleData={() => {
+            setIsMapReady(true);
+          }} />
         <Button
           color="primary"
           variant="contained"

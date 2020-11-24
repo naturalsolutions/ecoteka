@@ -57,7 +57,7 @@ class Organization {
     return await response.json();
   }
 
-  async workingArea(id, file, { onProgress, onLoad, onError }) {
+  async postWorkingArea(id, file, { onProgress, onLoad, onError }) {
     const formData = new FormData();
     formData.append("file", file, file.name);
 
@@ -74,6 +74,14 @@ class Organization {
 
     return xhr;
   }
+
+  async getWorkingArea(id) {
+    const url = `/organization/${id}/working_area`;
+    const response = await this.api.get(url);
+
+    return await response.json();
+  }
+
   async getCentroidFromOrganization(id) {
     const url = `/organization/${id}/get-centroid-organization`;
     const response = await this.api.get(url);

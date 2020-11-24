@@ -1,0 +1,173 @@
+{
+  "bearing": 0,
+  "center": [-1.1778459560281362, 41.085128837010785],
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=1zul9rM9yDm3Dbdl3U9r",
+  "id": "172d4216-8b9e-4d69-965a-c5dc3edbf21b",
+  "layers": [
+    {
+      "id": "background",
+      "paint": {
+        "background-color": "rgba(51, 51, 51, 1)"
+      },
+      "type": "background"
+    },
+    {
+      "filter": [
+        "all",
+        ["==", "$type", "Polygon"],
+        ["!=", "intermittent", 1],
+        ["!=", "brunnel", "tunnel"]
+      ],
+      "id": "water",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "#121212"
+      },
+      "source": "openmaptiles",
+      "source-layer": "water",
+      "type": "fill"
+    },
+    {
+      "filter": ["in", "admin_level", 4, 6, 8],
+      "id": "admin_sub",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsla(0, 0%, 60%, 0.5)",
+        "line-dasharray": [2, 1]
+      },
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "type": "line"
+    },
+    {
+      "filter": [
+        "all",
+        ["<=", "admin_level", 2],
+        ["==", "$type", "LineString"],
+        ["!has", "claimed_by"]
+      ],
+      "id": "admin_country_z0-4",
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "maxzoom": 5,
+      "minzoom": 0,
+      "paint": {
+        "line-color": "hsl(0, 0%, 60%)",
+        "line-width": {
+          "base": 1.3,
+          "stops": [
+            [3, 0.5],
+            [22, 15]
+          ]
+        }
+      },
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "type": "line"
+    },
+    {
+      "filter": [
+        "all",
+        ["<=", "admin_level", 2],
+        ["==", "$type", "LineString"]
+      ],
+      "id": "admin_country_z5-",
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "minzoom": 5,
+      "paint": {
+        "line-color": "hsl(0, 0%, 60%)",
+        "line-width": {
+          "base": 1.3,
+          "stops": [
+            [3, 0.5],
+            [22, 15]
+          ]
+        }
+      },
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "type": "line"
+    },
+    {
+      "filter": ["all", ["==", "$type", "Point"], ["==", "class", "city"]],
+      "id": "place_label_city",
+      "layout": {
+        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-font": ["Noto Sans Regular"],
+        "text-max-width": 10,
+        "text-size": {
+          "stops": [
+            [3, 11],
+            [8, 16]
+          ]
+        }
+      },
+      "maxzoom": 16,
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)",
+        "text-halo-blur": 0,
+        "text-halo-color": "hsla(0, 0%, 100%, 0.75)",
+        "text-halo-width": 2
+      },
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "type": "symbol"
+    },
+    {
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "country"],
+        ["has", "iso_a2"]
+      ],
+      "id": "country_label",
+      "layout": {
+        "text-field": "{name:latin}",
+        "text-font": ["Noto Sans Bold"],
+        "text-max-width": 10,
+        "text-size": {
+          "stops": [
+            [3, 12],
+            [8, 22]
+          ]
+        },
+        "visibility": "visible"
+      },
+      "maxzoom": 12,
+      "paint": {
+        "text-color": "hsl(0, 0%, 13%)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(255,255,255,0.75)",
+        "text-halo-width": 2
+      },
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "type": "symbol"
+    }
+  ],
+  "metadata": {
+    "maptiler:copyright": "This style was generated on MapTiler Cloud. Usage outside of MapTiler Cloud requires valid OpenMapTiles Production Package: https://openmaptiles.com/production-package/ -- please contact us.",
+    "openmaptiles:version": "3.x"
+  },
+  "name": "Base",
+  "pitch": 0,
+  "sources": {
+    "openmaptiles": {
+      "type": "vector",
+      "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=1zul9rM9yDm3Dbdl3U9r"
+    }
+  },
+  "version": 8,
+  "zoom": 5.141328285805225
+}

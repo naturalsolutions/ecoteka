@@ -63,8 +63,11 @@ const ETKFormWorkingArea = forwardRef<ETKFormWorkingAreaActions, ETKFormWorkingA
     let isOk = false;
 
     const submit = () => {
+      if (!file) {
+        return Promise.reject(false);
+      }
       return new Promise((resolve, reject) => {
-        let newXHR = apiRest.organization.workingArea(props.organization.id, file, {
+        let newXHR = apiRest.organization.postWorkingArea(props.organization.id, file, {
           onProgress: onUploadProgress,
           onLoad: (cXHR) => {
             setInProgress(false);
@@ -95,8 +98,12 @@ const ETKFormWorkingArea = forwardRef<ETKFormWorkingAreaActions, ETKFormWorkingA
 
     useImperativeHandle(ref, () => ({
       submit: async () => {
-        await submit();
-        return isOk;
+        try {
+          await submit();
+          return isOk;
+        } catch (error) {
+          return false;
+        }
       },
     }));
 
