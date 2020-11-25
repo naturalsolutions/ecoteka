@@ -371,9 +371,10 @@ export type TInterventionStep =
   | "treeselection"
   | "intervention"
   | "validation";
+
 export const steps: TInterventionStep[] = [
-  "interventionselection",
   "treeselection",
+  "interventionselection",
   "intervention",
   "validation",
 ];
