@@ -26,7 +26,6 @@ import {
 import { useTranslation } from "react-i18next";
 import { apiRest } from "../../lib/api";
 import ETKMap from "../Map/Map";
-import mapboxgl from "mapbox-gl";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
 
