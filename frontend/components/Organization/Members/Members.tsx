@@ -3,21 +3,14 @@ import { IOrganization } from "@/index.d";
 import { useQuery, useQueryCache } from "react-query";
 import { makeStyles } from "@material-ui/core/styles";
 import { apiRest } from "@/lib/api";
-import { Box, Button, Toolbar, FormControl, InputLabel, Select, MenuItem, useMediaQuery } from "@material-ui/core";
+import { Box, Button, Toolbar, useMediaQuery } from "@material-ui/core";
 import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import { useTemplate } from "@/components/Template";
 import { useTranslation } from "react-i18next";
-import { CellGridSelectRenderer } from "@/components/Organization";
-import AddMembers, { AddMembersActions } from "@/components/Organization/Members/AddMembers";
+import AddMembers, {
+  AddMembersActions,
+} from "@/components/Organization/Members/AddMembers";
 import MembersTable from "@/components/Organization/Members/MembersTable";
-
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-material.css";
-
-function EditBtnRenderer(props) {
-  return <Button onClick={() => {}}>Edit</Button>;
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +46,7 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   const { t } = useTranslation(["components", "common"]);
   const formAddMembersRef = useRef<AddMembersActions>();
   const cache = useQueryCache();
-  const { status, data, error, isFetching } = useQuery(
+  const { data } = useQuery(
     `members_${organization.id}`,
     async () => {
       const data = await apiRest.organization.members(organization.id);
@@ -64,17 +57,7 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
     }
   );
 
-  const [gridApi, setGridApi] = useState(null);
   const [enableActions, setEnableActions] = useState(true);
-
-  const isVisible = value == index;
-  if (isVisible && gridApi) {
-    gridApi.sizeColumnsToFit();
-  }
-
-  function onGridReady(params) {
-    setGridApi(params.api);
-  }
 
   function onDetachMembers() {
     alert("Confirm detachMembers");
@@ -96,7 +79,9 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
 
     dialog.current.open({
       title: t("components:Organization.Members.dialogAddMemberTitle"),
-      content: <AddMembers ref={formAddMembersRef} organizationID={organization.id} />,
+      content: (
+        <AddMembers ref={formAddMembersRef} organizationID={organization.id} />
+      ),
       actions: dialogActions,
       dialogProps: {
         maxWidth: "sm",
@@ -144,15 +129,6 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
     });
   }
 
-  function onSelectionChanged() {
-    const selectedRows = gridApi.getSelectedRows();
-    setEnableActions(selectedRows.length > 0 ? false : true);
-  }
-
-  function groupAction() {
-    console.log(gridApi.getSelectedNodes());
-  }
-
   return (
     <Fragment>
       <Toolbar className={classes.toolbar}>
@@ -168,7 +144,14 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
         >
           Retirer du groupe
         </Button>
-        <Button variant="contained" size="small" color="primary" className={classes.button} startIcon={<AddIcon />} onClick={addMember}>
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          className={classes.button}
+          startIcon={<AddIcon />}
+          onClick={addMember}
+        >
           Ajouter des membres
         </Button>
       </Toolbar>
