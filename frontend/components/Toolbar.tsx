@@ -1,14 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Button,
-  Divider,
-  Grid,
-  Hidden,
-  makeStyles,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { Button, Divider, Grid, Hidden, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import ETKContactButton from "@/components/Contact/Button";
 import ETKRegisterButton from "@/components/Register/Button";
 import ETKLanguageSelector from "@/components/LanguageSelector";
@@ -76,10 +68,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
               </Grid>
               {user && (
                 <Grid item>
-                  <OrganizationSelect
-                    user={user}
-                    onChange={handleOrganizationSelectChange}
-                  />
+                  <OrganizationSelect user={user} onChange={handleOrganizationSelectChange} />
                 </Grid>
               )}
             </Grid>
@@ -94,11 +83,7 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 <ETKContactButton />
                 {user?.is_superuser && <ETKRegisterButton />}
                 {user && renderWhenSession()}
-                {!user && (
-                  <Button onClick={handleSignInClick}>
-                    {t("SignIn.buttonConnexion")}
-                  </Button>
-                )}
+                {!user && <Button onClick={handleSignInClick}>{t("SignIn.buttonConnexion")}</Button>}
               </Grid>
             </Grid>
           </Hidden>

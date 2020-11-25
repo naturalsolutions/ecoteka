@@ -20,7 +20,14 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import MuiAlert, { AlertProps, Color } from "@material-ui/lab/Alert";
-import { Edit, MoreHoriz as MoreHorizIcon, PhotoSizeSelectSmall, Visibility, Archive as ArchiveIcon, Delete as DeleteIcon } from "@material-ui/icons";
+import {
+  Edit,
+  MoreHoriz as MoreHorizIcon,
+  PhotoSizeSelectSmall,
+  Visibility,
+  Archive as ArchiveIcon,
+  Delete as DeleteIcon,
+} from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { Fragment } from "react";
 
@@ -60,9 +67,16 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const SnackAlert: React.FC<SnackAlertProps> = ({ open, severity, message = "" }) => {
+const SnackAlert: React.FC<SnackAlertProps> = ({
+  open,
+  severity,
+  message = "",
+}) => {
   const [isOpen, setIsOpen] = React.useState(open);
-  const handleClose = (event: SyntheticEvent<Element, Event>, reason: string) => {
+  const handleClose = (
+    event: SyntheticEvent<Element, Event>,
+    reason: string
+  ) => {
     // if (reason === "clickaway") {
     //   return;
     // }
@@ -74,7 +88,12 @@ const SnackAlert: React.FC<SnackAlertProps> = ({ open, severity, message = "" })
   }, [open]);
 
   return (
-    <Snackbar open={isOpen} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+    <Snackbar
+      open={isOpen}
+      autoHideDuration={3000}
+      onClose={handleClose}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+    >
       <Alert onClose={handleClose} severity={severity}>
         {message}
       </Alert>
@@ -84,7 +103,10 @@ const SnackAlert: React.FC<SnackAlertProps> = ({ open, severity, message = "" })
 
 const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
   const { t } = useTranslation("components");
-  const [headers] = React.useState(["Teams.Table.headers.name", "Teams.Table.headers.actions"]);
+  const [headers] = React.useState([
+    "Teams.Table.headers.name",
+    "Teams.Table.headers.actions",
+  ]);
   const [selected, setSelected] = useState([] as number[]);
   const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
@@ -99,14 +121,20 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
   };
 
   const deleteTeams = () => {
-    setAlertMesagge(`TODO: AJAX call to delete Teams with IDS: [${selected.join(", ")}]`);
+    setAlertMesagge(
+      `TODO: AJAX call to delete Teams with IDS: [${selected.join(", ")}]`
+    );
     setOpenAlert(true);
     setActionsMenuAnchorEl(null);
     setTimeout(() => setOpenAlert(false), 3000);
   };
 
   const discardTeams = () => {
-    setAlertMesagge(`TODO: AJAX call to discard (sof_delete) teams with IDS: [${selected.join(", ")}]`);
+    setAlertMesagge(
+      `TODO: AJAX call to discard (sof_delete) teams with IDS: [${selected.join(
+        ", "
+      )}]`
+    );
     setOpenAlert(true);
     setActionsMenuAnchorEl(null);
     setTimeout(() => setOpenAlert(false), 3000);
@@ -136,7 +164,10 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
     }
 
     setSelected(newSelected);
@@ -155,20 +186,42 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell style={{ minWidth: "96px", maxWidth: "96px" }}>
+              <TableCell
+                style={{
+                  minWidth: "124px",
+                  maxWidth: "124px",
+                  width: "124px",
+                }}
+              >
                 <Box flexDirection="row">
                   <Checkbox
-                    indeterminate={selected.length > 0 && selected.length < props.rows.length}
-                    checked={props.rows.length > 0 && selected.length === props.rows.length}
+                    indeterminate={
+                      selected.length > 0 && selected.length < props.rows.length
+                    }
+                    checked={
+                      props.rows.length > 0 &&
+                      selected.length === props.rows.length
+                    }
                     onChange={onSelectAllClick}
                     color="primary"
                   />
                   {selected.length > 0 && (
                     <>
-                      <IconButton aria-owns={actionsMenuAnchorEl ? "membersActionsMenu" : null} aria-haspopup="true" onClick={handleClick}>
+                      <IconButton
+                        aria-owns={
+                          actionsMenuAnchorEl ? "membersActionsMenu" : null
+                        }
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      >
                         <MoreHorizIcon />
                       </IconButton>
-                      <Menu id="membersActionsMenu" anchorEl={actionsMenuAnchorEl} open={Boolean(actionsMenuAnchorEl)} onClose={handleClose}>
+                      <Menu
+                        id="membersActionsMenu"
+                        anchorEl={actionsMenuAnchorEl}
+                        open={Boolean(actionsMenuAnchorEl)}
+                        onClose={handleClose}
+                      >
                         <MenuList>
                           <MenuItem onClick={discardTeams}>
                             <ListItemIcon>
@@ -199,9 +252,25 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
             {props.rows.map((row) => {
               const isItemSelected = isSelected(row.id);
               return (
-                <TableRow hover key={row.id} selected={isItemSelected} role="checkbox" aria-checked={isItemSelected}>
-                  <TableCell style={{ minWidth: "96px", maxWidth: "96px" }}>
-                    <Checkbox checked={isItemSelected} color="primary" onClick={(e) => onRowClick(e, row.id)} />
+                <TableRow
+                  hover
+                  key={row.id}
+                  selected={isItemSelected}
+                  role="checkbox"
+                  aria-checked={isItemSelected}
+                >
+                  <TableCell
+                    style={{
+                      minWidth: "124px",
+                      maxWidth: "124px",
+                      width: "124px",
+                    }}
+                  >
+                    <Checkbox
+                      checked={isItemSelected}
+                      color="primary"
+                      onClick={(e) => onRowClick(e, row.id)}
+                    />
                   </TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>
