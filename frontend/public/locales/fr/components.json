@@ -395,13 +395,21 @@
       "dialogTitle": "Editer l'emprise",
       "dialogContentText": "Extension acceptés : zip, geojson"
     },
+    "Tabs": {
+      "general": "Informations générales",
+      "teams": "Équipes",
+      "members": "Membres"
+    },
     "Members": {
       "dialogAddMemberTitle": "Ajouter des membres à votre organisation",
+      "addMembers": "Ajouter des membres",
       "dialogDdetachMembersTitle": "Retirer des membres à votre organisation",
+      "detachMembers": "Retirer du groupe",
       "cancel": "Annuler",
       "close": "Fermer",
       "done": "Terminer",
       "confirm": "Confirmer",
+      "confirmDetach": "Confirmer le retrait",
       "invite": "Inviter",
       "Table": {
         "headers": {
@@ -409,6 +417,14 @@
           "name": "Nom complet",
           "role": "Rôle",
           "status": "Statut"
+        },
+        "roles": {
+          "defineRole": "Définir le rôle",
+          "owner": "Propriétaire",
+          "manager": "Manager",
+          "contributor": "Contributeur",
+          "reader": "Lecteur",
+          "guest": "Invité"
         }
       }
     }

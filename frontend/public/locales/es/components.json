@@ -299,20 +299,37 @@
       "dialogTitle": "Edit working area",
       "dialogContentText": "Accept : zip, geojson"
     },
-    "Members" : {
+    "Tabs": {
+      "general": "General informations",
+      "teams": "Teams",
+      "members": "Members"
+    },
+    "Members": {
       "dialogAddMemberTitle": "Ajouter des membres à votre organisation",
+      "addMembers": "Add members",
       "dialogDdetachMembersTitle": "Retirer des membres à votre organisation",
+      "detachMembers": "Remove from group",
       "cancel": "Annuler",
       "close": "Fermer",
       "done": "Terminer",
       "confirm": "Confirmer",
+      "confirmDetach": "Confirm",
       "invite": "Inviter",
+      "detachFromGroup": "Remove members from organization",
       "Table": {
         "headers": {
           "email": "Email",
           "name": "Name",
           "role": "Role",
           "status": "Status"
+        },
+        "roles": {
+          "defineRole": "Définir le rôle",
+          "owner": "Owner",
+          "manager": "Manager",
+          "contributor": "Contributor",
+          "reader": "Reader",
+          "guest": "Guest"
         }
       }
     }

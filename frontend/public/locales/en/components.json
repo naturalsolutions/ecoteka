@@ -322,13 +322,21 @@
       "dialogTitle": "Edit working area",
       "dialogContentText": "Accept : zip, geojson"
     },
-    "Members" : {
+    "Tabs": {
+      "general": "General informations",
+      "teams": "Teams",
+      "members": "Members"
+    },
+    "Members": {
       "dialogAddMemberTitle": "Add members to your organization",
+      "addMembers": "Add members",
       "dialogDdetachMembersTitle": "Detach members from your organization",
+      "detachMembers": "Remove from group",
       "cancel": "Cancel",
       "close": "Close",
       "done": "Done",
       "confirm": "Confirm",
+      "confirmDetach": "Confirm",
       "invite": "Invite",
       "Table": {
         "headers": {
@@ -336,6 +344,14 @@
           "name": "Name",
           "role": "Role",
           "status": "Status"
+        },
+        "roles": {
+          "defineRole": "Define role",
+          "owner": "Owner",
+          "manager": "Manager",
+          "contributor": "Contributor",
+          "reader": "Reader",
+          "guest": "Guest"
         }
       }
     }

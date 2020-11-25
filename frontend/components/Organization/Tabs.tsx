@@ -6,6 +6,7 @@ import { Members } from "@/components/Organization/Members";
 import { IOrganization } from "@/index.d";
 import Teams from "./Teams/Teams";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
   root: {
@@ -19,6 +20,7 @@ interface TabsProps {
 }
 
 const ETKTabs: FC<TabsProps> = ({ organization, activeTab }) => {
+  const { t } = useTranslation(["components", "common"]);
   const classes = useStyles();
   const router = useRouter();
   const [value, setValue] = useState(activeTab || "general");
@@ -39,9 +41,15 @@ const ETKTabs: FC<TabsProps> = ({ organization, activeTab }) => {
           scrollButtons="on"
           aria-label="organization tabs"
         >
-          <Tab label="Informations Générales" value="general" />
-          <Tab label="Équipes" value="teams" />
-          <Tab label="Membres" value="members" />
+          <Tab
+            label={t("components:Organization.Tabs.general")}
+            value="general"
+          />
+          <Tab label={t("components:Organization.Tabs.teams")} value="teams" />
+          <Tab
+            label={t("components:Organization.Tabs.members")}
+            value="members"
+          />
         </Tabs>
       </Paper>
       <TabPanel value={value} index="general">
