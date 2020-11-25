@@ -74,7 +74,7 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
         })
         .catch((error) => {
           snackbar.current.open({
-            message: `Une erreur est survenue... votre action n' a pas pu être traitée.`,
+            message: `Une erreur est survenue... votre action n'a pas pu être traitée.`,
             severity: "error",
           });
         });
