@@ -16,6 +16,10 @@ interface HeaderProps {}
 
 const exportFormats = [
   {
+    label: "Export CSV",
+    format: "csv",
+  },
+  {
     label: "Export XLSX",
     format: "xlsx",
   },
@@ -34,7 +38,14 @@ const Header: FC<HeaderProps> = (props) => {
   const anchorRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(1);
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    const response = await fetch(`/api/v1/organization/1/trees/export`);
+
+    if (response.ok) {
+      const json = await response.json();
+      console.log(json);
+    }
+
     console.info(
       `Export format selected ${exportFormats[selectedIndex].format}`
     );
