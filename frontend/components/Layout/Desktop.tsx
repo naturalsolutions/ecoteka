@@ -39,9 +39,8 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
           },
           {
             label: "Template.menuItems.plantHeritage.cartographyEdition",
-            link: "/?panel=newTree",
-            activator: (router) =>
-              router.pathname === "/" && router.query.panel === "newTree",
+            link: "/edition",
+            activator: (router) => router.pathname === "/edition",
           },
         ],
       },
