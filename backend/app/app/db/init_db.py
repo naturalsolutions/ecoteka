@@ -39,6 +39,7 @@ def init_db(db: Session) -> None:
         organization_in_db = organization.create(db, obj_in=organization_in)
 
     user_in_db = user.get_by_email(db, email=settings.FIRST_SUPERUSER)
+    
     if not user_in_db:
         user_in = UserCreate(
             full_name=settings.FIRST_SUPERUSER_FULLNAME,

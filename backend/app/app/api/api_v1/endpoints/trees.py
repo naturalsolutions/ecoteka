@@ -10,6 +10,7 @@ from app.core import (
     get_current_active_user
 )
 from app.worker import import_geofile_task, create_mbtiles_task
+from starlette.responses import FileResponse
 
 import json
 
@@ -19,7 +20,8 @@ policies = {
     'trees:add': ['owner', 'manager', 'contributor'],
     'trees:update': ['owner', 'manager', 'contributor'],
     'trees:delete': ['owner', 'manager', 'contributor'],
-    'trees:import_from_geofile':  ['owner', 'manager', 'contributor']
+    'trees:import_from_geofile':  ['owner', 'manager', 'contributor'],
+    'trees:export': ['owner', 'manager', 'contributor'],
 }
 set_policies(policies)
 
@@ -164,3 +166,18 @@ def delete(
 
         create_mbtiles_task.delay(current_user.organization_id)
         return response
+
+@router.get("/export")
+def trees_export(
+    format: str = 'geojson',
+    auth=Depends(authorization('trees:export')),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_active_user)
+) -> Any:
+    """Export the trees from one organization"""
+
+    print(auth)
+
+    return True
+
+    # return FileResponse(file_location, media_type='application/octet-stream',filename=file_name)

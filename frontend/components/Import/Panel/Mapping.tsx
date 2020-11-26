@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import Geofile from "@/components/Geofile";
 import useTreeSchema from "@/components/Tree/Schema";
 import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportPanelMappingProps {
   geofile?: Geofile;
@@ -31,6 +32,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
   const [properties, setProperties] = useState({});
   const [values, setValues] = useState({});
   const fields = Object.keys(treeSchema).filter((f) => !["x", "y"].includes(f));
+  const { user } = useAppContext();
 
   useEffect(() => {
     if (props.geofile.properties) {
@@ -81,7 +83,10 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
       const newGeofile = { ...props.geofile } as Geofile;
 
       newGeofile.mapping_fields = JSON.stringify(data);
-      const response = await apiRest.geofiles.update(newGeofile);
+      const response = await apiRest.geofiles.update(
+        user.currentOrganization.id,
+        newGeofile
+      );
       props.onSend(response);
     } else {
       props.onSend(props.geofile);

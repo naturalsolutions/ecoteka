@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "tree_id": 1,
+    "intervention_type": "pruning",
+    "date": "2020-11-26T12:27:29.517Z",
+    "done": true
+  },
+  {
+    "id": 2,
+    "tree_id": 1,
+    "intervention_type": "felling",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": false
+  }
+]

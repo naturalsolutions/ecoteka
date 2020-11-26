@@ -1,35 +1,21 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { IUser } from "@/index";
-import { apiRest as api } from "@/lib/api";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
+import { useRouter } from "next/router";
 
 const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useLocalStorage<IUser>("user", null);
+  const router = useRouter();
+  const validRoutes = ["/", "/signin", "/404", "/500"];
 
   useEffect(() => {
-    if (!user) {
-      api.users
-        .me()
-        .then((currentUser: IUser) => {
-          if (currentUser.organizations.length === 1) {
-            currentUser.currentOrganization = currentUser.organizations[0];
-          }
-
-          setUser(currentUser);
-        })
-        .catch((e) => {
-          setUser(null);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      setIsLoading(false);
+    if (!validRoutes.includes(router.route) && !user) {
+      router.push("/");
     }
-  }, []);
+  }, [user]);
 
   return (
     <StoreContext.Provider value={{ user, setUser, isLoading }}>

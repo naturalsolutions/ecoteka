@@ -12,8 +12,13 @@ class Tree {
   }
 
   async get(id) {
-    const url = `/trees/${id}`;
-    const response = await this.api.get(url);
+    const url = `/assets/mock/trees_${id}.json`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    /* const url = `/trees/${id}`;
+    const response = await this.api.get(url); */
 
     return await response.json();
   }
@@ -35,6 +40,15 @@ class Tree {
   async delete(id) {
     const url = `/trees/${id}`;
     const response = await this.api.delete(url);
+
+    return await response.json();
+  }
+
+  async getInterventions(treeId) {
+    const url = `/assets/mock/trees_${treeId}_interventions.json`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
 
     return await response.json();
   }

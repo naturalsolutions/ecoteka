@@ -7,6 +7,7 @@ from typing import Any, List, Optional
 import geopandas as gpd
 from shapely.geometry import shape
 from shapely.geometry.geo import mapping
+from shapely.geometry.multipolygon import MultiPolygon
 from geoalchemy2.shape import to_shape
 from passlib import pwd
 from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
@@ -408,7 +409,12 @@ async def upload_working_area(
                 status_code=404, detail="Organization not found"
             )
 
-        working_area = shape(record["geometry"]).wkt
+        shape_working_area = shape(record["geometry"])
+        working_area = shape_working_area.wkt
+
+        if record["geometry"]["type"] == "Polygon":
+            working_area = MultiPolygon([shape_working_area]).wkt
+
         return organization.update(
             db,
             db_obj=organization_in_db,

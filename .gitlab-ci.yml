@@ -7,6 +7,10 @@ stages:
 build_frontend_dev:
   stage: build_dev
   image: docker
+  variables:
+    API_URL: https://dev.ecoteka.org/api/v1
+    TOKEN_STORAGE: ecoteka_access_token
+    REFRESH_TOKEN_STORAGE: ecoteka_refresh_token
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-dev-latest -f ./frontend/.docker/Dockerfile ./frontend
@@ -24,19 +28,6 @@ build_backend_dev:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-dev-latest ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-dev-latest
-    - docker system prune -a -f
-  only:
-    - dev
-  tags:
-    - ns01
-
-build_docs_dev:
-  stage: build_dev
-  image: docker
-  script:
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:docs-latest -f ./docs/Dockerfile .
-    - docker push ${CI_REGISTRY_IMAGE}:docs-latest
     - docker system prune -a -f
   only:
     - dev

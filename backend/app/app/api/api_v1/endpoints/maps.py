@@ -1,5 +1,6 @@
 import os
 import uuid
+from fastapi_jwt_auth import AuthJWT
 import json
 from typing import Any, List, Optional
 from pydantic import Json
@@ -33,11 +34,9 @@ router = APIRouter()
 def generate_style(
     *,
     db: Session = Depends(get_db),
-    current_user: Optional[models.User] = Depends(
-        get_optional_current_active_user
-    ),
     base: Optional[bool] = False,
-    token: Optional[str] = ''
+    token: Optional[str] = '',
+    organization_id: Optional[int] = -1,
 ) -> Json:
     """
     Generate style
@@ -76,21 +75,18 @@ def generate_style(
 
             if token:
                 try:
-                    payload = jwt.decode(
-                        token,
-                        settings.SECRET_KEY,
-                        algorithms=[security.ALGORITHM]
-                    )
-                    token_data = schemas.TokenPayload(**payload)
-                    user_in_db = crud.user.get(db, id=token_data.sub)
-                except:
+                    Authorize = AuthJWT()
+                    Authorize._token = token
+                    current_user_id = Authorize.get_jwt_subject()
+                    user_in_db = crud.user.get(db, id=current_user_id)
+                except Exception as e:
                     pass
 
             conn = None
 
             if user_in_db:
                 try:
-                    organization = crud.organization.get(db, user_in_db.organization_id)
+                    organization = crud.organization.get(db, organization_id)
 
                     if not organization:
                         pass

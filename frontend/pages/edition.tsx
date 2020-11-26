@@ -5,6 +5,8 @@ import { apiRest } from "@/lib/api";
 import { useTemplate } from "@/components/Template";
 import MiniDisplay from "@/components/Tree/Infos/Mini";
 import ExpandedDisplay from "@/components/Tree/Infos/Expanded";
+import TreeSheetBasic from "@/components/Tree/TreeSheetBasic";
+import TreeAccordion from "@/components/Tree/TreeAccordion";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -114,6 +116,15 @@ const EditionPage = ({}) => {
             <Button color="primary" variant="contained" onClick={openDialog}>
               + Arbre
             </Button>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box className={classes.background}></Box>
+      <Box className={classes.sidebar}>
+        <Grid container>
+          <Grid item>
+            <TreeSheetBasic id={1}></TreeSheetBasic>
+            <TreeAccordion id={1}></TreeAccordion>
           </Grid>
         </Grid>
       </Box>

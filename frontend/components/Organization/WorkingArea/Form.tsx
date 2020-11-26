@@ -12,6 +12,7 @@ import { apiRest } from "@/lib/api";
 import { IOrganization } from "@/index.d";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useTemplate } from "@/components/Template";
+import { useAppContext } from "@/providers/AppContext";
 
 export type ETKFormWorkingAreaActions = {
   submit: () => Promise<boolean>;
@@ -65,6 +66,7 @@ const ETKFormWorkingArea = forwardRef<
   const [linearProgressValue, setLinearProgressValue] = useState(0);
   const [inProgress, setInProgress] = useState(false);
   const [xhr, setXHR] = useState(null);
+  const { user, setUser } = useAppContext();
   const { snackbar } = useTemplate();
 
   const { t } = useTranslation("components");
@@ -85,6 +87,7 @@ const ETKFormWorkingArea = forwardRef<
     snackbar.current.open({
       message: "Envoi en cours...",
     });
+
     return new Promise((resolve, reject) => {
       let newXHR = apiRest.organization.postWorkingArea(
         props.organization.id,
@@ -101,6 +104,9 @@ const ETKFormWorkingArea = forwardRef<
             }
             isOk = true;
             resolve(JSON.parse(cXHR.response));
+            const newUser = { ...user };
+            newUser.currentOrganization.has_working_area = true;
+            setUser(newUser);
           },
           onError: (cXHR) => {
             const response = JSON.parse(cXHR.response);

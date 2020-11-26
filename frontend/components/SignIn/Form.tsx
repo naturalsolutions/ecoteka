@@ -39,6 +39,10 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
       const newUser = await apiRest.users.me();
 
       if (newUser) {
+        if (newUser.organizations.length === 1) {
+          newUser.currentOrganization = newUser.organizations[0];
+        }
+
         setUser(newUser);
         logged = true;
       }

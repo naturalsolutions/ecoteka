@@ -1,70 +1,43 @@
 import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useRequireToken } from "@/lib/hooks/useRequireToken";
-import { Box, Container } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 import { Header, Breadcrumb, Tabs } from "@/components/Organization";
 import { apiRest } from "@/lib/api";
-import { useQuery } from "react-query";
 
-interface OrganizationProps { }
-
-function useOrganizationParents(id) {
-  return useQuery(
-    `organizationParents_${id}`,
-    async () => {
-      const path = await apiRest.organization.parents(id);
-      return path;
-    },
-    {
-      enabled: Boolean(id), // We accept that id could not be 0
-    }
-  );
-}
-
-function useOrganization(id) {
-  return useQuery(
-    `organizationCurrentNode_${id}`,
-    async () => {
-      const organization = await apiRest.organization.get(id);
-      return organization;
-    },
-    {
-      enabled: Boolean(id), // We accept that id could not be 0
-    }
-  );
-}
+interface OrganizationProps {}
 
 const Organization: FC<OrganizationProps> = (props) => {
   const router = useRouter();
-  const token = useRequireToken();
-  const { data: path } = useOrganizationParents(router.query.id);
-  const { status, data: organization, error, isFetching } = useOrganization(router.query.id);
+  const [organization, setOrganization] = useState(null);
+  const [parents, setParents] = useState([]);
 
-  /* const {
-    status: parentStatus,
-    isLoading: parentsIsLoading,
-    data: path,
-    error: parentsError,
-    isFetching: parentsIsFetching,
-  } = useOrganizationParents(router.query.id); */
+  const getData = async (id) => {
+    const newOrganization = await apiRest.organization.get(id);
+    const newParents = await apiRest.organization.parents(id);
 
-  if (!token) {
-    return <div>Récupération de votre session...</div>;
-  }
-  if (!path || !organization) {
-    return <div>Récupération des données de l'organisation...</div>;
-  }
-  if (path.detail === "Signature has expired" || organization.detail === "Signature has expired") {
-    router.push("/signin");
-    return <div>Signature has expired...</div>;
-  }
+    if (newOrganization) {
+      setOrganization(newOrganization);
+    }
+
+    if (newParents && newParents.length > 0) {
+      setParents(newParents);
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.id) {
+      getData(router.query.id);
+    }
+  }, [router.query.id]);
+
   return (
-    <Container>
-      {path && <Breadcrumb path={path} />}
-      <Header />
-      {/* <Tabs organization={[...(path || [])]?.pop()} /> */}
-      <Tabs organization={organization} activeTab={router.query.t} />
-    </Container>
+    organization && (
+      <Container>
+        {parents && parents.length > 0 && <Breadcrumb path={parents} />}
+        <Header />
+        <Tabs organization={organization} activeTab={router.query.t} />
+      </Container>
+    )
   );
 };
 
