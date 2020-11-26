@@ -28,15 +28,15 @@
       "plantHeritage": {
         "plantHeritage": "Patrimoine Végétal",
         "allTrees": "Tous les arbres",
-        "addATree": "Ajouter un arbre"
+        "cartographyEdition": "Edition cartographique"
       },
       "dataImport": {
         "dataImport": "Import de données",
         "importYourData": "Importer vos données",
         "importHistory": "Historique des imports"
       },
-      "availableSoon": {
-        "availableSoon": "Bientôt disponible !",
+      "intervention": {
+        "intervention": "Intervention",
         "requestAnItervention": "Demander une intervention",
         "scheduleOfInterventions": "Calendrier des interventions"
       }

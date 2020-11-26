@@ -38,7 +38,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
               router.pathname === "/" && router.query.panel === undefined,
           },
           {
-            label: "Template.menuItems.plantHeritage.addATree",
+            label: "Template.menuItems.plantHeritage.cartographyEdition",
             link: "/?panel=newTree",
             activator: (router) =>
               router.pathname === "/" && router.query.panel === "newTree",
@@ -63,18 +63,18 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
         ],
       },
       {
-        label: "Template.menuItems.availableSoon.availableSoon",
+        label: "Template.menuItems.intervention.intervention",
         icon: <Star viewBox="0 -4 24 24" />,
         children: [
           {
-            label: "Template.menuItems.availableSoon.requestAnItervention",
+            label: "Template.menuItems.intervention.requestAnItervention",
             link: "/?panel=newIntervention",
             activator: (router) =>
               router.pathname === "/" &&
               router.query.panel === "newIntervention",
           },
           {
-            label: "Template.menuItems.availableSoon.scheduleOfInterventions",
+            label: "Template.menuItems.intervention.scheduleOfInterventions",
             link: `/calendar/${user?.currentOrganization?.id}`,
             activator: (router) =>
               router.pathname === `/calendar/${user?.currentOrganization?.id}`,

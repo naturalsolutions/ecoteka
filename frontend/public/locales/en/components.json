@@ -31,15 +31,15 @@
       "plantHeritage": {
         "plantHeritage": "Plant heritage",
         "allTrees": "All trees",
-        "addATree": "Add a tree"
+        "cartographyEdition": "Cartography edition"
       },
       "dataImport": {
         "dataImport": "Data Import",
         "importYourData": "Import your data",
         "importHistory": "Import history"
       },
-      "availableSoon": {
-        "availableSoon": "Available Soon !",
+      "intervention": {
+        "intervention": "Intervention",
         "requestAnItervention": "Request an intervention",
         "scheduleOfInterventions": "Schedule of interventions"
       }
