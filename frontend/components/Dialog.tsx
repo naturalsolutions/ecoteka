@@ -26,6 +26,7 @@ export interface ETKDialogAction {
 export interface ETKDialogPropsDialogProps {
   disableBackdropClick?: boolean;
   disableEscapeKeyDown?: boolean;
+  fullScreen?: boolean;
 }
 
 export interface ETKDialogProps {
@@ -91,6 +92,9 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     });
 
     useImperativeHandle(ref, () => ({
+      isOpen: () => {
+        return isOpen;
+      },
       open: (openProps: ETKDialogProps) => {
         setTitle(openProps.title);
         setContent(openProps.content);
@@ -98,6 +102,12 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
         setIsDraggable(openProps.isDraggable);
         setDialogProps(openProps.dialogProps);
         setIsOpen(true);
+      },
+      displayFullScreen: (activate: boolean) => {
+        setDialogProps({ ...dialogProps, fullScreen: activate });
+      },
+      setContent: (content: string | React.ReactNode) => {
+        setContent(content);
       },
       close: () => {
         setIsOpen(false);

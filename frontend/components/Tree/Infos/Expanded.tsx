@@ -1,7 +1,10 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Box, Button, makeStyles, Typography } from "@material-ui/core";
 
-export interface ETKTreeInfosExpandedProps {}
+export interface ETKTreeInfosExpandedProps {
+  data?: number;
+  showLess?: () => void;
+}
 
 const defaultProps: ETKTreeInfosExpandedProps = {};
 
@@ -9,10 +12,24 @@ const useStyles = makeStyles(() => ({
   root: {},
 }));
 
-const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
+const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = ({
+  data,
+  showLess,
+}) => {
   const classes = useStyles();
+  const [displayData, setDisplayData] = useState(data);
 
-  return <div>ETKTreeInfosExpanded</div>;
+  useEffect(() => {
+    setDisplayData(data);
+  }, [data]);
+
+  return (
+    <Box>
+      <Typography>Expanded</Typography>
+      <Box>{displayData}</Box>
+      <Button onClick={showLess}>Moins fort...</Button>
+    </Box>
+  );
 };
 
 ETKTreeInfosExpanded.defaultProps = defaultProps;

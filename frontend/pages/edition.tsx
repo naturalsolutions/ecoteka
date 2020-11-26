@@ -4,6 +4,7 @@ import Map from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
 import { useTemplate } from "@/components/Template";
 import MiniDisplay from "@/components/Tree/Infos/Mini";
+import ExpandedDisplay from "@/components/Tree/Infos/Expanded";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -40,7 +41,40 @@ const useStyles = makeStyles((theme) => {
 const EditionPage = ({}) => {
   const classes = useStyles();
   const [sidebar, setSidebar] = useState();
+  const [isDialogExpanded, setIsDialogExpanded] = useState(false);
+  const [data, setData] = useState(0);
   const { dialog } = useTemplate();
+
+  useEffect(() => {
+    if (dialog.current.isOpen()) {
+      dialog.current.displayFullScreen(isDialogExpanded);
+      dialog.current.setContent(
+        !isDialogExpanded ? (
+          <MiniDisplay data={data} showMore={handleExpandDialog} />
+        ) : (
+          <ExpandedDisplay data={data} showLess={handleExpandDialog} />
+        )
+      );
+    }
+  }, [isDialogExpanded, data]);
+
+  useEffect(() => {
+    start(0);
+  }, []);
+
+  function start(counter) {
+    if (counter < 1000) {
+      setData(counter);
+      setTimeout(function () {
+        counter++;
+        start(counter);
+      }, 1000);
+    }
+  }
+
+  function handleExpandDialog() {
+    setIsDialogExpanded((current) => !current);
+  }
 
   const openDialog = () => {
     const dialogActions = [
@@ -51,13 +85,13 @@ const EditionPage = ({}) => {
 
     dialog.current.open({
       title: "Ça va bien le dialogue?",
-      content: <MiniDisplay />,
+      content: <MiniDisplay showMore={handleExpandDialog} />,
       actions: dialogActions,
       isDraggable: true,
       dialogProps: {
         maxWidth: "sm",
         fullWidth: true,
-        fullScreen: false,
+        fullScreen: isDialogExpanded,
         disableBackdropClick: true,
       },
     });
