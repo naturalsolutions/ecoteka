@@ -3,6 +3,9 @@ import { Grid, makeStyles, Button, Box } from "@material-ui/core";
 import Map from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
 import Calendar from "@/components/Calendar/Index";
+import TreeSheetBasic from "@/components/Tree/TreeSheetBasic";
+import ETKTreeForm from "@/components/Tree/Form";
+import TreeAccordion from "@/components/Tree/TreeAccordion";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -60,7 +63,10 @@ const EditionPage = ({}) => {
       <Box className={classes.background}></Box>
       <Box className={classes.sidebar}>
         <Grid container>
-          <Grid item></Grid>
+          <Grid item>
+            <TreeSheetBasic id={1}></TreeSheetBasic>
+            <TreeAccordion id={1}></TreeAccordion>
+          </Grid>
         </Grid>
       </Box>
     </Grid>
