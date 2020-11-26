@@ -1,13 +1,18 @@
-FROM registry.gitlab.com/natural-solutions/ecoteka:frontend-base as builder
-COPY . .
-RUN npm run build && npm run export
+FROM node:alpine
 
-FROM nginx:alpine
+RUN mkdir -p /usr/src/app
+ENV PORT 3000
 
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /app/out /usr/share/nginx/html
-COPY .docker/docker-entrypoint.sh /docker-entrypoint.sh
+WORKDIR /usr/src/app
 
-EXPOSE 80
+COPY package.json /usr/src/app
+COPY package-lock.json /usr/src/app
 
-ENTRYPOINT [ "./docker-entrypoint.sh" ]
+RUN npm install --production
+
+COPY . /usr/src/app
+
+RUN npm run build
+
+EXPOSE 3000
+CMD [ "npm", "start" ]

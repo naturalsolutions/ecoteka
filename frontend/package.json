@@ -32,9 +32,7 @@
     "react-hook-form-resolvers": "0.0.1",
     "react-i18next": "^11.7.3",
     "react-query": "^2.26.3",
-    "yup": "^0.31.0"
-  },
-  "devDependencies": {
+    "yup": "^0.31.0",
     "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
     "typescript": "^4.1.2"
