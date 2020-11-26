@@ -84,8 +84,6 @@ def generate_style(
 
             conn = None
 
-            print('aaa', user_in_db)
-
             if user_in_db:
                 try:
                     organization = crud.organization.get(db, organization_id)
