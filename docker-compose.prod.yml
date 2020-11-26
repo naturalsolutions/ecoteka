@@ -97,7 +97,7 @@ services:
     labels:
       - traefik.http.routers.frontend.entrypoints=websecure
       - traefik.http.routers.frontend.tls=true
-      - traefik.http.services.frontend.loadbalancer.server.port=80
+      - traefik.http.services.frontend.loadbalancer.server.port=3000
 
   tile_server:
     labels:
