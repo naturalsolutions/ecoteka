@@ -44,12 +44,11 @@ def create(
     auth=Depends(authorization('interventions:create')),
     request_intervention: InterventionCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user)
 ):
     return intervention.create(
         db,
         obj_in=dict(request_intervention,
-                    organization_id=current_user.organization_id)
+                    organization_id=organization_id)
     )
 
 

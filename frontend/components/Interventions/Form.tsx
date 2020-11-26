@@ -205,7 +205,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
         } // c'est moche !!
       );
 
-    await apiRest.interventions.post(payload);
+    await apiRest.interventions.post(user.currentOrganization.id, payload);
   };
 
   const handleNext = async (step: TInterventionStep) => {

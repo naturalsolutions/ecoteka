@@ -1,7 +1,7 @@
 class Intervention {
   constructor(api) {
     this.api = api;
-    this.basepath = "/interventions";
+    this.basepath = "/organization/{organization_id}/interventions";
   }
 
   async get(id) {
@@ -11,8 +11,12 @@ class Intervention {
     return await response.json();
   }
 
-  async post(model) {
-    const url = `${this.basepath}/`;
+  async post(organizationId, model) {
+    const url = `${this.basepath.replace(
+      "{organization_id}",
+      organizationId
+    )}/`;
+    console.log(url);
     const response = await this.api.post(url, {}, JSON.stringify(model));
 
     return await response.json();
