@@ -42,15 +42,15 @@ const EditionPage = ({}) => {
   const [sidebar, setSidebar] = useState();
   const { dialog } = useTemplate();
 
-  useEffect(() => {
+  const openDialog = () => {
     const dialogActions = [
       {
-        label: "Yo",
+        label: "Ferme là",
       },
     ];
 
     dialog.current.open({
-      title: "//",
+      title: "Ça va bien le dialogue?",
       content: <MiniDisplay />,
       actions: dialogActions,
       isDraggable: true,
@@ -61,7 +61,7 @@ const EditionPage = ({}) => {
         disableBackdropClick: true,
       },
     });
-  }, []);
+  };
 
   return (
     <Grid className={classes.root}>
@@ -74,7 +74,7 @@ const EditionPage = ({}) => {
             </Button>
           </Grid>
           <Grid item>
-            <Button color="primary" variant="contained">
+            <Button color="primary" variant="contained" onClick={openDialog}>
               + Arbre
             </Button>
           </Grid>

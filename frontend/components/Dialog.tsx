@@ -59,6 +59,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [actions, setActions] = useState<ETKDialogAction[]>(props.actions);
     const [title, setTitle] = useState<string>(props.title);
+    const [isDraggable, setIsDraggable] = useState<boolean>(props.isDraggable);
     const [content, setContent] = useState<string | React.ReactNode>(
       props.content
     );
@@ -94,6 +95,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
         setTitle(openProps.title);
         setContent(openProps.content);
         setActions(openProps.actions);
+        setIsDraggable(openProps.isDraggable);
         setDialogProps(openProps.dialogProps);
         setIsOpen(true);
       },
@@ -108,9 +110,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
         onClose={() => setIsOpen(false)}
         {...dialogProps}
         aria-labelledby="etk-dialog"
-        PaperComponent={
-          props.isDraggable ? DraggablePaperComponent : PaperComponent
-        }
+        PaperComponent={isDraggable ? DraggablePaperComponent : PaperComponent}
       >
         <DialogTitle id="etk-dialog">{title}</DialogTitle>
         <DialogContent>{content}</DialogContent>
