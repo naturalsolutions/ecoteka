@@ -1,7 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, createRef } from "react";
 import { Grid, makeStyles, Button, Box } from "@material-ui/core";
-import Map from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
+import Map from "@/components/Map/Map";
+import SearchCity from "@/components/Map/SearchCity";
 import { useTemplate } from "@/components/Template";
 import MiniDisplay from "@/components/Tree/Infos/Mini";
 import ExpandedDisplay from "@/components/Tree/Infos/Expanded";
@@ -35,6 +37,12 @@ const useStyles = makeStyles((theme) => {
     calendar: {
       height: "100%",
     },
+    mapSearchCity: {
+      position: "absolute",
+      top: "1rem",
+      right: "1rem",
+      width: "300px",
+    },
   };
 });
 
@@ -44,6 +52,9 @@ const EditionPage = ({}) => {
   const [isDialogExpanded, setIsDialogExpanded] = useState(false);
   const [data, setData] = useState(0);
   const { dialog } = useTemplate();
+  const mapRef = createRef<Map>();
+  const { user, isLoading } = useAppContext();
+  const [styleSource, setStyleSource] = useState("/api/v1/maps/style");
 
   useEffect(() => {
     if (dialog.current.isOpen()) {
@@ -58,19 +69,32 @@ const EditionPage = ({}) => {
     }
   }, [isDialogExpanded, data]);
 
-  useEffect(() => {
-    start(0);
-  }, []);
+  // useEffect(() => {}, []);
 
-  function start(counter) {
-    if (counter < 1000) {
-      setData(counter);
-      setTimeout(function () {
-        counter++;
-        start(counter);
-      }, 1000);
+  useEffect(() => {
+    if (user) {
+      if (user.currentOrganization) {
+        setStyleSource(
+          `/api/v1/maps/style?token=${apiRest.getToken()}&organization_id=${
+            user.currentOrganization.id
+          }`
+        );
+      }
+    } else {
+      setStyleSource("/api/v1/maps/style");
     }
-  }
+  }, [isLoading, user, mapRef]);
+
+  useEffect(() => {
+    mapRef.current.map.setStyle(styleSource);
+  }, [styleSource]);
+
+  useEffect(() => {
+    mapRef?.current?.map.on("click", onClick);
+    return () => {
+      mapRef?.current?.map.off("click", onClick);
+    };
+  }, [mapRef]);
 
   function handleExpandDialog() {
     setIsDialogExpanded((current) => !current);
@@ -94,15 +118,35 @@ const EditionPage = ({}) => {
         fullScreen: isDialogExpanded,
         disableBackdropClick: true,
         hideBackdrop: true,
-        disablePortal: true,
-        container: () => document.getElementById("map-edition"),
       },
     });
   };
 
+  const onClick = (e) => {
+    const rendererFeatures = mapRef.current?.map?.queryRenderedFeatures(
+      e.point
+    );
+    let features = [];
+
+    if (rendererFeatures) {
+      features = rendererFeatures?.filter((f) => {
+        console.log(f);
+        return f.layer["id"].includes("ecoteka");
+      });
+
+      if (features.length > 0) {
+        const feature = features.pop();
+
+        console.log(feature.properties);
+        console.log(feature.geometry.coordinates);
+      }
+    }
+  };
+
   return (
     <Grid className={classes.root} id="map-edition">
-      <Map styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`} />
+      <Map ref={mapRef} styleSource={styleSource} />
+      <SearchCity className={classes.mapSearchCity} map={mapRef} />
       <Box className={classes.toolbar} p={1}>
         <Grid container spacing={2} justify="center" alignItems="center">
           <Grid item>
