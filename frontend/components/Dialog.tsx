@@ -20,11 +20,16 @@ export interface ETKDialogAction {
   onClick?: () => void;
 }
 
+export interface ETKDialogPropsDialogProps {
+  disableBackdropClick?: boolean;
+  disableEscapeKeyDown?: boolean;
+}
+
 export interface ETKDialogProps {
   title?: string;
   content?: string | React.ReactNode;
   actions?: ETKDialogAction[];
-  dialogProps?: DialogProps;
+  dialogProps?: ETKDialogPropsDialogProps;
 }
 
 const defaultProps: ETKDialogProps = {
@@ -41,7 +46,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     const [content, setContent] = useState<string | React.ReactNode>(
       props.content
     );
-    const [dialogProps, setDialogProps] = useState<DialogProps>(
+    const [dialogProps, setDialogProps] = useState<ETKDialogPropsDialogProps>(
       props.dialogProps
     );
 

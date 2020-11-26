@@ -3,7 +3,7 @@ import { Hidden } from "@material-ui/core";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { useAppContext } from "@/providers/AppContext";
 import themeConfig from "@/theme/config";
-import ETKDialog from "@/components/Dialog";
+import ETKDialog, { ETKDialogActions } from "@/components/Dialog";
 import ETKLayoutDesktop from "@/components/Layout/Desktop";
 import ETKLayoutMobile from "@/components/Layout/Mobile";
 import OrganizationList from "@/components/Organization/List";
@@ -15,7 +15,7 @@ const TemplateContext = React.createContext(null);
 export const useTemplate = () => React.useContext(TemplateContext);
 
 export default function Template(props) {
-  const dialogRef = React.useRef();
+  const dialogRef = React.useRef<ETKDialogActions>(null);
   const snackRef = React.useRef();
   const theme = createMuiTheme(themeConfig("dark"));
   const { isLoading, user, setUser } = useAppContext();
