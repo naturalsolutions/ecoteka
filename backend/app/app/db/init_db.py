@@ -11,6 +11,9 @@ from app.crud import (
 )
 from app.db import base  # noqa: F401
 from app.core.security import enforcer
+import casbin
+import casbin_sqlalchemy_adapter
+from app.db.session import engine
 import logging
 
 # make sure all SQL Alchemy models
@@ -38,8 +41,6 @@ def init_db(db: Session) -> None:
     user_in_db = user.get_by_email(db, email=settings.FIRST_SUPERUSER)
     if not user_in_db:
         user_in = UserCreate(
-            #organization_id=organization_in_db.id,
-            #organization=organization_in_db.name,
             full_name=settings.FIRST_SUPERUSER_FULLNAME,
             email=settings.FIRST_SUPERUSER,
             password=settings.FIRST_SUPERUSER_PASSWORD,
@@ -53,6 +54,7 @@ def init_db(db: Session) -> None:
         db.refresh(user_in_db)
 
     planet = organization.get_by_name(db, name='planet')
+    
     if not planet:
         planet = organization.create(
             db,
@@ -74,3 +76,10 @@ def init_db(db: Session) -> None:
                     parent_id=planet.id,
                 )
             )
+
+    source_file = "/app/app/core/authorization-model.conf"
+    adapter = casbin_sqlalchemy_adapter.Adapter(engine)
+    enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, True)
+
+    if len(enforcer.get_roles_for_user_in_domain('1', '1')) == 0:
+        enforcer.add_role_for_user_in_domain('1', 'admin', '1')
