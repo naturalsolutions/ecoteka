@@ -1,8 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Grid, makeStyles, Button, Box } from "@material-ui/core";
 import Map from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
-import Calendar from "@/components/Calendar/Index";
+import { useTemplate } from "@/components/Template";
+import MiniDisplay from "@/components/Tree/Infos/Mini";
+import ExpandedDisplay from "@/components/Tree/Infos/Expanded";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -39,9 +41,67 @@ const useStyles = makeStyles((theme) => {
 const EditionPage = ({}) => {
   const classes = useStyles();
   const [sidebar, setSidebar] = useState();
+  const [isDialogExpanded, setIsDialogExpanded] = useState(false);
+  const [data, setData] = useState(0);
+  const { dialog } = useTemplate();
+
+  useEffect(() => {
+    if (dialog.current.isOpen()) {
+      dialog.current.displayFullScreen(isDialogExpanded);
+      dialog.current.setContent(
+        !isDialogExpanded ? (
+          <MiniDisplay data={data} showMore={handleExpandDialog} />
+        ) : (
+          <ExpandedDisplay data={data} showLess={handleExpandDialog} />
+        )
+      );
+    }
+  }, [isDialogExpanded, data]);
+
+  useEffect(() => {
+    start(0);
+  }, []);
+
+  function start(counter) {
+    if (counter < 1000) {
+      setData(counter);
+      setTimeout(function () {
+        counter++;
+        start(counter);
+      }, 1000);
+    }
+  }
+
+  function handleExpandDialog() {
+    setIsDialogExpanded((current) => !current);
+  }
+
+  const openDialog = () => {
+    const dialogActions = [
+      {
+        label: "Fermer",
+      },
+    ];
+
+    dialog.current.open({
+      title: "Tree information",
+      content: <MiniDisplay showMore={handleExpandDialog} />,
+      actions: dialogActions,
+      isDraggable: true,
+      dialogProps: {
+        maxWidth: "sm",
+        fullWidth: true,
+        fullScreen: isDialogExpanded,
+        disableBackdropClick: true,
+        hideBackdrop: true,
+        disablePortal: true,
+        container: () => document.getElementById("map-edition"),
+      },
+    });
+  };
 
   return (
-    <Grid className={classes.root}>
+    <Grid className={classes.root} id="map-edition">
       <Map styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`} />
       <Box className={classes.toolbar} p={1}>
         <Grid container spacing={2} justify="center" alignItems="center">
@@ -51,16 +111,10 @@ const EditionPage = ({}) => {
             </Button>
           </Grid>
           <Grid item>
-            <Button color="primary" variant="contained">
+            <Button color="primary" variant="contained" onClick={openDialog}>
               + Arbre
             </Button>
           </Grid>
-        </Grid>
-      </Box>
-      <Box className={classes.background}></Box>
-      <Box className={classes.sidebar}>
-        <Grid container>
-          <Grid item></Grid>
         </Grid>
       </Box>
     </Grid>
