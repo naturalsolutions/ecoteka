@@ -435,6 +435,9 @@ def get_working_area(
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
 
+    if organization_in_db.working_area is None:
+        raise HTTPException(status_code=404, detail="Organization working area is empty")
+
     shape = to_shape(organization_in_db.working_area)
 
     return {"type": "Feature", "geometry": mapping(shape), "properties": {}}
