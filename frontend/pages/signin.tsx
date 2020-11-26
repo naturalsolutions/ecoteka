@@ -52,9 +52,6 @@ export default function SignInPage() {
               </Link>
             </CardContent>
             <CardActions disableSpacing>
-              <Button color="primary" disabled href="/signup">
-                Créer un compte
-              </Button>
               <Box flexGrow={1} />
               <Button
                 color="primary"
