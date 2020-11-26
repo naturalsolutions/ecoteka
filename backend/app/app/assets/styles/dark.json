@@ -1,13 +1,13 @@
 {
   "bearing": 0,
-  "center": [5.38269469770762, 43.289856363208486],
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=gIsX5IVJjo65XN0cqxz4",
-  "id": "a24a89c7-269b-4f1f-9d8d-3f9f0e62e579",
+  "center": [5.43988433343884, 43.286155160040266],
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=N5nBTeopFlwviS9iHDMc",
+  "id": "4430a553-1407-44f9-a5a9-f91eca51fdd9",
   "layers": [
     {
       "id": "background",
       "paint": {
-        "background-color": "rgba(95, 116, 112, 1)"
+        "background-color": "rgb(74, 98, 135)"
       },
       "type": "background"
     },
@@ -22,7 +22,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "#889696",
+        "fill-color": "rgb(83, 96, 115)",
         "fill-opacity": 0.7
       },
       "source": "openmaptiles",
@@ -33,7 +33,7 @@
       "filter": ["==", "class", "grass"],
       "id": "landcover_grass",
       "paint": {
-        "fill-color": "rgba(187, 245, 140, 1)",
+        "fill-color": "rgb(175, 233, 161)",
         "fill-opacity": 0.4
       },
       "source": "openmaptiles",
@@ -44,7 +44,7 @@
       "filter": ["==", "class", "wood"],
       "id": "landcover_wood",
       "paint": {
-        "fill-color": "rgba(91, 123, 84, 1)",
+        "fill-color": "rgb(171, 238, 141)",
         "fill-opacity": {
           "base": 1,
           "stops": [
@@ -69,7 +69,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(52, 73, 102, 1)"
+        "fill-color": "rgb(47, 63, 75)"
       },
       "source": "openmaptiles",
       "source-layer": "water",
@@ -82,7 +82,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(73, 98, 133, 1)",
+        "fill-color": "rgb(47, 63, 75)",
         "fill-opacity": 0.7
       },
       "source": "openmaptiles",
@@ -96,7 +96,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(0, 0, 0, 1)",
+        "fill-color": "hsl(47, 26%, 88%)",
         "fill-opacity": 0.8
       },
       "source": "openmaptiles",
@@ -110,7 +110,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "rgba(255, 255, 255, 1)",
+        "fill-color": "hsl(47, 22%, 94%)",
         "fill-opacity": {
           "base": 1,
           "stops": [
@@ -129,7 +129,7 @@
       "metadata": {},
       "paint": {
         "fill-antialias": false,
-        "fill-color": "rgba(255, 254, 137, 1)",
+        "fill-color": "rgb(178, 255, 27)",
         "fill-opacity": 0.3
       },
       "source": "openmaptiles",
@@ -147,7 +147,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "hsl(205, 56%, 73%)",
+        "line-color": "rgb(47, 63, 75)",
         "line-dasharray": [3, 3],
         "line-gap-width": {
           "stops": [
@@ -180,7 +180,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "hsl(205, 56%, 73%)",
+        "line-color": "rgb(47, 63, 75)",
         "line-opacity": 1,
         "line-width": {
           "base": 1.4,
@@ -206,7 +206,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "hsl(205, 56%, 73%)",
+        "line-color": "rgb(47, 63, 75)",
         "line-dasharray": [2, 1],
         "line-opacity": 1,
         "line-width": {
@@ -253,7 +253,7 @@
       "id": "building",
       "paint": {
         "fill-antialias": true,
-        "fill-color": "rgba(76, 99, 101, 1)",
+        "fill-color": "rgb(38, 55, 80)",
         "fill-opacity": {
           "base": 1,
           "stops": [
@@ -263,8 +263,8 @@
         },
         "fill-outline-color": {
           "stops": [
-            [15, "rgba(212, 177, 146, 0)"],
-            [16, "rgba(212, 177, 146, 0.5)"]
+            [15, "rgba(17, 34, 47, 0)"],
+            [16, "rgba(17, 34, 47, 0.5)"]
           ]
         }
       },
@@ -281,7 +281,7 @@
       "metadata": {},
       "paint": {
         "fill-antialias": true,
-        "fill-color": "rgba(164, 152, 113, 1)"
+        "fill-color": "rgb(74, 98, 135)"
       },
       "source": "openmaptiles",
       "source-layer": "transportation",
@@ -296,7 +296,7 @@
       },
       "metadata": {},
       "paint": {
-        "line-color": "rgba(168, 161, 132, 1)",
+        "line-color": "hsl(47, 26%, 88%)",
         "line-width": {
           "base": 1.2,
           "stops": [
@@ -318,7 +318,7 @@
       "id": "road_bridge_area",
       "layout": {},
       "paint": {
-        "fill-color": "rgba(213, 192, 127, 1)",
+        "fill-color": "rgb(74, 98, 135)",
         "fill-opacity": 0.5
       },
       "source": "openmaptiles",
@@ -337,7 +337,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "rgba(114, 103, 69, 1)",
+        "line-color": "hsl(0, 0%, 97%)",
         "line-dasharray": [1, 1],
         "line-width": {
           "base": 1.55,
@@ -364,7 +364,7 @@
       },
       "minzoom": 13,
       "paint": {
-        "line-color": "rgba(67, 67, 58, 1)",
+        "line-color": "hsl(0, 0%, 97%)",
         "line-width": {
           "base": 1.55,
           "stops": [
@@ -390,7 +390,7 @@
         "line-join": "miter"
       },
       "paint": {
-        "line-color": "rgba(139, 136, 136, 1)",
+        "line-color": "#efefef",
         "line-dasharray": [0.36, 0.18],
         "line-width": {
           "base": 1.55,
@@ -533,7 +533,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(81, 81, 68, 1)",
+        "line-color": "#fff",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -558,7 +558,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(59, 59, 55, 1)",
+        "line-color": "#fff",
         "line-width": {
           "base": 1.4,
           "stops": [
@@ -583,7 +583,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(79, 77, 60, 1)",
+        "line-color": "hsl(0, 0%, 100%)",
         "line-offset": 0,
         "line-width": {
           "base": 1.4,
@@ -685,7 +685,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "rgba(43, 89, 143, 1)",
+        "line-color": "hsl(205, 56%, 73%)",
         "line-width": {
           "base": 1.55,
           "stops": [
@@ -823,7 +823,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "line-color": "hsla(0, 0%, 60%, 0.5)",
+        "line-color": "rgba(199, 199, 199, 0.5)",
         "line-dasharray": [2, 1]
       },
       "source": "openmaptiles",
@@ -846,7 +846,7 @@
       "maxzoom": 5,
       "minzoom": 0,
       "paint": {
-        "line-color": "hsl(0, 0%, 60%)",
+        "line-color": "rgb(199, 199, 199)",
         "line-width": {
           "base": 1.3,
           "stops": [
@@ -873,7 +873,7 @@
       },
       "minzoom": 5,
       "paint": {
-        "line-color": "hsl(0, 0%, 60%)",
+        "line-color": "rgb(199, 199, 199)",
         "line-width": {
           "base": 1.3,
           "stops": [
@@ -931,8 +931,8 @@
       },
       "minzoom": 13,
       "paint": {
-        "text-color": "rgba(255, 255, 255, 1)",
-        "text-halo-color": "rgba(0, 0, 0, 0)",
+        "text-color": "#000",
+        "text-halo-color": "hsl(0, 0%, 100%)",
         "text-halo-width": 2
       },
       "source": "openmaptiles",
@@ -1062,19 +1062,18 @@
     "maptiler:copyright": "This style was generated on MapTiler Cloud. Usage outside of MapTiler Cloud requires valid OpenMapTiles Production Package: https://openmaptiles.com/production-package/ -- please contact us.",
     "openmaptiles:version": "3.x"
   },
-  "name": "Basic ggg",
+  "name": "Ecoteka",
   "pitch": 0,
   "sources": {
+    "maptiler_attribution": {
+      "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",
+      "type": "vector"
+    },
     "openmaptiles": {
       "type": "vector",
-      "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=gIsX5IVJjo65XN0cqxz4"
-    },
-    "satellite": {
-      "tileSize": 256,
-      "type": "raster",
-      "url": "https://api.maptiler.com/tiles/satellite/tiles.json?key=1zul9rM9yDm3Dbdl3U9r"
+      "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=N5nBTeopFlwviS9iHDMc"
     }
   },
   "version": 8,
-  "zoom": 17.336575724419564
+  "zoom": 11.922238730525073
 }
