@@ -5,14 +5,15 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { ETKPanelProps } from "../Panel";
+import { useTranslation } from "react-i18next";
+import { ETKPanelProps } from "@/components/Panel";
 import {
   steps,
   schemaMap,
   TInterventionType,
   TInterventionStep,
-} from "./Schema";
-import useETKForm from "../Form/useForm";
+} from "@/components/Interventions/Schema";
+import useETKForm from "@/components/Form/useForm";
 import {
   Button,
   Grid,
@@ -23,9 +24,8 @@ import {
   Stepper,
   Typography,
 } from "@material-ui/core";
-import { useTranslation } from "react-i18next";
-import { apiRest } from "../../lib/api";
-import ETKMap from "../Map/Map";
+import { apiRest } from "@/lib/api";
+import ETKMap from "@/components/Map/Map";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
 
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ETKInterventionFormProps = {
-  interventiontype: TInterventionType;
+  interventionType: TInterventionType;
   step: TInterventionStep;
   data: any;
   map: React.RefObject<ETKMap>;
@@ -72,7 +72,7 @@ const ETKInterventionForm = forwardRef<
   ETKInterventionFormHandles,
   ETKInterventionFormProps
 >((props, ref) => {
-  const schema = schemaMap[props.step](props.interventiontype);
+  const schema = schemaMap[props.step](props.interventionType);
   const form = useETKForm({ schema });
 
   useEffect(() => {
@@ -106,6 +106,7 @@ const ETKInterventionForm = forwardRef<
       valid = true;
     },
     (errors, e) => {
+      console.log(errors);
       valid = false;
     }
   );
@@ -145,21 +146,21 @@ const ETKInterventionForm = forwardRef<
   );
 });
 
+const initialData = steps.reduce(
+  (acc, step) => Object.assign(acc, { [step]: {} }),
+  {}
+);
+
 const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { user } = useAppContext();
-
   const [activestep, setActivestep] = useState(0);
-  const [interventiontype, setInterventiontype] = useState<TInterventionType>(
+  const [interventionType, setInterventionType] = useState<TInterventionType>(
     "pruning"
   );
 
-  const initialdata = steps.reduce(
-    (acc, step) => Object.assign(acc, { [step]: {} }),
-    {}
-  );
-  const [data, setData] = useState(initialdata);
+  const [data, setData] = useState(initialData);
   const [formRefs, setFormRefs] = useState({});
 
   useEffect(() => {
@@ -171,25 +172,26 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
     setFormRefs(refs);
   }, []);
 
-  const setStepdata = (step, stepdata) => {
-    setData(Object.assign(data, { [step]: stepdata }));
+  const setStepData = (step, stepData) => {
+    setData(Object.assign(data, { [step]: stepData }));
   };
 
-  const handleStepDataValidated = (step: TInterventionStep, stepdata) => {
+  const handleStepDataValidated = (step: TInterventionStep, stepData) => {
     if (
       step === "interventionselection" &&
-      stepdata.intervention_type !== interventiontype
+      stepData.intervention_type !== interventionType
     ) {
-      setInterventiontype(stepdata.intervention_type);
+      setInterventionType(stepData.intervention_type);
     }
   };
 
   const reset = () => {
-    setData(initialdata);
+    setData(initialData);
     setActivestep(0);
   };
+
   const submit = async () => {
-    const daterange = data["validation"].intervention_period;
+    const dateRange = data["validation"].intervention_period;
     const payload = steps
       .filter((step) => step != "intervention")
       .reduce(
@@ -198,21 +200,23 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
         },
         {
           properties: data["intervention"],
-          intervention_start_date: new Date(daterange.startDate),
-          intervention_end_date: new Date(daterange.endDate),
+          intervention_start_date: new Date(dateRange.startDate),
+          intervention_end_date: new Date(dateRange.endDate),
         } // c'est moche !!
       );
-    const response = await apiRest.interventions.post(payload);
+
+    await apiRest.interventions.post(payload);
   };
 
   const handleNext = async (step: TInterventionStep) => {
     const form = formRefs[step].current;
-    const isvalid = await form.submit();
+    const isValid = await form.submit();
 
-    if (isvalid) {
-      const formdata = form.getValues();
-      setStepdata(step, formdata);
-      handleStepDataValidated(step, formdata);
+    if (isValid) {
+      const formData = form.getValues();
+
+      setStepData(step, formData);
+      handleStepDataValidated(step, formData);
 
       if (steps.indexOf(step) === steps.length - 1) {
         await submit();
@@ -221,17 +225,20 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
       setActivestep(activestep + 1);
     }
   };
+
   const handlePrevious = async (step: TInterventionStep) => {
     const form = formRefs[step].current;
-    const isvalid = await form.submit();
+    const isValid = await form.submit();
 
-    if (isvalid) {
-      const formdata = form.getValues();
-      setStepdata(step, formdata);
-      handleStepDataValidated(step, formdata);
+    if (isValid) {
+      const formData = form.getValues();
+
+      setStepData(step, formData);
+      handleStepDataValidated(step, formData);
     }
 
-    setActivestep(activestep - 1); //In case of previous, we go backward regardless of the form being valid
+    // In case of previous, we go backward regardless of the form being valid
+    setActivestep(activestep - 1);
   };
 
   return (
@@ -261,7 +268,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                 <ETKInterventionForm
                   ref={formRefs[step]}
                   data={data[step]}
-                  interventiontype={interventiontype}
+                  interventionType={interventionType}
                   step={step}
                   map={props.context.map}
                   organization={user.currentOrganization}

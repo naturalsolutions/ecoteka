@@ -326,7 +326,12 @@ export function usePlanningSchema(it: TInterventionType) {
       component: {
         label: t("components:Intervention.intervention_period"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup
+        .object({
+          startDate: yup.string(),
+          endDate: yup.string(),
+        })
+        .required(t("common:errors.required")),
     },
     estimated_cost: {
       type: "textfield",
@@ -344,7 +349,10 @@ export function usePlanningSchema(it: TInterventionType) {
         label: t("components:Intervention.required_documents"),
         items: requiredDocumentsItems(it, t),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup
+        .array()
+        .of(yup.string())
+        .required(t("common:errors.required")),
     },
     required_material: {
       type: "select",
@@ -353,7 +361,10 @@ export function usePlanningSchema(it: TInterventionType) {
         items: requiredMaterialItems(it, t),
         label: t("components:Intervention.required_material"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup
+        .array()
+        .of(yup.string())
+        .required(t("common:errors.required")),
     },
     intervenant: {
       type: "textfield",
