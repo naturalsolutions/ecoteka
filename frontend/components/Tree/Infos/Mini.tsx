@@ -27,7 +27,9 @@ const ETKTreeInfosMini: React.FC<ETKTreeInfosMiniProps> = ({
     <Box>
       <Typography>Mini</Typography>
       <Box>{displayData}</Box>
-      <Button onClick={showMore}>Dis moi tout...</Button>
+      <Button variant="contained" onClick={showMore}>
+        Plus de détails
+      </Button>
     </Box>
   );
 };

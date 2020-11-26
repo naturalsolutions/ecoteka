@@ -27,7 +27,9 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = ({
     <Box>
       <Typography>Expanded</Typography>
       <Box>{displayData}</Box>
-      <Button onClick={showLess}>Moins fort...</Button>
+      <Button variant="contained" onClick={showLess}>
+        Réduire
+      </Button>
     </Box>
   );
 };

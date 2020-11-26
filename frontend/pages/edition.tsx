@@ -79,12 +79,12 @@ const EditionPage = ({}) => {
   const openDialog = () => {
     const dialogActions = [
       {
-        label: "Ferme là",
+        label: "Fermer",
       },
     ];
 
     dialog.current.open({
-      title: "Ça va bien le dialogue?",
+      title: "Tree information",
       content: <MiniDisplay showMore={handleExpandDialog} />,
       actions: dialogActions,
       isDraggable: true,
@@ -93,12 +93,15 @@ const EditionPage = ({}) => {
         fullWidth: true,
         fullScreen: isDialogExpanded,
         disableBackdropClick: true,
+        hideBackdrop: true,
+        disablePortal: true,
+        container: () => document.getElementById("map-edition"),
       },
     });
   };
 
   return (
-    <Grid className={classes.root}>
+    <Grid className={classes.root} id="map-edition">
       <Map styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`} />
       <Box className={classes.toolbar} p={1}>
         <Grid container spacing={2} justify="center" alignItems="center">
@@ -112,12 +115,6 @@ const EditionPage = ({}) => {
               + Arbre
             </Button>
           </Grid>
-        </Grid>
-      </Box>
-      <Box className={classes.background}></Box>
-      <Box className={classes.sidebar}>
-        <Grid container>
-          <Grid item></Grid>
         </Grid>
       </Box>
     </Grid>

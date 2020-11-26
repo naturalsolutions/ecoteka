@@ -8,6 +8,7 @@ import {
   DialogActions,
   DialogProps,
   Paper,
+  makeStyles,
 } from "@material-ui/core";
 
 import Draggable from "react-draggable";
@@ -27,6 +28,9 @@ export interface ETKDialogPropsDialogProps {
   disableBackdropClick?: boolean;
   disableEscapeKeyDown?: boolean;
   fullScreen?: boolean;
+  hideBackdrop?: boolean;
+  disablePortal?: boolean;
+  container?: HTMLElement | React.Component;
 }
 
 export interface ETKDialogProps {
@@ -55,8 +59,18 @@ const PaperComponent = (props) => {
   return <Paper {...props} />;
 };
 
+const useStyles = makeStyles(() => ({
+  root: {
+    pointerEvents: "none",
+  },
+  paper: {
+    pointerEvents: "all",
+  },
+}));
+
 export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
   (props, ref) => {
+    const classes = useStyles();
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [actions, setActions] = useState<ETKDialogAction[]>(props.actions);
     const [title, setTitle] = useState<string>(props.title);
@@ -121,6 +135,10 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
         {...dialogProps}
         aria-labelledby="etk-dialog"
         PaperComponent={isDraggable ? DraggablePaperComponent : PaperComponent}
+        classes={{
+          root: classes.root,
+          paper: classes.paper,
+        }}
       >
         <DialogTitle id="etk-dialog">{title}</DialogTitle>
         <DialogContent>{content}</DialogContent>
