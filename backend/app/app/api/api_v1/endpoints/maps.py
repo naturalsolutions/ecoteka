@@ -36,7 +36,7 @@ def generate_style(
     db: Session = Depends(get_db),
     base: Optional[bool] = False,
     token: Optional[str] = '',
-    organization_id: Optional[int],
+    organization_id: Optional[int] = -1,
 ) -> Json:
     """
     Generate style
