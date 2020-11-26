@@ -33,8 +33,8 @@ def upgrade():
         sa.Column("required_material", sa.dialects.postgresql.JSONB()),
         sa.Column("properties", sa.dialects.postgresql.JSONB(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
-        sa.ForeignKeyConstraint(['tree_id'], ['tree.id']),
-        sa.ForeignKeyConstraint(['organization_id'], ['organization.id'])
+        sa.ForeignKeyConstraint(['tree_id'], ['tree.id'], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(['organization_id'], ['organization.id'], ondelete="CASCADE")
     )
     op.create_index(op.f("ix_intervention_id"), "intervention", ["id"], unique=True)
 
