@@ -67,7 +67,9 @@ export default function IndexPage() {
         )}
         <ETKMap
           ref={mapRef}
-          styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}`}
+          styleSource={`/api/v1/maps/style?token=${apiRest.getToken()}&organization_id=${
+            user.currentOrganization.id
+          }`}
         />
         {!landing && (
           <ETKMapSearchCity className={classes.mapSearchCity} map={mapRef} />
