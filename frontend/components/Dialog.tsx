@@ -7,7 +7,10 @@ import {
   DialogContent,
   DialogActions,
   DialogProps,
+  Paper,
 } from "@material-ui/core";
+
+import Draggable from "react-draggable";
 
 export type ETKDialogActions = {
   open: (openProps: ETKDialogProps) => void;
@@ -30,12 +33,25 @@ export interface ETKDialogProps {
   content?: string | React.ReactNode;
   actions?: ETKDialogAction[];
   dialogProps?: ETKDialogPropsDialogProps;
+  isDraggable?: boolean;
 }
 
 const defaultProps: ETKDialogProps = {
   title: "",
   content: "",
   actions: [],
+};
+
+const DraggablePaperComponent = (props) => {
+  return (
+    <Draggable handle="#etk-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
+      <Paper {...props} />
+    </Draggable>
+  );
+};
+
+const PaperComponent = (props) => {
+  return <Paper {...props} />;
 };
 
 export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
@@ -87,8 +103,16 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     }));
 
     return (
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} {...dialogProps}>
-        <DialogTitle>{title}</DialogTitle>
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        {...dialogProps}
+        aria-labelledby="etk-dialog"
+        PaperComponent={
+          props.isDraggable ? DraggablePaperComponent : PaperComponent
+        }
+      >
+        <DialogTitle id="etk-dialog">{title}</DialogTitle>
         <DialogContent>{content}</DialogContent>
         <DialogActions>{renderActions}</DialogActions>
       </Dialog>

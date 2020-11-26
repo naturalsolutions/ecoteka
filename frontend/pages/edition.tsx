@@ -1,8 +1,9 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Grid, makeStyles, Button, Box } from "@material-ui/core";
 import Map from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
-import Calendar from "@/components/Calendar/Index";
+import { useTemplate } from "@/components/Template";
+import MiniDisplay from "@/components/Tree/Infos/Mini";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -39,6 +40,28 @@ const useStyles = makeStyles((theme) => {
 const EditionPage = ({}) => {
   const classes = useStyles();
   const [sidebar, setSidebar] = useState();
+  const { dialog } = useTemplate();
+
+  useEffect(() => {
+    const dialogActions = [
+      {
+        label: "Yo",
+      },
+    ];
+
+    dialog.current.open({
+      title: "//",
+      content: <MiniDisplay />,
+      actions: dialogActions,
+      isDraggable: true,
+      dialogProps: {
+        maxWidth: "sm",
+        fullWidth: true,
+        fullScreen: false,
+        disableBackdropClick: true,
+      },
+    });
+  }, []);
 
   return (
     <Grid className={classes.root}>
