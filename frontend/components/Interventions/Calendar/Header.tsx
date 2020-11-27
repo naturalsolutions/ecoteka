@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
 import { TIntervention } from "@/components/Interventions/Schema";
-import CalendarTodoIntervention from "@/components/Calendar/TodoIntervention";
+import CalendarTodoIntervention from "@/components/Interventions/Calendar/TodoIntervention";
 
 export interface CalendarHeaderProps {
   todoInterventions: TIntervention[];

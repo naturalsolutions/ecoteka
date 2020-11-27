@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { makeStyles, Grid, Box } from "@material-ui/core";
+import React from "react";
+import { makeStyles, IconButton } from "@material-ui/core";
 import { useTemplate } from "@/components/Template";
 import { useDrop } from "react-dnd";
 import { DragObjectWithType } from "react-dnd/lib/interfaces/hooksApi";
-import { ItemTypes } from "@/components/Calendar/ItemTypes";
+import { ItemTypes } from "@/components/Interventions/Calendar/ItemTypes";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
+import CalendarIntervention from "@/components/Interventions/Calendar/Intervention";
 
 export interface CalendarDayProps {
   day: number;
@@ -31,12 +32,6 @@ function isToday(day, month, year) {
 
 const useStyles = makeStyles(() => ({
   root: {},
-  item: {
-    border: "1px solid #fff",
-    textAlign: "center",
-    fontWeight: "bold",
-    marginBottom: ".5rem",
-  },
 }));
 
 interface InterventionType extends DragObjectWithType {
@@ -69,6 +64,7 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
   const classes = useStyles();
   const { theme } = useTemplate();
   const { user } = useAppContext();
+  const { dialog } = useTemplate();
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.BOX,
     drop: async function (newIntervention: InterventionType) {
@@ -83,18 +79,31 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
     }),
   });
 
+  const handleInterventionDialog = () => {
+    dialog.current.open({
+      title: "Intervention",
+      content: "",
+      actions: [
+        {
+          label: "Close",
+        },
+      ],
+    });
+  };
+
   return (
-    <div
+    <IconButton
       ref={drop}
-      className={classes.item}
+      size="small"
       style={{
         backgroundColor: isToday(props.day, props.month, props.year)
           ? theme?.palette?.info.main
           : undefined,
       }}
+      onClick={handleInterventionDialog}
     >
       {props.day}
-    </div>
+    </IconButton>
   );
 };
 

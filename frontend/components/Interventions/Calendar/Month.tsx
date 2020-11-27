@@ -7,7 +7,7 @@ import {
   CardContent,
   CardHeader,
 } from "@material-ui/core";
-import Day from "@/components/Calendar/Day";
+import Day from "@/components/Interventions/Calendar/Day";
 import { useTranslation } from "react-i18next";
 
 export interface CalendarMonthProps {
@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   dayLabel: {
     fontWeight: 900,
     fontSize: "1.1rem",
+  },
+  item: {
+    textAlign: "center",
   },
 }));
 
@@ -83,7 +86,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
             }
 
             return (
-              <Grid xs item key={`day-${i}-${j}`}>
+              <Grid xs item key={`day-${i}-${j}`} className={classes.item}>
                 <Day day={day++} month={props.month} year={props.year} />
               </Grid>
             );

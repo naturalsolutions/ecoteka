@@ -11,7 +11,7 @@ import {
   TInterventionType,
 } from "@/components/Interventions/Schema";
 import { useTranslation } from "react-i18next";
-import { INTERVENTION_COLORS } from "@/components/Calendar/index.d";
+import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
 
 export interface CalendarFilterProps {
   onChange(filters: object): void;

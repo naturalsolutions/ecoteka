@@ -1,9 +1,9 @@
 import React from "react";
 import { makeStyles, Button, Grid } from "@material-ui/core";
 import { useDrag } from "react-dnd";
-import { ItemTypes } from "@/components/Calendar/ItemTypes";
+import { ItemTypes } from "@/components/Interventions/Calendar/ItemTypes";
 import { TIntervention } from "@/components/Interventions/Schema";
-import { INTERVENTION_COLORS } from "@/components/Calendar/index.d";
+import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
 
 export interface CalendarTodoInterventionProps {
   todoIntervention: TIntervention;
