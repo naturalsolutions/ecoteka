@@ -46,7 +46,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   );
 
   useEffect(() => {
-    const newTodoInterventions = props.interventions.filter((f) => !f.done);
+    const newTodoInterventions = props.interventions.filter((f) => !f.date);
 
     setTodoInterventions(newTodoInterventions);
   }, [props.interventions]);
@@ -116,14 +116,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
           <Grid item xs>
             <Card style={{ backgroundColor: "transparent" }}>
               <CardContent>
-                <Header
-                  year={props.year}
-                  todoInterventions={todoInterventions.filter(
-                    (todoIntervention) =>
-                      filters.includes(todoIntervention.intervention_type)
-                  )}
-                  onYearChange={props.onYearChange}
-                />
+                <Header year={props.year} onYearChange={props.onYearChange} />
                 <Divider />
                 <Grid
                   container

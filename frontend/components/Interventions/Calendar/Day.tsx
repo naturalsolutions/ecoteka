@@ -44,10 +44,11 @@ async function interventionPlan(
   date: CalendarDayProps
 ) {
   try {
+    const dateIntervention = new Date(date.year, date.month, date.day);
     const response = await apiRest.interventions.plan(
       organizationId,
       interventionId,
-      date
+      dateIntervention
     );
 
     if (response.ok) {
