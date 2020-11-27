@@ -12,12 +12,14 @@ import { TIntervention } from "@/components/Interventions/Schema";
 import CalendarTodoIntervention from "@/components/Interventions/Calendar/TodoIntervention";
 
 export interface CalendarMonthProps {
+  interventions: TIntervention[];
   todoInterventions: TIntervention[];
   month: number;
   year: number;
 }
 
 const defaultProps: CalendarMonthProps = {
+  interventions: [],
   todoInterventions: [],
   month: 0,
   year: 2020,
@@ -70,6 +72,14 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
 
     rows.push(dayLabels);
 
+    const filterInterventionsDay = (day) => {
+      return (intervention: TIntervention) => {
+        const interventionDay = new Date(intervention.date).getDate();
+
+        return interventionDay === day;
+      };
+    };
+
     range(6).map((i) => {
       rows.push(
         <Grid
@@ -90,7 +100,14 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
 
             return (
               <Grid xs item key={`day-${i}-${j}`} className={classes.item}>
-                <Day day={day++} month={props.month} year={props.year} />
+                <Day
+                  day={day}
+                  month={props.month}
+                  year={props.year}
+                  interventions={props.interventions.filter(
+                    filterInterventionsDay(day++)
+                  )}
+                />
               </Grid>
             );
           })}

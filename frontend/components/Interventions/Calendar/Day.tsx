@@ -7,14 +7,18 @@ import { ItemTypes } from "@/components/Interventions/Calendar/ItemTypes";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 import CalendarIntervention from "@/components/Interventions/Calendar/Intervention";
+import { TIntervention } from "@/components/Interventions/Schema";
+import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
 
 export interface CalendarDayProps {
+  interventions: TIntervention[];
   day: number;
   month: number;
   year: number;
 }
 
 const defaultProps: CalendarDayProps = {
+  interventions: [],
   day: 0,
   month: 0,
   year: 0,
@@ -107,6 +111,27 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
         >
           {props.day}
         </IconButton>
+      </Grid>
+      <Grid item>
+        <Grid container>
+          {props.interventions.map((intervention) => {
+            const backgroundColor =
+              INTERVENTION_COLORS[intervention.intervention_type];
+            return (
+              <Grid item>
+                <div
+                  style={{
+                    borderRadius: "50%",
+                    backgroundColor: backgroundColor,
+                    width: "8px",
+                    height: "8px",
+                    marginRight: "2px",
+                  }}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
       </Grid>
     </Grid>
   );

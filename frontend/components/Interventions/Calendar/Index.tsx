@@ -55,6 +55,14 @@ const Calendar: React.FC<CalendarProps> = (props) => {
     setFilters(filters);
   };
 
+  const filterInterventionMonth = (month) => {
+    return (intervention: TIntervention) => {
+      const interventionMonth = new Date(intervention.date).getMonth();
+
+      return intervention.date && interventionMonth === month;
+    };
+  };
+
   const renderMonths = () => {
     const months = [];
 
@@ -64,6 +72,11 @@ const Calendar: React.FC<CalendarProps> = (props) => {
           <Month
             month={i}
             year={props.year}
+            interventions={props.interventions
+              .filter((intervention) =>
+                filters.includes(intervention.intervention_type)
+              )
+              .filter(filterInterventionMonth(i))}
             todoInterventions={todoInterventions.filter((todoIntervention) =>
               filters.includes(todoIntervention.intervention_type)
             )}

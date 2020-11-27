@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from app.schemas import Intervention, InterventionCreate, InterventionUpdate
-from app.models import User
 from app import crud
 from app.api import get_db
-from app.core import authorization, set_policies, get_current_active_user
+from app.core import authorization, set_policies
 
 from sqlalchemy.orm import Session
-from typing import List, Any
+from typing import List
 
 router = APIRouter()
 
@@ -34,12 +33,10 @@ def create(
 
 @router.get("/{intervention_id}", response_model=Intervention)
 def get(
-    organization_id: int,
     intervention_id: int,
     *,
     auth=Depends(authorization("interventions:get")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     return crud.intervention.get(db, id=intervention_id)
 
@@ -51,7 +48,6 @@ def get_year(
     *,
     auth=Depends(authorization("interventions:get_year")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     return crud.intervention.get_by_year(db, organization_id, year)
 
@@ -76,11 +72,9 @@ def update(
 
 @router.delete("/{intervention_id}", response_model=Intervention)
 def delete(
-    organization_id: int,
     id: int,
     *,
     auth=Depends(authorization("interventions:delete")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
     return crud.intervention.remove(db, id=id)
