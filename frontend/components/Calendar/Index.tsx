@@ -26,15 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const INTERVENTION_COLORS = {
-  pruning: "green",
-  felling: "red",
-  streanremoval: "brown",
-  indepthdiagnostic: "purple",
-  treatment: "orange",
-  surveillance: "blue",
-};
-
 const Calendar: React.FC<CalendarProps> = (props) => {
   const classes = useStyles();
   const [todoInterventions, setTodoInterventions] = useState<TIntervention[]>(
@@ -66,7 +57,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
       <Paper square className={classes.root}>
         <Grid container>
           <Grid item>
-            <Filter interventionColors={INTERVENTION_COLORS} />
+            <Filter />
           </Grid>
           <Grid item xs>
             <Header

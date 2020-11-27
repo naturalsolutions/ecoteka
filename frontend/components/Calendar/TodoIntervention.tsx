@@ -3,6 +3,7 @@ import { makeStyles, Button, Grid } from "@material-ui/core";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "@/components/Calendar/ItemTypes";
 import { TIntervention } from "@/components/Interventions/Schema";
+import { INTERVENTION_COLORS } from "@/components/Calendar/index.d";
 
 export interface CalendarTodoInterventionProps {
   todoIntervention: TIntervention;
@@ -26,9 +27,16 @@ const CalendarTodoIntervention: React.FC<CalendarTodoInterventionProps> = (
     }),
   });
 
+  const color = INTERVENTION_COLORS[props.todoIntervention.intervention_type];
+
   return (
     <Grid item>
-      <Button ref={drag} size="small" color="primary" variant="contained">
+      <Button
+        ref={drag}
+        size="small"
+        variant="contained"
+        style={{ backgroundColor: color }}
+      >
         {props.todoIntervention.id}
       </Button>
     </Grid>

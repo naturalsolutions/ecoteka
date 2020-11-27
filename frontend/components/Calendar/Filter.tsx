@@ -13,6 +13,7 @@ import {
   TInterventionType,
 } from "@/components/Interventions/Schema";
 import { useTranslation } from "react-i18next";
+import { INTERVENTION_COLORS } from "@/components/Calendar/index.d";
 
 export interface CalendarFilterProps {
   interventionColors?: {};
@@ -45,7 +46,7 @@ const CalendarFilter: React.FC<CalendarFilterProps> = (props) => {
         <ListItem key={`list-item-${it}`} dense button>
           <ListItemIcon>
             <Checkbox
-              style={{ color: props.interventionColors[it] }}
+              style={{ color: INTERVENTION_COLORS[it] }}
               checked={types.includes(it)}
               id={`checkbox-for-${it}`}
               onChange={(e) => handleCheckboxChange(e, it)}
