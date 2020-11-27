@@ -1,38 +1,38 @@
-import { FC, useState } from "react";
-import { Grid, makeStyles, Button, Box } from "@material-ui/core";
+import { FC, useEffect, useState } from "react";
 import Calendar from "@/components/Calendar/Index";
 import { apiRest } from "@/lib/api";
+import { useRouter } from "next/router";
 
-const useStyles = makeStyles((theme) => {
-  return {};
-});
+const initialYear = new Date().getFullYear();
 
-const CalendarPage = ({}) => {
-  const classes = useStyles();
+const CalendarPage: FC = ({}) => {
+  const [interventions, setInterventions] = useState([]);
+  const [year, setYear] = useState(initialYear);
+  const router = useRouter();
 
-  const getCalendarData = async (year) => {
-    const result = {};
-    const data = await apiRest.interventions.getByYear(year);
+  const getData = async (organizationId: number, year: number) => {
+    const data = await apiRest.interventions.getByYear(organizationId, year);
 
-    data.forEach((it) => {
-      const r = {
-        ...it,
-        intervention_start_date: new Date(it.intervention_start_date),
-        intervention_end_date: new Date(it.intervention_end_date),
-        date: it.date ? new Date(it.date) : null,
-      };
-      const startmonth = r.intervention_start_date.getMonth(),
-        endmonth = r.intervention_end_date.getMonth();
-
-      for (let i = startmonth; i <= endmonth; i++) {
-        result[i] = (result[i] || []).concat(r);
-      }
-    });
-
-    return result;
+    setInterventions(data);
   };
 
-  return <Calendar />;
+  const handleYearChange = (newYear: number) => {
+    setYear(newYear);
+  };
+
+  useEffect(() => {
+    if (router.query.id) {
+      getData(Number(router.query.id), year);
+    }
+  }, [router.query.id, year]);
+
+  return (
+    <Calendar
+      interventions={interventions}
+      year={year}
+      onYearChange={handleYearChange}
+    />
+  );
 };
 
 export default CalendarPage;

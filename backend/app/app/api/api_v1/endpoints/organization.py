@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import uuid
 import fiona
@@ -15,6 +16,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
 from app.api import get_db
+from app import crud
 from app.core import (
     settings,
     enforcer,
@@ -148,6 +150,7 @@ def get_teams(
     ]
 
 
+
 @router.get("/{organization_id}/members")
 def get_members(
     organization_id: int,
@@ -156,20 +159,7 @@ def get_members(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    t = text(
-        "SELECT v0 AS user_id, v1 as role FROM casbin_rule WHERE v2 = :org_id"
-    )
-    user_ids = db.execute(t, {"org_id": str(organization_id)})
-
-    result = []
-    for (userid, role) in user_ids:
-        user_in_db = user.get(db, id=int(userid))
-
-        if user_in_db:
-            result.append(dict(user_in_db.as_dict(), role=role))
-
-    return result
-
+    return crud.organization.get_members(db, id=organization_id)
 
 @router.post("/{organization_id}/members")
 def add_members(
@@ -180,41 +170,43 @@ def add_members(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    org_members = get_members(
-        organization_id, auth=auth, db=db, current_user=current_user
-    )
-    users_to_add = (
-        invite
-        for invite in invites
-        if invite.email not in (u.get("email") for u in org_members)
-    )
+    try:
+        members = crud.organization.get_members(db, id=organization_id)
+        
+        users_to_add = (
+            invite
+            for invite in invites
+            if invite.email not in (u.get("email") for u in members)
+        )
 
-    for invite in users_to_add:
-        user_in_db = user.get_by_email(db, email=invite.email)
+        for invite in users_to_add:
+            user_in_db = user.get_by_email(db, email=invite.email)
 
-        if not user_in_db:
-            user_in_db = user.create(
-                db,
-                obj_in=UserCreate(
-                    full_name=invite.email,
-                    email=invite.email,
-                    password=pwd.genword(),
-                ),
+            if not user_in_db:
+                user_in_db = user.create(
+                    db,
+                    obj_in=UserCreate(
+                        full_name=invite.email,
+                        email=invite.email,
+                        password=pwd.genword(),
+                    ),
+                )
+            enforcer.add_role_for_user_in_domain(
+                str(user_in_db.id),
+                invite.role if invite.role else "guest",
+                str(organization_id),
             )
-        enforcer.add_role_for_user_in_domain(
-            str(user_in_db.id),
-            invite.role if invite.role else "guest",
-            str(organization_id),
-        )
-        enforcer.load_policy()
+            enforcer.load_policy()
 
-    return [
-        user
-        for user in get_members(
-            organization_id, auth=auth, db=db, current_user=current_user
-        )
-        if user.get("email") in (invite.email for invite in invites)
-    ]
+        return [
+            user
+            for user in get_members(
+                organization_id, auth=auth, db=db, current_user=current_user
+            )
+            if user.get("email") in (invite.email for invite in invites)
+        ]
+    except Exception as e:
+        logging.error(e)
 
 
 @router.delete("/{organization_id}/members/{user_id}")

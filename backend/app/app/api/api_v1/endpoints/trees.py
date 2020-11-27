@@ -26,22 +26,6 @@ policies = {
 set_policies(policies)
 
 
-def get_tree_if_authorized(db: Session, current_user: models.User, tree_id: int):
-    """Returns a tree if it exists and the user has access rights to it"""
-    tree_in_db = crud.crud_tree.tree.get(db, tree_id)
-
-    if not tree_in_db:
-        raise HTTPException(status_code=404, detail="Tree does not exist")
-
-    if tree_in_db.organization_id != current_user.organization_id:
-        raise HTTPException(
-            status_code=403,
-            detail="Cannot request a tree that does not belong to your organization",
-        )
-
-    return tree_in_db
-
-
 @router.post("/import-from-geofile", response_model=schemas.GeoFile)
 def import_from_geofile(
     organization_id: int,
@@ -89,7 +73,12 @@ def get(
     current_user: models = Depends(get_current_active_user),
 ) -> Any:
     """Gets a tree"""
-    return get_tree_if_authorized(db, current_user, tree_id).to_xy()
+    tree = crud.tree.get(db, tree_id)
+
+    if not tree:
+        raise HTTPException(status_code=404, detail=f"{tree_id} not found")
+    
+    return tree.to_xy()
 
 
 @router.post("/", response_model=schemas.tree.Tree_xy)

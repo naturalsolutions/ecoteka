@@ -26,7 +26,16 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   const { user } = useAppContext();
   const crsColumnChoices = [
     { value: "epsg:4326", label: "EPSG:4326" },
-    { value: "epsg:3949", label: "Lambert 9" },
+    { value: "epsg:3034", label: "ETRS89-LCC" },
+    { value: "epsg:3942", label: "Lambert CC42 (Zone 1)" },
+    { value: "epsg:3943", label: "Lambert CC43 (Zone 2)" },
+    { value: "epsg:3944", label: "Lambert CC44 (Zone 3)" },
+    { value: "epsg:3945", label: "Lambert CC45 (Zone 4)" },
+    { value: "epsg:3946", label: "Lambert CC46 (Zone 5)" },
+    { value: "epsg:3947", label: "Lambert CC47 (Zone 6)" },
+    { value: "epsg:3948", label: "Lambert CC48 (Zone 7)" },
+    { value: "epsg:3949", label: "Lambert CC49 (Zone 8)" },
+    { value: "epsg:3950", label: "Lambert CC50 (Zone 9)" },
     { value: "epsg:2154", label: "Lambert 93" },
   ];
   let latLonChoice = [];

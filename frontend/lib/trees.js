@@ -45,6 +45,7 @@ class Tree {
   }
 
   async getInterventions(treeId) {
+    // TODO : use real endpoints
     const url = `/assets/mock/trees_${treeId}_interventions.json`;
     const response = await fetch(url, {
       method: "GET",
