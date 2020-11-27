@@ -90,21 +90,24 @@ def send_new_account_email(
 ) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - New account for user {username}"
-    with open(Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html") as f:
+    path = Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html"
+    
+    if path.is_file():
+        f = open(path)
         template_str = f.read()
-    link = settings.EXTERNAL_PATH
-    send_email(
-        email_to=email_to,
-        subject_template=subject,
-        html_template=template_str,
-        environment={
-            "project_name": settings.PROJECT_NAME,
-            "username": username,
-            "password": password,
-            "email": email_to,
-            "link": link,
-        },
-    )
+        link = settings.EXTERNAL_PATH
+        send_email(
+            email_to=email_to,
+            subject_template=subject,
+            html_template=template_str,
+            environment={
+                "project_name": settings.PROJECT_NAME,
+                "username": username,
+                "password": password,
+                "email": email_to,
+                "link": link,
+            },
+        )
 
 
 def generate_password_reset_token(email: str) -> str:

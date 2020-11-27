@@ -7,17 +7,16 @@ from sqlalchemy import (
     Boolean,
     Date,
     DateTime,
-    ForeignKey
+    ForeignKey,
 )
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import (relationship)
+from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 
 
 class Intervention(Base):
     id = Column(Integer, primary_key=True, index=True)
-    organization_id = Column(Integer, ForeignKey('organization.id'))
-
+    organization_id = Column(Integer, ForeignKey("organization.id"))
     intervention_type = Column(String)
     tree_id = Column(Integer)
     intervenant = Column(String)

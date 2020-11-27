@@ -43,9 +43,12 @@ class Intervention {
     return await response.json();
   }
 
-  async getByYear(year) {
+  async getByYear(organizationId, year) {
     try {
-      const url = `${this.basepath}/year/${year}`;
+      const url = `${this.basepath.replace(
+        "{organization_id}",
+        organizationId
+      )}/year/${year}`;
       const response = await this.api.get(url);
       const body = await response.json();
 
