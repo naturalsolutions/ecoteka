@@ -12,7 +12,9 @@ const Summary: FC<{
   const { data: tree } = useQuery(
     `tree_${id}`,
     async () => {
+      console.log(id);
       const data = await apiRest.trees.get(id);
+      console.log(data);
       return data;
     },
     {

@@ -119,6 +119,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
       },
       displayFullScreen: (activate: boolean) => {
         setDialogProps({ ...dialogProps, fullScreen: activate });
+        setIsDraggable(!activate);
       },
       setContent: (content: string | React.ReactNode) => {
         setContent(content);
