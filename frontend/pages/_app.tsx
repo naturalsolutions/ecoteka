@@ -7,6 +7,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "react-calendar/dist/Calendar.css";
 import Template from "@/components/Template";
 import "@/styles/global.css";
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";
 
