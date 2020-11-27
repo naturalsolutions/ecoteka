@@ -5,17 +5,20 @@ import {
   Typography,
   Card,
   CardContent,
-  CardHeader,
 } from "@material-ui/core";
 import Day from "@/components/Interventions/Calendar/Day";
 import { useTranslation } from "react-i18next";
+import { TIntervention } from "@/components/Interventions/Schema";
+import CalendarTodoIntervention from "@/components/Interventions/Calendar/TodoIntervention";
 
 export interface CalendarMonthProps {
+  todoInterventions: TIntervention[];
   month: number;
   year: number;
 }
 
 const defaultProps: CalendarMonthProps = {
+  todoInterventions: [],
   month: 0,
   year: 2020,
 };
@@ -98,14 +101,53 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
     return rows;
   };
 
+  const filter = (todoIntervention) => {
+    const startDate = new Date(
+      todoIntervention.intervention_start_date
+    ).getMonth();
+    const endDate = new Date(todoIntervention.intervention_end_date).getMonth();
+
+    return !(props.month < startDate || props.month > endDate);
+  };
+
+  const renderTodoInterventions = () =>
+    props.todoInterventions.filter(filter).map((todoIntervention) => {
+      return (
+        <CalendarTodoIntervention
+          key={`todo-intervention-${todoIntervention.id}`}
+          todoIntervention={todoIntervention}
+        />
+      );
+    });
+
   return (
-    <Card className={classes.root}>
-      <CardHeader
-        title={t("common:months", { returnObjects: true })[props.month]}
-      />
+    <Card className={classes.root} square elevation={1}>
       <CardContent>
-        <Grid container spacing={2} alignItems="stretch" justify="flex-start">
-          {renderDays()}
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
+            <Grid container spacing={2}>
+              <Grid item>
+                <Typography variant="h5">
+                  {t("common:months", { returnObjects: true })[props.month]}
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Grid container spacing={2}>
+                  {renderTodoInterventions()}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid
+              container
+              spacing={2}
+              alignItems="stretch"
+              justify="flex-start"
+            >
+              {renderDays()}
+            </Grid>
+          </Grid>
         </Grid>
       </CardContent>
     </Card>

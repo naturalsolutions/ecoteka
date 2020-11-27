@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, IconButton } from "@material-ui/core";
+import { makeStyles, IconButton, Grid } from "@material-ui/core";
 import { useTemplate } from "@/components/Template";
 import { useDrop } from "react-dnd";
 import { DragObjectWithType } from "react-dnd/lib/interfaces/hooksApi";
@@ -92,18 +92,22 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
   };
 
   return (
-    <IconButton
-      ref={drop}
-      size="small"
-      style={{
-        backgroundColor: isToday(props.day, props.month, props.year)
-          ? theme?.palette?.info.main
-          : undefined,
-      }}
-      onClick={handleInterventionDialog}
-    >
-      {props.day}
-    </IconButton>
+    <Grid container direction="column">
+      <Grid item>
+        <IconButton
+          ref={drop}
+          size="small"
+          style={{
+            backgroundColor: isToday(props.day, props.month, props.year)
+              ? theme?.palette?.info.main
+              : undefined,
+          }}
+          onClick={handleInterventionDialog}
+        >
+          {props.day}
+        </IconButton>
+      </Grid>
+    </Grid>
   );
 };
 
