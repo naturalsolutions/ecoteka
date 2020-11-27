@@ -32,7 +32,10 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = (props) => {
 
   const renderTodoInterventions = () =>
     props.todoInterventions.map((todoIntervention) => (
-      <CalendarTodoIntervention todoIntervention={todoIntervention} />
+      <CalendarTodoIntervention
+        key={`todo-intervention-${todoIntervention.id}`}
+        todoIntervention={todoIntervention}
+      />
     ));
 
   return (
