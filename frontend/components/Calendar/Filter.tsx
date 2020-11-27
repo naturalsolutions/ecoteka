@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  makeStyles,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Checkbox,
-  FormLabel,
 } from "@material-ui/core";
 import {
   interventionTypes,
@@ -16,49 +14,47 @@ import { useTranslation } from "react-i18next";
 import { INTERVENTION_COLORS } from "@/components/Calendar/index.d";
 
 export interface CalendarFilterProps {
-  interventionColors?: {};
+  onChange(filters: object): void;
 }
 
-const defaultProps: CalendarFilterProps = {};
-
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
 const CalendarFilter: React.FC<CalendarFilterProps> = (props) => {
-  const classes = useStyles();
-  const [types, setItypes] = useState(interventionTypes);
+  const initialData = interventionTypes.reduce(
+    (oldInterventinType, newInterventionType) =>
+      Object.assign(oldInterventinType, {
+        [newInterventionType]: true,
+      }),
+    {}
+  );
+  const [filters, setFilters] = useState(initialData);
   const { t } = useTranslation(["common", "components"]);
 
-  const handleCheckboxChange = (e, it: TInterventionType) => {
-    const value = e.target.checked;
-
-    if (value) {
-      return setItypes(types.concat([it]));
-    }
-
-    setItypes(types.filter((i) => i !== it));
+  const handleCheckboxChange = (e, interventionType: TInterventionType) => {
+    setFilters({ ...filters, [interventionType]: e.target.checked });
   };
+
+  useEffect(() => {
+    props.onChange(Object.keys(filters).filter((filter) => filters[filter]));
+  }, [filters]);
 
   return (
     <List dense>
-      {interventionTypes.map((it) => (
-        <ListItem key={`list-item-${it}`} dense button>
+      {interventionTypes.map((interventionType) => (
+        <ListItem key={`list-item-${interventionType}`} dense button>
           <ListItemIcon>
             <Checkbox
-              style={{ color: INTERVENTION_COLORS[it] }}
-              checked={types.includes(it)}
-              id={`checkbox-for-${it}`}
-              onChange={(e) => handleCheckboxChange(e, it)}
+              style={{ color: INTERVENTION_COLORS[interventionType] }}
+              checked={filters[interventionType]}
+              id={`checkbox-for-${interventionType}`}
+              onChange={(e) => handleCheckboxChange(e, interventionType)}
             />
           </ListItemIcon>
-          <ListItemText primary={t(`components:Intervention.types.${it}`)} />
+          <ListItemText
+            primary={t(`components:Intervention.types.${interventionType}`)}
+          />
         </ListItem>
       ))}
     </List>
   );
 };
-
-CalendarFilter.defaultProps = defaultProps;
 
 export default CalendarFilter;

@@ -3,7 +3,10 @@ import { makeStyles, Grid, Paper, Divider } from "@material-ui/core";
 import Month from "@/components/Calendar/Month";
 import Header from "@/components/Calendar/Header";
 import Filter from "@/components/Calendar/Filter";
-import { TIntervention } from "@/components/Interventions/Schema";
+import {
+  TIntervention,
+  TInterventionType,
+} from "@/components/Interventions/Schema";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 
@@ -28,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Calendar: React.FC<CalendarProps> = (props) => {
   const classes = useStyles();
+  const [filters, setFilters] = useState([]);
   const [todoInterventions, setTodoInterventions] = useState<TIntervention[]>(
     []
   );
@@ -37,6 +41,10 @@ const Calendar: React.FC<CalendarProps> = (props) => {
 
     setTodoInterventions(newTodoInterventions);
   }, [props.interventions]);
+
+  const handleFilterChange = (filters) => {
+    setFilters(filters);
+  };
 
   const renderMonths = () => {
     const months = [];
@@ -57,12 +65,14 @@ const Calendar: React.FC<CalendarProps> = (props) => {
       <Paper square className={classes.root}>
         <Grid container>
           <Grid item>
-            <Filter />
+            <Filter onChange={handleFilterChange} />
           </Grid>
           <Grid item xs>
             <Header
               year={props.year}
-              todoInterventions={todoInterventions}
+              todoInterventions={todoInterventions.filter((todoIntervention) =>
+                filters.includes(todoIntervention.intervention_type)
+              )}
               onYearChange={props.onYearChange}
             />
             <Divider />

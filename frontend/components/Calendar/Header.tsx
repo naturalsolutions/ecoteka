@@ -48,7 +48,10 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = (props) => {
       >
         Today
       </Button>
-      <IconButton onClick={() => props.onYearChange(props.year - 1)}>
+      <IconButton
+        size="medium"
+        onClick={() => props.onYearChange(props.year - 1)}
+      >
         <ArrowBackIos />
       </IconButton>
       <Typography variant="h6">{props.year}</Typography>

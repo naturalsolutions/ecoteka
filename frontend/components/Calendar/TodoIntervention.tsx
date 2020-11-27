@@ -37,7 +37,7 @@ const CalendarTodoIntervention: React.FC<CalendarTodoInterventionProps> = (
         variant="contained"
         style={{ backgroundColor: color }}
       >
-        {props.todoIntervention.id}
+        &nbsp;
       </Button>
     </Grid>
   );

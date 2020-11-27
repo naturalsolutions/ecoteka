@@ -5,6 +5,7 @@ import { useDrop } from "react-dnd";
 import { DragObjectWithType } from "react-dnd/lib/interfaces/hooksApi";
 import { ItemTypes } from "@/components/Calendar/ItemTypes";
 import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface CalendarDayProps {
   day: number;
@@ -42,25 +43,40 @@ interface InterventionType extends DragObjectWithType {
   id: number;
 }
 
+async function interventionPlan(
+  organizationId: Number,
+  interventionId: Number,
+  date: CalendarDayProps
+) {
+  try {
+    const response = await apiRest.interventions.plan(
+      organizationId,
+      interventionId,
+      date
+    );
+
+    if (response.ok) {
+      const intervention = await response.json();
+
+      return intervention;
+    }
+
+    return false;
+  } catch (e) {}
+}
+
 const CalendarDay: React.FC<CalendarDayProps> = (props) => {
   const classes = useStyles();
   const { theme } = useTemplate();
+  const { user } = useAppContext();
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.BOX,
-    drop: async function (newItem: InterventionType) {
-      try {
-        /*const response = await apiRest.interventions.plan(
-          newItem.id,
-          props.date
-        );
-
-        if (response.ok) {
-          const internention = await response.json();
-          const date = new Date(props.date);
-          props.onInterventionPlanified(internention, date.getMonth());
-        }*/
-        console.log(props);
-      } catch (e) {}
+    drop: async function (newIntervention: InterventionType) {
+      const intervention = await interventionPlan(
+        user.currentOrganization.id,
+        newIntervention.id,
+        props
+      );
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
