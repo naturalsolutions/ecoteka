@@ -55,7 +55,6 @@ class Organization(Base):
         return self.to_schema()
 
     def to_schema(self):
-        print('aaaa', self.working_area)
         return schemas.Organization(
             **{
                 c.key: getattr(self, c.key)

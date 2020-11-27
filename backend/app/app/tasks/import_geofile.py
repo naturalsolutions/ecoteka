@@ -75,9 +75,8 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
 
     if geofile.crs.lower() != 'epsg:4326':
         transformer = Transformer.from_crs(
-            geofile.crs.lower(),
-            "epsg:4326",
-            always_xy=True)
+            int(geofile.crs.lower().split(':')[1]),
+            4326)
 
     for i in df.index:
         x = df.loc[i, geofile.longitude_column]
@@ -89,7 +88,6 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
         if transformer:
             x, y = transformer.transform(x, y)
 
-        point_columns = [geofile.longitude_column, geofile.latitude_column]
         properties = df.loc[i]
         tree = create_tree(geofile, x, y, properties)
         db.add(tree)

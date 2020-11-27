@@ -7,7 +7,9 @@ from sqlalchemy import func, and_
 from app.crud.base import CRUDBase
 from app.models.organization import Organization
 from app.models.tree import Tree
+from app import crud
 from app.schemas.organization import OrganizationCreate, OrganizationUpdate
+from sqlalchemy.sql import text
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy_utils import Ltree, LtreeType
@@ -90,6 +92,22 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
             .filter(Organization.path.ancestor_of(org.path))
             .order_by(Organization.path.asc())
         )
+
+    def get_members(self, db: Session, *, id: int):
+        t = text(
+            "SELECT v0 AS user_id, v1 as role FROM casbin_rule WHERE v2 = :org_id"
+        )
+        user_ids = db.execute(t, {"org_id": str(id)})
+        
+        members = []
+
+        for (user_id, role) in user_ids:
+            user_in_db = crud.user.get(db, id=int(user_id))
+            
+            if user_in_db:
+                members.append(dict(user_in_db.as_dict(), role=role))
+
+        return members
 
 
 organization = CRUDOrganization(Organization)

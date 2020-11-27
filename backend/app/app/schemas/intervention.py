@@ -6,17 +6,18 @@ from enum import Enum
 
 
 class EnumInterventionType(str, Enum):
-    pruning = 'pruning'
-    felling = 'felling'
-    streanremoval = 'streanremoval'
-    indepthdiagnostic = 'indepthdiagnostic'
-    treatment = 'treatment'
-    surveillance = 'surveillance'
+    pruning = "pruning"
+    felling = "felling"
+    streanremoval = "streanremoval"
+    indepthdiagnostic = "indepthdiagnostic"
+    treatment = "treatment"
+    surveillance = "surveillance"
 
 
 class InterventionBase(BaseModel):
-    intervention_type: EnumInterventionType
     tree_id: int
+    organization_id: Optional[int]
+    intervention_type: EnumInterventionType
     intervenant: str
     intervention_start_date: Optional[datetime]
     intervention_end_date: Optional[datetime]

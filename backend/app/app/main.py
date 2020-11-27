@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from starlette.middleware.cors import CORSMiddleware
 from fastapi_jwt_auth.exceptions import AuthJWTException
+
 from app.core import (
     authjwt_exception_handler,
     settings
@@ -31,3 +32,4 @@ if settings.BACKEND_CORS_ORIGINS:
 
 
 app.include_router(api_router)
+
