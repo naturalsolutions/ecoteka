@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Body, Depends, HTTPException
 from app.schemas import Intervention, InterventionCreate, InterventionUpdate
 from app.models import User
-from app.crud import intervention
+from app import crud
 from app.api import get_db
 from app.core import authorization, set_policies, get_current_active_user
 
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Any
 
 router = APIRouter()
 
@@ -29,7 +29,7 @@ def create(
     db: Session = Depends(get_db),
 ):
     request_intervention.organization_id = organization_id
-    return intervention.create(db, obj_in=request_intervention)
+    return crud.intervention.create(db, obj_in=request_intervention)
 
 
 @router.get("/{intervention_id}", response_model=Intervention)
@@ -41,7 +41,7 @@ def get(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    return intervention.get(db, id=intervention_id)
+    return crud.intervention.get(db, id=intervention_id)
 
 
 @router.get("/year/{year}", response_model=List[Intervention])
@@ -53,21 +53,24 @@ def get_year(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    return intervention.get_by_year(db, organization_id, year)
+    return crud.intervention.get_by_year(db, organization_id, year)
 
 
 @router.patch("/{intervention_id}", response_model=Intervention)
 def update(
-    organization_id: int,
     intervention_id: int,
     *,
     auth=Depends(authorization("interventions:update")),
     request_intervention: InterventionUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
 ):
-    return intervention.update(
-        db, db_obj=intervention.get(db, id=intervention_id), obj_in=request_intervention
+    intervention_in_db = crud.intervention.get(db, id=intervention_id)
+
+    if not intervention_in_db:
+        raise HTTPException(status_code=404, detail="Intervention not found")
+
+    return crud.intervention.update(
+        db, db_obj=intervention_in_db, obj_in=request_intervention
     )
 
 
@@ -80,4 +83,4 @@ def delete(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    return intervention.remove(db, id=id)
+    return crud.intervention.remove(db, id=id)
