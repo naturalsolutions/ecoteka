@@ -13,7 +13,7 @@ import { TIntervention } from "./Schema";
 
 const InterventionsTable: FC<{
   interventions: TIntervention[];
-}> = (props) => {
+}> = ({ interventions }) => {
   const { t } = useTranslation("components");
   //TODO generic
   const formatDate = (dateStr) => {
@@ -34,7 +34,7 @@ const InterventionsTable: FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {props?.interventions.map((intervention, i) => {
+          {interventions?.map((intervention, i) => {
             return (
               <TableRow key={i}>
                 <TableCell>{formatDate(intervention.date)}</TableCell>

@@ -1,14 +1,14 @@
 import { apiRest } from "@/lib/api";
-import { Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { FC, Fragment } from "react";
 import { useQuery } from "react-query";
 import RoomIcon from "@material-ui/icons/Room";
-import InterventionsTable from "../Interventions/InterventionsTable";
+import InterventionsTable from "../../Interventions/InterventionsTable";
 
-const TreeSheetBasic: FC<{
+const Summary: FC<{
   id: number;
-}> = (props) => {
-  const id = props.id;
+  showMore: () => void;
+}> = ({ id, showMore }) => {
   const { data: tree } = useQuery(
     `tree_${id}`,
     async () => {
@@ -20,10 +20,10 @@ const TreeSheetBasic: FC<{
     }
   );
   const { data: interventions } = useQuery(
-    `tree_${id}_interventions`,
+    `tree_${id}_interventions_summary`,
     async () => {
       const data = await apiRest.trees.getInterventions(id);
-      return data;
+      return data.slice(0, 5);
     },
     {
       enabled: Boolean(id),
@@ -39,8 +39,11 @@ const TreeSheetBasic: FC<{
         {tree?.address}
       </Typography>
       {interventions && <InterventionsTable interventions={interventions} />}
+      <Button variant="contained" onClick={showMore}>
+        Plus de détails
+      </Button>
     </Fragment>
   );
 };
 
-export default TreeSheetBasic;
+export default Summary;

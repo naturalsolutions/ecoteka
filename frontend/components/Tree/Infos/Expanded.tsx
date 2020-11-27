@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Grid,
+  makeStyles,
+  Paper,
+  Typography,
+} from "@material-ui/core";
+import TreeAccordion from "../TreeAccordion";
+import InterventionsTable from "@/components/Interventions/InterventionsTable";
+import { useQuery } from "react-query";
+import { apiRest } from "@/lib/api";
 
 export interface ETKTreeInfosExpandedProps {
-  data?: number;
+  id?: number;
   showLess?: () => void;
 }
 
@@ -13,20 +24,38 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = ({
-  data,
+  id,
   showLess,
 }) => {
   const classes = useStyles();
-  const [displayData, setDisplayData] = useState(data);
 
-  useEffect(() => {
-    setDisplayData(data);
-  }, [data]);
+  const { data: interventions } = useQuery(
+    `tree_${id}_interventions`,
+    async () => {
+      const data = await apiRest.trees.getInterventions(id);
+      return data;
+    },
+    {
+      enabled: Boolean(id),
+    }
+  );
 
   return (
     <Box>
-      <Typography>Expanded</Typography>
-      <Box>{displayData}</Box>
+      <Grid container>
+        <Grid item xs={6}>
+          <Paper>
+            <TreeAccordion id={id} />
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper>
+            {interventions && (
+              <InterventionsTable interventions={interventions} />
+            )}
+          </Paper>
+        </Grid>
+      </Grid>
       <Button variant="contained" onClick={showLess}>
         Réduire
       </Button>

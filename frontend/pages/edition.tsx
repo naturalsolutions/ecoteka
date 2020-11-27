@@ -1,11 +1,10 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Grid, makeStyles, Button, Box } from "@material-ui/core";
 import Map from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
 import { useTemplate } from "@/components/Template";
-import MiniDisplay from "@/components/Tree/Infos/Mini";
 import ExpandedDisplay from "@/components/Tree/Infos/Expanded";
-import TreeSheetBasic from "@/components/Tree/TreeSheetBasic";
+import TreeSummary from "@/components/Tree/Infos/Summary";
 import TreeAccordion from "@/components/Tree/TreeAccordion";
 
 const useStyles = makeStyles((theme) => {
@@ -52,9 +51,9 @@ const EditionPage = ({}) => {
       dialog.current.displayFullScreen(isDialogExpanded);
       dialog.current.setContent(
         !isDialogExpanded ? (
-          <MiniDisplay data={data} showMore={handleExpandDialog} />
+          <TreeSummary id={1} showMore={handleExpandDialog} />
         ) : (
-          <ExpandedDisplay data={data} showLess={handleExpandDialog} />
+          <ExpandedDisplay id={1} showLess={handleExpandDialog} />
         )
       );
     }
@@ -87,7 +86,7 @@ const EditionPage = ({}) => {
 
     dialog.current.open({
       title: "Tree information",
-      content: <MiniDisplay showMore={handleExpandDialog} />,
+      content: <TreeSummary id={1} showMore={handleExpandDialog} />,
       actions: dialogActions,
       isDraggable: true,
       dialogProps: {
@@ -121,12 +120,7 @@ const EditionPage = ({}) => {
       </Box>
       <Box className={classes.background}></Box>
       <Box className={classes.sidebar}>
-        <Grid container>
-          <Grid item>
-            <TreeSheetBasic id={1}></TreeSheetBasic>
-            <TreeAccordion id={1}></TreeAccordion>
-          </Grid>
-        </Grid>
+        <Grid container></Grid>
       </Box>
     </Grid>
   );
