@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { makeStyles, Grid, Box } from "@material-ui/core";
 import { useTemplate } from "@/components/Template";
+import { useDrop } from "react-dnd";
+import { DragObjectWithType } from "react-dnd/lib/interfaces/hooksApi";
+import { ItemTypes } from "@/components/Calendar/ItemTypes";
+import { apiRest } from "@/lib/api";
 
 export interface CalendarDayProps {
   day: number;
@@ -30,17 +34,42 @@ const useStyles = makeStyles(() => ({
     border: "1px solid #fff",
     textAlign: "center",
     fontWeight: "bold",
+    marginBottom: ".5rem",
   },
 }));
+
+interface InterventionType extends DragObjectWithType {
+  id: number;
+}
 
 const CalendarDay: React.FC<CalendarDayProps> = (props) => {
   const classes = useStyles();
   const { theme } = useTemplate();
+  const [{ isOver }, drop] = useDrop({
+    accept: ItemTypes.BOX,
+    drop: async function (newItem: InterventionType) {
+      try {
+        /*const response = await apiRest.interventions.plan(
+          newItem.id,
+          props.date
+        );
+
+        if (response.ok) {
+          const internention = await response.json();
+          const date = new Date(props.date);
+          props.onInterventionPlanified(internention, date.getMonth());
+        }*/
+        console.log(props);
+      } catch (e) {}
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
 
   return (
-    <Box
-      mb={1}
-      p={1}
+    <div
+      ref={drop}
       className={classes.item}
       style={{
         backgroundColor: isToday(props.day, props.month, props.year)
@@ -49,7 +78,7 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
       }}
     >
       {props.day}
-    </Box>
+    </div>
   );
 };
 

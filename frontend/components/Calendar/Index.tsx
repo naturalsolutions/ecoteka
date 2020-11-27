@@ -4,6 +4,8 @@ import Month from "@/components/Calendar/Month";
 import Header from "@/components/Calendar/Header";
 import Filter from "@/components/Calendar/Filter";
 import { TIntervention } from "@/components/Interventions/Schema";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
 
 export interface CalendarProps {
   interventions: TIntervention[];
@@ -60,29 +62,31 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   };
 
   return (
-    <Paper square className={classes.root}>
-      <Grid container>
-        <Grid item>
-          <Filter interventionColors={INTERVENTION_COLORS} />
-        </Grid>
-        <Grid item xs>
-          <Header
-            year={props.year}
-            todoInterventions={todoInterventions}
-            onYearChange={props.onYearChange}
-          />
-          <Divider />
-          <Grid
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="stretch"
-          >
-            {renderMonths()}
+    <DndProvider backend={HTML5Backend}>
+      <Paper square className={classes.root}>
+        <Grid container>
+          <Grid item>
+            <Filter interventionColors={INTERVENTION_COLORS} />
+          </Grid>
+          <Grid item xs>
+            <Header
+              year={props.year}
+              todoInterventions={todoInterventions}
+              onYearChange={props.onYearChange}
+            />
+            <Divider />
+            <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="stretch"
+            >
+              {renderMonths()}
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Paper>
+      </Paper>
+    </DndProvider>
   );
 };
 

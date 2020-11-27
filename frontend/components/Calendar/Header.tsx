@@ -5,10 +5,10 @@ import {
   Button,
   IconButton,
   Typography,
-  Divider,
 } from "@material-ui/core";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
 import { TIntervention } from "@/components/Interventions/Schema";
+import CalendarTodoIntervention from "@/components/Calendar/TodoIntervention";
 
 export interface CalendarHeaderProps {
   todoInterventions: TIntervention[];
@@ -32,11 +32,10 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = (props) => {
 
   const renderTodoInterventions = () =>
     props.todoInterventions.map((todoIntervention) => (
-      <Grid item>
-        <Button size="small" color="primary" variant="contained">
-          {todoIntervention.id}
-        </Button>
-      </Grid>
+      <CalendarTodoIntervention
+        key={`todo-intervention-${todoIntervention.id}`}
+        todoIntervention={todoIntervention}
+      />
     ));
 
   return (
