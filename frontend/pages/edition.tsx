@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import { Grid, makeStyles, Button, Box } from "@material-ui/core";
 import Map from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
-import Calendar from "@/components/Calendar/Index";
 
 const useStyles = makeStyles((theme) => {
   return {
