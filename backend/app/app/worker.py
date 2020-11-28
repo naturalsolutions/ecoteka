@@ -4,7 +4,7 @@ from app.tasks.import_geofile import import_geofile
 from app.tasks.create_mbtiles import create_mbtiles
 from fastapi import Depends
 from app.api import deps
-from app import crud
+from app import crud, models
 import logging
 from app.utils import send_new_registration_email
 from app.utils import send_new_registration_link_email
@@ -17,6 +17,9 @@ def import_geofile_task(geofilename: str):
     with deps.dbcontext() as db:
         geofile = crud.geo_file.get_by_name(db, name=geofilename)
 
+        if geofile is None:
+            return
+
         import_geofile(db, geofile)
         return "import completed"
 
@@ -24,11 +27,14 @@ def import_geofile_task(geofilename: str):
 @celery_app.task
 def create_mbtiles_task(organization_id: int):
     with deps.dbcontext() as db:
-        print(f"creating tiles for organization {organization_id}")
         organization = crud.organization.get(db, organization_id)
 
+        if organization is None:
+            return            
+
+        print(f"creating tiles for organization {organization.id}")
         create_mbtiles(db, organization)
-        return f"organization {organization_id} tiles generated"
+        return f"organization {organization.id} tiles generated"
 
 
 @celery_app.task

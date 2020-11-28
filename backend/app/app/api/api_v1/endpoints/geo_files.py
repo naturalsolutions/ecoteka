@@ -12,7 +12,6 @@ from app.core import (
     authorization,
     get_current_active_user,
 )
-from app.tasks import create_mbtiles
 from app.worker import create_mbtiles_task
 
 router = APIRouter()
@@ -158,7 +157,6 @@ def delete_geo_file(
     *,
     name: str,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """
     Delete one geofile
@@ -178,6 +176,6 @@ def delete_geo_file(
         pass
 
     crud.geo_file.remove(db, id=geofile.id)
-    create_mbtiles_task.delay(geofile.organization_id)
+    create_mbtiles_task.delay(organization_id)
 
     return name
