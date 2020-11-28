@@ -59,7 +59,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
 
       return (
         interventionDateMonth === month ||
-        (interventionStartMonth >= month && interventionEndMonth <= month)
+        (interventionStartMonth <= month && interventionEndMonth >= month)
       );
     };
   };

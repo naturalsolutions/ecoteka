@@ -132,7 +132,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
     ).getMonth();
     const endMonth = new Date(intervention.intervention_end_date).getMonth();
 
-    return !(props.month < startMonth || props.month > endMonth);
+    return props.month >= startMonth && props.month <= endMonth;
   };
 
   const renderTodoInterventions = () =>
