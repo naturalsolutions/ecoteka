@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "tree_id": 1,
+    "intervention_type": "pruning",
+    "date": "2020-11-26T12:27:29.517Z",
+    "done": true
+  },
+  {
+    "id": 2,
+    "tree_id": 1,
+    "intervention_type": "felling",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": false
+  },
+  {
+    "id": 3,
+    "tree_id": 1,
+    "intervention_type": "streanremoval",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": false
+  },
+  {
+    "id": 4,
+    "tree_id": 1,
+    "intervention_type": "indepthdiagnostic",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": true
+  },
+  {
+    "id": 5,
+    "tree_id": 1,
+    "intervention_type": "treatment",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": true
+  },
+  {
+    "id": 6,
+    "tree_id": 1,
+    "intervention_type": "surveillance",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": false
+  },
+  {
+    "id": 7,
+    "tree_id": 1,
+    "intervention_type": "felling",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": true
+  },
+  {
+    "id": 8,
+    "tree_id": 1,
+    "intervention_type": "felling",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": true
+  },
+  {
+    "id": 9,
+    "tree_id": 1,
+    "intervention_type": "streanremoval",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": true
+  },
+  {
+    "id": 10,
+    "tree_id": 1,
+    "intervention_type": "treatment",
+    "date": "2020-11-27T11:30:00.517Z",
+    "done": false
+  }
+]

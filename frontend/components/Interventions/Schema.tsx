@@ -17,7 +17,7 @@ export interface TIntervention {
   intervention_start_date?: Date;
   intervention_end_date?: Date;
   date?: Date;
-  done: Boolean;
+  done: boolean;
   required_documents: string[];
   required_material: string[];
   properties: any;
