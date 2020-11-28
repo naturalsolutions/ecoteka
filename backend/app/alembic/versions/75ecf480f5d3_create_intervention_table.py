@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '75ecf480f5d3'
-down_revision = '03b1736791f4'
+revision = "75ecf480f5d3"
+down_revision = "03b1736791f4"
 branch_labels = None
 depends_on = None
 
@@ -33,8 +33,10 @@ def upgrade():
         sa.Column("required_material", sa.dialects.postgresql.JSONB()),
         sa.Column("properties", sa.dialects.postgresql.JSONB(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
-        sa.ForeignKeyConstraint(['tree_id'], ['tree.id'], ondelete="CASCADE"),
-        sa.ForeignKeyConstraint(['organization_id'], ['organization.id'], ondelete="CASCADE")
+        sa.ForeignKeyConstraint(["tree_id"], ["tree.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(
+            ["organization_id"], ["organization.id"], ondelete="CASCADE"
+        ),
     )
     op.create_index(op.f("ix_intervention_id"), "intervention", ["id"], unique=True)
 

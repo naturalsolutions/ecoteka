@@ -4,11 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import (
-    set_policies,
-    authorization,
-    get_current_active_user
-)
+from app.core import set_policies, authorization, get_current_active_user
 from app.worker import import_geofile_task, create_mbtiles_task
 from starlette.responses import FileResponse
 
@@ -16,12 +12,12 @@ import json
 
 router = APIRouter()
 policies = {
-    'trees:get': ['owner', 'manager', 'contributor', 'reader'],
-    'trees:add': ['owner', 'manager', 'contributor'],
-    'trees:update': ['owner', 'manager', 'contributor'],
-    'trees:delete': ['owner', 'manager', 'contributor'],
-    'trees:import_from_geofile':  ['owner', 'manager', 'contributor'],
-    'trees:export': ['owner', 'manager', 'contributor'],
+    "trees:get": ["owner", "manager", "contributor", "reader"],
+    "trees:add": ["owner", "manager", "contributor"],
+    "trees:update": ["owner", "manager", "contributor"],
+    "trees:delete": ["owner", "manager", "contributor"],
+    "trees:import_from_geofile": ["owner", "manager", "contributor"],
+    "trees:export": ["owner", "manager", "contributor"],
 }
 set_policies(policies)
 
@@ -30,7 +26,7 @@ set_policies(policies)
 def import_from_geofile(
     organization_id: int,
     *,
-    auth=Depends(authorization('trees:import_from_geofile')),
+    auth=Depends(authorization("trees:import_from_geofile")),
     db: Session = Depends(get_db),
     name: str,
     current_user: models.User = Depends(get_current_active_user),
@@ -68,7 +64,7 @@ def import_from_geofile(
 def get(
     organization_id: int,
     tree_id: int,
-    auth=Depends(authorization('trees:get')),
+    auth=Depends(authorization("trees:get")),
     db: Session = Depends(get_db),
     current_user: models = Depends(get_current_active_user),
 ) -> Any:
@@ -77,7 +73,7 @@ def get(
 
     if not tree:
         raise HTTPException(status_code=404, detail=f"{tree_id} not found")
-    
+
     return tree.to_xy()
 
 
@@ -85,7 +81,7 @@ def get(
 def add(
     organization_id: int,
     *,
-    auth=Depends(authorization('trees:add')),
+    auth=Depends(authorization("trees:add")),
     db: Session = Depends(get_db),
     tree: schemas.TreePost,
     current_user: models.User = Depends(get_current_active_user),
@@ -109,7 +105,7 @@ def update(
     organization_id: int,
     tree_id: int,
     *,
-    auth=Depends(authorization('trees:update')),
+    auth=Depends(authorization("trees:update")),
     db: Session = Depends(get_db),
     update_data: schemas.tree.TreePatch,
     current_user: models = Depends(get_current_active_user),
@@ -145,7 +141,7 @@ def update(
 def delete(
     organization_id: int,
     tree_id: int,
-    auth=Depends(authorization('trees:delete')),
+    auth=Depends(authorization("trees:delete")),
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
@@ -156,12 +152,13 @@ def delete(
         create_mbtiles_task.delay(current_user.organization_id)
         return response
 
+
 @router.get("/export")
 def trees_export(
-    format: str = 'geojson',
-    auth=Depends(authorization('trees:export')),
+    format: str = "geojson",
+    auth=Depends(authorization("trees:export")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user)
+    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """Export the trees from one organization"""
 

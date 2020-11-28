@@ -32,8 +32,8 @@ def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
         geofile_id=geofile.id,
         user_id=geofile.user_id,
         organization_id=geofile.organization_id,
-        geom=f'POINT({x} {y})',
-        properties=properties_tree
+        geom=f"POINT({x} {y})",
+        properties=properties_tree,
     )  # type: ignore
 
     return tree
@@ -42,11 +42,10 @@ def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
 def import_from_fiona(db: Session, path: Path, geofile: GeoFile):
     transformer = None
 
-    if geofile.crs != 'epsg:4326':
+    if geofile.crs != "epsg:4326":
         transformer = Transformer.from_crs(
-            geofile.crs.lower(),
-            "epsg:4326",
-            always_xy=True)
+            geofile.crs.lower(), "epsg:4326", always_xy=True
+        )
 
     with fiona.open(path) as c:
         for i, feature in enumerate(c):
@@ -73,10 +72,8 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
 
     transformer = None
 
-    if geofile.crs.lower() != 'epsg:4326':
-        transformer = Transformer.from_crs(
-            int(geofile.crs.lower().split(':')[1]),
-            4326)
+    if geofile.crs.lower() != "epsg:4326":
+        transformer = Transformer.from_crs(int(geofile.crs.lower().split(":")[1]), 4326)
 
     for i in df.index:
         x = df.loc[i, geofile.longitude_column]
@@ -98,20 +95,20 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
 
 
 def import_geofile(db: Session, geofile: GeoFile):
-    logging.info('running geofile import task')
+    logging.info("running geofile import task")
     try:
         geofile.status = GeoFileStatus.IMPORTING.value
         geofile.importing_start = datetime.datetime.utcnow()
         db.commit()
 
-        if geofile.extension in ['geojson', 'zip']:
+        if geofile.extension in ["geojson", "zip"]:
             import_from_fiona(db, geofile.get_filepath(), geofile)
 
-        if geofile.extension in ['xlsx', 'xls']:
+        if geofile.extension in ["xlsx", "xls"]:
             df = pd.read_excel(geofile.get_filepath())
             import_from_dataframe(db, df, geofile.get_filepath(), geofile)
 
-        if geofile.extension == 'csv':
+        if geofile.extension == "csv":
             df = pd.read_csv(geofile.get_filepath())
             import_from_dataframe(db, df, geofile.get_filepath(), geofile)
 
@@ -126,5 +123,5 @@ def import_geofile(db: Session, geofile: GeoFile):
     except:
         traceback.print_exc()
 
-        geofile.status = 'error'
+        geofile.status = "error"
         db.commit()

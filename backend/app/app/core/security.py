@@ -1,19 +1,19 @@
-from fastapi import Depends, HTTPException, status, Request
-from fastapi.security import OAuth2PasswordBearer
-from fastapi_jwt_auth import AuthJWT
-from pydantic.typing import Optional
-from sqlalchemy.orm import Session
-from app.core import settings
 from app.api import get_db
-from app.models import User
+from app.core import settings
 from app.crud import user, organization as crud_organization
+from app.db.session import engine
+from app.models import User, Organization
+from app.schemas import CurrentUser
+from datetime import timedelta
+from fastapi import Depends, HTTPException, status, Request
+from fastapi_jwt_auth import AuthJWT
+from fastapi.security import OAuth2PasswordBearer
+from pydantic import BaseModel
+from pydantic.typing import Optional
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 import casbin
 import casbin_sqlalchemy_adapter
-from datetime import timedelta
-from pydantic import BaseModel
-from app.db.session import engine
-from sqlalchemy import text
-from app.schemas import CurrentUSer
 
 
 token_url = f"{settings.ROOT_PATH}/auth/login"
@@ -23,12 +23,8 @@ reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=token_url)
 
 class Settings(BaseModel):
     authjwt_secret_key: str = settings.SECRET_KEY
-    authjwt_access_token_expires: timedelta = (
-        settings.authjwt_access_token_expires
-    )
-    authjwt_refresh_token_expires: timedelta = (
-        settings.authjwt_refresh_token_expires
-    )
+    authjwt_access_token_expires: timedelta = settings.authjwt_access_token_expires
+    authjwt_refresh_token_expires: timedelta = settings.authjwt_refresh_token_expires
 
 
 @AuthJWT.load_config
@@ -113,9 +109,7 @@ def get_current_user_if_is_superuser(
     return current_user
 
 
-reusable_oauth2_optional = OAuth2PasswordBearer(
-    tokenUrl=token_url, auto_error=False
-)
+reusable_oauth2_optional = OAuth2PasswordBearer(tokenUrl=token_url, auto_error=False)
 
 
 def get_optional_current_active_user(
@@ -137,14 +131,9 @@ source_file = "/app/app/core/authorization-model.conf"
 adapter = casbin_sqlalchemy_adapter.Adapter(engine)
 enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, True)
 
-# enforcer.add_role_for_user_in_domain('1', 'admin', '1')
-# enforcer.add_role_for_user_in_domain('2', 'reader', '1')
-
 
 def authorization(action: str):
-    def decorated(
-        request: Request, organization_id, user=Depends(get_current_user)
-    ):
+    def decorated(request: Request, organization_id, user=Depends(get_current_user)):
         if not enforcer.enforce(str(user.id), str(organization_id), action):
             raise HTTPException(
                 status_code=403,
@@ -166,15 +155,18 @@ def get_current_user_with_organizations(
     current_user=Depends(get_current_user), db: Session = Depends(get_db)
 ):
     query = text("SELECT v2 FROM casbin_rule WHERE ptype=:ptype AND v0=:user")
+    params = { "ptype": "g", "user": str(current_user.id)}
 
-    result = CurrentUSer(
+    organizations = []
+
+    for row in db.execute(query, params=params):
+        organization = crud_organization.get(db, id=row[0])
+        if organization is not None and isinstance(organization, Organization):
+            organizations.append(organization.to_current_user_schema())
+
+    result = CurrentUser(
         **current_user.as_dict(),
-        organizations=[
-            crud_organization.get(db, id=row[0]).to_current_user_schema()
-            for row in db.execute(
-                query, {"ptype": "g", "user": str(current_user.id)}
-            )
-        ],
+        organizations=organizations,
     )
 
     return result

@@ -18,36 +18,36 @@ def import_geofile_task(geofilename: str):
         geofile = crud.geo_file.get_by_name(db, name=geofilename)
 
         import_geofile(db, geofile)
-        return 'import completed'
+        return "import completed"
 
 
 @celery_app.task
 def create_mbtiles_task(organization_id: int):
     with deps.dbcontext() as db:
-        print(f'creating tiles for organization {organization_id}')
+        print(f"creating tiles for organization {organization_id}")
         organization = crud.organization.get(db, organization_id)
 
         create_mbtiles(db, organization)
-        return f'organization {organization_id} tiles generated'
+        return f"organization {organization_id} tiles generated"
 
 
 @celery_app.task
 def send_new_registration_email_task(email_to: str, full_name: str, password: str):
     send_new_registration_email(email_to, full_name, password)
-    return 'ok'
+    return "ok"
 
 
 @celery_app.task
 def send_new_registration_link_email_task(email_to: str, full_name: str, link: str):
     send_new_registration_link_email(email_to, full_name, link)
-    return 'ok'
+    return "ok"
 
 
 @celery_app.task
 def generate_and_insert_registration_link_task(user_id: int):
     with deps.dbcontext() as db:
         crud.registration_link.generate_and_insert(db, user_id)
-        return 'ok'
+        return "ok"
 
 
 @celery_app.task
@@ -65,7 +65,7 @@ def send_new_contact_notification_task(contact_id):
             position=contact_in_db.position,
             contact_request=contact_in_db.contact_request,
         )
-        return 'contact notification sent'
+        return "contact notification sent"
 
 
 @celery_app.task
@@ -73,9 +73,7 @@ def send_contact_request_confirmation_task(contact_id: int):
     with deps.dbcontext() as db:
         contact_in_db = crud.contact.get(db, contact_id)
         send_contact_request_confirmation(
-            contact_in_db.email,
-            contact_in_db.first_name,
-            contact_in_db.last_name
+            contact_in_db.email, contact_in_db.first_name, contact_in_db.last_name
         )
 
-    return 'contact request confirmation task completed'
+    return "contact request confirmation task completed"

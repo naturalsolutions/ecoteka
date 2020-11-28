@@ -6,11 +6,3 @@
 .etk-map .mapboxgl-ctrl-geolocate {
   display: none;
 }
-
-.ag-cell.no-focus {
-  border: none !important;
-}
-
-.ag-cell.align-right .ag-cell-wrapper {
-  justify-content: right;
-}

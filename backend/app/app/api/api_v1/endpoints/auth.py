@@ -53,9 +53,7 @@ def login_and_get_refresh_token(
         db, email=form_data.username, password=form_data.password
     )
     if not user_in_db:
-        raise HTTPException(
-            status_code=400, detail="Incorrect email or password"
-        )
+        raise HTTPException(status_code=400, detail="Incorrect email or password")
 
     return generate_access_token_and_refresh_token_response(
         user_id=user_in_db.id, is_superuser=user_in_db.is_superuser
@@ -69,9 +67,7 @@ def get_access_token(
 ):
     logging.info(f"token authorization find : {current_user}")
 
-    access_token = Authorize.create_access_token(
-        subject=current_user.id, fresh=False
-    )
+    access_token = Authorize.create_access_token(subject=current_user.id, fresh=False)
 
     return {"access_token": access_token, "token_type": "Bearer"}
 

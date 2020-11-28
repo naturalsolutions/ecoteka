@@ -7,14 +7,17 @@ from app.crud import user
 from app.core import settings
 from app.schemas import UserCreate
 from app.model import User
+
 # from app.tests.utils.utils import random_email, random_lower_string
 
-test_user = User(
-    
-)
+test_user = User()
 
-def test_create_user(client: TestClient, superuser_token_headers: Dict[str, str]) -> None:
-    
+
+def test_create_user(
+    client: TestClient, superuser_token_headers: Dict[str, str]
+) -> None:
+    pass
+
 
 def test_get_users_superuser_me(
     client: TestClient, superuser_token_headers: Dict[str, str]

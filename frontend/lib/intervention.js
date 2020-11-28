@@ -29,8 +29,11 @@ class Intervention {
     return await response.json();
   }
 
-  async plan(id, date) {
-    const url = `${this.basepath}/${id}`;
+  async plan(organizationId, id, date) {
+    const url = `${this.basepath.replace(
+      "{organization_id}",
+      organizationId
+    )}/${id}`;
     const response = await this.api.patch(url, {}, JSON.stringify({ date }));
 
     return response;

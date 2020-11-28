@@ -26,6 +26,5 @@ class RegistrationLinkOut(RegistrationLinkPrimaryKey, RegistrationLinkBase):
 
 # Additional properties to return via API
 class RegistrationLinkDB(RegistrationLinkPrimaryKey, RegistrationLinkBase):
-
     class Config:
         orm_mode = True

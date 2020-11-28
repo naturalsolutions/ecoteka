@@ -7,11 +7,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
-import { TIntervention } from "@/components/Interventions/Schema";
-import CalendarTodoIntervention from "@/components/Calendar/TodoIntervention";
 
 export interface CalendarHeaderProps {
-  todoInterventions: TIntervention[];
   year: number;
   onYearChange?(newYear: number): void;
 }
@@ -19,7 +16,6 @@ export interface CalendarHeaderProps {
 const TODAY = new Date();
 
 const defaultProps: CalendarHeaderProps = {
-  todoInterventions: [],
   year: TODAY.getFullYear(),
 };
 
@@ -29,14 +25,6 @@ const useStyles = makeStyles(() => ({
 
 const CalendarHeader: React.FC<CalendarHeaderProps> = (props) => {
   const classes = useStyles();
-
-  const renderTodoInterventions = () =>
-    props.todoInterventions.map((todoIntervention) => (
-      <CalendarTodoIntervention
-        key={`todo-intervention-${todoIntervention.id}`}
-        todoIntervention={todoIntervention}
-      />
-    ));
 
   return (
     <Grid container alignItems="center">
@@ -48,18 +36,16 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = (props) => {
       >
         Today
       </Button>
-      <IconButton onClick={() => props.onYearChange(props.year - 1)}>
+      <IconButton
+        size="medium"
+        onClick={() => props.onYearChange(props.year - 1)}
+      >
         <ArrowBackIos />
       </IconButton>
       <Typography variant="h6">{props.year}</Typography>
       <IconButton onClick={() => props.onYearChange(props.year + 1)}>
         <ArrowForwardIos />
       </IconButton>
-      <Grid item>
-        <Grid container spacing={1}>
-          {renderTodoInterventions()}
-        </Grid>
-      </Grid>
     </Grid>
   );
 };

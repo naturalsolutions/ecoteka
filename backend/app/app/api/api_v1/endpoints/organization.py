@@ -74,9 +74,7 @@ def create_organization(
     organization_in: OrganizationCreate,
     current_user: User = Depends(get_current_active_user),
 ):
-    new_organization = organization.create(
-        db, obj_in=organization_in
-    ).to_schema()
+    new_organization = organization.create(db, obj_in=organization_in).to_schema()
     enforcer.add_role_for_user_in_domain(
         str(current_user.id), "owner", str(new_organization.id)
     )
@@ -108,9 +106,9 @@ def update_organization(
 
 @router.get("/{organization_id}")
 def get_one(
+    organization_id: int,
     *,
     auth=Depends(authorization("organizations:get_one")),
-    organization_id: int,
     db: Session = Depends(get_db),
 ) -> Optional[Organization]:
     """
@@ -121,19 +119,7 @@ def get_one(
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
 
-    total_trees = organization.get_total_tree_by_id(db, id=organization_id)
-
-    if not total_trees:
-        total_trees = 0
-
-    organization_response = Organization(
-        **jsonable_encoder(
-            organization_in_db.to_schema(), exclude=["total_trees"]
-        ),
-        total_trees=total_trees,
-    )
-
-    return organization_response
+    return organization_in_db.to_schema()
 
 
 @router.get("/{organization_id}/teams", response_model=List[Organization])
@@ -145,10 +131,8 @@ def get_teams(
     current_user: User = Depends(get_current_user),
 ):
     return [
-        org.to_schema()
-        for org in organization.get_teams(db, parent_id=organization_id)
+        org.to_schema() for org in organization.get_teams(db, parent_id=organization_id)
     ]
-
 
 
 @router.get("/{organization_id}/members")
@@ -161,6 +145,7 @@ def get_members(
 ):
     return crud.organization.get_members(db, id=organization_id)
 
+
 @router.post("/{organization_id}/members")
 def add_members(
     organization_id: int,
@@ -172,7 +157,7 @@ def add_members(
 ):
     try:
         members = crud.organization.get_members(db, id=organization_id)
-        
+
         users_to_add = (
             invite
             for invite in invites
@@ -287,9 +272,7 @@ def update_member_role(
         enforcer.delete_roles_for_user_in_domain(
             str(user_id), user_role, str(organization_id)
         )
-        enforcer.add_role_for_user_in_domain(
-            str(user_id), role, str(organization_id)
-        )
+        enforcer.add_role_for_user_in_domain(str(user_id), role, str(organization_id))
         # need ro reload handle new policy
         enforcer.load_policy()
 
@@ -330,9 +313,7 @@ def get_path(
     return [org.to_schema() for org in organization.get_path(db, id=organization_id)]
 
 
-@router.get(
-    "/{organization_id}/get-centroid-organization", response_model=Coordinate
-)
+@router.get("/{organization_id}/get-centroid-organization", response_model=Coordinate)
 def get_center_from_organization(
     *,
     auth=Depends(authorization("organization:get_center_from_organization")),
@@ -376,9 +357,7 @@ async def upload_working_area(
         extension = filename_parts[1][1:]
 
         if extension not in ["zip", "geojson"]:
-            raise HTTPException(
-                status_code=415, detail="File format unsupported"
-            )
+            raise HTTPException(status_code=415, detail="File format unsupported")
 
         unique_name = uuid.uuid4()
         unique_filename = f"{unique_name}.{extension}"
@@ -397,9 +376,7 @@ async def upload_working_area(
         organization_in_db = organization.get(db, id=organization_id)
 
         if not organization_in_db:
-            raise HTTPException(
-                status_code=404, detail="Organization not found"
-            )
+            raise HTTPException(status_code=404, detail="Organization not found")
 
         shape_working_area = shape(record["geometry"])
         working_area = shape_working_area.wkt
@@ -434,7 +411,9 @@ def get_working_area(
         raise HTTPException(status_code=404, detail="Organization not found")
 
     if organization_in_db.working_area is None:
-        raise HTTPException(status_code=404, detail="Organization working area is empty")
+        raise HTTPException(
+            status_code=404, detail="Organization working area is empty"
+        )
 
     shape = to_shape(organization_in_db.working_area)
 

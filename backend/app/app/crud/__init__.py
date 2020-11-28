@@ -1,27 +1,11 @@
-from .base import (
-    CRUDBase
-)
-from .crud_user import (
-    user
-)
-from .crud_contact import (
-    contact
-)
-from .crud_registration_link import (
-    registration_link
-)
-from .crud_geo_file import (
-    geo_file
-)
-from .crud_tree import (
-    tree
-)
-from .crud_organization import (
-    organization
-)
-from .crud_taxref import (
-    taxref
-)
+from .base import CRUDBase
+from .crud_user import user
+from .crud_contact import contact
+from .crud_registration_link import registration_link
+from .crud_geo_file import geo_file
+from .crud_tree import tree
+from .crud_organization import organization
+from .crud_taxref import taxref
 from .crud_intervention import intervention
 
 __all__ = [
@@ -33,7 +17,7 @@ __all__ = [
     "taxref",
     "tree",
     "user",
-    "intervention"
+    "intervention",
 ]
 
 # For a new basic set of CRUD operations you could just do

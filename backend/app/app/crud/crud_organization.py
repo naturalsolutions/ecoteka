@@ -78,9 +78,6 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
             .all()
         )
 
-    def get_total_tree_by_id(self, db: Session, *, id: int) -> Optional[int]:
-        return db.query(Tree).filter(Tree.organization_id == id).count()
-
     def get_path(self, db: Session, *, id: int):
         org = self.get(db, id=id)
 
@@ -94,16 +91,14 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
         )
 
     def get_members(self, db: Session, *, id: int):
-        t = text(
-            "SELECT v0 AS user_id, v1 as role FROM casbin_rule WHERE v2 = :org_id"
-        )
+        t = text("SELECT v0 AS user_id, v1 as role FROM casbin_rule WHERE v2 = :org_id")
         user_ids = db.execute(t, {"org_id": str(id)})
-        
+
         members = []
 
         for (user_id, role) in user_ids:
             user_in_db = crud.user.get(db, id=int(user_id))
-            
+
             if user_in_db:
                 members.append(dict(user_in_db.as_dict(), role=role))
 

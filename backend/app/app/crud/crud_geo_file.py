@@ -19,7 +19,13 @@ class CRUDGeoFile(CRUDBase[GeoFile, GeoFileCreate, GeoFileUpdate]):
     def get_multi(
         self, db: Session, *, user: User, skip: int = 0, limit: int = 100
     ) -> List[GeoFile]:
-        return db.query(GeoFile).filter(GeoFile.user_id == user.id).offset(skip).limit(limit).all()
+        return (
+            db.query(GeoFile)
+            .filter(GeoFile.user_id == user.id)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
 
 
 geo_file = CRUDGeoFile(GeoFile)

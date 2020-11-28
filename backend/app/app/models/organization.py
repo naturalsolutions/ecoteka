@@ -4,10 +4,11 @@ from app.db.session import engine
 from geoalchemy2 import Geometry
 from sqlalchemy_utils import LtreeType, Ltree
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import relationship, foreign, remote
-from sqlalchemy import Sequence
+from sqlalchemy.orm import relationship, foreign, remote, column_property
+from sqlalchemy import Sequence, select, func
 from fastapi.encoders import jsonable_encoder
 from app import schemas
+from app.models.tree import Tree
 import slug as slugmodule
 import logging
 
@@ -27,11 +28,14 @@ class Organization(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False, index=True)
     slug = Column(String, nullable=False, index=True)
-
     working_area = Column("working_area", Geometry("MULTIPOLYGON"), nullable=True)
-
     path = Column(LtreeType, nullable=False)
     config = Column(JSONB, nullable=True)
+    total_trees = column_property(
+        select([func.count(Tree.id)])
+        .where(Tree.organization_id == id)
+        .correlate_except(Tree)
+    )
     parent = relationship(
         "Organization",
         primaryjoin=remote(path) == foreign(func.subpath(path, 0, -1)),
@@ -49,7 +53,11 @@ class Organization(Base):
         self.slug = slugmodule.slug(name)
         self.config = config
         self.working_area = working_area
-        self.path = Ltree(str(_id)) if parent is None else (parent.path or Ltree('_')) + Ltree(str(_id))
+        self.path = (
+            Ltree(str(_id))
+            if parent is None
+            else (parent.path or Ltree("_")) + Ltree(str(_id))
+        )
 
     def to_current_user_schema(self):
         return self.to_schema()

@@ -1,31 +1,16 @@
 from typing import Any
-from fastapi import (
-    APIRouter,
-    Depends
-)
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.schemas import (
-    ContactDB,
-    ContactCreate
-)
-from app.crud import (
-    contact
-)
-from app.api import (
-    get_db
-)
-from app.utils import (
-    send_contact_request_confirmation,
-    send_new_contact_notification
-)
+from app.schemas import ContactDB, ContactCreate
+from app.crud import contact
+from app.api import get_db
+from app.utils import send_contact_request_confirmation, send_new_contact_notification
 from app.worker import (
     send_contact_request_confirmation_task,
-    send_new_contact_notification_task
+    send_new_contact_notification_task,
 )
-from app.core import (
-    settings
-)
+from app.core import settings
 
 router = APIRouter()
 

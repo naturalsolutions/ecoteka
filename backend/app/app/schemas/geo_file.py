@@ -6,10 +6,10 @@ from pydantic import BaseModel, Field, Json
 
 
 class GeoFileStatus(enum.Enum):
-    UPLOADED = 'uploaded'
-    IMPORTED = 'imported'
-    IMPORTING = 'importing'
-    ERROR = 'error'
+    UPLOADED = "uploaded"
+    IMPORTED = "imported"
+    IMPORTING = "importing"
+    ERROR = "error"
 
 
 # Shared properties
@@ -22,7 +22,7 @@ class GeoFileBase(BaseModel):
     checksum: str
     count: int = 0
     crs: Optional[str] = Field(...)
-    driver: str = ''
+    driver: str = ""
     longitude_column: Optional[str] = Field(...)
     latitude_column: Optional[str] = Field(...)
     properties: Optional[Any] = Field(...)

@@ -1,6 +1,4 @@
-from pydantic import (
-    BaseModel
-)
+from pydantic import BaseModel
 from typing import Optional
 
 
@@ -64,18 +62,15 @@ class TaxrefForTrees(TaxrefPrimaryKey):
 
 
 class TaxrefForTreesOut(TaxrefForTrees):
-
     class Config:
         orm_mode = True
 
 
 class TaxrefOut(TaxrefPrimaryKey, TaxrefBase):
-
     class Config:
         orm_mode = True
 
 
 class TaxrefDB(TaxrefPrimaryKey, TaxrefCreate):
-
     class Config:
         orm_mode = True

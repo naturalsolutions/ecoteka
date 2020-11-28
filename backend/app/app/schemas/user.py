@@ -1,8 +1,5 @@
 from typing import Optional, List
-from pydantic import (
-    BaseModel,
-    EmailStr
-)
+from pydantic import BaseModel, EmailStr
 from app.schemas.organization import OrganizationCurrentUser
 import sqlalchemy
 
@@ -14,7 +11,7 @@ class UserPrimaryKey(BaseModel):
 # Shared properties
 class UserBase(BaseModel):
     email: Optional[EmailStr] = None
-    status: str = None
+    status: str = 'pending'
     is_superuser: bool = False
     full_name: Optional[str] = None
     is_verified: Optional[bool] = False
@@ -36,8 +33,10 @@ class UserOut(UserPrimaryKey, UserBase):
     class Config:
         orm_mode = True
 
-class CurrentUSer(UserOut):
+
+class CurrentUser(UserOut):
     organizations: List[OrganizationCurrentUser]
+
 
 class UserDB(UserPrimaryKey, UserBase):
     hashed_password: str
@@ -45,9 +44,11 @@ class UserDB(UserPrimaryKey, UserBase):
     class Config:
         orm_mode = True
 
+
 class UserInvite(BaseModel):
     email: EmailStr
     role: Optional[str]
+
 
 class UserWithRole(UserOut):
     role: Optional[str]

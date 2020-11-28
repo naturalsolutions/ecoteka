@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import Calendar from "@/components/Calendar/Index";
+import Calendar from "@/components/Interventions/Calendar/Index";
 import { apiRest } from "@/lib/api";
 import { useRouter } from "next/router";
 

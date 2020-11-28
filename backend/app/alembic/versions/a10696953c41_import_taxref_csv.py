@@ -12,21 +12,23 @@ import gzip
 
 
 # revision identifiers, used by Alembic.
-revision = 'a10696953c41'
-down_revision = 'c9b68ad69472'
+revision = "a10696953c41"
+down_revision = "c9b68ad69472"
 branch_labels = None
 depends_on = None
 
-tableTarget = 'taxref'
+tableTarget = "taxref"
 
 
 def upgrade():
     connectionObj = op.get_bind()
     rawCursor = connectionObj.connection.cursor()
-    filenameZip = os.path.join('/data', 'TAXREFv13.txt.gz')
+    filenameZip = os.path.join("/data", "TAXREFv13.txt.gz")
 
-    with gzip.open(filenameZip, 'rb') as csvFile:
-        rawCursor.copy_expert(fr"COPY {tableTarget} FROM STDIN DELIMITER E'\t' CSV HEADER;", csvFile)
+    with gzip.open(filenameZip, "rb") as csvFile:
+        rawCursor.copy_expert(
+            fr"COPY {tableTarget} FROM STDIN DELIMITER E'\t' CSV HEADER;", csvFile
+        )
 
 
 def downgrade():

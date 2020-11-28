@@ -10,19 +10,21 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cfc56b69ef20'
-down_revision = 'f8cb04c99a4f'
+revision = "cfc56b69ef20"
+down_revision = "f8cb04c99a4f"
 branch_labels = None
 depends_on = None
 
+
 def create_organization_column() -> sa.Column:
     return sa.Column(
-        'organization_id',
+        "organization_id",
         sa.Integer(),
-        sa.ForeignKey('organization.id', ondelete="CASCADE"),
+        sa.ForeignKey("organization.id", ondelete="CASCADE"),
         nullable=False,
-        server_default="1"
+        server_default="1",
     )
+
 
 def upgrade():
     op.drop_column("user", "organization_id")

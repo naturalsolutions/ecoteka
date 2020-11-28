@@ -4,10 +4,7 @@ from sqlalchemy.orm import Session
 # from app import crud
 from app.crud import user
 from app.core.security import verify_password
-from app.schemas import (
-    UserCreate,
-    UserUpdate
-)
+from app.schemas import UserCreate, UserUpdate
 from app.tests.utils.utils import random_email, random_lower_string
 
 
@@ -25,11 +22,7 @@ def test_authenticate_user(db: Session) -> None:
     password = random_lower_string()
     user_in = UserCreate(email=email, password=password)
     user_in_db = user.create(db, obj_in=user_in)
-    authenticated_user = user.authenticate(
-        db,
-        email=email,
-        password=password
-    )
+    authenticated_user = user.authenticate(db, email=email, password=password)
     assert authenticated_user
     assert user_in_db.email == authenticated_user.email
 
