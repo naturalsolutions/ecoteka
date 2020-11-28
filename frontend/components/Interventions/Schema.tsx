@@ -254,7 +254,10 @@ export function useInterventionSchema(it: TInterventionType) {
             sitem(m, t, "components:Intervention.surveillance")
           ),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup
+          .array()
+          .of(yup.string())
+          .required(t("common:errors.required")),
       },
       comment: {
         type: "textfield",
@@ -302,7 +305,10 @@ export function useInterventionSchema(it: TInterventionType) {
             sitem(m, t, "components:Intervention.indepthdiagnostic")
           ),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup
+          .array()
+          .of(yup.string())
+          .required(t("common:errors.required")),
       },
       comment: {
         type: "textfield",
