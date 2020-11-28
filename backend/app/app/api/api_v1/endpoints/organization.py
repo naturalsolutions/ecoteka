@@ -279,7 +279,7 @@ def update_member_role(
     return dict(user_in_db, role=role)
 
 
-@router.get("{organization_id}/geojson")
+@router.get("/{organization_id}/geojson")
 def get_geojson(
     *,
     organization_id: int,

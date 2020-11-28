@@ -1,6 +1,5 @@
 import { FC, useEffect, useState, createRef } from "react";
 import { Grid, makeStyles, Button, Box, Hidden } from "@material-ui/core";
-import { useQuery } from "react-query";
 import MapGL, { Source, Layer, FeatureState } from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
@@ -66,22 +65,22 @@ const EditionPage = ({}) => {
     longitude: 2.54,
     zoom: 5,
   });
-  const [mode, setMode] = useState("simple_select");
-  const [_, setFeatures] = useState([]);
+  const [mode, setMode] = useState<string>("simple_select");
+  const [data, setData] = useState<[]>([]);
   const [hoveredTreeId, setHoveredTreeId] = useState(null);
   const [clickedTreeId, setClickedTreeId] = useState(null);
-  const { data } = useQuery(
-    `geojson_${user.currentOrganization.id}`,
-    async () => {
-      const data = await apiRest.organization.geojson(
-        user.currentOrganization.id
-      );
-      return data;
-    },
-    {
-      enabled: Boolean(user.currentOrganization),
-    }
-  );
+
+  const getData = async () => {
+    const newData = await apiRest.organization.geojson(
+      user.currentOrganization.id
+    );
+
+    setData(newData);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   useEffect(() => {
     if (dialog.current.isOpen()) {
@@ -144,7 +143,7 @@ const EditionPage = ({}) => {
   };
 
   const onClick = (event) => {
-    console.log("click", event.features);
+    console.log(event);
     if (event.features.length > 0) {
       const nextClickedTreeId = event.features[0].id;
       console.log(nextClickedTreeId);
@@ -157,7 +156,6 @@ const EditionPage = ({}) => {
 
   return (
     <Grid className={classes.root} id="map-edition">
-      {/* <Map ref={mapRef} styleSource={styleSource} /> */}
       <MapGL
         ref={mapRef}
         style={{ width: "100%", height: "100%" }}
@@ -204,6 +202,13 @@ const EditionPage = ({}) => {
           onLeave={onLeave}
           onClick={onClick}
         />
+        <Draw
+          // @ts-ignore
+          data={data}
+          mode={mode}
+          onChange={(newData) => setData(newData)}
+          onDrawModeChange={({ mode: newMode }) => setMode(newMode)}
+        />
         {hoveredTreeId && (
           <FeatureState
             id={hoveredTreeId}
@@ -218,10 +223,6 @@ const EditionPage = ({}) => {
             state={{ click: true }}
           />
         )}
-        <Draw
-          mode={mode}
-          onDrawModeChange={({ mode: newMode }) => setMode(newMode)}
-        />
       </MapGL>
       <SearchCity className={classes.mapSearchCity} map={mapRef} />
       <Box className={classes.toolbar} p={1}>
