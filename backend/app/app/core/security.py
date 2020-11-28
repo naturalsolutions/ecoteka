@@ -23,12 +23,8 @@ reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=token_url)
 
 class Settings(BaseModel):
     authjwt_secret_key: str = settings.SECRET_KEY
-    authjwt_access_token_expires: timedelta = (
-        settings.authjwt_access_token_expires
-    )
-    authjwt_refresh_token_expires: timedelta = (
-        settings.authjwt_refresh_token_expires
-    )
+    authjwt_access_token_expires: timedelta = settings.authjwt_access_token_expires
+    authjwt_refresh_token_expires: timedelta = settings.authjwt_refresh_token_expires
 
 
 @AuthJWT.load_config
@@ -113,9 +109,7 @@ def get_current_user_if_is_superuser(
     return current_user
 
 
-reusable_oauth2_optional = OAuth2PasswordBearer(
-    tokenUrl=token_url, auto_error=False
-)
+reusable_oauth2_optional = OAuth2PasswordBearer(tokenUrl=token_url, auto_error=False)
 
 
 def get_optional_current_active_user(
@@ -142,9 +136,7 @@ enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, True)
 
 
 def authorization(action: str):
-    def decorated(
-        request: Request, organization_id, user=Depends(get_current_user)
-    ):
+    def decorated(request: Request, organization_id, user=Depends(get_current_user)):
         if not enforcer.enforce(str(user.id), str(organization_id), action):
             raise HTTPException(
                 status_code=403,
@@ -171,9 +163,7 @@ def get_current_user_with_organizations(
         **current_user.as_dict(),
         organizations=[
             crud_organization.get(db, id=row[0]).to_current_user_schema()
-            for row in db.execute(
-                query, {"ptype": "g", "user": str(current_user.id)}
-            )
+            for row in db.execute(query, {"ptype": "g", "user": str(current_user.id)})
         ],
     )
 

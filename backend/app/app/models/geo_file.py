@@ -1,14 +1,20 @@
 import os
 import datetime
 import hashlib
-from json import (
-    dumps,
-    loads
-)
+from json import dumps, loads
 from typing import TYPE_CHECKING
 from pathlib import Path
 
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum, JSON, ForeignKey
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Integer,
+    String,
+    DateTime,
+    Enum,
+    JSON,
+    ForeignKey,
+)
 from sqlalchemy.orm import relationship
 import fiona
 import pandas as pd
@@ -20,8 +26,8 @@ from app.schemas import GeoFileStatus
 
 class GeoFile(Base):
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    organization_id = Column(Integer, ForeignKey('organization.id'))
+    user_id = Column(Integer, ForeignKey("user.id"))
+    organization_id = Column(Integer, ForeignKey("organization.id"))
     name = Column(String, index=True, unique=True, nullable=False)
     original_name = Column(String, nullable=False)
     extension = Column(String, nullable=False)
@@ -33,10 +39,11 @@ class GeoFile(Base):
     latitude_column = Column(String, nullable=True)
     properties = Column(JSON, nullable=True)
     mapping_fields = Column(JSON, nullable=True)
-    status = Column(Enum(GeoFileStatus,
-                         values_callable=lambda obj: [e.value for e in obj]),
-                    nullable=False,
-                    default=GeoFileStatus.UPLOADED.value)
+    status = Column(
+        Enum(GeoFileStatus, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False,
+        default=GeoFileStatus.UPLOADED.value,
+    )
     uploaded_date = Column(DateTime, nullable=True, default=datetime.datetime.utcnow)
     imported_date = Column(DateTime, nullable=True)
     importing_start = Column(DateTime, nullable=True)
@@ -45,7 +52,14 @@ class GeoFile(Base):
     user = relationship("User")
     organization = relationship("Organization")
 
-    def __init__(self, user_id: int, organization_id: int, name: str, extension: str, original_name: str):
+    def __init__(
+        self,
+        user_id: int,
+        organization_id: int,
+        name: str,
+        extension: str,
+        original_name: str,
+    ):
         self.user_id = user_id
         self.organization_id = organization_id
         self.name = name
@@ -56,45 +70,47 @@ class GeoFile(Base):
         super().__init__()
 
     def get_filepath(self, extended: bool = True):
-        if self.extension == 'zip' and extended:
-            return f'zip://{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
+        if self.extension == "zip" and extended:
+            return (
+                f"zip://{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}"
+            )
         else:
-            return f'{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}'
+            return f"{settings.UPLOADED_FILES_FOLDER}/{self.name}.{self.extension}"
 
     def get_longitude_latitude_columns(self):
         properties = loads(self.properties)
 
         if not self.longitude_column:
             for i in properties:
-                if i in ['longitude', 'long', 'lon', 'lng', 'x']:
+                if i in ["longitude", "long", "lon", "lng", "x"]:
                     self.longitude_column = i
 
         if not self.latitude_column:
             for i in properties:
-                if i in ['latitude', 'lat', 'y']:
+                if i in ["latitude", "lat", "y"]:
                     self.latitude_column = i
 
     def get_metadata(self):
-        if self.extension in ['geojson', 'zip']:
+        if self.extension in ["geojson", "zip"]:
             with fiona.open(self.get_filepath()) as c:
                 self.count = len(c)
                 self.driver = c.driver
                 self.crs = c.crs["init"]
                 self.properties = dumps(c.schema["properties"])
 
-        if self.extension in ['xlsx', 'xls']:
+        if self.extension in ["xlsx", "xls"]:
             df = pd.read_excel(self.get_filepath())
             self.count = len(df.index)
-            self.driver = 'Excel'
-            self.crs = 'epsg:4326'
+            self.driver = "Excel"
+            self.crs = "epsg:4326"
             self.properties = dumps(df.dtypes.astype(str).to_dict())
             self.get_longitude_latitude_columns()
 
-        if self.extension == 'csv':
+        if self.extension == "csv":
             df = pd.read_csv(self.get_filepath())
             self.count = len(df.index)
-            self.driver = 'CSV'
-            self.crs = 'epsg:4326'
+            self.driver = "CSV"
+            self.crs = "epsg:4326"
             self.properties = dumps(df.dtypes.astype(str).to_dict())
             self.get_longitude_latitude_columns()
 
@@ -108,17 +124,17 @@ class GeoFile(Base):
 
     def is_valid(self):
         try:
-            if self.extension == 'geojson':
-                return self.driver == 'GeoJSON'
+            if self.extension == "geojson":
+                return self.driver == "GeoJSON"
 
-            if self.extension == 'zip':
-                return self.driver == 'ESRI Shapefile'
+            if self.extension == "zip":
+                return self.driver == "ESRI Shapefile"
 
-            if self.extension == 'csv':
+            if self.extension == "csv":
                 df = pd.read_csv(self.get_filepath())
                 return len(df.columns) > 0 and not df.empty
 
-            if self.extension == 'xls' or self.extension == 'xlsx':
+            if self.extension == "xls" or self.extension == "xlsx":
                 df = pd.read_excel(self.get_filepath())
                 return len(df.columns) > 0 and not df.empty
         except:

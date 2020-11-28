@@ -9,8 +9,8 @@ from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision = 'c9b68ad69472'
-down_revision = '4231989b78d5'
+revision = "c9b68ad69472"
+down_revision = "4231989b78d5"
 branch_labels = None
 depends_on = None
 
@@ -58,7 +58,7 @@ def upgrade():
         sa.Column("WF", sa.String(2), nullable=True),
         sa.Column("CLI", sa.String(2), nullable=True),
         sa.Column("URL", sa.String(82), nullable=True),
-        sa.PrimaryKeyConstraint("CD_NOM")
+        sa.PrimaryKeyConstraint("CD_NOM"),
     )
     op.create_index(op.f("ix_taxref_CD_NOM"), "taxref", ["CD_NOM"], unique=True)
     op.create_index(op.f("ix_taxref_LB_NOM"), "taxref", ["LB_NOM"])

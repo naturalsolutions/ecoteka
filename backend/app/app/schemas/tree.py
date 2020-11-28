@@ -39,7 +39,8 @@ class TreeDBMeta(BaseModel):
 
 
 class TreePost(TreeJsonBProperties):
-    ''' Schema for tree creation post request data'''
+    """ Schema for tree creation post request data"""
+
     x: float
     y: float
 
@@ -50,7 +51,8 @@ class TreePatch(TreePost):
 
 
 class Tree_xy(TreeDBMeta):
-    '''Representation of Tree with (x,y) coords instead of geoalchemy.geom-point'''
+    """Representation of Tree with (x,y) coords instead of geoalchemy.geom-point"""
+
     id: int
 
 

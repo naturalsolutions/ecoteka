@@ -9,8 +9,8 @@ from alembic import op
 import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
-revision = '4231989b78d5'
-down_revision = 'ed182660c635'
+revision = "4231989b78d5"
+down_revision = "ed182660c635"
 branch_labels = None
 depends_on = None
 
@@ -23,4 +23,5 @@ def upgrade():
 def downgrade():
     op.execute("UPDATE geofile SET status='importing' WHERE status='error'")
     op.execute(
-        "DELETE FROM pg_enum WHERE enumtypid='geofilestatus'::regtype AND enumlabel='error'")
+        "DELETE FROM pg_enum WHERE enumtypid='geofilestatus'::regtype AND enumlabel='error'"
+    )

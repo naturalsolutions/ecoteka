@@ -33,6 +33,5 @@ class ContactOut(ContactPrimaryKey, ContactBase):
 
 # Additional properties to return via API
 class ContactDB(ContactPrimaryKey, ContactBase):
-
     class Config:
         orm_mode = True

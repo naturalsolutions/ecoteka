@@ -5,11 +5,12 @@ import json
 
 
 new_user = {
-    "full_name": 'test user',
-    "email": 'test@mail.com',
-    "organization": 'test organization',
-    "password": 'toto'
+    "full_name": "test user",
+    "email": "test@mail.com",
+    "organization": "test organization",
+    "password": "toto",
 }
+
 
 def test_auth_login_first_superuser(client: TestClient) -> None:
     credentials = {
@@ -36,25 +37,23 @@ def test_auth_login_bad_password(client: TestClient) -> None:
     assert error_message["detail"] == "Incorrect email or password"
 
 
-def test_auth_register(client: TestClient, superuser_token_headers: Dict[str, str]) -> None:
+def test_auth_register(
+    client: TestClient, superuser_token_headers: Dict[str, str]
+) -> None:
     json_data = json.dumps(new_user)
-    r = client.post(
-        "/auth/register/",
-        headers=superuser_token_headers,
-        data=json_data
-    )
+    r = client.post("/auth/register/", headers=superuser_token_headers, data=json_data)
     message = r.json()
     assert r.status_code == 200
-    assert message["msg"] == 'user created'
+    assert message["msg"] == "user created"
 
 
-def test_auth_register_user_exist(client: TestClient, superuser_token_headers: Dict[str, str]) -> None:
+def test_auth_register_user_exist(
+    client: TestClient, superuser_token_headers: Dict[str, str]
+) -> None:
     json_data = json.dumps(new_user)
-    r = client.post(
-        "/auth/register/",
-        headers=superuser_token_headers,
-        data=json_data
-    )
+    r = client.post("/auth/register/", headers=superuser_token_headers, data=json_data)
     message = r.json()
     assert r.status_code == 400
-    assert message["detail"] == 'The user with this username already exists in the system.'
+    assert (
+        message["detail"] == "The user with this username already exists in the system."
+    )

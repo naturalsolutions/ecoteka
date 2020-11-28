@@ -1,25 +1,10 @@
-from .contact import (
-    Contact
-)
-from .geo_file import (
-    GeoFile,
-    GeoFileStatus
-)
-from .organization import (
-    Organization
-)
-from .registration_link import (
-    Registration_Link
-)
-from .taxref import (
-    Taxref
-)
-from .tree import (
-    Tree
-)
-from .user import (
-    User
-)
+from .contact import Contact
+from .geo_file import GeoFile, GeoFileStatus
+from .organization import Organization
+from .registration_link import Registration_Link
+from .taxref import Taxref
+from .tree import Tree
+from .user import User
 from .intervention import Intervention
 
 
@@ -32,5 +17,5 @@ __all__ = [
     "Taxref",
     "Tree",
     "User",
-    "Intervention"
+    "Intervention",
 ]

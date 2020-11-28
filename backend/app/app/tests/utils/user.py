@@ -4,13 +4,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.crud import user
-from app.models import (
-    User
-)
-from app.schemas import (
-    UserCreate,
-    UserUpdate
-)
+from app.models import User
+from app.schemas import UserCreate, UserUpdate
 from app.tests.utils.utils import random_email, random_lower_string
 
 
@@ -45,18 +40,10 @@ def authentication_token_from_email(
     password = random_lower_string()
     user_in_db = user.get_by_email(db, email=email)
     if not user_in_db:
-        user_in_create = UserCreate(
-            username=email,
-            email=email,
-            password=password
-        )
+        user_in_create = UserCreate(username=email, email=email, password=password)
         user_in_db = user.create(db, obj_in=user_in_create)
     else:
         user_in_update = UserUpdate(password=password)
         user_in_db = user.update(db, db_obj=user_in_db, obj_in=user_in_update)
 
-    return user_authentication_headers(
-        client=client,
-        email=email,
-        password=password
-    )
+    return user_authentication_headers(client=client, email=email, password=password)

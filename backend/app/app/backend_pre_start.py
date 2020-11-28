@@ -19,7 +19,7 @@ def create_uploaded_files_folder(path):
     except OSError:
         logger.error(f"Creation of the directory {path} failed")
     else:
-        logger.info(f'Successfully created the directory {path}')
+        logger.info(f"Successfully created the directory {path}")
 
 
 @retry(
