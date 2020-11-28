@@ -65,7 +65,7 @@ const EditionPage = ({}) => {
     longitude: 2.54,
     zoom: 5,
   });
-  const [mode, setMode] = useState<string>("simple_select");
+  const [mode, setMode] = useState<string>("draw_point");
   const [data, setData] = useState({
     type: "FeatureCollection",
     features: [],
@@ -181,8 +181,13 @@ const EditionPage = ({}) => {
           // @ts-ignore
           data={data}
           mode={mode}
-          onChange={(newData) => setData(newData)}
-          onDrawModeChange={({ mode: newMode }) => setMode(newMode)}
+          boxSelect={true}
+          onChange={(newData) => {
+            setData(newData);
+          }}
+          onDrawModeChange={({ mode: newMode }) => {
+            setMode(newMode);
+          }}
         />
         {hoveredTreeId && (
           <FeatureState

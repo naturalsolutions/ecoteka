@@ -6,12 +6,13 @@ import InterventionsTable from "../../Interventions/InterventionsTable";
 import { useAppContext } from "@/providers/AppContext";
 import TreeExpanded from "@/components/Tree/Infos/Expanded";
 import { useTemplate } from "@/components/Template";
+import { TIntervention } from "@/components/Interventions/Schema";
 
 const Summary: FC<{ id: number }> = ({ id }) => {
   const { user } = useAppContext();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [tree, setTree] = useState();
-  const [interventions, setInterventions] = useState([]);
+  const [tree, setTree] = useState<any>({});
+  const [interventions, setInterventions] = useState<TIntervention[]>();
   const { dialog } = useTemplate();
 
   const getTree = async (id) => {
@@ -36,13 +37,7 @@ const Summary: FC<{ id: number }> = ({ id }) => {
     <Grid container direction="column">
       <Grid item>
         <Typography color="textPrimary" component="h3">
-          {tree?.family}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Typography color="textPrimary" component="b">
-          <RoomIcon />
-          {tree?.address}
+          {tree && tree?.family}
         </Typography>
       </Grid>
       <Grid item>
@@ -61,7 +56,12 @@ const Summary: FC<{ id: number }> = ({ id }) => {
           </Grid>
         </Grid>
       </Grid>
-      <TreeExpanded open={isExpanded} onClose={() => setIsExpanded(false)} />
+      <TreeExpanded
+        open={isExpanded}
+        tree={tree}
+        interventions={interventions}
+        onClose={() => setIsExpanded(false)}
+      />
     </Grid>
   );
 };

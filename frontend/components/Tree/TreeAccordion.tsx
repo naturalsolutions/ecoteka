@@ -10,8 +10,6 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useETKForm from "../Form/useForm";
 import useTreeSchema from "./Schema";
-import { useQuery } from "react-query";
-import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TreeAccordion: FC<{
-  id: number;
+  tree: object;
 }> = (props) => {
   const { user } = useAppContext();
   const classes = useStyles();
@@ -37,29 +35,16 @@ const TreeAccordion: FC<{
     };
   });
   const { fields, setValue } = useETKForm({ schema: schema });
-  const id = props.id;
-  const { data: tree } = useQuery(
-    `tree_${id}`,
-    async () => {
-      if (id) {
-        const data = await apiRest.trees.get(user.currentOrganization.id, id);
-        return data;
-      }
-    },
-    {
-      enabled: Boolean(id),
-    }
-  );
 
   useEffect(() => {
-    for (let key in tree) {
+    for (let key in props.tree) {
       if (schema.hasOwnProperty(key)) {
-        setValue(key, tree[key]);
+        setValue(key, props.tree[key]);
       }
     }
-  }, [tree]);
+  }, [props.tree]);
 
-  return !tree ? (
+  return !props.tree ? (
     <Fragment></Fragment>
   ) : (
     <Fragment>
