@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, inspect
+from sqlalchemy import Column, Integer, ForeignKey, inspect
 from sqlalchemy.dialects.postgresql import JSONB
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
@@ -17,7 +17,7 @@ class Tree(Base):
 
     def to_xy(self):
         coords = to_shape(self.geom)
-        return Tree_xy(
+        tree = Tree_xy(
             **{
                 c.key: getattr(self, c.key)
                 for c in inspect(self).mapper.column_attrs
@@ -26,3 +26,5 @@ class Tree(Base):
             x=coords.x,
             y=coords.y
         )
+
+        return tree

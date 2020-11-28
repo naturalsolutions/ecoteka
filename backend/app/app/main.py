@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.openapi.utils import get_openapi
 from starlette.middleware.cors import CORSMiddleware
 from fastapi_jwt_auth.exceptions import AuthJWTException
 

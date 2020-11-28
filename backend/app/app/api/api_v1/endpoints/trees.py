@@ -62,11 +62,9 @@ def import_from_geofile(
 
 @router.get("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def get(
-    organization_id: int,
     tree_id: int,
     auth=Depends(authorization("trees:get")),
     db: Session = Depends(get_db),
-    current_user: models = Depends(get_current_active_user),
 ) -> Any:
     """Gets a tree"""
     tree = crud.tree.get(db, tree_id)
