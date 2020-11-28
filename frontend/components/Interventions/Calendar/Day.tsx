@@ -8,13 +8,13 @@ import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 import CalendarIntervention from "@/components/Interventions/Calendar/Intervention";
 import { TIntervention } from "@/components/Interventions/Schema";
-import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
 
 export interface CalendarDayProps {
   interventions: TIntervention[];
   day: number;
   month: number;
   year: number;
+  onInterventionPlan?(intervention: TIntervention): void;
 }
 
 const defaultProps: CalendarDayProps = {
@@ -48,7 +48,7 @@ async function interventionPlan(
   date: CalendarDayProps
 ) {
   try {
-    const dateIntervention = new Date(date.year, date.month, date.day);
+    const dateIntervention = new Date(date.year, date.month, date.day + 1);
     const response = await apiRest.interventions.plan(
       organizationId,
       interventionId,
@@ -69,7 +69,6 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
   const classes = useStyles();
   const { theme } = useTemplate();
   const { user } = useAppContext();
-  const { dialog } = useTemplate();
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.BOX,
     drop: async function (newIntervention: InterventionType) {
@@ -78,23 +77,22 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
         newIntervention.id,
         props
       );
+
+      props.onInterventionPlan(intervention);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   });
 
-  const handleInterventionDialog = () => {
-    dialog.current.open({
-      title: "Intervention",
-      content: "",
-      actions: [
-        {
-          label: "Close",
-        },
-      ],
+  const renderCalendarInterventions = () =>
+    props.interventions.map((intervention) => {
+      return (
+        <Grid key={`day-intervention-${intervention.id}`} item>
+          <CalendarIntervention intervention={intervention} />
+        </Grid>
+      );
     });
-  };
 
   return (
     <Grid container direction="column">
@@ -107,31 +105,12 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
               ? theme?.palette?.info.main
               : undefined,
           }}
-          onClick={handleInterventionDialog}
         >
           {props.day}
         </IconButton>
       </Grid>
       <Grid item>
-        <Grid container>
-          {props.interventions.map((intervention) => {
-            const backgroundColor =
-              INTERVENTION_COLORS[intervention.intervention_type];
-            return (
-              <Grid key={`day-intervention-${intervention.id}`} item>
-                <div
-                  style={{
-                    borderRadius: "50%",
-                    backgroundColor: backgroundColor,
-                    width: "8px",
-                    height: "8px",
-                    marginRight: "2px",
-                  }}
-                />
-              </Grid>
-            );
-          })}
-        </Grid>
+        <Grid container>{renderCalendarInterventions()}</Grid>
       </Grid>
     </Grid>
   );

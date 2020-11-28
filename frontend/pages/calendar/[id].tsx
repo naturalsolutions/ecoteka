@@ -31,6 +31,7 @@ const CalendarPage: FC = ({}) => {
       interventions={interventions}
       year={year}
       onYearChange={handleYearChange}
+      onInterventionPlan={() => getData(Number(router.query.id), year)}
     />
   );
 };

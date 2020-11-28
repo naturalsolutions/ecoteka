@@ -15,6 +15,7 @@ export interface CalendarMonthProps {
   interventions: TIntervention[];
   month: number;
   year: number;
+  onInterventionPlan?(intervention: TIntervention): void;
 }
 
 const defaultProps: CalendarMonthProps = {
@@ -72,6 +73,10 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
 
     const filterInterventionsDay = (day) => {
       return (intervention: TIntervention) => {
+        if (!intervention.date) {
+          return false;
+        }
+
         const interventionDay = new Date(intervention.date).getDate();
 
         return interventionDay === day;
@@ -105,6 +110,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
                   interventions={props.interventions.filter(
                     filterInterventionsDay(day++)
                   )}
+                  onInterventionPlan={props.onInterventionPlan}
                 />
               </Grid>
             );

@@ -22,6 +22,7 @@ export interface CalendarProps {
   interventions: TIntervention[];
   year: number;
   onYearChange?(newYear: number): void;
+  onInterventionPlan?(intervention: TIntervention): void;
 }
 
 const TODAY = new Date();
@@ -77,6 +78,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
                 filters.includes(intervention.intervention_type)
               )
               .filter(filterInterventionMonth(i))}
+            onInterventionPlan={props.onInterventionPlan}
           />
         </Grid>
       );
@@ -88,8 +90,6 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   const handleNewIntervention = () => {
     router.push("/?panel=newIntervention");
   };
-
-  console.log(props.interventions);
 
   return (
     <DndProvider backend={HTML5Backend}>
