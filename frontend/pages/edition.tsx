@@ -66,7 +66,10 @@ const EditionPage = ({}) => {
     zoom: 5,
   });
   const [mode, setMode] = useState<string>("simple_select");
-  const [data, setData] = useState<[]>([]);
+  const [data, setData] = useState({
+    type: "FeatureCollection",
+    features: [],
+  });
   const [hoveredTreeId, setHoveredTreeId] = useState(null);
   const [clickedTreeId, setClickedTreeId] = useState(null);
 
@@ -145,7 +148,7 @@ const EditionPage = ({}) => {
   const onClick = (event) => {
     console.log(event);
     if (event.features.length > 0) {
-      const nextClickedTreeId = event.features[0].id;
+      const nextClickedTreeId = event.features[0].properties.id;
       console.log(nextClickedTreeId);
       if (clickedTreeId !== nextClickedTreeId) {
         setClickedTreeId(nextClickedTreeId);

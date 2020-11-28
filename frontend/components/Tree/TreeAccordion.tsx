@@ -12,6 +12,7 @@ import useETKForm from "../Form/useForm";
 import useTreeSchema from "./Schema";
 import { useQuery } from "react-query";
 import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const TreeAccordion: FC<{
   id: number;
 }> = (props) => {
+  const { user } = useAppContext();
   const classes = useStyles();
   const schema = useTreeSchema();
   Object.keys(schema).map((key) => {
@@ -39,8 +41,10 @@ const TreeAccordion: FC<{
   const { data: tree } = useQuery(
     `tree_${id}`,
     async () => {
-      const data = await apiRest.trees.get(id);
-      return data;
+      if (id) {
+        const data = await apiRest.trees.get(user.currentOrganization.id, id);
+        return data;
+      }
     },
     {
       enabled: Boolean(id),

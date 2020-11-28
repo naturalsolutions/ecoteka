@@ -4,18 +4,20 @@ import { FC, Fragment } from "react";
 import { useQuery } from "react-query";
 import RoomIcon from "@material-ui/icons/Room";
 import InterventionsTable from "../../Interventions/InterventionsTable";
+import { useAppContext } from "@/providers/AppContext";
 
 const Summary: FC<{
   id: number;
   showMore: () => void;
 }> = ({ id, showMore }) => {
+  const { user } = useAppContext();
   const { data: tree } = useQuery(
     `tree_${id}`,
     async () => {
-      console.log(id);
-      const data = await apiRest.trees.get(id);
-      console.log(data);
-      return data;
+      if (id) {
+        const data = await apiRest.trees.get(user.currentOrganization.id, id);
+        return data;
+      }
     },
     {
       enabled: Boolean(id),

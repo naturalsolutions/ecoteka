@@ -42,7 +42,7 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = ({
 
   return (
     <Box>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={6}>
           <Paper>
             <TreeAccordion id={id} />
