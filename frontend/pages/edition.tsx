@@ -2,7 +2,7 @@ import { FC, useEffect, useState, createRef } from "react";
 import { Grid, makeStyles, Button, Box } from "@material-ui/core";
 import { useQuery } from "react-query";
 import MapGL, { Source, Layer, FeatureState } from "@urbica/react-map-gl";
-import Draw from "@urbica/react-map-gl-draw"; //!! Buggy
+// import Draw from "@urbica/react-map-gl-draw"; //!! Buggy
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 import Map from "@/components/Map/Map";
@@ -11,6 +11,11 @@ import { useTemplate } from "@/components/Template";
 import TreeExpanded from "@/components/Tree/Infos/Expanded";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import TreeAccordion from "@/components/Tree/TreeAccordion";
+import dynamic from "next/dynamic";
+
+const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
+  ssr: false,
+});
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -220,12 +225,12 @@ const EditionPage = ({}) => {
             state={{ click: true }}
           />
         )}
-        {/* {isDrawable && (
+        {isDrawable && (
           <Draw
             onDrawCreate={({ features }) => setFeatures({ features })}
             onDrawUpdate={({ features }) => setFeatures({ features })}
           />
-        )} */}
+        )}
       </MapGL>
       <SearchCity className={classes.mapSearchCity} map={mapRef} />
       <Box className={classes.toolbar} p={1}>

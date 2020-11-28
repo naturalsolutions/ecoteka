@@ -1,7 +1,8 @@
 const assetPrefix = process.env["ASSET_PREFIX"] || "";
 const apiUrl = process.env["API_URL"] || "%api_url%";
 const tokenStorage = process.env["TOKEN_STORAGE"] || "%token_storage%";
-const refreshTokenStorage = process.env["REFRESH_TOKEN_STORAGE"] || "%refresh_token_storage%";
+const refreshTokenStorage =
+  process.env["REFRESH_TOKEN_STORAGE"] || "%refresh_token_storage%";
 
 let config = {
   trailingSlash: true,
@@ -18,7 +19,18 @@ config.env = {
 config.publicRuntimeConfig = {
   apiUrl,
   tokenStorage,
-  refreshTokenStorage
+  refreshTokenStorage,
+};
+
+config.webpack = (config, { isServer }) => {
+  // Fixes npm packages that depend on `fs` module
+  if (!isServer) {
+    config.node = {
+      fs: "empty",
+    };
+  }
+
+  return config;
 };
 
 module.exports = config;
