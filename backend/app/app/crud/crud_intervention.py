@@ -19,5 +19,12 @@ class CRUDIntervention(CRUDBase[Intervention, InterventionCreate, InterventionUp
             .all()
         )
 
+    def get_by_tree(self, db: Session, tree_id: int):
+        return (
+            db.query(self.model)
+            .filter(self.model.tree_id == tree_id)
+            .all()
+        )
+
 
 intervention = CRUDIntervention(Intervention)

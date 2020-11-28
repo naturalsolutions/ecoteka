@@ -1,52 +1,68 @@
 import { apiRest } from "@/lib/api";
-import { Button, Typography } from "@material-ui/core";
-import { FC, Fragment } from "react";
-import { useQuery } from "react-query";
+import { Button, Typography, Grid } from "@material-ui/core";
+import { FC, useState, useEffect } from "react";
 import RoomIcon from "@material-ui/icons/Room";
 import InterventionsTable from "../../Interventions/InterventionsTable";
 import { useAppContext } from "@/providers/AppContext";
+import TreeExpanded from "@/components/Tree/Infos/Expanded";
+import { useTemplate } from "@/components/Template";
 
-const Summary: FC<{
-  id: number;
-  showMore: () => void;
-}> = ({ id, showMore }) => {
+const Summary: FC<{ id: number }> = ({ id }) => {
   const { user } = useAppContext();
-  const { data: tree } = useQuery(
-    `tree_${id}`,
-    async () => {
-      if (id) {
-        const data = await apiRest.trees.get(user.currentOrganization.id, id);
-        return data;
-      }
-    },
-    {
-      enabled: Boolean(id),
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [tree, setTree] = useState();
+  const [interventions, setInterventions] = useState([]);
+  const { dialog } = useTemplate();
+
+  const getTree = async (id) => {
+    const organizationId = user.currentOrganization.id;
+    const newTree = await apiRest.trees.get(organizationId, id);
+    const newInterventions = await apiRest.trees.getInterventions(
+      organizationId,
+      id
+    );
+
+    setTree(newTree);
+    setInterventions(newInterventions);
+  };
+
+  useEffect(() => {
+    if (id) {
+      getTree(id);
     }
-  );
-  const { data: interventions } = useQuery(
-    `tree_${id}_interventions_summary`,
-    async () => {
-      const data = await apiRest.trees.getInterventions(id);
-      return data.slice(0, 5);
-    },
-    {
-      enabled: Boolean(id),
-    }
-  );
+  }, [id]);
+
   return (
-    <Fragment>
-      <Typography color="textPrimary" component="h3">
-        {tree?.family}
-      </Typography>
-      <Typography color="textPrimary" component="b">
-        <RoomIcon />
-        {tree?.address}
-      </Typography>
-      {interventions && <InterventionsTable interventions={interventions} />}
-      <Button variant="contained" onClick={showMore}>
-        Plus de détails
-      </Button>
-    </Fragment>
+    <Grid container direction="column">
+      <Grid item>
+        <Typography color="textPrimary" component="h3">
+          {tree?.family}
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography color="textPrimary" component="b">
+          <RoomIcon />
+          {tree?.address}
+        </Typography>
+      </Grid>
+      <Grid item>
+        {interventions && <InterventionsTable interventions={interventions} />}
+      </Grid>
+      <Grid item>
+        <Grid container>
+          <Grid item>
+            <Button variant="contained" onClick={() => setIsExpanded(true)}>
+              Plus de détails
+            </Button>
+          </Grid>
+          <Grid item xs></Grid>
+          <Grid item>
+            <Button onClick={() => dialog.current.close()}>Close</Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <TreeExpanded open={isExpanded} onClose={() => setIsExpanded(false)} />
+    </Grid>
   );
 };
 

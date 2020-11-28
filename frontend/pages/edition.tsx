@@ -6,9 +6,8 @@ import { useAppContext } from "@/providers/AppContext";
 import Map from "@/components/Map/Map";
 import SearchCity from "@/components/Map/SearchCity";
 import { useTemplate } from "@/components/Template";
-import TreeExpanded from "@/components/Tree/Infos/Expanded";
+import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
-import TreeAccordion from "@/components/Tree/TreeAccordion";
 import dynamic from "next/dynamic";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
@@ -58,7 +57,8 @@ const EditionPage = ({}) => {
   const [isDialogExpanded, setIsDialogExpanded] = useState(false);
   const { dialog } = useTemplate();
   const mapRef = createRef<Map>();
-  const { user, isLoading } = useAppContext();
+  const { user } = useAppContext();
+  const router = useRouter();
   const [styleSource, setStyleSource] = useState("/api/v1/maps/style");
   const [viewport, setViewport] = useState({
     latitude: 46.7,
@@ -71,7 +71,6 @@ const EditionPage = ({}) => {
     features: [],
   });
   const [hoveredTreeId, setHoveredTreeId] = useState(null);
-  const [clickedTreeId, setClickedTreeId] = useState(null);
 
   const getData = async () => {
     const newData = await apiRest.organization.geojson(
@@ -86,42 +85,21 @@ const EditionPage = ({}) => {
   }, []);
 
   useEffect(() => {
-    if (dialog.current.isOpen()) {
-      dialog.current.displayFullScreen(isDialogExpanded);
-      dialog.current.setContent(
-        !isDialogExpanded ? (
-          <TreeSummary id={clickedTreeId} showMore={handleExpandDialog} />
-        ) : (
-          <TreeExpanded id={clickedTreeId} showLess={handleExpandDialog} />
-        )
-      );
+    if (router.query.tree) {
+      apiRest.trees
+        .get(user.currentOrganization.id, router.query.tree)
+        .then((tree) => {
+          openDialog(tree.id);
+        });
     }
-  }, [isDialogExpanded]);
+  }, [router.query.tree]);
 
-  const handleExpandDialog = () => {
-    setIsDialogExpanded((current) => !current);
-  };
-
-  const handleClose = () => {
-    dialog.current.close();
-    setIsDialogExpanded(false);
-  };
-
-  const openDialog = () => {
-    const dialogActions = [
-      {
-        label: "Fermer",
-        onClick: handleClose,
-      },
-    ];
-
+  const openDialog = (id) => {
     dialog.current.open({
       title: "Tree information",
-      content: <TreeSummary id={clickedTreeId} showMore={handleExpandDialog} />,
-      actions: dialogActions,
+      content: <TreeSummary id={id} />,
       isDraggable: true,
       dialogProps: {
-        maxWidth: "sm",
         fullWidth: true,
         fullScreen: isDialogExpanded,
         disableBackdropClick: true,
@@ -146,14 +124,8 @@ const EditionPage = ({}) => {
   };
 
   const onClick = (event) => {
-    console.log(event);
     if (event.features.length > 0) {
-      const nextClickedTreeId = event.features[0].properties.id;
-      console.log(nextClickedTreeId);
-      if (clickedTreeId !== nextClickedTreeId) {
-        setClickedTreeId(nextClickedTreeId);
-      }
-      openDialog();
+      openDialog(event.features[0].properties.id);
     }
   };
 
@@ -217,13 +189,6 @@ const EditionPage = ({}) => {
             id={hoveredTreeId}
             source="trees"
             state={{ hover: true }}
-          />
-        )}
-        {clickedTreeId && (
-          <FeatureState
-            id={clickedTreeId}
-            source="trees"
-            state={{ click: true }}
           />
         )}
       </MapGL>

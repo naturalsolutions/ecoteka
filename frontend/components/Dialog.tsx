@@ -92,18 +92,20 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
       }
     };
 
-    const renderActions = actions.map((action, idx) => {
-      const { onClick, label, noClose, ...buttonProps } = action;
-      return (
-        <Button
-          {...buttonProps}
-          key={idx}
-          onClick={(e) => onActionClick(e, action)}
-        >
-          {label}
-        </Button>
-      );
-    });
+    const renderActions = () => {
+      return actions.map((action, idx) => {
+        const { onClick, label, noClose, ...buttonProps } = action;
+        return (
+          <Button
+            {...buttonProps}
+            key={idx}
+            onClick={(e) => onActionClick(e, action)}
+          >
+            {label}
+          </Button>
+        );
+      });
+    };
 
     useImperativeHandle(ref, () => ({
       isOpen: () => {
@@ -143,7 +145,9 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
       >
         <DialogTitle id="etk-dialog">{title}</DialogTitle>
         <DialogContent>{content}</DialogContent>
-        <DialogActions>{renderActions}</DialogActions>
+        {actions && actions.length > 0 && (
+          <DialogActions>{renderActions()}</DialogActions>
+        )}
       </Dialog>
     );
   }

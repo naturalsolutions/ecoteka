@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
@@ -17,6 +17,7 @@ policies = {
     "trees:update": ["owner", "manager", "contributor"],
     "trees:delete": ["owner", "manager", "contributor"],
     "trees:import_from_geofile": ["owner", "manager", "contributor"],
+    "trees:get_interventions": ["owner", "manager", "contributor"],
     "trees:export": ["owner", "manager", "contributor"],
 }
 set_policies(policies)
@@ -149,6 +150,16 @@ def delete(
 
         create_mbtiles_task.delay(current_user.organization_id)
         return response
+
+@router.get("/{tree_id}/interventions", response_model=List[schemas.Intervention])
+def get_interventions(
+    tree_id: int,
+    *,
+    auth=Depends(authorization("trees:export")),
+    db: Session = Depends(get_db),
+):
+    """Get all interventions from a tree"""
+    return crud.intervention.get_by_tree(db, tree_id)
 
 
 @router.get("/export")

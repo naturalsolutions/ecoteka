@@ -39,12 +39,10 @@ class Tree {
     return await response.json();
   }
 
-  async getInterventions(treeId) {
+  async getInterventions(organizationId, treeId) {
     // TODO : use real endpoints
-    const url = `/assets/mock/trees_1_interventions.json`;
-    const response = await fetch(url, {
-      method: "GET",
-    });
+    const url = `/organization/${organizationId}/trees/${treeId}/interventions`;
+    const response = await this.api.get(url);
 
     return await response.json();
   }
