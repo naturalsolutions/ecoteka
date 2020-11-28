@@ -9,7 +9,6 @@ import {
   Paper,
   Grid,
   Button,
-  TableFooter,
 } from "@material-ui/core";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";

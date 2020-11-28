@@ -37,7 +37,6 @@ export default function IndexPage() {
   const mapRef = createRef<ETKMap>();
   const classes = useStyles();
   const { user, isLoading } = useAppContext();
-  const [styleSource, setStyleSource] = useState("/api/v1/maps/style");
   const [landing, setLanding] = useState(true);
   const router = useRouter();
 
@@ -45,34 +44,16 @@ export default function IndexPage() {
     if (user) {
       setLanding(false);
       if (user.currentOrganization) {
-        setStyleSource(
+        mapRef.current.map.setStyle(
           `/api/v1/maps/style?token=${apiRest.getToken()}&organization_id=${
             user.currentOrganization.id
           }`
         );
       }
     } else {
-      setStyleSource("/api/v1/maps/style");
+      mapRef.current.map.setStyle("/api/v1/maps/style");
     }
   }, [isLoading, user, mapRef]);
-
-  useEffect(() => {
-    mapRef.current.map.setStyle(styleSource);
-  }, [styleSource]);
-
-  useEffect(() => {
-    if (router.query.tree) {
-      apiRest.trees
-        .get(user.currentOrganization.id, router.query.tree)
-        .then((tree) => {
-          mapRef.current.map.setZoom(20);
-          mapRef.current.map.flyTo({
-            center: [tree.x, tree.y],
-            essential: true,
-          });
-        });
-    }
-  }, [router.query.tree]);
 
   return (
     <Grid
@@ -93,7 +74,7 @@ export default function IndexPage() {
         {!user && landing && (
           <ETKLanding map={mapRef} setLanding={setLanding} />
         )}
-        <ETKMap ref={mapRef} styleSource={styleSource} />
+        <ETKMap ref={mapRef} styleSource="/api/v1/maps/style" />
         {!landing && (
           <ETKMapSearchCity className={classes.mapSearchCity} map={mapRef} />
         )}

@@ -33,20 +33,12 @@ export default function ImportsPage() {
   }
 
   useEffect(() => {
-    if (!user && !isLoading) {
-      router.push("/");
-    } else {
-      try {
-        fetchData();
-      } catch (e) {}
-    }
-  }, [isLoading, user]);
+    fetchData();
+  }, []);
 
   return (
     <Template>
-      {user && (
-        <ETKImportHistory rows={rows} onDelete={onDelete} onImport={onImport} />
-      )}
+      <ETKImportHistory rows={rows} onDelete={onDelete} onImport={onImport} />
     </Template>
   );
 }
