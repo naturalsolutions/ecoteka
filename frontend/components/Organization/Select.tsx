@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, MenuItem, Menu, makeStyles } from "@material-ui/core";
+import { Button, MenuItem, Menu } from "@material-ui/core";
 import { IOrganization, IUser } from "@/index";
 
 export interface OrganizationSelectProps {
@@ -9,12 +9,7 @@ export interface OrganizationSelectProps {
 
 const defaultProps: OrganizationSelectProps = {};
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
 const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
