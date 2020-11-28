@@ -181,7 +181,7 @@ const EditionPage = ({}) => {
           // @ts-ignore
           data={data}
           mode={mode}
-          boxSelect={true}
+          boxSelect={false}
           onChange={(newData) => {
             setData(newData);
           }}

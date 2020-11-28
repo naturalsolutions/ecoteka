@@ -6,15 +6,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Paper,
+  Grid,
+  Button,
+  TableFooter,
 } from "@material-ui/core";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { TIntervention } from "./Schema";
+import { useRouter } from "next/router";
 
 const InterventionsTable: FC<{
+  tree: any;
   interventions: TIntervention[];
-}> = ({ interventions }) => {
+}> = ({ interventions, tree }) => {
   const { t } = useTranslation("components");
+  const router = useRouter();
   //TODO generic
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString("fr-FR", {
@@ -24,8 +31,22 @@ const InterventionsTable: FC<{
     });
   };
   return (
-    <TableContainer>
+    <TableContainer component={Paper}>
       <Table size="small">
+        <caption>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Button
+                size="small"
+                onClick={() => {
+                  router.push(`/?panel=newIntervention&tree=${tree.id}`);
+                }}
+              >
+                Demander une intervention
+              </Button>
+            </Grid>
+          </Grid>
+        </caption>
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
@@ -37,7 +58,13 @@ const InterventionsTable: FC<{
           {interventions?.map((intervention, i) => {
             return (
               <TableRow key={i}>
-                <TableCell>{formatDate(intervention.date)}</TableCell>
+                <TableCell>
+                  {intervention.date && formatDate(intervention.date)}
+                  {!intervention.date &&
+                    `${formatDate(
+                      intervention.intervention_start_date
+                    )} - ${formatDate(intervention.intervention_end_date)}`}
+                </TableCell>
                 <TableCell>
                   {t(`Intervention.types.${intervention.intervention_type}`)}
                 </TableCell>

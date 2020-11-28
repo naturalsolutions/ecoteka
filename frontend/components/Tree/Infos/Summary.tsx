@@ -34,19 +34,25 @@ const Summary: FC<{ id: number }> = ({ id }) => {
   }, [id]);
 
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" spacing={2}>
       <Grid item>
         <Typography color="textPrimary" component="h3">
           {tree && tree?.family}
         </Typography>
       </Grid>
       <Grid item>
-        {interventions && <InterventionsTable interventions={interventions} />}
+        {interventions && (
+          <InterventionsTable interventions={interventions} tree={tree} />
+        )}
       </Grid>
       <Grid item>
         <Grid container>
           <Grid item>
-            <Button variant="contained" onClick={() => setIsExpanded(true)}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setIsExpanded(true)}
+            >
               Plus de détails
             </Button>
           </Grid>
