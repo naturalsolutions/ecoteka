@@ -1,8 +1,7 @@
 import { FC, useEffect, useState, createRef } from "react";
-import { Grid, makeStyles, Button, Box } from "@material-ui/core";
+import { Grid, makeStyles, Button, Box, Hidden } from "@material-ui/core";
 import { useQuery } from "react-query";
 import MapGL, { Source, Layer, FeatureState } from "@urbica/react-map-gl";
-// import Draw from "@urbica/react-map-gl-draw"; //!! Buggy
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 import Map from "@/components/Map/Map";
@@ -57,7 +56,6 @@ const useStyles = makeStyles((theme) => {
 
 const EditionPage = ({}) => {
   const classes = useStyles();
-  const [sidebar, setSidebar] = useState();
   const [isDialogExpanded, setIsDialogExpanded] = useState(false);
   const { dialog } = useTemplate();
   const mapRef = createRef<Map>();
@@ -68,8 +66,7 @@ const EditionPage = ({}) => {
     longitude: 2.54,
     zoom: 5,
   });
-  // TODO: Fix mapbox-gl-draw bugs
-  const [isDrawable, setIsDrawable] = useState(false);
+  const [mode, setMode] = useState("simple_select");
   const [_, setFeatures] = useState([]);
   const [hoveredTreeId, setHoveredTreeId] = useState(null);
   const [clickedTreeId, setClickedTreeId] = useState(null);
@@ -101,10 +98,6 @@ const EditionPage = ({}) => {
 
   const handleExpandDialog = () => {
     setIsDialogExpanded((current) => !current);
-  };
-
-  const activateDraw = () => {
-    setIsDrawable(true);
   };
 
   const handleClose = () => {
@@ -225,23 +218,29 @@ const EditionPage = ({}) => {
             state={{ click: true }}
           />
         )}
-        {isDrawable && (
-          <Draw
-            onDrawCreate={({ features }) => setFeatures({ features })}
-            onDrawUpdate={({ features }) => setFeatures({ features })}
-          />
-        )}
+        <Draw
+          mode={mode}
+          onDrawModeChange={({ mode: newMode }) => setMode(newMode)}
+        />
       </MapGL>
       <SearchCity className={classes.mapSearchCity} map={mapRef} />
       <Box className={classes.toolbar} p={1}>
         <Grid container spacing={2} justify="center" alignItems="center">
           <Grid item>
-            <Button color="primary" variant="contained" onClick={activateDraw}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => setMode("draw_polygon")}
+            >
               + Station
             </Button>
           </Grid>
           <Grid item>
-            <Button color="primary" variant="contained" onClick={activateDraw}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => setMode("draw_point")}
+            >
               + Arbre
             </Button>
           </Grid>
