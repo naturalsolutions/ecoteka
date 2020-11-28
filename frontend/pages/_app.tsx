@@ -2,9 +2,8 @@ import React from "react";
 import Head from "next/head";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { I18nextProvider } from "react-i18next";
-import i18n from "../i18n";
+import i18n from "@/i18n";
 import "mapbox-gl/dist/mapbox-gl.css";
-import "react-calendar/dist/Calendar.css";
 import Template from "@/components/Template";
 import "@/styles/global.css";
 
