@@ -11,13 +11,8 @@ class Tree {
     return geofile;
   }
 
-  async get(id) {
-    /*const url = `/assets/mock/trees_${id}.json`;
-      const response = await fetch(url, {
-      method: "GET",
-    }); */
-
-    const url = `/trees/${id}`;
+  async get(organizationId, id) {
+    const url = `/organization/${organizationId}/trees/${id}`;
     const response = await this.api.get(url);
 
     return await response.json();

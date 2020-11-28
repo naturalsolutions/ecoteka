@@ -4,6 +4,7 @@ import { useDrag } from "react-dnd";
 import { ItemTypes } from "@/components/Interventions/Calendar/ItemTypes";
 import { TIntervention } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
+import { useTemplate } from "@/components/Template";
 
 export interface CalendarTodoInterventionProps {
   todoIntervention: TIntervention;
@@ -20,6 +21,7 @@ const useStyles = makeStyles(() => ({
 const CalendarTodoIntervention: React.FC<CalendarTodoInterventionProps> = (
   props
 ) => {
+  const { dialog } = useTemplate();
   const [collectedProps, drag] = useDrag({
     item: { type: ItemTypes.BOX, id: props.todoIntervention.id },
     collect: (monitor) => ({
@@ -29,6 +31,18 @@ const CalendarTodoIntervention: React.FC<CalendarTodoInterventionProps> = (
 
   const color = INTERVENTION_COLORS[props.todoIntervention.intervention_type];
 
+  const handleTodoInterventionOnClick = () => {
+    dialog.current.open({
+      title: props.todoIntervention.intervention_type,
+      content: "",
+      actions: [
+        {
+          label: "Close",
+        },
+      ],
+    });
+  };
+
   return (
     <Grid item>
       <Button
@@ -36,6 +50,7 @@ const CalendarTodoIntervention: React.FC<CalendarTodoInterventionProps> = (
         size="small"
         variant="contained"
         style={{ backgroundColor: color }}
+        onClick={handleTodoInterventionOnClick}
       >
         &nbsp;
       </Button>

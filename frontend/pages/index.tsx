@@ -60,6 +60,20 @@ export default function IndexPage() {
     mapRef.current.map.setStyle(styleSource);
   }, [styleSource]);
 
+  useEffect(() => {
+    if (router.query.tree) {
+      apiRest.trees
+        .get(user.currentOrganization.id, router.query.tree)
+        .then((tree) => {
+          mapRef.current.map.setZoom(20);
+          mapRef.current.map.flyTo({
+            center: [tree.x, tree.y],
+            essential: true,
+          });
+        });
+    }
+  }, [router.query.tree]);
+
   return (
     <Grid
       container
