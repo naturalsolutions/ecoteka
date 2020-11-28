@@ -2,12 +2,8 @@ import os
 import uuid
 import json
 from typing import Any, List
-
 from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
-
 from sqlalchemy.orm import Session
-from pydantic import Json
-
 from app import crud, models, schemas
 from app.api import get_db
 from app.core import (
@@ -47,9 +43,7 @@ def read_geo_files(
     """
     Retrieve geo files.
     """
-    geo_files = crud.geo_file.get_multi(
-        db, user=current_user, skip=skip, limit=limit
-    )
+    geo_files = crud.geo_file.get_multi(db, user=current_user, skip=skip, limit=limit)
 
     return geo_files
 
@@ -93,9 +87,7 @@ async def upload_geo_file(
         extension = filename_parts[1][1:]
 
         if not extension in settings.GEO_FILES_ALLOWED:
-            raise HTTPException(
-                status_code=415, detail="File format unsupported"
-            )
+            raise HTTPException(status_code=415, detail="File format unsupported")
 
         unique_name = uuid.uuid4()
         unique_filename = f"{unique_name}.{extension}"
@@ -113,9 +105,7 @@ async def upload_geo_file(
             organization_id=organization_id,
         )
 
-        geofile_exists = crud.geo_file.get_by_checksum(
-            db, checksum=geofile.checksum
-        )
+        geofile_exists = crud.geo_file.get_by_checksum(db, checksum=geofile.checksum)
 
         if geofile_exists:
             os.remove(geofile.get_filepath(extended=False))
