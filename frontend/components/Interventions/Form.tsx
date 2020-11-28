@@ -123,11 +123,11 @@ const ETKInterventionForm = forwardRef<
 
   const onMapClick = (map, e) => {
     if (props.step === "treeselection") {
-      var bbox = [
+      const bbox = [
         [e.point.x - 5, e.point.y - 5],
         [e.point.x + 5, e.point.y + 5],
       ];
-      var features = map.queryRenderedFeatures(bbox, {
+      const features = map.queryRenderedFeatures(bbox, {
         layers: [`ecoteka-${props.organization.slug}`],
       });
 
@@ -155,7 +155,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { user } = useAppContext();
-  const [activestep, setActivestep] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const [interventionType, setInterventionType] = useState<TInterventionType>(
     "pruning"
   );
@@ -186,8 +186,10 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
   };
 
   const reset = () => {
-    setData(initialData);
-    setActivestep(0);
+    Object.keys(initialData).map((id) => {
+      setStepData(id, {});
+    });
+    setActiveStep(0);
   };
 
   const submit = async () => {
@@ -222,7 +224,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
         await submit();
       }
 
-      setActivestep(activestep + 1);
+      setActiveStep(activeStep + 1);
     }
   };
 
@@ -238,7 +240,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
     }
 
     // In case of previous, we go backward regardless of the form being valid
-    setActivestep(activestep - 1);
+    setActiveStep(activeStep - 1);
   };
 
   return (
@@ -246,7 +248,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
       <Typography variant="h5">{t("components:Intervention.title")}</Typography>
       <Stepper
         orientation="vertical"
-        activeStep={activestep}
+        activeStep={activeStep}
         className={classes.root}
       >
         {steps.map((step, stepidx) => (
@@ -259,7 +261,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                   completed: classes.completedIcon,
                 },
               }}
-              onClick={(e) => stepidx < activestep && setActivestep(stepidx)}
+              onClick={(e) => stepidx < activeStep && setActiveStep(stepidx)}
             >
               {t(`components:Intervention.steps.${step}`)}
             </StepLabel>
@@ -274,9 +276,9 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                   organization={user.currentOrganization}
                 />
                 <Grid container direction="row" justify="flex-end">
-                  {activestep !== 0 && (
+                  {activeStep !== 0 && (
                     <Button onClick={() => handlePrevious(step)}>
-                      {activestep === steps.length - 1
+                      {activeStep === steps.length - 1
                         ? t("common:buttons.previous")
                         : t("common:buttons.previous")}
                     </Button>
@@ -286,7 +288,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                     variant="contained"
                     onClick={() => handleNext(step)}
                   >
-                    {activestep === steps.length - 1
+                    {activeStep === steps.length - 1
                       ? t("common:buttons.finish")
                       : t("common:buttons.next")}
                   </Button>
