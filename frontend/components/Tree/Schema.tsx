@@ -10,7 +10,7 @@ export default function useTreeSchema() {
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.family"),
-      },
+      } as any,
       schema: yup.string().required(t("common:errors.required")),
     },
     gender: {

@@ -88,6 +88,13 @@ class Organization {
 
     return await response.json();
   }
+
+  async geojson(id) {
+    const url = `/organization${id}/geojson`;
+    const response = await this.api.get(url);
+
+    return await response.json();
+  }
 }
 
 export default function userFactory(api) {
