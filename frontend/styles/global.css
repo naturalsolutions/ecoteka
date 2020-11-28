@@ -6,3 +6,7 @@
 .etk-map .mapboxgl-ctrl-geolocate {
   display: none;
 }
+
+button.mapbox-gl-draw_ctrl-draw-btn {
+  display: none;
+}
