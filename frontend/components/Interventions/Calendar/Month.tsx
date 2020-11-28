@@ -13,14 +13,12 @@ import CalendarTodoIntervention from "@/components/Interventions/Calendar/TodoIn
 
 export interface CalendarMonthProps {
   interventions: TIntervention[];
-  todoInterventions: TIntervention[];
   month: number;
   year: number;
 }
 
 const defaultProps: CalendarMonthProps = {
   interventions: [],
-  todoInterventions: [],
   month: 0,
   year: 2020,
 };
@@ -118,24 +116,30 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
     return rows;
   };
 
-  const filter = (todoIntervention) => {
-    const startDate = new Date(
-      todoIntervention.intervention_start_date
-    ).getMonth();
-    const endDate = new Date(todoIntervention.intervention_end_date).getMonth();
+  const filterTodoInterventions = (intervention) => {
+    if (intervention.date) {
+      return false;
+    }
 
-    return !(props.month < startDate || props.month > endDate);
+    const startMonth = new Date(
+      intervention.intervention_start_date
+    ).getMonth();
+    const endMonth = new Date(intervention.intervention_end_date).getMonth();
+
+    return !(props.month < startMonth || props.month > endMonth);
   };
 
   const renderTodoInterventions = () =>
-    props.todoInterventions.filter(filter).map((todoIntervention) => {
-      return (
-        <CalendarTodoIntervention
-          key={`todo-intervention-${todoIntervention.id}`}
-          todoIntervention={todoIntervention}
-        />
-      );
-    });
+    props.interventions
+      .filter(filterTodoInterventions)
+      .map((todoIntervention) => {
+        return (
+          <CalendarTodoIntervention
+            key={`todo-intervention-${todoIntervention.id}`}
+            todoIntervention={todoIntervention}
+          />
+        );
+      });
 
   return (
     <Card className={classes.root} square elevation={1}>

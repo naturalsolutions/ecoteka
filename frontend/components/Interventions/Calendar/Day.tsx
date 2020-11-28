@@ -118,7 +118,7 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
             const backgroundColor =
               INTERVENTION_COLORS[intervention.intervention_type];
             return (
-              <Grid item>
+              <Grid key={`day-intervention-${intervention.id}`} item>
                 <div
                   style={{
                     borderRadius: "50%",

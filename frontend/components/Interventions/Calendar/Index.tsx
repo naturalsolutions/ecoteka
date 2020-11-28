@@ -41,15 +41,6 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   const classes = useStyles();
   const router = useRouter();
   const [filters, setFilters] = useState([]);
-  const [todoInterventions, setTodoInterventions] = useState<TIntervention[]>(
-    []
-  );
-
-  useEffect(() => {
-    const newTodoInterventions = props.interventions.filter((f) => !f.date);
-
-    setTodoInterventions(newTodoInterventions);
-  }, [props.interventions]);
 
   const handleFilterChange = (filters) => {
     setFilters(filters);
@@ -57,9 +48,18 @@ const Calendar: React.FC<CalendarProps> = (props) => {
 
   const filterInterventionMonth = (month) => {
     return (intervention: TIntervention) => {
-      const interventionMonth = new Date(intervention.date).getMonth();
+      const interventionStartMonth = new Date(
+        intervention.intervention_start_date
+      ).getMonth();
+      const interventionEndMonth = new Date(
+        intervention.intervention_end_date
+      ).getMonth();
+      const interventionDateMonth = new Date(intervention.date).getMonth();
 
-      return intervention.date && interventionMonth === month;
+      return (
+        interventionDateMonth === month ||
+        (interventionStartMonth >= month && interventionEndMonth <= month)
+      );
     };
   };
 
@@ -77,9 +77,6 @@ const Calendar: React.FC<CalendarProps> = (props) => {
                 filters.includes(intervention.intervention_type)
               )
               .filter(filterInterventionMonth(i))}
-            todoInterventions={todoInterventions.filter((todoIntervention) =>
-              filters.includes(todoIntervention.intervention_type)
-            )}
           />
         </Grid>
       );
@@ -91,6 +88,8 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   const handleNewIntervention = () => {
     router.push("/?panel=newIntervention");
   };
+
+  console.log(props.interventions);
 
   return (
     <DndProvider backend={HTML5Backend}>

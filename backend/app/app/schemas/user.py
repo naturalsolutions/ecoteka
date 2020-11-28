@@ -11,7 +11,7 @@ class UserPrimaryKey(BaseModel):
 # Shared properties
 class UserBase(BaseModel):
     email: Optional[EmailStr] = None
-    status: str = None
+    status: str = 'pending'
     is_superuser: bool = False
     full_name: Optional[str] = None
     is_verified: Optional[bool] = False
@@ -34,7 +34,7 @@ class UserOut(UserPrimaryKey, UserBase):
         orm_mode = True
 
 
-class CurrentUSer(UserOut):
+class CurrentUser(UserOut):
     organizations: List[OrganizationCurrentUser]
 
 
