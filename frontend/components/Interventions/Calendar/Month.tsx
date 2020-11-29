@@ -71,15 +71,15 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
 
     rows.push(dayLabels);
 
-    const filterInterventionsDay = (day) => {
+    const filterInterventionsDay = (month, day) => {
       return (intervention: TIntervention) => {
         if (!intervention.date) {
           return false;
         }
 
-        const interventionDay = new Date(intervention.date).getDate();
+        const date = new Date(intervention.date);
 
-        return interventionDay === day;
+        return date.getDate() === day && date.getMonth() === month;
       };
     };
 
@@ -108,7 +108,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
                   month={props.month}
                   year={props.year}
                   interventions={props.interventions.filter(
-                    filterInterventionsDay(day++)
+                    filterInterventionsDay(props.month, day++)
                   )}
                   onInterventionPlan={props.onInterventionPlan}
                 />
