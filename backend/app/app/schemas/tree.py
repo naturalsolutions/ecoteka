@@ -1,4 +1,5 @@
 from enum import Enum
+import json
 from typing import Optional, Any, List
 
 from pydantic import BaseModel, Json
@@ -65,6 +66,7 @@ class TreeCreate(TreeBase):
 
 
 class TreeUpdate(BaseModel):
+    properties: Any
     pass
 
 

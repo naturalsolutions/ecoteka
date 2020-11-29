@@ -18,22 +18,22 @@ class Tree {
     return await response.json();
   }
 
-  async post(model) {
-    const url = `/trees/`;
-    const response = await this.api.post(url, {}, JSON.stringify(model));
+  async post(organizationId, payload) {
+    const url = `/organization/${organizationId}/trees/`;
+    const response = await this.api.post(url, {}, JSON.stringify(payload));
 
     return await response.json();
   }
 
-  async patch(id, model) {
-    const url = `/trees/${id}`;
-    const response = await this.api.patch(url, {}, JSON.stringify(model));
+  async put(organizationId, id, payload) {
+    const url = `/organization/${organizationId}/trees/${id}`;
+    const response = await this.api.put(url, {}, JSON.stringify(payload));
 
-    return await response.json();
+    return response;
   }
 
-  async delete(id) {
-    const url = `/trees/${id}`;
+  async delete(organizationId, id) {
+    const url = `/organization/${organizationId}/trees/${id}`;
     const response = await this.api.delete(url);
 
     return await response.json();

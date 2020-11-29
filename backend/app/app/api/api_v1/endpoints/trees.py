@@ -127,41 +127,28 @@ def add(
     return response
 
 
-@router.patch("/{tree_id}", response_model=schemas.tree.Tree_xy)
+@router.put("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def update(
-    organization_id: int,
     tree_id: int,
     *,
     auth=Depends(authorization("trees:update")),
     db: Session = Depends(get_db),
-    update_data: schemas.tree.TreePatch,
-    current_user: models = Depends(get_current_active_user),
+    payload: schemas.tree.TreeUpdate
 ) -> Any:
-    """Update tree info"""
-    tree_in_db = get_tree_if_authorized(db, current_user, tree_id)
-    properties = json.loads(tree_in_db.properties)
+    """Update one tree"""
+    tree_in_db = crud.tree.get(db, id=tree_id)
 
-    request_data: dict = dict(jsonable_encoder(update_data, exclude_unset=True))
-    request_properties = {
-        key: request_data[key] for key in request_data if key not in ("x", "y")
-    }
+    if tree_in_db is None:
+        return HTTPException(
+            status_code=404,
+            detail=f"Tree {tree_id} not found"
+        )
 
-    properties.update(request_properties)
-    response = crud.crud_tree.tree.update(
-        db,
-        db_obj=tree_in_db,
-        obj_in=dict(
-            {"properties": properties},
-            **(
-                dict(geom=f"POINT({request_data['x']} {request_data['y']})")
-                if request_data["x"] is not None and request_data["y"] is not None
-                else dict()
-            ),
-        ),
-    ).to_xy()
-
-    create_mbtiles_task.delay(organization_id)
-    return response
+    properties = {k: v for (k,v) in payload.properties.items() if v is not ''}
+    tree_in_db.properties = properties
+    db.commit()
+    create_mbtiles_task.delay(tree_in_db.organization_id)
+    return tree_in_db.to_xy()
 
 
 @router.delete("/{tree_id}", response_model=schemas.tree.Tree_xy)

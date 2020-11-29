@@ -43,7 +43,6 @@ const Header: FC<HeaderProps> = (props) => {
 
     if (response.ok) {
       const json = await response.json();
-      console.log(json);
     }
 
     console.info(

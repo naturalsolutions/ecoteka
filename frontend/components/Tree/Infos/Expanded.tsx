@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef, useState } from "react";
 import {
   Button,
   Grid,
@@ -7,15 +7,18 @@ import {
   DialogContent,
   DialogActions,
 } from "@material-ui/core";
-import TreeAccordion from "@/components/Tree/TreeAccordion";
+import TreeAccordion, { TTreeAccordion } from "@/components/Tree/TreeAccordion";
 import { TIntervention } from "@/components/Interventions/Schema";
 import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { ITree } from "@/index";
+import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKTreeInfosExpandedProps {
   open: boolean;
   tree?: ITree;
   interventions?: TIntervention[];
+  onChange?: (newTree: ITree) => void;
   onClose?: () => void;
 }
 
@@ -25,8 +28,27 @@ const defaultProps: ETKTreeInfosExpandedProps = {
 
 const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
   const [scroll, setScroll] = React.useState("paper");
+  const treeAccordionRef = createRef<TTreeAccordion>();
+  const { user } = useAppContext();
 
-  const handlerOnSave = async () => {};
+  const handlerOnSave = async () => {
+    const properties = treeAccordionRef.current.getValues();
+    const response = await apiRest.trees.put(
+      user.currentOrganization.id,
+      props.tree.id,
+      {
+        properties: properties,
+      }
+    );
+
+    if (response.ok) {
+      const newTree = (await response.json()) as ITree;
+
+      if (props.onChange) {
+        props.onChange(newTree);
+      }
+    }
+  };
 
   return (
     <Dialog maxWidth="xl" open={props.open} fullWidth>
@@ -34,7 +56,7 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <Paper>
-              <TreeAccordion tree={props.tree} />
+              <TreeAccordion ref={treeAccordionRef} tree={props.tree} />
             </Paper>
           </Grid>
           <Grid item xs={6}>

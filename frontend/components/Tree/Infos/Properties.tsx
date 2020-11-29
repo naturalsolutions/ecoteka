@@ -23,14 +23,14 @@ const defaultProps: TreeInfosPropertiesProps = {
 };
 
 const useStyles = makeStyles(() => ({
-  root: {},
+  container: { maxHeight: 220 },
 }));
 
 const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
   const classes = useStyles();
 
   return props.tree ? (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className={classes.container}>
       <Table size="small">
         <TableBody>
           <TableRow>

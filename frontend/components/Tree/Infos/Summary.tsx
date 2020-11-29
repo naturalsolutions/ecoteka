@@ -10,7 +10,7 @@ import TreeInfosProperties from "./Properties";
 
 const useStyles = makeStyles(() => ({
   root: {
-    width: "20rem",
+    width: "24rem",
   },
 }));
 
@@ -32,7 +32,6 @@ const Summary: FC<{ id: number }> = ({ id }) => {
 
     setTree(newTree);
     setInterventions(newInterventions);
-    console.log(newTree);
   };
 
   useEffect(() => {
@@ -70,6 +69,7 @@ const Summary: FC<{ id: number }> = ({ id }) => {
         tree={tree}
         interventions={interventions}
         onClose={() => setIsExpanded(false)}
+        onChange={(newTree) => setTree(newTree)}
       />
     </Grid>
   );

@@ -159,7 +159,6 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
     setOpenAlert(true);
     setActionsMenuAnchorEl(null);
     setTimeout(() => setOpenAlert(false), 3000);
-    console.log("change role", userID);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;

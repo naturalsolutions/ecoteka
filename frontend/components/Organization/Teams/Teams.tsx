@@ -84,7 +84,6 @@ const Teams: FC<TeamsProps> = (props) => {
     queryName,
     async () => {
       const data = await apiRest.organization.teams(props.organization.id);
-      console.log(data);
       return data;
     },
     {

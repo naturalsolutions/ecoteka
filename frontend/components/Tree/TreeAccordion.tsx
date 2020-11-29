@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect } from "react";
+import { forwardRef, Fragment, useEffect, useImperativeHandle } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -10,7 +10,6 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useETKForm from "../Form/useForm";
 import useTreeSchema from "./Schema";
-import { useAppContext } from "@/providers/AppContext";
 import { ITree } from "@/index";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,13 +19,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TreeAccordion: FC<{
-  tree: ITree;
-}> = (props) => {
-  const { user } = useAppContext();
+export type TTreeAccordion = {
+  getValues: () => object;
+};
+
+export const TreeAccordion = forwardRef<
+  TTreeAccordion,
+  {
+    tree: ITree;
+    onChange?(tree: ITree, properties: object): void;
+  }
+>((props, ref) => {
   const classes = useStyles();
   const schema = useTreeSchema();
-  const { fields, setValue } = useETKForm({ schema: schema });
+  const { fields, setValue, getValues } = useETKForm({
+    schema: schema,
+  });
+
+  useImperativeHandle(ref, () => ({
+    getValues: getValues,
+  }));
 
   useEffect(() => {
     for (let key in ["id", "x", "y"]) {
@@ -40,9 +52,7 @@ const TreeAccordion: FC<{
     }
   }, [props.tree]);
 
-  return !props.tree ? (
-    <Fragment></Fragment>
-  ) : (
+  return props.tree ? (
     <Fragment>
       <Accordion expanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -113,7 +123,7 @@ const TreeAccordion: FC<{
         </AccordionDetails>
       </Accordion>
     </Fragment>
-  );
-};
+  ) : null;
+});
 
 export default TreeAccordion;
