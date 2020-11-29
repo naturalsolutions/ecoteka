@@ -7,8 +7,9 @@ from app.api import get_db
 from app.core import set_policies, authorization, get_current_active_user
 from app.worker import import_geofile_task, create_mbtiles_task
 from starlette.responses import FileResponse
-
+import geopandas as gpd
 import json
+import tempfile
 
 router = APIRouter()
 policies = {
@@ -16,18 +17,17 @@ policies = {
     "trees:add": ["owner", "manager", "contributor"],
     "trees:update": ["owner", "manager", "contributor"],
     "trees:delete": ["owner", "manager", "contributor"],
-    "trees:import_from_geofile": ["owner", "manager", "contributor"],
     "trees:get_interventions": ["owner", "manager", "contributor"],
+    "trees:import": ["owner", "manager", "contributor"],
     "trees:export": ["owner", "manager", "contributor"],
 }
 set_policies(policies)
 
-
-@router.post("/import-from-geofile", response_model=schemas.GeoFile)
-def import_from_geofile(
+@router.post("/import", response_model=schemas.GeoFile)
+def trees_import(
     organization_id: int,
     *,
-    auth=Depends(authorization("trees:import_from_geofile")),
+    auth=Depends(authorization("trees:import")),
     db: Session = Depends(get_db),
     name: str,
     current_user: models.User = Depends(get_current_active_user),
@@ -60,6 +60,34 @@ def import_from_geofile(
 
     return geofile
 
+@router.get("/export")
+def trees_export(
+    organization_id: int,
+    format: str = "geojson",
+    auth=Depends(authorization("trees:export")),
+    db: Session = Depends(get_db),
+) -> Any:
+    """Export the trees from one organization"""
+    sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_id}"
+    df = gpd.read_postgis(sql, db.bind)
+    tempfile_name = tempfile.mkstemp()[1]
+
+    if df.empty:
+        return HTTPException(
+            status_code=404,
+            detail="this organization has no trees"
+        )
+    
+    if format == 'geojson':
+        df.to_file(tempfile_name, driver="GeoJSON")
+        filename="export.geojson"
+        return FileResponse(tempfile_name, media_type='application/octet-stream',filename=filename)
+    else:
+        return HTTPException(
+            status_code=404,
+            detail="format not found"
+        )
+
 
 @router.get("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def get(
@@ -85,17 +113,17 @@ def add(
     tree: schemas.TreePost,
     current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
-    """Manual tree registration"""
+    """Add one tree"""
     tree_with_user_info = schemas.TreeCreate(
         geom=f"POINT({tree.x} {tree.y})",
         properties=json.dumps(jsonable_encoder(tree)),
         user_id=current_user.id,
-        organization_id=current_user.organization_id,
+        organization_id=organization_id,
     )
 
     response = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
 
-    create_mbtiles_task.delay(current_user.organization_id)
+    create_mbtiles_task.delay(organization_id)
     return response
 
 
@@ -132,7 +160,7 @@ def update(
         ),
     ).to_xy()
 
-    create_mbtiles_task.delay(current_user.organization_id)
+    create_mbtiles_task.delay(organization_id)
     return response
 
 
@@ -142,14 +170,12 @@ def delete(
     tree_id: int,
     auth=Depends(authorization("trees:delete")),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """Deletes a tree"""
-    if get_tree_if_authorized(db, current_user, tree_id):
-        response = crud.crud_tree.tree.remove(db, id=tree_id).to_xy()
-
-        create_mbtiles_task.delay(current_user.organization_id)
-        return response
+    response = crud.crud_tree.tree.remove(db, id=tree_id).to_xy()
+    create_mbtiles_task.delay(organization_id)
+        
+    return response
 
 @router.get("/{tree_id}/interventions", response_model=List[schemas.Intervention])
 def get_interventions(
@@ -160,19 +186,3 @@ def get_interventions(
 ):
     """Get all interventions from a tree"""
     return crud.intervention.get_by_tree(db, tree_id)
-
-
-@router.get("/export")
-def trees_export(
-    format: str = "geojson",
-    auth=Depends(authorization("trees:export")),
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user),
-) -> Any:
-    """Export the trees from one organization"""
-
-    print(auth)
-
-    return True
-
-    # return FileResponse(file_location, media_type='application/octet-stream',filename=file_name)

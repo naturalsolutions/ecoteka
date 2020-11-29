@@ -2,10 +2,10 @@ import { TextField, CircularProgress, makeStyles } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import ETKMap from "./Map";
+import MapGL from "@urbica/react-map-gl";
 
 export interface ETKMapSearchCityProps {
-  map: React.RefObject<ETKMap>;
+  map: React.RefObject<MapGL>;
   className?: string;
   style?: React.CSSProperties;
   onChange?(item: {}): void;
@@ -75,8 +75,8 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
       setValue(newValue);
 
       if (props.map && newValue.centre && newValue.centre.coordinates) {
-        props.map.current.map.setZoom(12);
-        props.map.current.map.flyTo({
+        props.map.current.getMap().setZoom(12);
+        props.map.current.getMap().flyTo({
           center: newValue.centre.coordinates,
         });
       }
