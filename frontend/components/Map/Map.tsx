@@ -1,6 +1,12 @@
 import { Component } from "react";
 import mapboxgl from "mapbox-gl";
 
+type TActiveFeature = {
+  id: number;
+  lat: number;
+  long: number;
+};
+
 export interface ETKMapProps {
   styleSource: string;
   onStyleData?(map: mapboxgl.Map): void;
@@ -14,6 +20,7 @@ export default class ETKMap extends Component<
     lng: number;
     lat: number;
     styleSource: string;
+    activeFeature?: TActiveFeature;
   }
 > {
   public map: mapboxgl.Map;

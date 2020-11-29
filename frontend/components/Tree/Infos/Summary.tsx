@@ -58,7 +58,7 @@ const Summary: FC<{ id: number }> = ({ id }) => {
           </Grid>
           <Grid item xs></Grid>
           <Grid item>
-            <Button onClick={() => dialog.current.close()}>Close</Button>
+            <Button onClick={() => dialog.current.close()}>Fermer</Button>
           </Grid>
         </Grid>
       </Grid>

@@ -28,7 +28,7 @@ import { apiRest } from "@/lib/api";
 import ETKMap from "@/components/Map/Map";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
-
+import { useRouter } from "next/router";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 400,
@@ -74,6 +74,7 @@ const ETKInterventionForm = forwardRef<
 >((props, ref) => {
   const schema = schemaMap[props.step](props.interventionType);
   const form = useETKForm({ schema });
+  const router = useRouter();
 
   useEffect(() => {
     const formfields = Object.keys(props.data).filter(
@@ -98,6 +99,12 @@ const ETKInterventionForm = forwardRef<
       props.map?.current?.map.off("click", onMapClick);
     };
   }, []);
+
+  useEffect(() => {
+    if (router.query?.tree) {
+      form.setValue("tree_id", router.query?.tree);
+    }
+  }, [router]);
 
   let valid = false;
 
@@ -130,6 +137,8 @@ const ETKInterventionForm = forwardRef<
       const features = map.queryRenderedFeatures(bbox, {
         layers: [`ecoteka-${props.organization.slug}`],
       });
+
+      console.log(map, e);
 
       if (features.length) {
         form.setValue("tree_id", features[0].properties.id);

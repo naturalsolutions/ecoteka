@@ -14,6 +14,7 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { TIntervention } from "./Schema";
 import { useRouter } from "next/router";
+import { useTemplate } from "@/components/Template";
 
 const InterventionsTable: FC<{
   tree: any;
@@ -21,6 +22,7 @@ const InterventionsTable: FC<{
 }> = ({ interventions, tree }) => {
   const { t } = useTranslation("components");
   const router = useRouter();
+  const { dialog } = useTemplate();
   //TODO generic
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString("fr-FR", {
@@ -39,6 +41,7 @@ const InterventionsTable: FC<{
                 size="small"
                 onClick={() => {
                   router.push(`/?panel=newIntervention&tree=${tree.id}`);
+                  dialog.current.close();
                 }}
               >
                 Demander une intervention
