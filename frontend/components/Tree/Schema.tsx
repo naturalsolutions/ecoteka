@@ -6,7 +6,7 @@ export default function useTreeSchema() {
 
   return {
     family: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.family"),
@@ -14,7 +14,7 @@ export default function useTreeSchema() {
       schema: yup.string().required(t("common:errors.required")),
     },
     gender: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.gender"),
@@ -22,7 +22,7 @@ export default function useTreeSchema() {
       schema: yup.string().required(t("common:errors.required")),
     },
     specie: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.specie"),
@@ -30,7 +30,7 @@ export default function useTreeSchema() {
       schema: yup.string().required(t("common:errors.required")),
     },
     cultivar: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.cultivar"),
@@ -98,15 +98,16 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     etkRegistrationNumber: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
+        readOnly: true,
         label: t("components:Tree.etkRegistrationNumber"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
     registrationNumber: {
-      type: "select",
+      type: "textfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.registrationNumber"),

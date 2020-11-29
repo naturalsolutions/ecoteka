@@ -20,26 +20,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TreeAccordion: FC<{
-  tree: object;
+  tree: {
+    id: number;
+    x: number;
+    y: number;
+    properties: object;
+  };
 }> = (props) => {
   const { user } = useAppContext();
   const classes = useStyles();
   const schema = useTreeSchema();
-  Object.keys(schema).map((key) => {
-    schema[key].type = "textfield";
-    schema[key].component.type = "text";
-    schema[key].component.InputProps = {
-      ...schema[key].component.InputProps,
-      readOnly: true,
-      disabled: true,
-    };
-  });
   const { fields, setValue } = useETKForm({ schema: schema });
 
   useEffect(() => {
-    for (let key in props.tree) {
+    for (let key in ["id", "x", "y"]) {
+      setValue(key, props.tree[key]);
+    }
+
+    for (let key in props.tree.properties) {
       if (schema.hasOwnProperty(key)) {
-        setValue(key, props.tree[key]);
+        setValue(key, props.tree.properties[key]);
       }
     }
   }, [props.tree]);

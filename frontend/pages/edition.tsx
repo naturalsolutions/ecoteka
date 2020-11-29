@@ -1,5 +1,5 @@
 import { useEffect, useState, createRef } from "react";
-import { Grid, makeStyles, Button, Box } from "@material-ui/core";
+import { Grid, makeStyles, Button, Box, IconButton } from "@material-ui/core";
 import MapGL, {
   Source,
   Layer,
@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
 import { bbox } from "@turf/turf";
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
@@ -115,7 +116,23 @@ const EditionPage = ({}) => {
 
   const openDialog = (id) => {
     dialog.current.open({
-      title: "Tree information",
+      title: (
+        <Grid container alignItems="flex-end" justify="flex-end">
+          <Grid item xs>
+            {id}
+          </Grid>
+          <Grid item>
+            <IconButton
+              size="small"
+              onClick={() => {
+                dialog.current.close();
+              }}
+            >
+              <HighlightOffIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+      ),
       content: <TreeSummary id={id} />,
       isDraggable: true,
       dialogProps: {
@@ -240,7 +257,6 @@ const EditionPage = ({}) => {
           // @ts-ignore
           data={data}
           mode={mode}
-          clickBuffer={5}
           lineStringControl={false}
           combineFeaturesControl={false}
           uncombineFeaturesControl={false}
