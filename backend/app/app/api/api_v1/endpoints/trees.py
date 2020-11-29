@@ -116,7 +116,7 @@ def add(
     """Add one tree"""
     tree_with_user_info = schemas.TreeCreate(
         geom=f"POINT({tree.x} {tree.y})",
-        properties=json.dumps(jsonable_encoder(tree)),
+        properties=tree.properties,
         user_id=current_user.id,
         organization_id=organization_id,
     )

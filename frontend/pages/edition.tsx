@@ -1,5 +1,12 @@
 import { useEffect, useState, createRef } from "react";
-import { Grid, makeStyles, Button, Box, IconButton } from "@material-ui/core";
+import {
+  Grid,
+  makeStyles,
+  Button,
+  Box,
+  IconButton,
+  withStyles,
+} from "@material-ui/core";
 import MapGL, {
   Source,
   Layer,
@@ -167,6 +174,16 @@ const EditionPage = ({}) => {
     }
   };
 
+  const DarkButton = withStyles((theme) => ({
+    root: {
+      color: "#fff",
+      backgroundColor: "#212121",
+      "&:hover": {
+        backgroundColor: "#313131",
+      },
+    },
+  }))(Button);
+
   return (
     <Grid className={classes.root} id="map-edition">
       <MapGL
@@ -262,6 +279,18 @@ const EditionPage = ({}) => {
           uncombineFeaturesControl={false}
           displayControlsDefault={false}
           boxSelect={true}
+          onDrawCreate={async (item) => {
+            if (currentMode === "draw_point") {
+              const [x, y] = item.features[0].geometry.coordinates;
+              const newTree = {
+                x: x,
+                y: y,
+                properties: {},
+              };
+
+              await apiRest.trees.post(user.currentOrganization.id, newTree);
+            }
+          }}
           onChange={(newData) => {
             setData(newData);
           }}
@@ -271,7 +300,7 @@ const EditionPage = ({}) => {
             if (currentMode !== "simple_select") {
               setTimeout(() => {
                 setMode(currentMode);
-              }, 100);
+              }, 200);
             }
           }}
         />
@@ -287,7 +316,7 @@ const EditionPage = ({}) => {
       <Box className={classes.toolbar} p={1}>
         <Grid container spacing={2} justify="center" alignItems="center">
           <Grid item>
-            <Button
+            <DarkButton
               color="primary"
               variant="contained"
               onClick={() => {
@@ -296,22 +325,10 @@ const EditionPage = ({}) => {
               }}
             >
               Selection
-            </Button>
+            </DarkButton>
           </Grid>
           <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => {
-                setMode("draw_polygon");
-                setCurrentMode("draw_polygon");
-              }}
-            >
-              + Station
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
+            <DarkButton
               color="primary"
               variant="contained"
               onClick={() => {
@@ -320,7 +337,19 @@ const EditionPage = ({}) => {
               }}
             >
               + Arbre
-            </Button>
+            </DarkButton>
+          </Grid>
+          <Grid item>
+            <DarkButton
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                setMode("draw_polygon");
+                setCurrentMode("draw_polygon");
+              }}
+            >
+              + Station
+            </DarkButton>
           </Grid>
         </Grid>
       </Box>

@@ -43,11 +43,12 @@ class TreePost(TreeJsonBProperties):
     """ Schema for tree creation post request data"""
     x: float
     y: float
+    properties: Any
 
 
 class TreePatch(TreePost):
-    x: Optional[int]
-    y: Optional[int]
+    x: Optional[float]
+    y: Optional[float]
 
 
 class Tree_xy(TreeDBMeta):
