@@ -289,6 +289,7 @@ const EditionPage = ({}) => {
               };
 
               await apiRest.trees.post(user.currentOrganization.id, newTree);
+              await getData();
             }
           }}
           onChange={(newData) => {
