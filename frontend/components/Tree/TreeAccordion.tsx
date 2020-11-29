@@ -11,6 +11,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useETKForm from "../Form/useForm";
 import useTreeSchema from "./Schema";
 import { useAppContext } from "@/providers/AppContext";
+import { ITree } from "@/index";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -20,12 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TreeAccordion: FC<{
-  tree: {
-    id: number;
-    x: number;
-    y: number;
-    properties: object;
-  };
+  tree: ITree;
 }> = (props) => {
   const { user } = useAppContext();
   const classes = useStyles();
@@ -48,7 +44,7 @@ const TreeAccordion: FC<{
     <Fragment></Fragment>
   ) : (
     <Fragment>
-      <Accordion>
+      <Accordion expanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={classes.heading}>
             Identité de l'arbre
