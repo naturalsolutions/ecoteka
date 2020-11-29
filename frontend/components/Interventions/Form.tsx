@@ -28,6 +28,7 @@ import { apiRest } from "@/lib/api";
 import ETKMap from "@/components/Map/Map";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,13 +75,14 @@ const ETKInterventionForm = forwardRef<
 >((props, ref) => {
   const schema = schemaMap[props.step](props.interventionType);
   const form = useETKForm({ schema });
+  const router = useRouter();
 
   useEffect(() => {
-    const formfields = Object.keys(props.data).filter(
+    const formFields = Object.keys(props.data).filter(
       (field) => field in schema
     );
 
-    formfields.forEach((field) => {
+    formFields.forEach((field) => {
       const value = props.data[field];
 
       if (schema[field].component.multiple === true && !Array.isArray(value)) {
@@ -93,6 +95,10 @@ const ETKInterventionForm = forwardRef<
     props.map?.current?.map.on("click", (e) =>
       onMapClick(props.map.current.map, e)
     );
+
+    if (router.query.tree) {
+      form.setValue("tree_id", router.query.tree);
+    }
 
     return () => {
       props.map?.current?.map.off("click", onMapClick);
