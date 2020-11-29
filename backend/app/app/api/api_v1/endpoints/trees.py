@@ -1,6 +1,5 @@
 from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.api import get_db
@@ -8,7 +7,6 @@ from app.core import set_policies, authorization, get_current_active_user
 from app.worker import import_geofile_task, create_mbtiles_task
 from starlette.responses import FileResponse
 import geopandas as gpd
-import json
 import tempfile
 
 router = APIRouter()

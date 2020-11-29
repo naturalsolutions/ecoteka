@@ -6,13 +6,9 @@ import {
   Box,
   IconButton,
   withStyles,
+  ButtonGroup,
 } from "@material-ui/core";
-import MapGL, {
-  Source,
-  Layer,
-  FeatureState,
-  MapContext,
-} from "@urbica/react-map-gl";
+import MapGL, { Source, Layer, FeatureState } from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 import SearchCity from "@/components/Map/SearchCity";
@@ -20,7 +16,7 @@ import { useTemplate } from "@/components/Template";
 import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
-import { bbox, feature } from "@turf/turf";
+import { bbox } from "@turf/turf";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
@@ -68,10 +64,10 @@ const useStyles = makeStyles((theme) => {
 
 const EditionPage = ({}) => {
   const classes = useStyles();
-  const { dialog } = useTemplate();
-  const mapRef = createRef<MapGL>();
-  const { user } = useAppContext();
   const router = useRouter();
+  const { dialog } = useTemplate();
+  const { user } = useAppContext();
+  const mapRef = createRef<MapGL>();
   const [firstLoad, setFirstLoad] = useState(true);
   const [styleSource, setStyleSource] = useState("/api/v1/maps/style");
   const [viewport, setViewport] = useState({
@@ -85,11 +81,8 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [features, setFeatures] = useState({
-    type: "FeatureCollection",
-    features: [],
-  });
   const [hoveredTreeId, setHoveredTreeId] = useState(null);
+  const [boxSelect, setBoxSelect] = useState(false);
 
   const getData = async () => {
     const newData = await apiRest.organization.geojson(
@@ -165,7 +158,7 @@ const EditionPage = ({}) => {
   };
 
   const onClick = (event) => {
-    if (mode !== "simple_select") {
+    if (mode !== "simple_select" || boxSelect) {
       return;
     }
 
@@ -195,44 +188,6 @@ const EditionPage = ({}) => {
         zoom={viewport.zoom}
         onViewportChange={setViewport}
       >
-        <Source
-          id="features"
-          type="geojson"
-          data={features ? features : null}
-        />
-        <Layer
-          id="features"
-          type="circle"
-          source="features"
-          paint={{
-            "circle-color": [
-              "case",
-              ["boolean", ["feature-state", "click"], false],
-              "#076ee4",
-              "#ebb215",
-            ],
-            "circle-stroke-color": "#fff",
-            "circle-stroke-width": [
-              "case",
-              ["boolean", ["feature-state", "click"], false],
-              2,
-              0,
-            ],
-            "circle-radius": [
-              "case",
-              ["boolean", ["feature-state", "hover"], false],
-              12,
-              5,
-            ],
-            "circle-pitch-scale": "map",
-            "circle-opacity": [
-              "case",
-              ["boolean", ["feature-state", "hover"], false],
-              1,
-              0.8,
-            ],
-          }}
-        />
         <Source id="trees" type="geojson" data={data ? data : null} />
         <Layer
           id="trees"
@@ -270,51 +225,53 @@ const EditionPage = ({}) => {
           onLeave={onLeave}
           onClick={onClick}
         />
-        <Draw
-          // @ts-ignore
-          data={data}
-          mode={mode}
-          lineStringControl={false}
-          combineFeaturesControl={false}
-          uncombineFeaturesControl={false}
-          displayControlsDefault={false}
-          boxSelect={true}
-          onDrawCreate={async (item) => {
-            if (currentMode === "draw_point") {
-              const [x, y] = item.features[0].geometry.coordinates;
-              const newTree = {
-                x: x,
-                y: y,
-                properties: {},
-              };
+        {boxSelect && (
+          <Draw
+            // @ts-ignore
+            data={data}
+            mode={mode}
+            lineStringControl={false}
+            combineFeaturesControl={false}
+            uncombineFeaturesControl={false}
+            displayControlsDefault={false}
+            boxSelect={boxSelect}
+            onDrawCreate={async (item) => {
+              if (currentMode === "draw_point") {
+                const [x, y] = item.features[0].geometry.coordinates;
+                const newTree = {
+                  x: x,
+                  y: y,
+                  properties: {},
+                };
 
-              await apiRest.trees.post(user.currentOrganization.id, newTree);
-              await getData();
-            }
-          }}
-          onDrawDelete={async (selection) => {
-            const ids = selection.features.map(
-              (feature) => feature.properties.id
-            );
+                await apiRest.trees.post(user.currentOrganization.id, newTree);
+                await getData();
+              }
+            }}
+            onDrawDelete={async (selection) => {
+              const ids = selection.features.map(
+                (feature) => feature.properties.id
+              );
 
-            await apiRest.trees.bulkDelete(
-              user.currentOrganization.id,
-              JSON.stringify(ids)
-            );
-          }}
-          onChange={(newData) => {
-            setData(newData);
-          }}
-          onDrawModeChange={(drawMode) => {
-            setMode(drawMode.mode);
+              await apiRest.trees.bulkDelete(
+                user.currentOrganization.id,
+                JSON.stringify(ids)
+              );
+            }}
+            onChange={(newData) => {
+              setData(newData);
+            }}
+            onDrawModeChange={(drawMode) => {
+              setMode(drawMode.mode);
 
-            if (currentMode !== "simple_select") {
-              setTimeout(() => {
-                setMode(currentMode);
-              }, 200);
-            }
-          }}
-        />
+              if (currentMode !== "simple_select") {
+                setTimeout(() => {
+                  setMode(currentMode);
+                }, 200);
+              }
+            }}
+          />
+        )}
         {hoveredTreeId && (
           <FeatureState
             id={hoveredTreeId}
@@ -323,44 +280,51 @@ const EditionPage = ({}) => {
           />
         )}
       </MapGL>
-      <SearchCity className={classes.mapSearchCity} map={mapRef} />
       <Box className={classes.toolbar} p={1}>
         <Grid container spacing={2} justify="center" alignItems="center">
+          <Grid item xs></Grid>
           <Grid item>
-            <DarkButton
-              color="primary"
-              variant="contained"
-              onClick={() => {
-                setMode("simple_select");
-                setCurrentMode("simple_select");
-              }}
-            >
-              Selection
-            </DarkButton>
+            <ButtonGroup>
+              <DarkButton
+                onClick={() => {
+                  setBoxSelect(false);
+                }}
+              >
+                Information
+              </DarkButton>
+              <DarkButton
+                onClick={() => {
+                  setBoxSelect(true);
+                  setMode("simple_select");
+                  setCurrentMode("simple_select");
+                  console.log(boxSelect, currentMode);
+                }}
+              >
+                Selection
+              </DarkButton>
+              <DarkButton
+                onClick={() => {
+                  setBoxSelect(true);
+                  setMode("draw_point");
+                  setCurrentMode("draw_point");
+                }}
+              >
+                + Arbre
+              </DarkButton>
+              <DarkButton
+                onClick={() => {
+                  setBoxSelect(true);
+                  setMode("draw_polygon");
+                  setCurrentMode("draw_polygon");
+                }}
+              >
+                + Station
+              </DarkButton>
+            </ButtonGroup>
           </Grid>
+          <Grid item xs></Grid>
           <Grid item>
-            <DarkButton
-              color="primary"
-              variant="contained"
-              onClick={() => {
-                setMode("draw_point");
-                setCurrentMode("draw_point");
-              }}
-            >
-              + Arbre
-            </DarkButton>
-          </Grid>
-          <Grid item>
-            <DarkButton
-              color="primary"
-              variant="contained"
-              onClick={() => {
-                setMode("draw_polygon");
-                setCurrentMode("draw_polygon");
-              }}
-            >
-              + Station
-            </DarkButton>
+            <SearchCity map={mapRef} />
           </Grid>
         </Grid>
       </Box>
