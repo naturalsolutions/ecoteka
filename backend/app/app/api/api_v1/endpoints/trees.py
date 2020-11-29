@@ -123,7 +123,6 @@ def add(
     )
 
     response = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
-
     create_mbtiles_task.delay(organization_id)
     return response
 

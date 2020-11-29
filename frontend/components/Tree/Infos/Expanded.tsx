@@ -64,6 +64,7 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
               <InterventionsTable
                 interventions={props.interventions}
                 tree={props.tree}
+                onNewIntervention={props.onClose}
               />
             </Paper>
           </Grid>

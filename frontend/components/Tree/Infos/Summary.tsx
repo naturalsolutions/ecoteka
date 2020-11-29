@@ -47,7 +47,13 @@ const Summary: FC<{ id: number }> = ({ id }) => {
       </Grid>
       <Grid item>
         {interventions && (
-          <InterventionsTable interventions={interventions} tree={tree} />
+          <InterventionsTable
+            interventions={interventions}
+            tree={tree}
+            onNewIntervention={() => {
+              dialog.current.close();
+            }}
+          />
         )}
       </Grid>
       <Grid item>

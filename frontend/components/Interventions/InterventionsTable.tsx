@@ -18,7 +18,8 @@ import { useRouter } from "next/router";
 const InterventionsTable: FC<{
   tree: any;
   interventions: TIntervention[];
-}> = ({ interventions, tree }) => {
+  onNewIntervention?(): void;
+}> = ({ interventions, tree, onNewIntervention }) => {
   const { t } = useTranslation("components");
   const router = useRouter();
   //TODO generic
@@ -29,6 +30,7 @@ const InterventionsTable: FC<{
       day: "numeric",
     });
   };
+
   return (
     <TableContainer component={Paper}>
       <Table size="small">
@@ -38,6 +40,7 @@ const InterventionsTable: FC<{
               <Button
                 size="small"
                 onClick={() => {
+                  onNewIntervention();
                   router.push(`/?panel=newIntervention&tree=${tree.id}`);
                 }}
               >

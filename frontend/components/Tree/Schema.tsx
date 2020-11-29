@@ -45,24 +45,6 @@ export default function useTreeSchema() {
       },
       schema: yup.string().required(t("common:errors.required")),
     },
-    y: {
-      type: "textfield",
-      category: "Identité de l'arbre",
-      component: {
-        type: "number",
-        label: t("components:Tree.latitude"),
-      },
-      schema: yup.number().required(t("common:errors.required")),
-    },
-    x: {
-      type: "textfield",
-      category: "Identité de l'arbre",
-      component: {
-        type: "number",
-        label: t("components:Tree.longitude"),
-      },
-      schema: yup.number().required(t("common:errors.required")),
-    },
     townshipCode: {
       type: "textfield",
       category: "Identité de l'arbre",
