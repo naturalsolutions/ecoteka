@@ -20,7 +20,7 @@ import { useTemplate } from "@/components/Template";
 import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
-import { bbox } from "@turf/turf";
+import { bbox, feature } from "@turf/turf";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
@@ -291,6 +291,16 @@ const EditionPage = ({}) => {
               await apiRest.trees.post(user.currentOrganization.id, newTree);
               await getData();
             }
+          }}
+          onDrawDelete={async (selection) => {
+            const ids = selection.features.map(
+              (feature) => feature.properties.id
+            );
+
+            await apiRest.trees.bulkDelete(
+              user.currentOrganization.id,
+              JSON.stringify(ids)
+            );
           }}
           onChange={(newData) => {
             setData(newData);

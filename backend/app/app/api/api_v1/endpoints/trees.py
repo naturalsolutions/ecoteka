@@ -20,6 +20,7 @@ policies = {
     "trees:get_interventions": ["owner", "manager", "contributor"],
     "trees:import": ["owner", "manager", "contributor"],
     "trees:export": ["owner", "manager", "contributor"],
+    "trees:bulk_delete": ["owner", "manager", "contributor"],
 }
 set_policies(policies)
 
@@ -150,6 +151,20 @@ def update(
     create_mbtiles_task.delay(tree_in_db.organization_id)
     return tree_in_db.to_xy()
 
+@router.delete("/bulk_delete")
+def bulk_delete(
+    organization_id: int,
+    trees: List[int],
+    db: Session = Depends(get_db),
+    auth=Depends(authorization("trees:bulk_delete")),
+) -> Any:
+    """Bulk delete"""
+    for tree_id in trees:
+        crud.crud_tree.tree.remove(db, id=tree_id)
+
+    create_mbtiles_task.delay(organization_id)
+    
+    return trees
 
 @router.delete("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def delete(
