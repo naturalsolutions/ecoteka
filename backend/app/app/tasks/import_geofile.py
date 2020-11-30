@@ -82,8 +82,10 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
         if np.isnan(x) or np.isnan(y):
             continue
 
-        if transformer:
-            x, y = transformer.transform(x, y)
+        if transformer is not None:
+            coord = transformer.transform(x, y)
+            x = coord[0]
+            y = coord[1]
 
         properties = df.loc[i]
         tree = create_tree(geofile, x, y, properties)
