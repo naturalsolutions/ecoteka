@@ -17,11 +17,18 @@ class CRUDGeoFile(CRUDBase[GeoFile, GeoFileCreate, GeoFileUpdate]):
         return db.query(GeoFile).filter(GeoFile.checksum == checksum).first()
 
     def get_multi(
-        self, db: Session, *, user: User, skip: int = 0, limit: int = 100
+        self,
+        db: Session,
+        *,
+        organization_id: int,
+        user_id: int,
+        skip: int = 0,
+        limit: int = 100
     ) -> List[GeoFile]:
         return (
             db.query(GeoFile)
-            .filter(GeoFile.user_id == user.id)
+            .filter(GeoFile.organization_id == organization_id)
+            .filter(GeoFile.user_id == user_id)
             .offset(skip)
             .limit(limit)
             .all()

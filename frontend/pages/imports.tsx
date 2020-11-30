@@ -17,7 +17,7 @@ export default function ImportsPage() {
         await apiRest.geofiles.delete(user.currentOrganization.id, name);
       }
 
-      await fetchData();
+      await fetchData(user.currentOrganization.id);
     } catch (e) {}
   };
 
@@ -27,14 +27,14 @@ export default function ImportsPage() {
     } catch (e) {}
   };
 
-  async function fetchData() {
-    const rows = await apiRest.geofiles.getAll(user.currentOrganization.id);
+  async function fetchData(organizationId) {
+    const rows = await apiRest.geofiles.getAll(organizationId);
     setRows(rows);
   }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(user.currentOrganization.id);
+  }, [user.currentOrganization.id]);
 
   return (
     <Template>

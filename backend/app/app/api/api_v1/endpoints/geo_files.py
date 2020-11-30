@@ -42,7 +42,13 @@ def read_geo_files(
     """
     Retrieve geo files.
     """
-    geo_files = crud.geo_file.get_multi(db, user=current_user, skip=skip, limit=limit)
+    geo_files = crud.geo_file.get_multi(
+        db,
+        organization_id=organization_id,
+        user_id=current_user.id,
+        skip=skip,
+        limit=limit,
+    )
 
     return geo_files
 
