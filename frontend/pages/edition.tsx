@@ -102,8 +102,10 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     if (mapRef.current && data.features.length > 0 && firstLoad) {
-      const map = mapRef.current.getMap();
-      map.fitBounds(bbox(data));
+      try {
+        const map = mapRef.current.getMap();
+        map.fitBounds(bbox(data));
+      } catch (e) {}
       setFirstLoad(false);
     }
   }, [data, mapRef]);

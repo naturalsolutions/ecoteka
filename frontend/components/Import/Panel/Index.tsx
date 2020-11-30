@@ -101,10 +101,12 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
     );
 
     props.context?.map?.current?.map?.on("styledata", () => {
-      props.context?.map?.current?.map?.setZoom(12);
-      props.context?.map?.current?.map?.flyTo({
-        center: [longitude, latitude],
-      });
+      try {
+        props.context?.map?.current?.map?.setZoom(12);
+        props.context?.map?.current?.map?.flyTo({
+          center: [longitude, latitude],
+        });
+      } catch (e) {}
     });
   };
 
