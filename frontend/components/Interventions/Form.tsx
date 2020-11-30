@@ -76,6 +76,7 @@ const ETKInterventionForm = forwardRef<
   const schema = schemaMap[props.step](props.interventionType);
   const form = useETKForm({ schema });
   const router = useRouter();
+  const { user } = useAppContext();
 
   useEffect(() => {
     const formFields = Object.keys(props.data).filter(
@@ -96,14 +97,27 @@ const ETKInterventionForm = forwardRef<
       onMapClick(props.map.current.map, e)
     );
 
-    if (router.query.tree) {
-      form.setValue("tree_id", router.query.tree);
-    }
-
     return () => {
       props.map?.current?.map.off("click", onMapClick);
     };
   }, []);
+
+  useEffect(() => {
+    if (router.query.tree) {
+      form.setValue("tree_id", router.query.tree);
+
+      apiRest.trees
+        .get(user.currentOrganization.id, router.query.tree)
+        .then((tree) => {
+          try {
+            props.map.current.map.flyTo({
+              zoom: 20,
+              center: [tree.x, tree.y],
+            });
+          } catch (e) {}
+        });
+    }
+  }, [router.query.tree]);
 
   let valid = false;
 
