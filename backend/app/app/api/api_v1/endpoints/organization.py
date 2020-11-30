@@ -43,6 +43,7 @@ router = APIRouter()
 policies = {
     "organizations:get_one": ["owner", "manager", "contributor", "reader"],
     "organizations:get_teams": ["owner", "manager", "contributor", "reader"],
+    "organizations:delete_team": ["owner", "manager"],
     "organizations:get_members": ["owner", "manager", "contributor", "reader"],
     "organizations:add_members": ["owner", "manager"],
     "organizations:remove_member": ["owner", "manager"],
@@ -133,6 +134,43 @@ def get_teams(
     return [
         org.to_schema() for org in organization.get_teams(db, parent_id=organization_id)
     ]
+
+@router.delete("/{organization_id}/teams/{team_id}")
+def remove_team(
+    organization_id: int,
+    team_id: int,
+    *,
+    auth=Depends(authorization("organizations:delete_team")),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    delete one team and its members by id
+    """
+    organization_in_db = organization.get(db, id=team_id)
+
+    if not organization_in_db:
+        raise HTTPException(status_code=404, detail="Team not found")
+
+    # WIP : Remove all roles for team to delete
+    try:
+        members_in_db = crud.organization.get_members(db, id=team_id)
+
+        for member in members_in_db:
+            current_roles = enforcer.get_roles_for_user_in_domain(
+                str(member['id']), str(team_id) 
+            )
+
+            for current_role in current_roles:
+                enforcer.delete_roles_for_user_in_domain(
+                str(member['id']), current_role, str(team_id)
+            )
+    except Exception as e:
+        logging.error(e)
+        return False
+    organization.remove(db, id=team_id)
+    return True
+
 
 
 @router.get("/{organization_id}/members")
