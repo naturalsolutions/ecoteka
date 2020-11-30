@@ -3,9 +3,10 @@ import { Autocomplete } from "@material-ui/lab";
 import { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import MapGL from "@urbica/react-map-gl";
+import Map from "@/components/Map/Map";
 
 export interface ETKMapSearchCityProps {
-  map: React.RefObject<MapGL>;
+  map: React.RefObject<MapGL | Map>;
   className?: string;
   style?: React.CSSProperties;
   onChange?(item: {}): void;
@@ -74,9 +75,26 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
     if (newValue) {
       setValue(newValue);
 
-      if (props.map && newValue.centre && newValue.centre.coordinates) {
+      if (
+        props.map &&
+        props.map.current.getMap &&
+        newValue.centre &&
+        newValue.centre.coordinates
+      ) {
         props.map.current.getMap().setZoom(12);
         props.map.current.getMap().flyTo({
+          center: newValue.centre.coordinates,
+        });
+      }
+
+      if (
+        props.map &&
+        props.map.current.map &&
+        newValue.centre &&
+        newValue.centre.coordinates
+      ) {
+        props.map.current.map.setZoom(12);
+        props.map.current.map.flyTo({
           center: newValue.centre.coordinates,
         });
       }

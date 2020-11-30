@@ -84,17 +84,22 @@ const EditionPage = ({}) => {
   const [hoveredTreeId, setHoveredTreeId] = useState(null);
   const [boxSelect, setBoxSelect] = useState(false);
 
-  const getData = async () => {
-    const newData = await apiRest.organization.geojson(
-      user.currentOrganization.id
-    );
-
+  const getData = async (organizationId: number) => {
+    const newData = await apiRest.organization.geojson(organizationId);
     setData(newData);
   };
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (user.currentOrganization) {
+      getData(user.currentOrganization.id);
+    }
+
+    return () => {
+      if (dialog.current) {
+        dialog.current.close();
+      }
+    };
+  }, [user, dialog]);
 
   useEffect(() => {
     if (mapRef.current && data.features.length > 0 && firstLoad) {
@@ -245,7 +250,7 @@ const EditionPage = ({}) => {
                 };
 
                 await apiRest.trees.post(user.currentOrganization.id, newTree);
-                await getData();
+                await getData(user.currentOrganization.id);
               }
             }}
             onDrawDelete={async (selection) => {
