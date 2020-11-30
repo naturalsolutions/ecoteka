@@ -155,7 +155,7 @@ def get_current_user_with_organizations(
     current_user=Depends(get_current_user), db: Session = Depends(get_db)
 ):
     query = text("SELECT v2 FROM casbin_rule WHERE ptype=:ptype AND v0=:user")
-    params = { "ptype": "g", "user": str(current_user.id)}
+    params = {"ptype": "g", "user": str(current_user.id)}
 
     organizations = []
 

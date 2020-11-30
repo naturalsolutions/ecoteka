@@ -11,7 +11,7 @@ class UserPrimaryKey(BaseModel):
 # Shared properties
 class UserBase(BaseModel):
     email: Optional[EmailStr] = None
-    status: str = 'pending'
+    status: str = "pending"
     is_superuser: bool = False
     full_name: Optional[str] = None
     is_verified: Optional[bool] = False

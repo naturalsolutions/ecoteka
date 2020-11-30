@@ -25,6 +25,8 @@ services:
     volumes:
       - ./backend/app:/app
     command: /start-reload.sh
+    ports:
+      - "5678:5678"
 
   celery_worker:
     image: ecoteka-backend:dev

@@ -30,7 +30,7 @@ def create_mbtiles_task(organization_id: int):
         organization = crud.organization.get(db, organization_id)
 
         if organization is None:
-            return            
+            return
 
         print(f"creating tiles for organization {organization.id}")
         create_mbtiles(db, organization)

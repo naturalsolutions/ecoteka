@@ -5,6 +5,7 @@ from fastapi_jwt_auth.exceptions import AuthJWTException
 from app.core import authjwt_exception_handler, settings
 from app.api.api_v1.api import api_router
 
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     root_path=settings.ROOT_PATH,

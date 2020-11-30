@@ -1,4 +1,3 @@
-import os
 import traceback
 import fiona
 import logging
@@ -14,7 +13,6 @@ from pyproj import Transformer
 
 from app import crud
 from app.models import GeoFile, GeoFileStatus, Tree
-from app.api import deps
 from .create_mbtiles import create_mbtiles
 
 
@@ -73,7 +71,7 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
     transformer = None
 
     if geofile.crs.lower() != "epsg:4326":
-        transformer = Transformer.from_crs(int(geofile.crs.lower().split(":")[1]), 4326)
+        transformer = Transformer.from_crs(geofile.crs, "epsg:4326", always_xy=True)
 
     for i in df.index:
         x = df.loc[i, geofile.longitude_column]
@@ -82,13 +80,13 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
         if np.isnan(x) or np.isnan(y):
             continue
 
+        coord = [x, y]
+
         if transformer is not None:
             coord = transformer.transform(x, y)
-            x = coord[0]
-            y = coord[1]
 
         properties = df.loc[i]
-        tree = create_tree(geofile, x, y, properties)
+        tree = create_tree(geofile, coord[0], coord[1], properties)
         db.add(tree)
 
         if i % 1000 == 0 and i > 0:
@@ -96,9 +94,17 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
     db.commit()
 
 
+def coord_to_float(a):
+    return float(str(a).replace(",", ".").replace(" ", ""))
+
+
 def import_geofile(db: Session, geofile: GeoFile):
     logging.info("running geofile import task")
     try:
+        converters = {
+            geofile.latitude_column: coord_to_float,
+            geofile.longitude_column: coord_to_float,
+        }
         geofile.status = GeoFileStatus.IMPORTING.value
         geofile.importing_start = datetime.datetime.utcnow()
         db.commit()
@@ -107,7 +113,10 @@ def import_geofile(db: Session, geofile: GeoFile):
             import_from_fiona(db, geofile.get_filepath(), geofile)
 
         if geofile.extension in ["xlsx", "xls"]:
-            df = pd.read_excel(geofile.get_filepath())
+            df = pd.read_excel(
+                geofile.get_filepath(),
+                converters=converters,
+            )
             import_from_dataframe(db, df, geofile.get_filepath(), geofile)
 
         if geofile.extension == "csv":

@@ -22,6 +22,7 @@ policies = {
 }
 set_policies(policies)
 
+
 @router.post("/import", response_model=schemas.GeoFile)
 def trees_import(
     organization_id: int,
@@ -59,6 +60,7 @@ def trees_import(
 
     return geofile
 
+
 @router.get("/export")
 def trees_export(
     organization_id: int,
@@ -72,20 +74,16 @@ def trees_export(
     tempfile_name = tempfile.mkstemp()[1]
 
     if df.empty:
-        return HTTPException(
-            status_code=404,
-            detail="this organization has no trees"
-        )
-    
-    if format == 'geojson':
+        return HTTPException(status_code=404, detail="this organization has no trees")
+
+    if format == "geojson":
         df.to_file(tempfile_name, driver="GeoJSON")
-        filename="export.geojson"
-        return FileResponse(tempfile_name, media_type='application/octet-stream',filename=filename)
-    else:
-        return HTTPException(
-            status_code=404,
-            detail="format not found"
+        filename = "export.geojson"
+        return FileResponse(
+            tempfile_name, media_type="application/octet-stream", filename=filename
         )
+    else:
+        return HTTPException(status_code=404, detail="format not found")
 
 
 @router.get("/{tree_id}", response_model=schemas.tree.Tree_xy)
@@ -131,22 +129,20 @@ def update(
     *,
     auth=Depends(authorization("trees:update")),
     db: Session = Depends(get_db),
-    payload: schemas.tree.TreeUpdate
+    payload: schemas.tree.TreeUpdate,
 ) -> Any:
     """Update one tree"""
     tree_in_db = crud.tree.get(db, id=tree_id)
 
     if tree_in_db is None:
-        return HTTPException(
-            status_code=404,
-            detail=f"Tree {tree_id} not found"
-        )
+        return HTTPException(status_code=404, detail=f"Tree {tree_id} not found")
 
-    properties = {k: v for (k,v) in payload.properties.items() if v is not ''}
+    properties = {k: v for (k, v) in payload.properties.items() if v is not ""}
     tree_in_db.properties = properties
     db.commit()
     create_mbtiles_task.delay(tree_in_db.organization_id)
     return tree_in_db.to_xy()
+
 
 @router.delete("/bulk_delete")
 def bulk_delete(
@@ -160,8 +156,9 @@ def bulk_delete(
         crud.crud_tree.tree.remove(db, id=tree_id)
 
     create_mbtiles_task.delay(organization_id)
-    
+
     return trees
+
 
 @router.delete("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def delete(
@@ -173,8 +170,9 @@ def delete(
     """Deletes a tree"""
     response = crud.crud_tree.tree.remove(db, id=tree_id).to_xy()
     create_mbtiles_task.delay(organization_id)
-        
+
     return response
+
 
 @router.get("/{tree_id}/interventions", response_model=List[schemas.Intervention])
 def get_interventions(
