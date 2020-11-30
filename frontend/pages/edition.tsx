@@ -89,7 +89,7 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
-    if (user.currentOrganization) {
+    if (user && user.currentOrganization) {
       getData(user.currentOrganization.id);
     }
 
@@ -114,6 +114,10 @@ const EditionPage = ({}) => {
         .get(user.currentOrganization.id, router.query.tree)
         .then((tree) => {
           openDialog(tree.id);
+          mapRef.current.getMap().flyTo({
+            zoom: 20,
+            center: [tree.x, tree.y],
+          });
         });
     }
   }, [router.query.tree]);

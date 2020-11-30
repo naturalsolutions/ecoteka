@@ -31,18 +31,6 @@ const CalendarTodoIntervention: React.FC<CalendarTodoInterventionProps> = (
 
   const color = INTERVENTION_COLORS[props.todoIntervention.intervention_type];
 
-  const handleTodoInterventionOnClick = () => {
-    dialog.current.open({
-      title: props.todoIntervention.intervention_type,
-      content: "",
-      actions: [
-        {
-          label: "Close",
-        },
-      ],
-    });
-  };
-
   return (
     <Grid item>
       <Button
@@ -50,7 +38,6 @@ const CalendarTodoIntervention: React.FC<CalendarTodoInterventionProps> = (
         size="small"
         variant="contained"
         style={{ backgroundColor: color }}
-        onClick={handleTodoInterventionOnClick}
       >
         &nbsp;
       </Button>

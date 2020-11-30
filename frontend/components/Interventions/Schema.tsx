@@ -11,7 +11,7 @@ export type TInterventionType =
 
 export interface TIntervention {
   id?: number;
-  intervention_type: string;
+  intervention_type: TInterventionType;
   organization_id?: number;
   tree_id: number;
   intervention_start_date?: Date;

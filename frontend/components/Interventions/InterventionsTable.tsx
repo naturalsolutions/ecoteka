@@ -57,29 +57,30 @@ const InterventionsTable: FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {interventions?.map((intervention, i) => {
-            return (
-              <TableRow key={i}>
-                <TableCell>
-                  {intervention.date && formatDate(intervention.date)}
-                  {!intervention.date &&
-                    `${formatDate(
-                      intervention.intervention_start_date
-                    )} - ${formatDate(intervention.intervention_end_date)}`}
-                </TableCell>
-                <TableCell>
-                  {t(`Intervention.types.${intervention.intervention_type}`)}
-                </TableCell>
-                <TableCell>
-                  <Checkbox
-                    checked={intervention.done}
-                    color="primary"
-                    readOnly
-                  />
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {interventions &&
+            interventions.map((intervention, i) => {
+              return (
+                <TableRow key={i}>
+                  <TableCell>
+                    {intervention.date && formatDate(intervention.date)}
+                    {!intervention.date &&
+                      `${formatDate(
+                        intervention.intervention_start_date
+                      )} - ${formatDate(intervention.intervention_end_date)}`}
+                  </TableCell>
+                  <TableCell>
+                    {t(`Intervention.types.${intervention.intervention_type}`)}
+                  </TableCell>
+                  <TableCell>
+                    <Checkbox
+                      checked={intervention.done}
+                      color="primary"
+                      readOnly
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
         </TableBody>
       </Table>
     </TableContainer>
