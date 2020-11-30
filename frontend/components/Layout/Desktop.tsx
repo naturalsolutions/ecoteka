@@ -39,8 +39,8 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
           },
           {
             label: "Template.menuItems.plantHeritage.cartographyEdition",
-            link: "/edition",
-            activator: (router) => router.pathname === "/edition",
+            link: "/edition/",
+            activator: (router) => router.pathname === "/edition/",
           },
         ],
       },
@@ -56,8 +56,8 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
           },
           {
             label: "Template.menuItems.dataImport.importHistory",
-            link: "/imports",
-            activator: (router) => router.pathname === "/imports",
+            link: "/imports/",
+            activator: (router) => router.pathname === "/imports/",
           },
         ],
       },

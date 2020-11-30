@@ -39,10 +39,6 @@ def upgrade():
     op.create_index(op.f("ix_organization_name"), "organization", ["name"])
     op.create_index(op.f("ix_organization_slug"), "organization", ["slug"])
 
-    organization_data = {"name": "Ecoteka", "slug": "ecoteka"}
-
-    op.bulk_insert(organization_table, [organization_data])
-
     op.add_column("user", create_organization_column())
     op.add_column("geofile", create_organization_column())
     op.add_column("tree", create_organization_column())

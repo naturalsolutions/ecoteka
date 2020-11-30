@@ -27,7 +27,8 @@ def init_db(db: Session) -> None:
 
     if not organization_in_db:
         organization_in = OrganizationCreate(
-            name=settings.ORGANIZATION, slug=slug.slug(settings.ORGANIZATION)
+            name=settings.ORGANIZATION, 
+            slug=slug.slug(settings.ORGANIZATION)
         )
         organization_in_db = organization.create(db, obj_in=organization_in)
 
@@ -46,38 +47,6 @@ def init_db(db: Session) -> None:
         db.add(user_in_db)
         db.commit()
         db.refresh(user_in_db)
-
-    planet = organization.get_by_name(db, name="planet")
-
-    if not planet:
-        planet = organization.create(
-            db,
-            obj_in=OrganizationCreate(
-                name="planet",
-                slug=slug.slug("planet"),
-            ),
-        )
-
-    for continent in (
-        "europe",
-        "africa",
-        "asia",
-        "central-america",
-        "north-america",
-        "south-america",
-        "oceania",
-        "russia",
-    ):
-        c = organization.get_by_name(db, name=continent)
-        if not c:
-            c = organization.create(
-                db,
-                obj_in=OrganizationCreate(
-                    name=continent,
-                    slug=slug.slug(continent),
-                    parent_id=planet.id,
-                ),
-            )
 
     source_file = "/app/app/core/authorization-model.conf"
     adapter = casbin_sqlalchemy_adapter.Adapter(engine)

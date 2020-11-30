@@ -69,7 +69,6 @@ const EditionPage = ({}) => {
   const { user } = useAppContext();
   const mapRef = createRef<MapGL>();
   const [firstLoad, setFirstLoad] = useState(true);
-  const [styleSource, setStyleSource] = useState("/api/v1/maps/style");
   const [viewport, setViewport] = useState({
     latitude: 46.7,
     longitude: 2.54,
@@ -187,7 +186,7 @@ const EditionPage = ({}) => {
       <MapGL
         ref={mapRef}
         style={{ width: "100%", height: "100%" }}
-        mapStyle={styleSource}
+        mapStyle="/api/v1/maps/style"
         latitude={viewport.latitude}
         longitude={viewport.longitude}
         zoom={viewport.zoom}

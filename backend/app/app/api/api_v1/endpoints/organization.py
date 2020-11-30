@@ -72,7 +72,7 @@ def create_organization(
     *,
     db: Session = Depends(get_db),
     organization_in: OrganizationCreate,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user),
 ):
     new_organization = organization.create(db, obj_in=organization_in).to_schema()
     enforcer.add_role_for_user_in_domain(
