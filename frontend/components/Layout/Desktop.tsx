@@ -74,9 +74,8 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
           },
           {
             label: "Template.menuItems.intervention.scheduleOfInterventions",
-            link: `/calendar/${user?.currentOrganization?.id}`,
-            activator: (router) =>
-              router.pathname === `/calendar/${user?.currentOrganization?.id}`,
+            link: `/scheduler/`,
+            activator: (router) => router.pathname === `/scheduler/`,
           },
         ],
       },
