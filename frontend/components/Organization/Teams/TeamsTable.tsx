@@ -30,6 +30,7 @@ import {
 } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { Fragment } from "react";
+import { apiRest } from "@/lib/api";
 
 interface IOrganizationProps {
   id: number;
@@ -120,7 +121,7 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
     setActionsMenuAnchorEl(null);
   };
 
-  const deleteTeams = () => {
+  const deleteTeams = async () => {
     setAlertMesagge(
       `TODO: AJAX call to delete Teams with IDS: [${selected.join(", ")}]`
     );

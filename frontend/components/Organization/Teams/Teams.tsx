@@ -30,6 +30,7 @@ import ETKFormWorkingArea, {
 } from "@/components/Organization/WorkingArea/Form";
 import TeamsTable from "@/components/Organization/Teams/TeamsTable";
 import { useTranslation } from "react-i18next";
+import { useAppContext } from "@/providers/AppContext";
 
 interface TeamsProps {
   organization: IOrganization;
@@ -77,6 +78,7 @@ const Teams: FC<TeamsProps> = (props) => {
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
   const router = useRouter();
+  const { user, setUser } = useAppContext();
 
   const cache = useQueryCache();
   const queryName = `teams_${props.organization.id}`;
@@ -163,6 +165,10 @@ const Teams: FC<TeamsProps> = (props) => {
     const isOk = await formEditRef.current.submit();
     if (isOk) {
       dialog.current.close();
+      const newUser = await apiRest.users.me();
+
+      newUser.currentOrganization = user.currentOrganization;
+      setUser(newUser);
       //TODO Add a row to the array instead of reload the complete collection
       cache.invalidateQueries(queryName);
     }
