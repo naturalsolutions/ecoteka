@@ -3,6 +3,7 @@ import logging
 import os
 import uuid
 import fiona
+from datetime import datetime
 import numpy as np
 from typing import Any, List, Optional
 import geopandas as gpd
@@ -25,6 +26,7 @@ from app.core import (
     get_current_user,
     get_current_active_user,
 )
+
 from app.crud import organization, user
 from app.schemas import (
     Organization,
@@ -135,40 +137,7 @@ def get_teams(
         org.to_schema() for org in organization.get_teams(db, parent_id=organization_id)
     ]
 
-@router.delete("/{organization_id}/teams/{team_id}")
-def remove_team(
-    organization_id: int,
-    team_id: int,
-    *,
-    auth=Depends(authorization("organizations:delete_team")),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    """
-    delete one team and its members by id
-    """
-    organization_in_db = organization.get(db, id=team_id)
 
-    if not organization_in_db:
-        raise HTTPException(status_code=404, detail="Team not found")
-
-    try:
-        members_in_db = crud.organization.get_members(db, id=team_id)
-
-        for member in members_in_db:
-            current_roles = enforcer.get_roles_for_user_in_domain(
-                str(member['id']), str(team_id) 
-            )
-
-            for current_role in current_roles:
-                enforcer.delete_roles_for_user_in_domain(
-                str(member['id']), current_role, str(team_id)
-            )
-    except Exception as e:
-        logging.error(e)
-        return False
-    organization.remove(db, id=team_id)
-    return True
 
 @router.delete("/{organization_id}/teams")
 def remove_teams(
@@ -205,6 +174,94 @@ def remove_teams(
             return False
         organization.remove(db, id=team.id)
     return True
+
+@router.delete("/{organization_id}/teams/archive/", response_model=List[Organization])
+def archive_teams(
+    organization_id: int,
+    *,
+    auth=Depends(authorization("organizations:delete_team")),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    teams_in: List[Organization]
+):
+    """
+    Bulk archive teams
+    """
+    teams_out = []
+    for team in teams_in:
+        organization_in_db = organization.get(db, id=team.id)
+
+        if not organization_in_db:
+            raise HTTPException(status_code=404, detail="Team not found")
+        organization_in_db.archived = True
+        organization_in_db.archived_at = datetime.now()
+        db.add(organization_in_db)
+        db.commit()
+        db.refresh(organization_in_db)
+        teams_out.append(dict(organization_in_db.as_dict()))
+    return teams_out
+
+@router.delete("/{organization_id}/teams/{team_id}")
+def remove_team(
+    organization_id: int,
+    team_id: int,
+    *,
+    auth=Depends(authorization("organizations:delete_team")),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    delete one team and its members by id
+    """
+    organization_in_db = organization.get(db, id=team_id)
+
+    if not organization_in_db:
+        raise HTTPException(status_code=404, detail="Team not found")
+
+    try:
+        members_in_db = crud.organization.get_members(db, id=team_id)
+
+        for member in members_in_db:
+            current_roles = enforcer.get_roles_for_user_in_domain(
+                str(member['id']), str(team_id) 
+            )
+
+            for current_role in current_roles:
+                enforcer.delete_roles_for_user_in_domain(
+                str(member['id']), current_role, str(team_id)
+            )
+    except Exception as e:
+        logging.error(e)
+        return False
+    organization.remove(db, id=team_id)
+    return True
+
+@router.delete("/{organization_id}/teams/{team_id}/archive", response_model=Organization)
+def archive_team(
+    organization_id: int,
+    team_id: int,
+    *,
+    auth=Depends(authorization("organizations:delete_team")),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Archive one team by id
+    """
+    organization_in_db = organization.get(db, id=team_id)
+
+    if not organization_in_db:
+        raise HTTPException(status_code=404, detail="Team not found")
+    organization_in_db.archived = True
+    organization_in_db.archived_at = datetime.now()
+    db.add(organization_in_db)
+    db.commit()
+    db.refresh(organization_in_db)
+    return organization_in_db
+
+
+
+    
     
 @router.get("/{organization_id}/members")
 def get_members(
