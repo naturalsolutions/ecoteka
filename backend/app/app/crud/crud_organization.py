@@ -54,11 +54,14 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
     def get_by_name(self, db: Session, *, name: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.name == name).first()
 
+    def get_by_name(self, db: Session, *, name: str) -> Optional[Organization]:
+        return db.query(Organization).filter(Organization.name == name).first()
+
     def get_by_path(self, db: Session, *, path: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.path == Ltree(path)).one()
 
     def get_teams(self, db: Session, *, parent_id: int) -> List[Organization]:
-        """returns sub-organization (teams) given the the parent"""
+        """returns active sub-organizations (teams) given the parent"""
         # positble alternative: select * from organization o where o.path ~ 'planet.*{1}';
 
         parent = self.get(db, id=parent_id)
@@ -73,10 +76,34 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
                     func.nlevel(Organization.path)
                     == (func.nlevel(str(parent.path)) + 1),
                     Organization.path.descendant_of(parent.path),
+                    Organization.archived == False,
                 )
             )
             .all()
         )
+
+    def get_archived_teams(self, db: Session, *, parent_id: int) -> List[Organization]:
+        """returns archived sub-organizations (teams) given the parent"""
+        # positble alternative: select * from organization o where o.path ~ 'planet.*{1}';
+
+        parent = self.get(db, id=parent_id)
+
+        if not parent:
+            return []
+
+        return (
+            db.query(Organization)
+            .filter(
+                and_(
+                    func.nlevel(Organization.path)
+                    == (func.nlevel(str(parent.path)) + 1),
+                    Organization.path.descendant_of(parent.path),
+                    Organization.archived == True,
+                )
+            )
+            .all()
+        )
+
 
     def get_path(self, db: Session, *, id: int):
         org = self.get(db, id=id)
