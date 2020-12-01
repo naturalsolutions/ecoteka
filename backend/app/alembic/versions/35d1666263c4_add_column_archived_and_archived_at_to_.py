@@ -18,11 +18,8 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column('organization',
-    Column('archived', sa.Boolean(), nullable=False, server_default=expression.true())
-    op.add_column('organization',
-    Column('archived_at', sa.DateTime(), nullable=True, server_default=func.current_timestamp())
-)
+    op.add_column('organization', sa.Column('archived', sa.Boolean(), nullable=False, server_default=expression.true()))
+    op.add_column('organization', sa.Column('archived_at', sa.DateTime(), nullable=True, server_default=func.current_timestamp()))
 
 def downgrade():
     op.drop_column("organization", "archived")
