@@ -152,7 +152,6 @@ def remove_team(
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Team not found")
 
-    # WIP : Remove all roles for team to delete
     try:
         members_in_db = crud.organization.get_members(db, id=team_id)
 
@@ -171,8 +170,42 @@ def remove_team(
     organization.remove(db, id=team_id)
     return True
 
+@router.delete("/{organization_id}/teams")
+def remove_teams(
+    organization_id: int,
+    *,
+    auth=Depends(authorization("organizations:delete_teams")),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    teams_in: List[Organization],
+):
+    """
+    bulk_delete teams and their members
+    """
 
+    for team in teams_in:
+        organization_in_db = organization.get(db, id=team.id)
 
+        if not organization_in_db:
+            raise HTTPException(status_code=404, detail="Team not found")
+        try:
+            members_in_db = crud.organization.get_members(db, id=team.id)
+
+            for member in members_in_db:
+                current_roles = enforcer.get_roles_for_user_in_domain(
+                    str(member['id']), str(team.id) 
+                )
+
+                for current_role in current_roles:
+                    enforcer.delete_roles_for_user_in_domain(
+                    str(member['id']), current_role, str(team.id)
+                )
+        except Exception as e:
+            logging.error(e)
+            return False
+        organization.remove(db, id=team.id)
+    return True
+    
 @router.get("/{organization_id}/members")
 def get_members(
     organization_id: int,
