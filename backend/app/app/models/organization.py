@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, Index, String, Boolean, DateTime, func, inspect
 
 
-
 from app.db.base_class import Base
 from app.db.session import engine
 from geoalchemy2 import Geometry
@@ -52,7 +51,15 @@ class Organization(Base):
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 
-    def __init__(self, name: str, archived: bool, archived_at=None, config=None, working_area=None, parent=None):
+    def __init__(
+        self,
+        name: str,
+        archived: bool,
+        archived_at=None,
+        config=None,
+        working_area=None,
+        parent=None,
+    ):
         _id = engine.execute(id_seq)
         self.id = _id
         self.name = name
