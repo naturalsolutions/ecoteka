@@ -375,6 +375,8 @@
     "Table": {
       "headers": {
         "name": "Nom",
+        "total_members": "Membres",
+        "total_trees": "Arbres",
         "actions": "Actions"
       }
     }

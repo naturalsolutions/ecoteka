@@ -138,7 +138,6 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
   const [headers] = React.useState([
     "Organization.Members.Table.headers.email",
     "Organization.Members.Table.headers.name",
-    "Organization.Members.Table.headers.status",
     "Organization.Members.Table.headers.role",
   ]);
   const [selected, setSelected] = useState([] as number[]);

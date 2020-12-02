@@ -16,6 +16,7 @@ from app.db.session import engine
 from app import schemas
 from app.models.tree import Tree
 from app.core import enforcer
+from functools import reduce
 
 
 id_seq = Sequence("organization_id_seq")
@@ -79,7 +80,9 @@ class Organization(Base):
 
     @property
     def total_members(self):
-        return len(enforcer.model.get_values_for_field_in_policy('g', 'g', '1'))
+        get_users = enforcer.model.model["g"]["g"].rm.get_users
+        all_users = [get_users(role, str(self.id)) for role in enforcer.get_all_roles()]
+        return reduce(lambda total, users: total + len(users), all_users, 0)
 
     def to_current_user_schema(self):
         return self.to_schema()
