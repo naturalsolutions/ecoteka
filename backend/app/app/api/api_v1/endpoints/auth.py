@@ -71,17 +71,21 @@ def get_access_token(
 
     return {"access_token": access_token, "token_type": "Bearer"}
 
-@router.post('/refresh_token', response_model=AccessToken)
-def refresh(Authorize: AuthJWT = Depends()):
+@router.post('/refresh_token', response_model=AccessAndRefreshToken)
+def refresh(
+    current_user: User = Depends(get_current_user_with_refresh_token),
+    Authorize: AuthJWT = Depends()):
     """
     Renew expired acces_token with refresh_token
     """
     Authorize.jwt_refresh_token_required()
 
-    current_user = Authorize.get_jwt_subject()
-    new_access_token = Authorize.create_access_token(subject=current_user)
-    return {"access_token": new_access_token, "token_type": "Bearer"}
+    current_user_id = Authorize.get_jwt_subject()
 
+    logging.info(f"refresh_token user find : {current_user}")
+    return generate_access_token_and_refresh_token_response(
+        user_id=current_user.id, is_superuser=current_user.is_superuser
+    )
 
 @router.post("/login/test-token", response_model=UserOut)
 def test_token(current_user: User = Depends(get_current_user)) -> Any:

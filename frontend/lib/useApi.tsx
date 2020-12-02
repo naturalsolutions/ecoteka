@@ -10,12 +10,29 @@ export const useApi = () => {
 
   const localStorageService = LocalStorage.getService();
 
+  const accessToken = localStorageService.getAccessToken();
+  const refreshToken = localStorageService.getRefreshToken();
+
+  // TODO Send messages to User with snackbars
+
+  if (!accessToken || !refreshToken) {
+    router.push("/signin");
+  }
+
+  let axiosForRefresh = axios.create({
+    baseURL: apiUrl,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
+
   // Request interceptor
   axios.interceptors.request.use(
     (config) => {
       const token = localStorageService.getAccessToken();
       if (token) {
-        config.headers["Authorization"] = "Bearer " + token;
+        config.headers["Authorization"] = `Bearer ${token}`;
       }
       config.headers["Content-Type"] = "application/json";
       config.baseURL = apiUrl;
@@ -33,40 +50,35 @@ export const useApi = () => {
     },
     function (error) {
       const originalRequest = error.config;
-      console.log(error.config);
-      console.log(error.response);
       if (
-        error.response.status === 422 &&
-        error.response.data.detail === "Signature has expired" &&
-        originalRequest.url != "/auth/access_token" &&
-        !originalRequest._retry
+        error.response.status === 401 ||
+        (error.response.status === 422 &&
+          error.response.data.detail === "Signature has expired" &&
+          originalRequest.url != "/auth/refresh_token" &&
+          !originalRequest._retry)
       ) {
         originalRequest._retry = true;
-        console.log("Retry!");
 
-        return axios
-          .post("/auth/access_token", {
-            access_token: localStorageService.getRefreshToken(),
-            token_type: "Bearer",
-          })
-          .then((res) => {
-            if (res.status === 200) {
-              /// according to API docs
-              const token = res;
-              localStorageService.setAccesToken(res.data);
-              localStorageService.setRefeshToken(res.data);
-              axios.defaults.headers.common["Authorization"] =
-                "Bearer " + localStorageService.getAccessToken();
+        // !! Need fix : Error 422 is raised if access_token or refresh_token are missing
+        return axiosForRefresh.post("/auth/refresh_token", {}).then((res) => {
+          if (res.status === 200) {
+            const { access_token, refresh_token } = res.data;
+            localStorageService.setAccessToken(access_token);
+            localStorageService.setRefreshToken(refresh_token);
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${access_token}`;
 
-              return axios(originalRequest);
-            }
-          });
+            return axios(originalRequest);
+          }
+        });
       }
 
       if (
-        error.response.status === 422 &&
-        error.response.data.detail === "Signature has expired" &&
-        originalRequest.url === "/auth/access_token"
+        error.response.status === 401 ||
+        (error.response.status === 422 &&
+          error.response.data.detail === "Signature has expired" &&
+          originalRequest.url === "/auth/refresh_token")
       ) {
         router.push("/signin");
         return Promise.reject(error);
