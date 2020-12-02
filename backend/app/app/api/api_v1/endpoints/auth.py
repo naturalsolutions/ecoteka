@@ -71,7 +71,7 @@ def get_access_token(
 
     return {"access_token": access_token, "token_type": "Bearer"}
 
-@app.post('/refresh_token')
+@app.post('/refresh_token', response_model=AccessToken)
 def refresh(Authorize: AuthJWT = Depends()):
     """
     Renew expired acces_token with refresh_token
