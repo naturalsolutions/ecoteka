@@ -16,7 +16,6 @@ class Intervention {
       "{organization_id}",
       organizationId
     )}/`;
-    console.log(url);
     const response = await this.api.post(url, {}, JSON.stringify(model));
 
     return await response.json();

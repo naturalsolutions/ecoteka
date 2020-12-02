@@ -89,19 +89,17 @@ def trees_export(
 
     stream: Union[io.BytesIO, io.StringIO] = io.BytesIO()
 
-    
-
     if format == "geojson":
         df.to_file(stream, driver="GeoJSON")
         media_type = "application/geo+json"
 
     if format in ["csv", "xlsx"]:
-        df['lat'] = df.geom.y
-        df['lng'] = df.geom.x
-        df_properties = gpd.pd.DataFrame(df['properties'].values.tolist())
-        col = df.columns.difference(['properties'])
+        df["lat"] = df.geom.y
+        df["lng"] = df.geom.x
+        df_properties = gpd.pd.DataFrame(df["properties"].values.tolist())
+        col = df.columns.difference(["properties"])
         df = gpd.pd.concat([df[col], df_properties], axis=1)
-        df = df.drop(columns=['geom'])
+        df = df.drop(columns=["geom"])
 
     if format == "csv":
         stream = io.StringIO(df.to_csv())

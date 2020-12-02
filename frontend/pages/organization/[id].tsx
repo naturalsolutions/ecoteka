@@ -12,16 +12,19 @@ const Organization: FC<OrganizationProps> = (props) => {
   const [parents, setParents] = useState([]);
 
   const getData = async (id) => {
-    const newOrganization = await apiRest.organization.get(id);
-    const newParents = await apiRest.organization.parents(id);
+    try {
+      const newOrganization = await apiRest.organization.get(id);
 
-    if (newOrganization) {
-      setOrganization(newOrganization);
-    }
+      const newParents = await apiRest.organization.parents(id);
 
-    if (newParents && newParents.length > 0) {
-      setParents(newParents);
-    }
+      if (newOrganization) {
+        setOrganization(newOrganization);
+      }
+
+      if (newParents && newParents.length > 0) {
+        setParents(newParents);
+      }
+    } catch (e) {}
   };
 
   useEffect(() => {

@@ -1,6 +1,5 @@
 import { FC, Fragment, useState, useRef, useEffect } from "react";
 import { IOrganization } from "@/index.d";
-import { useQuery, useQueryCache } from "react-query";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Button, Toolbar, useMediaQuery } from "@material-ui/core";
 import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
@@ -45,45 +44,34 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const { t } = useTranslation(["components", "common"]);
   const formAddMembersRef = useRef<AddMembersActions>();
-  const cache = useQueryCache();
-  const { data } = useQuery(
-    `members_${organization.id}`,
-    async () => {
-      const data = await apiRest.organization.members(organization.id);
-      return data;
-    },
-    {
-      enabled: Boolean(organization),
-    }
-  );
-
   const [disableActions, setDisableActions] = useState(true);
   const [selectedMembers, setSelectedMembers] = useState([]);
+  const [data, setData] = useState([]);
+
+  const getData = async (organizationId: number) => {
+    const newData = await apiRest.organization.members(organization.id);
+
+    setData(newData);
+  };
 
   useEffect(() => {
     setDisableActions(Boolean(selectedMembers.length == 0));
   }, [selectedMembers]);
 
+  useEffect(() => {
+    getData(organization.id);
+  }, [organization]);
+
   const onDetachMembers = () => {
-    selectedMembers.map((id) => {
-      const response = apiRest.organization
-        .detachMember(organization.id, id)
-        .then((response) => {
-          cache.invalidateQueries(`members_${organization.id}`);
-          return response;
-        })
-        .catch((error) => {
-          snackbar.current.open({
-            message: `Une erreur est survenue... votre action n'a pas pu être traitée.`,
-            severity: "error",
-          });
-        });
-      if (response) {
+    selectedMembers.map(async (id) => {
+      try {
+        await apiRest.organization.detachMember(organization.id, id);
+        await getData(organization.id);
+      } catch (e) {
         snackbar.current.open({
-          message: `L'utilisateur #${id} a été retiré de votre organisation.`,
-          severity: "success",
+          message: `Une erreur est survenue... votre action n'a pas pu être traitée.`,
+          severity: "error",
         });
-        cache.invalidateQueries(`members_${organization.id}`);
       }
     });
     dialog.current.close();
@@ -119,12 +107,11 @@ const Members: FC<MembersProps> = ({ organization, value, index }) => {
   }
 
   const inviteMembers = async () => {
-    const res = await formAddMembersRef.current.submit();
-    if (res.ok) {
+    const response = await formAddMembersRef.current.submit();
+
+    if (response.ok) {
       dialog.current.close();
-      cache.invalidateQueries(`members_${organization.id}`);
-    } else {
-      // TODO: useAlert() with status and statusText
+      await getData(organization.id);
     }
   };
 
