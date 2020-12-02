@@ -23,8 +23,7 @@ from app.core import (
     enforcer,
     set_policies,
     authorization,
-    get_current_user,
-    get_current_active_user,
+    get_current_user
 )
 
 from app.crud import organization, user

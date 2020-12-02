@@ -1,6 +1,9 @@
+import debugpy
+debugpy.listen(("0.0.0.0", 5678))
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from fastapi_jwt_auth.exceptions import AuthJWTException
+
 
 from app.core import authjwt_exception_handler, settings
 from app.api.api_v1.api import api_router

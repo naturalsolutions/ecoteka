@@ -10,7 +10,7 @@ from app.models import User
 from app.crud import user
 from app.core import get_current_user, get_current_user_if_is_superuser
 from app.utils import send_new_account_email
-from app.core.security import enforcer, get_current_user_with_organizations
+from app.core.security import get_current_user_with_organizations
 from fastapi_jwt_auth import AuthJWT
 
 router = APIRouter()

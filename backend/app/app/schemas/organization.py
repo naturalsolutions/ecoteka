@@ -26,6 +26,7 @@ class Organization(OrganizationBase):
     has_working_area: bool = False
     slug: Optional[str]
     total_trees: Optional[int] = 0
+    total_members: Optional[int] = 0
     archived: bool = False
     archived_at: Optional[datetime]
 

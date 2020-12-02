@@ -1,20 +1,17 @@
-from sqlalchemy import Column, Integer, Index, String, Boolean, DateTime, func, inspect
-
-
-
-from app.db.base_class import Base
-from app.db.session import engine
 from geoalchemy2 import Geometry
 from sqlalchemy_utils import LtreeType, Ltree
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship, foreign, remote, column_property
 from sqlalchemy import Sequence, select, func
 from sqlalchemy.sql import expression
-from fastapi.encoders import jsonable_encoder
+from sqlalchemy import Column, Integer, Index, String, Boolean, DateTime, func, inspect
+import slug as slugmodule
+from app.db.base_class import Base
+from app.db.session import engine
 from app import schemas
 from app.models.tree import Tree
-import slug as slugmodule
-import logging
+from app.core import enforcer
+
 
 id_seq = Sequence("organization_id_seq")
 
@@ -67,6 +64,10 @@ class Organization(Base):
             else (parent.path or Ltree("_")) + Ltree(str(_id))
         )
 
+    @property
+    def total_members(self):
+        return len(enforcer.model.get_values_for_field_in_policy('g', 'g', '1'))
+
     def to_current_user_schema(self):
         return self.to_schema()
 
@@ -77,6 +78,7 @@ class Organization(Base):
                 for c in inspect(self).mapper.column_attrs
                 if not c.key in ["path", "working_area", "config"]
             },
+            total_members=self.total_members,
             has_working_area=bool(self.working_area),
             path=str(self.path)
         )
