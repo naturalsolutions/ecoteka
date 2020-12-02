@@ -29,6 +29,7 @@ const ETKTabs: FC<TabsProps> = ({ organization, activeTab }) => {
     setValue(newValue);
     router.push(`/organization/${organization.id}?t=${newValue}`);
   };
+
   return (
     <>
       <Paper className={classes.root}>

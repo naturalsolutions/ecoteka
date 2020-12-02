@@ -307,7 +307,6 @@ const EditionPage = ({}) => {
                   setBoxSelect(true);
                   setMode("simple_select");
                   setCurrentMode("simple_select");
-                  console.log(boxSelect, currentMode);
                 }}
               >
                 Selection
