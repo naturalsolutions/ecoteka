@@ -137,7 +137,6 @@ def get_teams(
     ]
 
 
-
 @router.delete("/{organization_id}/teams")
 def remove_teams(
     organization_id: int,
@@ -161,18 +160,19 @@ def remove_teams(
 
             for member in members_in_db:
                 current_roles = enforcer.get_roles_for_user_in_domain(
-                    str(member['id']), str(team.id) 
+                    str(member["id"]), str(team.id)
                 )
 
                 for current_role in current_roles:
                     enforcer.delete_roles_for_user_in_domain(
-                    str(member['id']), current_role, str(team.id)
-                )
+                        str(member["id"]), current_role, str(team.id)
+                    )
         except Exception as e:
             logging.error(e)
             return False
         organization.remove(db, id=team.id)
     return True
+
 
 @router.delete("/{organization_id}/teams/archive/", response_model=List[Organization])
 def archive_teams(
@@ -181,7 +181,7 @@ def archive_teams(
     auth=Depends(authorization("organizations:delete_team")),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-    teams_in: List[Organization]
+    teams_in: List[Organization],
 ):
     """
     Bulk archive teams
@@ -199,6 +199,7 @@ def archive_teams(
         db.refresh(organization_in_db)
         teams_out.append(dict(organization_in_db.as_dict()))
     return teams_out
+
 
 @router.delete("/{organization_id}/teams/{team_id}")
 def remove_team(
@@ -222,20 +223,23 @@ def remove_team(
 
         for member in members_in_db:
             current_roles = enforcer.get_roles_for_user_in_domain(
-                str(member['id']), str(team_id) 
+                str(member["id"]), str(team_id)
             )
 
             for current_role in current_roles:
                 enforcer.delete_roles_for_user_in_domain(
-                str(member['id']), current_role, str(team_id)
-            )
+                    str(member["id"]), current_role, str(team_id)
+                )
     except Exception as e:
         logging.error(e)
         return False
     organization.remove(db, id=team_id)
     return True
 
-@router.delete("/{organization_id}/teams/{team_id}/archive", response_model=Organization)
+
+@router.delete(
+    "/{organization_id}/teams/{team_id}/archive", response_model=Organization
+)
 def archive_team(
     organization_id: int,
     team_id: int,
@@ -259,9 +263,6 @@ def archive_team(
     return organization_in_db
 
 
-
-    
-    
 @router.get("/{organization_id}/members")
 def get_members(
     organization_id: int,

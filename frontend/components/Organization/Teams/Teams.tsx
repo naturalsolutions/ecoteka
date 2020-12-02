@@ -1,6 +1,5 @@
 import React, { FC, Fragment, useRef, useState, useEffect } from "react";
 import { IOrganization } from "@/index.d";
-import { useQuery, useQueryCache } from "react-query";
 import { apiRest } from "@/lib/api";
 import {
   Box,
@@ -79,19 +78,17 @@ const Teams: FC<TeamsProps> = (props) => {
   const { t } = useTranslation(["components", "common"]);
   const router = useRouter();
   const { user, setUser } = useAppContext();
+  const [data, setData] = useState([]);
 
-  const cache = useQueryCache();
-  const queryName = `teams_${props.organization.id}`;
-  const { status, data, error, isFetching } = useQuery(
-    queryName,
-    async () => {
-      const data = await apiRest.organization.teams(props.organization.id);
-      return data;
-    },
-    {
-      enabled: Boolean(props.organization),
-    }
-  );
+  const getData = async (organizationId: number) => {
+    const newData = await apiRest.organization.teams(organizationId);
+
+    setData(newData);
+  };
+
+  useEffect(() => {
+    getData(props.organization.id);
+  }, [props.organization]);
 
   const anchorRef = useRef(null);
   const [disableActions, setDisableActions] = useState(true);
@@ -166,11 +163,10 @@ const Teams: FC<TeamsProps> = (props) => {
     if (isOk) {
       dialog.current.close();
       const newUser = await apiRest.users.me();
-
       newUser.currentOrganization = user.currentOrganization;
+
       setUser(newUser);
-      //TODO Add a row to the array instead of reload the complete collection
-      cache.invalidateQueries(queryName);
+      setData([...data, newUser]);
     }
   };
 
@@ -199,10 +195,10 @@ const Teams: FC<TeamsProps> = (props) => {
 
   const editWorkingArea = async () => {
     const isOk = await formAreaRef.current.submit();
+
     if (isOk) {
+      await getData(props.organization.id);
       dialog.current.close();
-      //TODO Add a row to the array instead of reload the complete collection
-      cache.invalidateQueries("teams");
     }
   };
 

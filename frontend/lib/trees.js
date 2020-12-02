@@ -46,6 +46,11 @@ class Tree {
     return await response.json();
   }
 
+  async export(organizationId, format) {
+    const url = `/organization/${organizationId}/trees/export/?format=${format}`;
+    return await this.api.get(url);
+  }
+
   async getInterventions(organizationId, treeId) {
     // TODO : use real endpoints
     const url = `/organization/${organizationId}/trees/${treeId}/interventions`;

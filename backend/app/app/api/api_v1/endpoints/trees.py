@@ -1,13 +1,17 @@
-from typing import Any, List
+import logging
+from typing import Any, List, Union
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.api import get_db
 from app.core import set_policies, authorization, get_current_active_user
 from app.worker import import_geofile_task, create_mbtiles_task
-from starlette.responses import FileResponse
+from fastapi.responses import StreamingResponse
 import geopandas as gpd
 import tempfile
+import io
+import fiona.io
+
 
 router = APIRouter()
 policies = {
@@ -61,7 +65,7 @@ def trees_import(
     return geofile
 
 
-@router.get("/export")
+@router.get("/export/")
 def trees_export(
     organization_id: int,
     format: str = "geojson",
@@ -71,19 +75,44 @@ def trees_export(
     """Export the trees from one organization"""
     sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_id}"
     df = gpd.read_postgis(sql, db.bind)
-    tempfile_name = tempfile.mkstemp()[1]
 
     if df.empty:
         return HTTPException(status_code=404, detail="this organization has no trees")
 
-    if format == "geojson":
-        df.to_file(tempfile_name, driver="GeoJSON")
-        filename = "export.geojson"
-        return FileResponse(
-            tempfile_name, media_type="application/octet-stream", filename=filename
-        )
-    else:
+    if format not in ["geojson", "csv", "xlsx"]:
         return HTTPException(status_code=404, detail="format not found")
+
+    organization_in_db = crud.organization.get(db, id=organization_id)
+
+    if organization_in_db is None:
+        raise HTTPException(status_code=404, detail="organization not found")
+
+    stream: Union[io.BytesIO, io.StringIO] = io.BytesIO()
+
+    if format == "geojson":
+        df.to_file(stream, driver="GeoJSON")
+        media_type = "application/geo+json"
+
+    if format in ["csv", "xlsx"]:
+        df["lat"] = df.geom.y
+        df["lng"] = df.geom.x
+        df_properties = gpd.pd.DataFrame(df["properties"].values.tolist())
+        col = df.columns.difference(["properties"])
+        df = gpd.pd.concat([df[col], df_properties], axis=1)
+        df = df.drop(columns=["geom"])
+
+    if format == "csv":
+        stream = io.StringIO(df.to_csv())
+        media_type = "text/csv"
+
+    if format == "xlsx":
+        df.to_excel(stream, engine="xlsxwriter")
+        media_type = "application/xlsx"
+
+    response = StreamingResponse(iter([stream.getvalue()]), media_type=media_type)
+    response.headers["Content-Disposition"] = f"attachment; filename=export.{format}"
+
+    return response
 
 
 @router.get("/{tree_id}", response_model=schemas.tree.Tree_xy)
