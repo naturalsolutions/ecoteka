@@ -9,11 +9,15 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship, foreign, remote, column_property
 from sqlalchemy import Sequence, select, func
 from sqlalchemy.sql import expression
-from fastapi.encoders import jsonable_encoder
+from sqlalchemy import Column, Integer, Index, String, Boolean, DateTime, func, inspect
+import slug as slugmodule
+from app.db.base_class import Base
+from app.db.session import engine
 from app import schemas
 from app.models.tree import Tree
-import slug as slugmodule
-import logging
+from app.core import enforcer
+from functools import reduce
+
 
 id_seq = Sequence("organization_id_seq")
 
@@ -74,6 +78,12 @@ class Organization(Base):
             else (parent.path or Ltree("_")) + Ltree(str(_id))
         )
 
+    @property
+    def total_members(self):
+        get_users = enforcer.model.model["g"]["g"].rm.get_users
+        all_users = [get_users(role, str(self.id)) for role in enforcer.get_all_roles()]
+        return reduce(lambda total, users: total + len(users), all_users, 0)
+
     def to_current_user_schema(self):
         return self.to_schema()
 
@@ -84,6 +94,7 @@ class Organization(Base):
                 for c in inspect(self).mapper.column_attrs
                 if not c.key in ["path", "working_area", "config"]
             },
+            total_members=self.total_members,
             has_working_area=bool(self.working_area),
             path=str(self.path)
         )

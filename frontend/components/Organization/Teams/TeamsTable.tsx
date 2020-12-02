@@ -7,16 +7,15 @@ import {
   TableHead,
   TableRow,
   TableBody,
-  Select,
   MenuItem,
   IconButton,
   Menu,
   MenuList,
   ListItemIcon,
   ListItemText,
+  Button,
   Box,
   Snackbar,
-  SnackbarProps,
   Tooltip,
 } from "@material-ui/core";
 import MuiAlert, { AlertProps, Color } from "@material-ui/lab/Alert";
@@ -30,23 +29,13 @@ import {
 } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { Fragment } from "react";
-import { apiRest } from "@/lib/api";
-
-interface IOrganizationProps {
-  id: number;
-  has_working_area: boolean;
-  name?: string;
-  path?: string;
-  slug: string;
-  total_trees: number;
-  config?: any;
-}
+import { IOrganization } from "@/index";
 
 export interface ETKOrganizationTeamsTableProps {
-  rows?: IOrganizationProps[];
+  rows?: IOrganization[];
   onSelected?(selection?: number[]): void;
-  openArea?(data?: IOrganizationProps): void;
-  openForm?(data?: IOrganizationProps): void;
+  openArea?(data?: IOrganization): void;
+  openForm?(data?: IOrganization): void;
   openTeamPage?(data_id?: number): void;
 }
 
@@ -78,9 +67,6 @@ const SnackAlert: React.FC<SnackAlertProps> = ({
     event: SyntheticEvent<Element, Event>,
     reason: string
   ) => {
-    // if (reason === "clickaway") {
-    //   return;
-    // }
     setIsOpen(false);
   };
 
@@ -106,6 +92,8 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
   const { t } = useTranslation("components");
   const [headers] = React.useState([
     "Teams.Table.headers.name",
+    "Teams.Table.headers.total_members",
+    "Teams.Table.headers.total_trees",
     "Teams.Table.headers.actions",
   ]);
   const [selected, setSelected] = useState([] as number[]);
@@ -187,60 +175,49 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell
-                style={{
-                  minWidth: "124px",
-                  maxWidth: "124px",
-                  width: "124px",
-                }}
-              >
-                <Box flexDirection="row">
-                  <Checkbox
-                    indeterminate={
-                      selected.length > 0 && selected.length < props.rows.length
-                    }
-                    checked={
-                      props.rows.length > 0 &&
-                      selected.length === props.rows.length
-                    }
-                    onChange={onSelectAllClick}
-                    color="primary"
-                  />
-                  {selected.length > 0 && (
-                    <>
-                      <IconButton
-                        aria-owns={
-                          actionsMenuAnchorEl ? "membersActionsMenu" : null
-                        }
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                      >
-                        <MoreHorizIcon />
-                      </IconButton>
-                      <Menu
-                        id="membersActionsMenu"
-                        anchorEl={actionsMenuAnchorEl}
-                        open={Boolean(actionsMenuAnchorEl)}
-                        onClose={handleClose}
-                      >
-                        <MenuList>
-                          <MenuItem onClick={discardTeams}>
-                            <ListItemIcon>
-                              <ArchiveIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Archiver" />
-                          </MenuItem>
-                          <MenuItem onClick={deleteTeams}>
-                            <ListItemIcon>
-                              <DeleteIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Delete" />
-                          </MenuItem>
-                        </MenuList>
-                      </Menu>
-                    </>
-                  )}
-                </Box>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  indeterminate={
+                    selected.length > 0 && selected.length < props.rows.length
+                  }
+                  checked={
+                    props.rows.length > 0 &&
+                    selected.length === props.rows.length
+                  }
+                  onChange={onSelectAllClick}
+                  color="primary"
+                />
+              </TableCell>
+              <TableCell padding="checkbox">
+                <IconButton
+                  disabled={!selected.length}
+                  size="small"
+                  aria-owns={actionsMenuAnchorEl ? "membersActionsMenu" : null}
+                  aria-haspopup="true"
+                  onClick={handleClick}
+                >
+                  <MoreHorizIcon />
+                </IconButton>
+                <Menu
+                  elevation={0}
+                  id="membersActionsMenu"
+                  anchorEl={actionsMenuAnchorEl}
+                  open={Boolean(actionsMenuAnchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={discardTeams}>
+                    <ListItemIcon>
+                      <ArchiveIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Archiver" />
+                  </MenuItem>
+                  <MenuItem onClick={deleteTeams}>
+                    <ListItemIcon>
+                      <DeleteIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Delete" />
+                  </MenuItem>
+                </Menu>
               </TableCell>
               {headers.map((header, index) => (
                 <TableCell key={`header-${index}`}>
@@ -260,56 +237,63 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
                   role="checkbox"
                   aria-checked={isItemSelected}
                 >
-                  <TableCell
-                    style={{
-                      minWidth: "124px",
-                      maxWidth: "124px",
-                      width: "124px",
-                    }}
-                  >
+                  <TableCell padding="checkbox">
                     <Checkbox
                       checked={isItemSelected}
                       color="primary"
                       onClick={(e) => onRowClick(e, row.id)}
                     />
                   </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>
-                    <Fragment>
-                      <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={() => {
-                            props.openArea(row);
-                          }}
-                        >
-                          <PhotoSizeSelectSmall />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title={t("Teams.tooltipInfoEdit")}>
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={() => {
-                            props.openForm(row);
-                          }}
-                        >
-                          <Edit />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title={t("Teams.tooltipLink")}>
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={() => {
-                            props.openTeamPage(row.id);
-                          }}
-                        >
-                          <Visibility />
-                        </IconButton>
-                      </Tooltip>
-                    </Fragment>
+                  <TableCell padding="checkbox"></TableCell>
+                  <TableCell scope="row">
+                    <Button
+                      style={{ justifyContent: "flex-start" }}
+                      size="small"
+                      onClick={() => props.openTeamPage(row.id)}
+                    >
+                      {row.name}
+                    </Button>
+                  </TableCell>
+                  <TableCell align="center" style={{ width: 100 }}>
+                    {row.total_members || "-"}
+                  </TableCell>
+                  <TableCell align="center" style={{ width: 100 }}>
+                    {row.total_trees || "-"}
+                  </TableCell>
+                  <TableCell style={{ width: 120 }}>
+                    <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => {
+                          props.openArea(row);
+                        }}
+                      >
+                        <PhotoSizeSelectSmall fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t("Teams.tooltipInfoEdit")}>
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => {
+                          props.openForm(row);
+                        }}
+                      >
+                        <Edit fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t("Teams.tooltipLink")}>
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => {
+                          props.openTeamPage(row.id);
+                        }}
+                      >
+                        <Visibility fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               );

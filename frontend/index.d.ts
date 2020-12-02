@@ -4,6 +4,8 @@ export interface IOrganization {
   slug: string;
   path: string;
   parent_id: number;
+  total_trees: number;
+  total_members: number;
 }
 
 export interface IUser {

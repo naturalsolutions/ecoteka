@@ -1,14 +1,10 @@
 import slug
 from sqlalchemy.orm import Session
 from app.core.config import settings
+from app.core import enforcer
 from app.schemas import UserCreate, OrganizationCreate
 from app.crud import user, organization
 from app.db import base  # noqa: F401
-from app.core.security import enforcer
-import casbin
-import casbin_sqlalchemy_adapter
-from app.db.session import engine
-import logging
 
 # make sure all SQL Alchemy models
 # are imported (app.db.base) before initializing DB
@@ -46,10 +42,6 @@ def init_db(db: Session) -> None:
         db.add(user_in_db)
         db.commit()
         db.refresh(user_in_db)
-
-    source_file = "/app/app/core/authorization-model.conf"
-    adapter = casbin_sqlalchemy_adapter.Adapter(engine)
-    enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, True)
 
     if len(enforcer.get_roles_for_user_in_domain("1", "1")) == 0:
         enforcer.add_role_for_user_in_domain("1", "admin", "1")

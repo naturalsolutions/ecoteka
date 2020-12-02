@@ -1,5 +1,5 @@
 from .config import settings
-from .dependencies import verify_password, get_password_hash
+from .dependencies import verify_password, get_password_hash, enforcer
 from .exceptions_handlers import authjwt_exception_handler
 from .security import (
     authorization,
@@ -8,7 +8,6 @@ from .security import (
     get_current_active_user,
     get_current_user_if_is_superuser,
     get_optional_current_active_user,
-    enforcer,
     set_policies,
     get_current_user_with_refresh_token,
 )

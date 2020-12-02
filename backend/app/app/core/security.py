@@ -1,8 +1,5 @@
 from app.api import get_db
 from app.core import settings
-from app.crud import user, organization as crud_organization
-from app.db.session import engine
-from app.models import User, Organization
 from app.schemas import CurrentUser
 from datetime import timedelta
 from fastapi import Depends, HTTPException, status, Request
@@ -12,12 +9,12 @@ from pydantic import BaseModel
 from pydantic.typing import Optional
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-import casbin
-import casbin_sqlalchemy_adapter
+from app.models import Organization, User
+from app.crud import user, organization as crud_organization
+from app.core.dependencies import enforcer
 
 
 token_url = f"{settings.ROOT_PATH}/auth/login"
-
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=token_url)
 
 
@@ -125,11 +122,6 @@ def get_optional_current_active_user(
             return user_in_db
 
     return None
-
-
-source_file = "/app/app/core/authorization-model.conf"
-adapter = casbin_sqlalchemy_adapter.Adapter(engine)
-enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, True)
 
 
 def authorization(action: str):
