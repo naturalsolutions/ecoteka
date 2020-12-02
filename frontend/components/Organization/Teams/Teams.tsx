@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     flexDirection: "row",
+    padding: 0,
   },
   formControl: {
     margin: theme.spacing(1),

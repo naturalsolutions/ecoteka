@@ -18,14 +18,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
 from app.api import get_db
 from app import crud
-from app.core import (
-    settings,
-    enforcer,
-    set_policies,
-    authorization,
-    get_current_user,
-    get_current_active_user,
-)
+from app.core import settings, enforcer, set_policies, authorization, get_current_user
 
 from app.crud import organization, user
 from app.schemas import (
