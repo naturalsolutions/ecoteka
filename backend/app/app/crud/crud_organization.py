@@ -104,7 +104,6 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
             .all()
         )
 
-
     def get_path(self, db: Session, *, id: int):
         org = self.get(db, id=id)
 

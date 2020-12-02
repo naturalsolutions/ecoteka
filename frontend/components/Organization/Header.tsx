@@ -11,6 +11,9 @@ import {
   Popper,
 } from "@material-ui/core";
 import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
+import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
+import { promises } from "fs";
 
 interface HeaderProps {}
 
@@ -27,27 +30,38 @@ const exportFormats = [
     label: "Export GeoJSON",
     format: "geojson",
   },
-  {
-    label: "Export Shapefile",
-    format: "shp",
-  },
 ];
 
 const Header: FC<HeaderProps> = (props) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(1);
+  const { user } = useAppContext();
 
-  const handleClick = async () => {
-    const response = await fetch(`/api/v1/organization/1/trees/export`);
+  const downloadFile = (blob, filename) => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = filename;
+
+    document.body.appendChild(a);
+
+    a.click();
+    a.remove();
+  };
+
+  const handleClick = async (index: number) => {
+    const response = await apiRest.trees.export(
+      user.currentOrganization.id,
+      exportFormats[index].format
+    );
 
     if (response.ok) {
-      const json = await response.json();
+      const blob = await response.blob();
+      const filename = `export-trees-${user.currentOrganization.slug}.${exportFormats[index].format}`;
+      downloadFile(blob, filename);
     }
-
-    console.info(
-      `Export format selected ${exportFormats[selectedIndex].format}`
-    );
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -81,7 +95,7 @@ const Header: FC<HeaderProps> = (props) => {
           ref={anchorRef}
           aria-label="split button"
         >
-          <Button onClick={handleClick}>
+          <Button onClick={() => handleClick(selectedIndex)}>
             {exportFormats[selectedIndex].label}
           </Button>
           <Button
