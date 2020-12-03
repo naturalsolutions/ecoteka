@@ -18,8 +18,6 @@ export default function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       const item = window.localStorage.getItem(key);
 
-      console.log(item);
-
       if (isJSON(item)) {
         return item ? JSON.parse(item) : initialValue;
       } else {

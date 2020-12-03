@@ -59,6 +59,7 @@ export default function useApi() {
         return Promise.resolve();
       })
       .catch((error) => {
+        router.push("/signin");
         return Promise.reject();
       });
 
