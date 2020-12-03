@@ -16,7 +16,10 @@ import {
   ListItemText,
   Box,
   Snackbar,
-  SnackbarProps,
+  withStyles,
+  createStyles,
+  InputBase,
+  Theme,
 } from "@material-ui/core";
 import MuiAlert, { AlertProps, Color } from "@material-ui/lab/Alert";
 import {
@@ -91,6 +94,30 @@ const SnackAlert: React.FC<SnackAlertProps> = ({
   );
 };
 
+const BootstrapInput = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      "label + &": {
+        marginTop: theme.spacing(3),
+      },
+    },
+    input: {
+      borderRadius: 4,
+      position: "relative",
+      backgroundColor: theme.palette.background.paper,
+      border: "1px solid #ced4da",
+      fontSize: 16,
+      padding: "5px 26px 5px 12px",
+      transition: theme.transitions.create(["border-color", "box-shadow"]),
+      "&:focus": {
+        borderRadius: 4,
+        borderColor: "#80bdff",
+        boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+      },
+    },
+  })
+)(InputBase);
+
 const SelectRenderer: React.FC<SelectRendererProps> = ({
   value,
   handleChange,
@@ -118,7 +145,13 @@ const SelectRenderer: React.FC<SelectRendererProps> = ({
     },
   ];
   return (
-    <Select value={value} displayEmpty onChange={handleChange} autoWidth>
+    <Select
+      input={<BootstrapInput />}
+      value={value}
+      displayEmpty
+      onChange={handleChange}
+      autoWidth
+    >
       <MenuItem value="" disabled>
         {placeholder}
       </MenuItem>
@@ -206,48 +239,41 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell style={{ minWidth: "96px", maxWidth: "96px" }}>
-                <Box flexDirection="row">
-                  <Checkbox
-                    indeterminate={
-                      selected.length > 0 && selected.length < props.rows.length
-                    }
-                    checked={
-                      props.rows.length > 0 &&
-                      selected.length === props.rows.length
-                    }
-                    onChange={onSelectAllClick}
-                    color="primary"
-                  />
-                  {selected.length > 0 && (
-                    <>
-                      <IconButton
-                        aria-owns={
-                          actionsMenuAnchorEl ? "membersActionsMenu" : null
-                        }
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                      >
-                        <MoreHorizIcon />
-                      </IconButton>
-                      <Menu
-                        id="membersActionsMenu"
-                        anchorEl={actionsMenuAnchorEl}
-                        open={Boolean(actionsMenuAnchorEl)}
-                        onClose={handleClose}
-                      >
-                        <MenuList>
-                          <MenuItem onClick={props.onDetachMembers}>
-                            <ListItemIcon>
-                              <BlockIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Retirer du groupe" />
-                          </MenuItem>
-                        </MenuList>
-                      </Menu>
-                    </>
-                  )}
-                </Box>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  indeterminate={
+                    selected.length > 0 && selected.length < props.rows.length
+                  }
+                  checked={
+                    props.rows.length > 0 &&
+                    selected.length === props.rows.length
+                  }
+                  onChange={onSelectAllClick}
+                  color="primary"
+                />
+              </TableCell>
+              <TableCell padding="checkbox">
+                <IconButton
+                  disabled={!selected.length}
+                  aria-owns={actionsMenuAnchorEl ? "membersActionsMenu" : null}
+                  aria-haspopup="true"
+                  onClick={handleClick}
+                >
+                  <MoreHorizIcon />
+                </IconButton>
+                <Menu
+                  id="membersActionsMenu"
+                  anchorEl={actionsMenuAnchorEl}
+                  open={Boolean(actionsMenuAnchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={props.onDetachMembers}>
+                    <ListItemIcon>
+                      <BlockIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Retirer du groupe" />
+                  </MenuItem>
+                </Menu>
               </TableCell>
               {headers.map((header, index) => (
                 <TableCell key={`header-${index}`}>
@@ -267,16 +293,16 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
                   role="checkbox"
                   aria-checked={isItemSelected}
                 >
-                  <TableCell style={{ minWidth: "96px", maxWidth: "96px" }}>
+                  <TableCell padding="checkbox">
                     <Checkbox
                       checked={isItemSelected}
                       color="primary"
                       onClick={(e) => onRowClick(e, row.id)}
                     />
                   </TableCell>
+                  <TableCell padding="checkbox" />
                   <TableCell scope="row">{row.email}</TableCell>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.status}</TableCell>
                   <TableCell>
                     {row.role === "owner" ? (
                       "Propriétaire"

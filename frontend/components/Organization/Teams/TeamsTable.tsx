@@ -28,7 +28,6 @@ import {
   Delete as DeleteIcon,
 } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
-import { Fragment } from "react";
 import { IOrganization } from "@/index";
 
 export interface ETKOrganizationTeamsTableProps {
