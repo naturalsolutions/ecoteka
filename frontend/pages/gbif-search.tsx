@@ -37,9 +37,7 @@ const ETKGBIFSearch: React.FC<ETKGBIFSearchProps> = (props) => {
   };
 
   useEffect(() => {
-    getUsers().then((res) => {
-      console.log(res);
-    });
+    getUsers();
   }, []);
 
   useEffect(() => {
@@ -78,7 +76,7 @@ const ETKGBIFSearch: React.FC<ETKGBIFSearchProps> = (props) => {
           {taxa.length > 0 &&
             taxa.map((taxon) => {
               return (
-                <ListItem>
+                <ListItem key={taxon.key}>
                   <ListItemAvatar>
                     <Avatar>
                       <NatureIcon />

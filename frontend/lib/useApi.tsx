@@ -18,10 +18,6 @@ export default function useApi() {
     localStorage.getItem(refreshTokenStorage)
   );
 
-  console.log(accessToken, refreshToken);
-
-  // TODO Send messages to User with snackbars
-
   if (!accessToken || !refreshToken) {
     router.push("/signin");
   }
@@ -54,7 +50,6 @@ export default function useApi() {
     ecotekaV1ForRefresh
       .post("/auth/refresh_token")
       .then((tokenRefreshResponse) => {
-        console.log(tokenRefreshResponse);
         const { access_token, refresh_token } = tokenRefreshResponse.data;
         setAccessToken(access_token);
         setRefreshToken(refresh_token);
@@ -64,7 +59,6 @@ export default function useApi() {
         return Promise.resolve();
       })
       .catch((error) => {
-        console.log(error);
         return Promise.reject();
       });
 
