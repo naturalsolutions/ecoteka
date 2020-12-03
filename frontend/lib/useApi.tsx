@@ -1,17 +1,24 @@
 import axios from "axios";
-import LocalStorage from "@/lib/services/storage";
 import getConfig from "next/config";
 import { useRouter } from "next/router";
+import useLocalStorage from "@/lib/hooks/useLocalStorage";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 
-export const useApi = () => {
+export default function useApi() {
   const { publicRuntimeConfig } = getConfig();
+  const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
   const { apiUrl } = publicRuntimeConfig;
   const router = useRouter();
+  const [accessToken, setAccessToken] = useLocalStorage(
+    tokenStorage,
+    localStorage.getItem(tokenStorage)
+  );
+  const [refreshToken, setRefreshToken] = useLocalStorage(
+    refreshTokenStorage,
+    localStorage.getItem(refreshTokenStorage)
+  );
 
-  const localStorageService = LocalStorage.getService();
-
-  const accessToken = localStorageService.getAccessToken();
-  const refreshToken = localStorageService.getRefreshToken();
+  console.log(accessToken, refreshToken);
 
   // TODO Send messages to User with snackbars
 
@@ -19,81 +26,54 @@ export const useApi = () => {
     router.push("/signin");
   }
 
-  let axiosForRefresh = axios.create({
+  let ecotekaV1ForRefresh = axios.create({
     baseURL: apiUrl,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${refreshToken}`,
     },
   });
-
-  // Request interceptor
-  axios.interceptors.request.use(
-    (config) => {
-      const token = localStorageService.getAccessToken();
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
-      }
-      config.headers["Content-Type"] = "application/json";
-      config.baseURL = apiUrl;
-      return config;
+  let ecotekaV1 = axios.create({
+    baseURL: apiUrl,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
-    (error) => {
-      Promise.reject(error);
-    }
-  );
+  });
 
-  // Response interceptor
-  axios.interceptors.response.use(
-    (response) => {
-      return response;
+  // https://www.gbif.org/developer/summary
+  // Only for GET requests; POST, PUT, and DELETE requests require authentication through GBIF API HTTP Basic Authentication
+  let gbif = axios.create({
+    baseURL: "https://api.gbif.org/v1/",
+    headers: {
+      "Content-Type": "application/json",
     },
-    function (error) {
-      const originalRequest = error.config;
-      if (
-        error.response.status === 401 ||
-        (error.response.status === 422 &&
-          error.response.data.detail === "Signature has expired" &&
-          originalRequest.url != "/auth/refresh_token" &&
-          !originalRequest._retry)
-      ) {
-        originalRequest._retry = true;
+  });
 
-        // !! Need fix : Error 422 is raised if access_token or refresh_token are missing
-        return axiosForRefresh.post("/auth/refresh_token", {}).then((res) => {
-          if (res.status === 200) {
-            const { access_token, refresh_token } = res.data;
-            localStorageService.setAccessToken(access_token);
-            localStorageService.setRefreshToken(refresh_token);
-            axios.defaults.headers.common[
-              "Authorization"
-            ] = `Bearer ${access_token}`;
+  const refreshAuthLogic = (failedRequest) =>
+    ecotekaV1ForRefresh
+      .post("/auth/refresh_token")
+      .then((tokenRefreshResponse) => {
+        console.log(tokenRefreshResponse);
+        const { access_token, refresh_token } = tokenRefreshResponse.data;
+        setAccessToken(access_token);
+        setRefreshToken(refresh_token);
+        failedRequest.response.config.headers[
+          "Authorization"
+        ] = `Bearer ${access_token}`;
+        return Promise.resolve();
+      })
+      .catch((error) => {
+        console.log(error);
+        return Promise.reject();
+      });
 
-            return axios(originalRequest);
-          }
-        });
-      }
-
-      if (
-        error.response.status === 401 ||
-        (error.response.status === 422 &&
-          error.response.data.detail === "Signature has expired" &&
-          originalRequest.url === "/auth/refresh_token")
-      ) {
-        router.push("/signin");
-        return Promise.reject(error);
-      }
-      return Promise.reject(error);
-    }
-  );
-
-  // WIP
-  const getUsers = async () => {
-    const res = await axios.get("/users");
-    return res;
-  };
+  createAuthRefreshInterceptor(ecotekaV1, refreshAuthLogic, {
+    statusCodes: [401, 422],
+  });
 
   return {
-    getUsers,
+    ecotekaV1,
+    gbif,
   };
-};
+}
