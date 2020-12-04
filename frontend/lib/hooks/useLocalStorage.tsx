@@ -1,4 +1,13 @@
-import { useState } from "react";
+import { useState, SetStateAction } from "react";
+
+function isJSON(str) {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
 
 export default function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -9,7 +18,11 @@ export default function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       const item = window.localStorage.getItem(key);
 
-      return item ? JSON.parse(item) : initialValue;
+      if (isJSON(item)) {
+        return item ? JSON.parse(item) : initialValue;
+      } else {
+        return item ? item : initialValue;
+      }
     } catch (error) {
       console.log(error);
       return initialValue;
@@ -27,7 +40,8 @@ export default function useLocalStorage<T>(key: string, initialValue: T) {
       if (value === null) {
         window.localStorage.removeItem(key);
       } else {
-        window.localStorage.setItem(key, JSON.stringify(value));
+        const item = JSON.stringify(value);
+        window.localStorage.setItem(key, item);
       }
     } catch (error) {
       console.log(error);

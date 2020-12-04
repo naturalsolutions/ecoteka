@@ -57,7 +57,7 @@ const InterventionsTable: FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {interventions &&
+          {interventions.length > 0 &&
             interventions.map((intervention, i) => {
               return (
                 <TableRow key={i}>
