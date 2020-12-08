@@ -207,7 +207,7 @@ const EditionPage = ({}) => {
   }, [filterQuery]);
 
   useEffect(() => {
-    if (mapRef.current && data.features.length > 0 && firstLoad) {
+    if (mapRef.current && data?.features?.length > 0 && firstLoad) {
       try {
         const map = mapRef.current.getMap();
         map.fitBounds(bbox(data));
