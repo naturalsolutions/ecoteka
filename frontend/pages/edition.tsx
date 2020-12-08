@@ -149,14 +149,18 @@ const EditionPage = ({}) => {
     // shouldSort: true,
     // includeMatches: false,
     // findAllMatches: false,
-    // minMatchCharLength: 1,
+    minMatchCharLength: 3,
     // location: 0,
-    // threshold: 0.6,
-    // distance: 100,
+    threshold: 0.2,
+    distance: 0,
     // useExtendedSearch: false,
     // ignoreLocation: false,
     // ignoreFieldNorm: false,
-    keys: ["properties.properties.gender", "properties.properties.specie"],
+    keys: [
+      "properties.properties.gender",
+      "properties.properties.specie",
+      "properties.properties.vernacularName",
+    ],
   };
 
   const fuse = new Fuse(data.features, options);
@@ -188,7 +192,17 @@ const EditionPage = ({}) => {
         setFilteredData((prevState) => {
           return { ...prevState, features: newFeatures };
         });
+      } else {
+        setFilteredData((prevState) => {
+          return { ...prevState, features: [] };
+        });
       }
+    } else {
+      console.log("reset");
+      setFilteredData({
+        type: "FeatureCollection",
+        features: [],
+      });
     }
   }, [filterQuery]);
 
@@ -478,9 +492,6 @@ const EditionPage = ({}) => {
               justify="flex-start"
               alignItems="flex-start"
             >
-              <Grid item>
-                <SearchCity map={mapRef} />
-              </Grid>
               <Grid item>
                 <div className={classes.search}>
                   <div className={classes.searchIcon}>
