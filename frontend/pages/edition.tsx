@@ -7,7 +7,9 @@ import {
   IconButton,
   withStyles,
   ButtonGroup,
+  InputBase,
 } from "@material-ui/core";
+import { Search, Filter as FilterIcon } from "@material-ui/icons";
 import MapGL, { Source, Layer, FeatureState } from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
@@ -18,49 +20,102 @@ import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
 import { bbox } from "@turf/turf";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import Fuse from "fuse.js";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
 });
 
-const useStyles = makeStyles((theme) => {
-  return {
-    root: {
-      height: "100%",
-      position: "relative",
-    },
-    toolbar: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-    },
-    sidebar: {
-      position: "absolute",
-      top: 0,
-      right: 0,
-      height: "100%",
-    },
-    background: {
-      position: "absolute",
-      top: 0,
-      right: 0,
-      background: "#0D1821",
-      height: "100%",
-      width: "300px",
-    },
-    calendar: {
-      height: "100%",
-    },
-    mapSearchCity: {
-      position: "absolute",
-      top: "1rem",
-      right: "1rem",
-      width: "300px",
-    },
-  };
-});
+const useStyles = makeStyles(
+  ({ direction, spacing, transitions, breakpoints, palette, shape }) => {
+    // console.log(palette, shape, spacing);
+    return {
+      root: {
+        height: "100%",
+        position: "relative",
+      },
+      toolbar: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+      },
+      sidebar: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        height: "100%",
+      },
+      background: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        background: "#0D1821",
+        height: "100%",
+        width: "300px",
+      },
+      calendar: {
+        height: "100%",
+      },
+      mapSearchCity: {
+        position: "absolute",
+        top: "1rem",
+        right: "1rem",
+        width: "300px",
+      },
+      search: {
+        position: "relative",
+        marginRight: 8,
+        borderRadius: shape.borderRadius,
+        background:
+          palette.type === "dark"
+            ? palette.background.default
+            : palette.grey[200],
+        "&:hover": {
+          background:
+            palette.type === "dark"
+              ? palette.background.paper
+              : palette.grey[300],
+        },
+        marginLeft: 0,
+        width: "100%",
+        [breakpoints.up("sm")]: {
+          marginLeft: spacing(1),
+          width: "auto",
+        },
+      },
+      searchIcon: {
+        width: spacing(6),
+        height: "100%",
+        position: "absolute",
+        pointerEvents: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      inputRoot: {
+        color: "white",
+        width: "100%",
+      },
+      inputInput: {
+        borderRadius: 4,
+        paddingTop: spacing(1),
+        paddingRight: spacing(direction === "rtl" ? 5 : 1),
+        paddingBottom: spacing(1),
+        paddingLeft: spacing(direction === "rtl" ? 1 : 5),
+        transition: transitions.create("width"),
+        width: "100%",
+        [breakpoints.up("sm")]: {
+          width: 120,
+          "&:focus": {
+            width: 200,
+          },
+        },
+      },
+    };
+  }
+);
 
 const EditionPage = ({}) => {
   const classes = useStyles();
@@ -80,11 +135,35 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [hoveredTreeId, setHoveredTreeId] = useState(null);
-  const [boxSelect, setBoxSelect] = useState(false);
+  const [hoveredTreeId, setHoveredTreeId] = useState<number>(null);
+  const [boxSelect, setBoxSelect] = useState<boolean>(false);
+  const [filterQuery, setFilterQuery] = useState<string>("");
+  const [flteredData, setFilteredData] = useState<any>({
+    type: "FeatureCollection",
+    features: [],
+  });
+
+  const options = {
+    // isCaseSensitive: false,
+    // includeScore: false,
+    // shouldSort: true,
+    // includeMatches: false,
+    // findAllMatches: false,
+    // minMatchCharLength: 1,
+    // location: 0,
+    // threshold: 0.6,
+    // distance: 100,
+    // useExtendedSearch: false,
+    // ignoreLocation: false,
+    // ignoreFieldNorm: false,
+    keys: ["properties.properties.gender", "properties.properties.specie"],
+  };
+
+  const fuse = new Fuse(data.features, options);
 
   const getData = async (organizationId: number) => {
     const newData = await apiRest.organization.geojson(organizationId);
+    fuse.setCollection(newData?.features);
     setData(newData);
   };
 
@@ -99,6 +178,19 @@ const EditionPage = ({}) => {
       }
     };
   }, [user, dialog]);
+
+  useEffect(() => {
+    if (filterQuery) {
+      const hits = fuse.search(filterQuery);
+      if (hits.length > 0) {
+        const newFeatures = hits.map((hit) => hit.item);
+        console.log(newFeatures);
+        setFilteredData((prevState) => {
+          return { ...prevState, features: newFeatures };
+        });
+      }
+    }
+  }, [filterQuery]);
 
   useEffect(() => {
     if (mapRef.current && data.features.length > 0 && firstLoad) {
@@ -177,15 +269,21 @@ const EditionPage = ({}) => {
     }
   };
 
-  const DarkButton = withStyles((theme) => ({
-    root: {
-      color: "#fff",
-      backgroundColor: "#212121",
-      "&:hover": {
-        backgroundColor: "#313131",
+  const handleFilterChange = (event) => {
+    console.log(event.target.value);
+    setFilterQuery(event.target.value);
+  };
+  const DarkButton = withStyles(
+    ({ direction, spacing, transitions, breakpoints, palette, shape }) => ({
+      root: {
+        color: "#fff",
+        backgroundColor: "#212121",
+        "&:hover": {
+          backgroundColor: "#313131",
+        },
       },
-    },
-  }))(Button);
+    })
+  )(Button);
 
   return (
     <Grid className={classes.root} id="map-edition">
@@ -199,6 +297,11 @@ const EditionPage = ({}) => {
         onViewportChange={setViewport}
       >
         <Source id="trees" type="geojson" data={data ? data : null} />
+        <Source
+          id="filteredTrees"
+          type="geojson"
+          data={flteredData ? flteredData : null}
+        />
         <Layer
           id="trees"
           type="circle"
@@ -209,6 +312,42 @@ const EditionPage = ({}) => {
               ["boolean", ["feature-state", "click"], false],
               "#076ee4",
               "#ebb215",
+            ],
+            "circle-stroke-color": "#fff",
+            "circle-stroke-width": [
+              "case",
+              ["boolean", ["feature-state", "click"], false],
+              2,
+              0,
+            ],
+            "circle-radius": [
+              "case",
+              ["boolean", ["feature-state", "hover"], false],
+              12,
+              5,
+            ],
+            "circle-pitch-scale": "map",
+            "circle-opacity": [
+              "case",
+              ["boolean", ["feature-state", "hover"], false],
+              1,
+              0.8,
+            ],
+          }}
+          onHover={onHover}
+          onLeave={onLeave}
+          onClick={onClick}
+        />
+        <Layer
+          id="filteredTrees"
+          type="circle"
+          source="filteredTrees"
+          paint={{
+            "circle-color": [
+              "case",
+              ["boolean", ["feature-state", "click"], false],
+              "#076ee4",
+              "#6015eb",
             ],
             "circle-stroke-color": "#fff",
             "circle-stroke-width": [
@@ -333,7 +472,32 @@ const EditionPage = ({}) => {
           </Grid>
           <Grid item xs></Grid>
           <Grid item>
-            <SearchCity map={mapRef} />
+            <Grid
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="flex-start"
+            >
+              <Grid item>
+                <SearchCity map={mapRef} />
+              </Grid>
+              <Grid item>
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <Search style={{ color: "#e6e6e6" }} />
+                  </div>
+                  <InputBase
+                    placeholder="Filter"
+                    value={filterQuery}
+                    onChange={handleFilterChange}
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                  />
+                </div>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>
