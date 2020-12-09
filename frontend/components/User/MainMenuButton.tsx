@@ -45,7 +45,12 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
           setAnchorEl(e.currentTarget);
         }}
       >
-        {getDisplayNameFromUser(user)}
+        <Avatar>
+          {user.full_name
+            .split(" ")
+            .slice(0, 2)
+            .map((s) => s[0].toUpperCase())}
+        </Avatar>
       </Button>
       <Popover
         open={Boolean(anchorEl)}
@@ -76,7 +81,20 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
                     </Avatar>
                   </Grid>
                   <Grid item xs>
-                    {user.email}
+                    <Grid
+                      container
+                      direction="column"
+                      justify="flex-start"
+                      alignItems="flex-start"
+                      spacing={2}
+                    >
+                      <Grid item xs>
+                        {getDisplayNameFromUser(user)}
+                      </Grid>
+                      <Grid item xs>
+                        {user.email}
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>

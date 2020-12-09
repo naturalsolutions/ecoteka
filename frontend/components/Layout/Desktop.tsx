@@ -1,9 +1,9 @@
 import React from "react";
 import { makeStyles, AppBar } from "@material-ui/core";
 import ETKMenu, { ETKMenuItem } from "../Menu";
-import ETKToolbar from "../Toolbar";
+import ETKToolbar from "@/components/Toolbar";
 import { GetApp, Star } from "@material-ui/icons";
-import { useAppContext } from "../../providers/AppContext";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKLayoutDesktopProps {}
 

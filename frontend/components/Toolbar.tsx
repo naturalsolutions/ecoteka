@@ -88,13 +88,17 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
           </Grid>
           <Hidden smDown>
             <Grid item xs={12} sm={6}>
-              <Grid container justify="flex-end">
+              <Grid
+                container
+                justify="flex-end"
+                direction="row"
+                alignItems="center"
+              >
                 <Grid item>
                   <ETKLanguageSelector />
                 </Grid>
 
-                <ETKContactButton />
-                {user?.is_superuser && <ETKRegisterButton />}
+                {!user && <ETKContactButton />}
                 {user && renderWhenSession()}
                 {!user && (
                   <Button onClick={handleSignInClick}>
