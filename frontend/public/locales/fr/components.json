@@ -430,5 +430,10 @@
         }
       }
     }
+  },
+
+  "MapLayers": {
+    "backgrounds": "Fonds",
+    "layers": "Couches"
   }
 }

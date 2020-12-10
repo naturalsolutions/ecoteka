@@ -357,5 +357,10 @@
         }
       }
     }
+  },
+
+  "MapLayers": {
+    "backgrounds": "Backgrounds",
+    "layers": "Layers"
   }
 }
