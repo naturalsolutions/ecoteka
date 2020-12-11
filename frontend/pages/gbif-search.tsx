@@ -9,7 +9,6 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-  makeStyles,
   Paper,
   TextField,
   Typography,
@@ -21,12 +20,7 @@ export interface ETKGBIFSearchProps {}
 
 const defaultProps: ETKGBIFSearchProps = {};
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
 const ETKGBIFSearch: React.FC<ETKGBIFSearchProps> = (props) => {
-  const classes = useStyles();
   const { api } = useAPI();
   const { apiETK: ecotekaV1, apiGBIF } = api;
   const [query, setQuery] = useState("");
@@ -44,11 +38,11 @@ const ETKGBIFSearch: React.FC<ETKGBIFSearchProps> = (props) => {
   };
 
   const speciesMedia = async (key) => {
-    const res = await gbif.get(`/species/${key}/media`);
+    const res = await apiGBIF.get(`/species/${key}/media`);
     return res;
   };
   const speciesVernacularNames = async (key) => {
-    const res = await gbif.get(`/species/${key}/vernacularNames`);
+    const res = await apiGBIF.get(`/species/${key}/vernacularNames`);
     return res;
   };
 
