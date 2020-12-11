@@ -192,7 +192,7 @@ const EditionPage = ({}) => {
       <MapGL
         ref={mapRef}
         style={{ width: "100%", height: "100%" }}
-        mapStyle="/api/v1/maps/style"
+        mapStyle="/api/v1/maps/style/"
         latitude={viewport.latitude}
         longitude={viewport.longitude}
         zoom={viewport.zoom}

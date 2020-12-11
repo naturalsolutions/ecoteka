@@ -95,7 +95,7 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
     const { longitude, latitude } = coordinates;
 
     props.context?.map?.current?.map?.setStyle(
-      `/api/v1/maps/style?token=${apiRest.getToken()}&organization_id=${
+      `/api/v1/maps/style/?token=${apiRest.getToken()}&organization_id=${
         user.currentOrganization.id
       }`
     );
