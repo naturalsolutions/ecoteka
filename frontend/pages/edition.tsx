@@ -9,8 +9,6 @@ import {
   withStyles,
   ButtonGroup,
   InputBase,
-  Card,
-  CardContent,
 } from "@material-ui/core";
 import { Search, Filter as FilterIcon } from "@material-ui/icons";
 import MapGL, {
@@ -21,7 +19,6 @@ import MapGL, {
 } from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
-import SearchCity from "@/components/Map/SearchCity";
 import { useTemplate } from "@/components/Template";
 import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
@@ -32,6 +29,7 @@ import Fuse from "fuse.js";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import MapToolbar, { TMapToolbarAction } from "@/components/Map/Toolbar";
 import MapLayers from "@/components/Map/Layers";
+import useLocalStorage from "@/lib/hooks/useLocalStorage";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
@@ -39,7 +37,6 @@ const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
 
 const useStyles = makeStyles(
   ({ direction, spacing, transitions, breakpoints, palette, shape }) => {
-    // console.log(palette, shape, spacing);
     return {
       root: {
         height: "100%",
@@ -134,8 +131,8 @@ const EditionPage = ({}) => {
   const { user } = useAppContext();
   const mapRef = createRef<MapGL>();
   const geolocateControlRef = createRef<GeolocateControl>();
-  const [firstLoad, setFirstLoad] = useState(true);
-  const [viewport, setViewport] = useState({
+  const [firstLoad, setFirstLoad] = useLocalStorage("editor:firstLoad", true);
+  const [viewport, setViewport] = useLocalStorage("editor:viewport", {
     latitude: 46.7,
     longitude: 2.54,
     zoom: 5,
@@ -155,19 +152,10 @@ const EditionPage = ({}) => {
     features: [],
   });
 
-  const options = {
-    // isCaseSensitive: false,
-    // includeScore: false,
-    // shouldSort: true,
-    // includeMatches: false,
-    // findAllMatches: false,
+  const optionsFuse = {
     minMatchCharLength: 3,
-    // location: 0,
     threshold: 0.2,
     distance: 0,
-    // useExtendedSearch: false,
-    // ignoreLocation: false,
-    // ignoreFieldNorm: false,
     keys: [
       "properties.properties.gender",
       "properties.properties.specie",
@@ -175,7 +163,7 @@ const EditionPage = ({}) => {
     ],
   };
 
-  const fuse = new Fuse([], options);
+  const fuse = new Fuse([], optionsFuse);
 
   const getData = async (organizationId: number) => {
     const newData = await apiRest.organization.geojson(organizationId);
@@ -200,7 +188,6 @@ const EditionPage = ({}) => {
       const hits = fuse.search(filterQuery);
       if (hits.length > 0) {
         const newFeatures = hits.map((hit) => hit.item);
-        console.log(newFeatures);
         setFilteredData((prevState) => {
           return { ...prevState, features: newFeatures };
         });
@@ -210,7 +197,6 @@ const EditionPage = ({}) => {
         });
       }
     } else {
-      console.log("reset");
       setFilteredData({
         type: "FeatureCollection",
         features: [],
@@ -224,6 +210,7 @@ const EditionPage = ({}) => {
         const map = mapRef.current.getMap();
         map.fitBounds(bbox(data));
       } catch (e) {}
+
       setFirstLoad(false);
     }
   }, [data, mapRef]);
@@ -296,9 +283,9 @@ const EditionPage = ({}) => {
   };
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value);
     setFilterQuery(event.target.value);
   };
+
   const DarkButton = withStyles(
     ({ direction, spacing, transitions, breakpoints, palette, shape }) => ({
       root: {

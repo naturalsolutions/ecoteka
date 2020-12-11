@@ -90,7 +90,7 @@ class Organization {
   }
 
   async geojson(id) {
-    const url = `/organization/${id}/geojson`;
+    const url = `/organization/${id}/geojson/`;
     const response = await this.api.get(url);
 
     if (response.json) {
