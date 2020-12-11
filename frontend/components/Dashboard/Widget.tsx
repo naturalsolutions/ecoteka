@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, Fragment } from "react";
 import {
   Grid,
   makeStyles,
@@ -13,6 +13,7 @@ export interface ETKWidgetProps {
   paperProps?: PaperProps;
   springProps?: any;
   children?: React.ReactNode;
+  component?: React.ReactNode;
 }
 
 const defaultProps: ETKWidgetProps = {
@@ -23,11 +24,14 @@ const defaultProps: ETKWidgetProps = {
   paperProps: {},
 };
 
+makeStyles((theme) => console.log(theme));
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.hint,
+    backgroundColor: "#ecedee",
   },
 }));
 
@@ -38,6 +42,7 @@ const ETKWidget: React.FC<ETKWidgetProps> = ({
   paperProps,
   springProps,
   children,
+  component,
 }) => {
   const classes = useStyles();
   const _springProps = useSpring({
@@ -54,10 +59,15 @@ const ETKWidget: React.FC<ETKWidgetProps> = ({
     },
   });
 
+  console.log(component);
+
   return (
     <AnimatedGrid {...gridProps} style={springProps}>
       <Paper {...paperProps} className={classes.paper}>
-        {children}
+        <Fragment>
+          {component}
+          {children}
+        </Fragment>
       </Paper>
     </AnimatedGrid>
   );
