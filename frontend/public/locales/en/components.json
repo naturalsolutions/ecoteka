@@ -50,7 +50,9 @@
     "slogan": "For a greener city!",
     "login": "Login",
     "about": "About",
-    "register": "Register"
+    "register": "Register",
+    "myOrganizations": "Workspace",
+    "myDashboard": "Dashboard"
   },
 
   "Map": {
@@ -357,5 +359,9 @@
         }
       }
     }
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "for": "for"
   }
 }

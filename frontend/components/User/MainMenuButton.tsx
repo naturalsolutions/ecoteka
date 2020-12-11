@@ -34,6 +34,11 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
     router.push(`/organization/${user.currentOrganization?.id}`);
   };
 
+  const handlerMyDashboardClick = () => {
+    setAnchorEl(null);
+    router.push(`/dashboard`);
+  };
+
   const handlerLogoutClick = () => {
     setAnchorEl(null);
   };
@@ -104,6 +109,11 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
               <Grid item>
                 <Button fullWidth onClick={handlerMyOrganizationClick}>
                   {t("Toolbar.myOrganizations")}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button fullWidth onClick={handlerMyDashboardClick}>
+                  {t("Toolbar.myDashboard")}
                 </Button>
               </Grid>
               <Grid item>

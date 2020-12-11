@@ -47,7 +47,8 @@
     "login": "Iniciar sesión",
     "about": "Obtener más información",
     "register": "Registrar",
-    "myOrganizations": "Mis organizaciones"
+    "myOrganizations": "Mis organizaciones",
+    "myDashboard": "Mi tablero"
   },
   "Map": {
     "SearchCity": {
@@ -335,5 +336,9 @@
         }
       }
     }
+  },
+  "Dashboard": {
+    "title": "Tablero",
+    "for": "para"
   }
 }
