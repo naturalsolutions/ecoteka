@@ -5,12 +5,20 @@ import {
   Button,
   Box,
   IconButton,
+  Drawer,
   withStyles,
   ButtonGroup,
   InputBase,
+  Card,
+  CardContent,
 } from "@material-ui/core";
 import { Search, Filter as FilterIcon } from "@material-ui/icons";
-import MapGL, { Source, Layer, FeatureState } from "@urbica/react-map-gl";
+import MapGL, {
+  Source,
+  Layer,
+  FeatureState,
+  GeolocateControl,
+} from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 import SearchCity from "@/components/Map/SearchCity";
@@ -22,6 +30,8 @@ import { bbox } from "@turf/turf";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Fuse from "fuse.js";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import MapToolbar, { TMapToolbarAction } from "@/components/Map/Toolbar";
+import MapLayers from "@/components/Map/Layers";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
@@ -37,9 +47,9 @@ const useStyles = makeStyles(
       },
       toolbar: {
         position: "absolute",
-        top: 0,
+        top: 10,
         left: 0,
-        width: "100%",
+        width: "calc(100% - 50px)",
       },
       sidebar: {
         position: "absolute",
@@ -123,12 +133,14 @@ const EditionPage = ({}) => {
   const { dialog } = useTemplate();
   const { user } = useAppContext();
   const mapRef = createRef<MapGL>();
+  const geolocateControlRef = createRef<GeolocateControl>();
   const [firstLoad, setFirstLoad] = useState(true);
   const [viewport, setViewport] = useState({
     latitude: 46.7,
     longitude: 2.54,
     zoom: 5,
   });
+  const [openToolbarDrawer, setOpenToolbarDrawer] = useState(false);
   const [currentMode, setCurrentMode] = useState<string>("simple_select");
   const [mode, setMode] = useState<string>("simple_select");
   const [data, setData] = useState<any>({
@@ -163,7 +175,7 @@ const EditionPage = ({}) => {
     ],
   };
 
-  const fuse = new Fuse(data.features, options);
+  const fuse = new Fuse([], options);
 
   const getData = async (organizationId: number) => {
     const newData = await apiRest.organization.geojson(organizationId);
@@ -298,6 +310,31 @@ const EditionPage = ({}) => {
       },
     })
   )(Button);
+
+  const handleToolbarAction = (action: TMapToolbarAction) => {
+    const map = mapRef.current.getMap();
+
+    switch (action) {
+      case "zoom_in":
+        return map.setZoom(map.getZoom() + 1);
+      case "zoom_out":
+        return map.setZoom(map.getZoom() - 1);
+      case "toggle_layers":
+        setOpenToolbarDrawer(!openToolbarDrawer);
+        break;
+      // return setSecondaryPanel(
+      //   secondaryPanel ? null : <MapLayers map={map} />
+      // );
+      case "geolocate":
+        return geolocateControlRef.current.getControl().trigger();
+      case "fit_to_bounds":
+        if (data) {
+          return map.fitBounds(bbox(data));
+        }
+      case "import":
+        return router.push("/?panel=import");
+    }
+  };
 
   return (
     <Grid className={classes.root} id="map-edition">
@@ -442,7 +479,38 @@ const EditionPage = ({}) => {
             state={{ hover: true }}
           />
         )}
+        <GeolocateControl ref={geolocateControlRef} />
       </MapGL>
+      <Drawer
+        open={openToolbarDrawer}
+        hideBackdrop
+        anchor="right"
+        variant="temporary"
+        ModalProps={{
+          style: {
+            pointerEvents: "none",
+          },
+        }}
+        style={{
+          marginRight: 55,
+          marginTop: 100,
+          height: "calc(100vh - 100px)",
+        }}
+        PaperProps={{
+          style: {
+            pointerEvents: "all",
+            minWidth: 200,
+            padding: "1rem",
+            backgroundColor: "rgba(0, 0, 0, .5)",
+            marginRight: 55,
+            height: "calc(100vh - 100px)",
+            marginTop: 100,
+          },
+        }}
+      >
+        <MapLayers map={mapRef} />
+      </Drawer>
+      <MapToolbar onChange={handleToolbarAction} />
       <Box className={classes.toolbar} p={1}>
         <Grid container spacing={2} justify="center" alignItems="center">
           <Grid item xs></Grid>
@@ -474,6 +542,7 @@ const EditionPage = ({}) => {
                 + Arbre
               </DarkButton>
               <DarkButton
+                disabled
                 onClick={() => {
                   setBoxSelect(true);
                   setMode("draw_polygon");

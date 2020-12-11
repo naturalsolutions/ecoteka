@@ -93,7 +93,9 @@ class Organization {
     const url = `/organization/${id}/geojson`;
     const response = await this.api.get(url);
 
-    return await response.json();
+    if (response.json) {
+      return response.json();
+    }
   }
 }
 

@@ -3,10 +3,6 @@
   height: 100%;
 }
 
-.etk-map .mapboxgl-ctrl-geolocate {
-  display: none;
-}
-
-button.mapbox-gl-draw_ctrl-draw-btn {
+.mapboxgl-control-container {
   display: none;
 }
