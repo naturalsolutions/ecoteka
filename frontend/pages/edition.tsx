@@ -322,15 +322,13 @@ const EditionPage = ({}) => {
       case "toggle_layers":
         setOpenToolbarDrawer(!openToolbarDrawer);
         break;
-      // return setSecondaryPanel(
-      //   secondaryPanel ? null : <MapLayers map={map} />
-      // );
       case "geolocate":
         return geolocateControlRef.current.getControl().trigger();
       case "fit_to_bounds":
         if (data) {
           return map.fitBounds(bbox(data));
         }
+        break;
       case "import":
         return router.push("/?panel=import");
     }
