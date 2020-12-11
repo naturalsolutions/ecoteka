@@ -45,13 +45,13 @@ export default function IndexPage() {
       setLanding(false);
       if (user.currentOrganization) {
         mapRef.current.map.setStyle(
-          `/api/v1/maps/style?token=${apiRest.getToken()}&organization_id=${
+          `/api/v1/maps/style/?token=${apiRest.getToken()}&organization_id=${
             user.currentOrganization.id
           }`
         );
       }
     } else {
-      mapRef.current.map.setStyle("/api/v1/maps/style");
+      mapRef.current.map.setStyle("/api/v1/maps/style/");
     }
   }, [isLoading, user, mapRef]);
 
@@ -74,7 +74,7 @@ export default function IndexPage() {
         {!user && landing && (
           <ETKLanding map={mapRef} setLanding={setLanding} />
         )}
-        <ETKMap ref={mapRef} styleSource="/api/v1/maps/style" />
+        <ETKMap ref={mapRef} styleSource="/api/v1/maps/style/" />
         {!landing && (
           <ETKMapSearchCity className={classes.mapSearchCity} map={mapRef} />
         )}
