@@ -19,6 +19,7 @@
     "@types/react": "^16.8.0",
     "@urbica/react-map-gl": "^1.14.2",
     "@urbica/react-map-gl-draw": "^0.3.5",
+    "fuse.js": "^6.4.3",
     "axios": "^0.20.0",
     "axios-auth-refresh": "^3.0.0",
     "i18next": "^19.8.4",
