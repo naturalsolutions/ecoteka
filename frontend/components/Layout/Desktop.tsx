@@ -12,7 +12,7 @@ const defaultProps: ETKLayoutDesktopProps = {};
 const useStyles = makeStyles({
   content: {
     position: "relative",
-    backgroundColor: "#666666",
+    backgroundColor: "#c7c7c7",
   },
 });
 
