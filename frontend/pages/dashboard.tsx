@@ -7,6 +7,13 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Nature as TreeIcon, Euro as EuroIcon } from "@material-ui/icons";
+import {
+  GiFruitTree,
+  GiLogging,
+  GiPlantRoots,
+  GiStumpRegrowth,
+} from "react-icons/gi";
+import { IconContext } from "react-icons";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useAppContext } from "@/providers/AppContext";
@@ -45,7 +52,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
       metric: "500",
     },
     widget3: {
-      title: "Arbres abbatus en 2020",
+      title: "Arbres abattus en 2020",
       metric: "56",
     },
     widget4: {
@@ -60,7 +67,11 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         <SimpleMetric
           caption={widgetsData.widget1.title}
           metric={widgetsData.widget1.metric}
-          icon={<TreeIcon />}
+          icon={
+            <IconContext.Provider value={{ size: "3rem" }}>
+              <GiFruitTree />
+            </IconContext.Provider>
+          }
         />
       ),
     },
@@ -70,7 +81,11 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         <SimpleMetric
           caption={widgetsData.widget2.title}
           metric={widgetsData.widget2.metric}
-          icon={<TreeIcon />}
+          icon={
+            <IconContext.Provider value={{ size: "3rem" }}>
+              <GiPlantRoots />
+            </IconContext.Provider>
+          }
         />
       ),
     },
@@ -80,29 +95,33 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         <SimpleMetric
           caption={widgetsData.widget3.title}
           metric={widgetsData.widget3.metric}
-          icon={<TreeIcon />}
+          icon={
+            <IconContext.Provider value={{ size: "3rem" }}>
+              <GiLogging />
+            </IconContext.Provider>
+          }
         />
       ),
     },
     {
       name: "a.widget.4",
       size: {
-        xs: 3,
+        xs: 6,
       },
       component: (
         <SimpleMetric
           caption={widgetsData.widget4.title}
           metric={widgetsData.widget4.metric}
-          icon={<EuroIcon />}
+          icon={<EuroIcon style={{ fontSize: "3rem" }} />}
         />
       ),
     },
     {
       name: "Coût total par type d'interventions planifiées en 2020",
       size: {
-        xs: 9,
+        xs: 6,
       },
-      component: <StackedBars width={800} height={400} />,
+      component: <StackedBars width={750} height={350} />,
     },
   ];
 

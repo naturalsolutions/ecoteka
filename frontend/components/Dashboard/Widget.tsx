@@ -24,8 +24,6 @@ const defaultProps: ETKWidgetProps = {
   paperProps: {},
 };
 
-makeStyles((theme) => console.log(theme));
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -58,8 +56,6 @@ const ETKWidget: React.FC<ETKWidgetProps> = ({
       mass: 1,
     },
   });
-
-  console.log(component);
 
   return (
     <AnimatedGrid {...gridProps} style={springProps}>

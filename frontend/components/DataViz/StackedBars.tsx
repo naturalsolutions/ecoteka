@@ -10,8 +10,9 @@ import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale";
 import { timeParse, timeFormat } from "d3-time-format";
 import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip";
 import { LegendOrdinal } from "@visx/legend";
+import { localPoint } from "@visx/event";
 import { Box } from "@material-ui/core";
-import { motion } from "framer-motion";
+import ParentSize from "@visx/responsive/lib/components/ParentSize";
 
 type InterventionsCategories = "Élaguage" | "Abattage" | "Dessouchage";
 
@@ -34,9 +35,9 @@ export type BarStackProps = {
 };
 
 const purple1 = "#a53b67";
-const purple2 = "#FBB13C";
+const purple2 = "#fbb13c";
 export const purple3 = "#218380";
-export const background = "#deecee";
+export const background = "#ecedee";
 const defaultMargin = { top: 40, right: 0, bottom: 0, left: 0 };
 const tooltipStyles = {
   ...defaultStyles,
@@ -82,7 +83,7 @@ const colorScale = scaleOrdinal<InterventionsCategories, string>({
 
 let tooltipTimeout: number;
 
-export default function StackBars({
+function StackedBars({
   width,
   height,
   events = false,
@@ -155,9 +156,13 @@ export default function StackBars({
             {(barStacks) =>
               barStacks.map((barStack) =>
                 barStack.bars.map((bar) => (
-                  <motion.rect
+                  <rect
                     key={`bar-stack-${barStack.index}-${bar.index}`}
                     fill={bar.color}
+                    height={bar.height}
+                    width={bar.width}
+                    x={bar.x}
+                    y={bar.y}
                     onClick={() => {
                       if (events) alert(`clicked: ${JSON.stringify(bar)}`);
                     }}
@@ -167,27 +172,15 @@ export default function StackBars({
                       }, 300);
                     }}
                     onMouseMove={(event) => {
+                      const point = localPoint(event);
                       if (tooltipTimeout) clearTimeout(tooltipTimeout);
-                      const top = event.clientY - margin.top - bar.height / 3;
+                      const top = point.y;
                       const left = bar.x + bar.width / 2;
                       showTooltip({
                         tooltipData: bar,
                         tooltipTop: top,
                         tooltipLeft: left,
                       });
-                    }}
-                    initial={{
-                      height: 0,
-                      x: bar.x,
-                      y: bar.y,
-                      width: 0,
-                    }}
-                    animate={{
-                      height: bar.height,
-                      width: bar.width,
-                      transition: {
-                        duration: 1.5,
-                      },
                     }}
                   />
                 ))
@@ -244,5 +237,27 @@ export default function StackBars({
         </TooltipInPortal>
       )}
     </div>
+  );
+}
+
+export default function ResponsiveStackedBars({
+  width,
+  height,
+  events = false,
+  margin = defaultMargin,
+}: BarStackProps) {
+  return (
+    <Box width={width} height={height}>
+      <ParentSize>
+        {({ width, height }) => (
+          <StackedBars
+            width={width}
+            height={height}
+            events={events}
+            margin={margin}
+          />
+        )}
+      </ParentSize>
+    </Box>
   );
 }

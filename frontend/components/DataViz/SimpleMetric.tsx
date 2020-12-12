@@ -1,5 +1,11 @@
 import React from "react";
-import { makeStyles, IconProps, Icon } from "@material-ui/core";
+import {
+  makeStyles,
+  IconProps,
+  Icon,
+  Box,
+  Typography,
+} from "@material-ui/core";
 
 export interface ETKSimpleMetricProps {
   metric: string;
@@ -14,6 +20,15 @@ const defaultProps: ETKSimpleMetricProps = {
 
 const useStyles = makeStyles(() => ({
   root: {},
+  metric: {
+    fontWeight: "bold",
+    fontSize: "2rem",
+  },
+  caption: {
+    color: "#707274",
+    fontSize: "1rem",
+    fontWeight: "bolder",
+  },
 }));
 
 const ETKSimpleMetric: React.FC<ETKSimpleMetricProps> = ({
@@ -24,11 +39,17 @@ const ETKSimpleMetric: React.FC<ETKSimpleMetricProps> = ({
   const classes = useStyles();
 
   return (
-    <div>
-      <div>{metric}</div>
+    <Box>
+      <Box pb={1}>
+        <Typography variant="h6" component="h2" className={classes.metric}>
+          {metric}
+        </Typography>
+      </Box>
       {icon}
-      <div>{caption}</div>
-    </div>
+      <Box pt={1} className={classes.caption}>
+        {caption}
+      </Box>
+    </Box>
   );
 };
 
