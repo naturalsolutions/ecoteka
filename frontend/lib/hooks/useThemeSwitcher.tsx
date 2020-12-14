@@ -45,7 +45,9 @@ export default function Provider({ children }) {
   }, [dark]);
 
   return (
-    <ThemeContext.Provider value={{ theme, dark, setDark }}>
+    <ThemeContext.Provider
+      value={{ theme: theme ?? themeLight, dark, setDark }}
+    >
       <CssBaseline />
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </ThemeContext.Provider>

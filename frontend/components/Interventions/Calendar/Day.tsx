@@ -8,6 +8,7 @@ import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 import CalendarIntervention from "@/components/Interventions/Calendar/Intervention";
 import { TIntervention } from "@/components/Interventions/Schema";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 
 export interface CalendarDayProps {
   interventions: TIntervention[];
@@ -67,7 +68,7 @@ async function interventionPlan(
 
 const CalendarDay: React.FC<CalendarDayProps> = (props) => {
   const classes = useStyles();
-  const { theme } = useTemplate();
+  const { theme } = useThemeContext();
   const { user } = useAppContext();
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.BOX,

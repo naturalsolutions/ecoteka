@@ -14,10 +14,11 @@ const TemplateContext = React.createContext(null);
 export const useTemplate = () => React.useContext(TemplateContext);
 
 export default function Template(props) {
-  const dialogRef = React.useRef<ETKDialogActions>(null);
-  const snackRef = React.useRef();
-  const { isLoading, user, setUser } = useAppContext();
   const { t } = useTranslation(["components"]);
+  const { isLoading, user, setUser } = useAppContext();
+
+  const snackRef = React.useRef();
+  const dialogRef = React.useRef<ETKDialogActions>(null);
 
   const handlerOrganizationChange = (organization) => {
     const newUser = { ...user };
@@ -46,12 +47,10 @@ export default function Template(props) {
     }
   }, [user, isLoading]);
 
-  let theme = {};
-
   return (
     <ThemeProvider>
       <TemplateContext.Provider
-        value={{ dialog: dialogRef, theme, snackbar: snackRef }}
+        value={{ dialog: dialogRef, snackbar: snackRef }}
       >
         <Hidden only={["xs", "sm"]}>
           {!isLoading && <ETKLayoutDesktop>{props.children}</ETKLayoutDesktop>}
