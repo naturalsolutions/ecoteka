@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Hidden } from "@material-ui/core";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { useAppContext } from "@/providers/AppContext";
-import themeConfig from "@/theme/config";
 import ETKDialog, { ETKDialogActions } from "@/components/Dialog";
 import ETKLayoutDesktop from "@/components/Layout/Desktop";
 import ETKLayoutMobile from "@/components/Layout/Mobile";
 import OrganizationList from "@/components/Organization/List";
 import { useTranslation } from "react-i18next";
+import ThemeProvider from "@/lib/hooks/useThemeSwitcher";
 import Snackbars from "@/components/Snackbars";
 
 const TemplateContext = React.createContext(null);
@@ -17,7 +16,6 @@ export const useTemplate = () => React.useContext(TemplateContext);
 export default function Template(props) {
   const dialogRef = React.useRef<ETKDialogActions>(null);
   const snackRef = React.useRef();
-  const theme = createMuiTheme(themeConfig("dark"));
   const { isLoading, user, setUser } = useAppContext();
   const { t } = useTranslation(["components"]);
 
@@ -48,8 +46,10 @@ export default function Template(props) {
     }
   }, [user, isLoading]);
 
+  let theme = {};
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <TemplateContext.Provider
         value={{ dialog: dialogRef, theme, snackbar: snackRef }}
       >
