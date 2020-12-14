@@ -363,5 +363,9 @@
   "Dashboard": {
     "title": "Dashboard",
     "for": "for"
+  },
+  "MapLayers": {
+    "backgrounds": "Backgrounds",
+    "layers": "Layers"
   }
 }

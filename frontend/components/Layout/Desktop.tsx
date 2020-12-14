@@ -9,12 +9,12 @@ export interface ETKLayoutDesktopProps {}
 
 const defaultProps: ETKLayoutDesktopProps = {};
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   content: {
     position: "relative",
-    backgroundColor: "#c7c7c7",
+    backgroundColor: theme.palette.background.default,
   },
-});
+}));
 
 const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
   const classes = useStyles();
@@ -85,7 +85,7 @@ const ETKLayoutDesktop: React.FC<ETKLayoutDesktopProps> = (props) => {
   return (
     <div role="presentation">
       <AppBar position="fixed">
-        <ETKToolbar logo={`/assets/dark/logo.svg`} />
+        <ETKToolbar logo={`/assets/light/logo.svg`} />
         {user && <ETKMenu items={menuItems} />}
       </AppBar>
       <main className={classes.content} style={styles}>

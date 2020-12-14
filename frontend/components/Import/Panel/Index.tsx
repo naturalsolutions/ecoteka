@@ -11,6 +11,7 @@ import ETKImportImporting from "@/components/Import/Panel/Importing";
 import { apiRest } from "@/lib/api";
 import { ETKPanelProps } from "@/components/Panel";
 import { useAppContext } from "@/providers/AppContext";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 
 export interface Choice {
   value?: string;
@@ -35,6 +36,7 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
   const [geofile, setGeofile] = useState<ETKGeofile>();
   const [missingInfo, setMissingInfo] = useState<[string?]>([]);
   const { user } = useAppContext();
+  const { dark } = useThemeContext();
 
   const checkMissingInfo = (geofileToCheck: ETKGeofile): [string?] => {
     const driversToCheck = ["CSV", "Excel"];
@@ -93,9 +95,10 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
     );
 
     const { longitude, latitude } = coordinates;
+    const mapTheme = `${dark ? "dark" : "light"}`;
 
     props.context?.map?.current?.map?.setStyle(
-      `/api/v1/maps/style?token=${apiRest.getToken()}&organization_id=${
+      `/api/v1/maps/style/?theme=${mapTheme}&token=${apiRest.getToken()}&organization_id=${
         user.currentOrganization.id
       }`
     );

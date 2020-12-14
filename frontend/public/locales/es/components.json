@@ -268,7 +268,7 @@
     "dialogDeleteActionCancel": "No"
   },
   "Teams": {
-    "buttonAdd": "Add a team",
+    "buttonAdd": "Añadir un equipo",
     "tooltipWorkingAreaEdit": "Edit working area",
     "tooltipInfoEdit": "Edit informations",
     "tooltipLink": "Open the page",
@@ -282,57 +282,57 @@
     }
   },
   "Team": {
-    "name": "Apelido",
-    "slug": "Slug",
-    "dialogTitleCreate": "Ajouter une équipe",
-    "dialogTitleEdit": "Modifier une équipe",
-    "dialogContentTextCreate": "Vous allez ajouter une équipe dans l'organisation courante.",
-    "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'équipe.",
+    "name": "Nombre",
+    "slug": "Nombre amigable (slug)",
+    "dialogTitleCreate": "Añadir un equipo",
+    "dialogTitleEdit": "Modificar un equipo",
+    "dialogContentTextCreate": "Vas a añadir un equipo en la organización actual.",
+    "dialogContentTextEdit": "Utiliza este formalario para modificar el equipo.",
     "buttonSubmitContent": "Enviar",
     "buttonCancelContent": "Cancelar"
   },
 
   "Organization": {
-    "name": "Apelido",
-    "dialogTitleCreate": "Add an organisation",
-    "dialogTitleEdit": "Update the organisation",
-    "dialogContentTextCreate": "Use this form to create an organisation.",
-    "dialogContentTextEdit": "Use this form to update the organisation.",
+    "name": "Nombre",
+    "dialogTitleCreate": "Añadir una organización",
+    "dialogTitleEdit": "Actualizar una organización",
+    "dialogContentTextCreate": "Utiliza este formalario para crear una organización.",
+    "dialogContentTextEdit": "Utiliza este formalario para actualizar la organización.",
     "WorkingArea": {
-      "dialogTitle": "Edit working area",
-      "dialogContentText": "Accept : zip, geojson"
+      "dialogTitle": "Editar área de trabajo",
+      "dialogContentText": "Formatos aceptados : zip, geojson"
     },
     "Tabs": {
-      "general": "General informations",
-      "teams": "Teams",
-      "members": "Members"
+      "general": "Información general",
+      "teams": "Equipos",
+      "members": "Miembros"
     },
     "Members": {
-      "dialogAddMemberTitle": "Ajouter des membres à votre organisation",
-      "addMembers": "Add members",
-      "dialogDdetachMembersTitle": "Retirer des membres à votre organisation",
-      "detachMembers": "Remove from group",
-      "cancel": "Annuler",
-      "close": "Fermer",
-      "done": "Terminer",
-      "confirm": "Confirmer",
-      "confirmDetach": "Confirm",
-      "invite": "Inviter",
-      "detachFromGroup": "Remove members from organization",
+      "dialogAddMemberTitle": "Añadir miembros a la organización",
+      "addMembers": "Añadir miembros",
+      "dialogDdetachMembersTitle": "Eliminar los miembros de la organización",
+      "detachMembers": "Eliminar del equipo",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "done": "Terminar",
+      "confirm": "Confirmar",
+      "confirmDetach": "Confirmar",
+      "invite": "Invitar",
+      "detachFromGroup": "Eliminar miembros de la organización",
       "Table": {
         "headers": {
-          "email": "Email",
-          "name": "Name",
-          "role": "Role",
-          "status": "Status"
+          "email": "Correo electrónico",
+          "name": "Nombre",
+          "role": "Rol",
+          "status": "Estado"
         },
         "roles": {
-          "defineRole": "Définir le rôle",
-          "owner": "Owner",
-          "manager": "Manager",
+          "defineRole": "Definir el role",
+          "owner": "Propietario",
+          "manager": "Gestor",
           "contributor": "Contributor",
-          "reader": "Reader",
-          "guest": "Guest"
+          "reader": "Lectura",
+          "guest": "Invitado"
         }
       }
     }
@@ -340,5 +340,9 @@
   "Dashboard": {
     "title": "Tablero",
     "for": "para"
+  }
+  "MapLayers": {
+    "backgrounds": "Fondos",
+    "layers": "Capas"
   }
 }

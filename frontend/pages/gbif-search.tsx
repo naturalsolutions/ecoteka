@@ -9,7 +9,6 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-  makeStyles,
   Paper,
   TextField,
   Typography,
@@ -21,13 +20,9 @@ export interface ETKGBIFSearchProps {}
 
 const defaultProps: ETKGBIFSearchProps = {};
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
 const ETKGBIFSearch: React.FC<ETKGBIFSearchProps> = (props) => {
-  const classes = useStyles();
-  const { ecotekaV1, gbif } = useAPI();
+  const { api } = useAPI();
+  const { apiETK: ecotekaV1, apiGBIF } = api;
   const [query, setQuery] = useState("");
   const [taxa, setTaxa] = useState([]);
   const getUsers = async () => {
@@ -36,18 +31,18 @@ const ETKGBIFSearch: React.FC<ETKGBIFSearchProps> = (props) => {
   };
   const speciesSearch = async (query) => {
     // GET all Tracheophyta from GBIF Backbone Taxonomy
-    const res = await gbif.get(
+    const res = await apiGBIF.get(
       `/species/search?q=${query}&rank=species&highertaxonKey=7707728&datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c`
     );
     return res;
   };
 
   const speciesMedia = async (key) => {
-    const res = await gbif.get(`/species/${key}/media`);
+    const res = await apiGBIF.get(`/species/${key}/media`);
     return res;
   };
   const speciesVernacularNames = async (key) => {
-    const res = await gbif.get(`/species/${key}/vernacularNames`);
+    const res = await apiGBIF.get(`/species/${key}/vernacularNames`);
     return res;
   };
 

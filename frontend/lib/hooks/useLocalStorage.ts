@@ -1,4 +1,4 @@
-import { useState, SetStateAction } from "react";
+import { useState } from "react";
 
 function isJSON(str) {
   try {

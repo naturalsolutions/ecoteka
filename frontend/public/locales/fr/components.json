@@ -435,5 +435,9 @@
   "Dashboard": {
     "title": "Tableau de bord",
     "for": "pour"
+  },
+  "MapLayers": {
+    "backgrounds": "Fonds",
+    "layers": "Couches"
   }
 }

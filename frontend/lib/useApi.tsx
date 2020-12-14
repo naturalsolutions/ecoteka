@@ -22,13 +22,6 @@ export default function useApi() {
     router.push("/signin");
   }
 
-  let ecotekaV1ForRefresh = axios.create({
-    baseURL: apiUrl,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  });
   let ecotekaV1 = axios.create({
     baseURL: apiUrl,
     headers: {
@@ -37,8 +30,19 @@ export default function useApi() {
     },
   });
 
+  // This Axios instance is private;
+  // Use it only to get (or hope to get) a "/auth/refresh_token" successfull response
+  let _ecotekaV1ForRefresh = axios.create({
+    baseURL: apiUrl,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
+
   // https://www.gbif.org/developer/summary
-  // Only for GET requests; POST, PUT, and DELETE requests require authentication through GBIF API HTTP Basic Authentication
+  // Only for GET requests;
+  // POST, PUT, and DELETE requests require GBIF API HTTP Basic Authentication
   let gbif = axios.create({
     baseURL: "https://api.gbif.org/v1/",
     headers: {
@@ -47,7 +51,12 @@ export default function useApi() {
   });
 
   const refreshAuthLogic = (failedRequest) =>
-    ecotekaV1ForRefresh
+    // We got here because accessToken has expired
+    // Overwriting headers in failedRequest will not help us to get a "/auth/refresh_token" successfull response
+    // We could have used Axios reponse interceptors to reset defaut Authorization header...
+    // But we choose to use a dedicated Axios instance to make code clearer
+
+    _ecotekaV1ForRefresh
       .post("/auth/refresh_token")
       .then((tokenRefreshResponse) => {
         const { access_token, refresh_token } = tokenRefreshResponse.data;
@@ -67,8 +76,12 @@ export default function useApi() {
     statusCodes: [401, 422],
   });
 
+  const api = {
+    apiETK: ecotekaV1,
+    apiGBIF: gbif,
+  };
+
   return {
-    ecotekaV1,
-    gbif,
+    api,
   };
 }
