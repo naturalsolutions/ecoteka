@@ -3,6 +3,7 @@ import {
   Box,
   Container,
   Grid,
+  GridSpacing,
   makeStyles,
   Typography,
 } from "@material-ui/core";
@@ -37,6 +38,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+interface WidgetProps {
+  name: string;
+  component: React.ReactNode;
+  size?: WidgetSizeProps;
+}
+interface WidgetSizeProps {
+  xs?: GridSpacing;
+  sm?: GridSpacing;
+  md?: GridSpacing;
+  lg?: GridSpacing;
+  xl?: GridSpacing;
+}
+
 const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation("components");
@@ -60,7 +74,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
       metric: "15 850",
     },
   };
-  const widgets = [
+  const widgets: WidgetProps[] = [
     {
       name: "a.widget.1",
       component: (
@@ -106,7 +120,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
     {
       name: "a.widget.4",
       size: {
-        xs: 6,
+        xs: 4,
       },
       component: (
         <SimpleMetric
@@ -119,7 +133,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
     {
       name: "Coût total par type d'interventions planifiées en 2020",
       size: {
-        xs: 6,
+        xs: 8,
       },
       component: <StackedBars width={750} height={350} />,
     },
