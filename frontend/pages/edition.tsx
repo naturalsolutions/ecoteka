@@ -30,6 +30,8 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import MapToolbar, { TMapToolbarAction } from "@/components/Map/Toolbar";
 import MapLayers from "@/components/Map/Layers";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
@@ -92,7 +94,7 @@ const useStyles = makeStyles(
           width: "auto",
         },
       },
-      searchIcon: {
+      searchIconWrapper: {
         width: spacing(6),
         height: "100%",
         position: "absolute",
@@ -101,8 +103,11 @@ const useStyles = makeStyles(
         alignItems: "center",
         justifyContent: "center",
       },
+      searchIcon: {
+        color: palette.text.primary,
+      },
       inputRoot: {
-        color: "white",
+        color: palette.text.primary,
         width: "100%",
       },
       inputInput: {
@@ -120,6 +125,15 @@ const useStyles = makeStyles(
           },
         },
       },
+      toolbarDrawerPaper: {
+        pointerEvents: "all",
+        minWidth: 200,
+        padding: "1rem",
+        backgroundColor: fade(palette.background.default, 0.6),
+        marginRight: 55,
+        height: "calc(100vh - 100px)",
+        marginTop: 100,
+      },
     };
   }
 );
@@ -130,6 +144,7 @@ const EditionPage = ({}) => {
   const { dialog } = useTemplate();
   const { user } = useAppContext();
   const mapRef = createRef<MapGL>();
+  const { dark } = useThemeContext();
   const geolocateControlRef = createRef<GeolocateControl>();
   const [firstLoad, setFirstLoad] = useLocalStorage("editor:firstLoad", true);
   const [viewport, setViewport] = useLocalStorage("editor:viewport", {
@@ -326,7 +341,7 @@ const EditionPage = ({}) => {
       <MapGL
         ref={mapRef}
         style={{ width: "100%", height: "100%" }}
-        mapStyle="/api/v1/maps/style/"
+        mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
         latitude={viewport.latitude}
         longitude={viewport.longitude}
         zoom={viewport.zoom}
@@ -482,15 +497,8 @@ const EditionPage = ({}) => {
           height: "calc(100vh - 100px)",
         }}
         PaperProps={{
-          style: {
-            pointerEvents: "all",
-            minWidth: 200,
-            padding: "1rem",
-            backgroundColor: "rgba(0, 0, 0, .5)",
-            marginRight: 55,
-            height: "calc(100vh - 100px)",
-            marginTop: 100,
-          },
+          elevation: 0,
+          className: classes.toolbarDrawerPaper,
         }}
       >
         <MapLayers map={mapRef} />
@@ -548,8 +556,8 @@ const EditionPage = ({}) => {
             >
               <Grid item>
                 <div className={classes.search}>
-                  <div className={classes.searchIcon}>
-                    <Search style={{ color: "#e6e6e6" }} />
+                  <div className={classes.searchIconWrapper}>
+                    <Search className={classes.searchIcon} />
                   </div>
                   <InputBase
                     placeholder="Filter"

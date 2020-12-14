@@ -7,23 +7,22 @@ import {
   Hidden,
   makeStyles,
   Toolbar,
+  IconButton,
 } from "@material-ui/core";
 import ETKContactButton from "@/components/Contact/Button";
-import ETKRegisterButton from "@/components/Register/Button";
 import ETKLanguageSelector from "@/components/LanguageSelector";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
 import OrganizationSelect from "@/components/Organization/Select";
 import { IOrganization } from "@/index";
 import UserMainMenuButton from "@/components/User/MainMenuButton";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
 
 export interface ETKToolbarProps {
   logo: string;
 }
-
-const defaultProps: ETKToolbarProps = {
-  logo: "/assets/dark/logo.svg",
-};
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -31,18 +30,22 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: ".3rem",
   },
   toolbar: {
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor:
+      theme.type === "dark"
+        ? theme.palette.secondary.main
+        : theme.palette.background.default,
   },
   numberOfTrees: {
     width: "100%",
   },
 }));
 
-const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
+const ETKToolbar: React.FC<ETKToolbarProps> = (props): JSX.Element => {
   const { t } = useTranslation("components");
   const classes = useStyles();
   const { user, setUser } = useAppContext();
   const router = useRouter();
+  const { dark, setDark } = useThemeContext();
 
   const handleOrganizationSelectChange = (organization: IOrganization) => {
     if (!organization || !organization.id) {
@@ -95,6 +98,11 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
                 alignItems="center"
               >
                 <Grid item>
+                  <IconButton onClick={() => setDark(!dark)}>
+                    {dark ? <Brightness7Icon /> : <Brightness4Icon />}
+                  </IconButton>
+                </Grid>
+                <Grid item>
                   <ETKLanguageSelector />
                 </Grid>
 
@@ -113,7 +121,5 @@ const ETKToolbar: React.FC<ETKToolbarProps> = (props) => {
     </React.Fragment>
   );
 };
-
-ETKToolbar.defaultProps = defaultProps;
 
 export default ETKToolbar;

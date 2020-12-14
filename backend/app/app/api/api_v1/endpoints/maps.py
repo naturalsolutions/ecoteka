@@ -20,12 +20,13 @@ def generate_style(
     *,
     db: Session = Depends(get_db),
     token: Optional[str] = "",
+    theme: Optional[str] = "dark",
     organization_id: Optional[int] = -1,
 ) -> Json:
     """
     Generate style
     """
-    with open("/app/app/assets/styles/dark.json") as style_json:
+    with open(f"/app/app/assets/styles/{theme}.json") as style_json:
         style = json.load(style_json)
 
         style["sources"]["osm"] = {

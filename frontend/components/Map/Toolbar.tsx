@@ -7,6 +7,7 @@ import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import MyLocationIcon from "@material-ui/icons/MyLocation";
 import SearchIcon from "@material-ui/icons/Search";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 
 export type TMapToolbarAction =
   | "zoom_in"
@@ -21,9 +22,15 @@ export interface IMapToolbarProps {
   onChange?(action: TMapToolbarAction): void;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    background: "rgba(0, 0, 0, .5)",
+    transition: "background-color 0.3s ease",
+    background: fade(theme.palette.background.default, 0.3),
+    borderLeft: "1px solid #ccc",
+    borderLeftColor: fade(theme.palette.background.default, 0.7),
+    "&:hover": {
+      background: fade(theme.palette.background.default, 0.5),
+    },
     position: "absolute",
     bottom: 0,
     right: 0,
