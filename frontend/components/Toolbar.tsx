@@ -24,21 +24,23 @@ export interface ETKToolbarProps {
   logo: string;
 }
 
-const useStyles = makeStyles((theme) => ({
-  logo: {
-    height: "35px",
-    paddingTop: ".3rem",
-  },
-  toolbar: {
-    backgroundColor:
-      theme.type === "dark"
-        ? theme.palette.secondary.main
-        : theme.palette.background.default,
-  },
-  numberOfTrees: {
-    width: "100%",
-  },
-}));
+const useStyles = makeStyles((theme) => {
+  return {
+    logo: {
+      height: "35px",
+      paddingTop: ".3rem",
+    },
+    toolbar: {
+      backgroundColor:
+        theme.palette.type === "dark"
+          ? theme.palette.secondary.main
+          : theme.palette.background.default,
+    },
+    numberOfTrees: {
+      width: "100%",
+    },
+  };
+});
 
 const ETKToolbar: React.FC<ETKToolbarProps> = (props): JSX.Element => {
   const { t } = useTranslation("components");
