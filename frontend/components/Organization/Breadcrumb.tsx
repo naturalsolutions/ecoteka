@@ -16,7 +16,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ path }) => {
 
   return (
     path && (
-      <Box m={1}>
+      <Box pt={4}>
         <Breadcrumbs>
           {path
             .sort((o1, o2) =>
