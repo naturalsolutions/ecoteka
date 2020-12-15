@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Container } from "@material-ui/core";
 import { Header, Breadcrumb, Tabs } from "@/components/Organization";
 import { apiRest } from "@/lib/api";
+import AppLayoutGeneral from "@/components/appLayout/General";
 
 interface OrganizationProps {}
 
@@ -14,7 +15,6 @@ const Organization: FC<OrganizationProps> = (props) => {
   const getData = async (id) => {
     try {
       const newOrganization = await apiRest.organization.get(id);
-
       const newParents = await apiRest.organization.parents(id);
 
       if (newOrganization) {
@@ -35,11 +35,13 @@ const Organization: FC<OrganizationProps> = (props) => {
 
   return (
     organization && (
-      <Container>
-        {parents && parents.length > 0 && <Breadcrumb path={parents} />}
-        <Header />
-        <Tabs organization={organization} activeTab={router.query.t} />
-      </Container>
+      <AppLayoutGeneral>
+        <Container>
+          {parents && parents.length > 0 && <Breadcrumb path={parents} />}
+          <Header />
+          <Tabs organization={organization} activeTab={router.query.t} />
+        </Container>
+      </AppLayoutGeneral>
     )
   );
 };

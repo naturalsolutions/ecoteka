@@ -4,7 +4,7 @@ import { Paper, Tabs, Tab, Box } from "@material-ui/core";
 import { TabPanel, GeneralInfoTab } from "@/components/Organization";
 import { Members } from "@/components/Organization/Members";
 import { IOrganization } from "@/index.d";
-import Teams from "./Teams/Teams";
+import Teams from "@/components/Organization/Teams/Teams";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 

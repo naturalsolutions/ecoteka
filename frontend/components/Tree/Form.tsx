@@ -10,9 +10,9 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { useTranslation } from "react-i18next";
-import useETKForm from "../Form/useForm";
-import { ETKPanelProps } from "../Panel";
-import useETKTreeSchema from "./Schema";
+import useETKForm from "@/components/Form/useForm";
+import { ETKPanelProps } from "@/components/Panel";
+import useETKTreeSchema from "@/components/Tree/Schema";
 
 const useStyles = makeStyles((theme) => ({
   grid: {

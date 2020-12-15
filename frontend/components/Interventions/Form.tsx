@@ -55,7 +55,7 @@ type ETKInterventionFormProps = {
   interventionType: TInterventionType;
   step: TInterventionStep;
   data: any;
-  map: React.RefObject<ETKMap>;
+  map: any;
   organization: any;
 };
 
@@ -92,14 +92,6 @@ const ETKInterventionForm = forwardRef<
         form.setValue(field, value);
       }
     });
-
-    props.map?.current?.map.on("click", (e) =>
-      onMapClick(props.map.current.map, e)
-    );
-
-    return () => {
-      props.map?.current?.map.off("click", onMapClick);
-    };
   }, []);
 
   useEffect(() => {
@@ -110,7 +102,7 @@ const ETKInterventionForm = forwardRef<
         .get(user.currentOrganization.id, router.query.tree)
         .then((tree) => {
           try {
-            props.map.current.map.flyTo({
+            props.map.flyTo({
               zoom: 20,
               center: [tree.x, tree.y],
             });
@@ -140,22 +132,6 @@ const ETKInterventionForm = forwardRef<
       return form.getValues();
     },
   }));
-
-  const onMapClick = (map, e) => {
-    if (props.step === "treeselection") {
-      const bbox = [
-        [e.point.x - 5, e.point.y - 5],
-        [e.point.x + 5, e.point.y + 5],
-      ];
-      const features = map.queryRenderedFeatures(bbox, {
-        layers: [`ecoteka-${props.organization.slug}`],
-      });
-
-      if (features.length) {
-        form.setValue("tree_id", features[0].properties.id);
-      }
-    }
-  };
 
   return (
     <React.Fragment>
@@ -292,7 +268,7 @@ const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
                   data={data[step]}
                   interventionType={interventionType}
                   step={step}
-                  map={props.context.map}
+                  map={props.map}
                   organization={user.currentOrganization}
                 />
                 <Grid container direction="row" justify="flex-end">

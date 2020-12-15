@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles, IconButton, Grid } from "@material-ui/core";
-import { useTemplate } from "@/components/Template";
 import { useDrop } from "react-dnd";
 import { DragObjectWithType } from "react-dnd/lib/interfaces/hooksApi";
 import { ItemTypes } from "@/components/Interventions/Calendar/ItemTypes";

@@ -9,10 +9,10 @@ function isJSON(str) {
   }
 }
 
-export default function useLocalStorage<T>(key: string, initialValue: T) {
+export default function useLocalStorage<T>(key: string, initialValue?: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
     if (typeof window === "undefined") {
-      return null;
+      return initialValue || null;
     }
 
     try {
@@ -25,7 +25,7 @@ export default function useLocalStorage<T>(key: string, initialValue: T) {
       }
     } catch (error) {
       console.log(error);
-      return initialValue;
+      return null;
     }
   });
 

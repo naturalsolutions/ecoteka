@@ -6,14 +6,13 @@ import {
   CardActions,
   CardContent,
   CircularProgress,
-  Container,
   Grid,
   Typography,
 } from "@material-ui/core";
-import ETKFormSignIn, { ETKFormSignInActions } from "../components/SignIn/Form";
-import Template from "../components/Template";
+import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import AppLayoutGeneral from "@/components/appLayout/General";
 
 export default function SignInPage() {
   const formRef = useRef<ETKFormSignInActions>();
@@ -24,47 +23,45 @@ export default function SignInPage() {
     setIsLoading(true);
     const isOk = await formRef.current.submit();
     setIsLoading(false);
+
     if (isOk) {
-      router.back();
+      router.push("/edition/");
     }
   };
 
   return (
-    <Template>
+    <AppLayoutGeneral>
       <Grid
         container
-        direction="row"
-        justify="center"
+        spacing={0}
+        direction="column"
         alignItems="center"
-        style={{
-          height: "100%",
-        }}
+        justify="center"
+        style={{ minHeight: "calc(100vh - 48px)" }}
       >
-        <Container maxWidth="sm">
-          <Card>
-            <CardContent>
-              <Typography variant="h6" align="center">
-                Connectez-vous à votre compte
-              </Typography>
-              <ETKFormSignIn ref={formRef}></ETKFormSignIn>
-              <Link href="/reset-password">
-                <a style={{ color: "white" }}>Mot de passe oublié?</a>
-              </Link>
-            </CardContent>
-            <CardActions disableSpacing>
-              <Box flexGrow={1} />
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={onSubmit}
-                disabled={isLoading}
-              >
-                {isLoading ? <CircularProgress size={30} /> : "Connexion"}
-              </Button>
-            </CardActions>
-          </Card>
-        </Container>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" align="center">
+              Connectez-vous à votre compte
+            </Typography>
+            <ETKFormSignIn ref={formRef}></ETKFormSignIn>
+            <Link href="/reset-password">
+              <a style={{ color: "white" }}>Mot de passe oublié?</a>
+            </Link>
+          </CardContent>
+          <CardActions disableSpacing>
+            <Box flexGrow={1} />
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={onSubmit}
+              disabled={isLoading}
+            >
+              {isLoading ? <CircularProgress size={30} /> : "Connexion"}
+            </Button>
+          </CardActions>
+        </Card>
       </Grid>
-    </Template>
+    </AppLayoutGeneral>
   );
 }

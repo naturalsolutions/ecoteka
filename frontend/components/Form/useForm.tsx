@@ -1,11 +1,10 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { TextFieldProps, SelectProps } from "@material-ui/core";
-import useTextField from "./useTextField";
-import useSelect from "./useSelect";
-import usePasswordField from "./usePasswordField";
-import useDateRangeField from "./useDateRange";
+import useTextField from "@/components/Form/useTextField";
+import useSelect from "@/components/Form/useSelect";
+import usePasswordField from "@/components/Form/usePasswordField";
+import useDateRangeField from "@/components/Form/useDateRange";
 
 interface useETKFormSchema {
   [key: string]: {
@@ -57,9 +56,9 @@ export default function useETKForm(props: useETKFormProps) {
 
   const a = useTextField({ fields: textfields, ...form });
   const b = useSelect({ fields: selects, ...form });
-  const c = usePasswordField({fields: passwordfields, ...form});
-  const d = useDateRangeField({fields: dateranges, ...form});
-  
+  const c = usePasswordField({ fields: passwordfields, ...form });
+  const d = useDateRangeField({ fields: dateranges, ...form });
+
   const fields = Object.assign({}, a, b, c, d);
 
   return {

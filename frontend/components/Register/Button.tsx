@@ -1,13 +1,14 @@
 import React, { useRef } from "react";
-import { Button, ButtonProps, Grid, Typography } from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import { Button, ButtonProps } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { useTemplate } from "../Template";
-import ETKRegisterForm, { ETKFormRegisterActions } from "./Form";
+import { useAppLayout } from "@/components/appLayout/Base";
+import ETKRegisterForm, {
+  ETKFormRegisterActions,
+} from "@/components/Register/Form";
 
 const ETKRegisterButton: React.FC<ButtonProps> = (props) => {
   const { t } = useTranslation(["components", "common"]);
-  const { dialog, theme } = useTemplate();
+  const { dialog } = useAppLayout();
   const formRef = useRef<ETKFormRegisterActions>();
 
   const onButtonClick = async () => {

@@ -10,6 +10,7 @@ export default function useContactSchema() {
       component: {
         type: "email",
         label: t("SignIn.labelUsername"),
+        autoComplete: "email",
       },
       schema: yup
         .string()
@@ -21,6 +22,7 @@ export default function useContactSchema() {
       component: {
         type: "password",
         label: t("SignIn.labelPassword"),
+        autoComplete: "current-password",
       },
       schema: yup.string().required(t("SignIn.errorMessageRequiredField")),
     },

@@ -10,12 +10,14 @@ import {
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useTranslation } from "react-i18next";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
-import { useTemplate } from "@/components/Template";
-import ETKFormContact, { ETKFormContactActions } from "./Form";
+import { useAppLayout } from "@/components/appLayout/Base";
+import ETKFormContact, {
+  ETKFormContactActions,
+} from "@/components/Contact/Form";
 
 const ETKContactButton: React.FC<ButtonProps> = (props) => {
   const { t } = useTranslation(["components", "common"]);
-  const { dialog } = useTemplate();
+  const { dialog } = useAppLayout();
   const { theme } = useThemeContext();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const formRef = useRef<ETKFormContactActions>();

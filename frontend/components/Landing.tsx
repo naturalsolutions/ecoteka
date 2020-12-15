@@ -10,9 +10,9 @@ import {
 } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
-import ETKAboutCard from "./Card/About";
-import ETKMapSearchCity from "./Map/SearchCity";
-import ETKMap from "./Map/Map";
+import ETKAboutCard from "@/components/Card/About";
+import ETKMapSearchCity from "@/components/Map/SearchCity";
+import ETKMap from "@/components/Map/Map";
 
 export interface ETKLandingProps {
   map: React.RefObject<ETKMap>;
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   mapSearchCity: {
     width: "500px",
   },
-  searchBox:{
+  searchBox: {
     margin: "2rem 0",
   },
   [theme.breakpoints.down("sm")]: {
@@ -71,7 +71,6 @@ const useStyles = makeStyles((theme) => ({
       height: "unset",
       width: "100%",
     },
-    
   },
 }));
 
@@ -100,13 +99,13 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
             </Typography>
           </Grid>
           <Grid item className={classes.searchBox}>
-              <ETKMapSearchCity
-                map={props.map}
-                className={classes.mapSearchCity}
-                onChange={(city) => {
-                  props.setLanding(false);
-                }}
-              />
+            <ETKMapSearchCity
+              map={props.map}
+              className={classes.mapSearchCity}
+              onChange={(city) => {
+                props.setLanding(false);
+              }}
+            />
           </Grid>
           <Grid item>
             <ETKAboutCard background="#fff" buttonVariant="contained" />

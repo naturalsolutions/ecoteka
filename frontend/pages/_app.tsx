@@ -3,7 +3,7 @@ import Head from "next/head";
 import { I18nextProvider } from "react-i18next";
 import i18n from "@/i18n";
 import "mapbox-gl/dist/mapbox-gl.css";
-import Template from "@/components/Template";
+import AppLayoutBase from "@/components/appLayout/Base";
 import "@/styles/global.css";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";
@@ -28,9 +28,9 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <I18nextProvider i18n={i18n}>
         <AppContextProvider>
-          <Template>
+          <AppLayoutBase>
             <Component {...pageProps} />
-          </Template>
+          </AppLayoutBase>
         </AppContextProvider>
       </I18nextProvider>
     </React.Fragment>

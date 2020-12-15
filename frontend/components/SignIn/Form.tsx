@@ -1,10 +1,10 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { Grid } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import useETKForm from "../Form/useForm";
-import useETKSignInSchema from "./Schema";
-import { apiRest } from "../../lib/api";
-import { useAppContext } from "../../providers/AppContext";
+import useETKForm from "@/components/Form/useForm";
+import useETKSignInSchema from "@/components/SignIn/Schema";
+import { apiRest } from "@/lib/api";
+import { useAppContext } from "@/providers/AppContext";
 
 export type ETKFormSignInActions = {
   submit: () => Promise<boolean>;
@@ -39,11 +39,7 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
       const newUser = await apiRest.users.me();
 
       if (newUser) {
-        if (newUser.organizations.length === 1) {
-          newUser.currentOrganization = newUser.organizations[0];
-        }
-
-        setUser(newUser);
+        setUser({ ...newUser, currentOrganization: newUser.organizations[0] });
         logged = true;
       }
     };
@@ -58,10 +54,12 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
     }));
 
     return (
-      <Grid container direction="column">
-        <Grid item>{fields.username}</Grid>
-        <Grid item>{fields.password}</Grid>
-      </Grid>
+      <form>
+        <Grid container direction="column">
+          <Grid item>{fields.username}</Grid>
+          <Grid item>{fields.password}</Grid>
+        </Grid>
+      </form>
     );
   }
 );
