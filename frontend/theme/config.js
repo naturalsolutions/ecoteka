@@ -23,6 +23,7 @@ const themes = {
       },
       text: {
         primary: "#fff",
+        hint: "#131313",
       },
       primary: {
         main: "#AFE9A1",

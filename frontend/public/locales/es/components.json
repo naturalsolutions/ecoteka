@@ -47,7 +47,8 @@
     "login": "Iniciar sesión",
     "about": "Obtener más información",
     "register": "Registrar",
-    "myOrganizations": "Mis organizaciones"
+    "myOrganizations": "Mis organizaciones",
+    "myDashboard": "Panel de control"
   },
   "Map": {
     "SearchCity": {
@@ -209,30 +210,30 @@
     }
   },
   "Tree": {
-    "family": "Family",
-    "gender": "Gender",
-    "specie": "Specie",
+    "family": "Familia",
+    "gender": "Genero",
+    "specie": "Especie",
     "cultivar": "Cultivar",
-    "latinName": "Vernacular Name",
-    "latitude": "Latitude",
-    "longitude": "Longitude",
+    "latinName": "Nombre común",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
     "townshipCode": "Town ship code",
-    "zipCode": "Zip code",
-    "address": "Adress",
+    "zipCode": "Código Postal",
+    "address": "Dirección",
     "zone": "Zone cutting",
-    "etkRegistrationNumber": "Ecoteka registration number",
-    "registrationNumber": "Tree registration number",
-    "plantingDate": "Planting date",
-    "height": "Tree height",
-    "diameter": "Tree diameter",
+    "etkRegistrationNumber": "Identificador Ecoteka",
+    "registrationNumber": "Identificador del árbol",
+    "plantingDate": "Fecha de plantación",
+    "height": "Altura",
+    "diameter": "Diámetro",
     "soilType": {
-      "label": "Soil type",
-      "clay": "Calyey",
+      "label": "Tipo de suelo",
+      "clay": "Arcilloso",
       "silt": "Silty",
       "limestone": "Limestone",
-      "sand": "Sandy",
-      "acid": "Acid",
-      "sandyclay": "Sandy clay"
+      "sand": "Arenoso",
+      "acid": "Ácido",
+      "sandyclay": "Arenoso arcillosos"
     },
     "rootType": {
       "label": "Root type",
@@ -268,15 +269,15 @@
   },
   "Teams": {
     "buttonAdd": "Añadir un equipo",
-    "tooltipWorkingAreaEdit": "Edit working area",
-    "tooltipInfoEdit": "Edit informations",
-    "tooltipLink": "Open the page",
+    "tooltipWorkingAreaEdit": "Editar área de trabajo",
+    "tooltipInfoEdit": "Modificar la información",
+    "tooltipLink": "Abrir la página",
     "Table": {
       "headers": {
-        "name": "Name",
+        "name": "Nombre",
         "total_members": "Miembros",
         "total_trees": "Árboles",
-        "actions": "Actions"
+        "actions": "Acciones"
       }
     }
   },
@@ -336,7 +337,10 @@
       }
     }
   },
-
+  "Dashboard": {
+    "title": "Panel de control",
+    "for": "para"
+  },
   "MapLayers": {
     "backgrounds": "Fondos",
     "layers": "Capas"

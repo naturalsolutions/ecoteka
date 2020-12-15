@@ -47,7 +47,8 @@
     "login": "Connexion",
     "about": "En savoir plus",
     "register": "Inscription",
-    "myOrganizations": "Mes organisations"
+    "myOrganizations": "Mes organisations",
+    "myDashboard": "Mon tableau de bord"
   },
   "Map": {
     "SearchCity": {
@@ -431,7 +432,10 @@
       }
     }
   },
-
+  "Dashboard": {
+    "title": "Tableau de bord",
+    "for": "pour"
+  },
   "MapLayers": {
     "backgrounds": "Fonds",
     "layers": "Couches"
