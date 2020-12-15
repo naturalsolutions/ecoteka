@@ -147,7 +147,7 @@ const initialData = steps.reduce(
   {}
 );
 
-const ETKInterventionFormStepper: React.FC<ETKPanelProps> = (props) => {
+const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { user } = useAppContext();

@@ -14,11 +14,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   drawerLeft: {
+    // @ts-ignore
     width: (props) => props.drawerLeftWidth,
     height: toolbarHeightCalc,
     flexShrink: 0,
   },
   drawerLeftPaper: {
+    // @ts-ignore
     width: (props) => props.drawerLeftWidth,
     padding: "1rem",
     height: toolbarHeightCalc,
