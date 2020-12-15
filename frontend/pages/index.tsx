@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export default function IndexPage() {
   const mapRef = createRef<ETKMap>();
   const classes = useStyles();
-  const { user, isLoading } = useAppContext();
+  const { user } = useAppContext();
   const [landing, setLanding] = useState(true);
   const router = useRouter();
   const { dark } = useThemeContext();
@@ -46,20 +46,13 @@ export default function IndexPage() {
     const mapTheme = `${dark ? "dark" : "light"}`;
 
     if (user) {
-      setLanding(false);
-      if (user.currentOrganization) {
-        mapRef.current.map.setStyle(
-          `/api/v1/maps/style/?theme=${mapTheme}&token=${apiRest.getToken()}&organization_id=${
-            user.currentOrganization.id
-          }`
-        );
-      }
+      router.push("/edition/");
     } else {
       mapRef.current.map.setStyle(`/api/v1/maps/style/?theme=${mapTheme}`);
     }
-  }, [isLoading, user, mapRef]);
+  }, [user, mapRef]);
 
-  return (
+  return !user ? (
     <AppLayoutCarto>
       <Grid
         container
@@ -80,11 +73,8 @@ export default function IndexPage() {
             <ETKLanding map={mapRef} setLanding={setLanding} />
           )}
           <ETKMap ref={mapRef} styleSource="/api/v1/maps/style/" />
-          {!landing && (
-            <ETKMapSearchCity className={classes.mapSearchCity} map={mapRef} />
-          )}
         </Grid>
       </Grid>
     </AppLayoutCarto>
-  );
+  ) : null;
 }
