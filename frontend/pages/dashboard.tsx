@@ -22,6 +22,7 @@ import Widget from "@/components/Dashboard/Widget";
 import { Trail as SpringTail } from "react-spring/renderprops.cjs";
 import SimpleMetric from "@/components/DataViz/SimpleMetric";
 import StackedBars from "@/components/DataViz/StackedBars";
+import { treeInterventions } from "@/lib/mock";
 
 export interface ETKDashboardProps {}
 
@@ -135,7 +136,16 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
       size: {
         xs: 8,
       },
-      component: <StackedBars width={750} height={350} />,
+      component: (
+        <StackedBars
+          width={750}
+          height={350}
+          data={treeInterventions}
+          xScaleKey="date"
+          colorScheme={["#a53b67", "#fbb13c", "#218380", "#2871d1"]}
+          yScaleUnit="interventions"
+        />
+      ),
     },
   ];
 
