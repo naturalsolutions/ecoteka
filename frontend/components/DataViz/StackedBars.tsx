@@ -14,6 +14,7 @@ import { LegendOrdinal } from "@visx/legend";
 import { localPoint } from "@visx/event";
 import { Box } from "@material-ui/core";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 
 type InterventionsCategories = "Élaguage" | "Abattage" | "Dessouchage";
 
@@ -33,7 +34,7 @@ export type ResponsiveBandScaleStackedBars = {
   height: number;
   margin?: { top: number; right: number; bottom: number; left: number };
   events?: boolean;
-  data: [];
+  data: any;
   isXScaleTimeFormat?: boolean;
   xScaleKey: string;
   yScaleUnit?: string;
@@ -64,6 +65,7 @@ export default function ResponsiveBandScaleStackedBars({
   colorScheme,
   yScaleUnit,
 }: ResponsiveBandScaleStackedBars) {
+  const { theme } = useThemeContext();
   const chartData = data.slice(0, 12);
 
   const categories = Object.keys(chartData[0]).filter((d) => d !== xScaleKey);
@@ -190,7 +192,7 @@ export default function ResponsiveBandScaleStackedBars({
                 y={0}
                 width={width}
                 height={height}
-                fill={background}
+                fill={theme.palette.background.default}
                 rx={14}
               />
               <Grid

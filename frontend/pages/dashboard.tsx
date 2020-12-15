@@ -8,12 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Nature as TreeIcon, Euro as EuroIcon } from "@material-ui/icons";
-import {
-  GiFruitTree,
-  GiLogging,
-  GiPlantRoots,
-  GiStumpRegrowth,
-} from "react-icons/gi";
+import { GiFruitTree, GiLogging, GiPlantRoots } from "react-icons/gi";
 import { IconContext } from "react-icons";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
@@ -23,6 +18,7 @@ import { Trail as SpringTail } from "react-spring/renderprops.cjs";
 import SimpleMetric from "@/components/DataViz/SimpleMetric";
 import StackedBars from "@/components/DataViz/StackedBars";
 import { treeInterventions } from "@/lib/mock";
+import AppLayoutGeneral from "@/components/appLayout/General";
 
 export interface ETKDashboardProps {}
 
@@ -36,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
+  },
+  dashboardTitle: {
+    color: theme.palette.text.primary,
   },
 }));
 
@@ -150,41 +149,49 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   ];
 
   return (
-    <Container>
-      <Box py={4}>
-        <Typography variant="h6" component="h1">
-          {t("Dashboard.title")} 2020 {t("Dashboard.for")}{" "}
-          {user.currentOrganization?.name}
-        </Typography>
-      </Box>
-      <Grid container spacing={3}>
-        <SpringTail
-          items={widgets}
-          keys={(widget) => widget.name}
-          from={{ opacity: 0, transform: "translate3d(-40px,-10px,0)" }}
-          to={{
-            opacity: 1,
-            transform: "translate3d(0px,0px,0)",
-            delay: 2000,
-            duration: 600,
-          }}
-        >
-          {(widget) => (props) => (
-            <Widget
-              gridProps={{
-                item: true,
-                xs: widget.size?.xs ? widget.size?.xs : 4,
-              }}
-              paperProps={{ elevation: 2 }}
-              springProps={props}
-              component={widget.component}
-            >
-              {widget.name}
-            </Widget>
-          )}
-        </SpringTail>
-      </Grid>
-    </Container>
+    <AppLayoutGeneral>
+      <Container>
+        <Box py={4}>
+          <Typography
+            className={classes.dashboardTitle}
+            variant="h6"
+            component="h1"
+          >
+            {t("Dashboard.title")} 2020 {t("Dashboard.for")}{" "}
+            {user?.currentOrganization?.name}
+          </Typography>
+        </Box>
+        <Grid container spacing={3}>
+          <SpringTail
+            items={widgets}
+            keys={(widget) => widget.name}
+            from={{ opacity: 0, transform: "translate3d(-40px,-10px,0)" }}
+            to={{
+              opacity: 1,
+              transform: "translate3d(0px,0px,0)",
+              delay: 2000,
+              duration: 600,
+            }}
+          >
+            {(widget) => (props) => (
+              <Widget
+                gridProps={{
+                  item: true,
+                  xs: widget.size?.xs ? widget.size?.xs : 4,
+                }}
+                paperProps={{
+                  elevation: 2,
+                }}
+                springProps={props}
+                component={widget.component}
+              >
+                {widget.name}
+              </Widget>
+            )}
+          </SpringTail>
+        </Grid>
+      </Container>
+    </AppLayoutGeneral>
   );
 };
 
