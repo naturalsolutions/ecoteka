@@ -3,9 +3,10 @@ import { IOrganization } from "@/index.d";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Button, Toolbar, useMediaQuery } from "@material-ui/core";
 import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
-import { useTemplate } from "@/components/Template";
+import { useAppLayout } from "@/components/appLayout/Base";
 import { useTranslation } from "react-i18next";
 import { apiRest } from "@/lib/api";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AddMembers, {
   AddMembersActions,
 } from "@/components/Organization/Members/AddMembers";
@@ -38,9 +39,10 @@ interface MembersProps {
   index: string;
 }
 
-const Members: FC<MembersProps> = ({ organization, value, index }) => {
+const Members: FC<MembersProps> = ({ organization }) => {
   const classes = useStyles();
-  const { dialog, theme, snackbar } = useTemplate();
+  const { theme } = useThemeContext();
+  const { dialog, snackbar } = useAppLayout();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const { t } = useTranslation(["components", "common"]);
   const formAddMembersRef = useRef<AddMembersActions>();

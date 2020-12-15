@@ -8,8 +8,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import useETKForm from "../Form/useForm";
-import useTreeSchema from "./Schema";
+import useETKForm from "@/components/Form/useForm";
+import useTreeSchema from "@/components/Tree//Schema";
 import { ITree } from "@/index";
 
 const useStyles = makeStyles((theme) => ({

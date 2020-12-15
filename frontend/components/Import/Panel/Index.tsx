@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles, createStyles, Box, Grid } from "@material-ui/core";
+import { Box, Grid, Button } from "@material-ui/core";
 import ETKGeofile from "@/components/Geofile";
 import ETKImportTemplate from "@/components/Import/Panel/Template";
 import ETKMissingData from "@/components/Import/Panel/MissingDatas";
@@ -9,34 +9,24 @@ import ETKUpload from "@/components/Import/Panel/Upload";
 import ETKError from "@/components/Import/Panel/Error";
 import ETKImportImporting from "@/components/Import/Panel/Importing";
 import { apiRest } from "@/lib/api";
-import { ETKPanelProps } from "@/components/Panel";
 import { useAppContext } from "@/providers/AppContext";
-import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
+import { useRouter } from "next/router";
 
 export interface Choice {
   value?: string;
   label?: string;
 }
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    root: {
-      minWidth: "25rem",
-      maxWidth: "25rem",
-    },
-    import: {
-      alignSelf: "flex-start",
-    },
-  })
-);
+interface IImportPanel {
+  onFileImported?(coordinates: [number, number]): void;
+}
 
-const ETKImport: React.FC<ETKPanelProps> = (props) => {
-  const classes = useStyles();
+const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
   const [step, setStep] = useState("start");
   const [geofile, setGeofile] = useState<ETKGeofile>();
   const [missingInfo, setMissingInfo] = useState<[string?]>([]);
   const { user } = useAppContext();
-  const { dark } = useThemeContext();
+  const router = useRouter();
 
   const checkMissingInfo = (geofileToCheck: ETKGeofile): [string?] => {
     const driversToCheck = ["CSV", "Excel"];
@@ -95,22 +85,8 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
     );
 
     const { longitude, latitude } = coordinates;
-    const mapTheme = `${dark ? "dark" : "light"}`;
 
-    props.context?.map?.current?.map?.setStyle(
-      `/api/v1/maps/style/?theme=${mapTheme}&token=${apiRest.getToken()}&organization_id=${
-        user.currentOrganization.id
-      }`
-    );
-
-    props.context?.map?.current?.map?.on("styledata", () => {
-      try {
-        props.context?.map?.current?.map?.setZoom(12);
-        props.context?.map?.current?.map?.flyTo({
-          center: [longitude, latitude],
-        });
-      } catch (e) {}
-    });
+    onFileImported([longitude, latitude]);
   };
 
   const onReset = () => {
@@ -134,12 +110,7 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
   }, [step]);
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="center"
-      className={classes.root}
-    >
+    <Grid container direction="column" justify="center">
       {step === "start" && (
         <Grid item>
           <ETKUpload
@@ -176,6 +147,17 @@ const ETKImport: React.FC<ETKPanelProps> = (props) => {
 
       {step === "start" && (
         <Grid item>
+          <Box mt={3}>
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => {
+                router.push("/imports/");
+              }}
+            >
+              Voir historique d'imports
+            </Button>
+          </Box>
           <Box mt={5}>
             <ETKImportTemplate />
           </Box>

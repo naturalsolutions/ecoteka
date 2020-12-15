@@ -78,6 +78,7 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
           <TableRow>
             <TableCell>
               <Checkbox
+                color="primary"
                 indeterminate={
                   selected.length > 0 && selected.length < props.rows.length
                 }
@@ -107,7 +108,7 @@ const ETKImportHistoryTable: React.FC<ETKImportHistoryTableProps> = (props) => {
                 onClick={(e) => onRowClick(e, row.name)}
               >
                 <TableCell>
-                  <Checkbox checked={isItemSelected} />
+                  <Checkbox color="primary" checked={isItemSelected} />
                 </TableCell>
                 <TableCell scope="row">{row.original_name}</TableCell>
                 <TableCell>{row.count}</TableCell>

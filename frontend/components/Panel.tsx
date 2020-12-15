@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
-import { makeStyles, Paper, Card, CardContent } from "@material-ui/core";
-import ETKMap from "../components/Map/Map";
-import { useAppContext } from "../providers/AppContext";
+import { makeStyles, Card, CardContent } from "@material-ui/core";
+import ETKMap from "@/components/Map/Map";
+import { useAppContext } from "@/providers/AppContext";
 
 export type ETKPanelContext = {
   map: React.RefObject<ETKMap> | undefined;
@@ -26,15 +26,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ETKPanelPanels = {
-  start: dynamic(() => import("./Panel/Start/Index")),
-  import: dynamic(() => import("./Import/Panel/Index")),
-  newTree: dynamic(() => import("./Tree/Form")),
-  newIntervention: dynamic(() => import("./Interventions/Form")),
+  start: dynamic(() => import("@/components/Panel/Start/Index")),
+  import: dynamic(() => import("@/components/Import/Panel/Index")),
+  newTree: dynamic(() => import("@/components/Tree/Form")),
+  newIntervention: dynamic(() => import("@/components/Interventions/Form")),
 };
 
 const ETKPanel: React.FC<ETKPanelProps> = (props) => {
   const classes = useStyles();
-  const { user, isLoading } = useAppContext();
+  const { isLoading } = useAppContext();
   let panel = props.panel;
 
   if (!panel) {

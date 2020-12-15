@@ -50,7 +50,7 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
           setAnchorEl(e.currentTarget);
         }}
       >
-        <Avatar>
+        <Avatar style={{ height: 35, width: 35 }}>
           {user.full_name
             .split(" ")
             .slice(0, 2)

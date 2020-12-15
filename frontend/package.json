@@ -38,6 +38,7 @@
     "d3-time-format": "^3.0.0",
     "framer-motion": "^2.9.5",
     "fuse.js": "^6.4.3",
+    "fuse.js": "^6.4.3",
     "i18next": "^19.8.4",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",

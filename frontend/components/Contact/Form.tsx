@@ -1,8 +1,8 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
-import useETKForm from "../Form/useForm";
-import useEtkContactSchema from "./Schema";
+import useETKForm from "@/components/Form/useForm";
+import useEtkContactSchema from "@/components/Contact/Schema";
 import getConfig from "next/config";
 
 const { publicRuntimeConfig } = getConfig();

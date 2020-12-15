@@ -4,13 +4,10 @@ import {
   makeStyles,
   Button,
   Box,
-  IconButton,
-  Drawer,
-  withStyles,
   ButtonGroup,
   InputBase,
 } from "@material-ui/core";
-import { Search, Filter as FilterIcon } from "@material-ui/icons";
+import { Search } from "@material-ui/icons";
 import MapGL, {
   Source,
   Layer,
@@ -19,19 +16,19 @@ import MapGL, {
 } from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
-import { useTemplate } from "@/components/Template";
+import { useAppLayout } from "@/components/appLayout/Base";
 import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
 import { bbox } from "@turf/turf";
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Fuse from "fuse.js";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
-import MapToolbar, { TMapToolbarAction } from "@/components/Map/Toolbar";
+import { TMapToolbarAction } from "@/components/Map/Toolbar";
 import MapLayers from "@/components/Map/Layers";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
-import { fade } from "@material-ui/core/styles/colorManipulator";
+import AppLayoutCarto from "@/components/appLayout/Carto";
+import PanelStartGeneralInfo from "@/components/Panel/Start/GeneralInfo";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
@@ -49,29 +46,6 @@ const useStyles = makeStyles(
         top: 10,
         left: 0,
         width: "calc(100% - 50px)",
-      },
-      sidebar: {
-        position: "absolute",
-        top: 0,
-        right: 0,
-        height: "100%",
-      },
-      background: {
-        position: "absolute",
-        top: 0,
-        right: 0,
-        background: "#0D1821",
-        height: "100%",
-        width: "300px",
-      },
-      calendar: {
-        height: "100%",
-      },
-      mapSearchCity: {
-        position: "absolute",
-        top: "1rem",
-        right: "1rem",
-        width: "300px",
       },
       search: {
         position: "relative",
@@ -125,15 +99,6 @@ const useStyles = makeStyles(
           },
         },
       },
-      toolbarDrawerPaper: {
-        pointerEvents: "all",
-        minWidth: 200,
-        padding: "1rem",
-        backgroundColor: fade(palette.background.default, 0.6),
-        marginRight: 55,
-        height: "calc(100vh - 100px)",
-        marginTop: 100,
-      },
     };
   }
 );
@@ -141,18 +106,24 @@ const useStyles = makeStyles(
 const EditionPage = ({}) => {
   const classes = useStyles();
   const router = useRouter();
-  const { dialog } = useTemplate();
+  const { dialog } = useAppLayout();
   const { user } = useAppContext();
-  const mapRef = createRef<MapGL>();
   const { dark } = useThemeContext();
+  const [drawerLeftComponent, setDrawerLeftComponent] = useState(
+    <PanelStartGeneralInfo />
+  );
+  const [drawerRightComponent, setDrawerRightComponent] = useState(null);
+  const mapRef = createRef<MapGL>();
   const geolocateControlRef = createRef<GeolocateControl>();
-  const [firstLoad, setFirstLoad] = useLocalStorage("editor:firstLoad", true);
-  const [viewport, setViewport] = useLocalStorage("editor:viewport", {
+  const [firstLoad, setFirstLoad] = useLocalStorage(
+    "etk:editor:firstLoad",
+    true
+  );
+  const [viewport, setViewport] = useLocalStorage("etk:editor:viewport", {
     latitude: 46.7,
     longitude: 2.54,
     zoom: 5,
   });
-  const [openToolbarDrawer, setOpenToolbarDrawer] = useState(false);
   const [currentMode, setCurrentMode] = useState<string>("simple_select");
   const [mode, setMode] = useState<string>("simple_select");
   const [data, setData] = useState<any>({
@@ -180,8 +151,12 @@ const EditionPage = ({}) => {
 
   const fuse = new Fuse([], optionsFuse);
 
-  const getData = async (organizationId: number) => {
+  const getData = async (
+    organizationId: number,
+    fitBounds: boolean = false
+  ) => {
     const newData = await apiRest.organization.geojson(organizationId);
+
     fuse.setCollection(newData?.features);
     setData(newData);
   };
@@ -235,42 +210,40 @@ const EditionPage = ({}) => {
       apiRest.trees
         .get(user.currentOrganization.id, router.query.tree)
         .then((tree) => {
-          openDialog(tree.id);
           mapRef.current.getMap().flyTo({
             zoom: 20,
             center: [tree.x, tree.y],
           });
         });
     }
-  }, [router.query.tree]);
+  }, []);
 
-  const openDialog = (id) => {
-    dialog.current.open({
-      title: (
-        <Grid container alignItems="flex-end" justify="flex-end">
-          <Grid item xs>
-            {id}
-          </Grid>
-          <Grid item>
-            <IconButton
-              size="small"
-              onClick={() => {
-                dialog.current.close();
-              }}
-            >
-              <HighlightOffIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-      ),
-      content: <TreeSummary id={id} />,
-      isDraggable: true,
-      dialogProps: {
-        disableBackdropClick: true,
-        hideBackdrop: true,
-      },
-    });
+  const switchPanel = (panel) => {
+    switch (panel) {
+      case "import":
+        const Import = dynamic(() => import("@/components/Import/Panel/Index"));
+        setDrawerLeftComponent(
+          <Import
+            onFileImported={async () => {
+              getData(user.currentOrganization.id, true);
+            }}
+          />
+        );
+        break;
+      case "intervention":
+        const Intervention = dynamic(
+          () => import("@/components/Interventions/Form")
+        );
+        setDrawerLeftComponent(<Intervention map={mapRef.current.getMap()} />);
+        break;
+    }
   };
+
+  useEffect(() => {
+    if (!router.query.panel) return;
+
+    switchPanel(router.query.panel);
+  }, [router.query]);
 
   const onHover = (event) => {
     if (event.features.length > 0) {
@@ -293,7 +266,9 @@ const EditionPage = ({}) => {
     }
 
     if (event.features.length > 0) {
-      openDialog(event.features[0].properties.id);
+      setDrawerLeftComponent(
+        <TreeSummary id={event.features[0].properties.id} />
+      );
     }
   };
 
@@ -301,19 +276,7 @@ const EditionPage = ({}) => {
     setFilterQuery(event.target.value);
   };
 
-  const DarkButton = withStyles(
-    ({ direction, spacing, transitions, breakpoints, palette, shape }) => ({
-      root: {
-        color: "#fff",
-        backgroundColor: "#212121",
-        "&:hover": {
-          backgroundColor: "#313131",
-        },
-      },
-    })
-  )(Button);
-
-  const handleToolbarAction = (action: TMapToolbarAction) => {
+  const handleOnMapToolbarChange = (action: TMapToolbarAction) => {
     const map = mapRef.current.getMap();
 
     switch (action) {
@@ -322,7 +285,9 @@ const EditionPage = ({}) => {
       case "zoom_out":
         return map.setZoom(map.getZoom() - 1);
       case "toggle_layers":
-        setOpenToolbarDrawer(!openToolbarDrawer);
+        setDrawerRightComponent(
+          drawerRightComponent === null ? <MapLayers map={map} /> : null
+        );
         break;
       case "geolocate":
         return geolocateControlRef.current.getControl().trigger();
@@ -337,244 +302,236 @@ const EditionPage = ({}) => {
   };
 
   return (
-    <Grid className={classes.root} id="map-edition">
-      <MapGL
-        ref={mapRef}
-        style={{ width: "100%", height: "100%" }}
-        mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
-        latitude={viewport.latitude}
-        longitude={viewport.longitude}
-        zoom={viewport.zoom}
-        onViewportChange={setViewport}
-      >
-        <Source id="trees" type="geojson" data={data ? data : null} />
-        <Source
-          id="filteredTrees"
-          type="geojson"
-          data={flteredData ? flteredData : null}
-        />
-        <Layer
-          id="trees"
-          type="circle"
-          source="trees"
-          paint={{
-            "circle-color": [
-              "case",
-              ["boolean", ["feature-state", "click"], false],
-              "#076ee4",
-              "#ebb215",
-            ],
-            "circle-stroke-color": "#fff",
-            "circle-stroke-width": [
-              "case",
-              ["boolean", ["feature-state", "click"], false],
-              2,
-              0,
-            ],
-            "circle-radius": [
-              "case",
-              ["boolean", ["feature-state", "hover"], false],
-              12,
-              5,
-            ],
-            "circle-pitch-scale": "map",
-            "circle-opacity": [
-              "case",
-              ["boolean", ["feature-state", "hover"], false],
-              1,
-              0.8,
-            ],
-          }}
-          onHover={onHover}
-          onLeave={onLeave}
-          onClick={onClick}
-        />
-        <Layer
-          id="filteredTrees"
-          type="circle"
-          source="filteredTrees"
-          paint={{
-            "circle-color": [
-              "case",
-              ["boolean", ["feature-state", "click"], false],
-              "#076ee4",
-              "#6015eb",
-            ],
-            "circle-stroke-color": "#fff",
-            "circle-stroke-width": [
-              "case",
-              ["boolean", ["feature-state", "click"], false],
-              2,
-              0,
-            ],
-            "circle-radius": [
-              "case",
-              ["boolean", ["feature-state", "hover"], false],
-              12,
-              5,
-            ],
-            "circle-pitch-scale": "map",
-            "circle-opacity": [
-              "case",
-              ["boolean", ["feature-state", "hover"], false],
-              1,
-              0.8,
-            ],
-          }}
-          onHover={onHover}
-          onLeave={onLeave}
-          onClick={onClick}
-        />
-        {boxSelect && (
-          <Draw
-            // @ts-ignore
-            data={data}
-            mode={mode}
-            lineStringControl={false}
-            combineFeaturesControl={false}
-            uncombineFeaturesControl={false}
-            displayControlsDefault={false}
-            boxSelect={boxSelect}
-            onDrawCreate={async (item) => {
-              if (currentMode === "draw_point") {
-                const [x, y] = item.features[0].geometry.coordinates;
-                const newTree = {
-                  x: x,
-                  y: y,
-                  properties: {},
-                };
+    <AppLayoutCarto
+      drawerRightComponent={drawerRightComponent}
+      drawerLeftComponent={drawerLeftComponent}
+      onMapToolbarChange={(action) => handleOnMapToolbarChange(action)}
+    >
+      <Grid className={classes.root} id="map-edition">
+        {viewport && (
+          <MapGL
+            ref={mapRef}
+            style={{ width: "100%", height: "100%" }}
+            mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
+            latitude={viewport.latitude}
+            longitude={viewport.longitude}
+            zoom={viewport.zoom}
+            onViewportChange={setViewport}
+          >
+            <Source id="trees" type="geojson" data={data ? data : null} />
+            <Source
+              id="filteredTrees"
+              type="geojson"
+              data={flteredData ? flteredData : null}
+            />
+            <Layer
+              id="trees"
+              type="circle"
+              source="trees"
+              paint={{
+                "circle-color": [
+                  "case",
+                  ["boolean", ["feature-state", "click"], false],
+                  "#076ee4",
+                  "#ebb215",
+                ],
+                "circle-stroke-color": "#fff",
+                "circle-stroke-width": [
+                  "case",
+                  ["boolean", ["feature-state", "click"], false],
+                  2,
+                  0,
+                ],
+                "circle-radius": [
+                  "case",
+                  ["boolean", ["feature-state", "hover"], false],
+                  12,
+                  5,
+                ],
+                "circle-pitch-scale": "map",
+                "circle-opacity": [
+                  "case",
+                  ["boolean", ["feature-state", "hover"], false],
+                  1,
+                  0.8,
+                ],
+              }}
+              onHover={onHover}
+              onLeave={onLeave}
+              onClick={onClick}
+            />
+            <Layer
+              id="filteredTrees"
+              type="circle"
+              source="filteredTrees"
+              paint={{
+                "circle-color": [
+                  "case",
+                  ["boolean", ["feature-state", "click"], false],
+                  "#076ee4",
+                  "#6015eb",
+                ],
+                "circle-stroke-color": "#fff",
+                "circle-stroke-width": [
+                  "case",
+                  ["boolean", ["feature-state", "click"], false],
+                  2,
+                  0,
+                ],
+                "circle-radius": [
+                  "case",
+                  ["boolean", ["feature-state", "hover"], false],
+                  12,
+                  5,
+                ],
+                "circle-pitch-scale": "map",
+                "circle-opacity": [
+                  "case",
+                  ["boolean", ["feature-state", "hover"], false],
+                  1,
+                  0.8,
+                ],
+              }}
+              onHover={onHover}
+              onLeave={onLeave}
+              onClick={onClick}
+            />
+            {boxSelect && (
+              <Draw
+                // @ts-ignore
+                data={data}
+                mode={mode}
+                lineStringControl={false}
+                combineFeaturesControl={false}
+                uncombineFeaturesControl={false}
+                displayControlsDefault={false}
+                boxSelect={boxSelect}
+                onDrawCreate={async (item) => {
+                  if (currentMode === "draw_point") {
+                    const [x, y] = item.features[0].geometry.coordinates;
+                    const newTree = {
+                      x: x,
+                      y: y,
+                      properties: {},
+                    };
 
-                await apiRest.trees.post(user.currentOrganization.id, newTree);
-                await getData(user.currentOrganization.id);
-              }
-            }}
-            onDrawDelete={async (selection) => {
-              const ids = selection.features.map(
-                (feature) => feature.properties.id
-              );
+                    await apiRest.trees.post(
+                      user.currentOrganization.id,
+                      newTree
+                    );
+                    await getData(user.currentOrganization.id);
+                  }
+                }}
+                onDrawDelete={async (selection) => {
+                  const ids = selection.features.map(
+                    (feature) => feature.properties.id
+                  );
 
-              await apiRest.trees.bulkDelete(
-                user.currentOrganization.id,
-                JSON.stringify(ids)
-              );
-            }}
-            onChange={(newData) => {
-              setData(newData);
-            }}
-            onDrawModeChange={(drawMode) => {
-              setMode(drawMode.mode);
+                  await apiRest.trees.bulkDelete(
+                    user.currentOrganization.id,
+                    JSON.stringify(ids)
+                  );
+                }}
+                onChange={(newData) => {
+                  setData(newData);
+                }}
+                onDrawModeChange={(drawMode) => {
+                  setMode(drawMode.mode);
 
-              if (currentMode !== "simple_select") {
-                setTimeout(() => {
-                  setMode(currentMode);
-                }, 200);
-              }
-            }}
-          />
+                  if (currentMode !== "simple_select") {
+                    setTimeout(() => {
+                      setMode(currentMode);
+                    }, 200);
+                  }
+                }}
+              />
+            )}
+            {hoveredTreeId && (
+              <FeatureState
+                id={hoveredTreeId}
+                source="trees"
+                state={{ hover: true }}
+              />
+            )}
+            <GeolocateControl ref={geolocateControlRef} />
+          </MapGL>
         )}
-        {hoveredTreeId && (
-          <FeatureState
-            id={hoveredTreeId}
-            source="trees"
-            state={{ hover: true }}
-          />
-        )}
-        <GeolocateControl ref={geolocateControlRef} />
-      </MapGL>
-      <Drawer
-        open={openToolbarDrawer}
-        hideBackdrop
-        anchor="right"
-        variant="temporary"
-        ModalProps={{
-          style: {
-            pointerEvents: "none",
-          },
-        }}
-        style={{
-          marginRight: 55,
-          marginTop: 100,
-          height: "calc(100vh - 100px)",
-        }}
-        PaperProps={{
-          elevation: 0,
-          className: classes.toolbarDrawerPaper,
-        }}
-      >
-        <MapLayers map={mapRef} />
-      </Drawer>
-      <MapToolbar onChange={handleToolbarAction} />
-      <Box className={classes.toolbar} p={1}>
-        <Grid container spacing={2} justify="center" alignItems="center">
-          <Grid item xs></Grid>
-          <Grid item>
-            <ButtonGroup>
-              <DarkButton
-                onClick={() => {
-                  setBoxSelect(false);
-                }}
+        <Box className={classes.toolbar} p={1}>
+          <Grid container spacing={2} justify="center" alignItems="center">
+            <Grid item xs></Grid>
+            <Grid item>
+              <ButtonGroup variant="contained">
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    setBoxSelect(false);
+                  }}
+                >
+                  Information
+                </Button>
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    setBoxSelect(true);
+                    setMode("simple_select");
+                    setCurrentMode("simple_select");
+                  }}
+                >
+                  Selection
+                </Button>
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    setBoxSelect(true);
+                    setMode("draw_point");
+                    setCurrentMode("draw_point");
+                  }}
+                >
+                  + Arbre
+                </Button>
+                <Button
+                  color="secondary"
+                  disabled
+                  onClick={() => {
+                    setBoxSelect(true);
+                    setMode("draw_polygon");
+                    setCurrentMode("draw_polygon");
+                  }}
+                >
+                  + Station
+                </Button>
+              </ButtonGroup>
+            </Grid>
+            <Grid item xs></Grid>
+            <Grid item>
+              <Grid
+                container
+                direction="column"
+                justify="flex-start"
+                alignItems="flex-start"
               >
-                Information
-              </DarkButton>
-              <DarkButton
-                onClick={() => {
-                  setBoxSelect(true);
-                  setMode("simple_select");
-                  setCurrentMode("simple_select");
-                }}
-              >
-                Selection
-              </DarkButton>
-              <DarkButton
-                onClick={() => {
-                  setBoxSelect(true);
-                  setMode("draw_point");
-                  setCurrentMode("draw_point");
-                }}
-              >
-                + Arbre
-              </DarkButton>
-              <DarkButton
-                disabled
-                onClick={() => {
-                  setBoxSelect(true);
-                  setMode("draw_polygon");
-                  setCurrentMode("draw_polygon");
-                }}
-              >
-                + Station
-              </DarkButton>
-            </ButtonGroup>
-          </Grid>
-          <Grid item xs></Grid>
-          <Grid item>
-            <Grid
-              container
-              direction="column"
-              justify="flex-start"
-              alignItems="flex-start"
-            >
-              <Grid item>
-                <div className={classes.search}>
-                  <div className={classes.searchIconWrapper}>
-                    <Search className={classes.searchIcon} />
+                <Grid item>
+                  <div className={classes.search}>
+                    <div className={classes.searchIconWrapper}>
+                      <Search className={classes.searchIcon} />
+                    </div>
+                    <InputBase
+                      placeholder="Filter"
+                      value={filterQuery}
+                      onChange={handleFilterChange}
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }}
+                    />
                   </div>
-                  <InputBase
-                    placeholder="Filter"
-                    value={filterQuery}
-                    onChange={handleFilterChange}
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                  />
-                </div>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Box>
-    </Grid>
+        </Box>
+      </Grid>
+    </AppLayoutCarto>
   );
 };
 

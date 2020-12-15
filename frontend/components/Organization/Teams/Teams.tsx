@@ -20,7 +20,7 @@ import {
 } from "@material-ui/icons";
 import { useRouter } from "next/router";
 
-import { useTemplate } from "@/components/Template";
+import { useAppLayout } from "@/components/appLayout/Base";
 import ETKFormOrganization, {
   ETKFormOrganizationActions,
 } from "@/components/Organization/Form/Form";
@@ -73,7 +73,7 @@ const actionOptions = [
 
 const Teams: FC<TeamsProps> = (props) => {
   const classes = useStyles();
-  const { dialog, theme } = useTemplate();
+  const { dialog, theme } = useAppLayout();
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);

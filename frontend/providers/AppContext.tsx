@@ -7,7 +7,7 @@ const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useLocalStorage<IUser>("user", null);
+  const [user, setUser] = useLocalStorage<IUser>("user");
   const router = useRouter();
   const validRoutes = ["/", "/signin", "/404", "/500"];
 

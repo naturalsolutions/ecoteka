@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import { Button, ButtonProps } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { useTemplate } from "../Template";
-import ETKFormSignIn, { ETKFormSignInActions } from "./Form";
+import { useAppLayout } from "@/components/appLayout/Base";
+import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
 
 interface ETKFormSignInProps extends ButtonProps {
   open?: boolean;
@@ -15,7 +15,7 @@ const defaultProps: ETKFormSignInProps = {
 
 const ETKSignInButton: React.FC<ETKFormSignInProps> = (props) => {
   const { t } = useTranslation("components");
-  const { dialog } = useTemplate();
+  const { dialog } = useAppLayout();
   const formRef = useRef<ETKFormSignInActions>();
 
   const { dialogTitle, open, ...buttonProps } = props;

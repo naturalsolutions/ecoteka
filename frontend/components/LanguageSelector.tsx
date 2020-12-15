@@ -14,6 +14,8 @@ const ETKLanguageSelector: FC = () => {
   return (
     <FormControl>
       <Button
+        variant="outlined"
+        size="small"
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={(e) => setAnchorEl(e.currentTarget)}

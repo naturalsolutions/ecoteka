@@ -4,8 +4,7 @@ import { useDrag } from "react-dnd";
 import { ItemTypes } from "@/components/Interventions/Calendar/ItemTypes";
 import { TIntervention } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
-import { useTemplate } from "@/components/Template";
-
+import { useAppLayout } from "@/components/appLayout/Base";
 export interface CalendarTodoInterventionProps {
   todoIntervention: TIntervention;
 }
@@ -21,7 +20,7 @@ const useStyles = makeStyles(() => ({
 const CalendarTodoIntervention: React.FC<CalendarTodoInterventionProps> = (
   props
 ) => {
-  const { dialog } = useTemplate();
+  const { dialog } = useAppLayout();
   const [collectedProps, drag] = useDrag({
     item: { type: ItemTypes.BOX, id: props.todoIntervention.id },
     collect: (monitor) => ({

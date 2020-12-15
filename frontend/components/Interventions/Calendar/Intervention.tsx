@@ -5,7 +5,7 @@ import {
 } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
 import { makeStyles, Grid, Button } from "@material-ui/core";
-import { useTemplate } from "@/components/Template";
+import { useAppLayout } from "@/components/appLayout/Base";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import useForm from "@/components/Form/useForm";
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 
 const CalendarIntervention: React.FC<CalendarInterventionProps> = (props) => {
   const classes = useStyles();
-  const { dialog } = useTemplate();
+  const { dialog } = useAppLayout();
   const router = useRouter();
   const { t } = useTranslation(["common", "components"]);
   const backgroundColor =

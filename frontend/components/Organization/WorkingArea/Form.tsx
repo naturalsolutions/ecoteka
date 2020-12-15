@@ -11,7 +11,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { apiRest } from "@/lib/api";
 import { IOrganization } from "@/index.d";
 import { DropzoneArea } from "material-ui-dropzone";
-import { useTemplate } from "@/components/Template";
+import { useAppLayout } from "@/components/appLayout/Base";
 import { useAppContext } from "@/providers/AppContext";
 
 export type ETKFormWorkingAreaActions = {
@@ -67,7 +67,7 @@ const ETKFormWorkingArea = forwardRef<
   const [inProgress, setInProgress] = useState(false);
   const [xhr, setXHR] = useState(null);
   const { user, setUser } = useAppContext();
-  const { snackbar } = useTemplate();
+  const { snackbar } = useAppLayout();
 
   const { t } = useTranslation("components");
   let isOk = false;
