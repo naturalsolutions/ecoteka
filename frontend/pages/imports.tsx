@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-
-import Template from "../components/Template";
-import ETKImportHistory from "../components/Import/History/Index";
-import { useAppContext } from "../providers/AppContext";
-import { apiRest } from "../lib/api";
+import ETKImportHistory from "@/components/Import/History/Index";
+import { useAppContext } from "@/providers/AppContext";
+import { apiRest } from "@/lib/api";
+import AppLayoutGeneral from "@/components/appLayout/General";
 
 export default function ImportsPage() {
   const { user, isLoading } = useAppContext();
-  const router = useRouter();
   const [rows, setRows] = useState([]);
 
   const onDelete = async (selected) => {
@@ -33,12 +30,14 @@ export default function ImportsPage() {
   }
 
   useEffect(() => {
-    fetchData(user.currentOrganization.id);
-  }, [user.currentOrganization.id]);
+    if (user) {
+      fetchData(user.currentOrganization.id);
+    }
+  }, [user]);
 
   return (
-    <Template>
+    <AppLayoutGeneral>
       <ETKImportHistory rows={rows} onDelete={onDelete} onImport={onImport} />
-    </Template>
+    </AppLayoutGeneral>
   );
 }

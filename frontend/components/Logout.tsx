@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { Button, Grid, Box, Typography } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
-import { useAppContext } from "../providers/AppContext";
-import { apiRest } from "../lib/api";
+import { useAppContext } from "@/providers/AppContext";
+import { apiRest } from "@/lib/api";
 import { useTranslation } from "react-i18next";
-import { useTemplate } from "./Template";
+import { useAppLayout } from "@/components/appLayout/Base";
 
 export interface ETKLogoutProps {
   buttonProps?: any;
@@ -13,7 +13,7 @@ export interface ETKLogoutProps {
 
 const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
   const { t } = useTranslation("components");
-  const { dialog } = useTemplate();
+  const { dialog } = useAppLayout();
   const { setUser } = useAppContext();
   const router = useRouter();
 

@@ -5,11 +5,13 @@ import Map from "@/components/Map/Map";
 import ETKMap from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
 import { makeStyles } from "@material-ui/core/styles";
-import { useTemplate } from "@/components/Template";
-import ETKFormOrganization, { ETKFormOrganizationActions } from "../Form/Form";
+import { useAppLayout } from "@/components/appLayout/Base";
+import ETKFormOrganization, {
+  ETKFormOrganizationActions,
+} from "@/components/Organization/Form/Form";
 import ETKFormWorkingArea, {
   ETKFormWorkingAreaActions,
-} from "../WorkingArea/Form";
+} from "@/components/Organization/WorkingArea/Form";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryCache } from "react-query";
 import { bbox } from "@turf/turf";
@@ -26,7 +28,7 @@ interface IGeneralInfoTab {
 
 const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const classes = useStyles();
-  const { dialog, snackbar } = useTemplate();
+  const { dialog, snackbar } = useAppLayout();
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);

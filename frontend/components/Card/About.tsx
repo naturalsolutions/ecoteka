@@ -4,11 +4,10 @@ import {
   Card,
   CardContent,
   Typography,
-  Button,
   Grid,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import ETKContactButton from "../Contact/Button";
+import ETKContactButton from "@/components/Contact/Button";
 import Hidden from "@material-ui/core/Hidden";
 
 export interface ETKCardAboutProps {

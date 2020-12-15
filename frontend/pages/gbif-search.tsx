@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import { Nature as NatureIcon, Link as LinkIcon } from "@material-ui/icons";
 import useAPI from "@/lib/useApi";
+import AppLayoutGeneral from "@/components/appLayout/General";
 
 export interface ETKGBIFSearchProps {}
 
@@ -64,78 +65,80 @@ const ETKGBIFSearch: React.FC<ETKGBIFSearchProps> = (props) => {
   };
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={6}>
-        <Box p={4}>
-          <Paper elevation={3}>
-            <Box p={4}>
-              <Typography variant="h6" style={{ marginBottom: "1.5rem" }}>
-                ⚙ Search inpüt- useDebouñce()
-              </Typography>
-              <TextField
-                label="Recherche"
-                placeholder="Rechercher des plantes sur GBIF"
-                variant="outlined"
-                value={query}
-                onChange={handleChange}
-                style={{
-                  width: "100%",
-                }}
-              />
-              <List style={{ maxHeight: "66vh", overflow: "auto" }}>
-                {taxa.length > 0 &&
-                  taxa.map((taxon) => {
-                    return (
-                      <ListItem key={taxon.key}>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <NatureIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={taxon.canonicalName}
-                          secondary={taxon.family}
-                        />
-                        <ListItemSecondaryAction>
-                          <IconButton
-                            href={`https://www.gbif.org/species/${taxon.key}`}
-                            target="_blank"
-                            edge="end"
-                            aria-label="delete"
-                          >
-                            <LinkIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    );
-                  })}
-              </List>
-            </Box>
-          </Paper>
-        </Box>
+    <AppLayoutGeneral>
+      <Grid container spacing={3}>
+        <Grid item xs={6}>
+          <Box p={4}>
+            <Paper elevation={3}>
+              <Box p={4}>
+                <Typography variant="h6" style={{ marginBottom: "1.5rem" }}>
+                  ⚙ Search inpüt- useDebouñce()
+                </Typography>
+                <TextField
+                  label="Recherche"
+                  placeholder="Rechercher des plantes sur GBIF"
+                  variant="outlined"
+                  value={query}
+                  onChange={handleChange}
+                  style={{
+                    width: "100%",
+                  }}
+                />
+                <List style={{ maxHeight: "66vh", overflow: "auto" }}>
+                  {taxa.length > 0 &&
+                    taxa.map((taxon) => {
+                      return (
+                        <ListItem key={taxon.key}>
+                          <ListItemAvatar>
+                            <Avatar>
+                              <NatureIcon />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={taxon.canonicalName}
+                            secondary={taxon.family}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              href={`https://www.gbif.org/species/${taxon.key}`}
+                              target="_blank"
+                              edge="end"
+                              aria-label="delete"
+                            >
+                              <LinkIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      );
+                    })}
+                </List>
+              </Box>
+            </Paper>
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Box p={4}>
+            <Paper elevation={3}>
+              <Box p={4}>
+                <Typography variant="h6" style={{ marginBottom: "1.5rem" }}>
+                  ⚙ Search inpüt- useAutocomplete()
+                </Typography>
+                <TextField
+                  label="Autocomplete"
+                  placeholder="Rechercher des plantes sur GBIF"
+                  variant="outlined"
+                  value={query}
+                  onChange={handleChange}
+                  style={{
+                    width: "100%",
+                  }}
+                />
+              </Box>
+            </Paper>
+          </Box>
+        </Grid>
       </Grid>
-      <Grid item xs={6}>
-        <Box p={4}>
-          <Paper elevation={3}>
-            <Box p={4}>
-              <Typography variant="h6" style={{ marginBottom: "1.5rem" }}>
-                ⚙ Search inpüt- useAutocomplete()
-              </Typography>
-              <TextField
-                label="Autocomplete"
-                placeholder="Rechercher des plantes sur GBIF"
-                variant="outlined"
-                value={query}
-                onChange={handleChange}
-                style={{
-                  width: "100%",
-                }}
-              />
-            </Box>
-          </Paper>
-        </Box>
-      </Grid>
-    </Grid>
+    </AppLayoutGeneral>
   );
 };
 

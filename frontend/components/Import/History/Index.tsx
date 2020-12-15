@@ -3,10 +3,10 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Button, Paper, Box } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
-import ETKImportHistoryTable from "./Table";
-import ETKImportHistoryEmpty from "./Empty";
-import { useTemplate } from "../../Template";
-import Geofile from "../../Geofile";
+import ETKImportHistoryTable from "@/components/Import/History/Table";
+import ETKImportHistoryEmpty from "@/components/Import/History/Empty";
+import { useAppLayout } from "@/components/appLayout/Base";
+import Geofile from "@/components/Geofile";
 import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportHistoryIndexProps {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(() =>
 const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation("components");
-  const { dialog } = useTemplate();
+  const { dialog } = useAppLayout();
   const [selected, setSelected] = useState([]);
   const { user } = useAppContext();
 

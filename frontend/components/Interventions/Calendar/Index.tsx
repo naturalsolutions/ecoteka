@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -68,16 +68,20 @@ const Calendar: React.FC<CalendarProps> = (props) => {
     const months = [];
 
     for (let i = 0; i < 12; i++) {
+      const interventions = props.interventions
+        ? props.interventions
+            .filter((intervention) =>
+              filters.includes(intervention.intervention_type)
+            )
+            .filter(filterInterventionMonth(i))
+        : [];
+
       months.push(
         <Grid key={`month-${i}`} item xs={3}>
           <Month
             month={i}
             year={props.year}
-            interventions={props.interventions
-              .filter((intervention) =>
-                filters.includes(intervention.intervention_type)
-              )
-              .filter(filterInterventionMonth(i))}
+            interventions={interventions}
             onInterventionPlan={props.onInterventionPlan}
           />
         </Grid>
@@ -88,12 +92,12 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   };
 
   const handleNewIntervention = () => {
-    router.push("/?panel=newIntervention");
+    router.push("/edition/?panel=intervention");
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Paper square className={classes.root}>
+      <Paper square className={classes.root} elevation={0}>
         <Grid container>
           <Grid item>
             <Card
@@ -126,15 +130,16 @@ const Calendar: React.FC<CalendarProps> = (props) => {
             </Card>
           </Grid>
           <Grid item xs>
-            <Card style={{ backgroundColor: "transparent" }}>
+            <Card elevation={0} style={{ backgroundColor: "transparent" }}>
               <CardContent>
                 <Header year={props.year} onYearChange={props.onYearChange} />
-                <Divider />
+                <Divider style={{ marginBottom: "1rem" }} />
                 <Grid
                   container
                   direction="row"
                   justify="flex-start"
                   alignItems="stretch"
+                  spacing={2}
                 >
                   {renderMonths()}
                 </Grid>

@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import Calendar from "@/components/Interventions/Calendar/Index";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
+import AppLayoutGeneral from "@/components/appLayout/General";
 
 const initialYear = new Date().getFullYear();
 
@@ -27,12 +28,14 @@ const CalendarPage: FC = ({}) => {
   }, [user, year]);
 
   return (
-    <Calendar
-      interventions={interventions}
-      year={year}
-      onYearChange={handleYearChange}
-      onInterventionPlan={() => getData(user.currentOrganization.id, year)}
-    />
+    <AppLayoutGeneral>
+      <Calendar
+        interventions={interventions}
+        year={year}
+        onYearChange={handleYearChange}
+        onInterventionPlan={() => getData(user.currentOrganization.id, year)}
+      />
+    </AppLayoutGeneral>
   );
 };
 

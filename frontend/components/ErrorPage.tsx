@@ -19,7 +19,7 @@ const defaultProps: ETKErrorPageProps = {
 const ETKErrorPage: React.FC<ETKErrorPageProps> = (props) => {
   const useStyles = makeStyles((theme) => ({
     root: {
-      height: "100vh",
+      height: "calc(100vh - 48px)",
       width: "100vw",
       background: `no-repeat url('/assets/background_${props.error}.svg')`,
       backgroundSize: "cover",

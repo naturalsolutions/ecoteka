@@ -1,12 +1,12 @@
 import { FC, useState, useEffect } from "react";
 import { apiRest } from "@/lib/api";
-import { Button, Typography, Grid, makeStyles } from "@material-ui/core";
-import InterventionsTable from "../../Interventions/InterventionsTable";
+import { Button, Grid, makeStyles } from "@material-ui/core";
+import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { useAppContext } from "@/providers/AppContext";
 import TreeExpanded from "@/components/Tree/Infos/Expanded";
-import { useTemplate } from "@/components/Template";
+import { useAppLayout } from "@/components/appLayout/Base";
 import { TIntervention } from "@/components/Interventions/Schema";
-import TreeInfosProperties from "./Properties";
+import TreeInfosProperties from "@/components/Tree/Infos/Properties";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -19,7 +19,7 @@ const Summary: FC<{ id: number }> = ({ id }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [tree, setTree] = useState<any>({});
   const [interventions, setInterventions] = useState<TIntervention[]>();
-  const { dialog } = useTemplate();
+  const { dialog } = useAppLayout();
   const classes = useStyles();
 
   const getTree = async (id) => {
@@ -57,18 +57,14 @@ const Summary: FC<{ id: number }> = ({ id }) => {
         )}
       </Grid>
       <Grid item>
-        <Grid container>
-          <Grid item xs>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="primary"
-              onClick={() => setIsExpanded(true)}
-            >
-              Plus de détails
-            </Button>
-          </Grid>
-        </Grid>
+        <Button
+          fullWidth
+          variant="outlined"
+          color="primary"
+          onClick={() => setIsExpanded(true)}
+        >
+          Plus de détails
+        </Button>
       </Grid>
       <TreeExpanded
         open={isExpanded}
