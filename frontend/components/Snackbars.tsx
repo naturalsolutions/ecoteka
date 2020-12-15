@@ -19,6 +19,7 @@ export interface SnackbarMessage {
   anchorOrigin?: SnackbarOrigin;
   severity?: Color;
   key?: number;
+  autoHideDuration?: number;
 }
 
 export interface State {
@@ -76,6 +77,7 @@ export const Snackbars = forwardRef((props, ref) => {
             openProps.anchorOrigin
           ),
           severity: openProps.severity || "info",
+          autoHideDuration: openProps.autoHideDuration,
         },
       ]);
     },
@@ -87,7 +89,7 @@ export const Snackbars = forwardRef((props, ref) => {
       key={messageInfo ? messageInfo.key : undefined}
       anchorOrigin={messageInfo ? messageInfo.anchorOrigin : undefined}
       open={open}
-      autoHideDuration={6000}
+      autoHideDuration={messageInfo ? messageInfo.autoHideDuration : 6000}
       onClose={handleClose}
       onExited={handleExited}
       action={
