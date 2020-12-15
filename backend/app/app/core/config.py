@@ -85,6 +85,7 @@ class Settings(BaseSettings):
     USERS_OPEN_REGISTRATION: bool = True
     ORGANIZATION: str = "Ecoteka"
 
+    MAX_UPLOAD_IMAGE_SIZE: int = 2097152
     UPLOADED_FILES_FOLDER: Path = Path("/app/app/uploaded_files")
     TILES_FOLDER: Path = Path("/app/tiles")
     TILES_SERVER: str = "https://dev.ecoteka.org/tiles"

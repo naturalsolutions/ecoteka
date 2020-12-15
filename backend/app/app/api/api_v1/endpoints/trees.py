@@ -1,17 +1,19 @@
-import logging
+import io
+import os
+import shutil
 from typing import Any, List, Union
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
+from starlette.requests import Request
+from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import set_policies, authorization, get_current_active_user
+from app.core import set_policies, authorization, get_current_active_user, settings
 from app.worker import import_geofile_task, create_mbtiles_task
 from fastapi.responses import StreamingResponse
 import geopandas as gpd
-import tempfile
-import io
-import fiona.io
-
+import imghdr
+import aiofiles
 
 router = APIRouter()
 policies = {
@@ -23,18 +25,16 @@ policies = {
     "trees:import": ["owner", "manager", "contributor"],
     "trees:export": ["owner", "manager", "contributor"],
     "trees:bulk_delete": ["owner", "manager", "contributor"],
+    "trees:image": ["owner", "manager", "contributor"],
 }
 set_policies(policies)
 
-
 @router.post("/import", response_model=schemas.GeoFile)
 def trees_import(
-    organization_id: int,
     *,
     auth=Depends(authorization("trees:import")),
     db: Session = Depends(get_db),
     name: str,
-    current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """
     import trees from geofile
@@ -67,12 +67,10 @@ def trees_import(
 
 @router.get("/export/")
 def trees_export(
-    organization_id: int,
     format: str = "geojson",
     auth=Depends(authorization("trees:export")),
     db: Session = Depends(get_db),
 ) -> Any:
-    """Export the trees from one organization"""
     sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_id}"
     df = gpd.read_postgis(sql, db.bind)
 
@@ -201,6 +199,62 @@ def delete(
     create_mbtiles_task.delay(organization_id)
 
     return response
+
+@router.post("/{tree_id}/images")
+def upload_images(
+    tree_id: int,
+    organization_id: int,
+    auth=Depends(authorization("tree:upload_images")),
+    images: List[UploadFile] = File(...)
+):
+    """
+    upload pictures to a tree
+    """
+    upload_folder: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}"
+
+    if os.path.exists(upload_folder) is False:
+        os.makedirs(upload_folder)
+
+    total = 0
+
+    for image in images:
+        with open(f"{upload_folder}/{image.filename}", "wb") as buffer:
+            if imghdr.what(image.file) in ['png', 'gif', 'jpeg']:
+                shutil.copyfileobj(image.file, buffer)
+                total+=1
+
+    return HTMLResponse(status_code=200, content=f"{total} images uploaded")
+
+@router.get("/{tree_id}/images")
+def get_images(
+    tree_id: int,
+    organization_id: int,
+    auth=Depends(authorization("tree:upload_images")),
+):
+    """
+    get all images from a tree
+    """
+    upload_folder: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}"
+    f = []
+
+    for (dirpath, dirnames, filenames) in os.walk(upload_folder):
+        for filename in filenames:
+            f.append(f"{settings.EXTERNAL_PATH}/organization/{organization_id}/trees/{tree_id}/images/{filename}")
+
+    return f
+
+@router.get("/{tree_id}/images/{image}")
+def get_image(
+    image: str,
+    tree_id: int,
+    organization_id: int,
+):
+    """
+    get one image
+    """
+    upload_folder: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}"
+    
+    return FileResponse(f"{upload_folder}/{image}")
 
 
 @router.get("/{tree_id}/interventions", response_model=List[schemas.Intervention])

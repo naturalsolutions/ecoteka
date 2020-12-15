@@ -2,10 +2,8 @@ from app.core.celery_app import celery_app
 from app.core.config import settings
 from app.tasks.import_geofile import import_geofile
 from app.tasks.create_mbtiles import create_mbtiles
-from fastapi import Depends
 from app.api import deps
-from app import crud, models
-import logging
+from app import crud
 from app.utils import send_new_registration_email
 from app.utils import send_new_registration_link_email
 from app.utils import send_new_contact_notification
