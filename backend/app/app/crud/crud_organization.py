@@ -130,5 +130,4 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
 
         return members
 
-
 organization = CRUDOrganization(Organization)

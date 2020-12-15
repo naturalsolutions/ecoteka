@@ -14,7 +14,6 @@ import { LegendOrdinal } from "@visx/legend";
 import { localPoint } from "@visx/event";
 import { Box } from "@material-ui/core";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
-import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 
 type InterventionsCategories = "Élaguage" | "Abattage" | "Dessouchage";
 
@@ -34,7 +33,7 @@ export type ResponsiveBandScaleStackedBars = {
   height: number;
   margin?: { top: number; right: number; bottom: number; left: number };
   events?: boolean;
-  data: any;
+  data: [];
   isXScaleTimeFormat?: boolean;
   xScaleKey: string;
   yScaleUnit?: string;
@@ -65,7 +64,6 @@ export default function ResponsiveBandScaleStackedBars({
   colorScheme,
   yScaleUnit,
 }: ResponsiveBandScaleStackedBars) {
-  const { theme } = useThemeContext();
   const chartData = data.slice(0, 12);
 
   const categories = Object.keys(chartData[0]).filter((d) => d !== xScaleKey);
@@ -126,20 +124,6 @@ export default function ResponsiveBandScaleStackedBars({
   console.log("interventionsNestedCount", interventionsNestedCount);
   console.groupEnd();
 
-  const flattenObject = (obj) => {
-    const flattened = {};
-
-    Object.keys(obj).forEach((key) => {
-      if (typeof obj[key] === "object" && obj[key] !== null) {
-        Object.assign(flattened, flattenObject(obj[key]));
-      } else {
-        flattened[key] = obj[key];
-      }
-    });
-
-    return flattened;
-  };
-  console.log(flattenObject(interventionsNestedCostsSum));
   // accessors
   const getDate = (d: any) => d[`${xScaleKey}`];
 
@@ -192,7 +176,7 @@ export default function ResponsiveBandScaleStackedBars({
                 y={0}
                 width={width}
                 height={height}
-                fill={theme.palette.background.default}
+                fill={background}
                 rx={14}
               />
               <Grid

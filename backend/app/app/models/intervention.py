@@ -18,7 +18,7 @@ class Intervention(Base):
     id = Column(Integer, primary_key=True, index=True)
     organization_id = Column(Integer, ForeignKey("organization.id"))
     intervention_type = Column(String)
-    tree_id = Column(Integer)
+    tree_id = Column(Integer, ForeignKey("tree.id"))
     intervenant = Column(String)
     intervention_start_date = Column(DateTime)
     intervention_end_date = Column(DateTime)
@@ -28,3 +28,4 @@ class Intervention(Base):
     required_documents = Column(JSONB)
     required_material = Column(JSONB)
     properties = Column(JSONB)
+    tree = relationship("Tree", back_populates="interventions")

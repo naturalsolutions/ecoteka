@@ -14,6 +14,7 @@ class Tree(Base):
     organization_id = Column(Integer, ForeignKey("organization.id"))
     geom = Column("geom", Geometry("POINT"))
     properties = Column(JSONB, nullable=True)
+    interventions = relationship("Intervention", back_populates="tree")
 
     def to_xy(self):
         coords = to_shape(self.geom)

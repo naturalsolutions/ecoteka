@@ -38,6 +38,7 @@ from .organization import (
     OrganizationCreate,
     OrganizationUpdate,
     OrganizationCurrentUser,
+    OrganizationMetrics,
 )
 from .coordinate import Coordinate
 from .intervention import Intervention, InterventionCreate, InterventionUpdate
@@ -63,6 +64,7 @@ __all__ = [
     "OrganizationCreate",
     "OrganizationCurrentUser",
     "OrganizationUpdate",
+    "OrganizationMetrics",
     "RefreshToken",
     "RefreshTokenIn",
     "RegistrationLinkCreate",
