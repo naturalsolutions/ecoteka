@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { TIntervention } from "./Schema";
+import { TIntervention } from "@/components/Interventions/Schema";
 import { useRouter } from "next/router";
 
 const InterventionsTable: FC<{
@@ -35,19 +35,17 @@ const InterventionsTable: FC<{
     <TableContainer component={Paper}>
       <Table size="small">
         <caption>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Button
-                size="small"
-                onClick={() => {
-                  onNewIntervention();
-                  router.push(`/?panel=newIntervention&tree=${tree.id}`);
-                }}
-              >
-                Demander une intervention
-              </Button>
-            </Grid>
-          </Grid>
+          <Button
+            fullWidth
+            size="small"
+            variant="contained"
+            onClick={() => {
+              onNewIntervention();
+              router.push(`/edition/?panel=intervention&tree=${tree.id}`);
+            }}
+          >
+            Demander une intervention
+          </Button>
         </caption>
         <TableHead>
           <TableRow>

@@ -71,8 +71,8 @@ const MapToolbar: FC<IMapToolbarProps> = ({ onChange }) => {
         <Divider />
       </Grid>
       <Grid item>
-        <IconButton>
-          <SearchIcon onClick={() => handleActionClick("search")} />
+        <IconButton onClick={() => handleActionClick("search")}>
+          <SearchIcon />
         </IconButton>
       </Grid>
       <Grid item>

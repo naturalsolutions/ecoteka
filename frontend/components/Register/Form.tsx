@@ -1,9 +1,9 @@
 import React, { forwardRef, useImperativeHandle } from "react";
-import useEtkRegisterSchema from "./Schema";
-import useETKForm from "../Form/useForm";
+import useEtkRegisterSchema from "@/components/Register/Schema";
+import useETKForm from "@/components/Form/useForm";
 import { Grid } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import { apiRest } from "../../lib/api";
+import { apiRest } from "@/lib/api";
 
 export type ETKFormRegisterActions = {
   submit: () => Promise<boolean>;

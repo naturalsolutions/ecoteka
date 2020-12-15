@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { apiRest } from "../lib/api.js";
-import { useAppContext } from "../providers/AppContext";
-import ETKTemplate from "../components/Template";
-import ETKSigninButton from "../components/SignIn/Button";
-import ETKRegistrationLinkConfirmation from "../components/RegistrationLink/Confirmation";
+import { apiRest } from "@/lib/api.js";
+import { useAppContext } from "@/providers/AppContext";
+import ETKSigninButton from "@/components/SignIn/Button";
+import ETKRegistrationLinkConfirmation from "@/components/RegistrationLink/Confirmation";
+import AppLayoutGeneral from "@/components/appLayout/General.jsx";
 
 export default function RegistrationLinkPage() {
   const router = useRouter();
@@ -44,10 +44,10 @@ export default function RegistrationLinkPage() {
   );
 
   return (
-    <ETKTemplate>
+    <AppLayoutGeneral>
       {isLoading && <div>loading...</div>}
       {!isLoading && !user && !errorContent.length && signIn}
       {(user || errorContent.length > 0) && confirmation}
-    </ETKTemplate>
+    </AppLayoutGeneral>
   );
 }

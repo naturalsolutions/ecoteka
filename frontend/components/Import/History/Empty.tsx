@@ -51,7 +51,7 @@ const ETKImportHistoryEmpty: React.FC<ETKImportHistoryEmptyProps> = (props) => {
           color="primary"
           size="large"
           onClick={() => {
-            router.push("/?panel=import");
+            router.push("/edition/?panel=import");
           }}
         >
           {t("ImportHistoryEmpty.button")}

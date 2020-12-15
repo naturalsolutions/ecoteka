@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, MenuItem, Menu } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { Button, MenuItem, Menu, Box } from "@material-ui/core";
 import { IOrganization, IUser } from "@/index";
 
 export interface OrganizationSelectProps {
@@ -11,6 +11,7 @@ const defaultProps: OrganizationSelectProps = {};
 
 const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [organization, setOrganization] = React.useState<IOrganization>();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -24,12 +25,22 @@ const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (props.user) {
+      setOrganization(props.user.currentOrganization);
+    }
+  }, [props.user]);
+
   return (
-    <>
-      <Button aria-haspopup="true" onClick={handleClick}>
-        {props.user.currentOrganization
-          ? props.user.currentOrganization.name
-          : ""}
+    <Box ml={2} mr={3}>
+      <Button
+        size="small"
+        variant="outlined"
+        color="primary"
+        aria-haspopup="true"
+        onClick={handleClick}
+      >
+        {organization?.name}
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -37,13 +48,13 @@ const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {props.user.organizations.map((o) => (
+        {props.user?.organizations.map((o) => (
           <MenuItem key={`mi-${o.id}`} onClick={() => handleClose(o)}>
             {o.name}
           </MenuItem>
         ))}
       </Menu>
-    </>
+    </Box>
   );
 };
 

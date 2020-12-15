@@ -6,7 +6,7 @@ import {
   CircularProgress,
   makeStyles,
 } from "@material-ui/core";
-import { apiRest } from "../../lib/api";
+import { apiRest } from "@/lib/api";
 
 export interface ETKRegistrationLinkConfirmationProps {
   value: string | string[];

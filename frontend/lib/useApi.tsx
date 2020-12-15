@@ -9,16 +9,10 @@ export default function useApi() {
   const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
   const { apiUrl } = publicRuntimeConfig;
   const router = useRouter();
-  const [accessToken, setAccessToken] = useLocalStorage(
-    tokenStorage,
-    localStorage.getItem(tokenStorage)
-  );
-  const [refreshToken, setRefreshToken] = useLocalStorage(
-    refreshTokenStorage,
-    localStorage.getItem(refreshTokenStorage)
-  );
+  const [accessToken, setAccessToken] = useLocalStorage(tokenStorage);
+  const [refreshToken, setRefreshToken] = useLocalStorage(refreshTokenStorage);
 
-  if (!accessToken || !refreshToken) {
+  if ((!accessToken || !refreshToken) && typeof window !== "undefined") {
     router.push("/signin");
   }
 

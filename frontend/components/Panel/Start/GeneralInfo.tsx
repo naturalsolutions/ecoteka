@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { FC } from "react";
 import {
   makeStyles,
   Grid,
@@ -14,13 +14,8 @@ import { useAppContext } from "@/providers/AppContext";
 import CardInfoPanel from "@/components/Card/InfoPanel";
 import { useRouter } from "next/router";
 
-export interface ETKPanelStartGeneralInfoProps {}
-
-const defaultProps: ETKPanelStartGeneralInfoProps = {};
-
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "25rem",
     height: "100%",
   },
   card: {
@@ -31,28 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function fetchData(organizationId: number) {
-  try {
-    const response = await apiRest.organization.get(organizationId);
-
-    if (response.ok) {
-      const organization = await response.json();
-
-      return organization;
-    }
-  } catch (e) {}
-}
-
-interface Organization {
-  id: number;
-  name: string;
-  slug: string;
-  total_trees: number;
-}
-
-const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (
-  props
-) => {
+const ETKPanelStartGeneralInfo: FC = () => {
   const router = useRouter();
   const classes = useStyles();
   const { user } = useAppContext();
@@ -75,7 +49,7 @@ const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (
       <Grid item>
         <CardInfoPanel
           title={t("PanelStart.numberOfTreesLayer.title")}
-          content={`${user.currentOrganization?.total_trees || 0} ${t(
+          content={`${user?.currentOrganization?.total_trees || 0} ${t(
             "PanelStart.numberOfTreesLayer.content"
           )}`}
         />
@@ -100,7 +74,7 @@ const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (
                     size="large"
                     variant="outlined"
                     onClick={() => {
-                      router.push("/?panel=import");
+                      router.push("/edition/?panel=import");
                     }}
                   >
                     {t("PanelStart.card.button")}
@@ -114,7 +88,5 @@ const ETKPanelStartGeneralInfo: React.FC<ETKPanelStartGeneralInfoProps> = (
     </Grid>
   );
 };
-
-ETKPanelStartGeneralInfo.defaultProps = defaultProps;
 
 export default ETKPanelStartGeneralInfo;

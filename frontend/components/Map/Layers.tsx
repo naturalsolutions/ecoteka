@@ -66,10 +66,9 @@ const excludeLayers = [
 
 const MapLayers: FC<IMapLayers> = ({ map }) => {
   const { t } = useTranslation("components");
-  const mapCurrent = map.current?.getMap();
 
-  const initialLayers = mapCurrent
-    ? mapCurrent
+  const initialLayers = map
+    ? map
         .getStyle()
         .layers.filter((l) => !excludeLayers.includes(l.id))
         .reduce(
@@ -82,8 +81,8 @@ const MapLayers: FC<IMapLayers> = ({ map }) => {
   const [layers, setLayers] = useState(initialLayers);
 
   useEffect(() => {
-    if (mapCurrent && typeof mapCurrent.getStyle === "function") {
-      const satelliteLayer = mapCurrent
+    if (map && typeof map.getStyle === "function") {
+      const satelliteLayer = map
         .getStyle()
         .layers.find((l) => l.id === "satellite");
 
@@ -93,24 +92,24 @@ const MapLayers: FC<IMapLayers> = ({ map }) => {
         );
       }
     }
-  }, [mapCurrent]);
+  }, [map]);
 
   useEffect(() => {
-    if (mapCurrent) {
-      mapCurrent.setLayoutProperty(
+    if (map) {
+      map.setLayoutProperty(
         "satellite",
         "visibility",
         backgroundLayer === "map" ? "none" : "visible"
       );
     }
-  }, [backgroundLayer, mapCurrent]);
+  }, [backgroundLayer, map]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBackgroundLayer((event.target as HTMLInputElement).value);
   };
 
   const handleLayerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    mapCurrent.setLayoutProperty(
+    map.setLayoutProperty(
       event.target.name,
       "visibility",
       event.target.checked ? "visible" : "none"
