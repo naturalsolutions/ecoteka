@@ -33,6 +33,14 @@ class Organization(OrganizationBase):
     class Config:
         orm_mode = True
 
-
 class OrganizationCurrentUser(Organization):
     pass
+
+class OrganizationMetrics(BaseModel):
+    total_tree_count: int
+    logged_trees_count: int
+    planted_trees_count: int
+    planned_interventions_cost: float
+    scheduled_interventions_cost: float
+
+

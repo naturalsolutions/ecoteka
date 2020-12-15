@@ -20,11 +20,12 @@ from app.api import get_db
 from app import crud
 from app.core import settings, enforcer, set_policies, authorization, get_current_user
 
-from app.crud import organization, user
+from app.crud import organization, user, tree
 from app.schemas import (
     Organization,
     OrganizationCreate,
     OrganizationUpdate,
+    OrganizationMetrics,
     Coordinate,
     UserOut,
     UserInvite,
@@ -58,6 +59,11 @@ policies = {
         "manager",
         "contributor",
         "reader",
+    ],
+    "organizations:get_metrics": [
+        "owner",
+        "manager",
+        "contributor",
     ],
 }
 set_policies(policies)
@@ -540,3 +546,43 @@ def get_working_area(
     shape = to_shape(organization_in_db.working_area)
 
     return {"type": "Feature", "geometry": mapping(shape), "properties": {}}
+
+@router.get("/{organization_id}/metrics_by_year/{year}", response_model=OrganizationMetrics)
+def get_metrics(
+    *,
+    organization_id: int,
+    year: int,
+    auth=Depends(authorization("organizations:get_metrics")),
+    db: Session = Depends(get_db),
+) -> Any:
+    """
+    get dashboard metrics from one organization
+    """
+    organization_in_db = organization.get(db, id=organization_id)
+
+    if not organization_in_db:
+        raise HTTPException(status_code=404, detail="Organization not found")
+    
+    trees_count = organization_in_db.total_trees
+    # Asked in specs but no corresponding intervention_type
+    planted_trees_count = len([])
+    logged_trees_count = len(crud.intervention.get_by_intervention_type_and_year(db, organization_id=organization_id, intervention_type="felling", year=year))
+    scheduled_cost = 0
+    scheduled_interventions = crud.intervention.get_scheduled_by_year(db, organization_id=organization_id, year=year)
+    for i in scheduled_interventions:
+        scheduled_cost += i.estimated_cost
+    planned_cost = 0  
+    planned_interventions = crud.intervention.get_planned_by_year(db, organization_id=organization_id, year=year)
+    for i in planned_interventions:
+        planned_cost += i.estimated_cost
+
+    metrics = OrganizationMetrics(
+        total_tree_count=trees_count,
+        logged_trees_count=logged_trees_count,
+        planted_trees_count=planted_trees_count,
+        planned_interventions_cost=planned_cost,
+        scheduled_interventions_cost=scheduled_cost,
+        )
+
+
+    return metrics
