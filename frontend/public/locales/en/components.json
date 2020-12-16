@@ -370,5 +370,9 @@
   "MapLayers": {
     "backgrounds": "Backgrounds",
     "layers": "Layers"
+  },
+  "MapModeSwitch": {
+    "analysis": "Analysis",
+    "edition": "Edition"
   }
 }

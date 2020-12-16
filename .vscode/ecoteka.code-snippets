@@ -4,19 +4,22 @@
     "body": [
       "import React from \"react\";",
       "$3import { makeStyles } from \"@material-ui/core\";\n",
-      "export interface ETK$1Props {}\n",
-      "const defaultProps: ETK$1Props = {};\n",
+      "export interface I$1Props {}\n",
       "$3const useStyles = makeStyles(() => ({",
       "$3\troot: {},",
       "$3}));\n",
-      "const ETK$1: React.FC<ETK$1Props> = (props) => {",
+      "const $1: React.FC<I$1Props> = ({}) => {",
       "$3\tconst classes = useStyles();\n",
       "\treturn ($2);",
       "};\n",
-      "ETK$1.defaultProps = defaultProps;\n",
-      "export default ETK$1;\n"
+      "export default $1;\n"
     ],
     "description": "Ecoteka Frontend Component"
+  },
+
+  "ETK Frontend import translation": {
+    "prefix": "etkfit",
+    "body": "import { useTranslation } from \"react-i18next\";"
   },
 
   "ETK Frontend Import Index": {
