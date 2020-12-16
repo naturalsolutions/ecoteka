@@ -29,6 +29,7 @@ import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutCarto from "@/components/appLayout/Carto";
 import PanelStartGeneralInfo from "@/components/Panel/Start/GeneralInfo";
+import MapModeSwitch from "@/components/Map/ModeSwitch";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
@@ -458,6 +459,9 @@ const EditionPage = ({}) => {
         )}
         <Box className={classes.toolbar} p={1}>
           <Grid container spacing={2} justify="center" alignItems="center">
+            <Grid item>
+              <MapModeSwitch />
+            </Grid>
             <Grid item xs></Grid>
             <Grid item>
               <ButtonGroup variant="contained">

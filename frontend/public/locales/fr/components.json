@@ -439,5 +439,9 @@
   "MapLayers": {
     "backgrounds": "Fonds",
     "layers": "Couches"
+  },
+  "MapModeSwitch": {
+    "analysis": "Analyse",
+    "edition": "Édition"
   }
 }
