@@ -289,7 +289,10 @@
     "dialogDeleteTitle": "Remove selected trees",
     "dialogDeleteContent": "Are you sure you want to remove the selected trees?",
     "dialogDeleteActionYes": "Yes",
-    "dialogDeleteActionCancel": "No"
+    "dialogDeleteActionCancel": "No",
+    "imagesUpload": {
+      "select": "Drop files here or click (max.{{max}})"
+    }
   },
 
   "Teams": {
