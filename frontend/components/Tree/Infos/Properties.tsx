@@ -189,6 +189,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
           onClick: () => {
             images.splice(index, 1);
             setImages([...images]);
+            apiRest.trees.deleteImage(props.tree.organization_id, id, image);
           },
         },
         {
