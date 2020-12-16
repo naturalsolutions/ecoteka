@@ -42,7 +42,7 @@ const Summary: FC<{ id: number }> = ({ id }) => {
 
   return (
     <Grid className={classes.root} container direction="column" spacing={2}>
-      <Grid item>
+      <Grid item xs={12}>
         <TreeInfosProperties tree={tree} />
       </Grid>
       <Grid item>
