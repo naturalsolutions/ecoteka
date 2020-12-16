@@ -24,7 +24,10 @@ const MapModeSwitch: React.FC<IMapModeSwitchProps> = ({ onChange }) => {
 
   const handleOnChange = (e, value: TMapMode) => {
     setMode(value);
-    onChange(value);
+
+    if (typeof onChange === "function") {
+      onChange(value);
+    }
   };
 
   return (
@@ -33,7 +36,7 @@ const MapModeSwitch: React.FC<IMapModeSwitchProps> = ({ onChange }) => {
       value={mode}
       size="small"
       exclusive
-      onChange={(e, value) => handleOnChange}
+      onChange={handleOnChange}
     >
       <ToggleButton value="analysis">
         <MultilineChartIcon />
