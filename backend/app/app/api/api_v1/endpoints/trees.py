@@ -1,10 +1,10 @@
 import io
+import logging
 import os
 import shutil
 from typing import Any, List, Union
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
-from starlette.requests import Request
 from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
 from app.api import get_db
@@ -25,7 +25,10 @@ policies = {
     "trees:import": ["owner", "manager", "contributor"],
     "trees:export": ["owner", "manager", "contributor"],
     "trees:bulk_delete": ["owner", "manager", "contributor"],
-    "trees:image": ["owner", "manager", "contributor"],
+    "trees:upload_images": ["owner", "manager", "contributor"],
+    "trees:get_images": ["owner", "manager", "contributor"],
+    "trees:delete_images": ["owner", "manager", "contributor"],
+    "trees:delete_image": ["owner", "manager", "contributor"],
 }
 set_policies(policies)
 
@@ -229,7 +232,7 @@ def upload_images(
 def get_images(
     tree_id: int,
     organization_id: int,
-    auth=Depends(authorization("tree:upload_images")),
+    auth=Depends(authorization("tree:get_images")),
 ):
     """
     get all images from a tree
@@ -255,6 +258,46 @@ def get_image(
     upload_folder: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}"
     
     return FileResponse(f"{upload_folder}/{image}")
+
+@router.delete("/{tree_id}/images/")
+def delete_images(
+    tree_id: int,
+    organization_id: int,
+    auth=Depends(authorization("tree:delete_images")),
+):
+    """
+    delete one image
+    """
+    upload_folder: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}"
+
+    try: 
+        shutil.rmtree(upload_folder)
+
+        return HTMLResponse(status_code=200, content=f"{tree_id}")
+    except Exception as e:
+        logging.error(e)
+        return HTTPException(status_code=500, detail="Can't delete folder")
+
+
+@router.delete("/{tree_id}/images/{image}")
+def delete_image(
+    image: str,
+    tree_id: int,
+    organization_id: int,
+    auth=Depends(authorization("tree:delete_image")),
+):
+    """
+    delete one image
+    """
+    image_path: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}/{image}"
+    
+    try: 
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+        return HTMLResponse(status_code=200, content=f"{tree_id}")
+    except:
+        return HTTPException(status_code=500, detail="Can't delete {image} file")
 
 
 @router.get("/{tree_id}/interventions", response_model=List[schemas.Intervention])
