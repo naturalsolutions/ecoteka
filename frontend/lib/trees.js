@@ -58,6 +58,33 @@ class Tree {
 
     return await response.json();
   }
+
+  async getImages(organizationId, id) {
+    const url = `/organization/${organizationId}/trees/${id}/images`;
+    const response = await this.api.get(url);
+
+    return await response.json();
+  }
+
+  async postImages(organizationId, id, files, { onProgress, onLoad, onError }) {
+    const formData = new FormData();
+    Array.from(files).map((file) => {
+      formData.append("images", file, file.name);
+    });
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.onprogress = (e) => onProgress(e);
+    xhr.onload = () => onLoad(xhr);
+    xhr.onerror = () => onError(xhr);
+
+    const url = `${this.api.url}/organization/${organizationId}/trees/${id}/images`;
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Authorization", `Bearer ${this.api.getToken()}`);
+    xhr.send(formData);
+
+    return xhr;
+  }
 }
 
 export default function userFactory(api) {
