@@ -33,7 +33,7 @@ export type ResponsiveBandScaleStackedBars = {
   height: number;
   margin?: { top: number; right: number; bottom: number; left: number };
   events?: boolean;
-  data: [];
+  data: object[];
   isXScaleTimeFormat?: boolean;
   xScaleKey: string;
   yScaleUnit?: string;
@@ -84,14 +84,17 @@ export default function ResponsiveBandScaleStackedBars({
     color: string;
   };
 
-  const categoryTotals = chartData.reduce((allTotals, currentDate) => {
-    const totalByCategory = keys.reduce((dailyTotal, k) => {
-      dailyTotal += Number(currentDate[k]);
-      return dailyTotal;
-    }, 0);
-    allTotals.push(totalByCategory);
-    return allTotals;
-  }, [] as number[]);
+  const categoryTotals = chartData.reduce(
+    (allTotals: number[], currentDate: object) => {
+      const totalByCategory = keys.reduce((dailyTotal, k) => {
+        dailyTotal += Number(currentDate[k]);
+        return dailyTotal;
+      }, 0);
+      allTotals.push(totalByCategory);
+      return allTotals;
+    },
+    [] as number[]
+  ) as number[];
 
   // struct
   const formatTime = timeFormat("%Y-%m");
@@ -132,6 +135,7 @@ export default function ResponsiveBandScaleStackedBars({
     domain: chartData.map(getDate),
     padding: 0.2,
   });
+
   const yScale = scaleLinear<number>({
     domain: [0, Math.max(...categoryTotals)],
     nice: true,
