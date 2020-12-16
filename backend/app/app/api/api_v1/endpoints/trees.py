@@ -266,7 +266,7 @@ def delete_images(
     auth=Depends(authorization("tree:delete_images")),
 ):
     """
-    delete one image
+    delete all images
     """
     upload_folder: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}"
 
