@@ -344,5 +344,9 @@
   "MapLayers": {
     "backgrounds": "Fondos",
     "layers": "Capas"
+  },
+  "MapModeSwitch": {
+    "analysis": "Análisis",
+    "edition": "Edición"
   }
 }
