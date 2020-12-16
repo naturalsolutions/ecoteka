@@ -1,7 +1,12 @@
 {
+  "yes": "Yes",
+  "no": "No",
+  "permanentDeletion": "Permanent deletion",
+  "confirmContinue": "Do you want to continue?",
   "messages": {
     "success": "Success",
-    "error": "An error occured"
+    "error": "An error occured",
+    "sending": "Sending..."
   },
   "buttons": {
     "backToHome": "Back to home"
@@ -9,7 +14,8 @@
   "errors": {
     "email": "Email address is invalid",
     "required": "Field required",
-    "passwordsShouldMatch": "Passwords should match"
+    "passwordsShouldMatch": "Passwords should match",
+    "fileRequired": "Please select a file"
   },
   "months": [
     "January",

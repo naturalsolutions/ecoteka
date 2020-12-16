@@ -366,7 +366,10 @@
     "dialogDeleteTitle": "Supprimer les arbres sélectionnés",
     "dialogDeleteContent": "Êtes-vous sûr de vouloir supprimer les arbres sélectionnés ?",
     "dialogDeleteActionYes": "Oui",
-    "dialogDeleteActionCancel": "Non"
+    "dialogDeleteActionCancel": "Non",
+    "imagesUpload": {
+      "select": "Déposer ici les photos ou cliquer (max.{{max}})"
+    }
   },
   "Teams": {
     "buttonAdd": "Ajouter une équipe",
