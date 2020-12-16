@@ -267,7 +267,7 @@
     "dialogDeleteActionYes": "Si",
     "dialogDeleteActionCancel": "No",
     "imagesUpload": {
-      "select": "Drop files here or click (max.{{max}})"
+      "select": "Arrasta y suelta las imágenes aquí o haz click (max.{{max}})"
     }
   },
   "Teams": {
