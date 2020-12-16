@@ -85,6 +85,14 @@ class Tree {
 
     return xhr;
   }
+
+  async deleteImage(organizationId, treeId, image) {
+    const filename = (image.match(/[^\\/]+\.[^\\/]+$/) || []).pop();
+    const url = `/organization/${organizationId}/trees/${treeId}/images/${filename}`;
+    const response = await this.api.delete(url);
+
+    return await response.json();
+  }
 }
 
 export default function userFactory(api) {

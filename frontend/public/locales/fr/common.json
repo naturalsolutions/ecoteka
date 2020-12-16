@@ -1,7 +1,12 @@
 {
+  "yes": "Yes",
+  "no": "No",
+  "permanentDeletion": "Suppression définitive",
+  "confirmContinue": "Voulez-vous poursuivre ?",
   "messages": {
     "success": "Succès",
-    "error": "Une erreur s'est produite"
+    "error": "Une erreur s'est produite",
+    "sending": "Envoi en cours..."
   },
   "buttons": {
     "backToHome": "Retour à l'accueil",
@@ -14,7 +19,8 @@
   "errors": {
     "email": "Veuillez saisir un email valide",
     "required": "Veuillez renseigner ce champ",
-    "passwordsShouldMatch": "Les mots de passe ne correspondent pas"
+    "passwordsShouldMatch": "Les mots de passe ne correspondent pas",
+    "fileRequired": "Veuillez sélectionner un fichier"
   },
   "months": [
     "Janvier",

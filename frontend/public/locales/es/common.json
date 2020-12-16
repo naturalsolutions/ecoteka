@@ -1,7 +1,12 @@
 {
+  "yes": "Si",
+  "no": "No",
+  "permanentDeletion": "Supresión definitiva",
+  "confirmContinue": "¿Quieres continuar?",
   "messages": {
     "success": "Con éxito",
-    "error": "Ha ocurrido un error"
+    "error": "Ha ha producido un error",
+    "sending": "Enviando..."
   },
   "buttons": {
     "backToHome": "Ir a la página de inicio"
@@ -9,7 +14,8 @@
   "errors": {
     "email": "Correo electrónico no válido",
     "required": "Campo obligatorio",
-    "passwordsShouldMatch": "Las dos contraseñas no coinciden"
+    "passwordsShouldMatch": "Las contraseñas no coinciden",
+    "fileRequired": "Por favor, selecciona un archivo"
   },
   "months": [
     "Enero",
