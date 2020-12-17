@@ -1,12 +1,5 @@
 import { useEffect, useState, createRef } from "react";
-import {
-  Grid,
-  makeStyles,
-  Button,
-  Box,
-  ButtonGroup,
-  InputBase,
-} from "@material-ui/core";
+import { Grid, makeStyles, Box, InputBase } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import MapGL, {
   Source,
@@ -30,6 +23,7 @@ import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutCarto from "@/components/appLayout/Carto";
 import PanelStartGeneralInfo from "@/components/Panel/Start/GeneralInfo";
 import MapModeSwitch from "@/components/Map/ModeSwitch";
+import MapDrawToolbar from "@/components/Map/DrawToolbar";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
@@ -211,10 +205,12 @@ const EditionPage = ({}) => {
       apiRest.trees
         .get(user.currentOrganization.id, router.query.tree)
         .then((tree) => {
-          mapRef.current.getMap().flyTo({
-            zoom: 20,
-            center: [tree.x, tree.y],
-          });
+          if (mapRef.current) {
+            mapRef.current.getMap().flyTo({
+              zoom: 20,
+              center: [tree.x, tree.y],
+            });
+          }
         });
     }
   }, []);
@@ -465,51 +461,41 @@ const EditionPage = ({}) => {
         <Box className={classes.toolbar} p={1}>
           <Grid container spacing={2} justify="center" alignItems="center">
             <Grid item>
-              <MapModeSwitch />
+              <MapModeSwitch
+                onChange={(value) => {
+                  switch (value) {
+                    case "analysis":
+                      setBoxSelect(false);
+                      break;
+                    case "edition":
+                      setBoxSelect(true);
+                      break;
+                  }
+                }}
+              />
             </Grid>
             <Grid item xs></Grid>
             <Grid item>
-              <ButtonGroup variant="contained">
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    setBoxSelect(false);
+              {boxSelect && (
+                <MapDrawToolbar
+                  onChange={(value) => {
+                    switch (value) {
+                      case "simple_select":
+                        setMode("simple_select");
+                        setCurrentMode("simple_select");
+                        break;
+                      case "draw_point":
+                        setMode("draw_point");
+                        setCurrentMode("draw_point");
+                        break;
+                      case "draw_polygon":
+                        setMode("draw_polygon");
+                        setCurrentMode("draw_polygon");
+                        break;
+                    }
                   }}
-                >
-                  Information
-                </Button>
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    setBoxSelect(true);
-                    setMode("simple_select");
-                    setCurrentMode("simple_select");
-                  }}
-                >
-                  Selection
-                </Button>
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    setBoxSelect(true);
-                    setMode("draw_point");
-                    setCurrentMode("draw_point");
-                  }}
-                >
-                  + Arbre
-                </Button>
-                <Button
-                  color="secondary"
-                  disabled
-                  onClick={() => {
-                    setBoxSelect(true);
-                    setMode("draw_polygon");
-                    setCurrentMode("draw_polygon");
-                  }}
-                >
-                  + Station
-                </Button>
-              </ButtonGroup>
+                />
+              )}
             </Grid>
             <Grid item xs></Grid>
             <Grid item>

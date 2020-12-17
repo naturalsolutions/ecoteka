@@ -23,7 +23,9 @@ const MapModeSwitch: React.FC<IMapModeSwitchProps> = ({ onChange }) => {
   const { t } = useTranslation("components");
 
   const handleOnChange = (e, value: TMapMode) => {
-    setMode(value);
+    if (value !== null) {
+      setMode(value);
+    }
 
     if (typeof onChange === "function") {
       onChange(value);
