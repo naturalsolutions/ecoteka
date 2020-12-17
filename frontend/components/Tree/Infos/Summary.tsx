@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Summary: FC<{ id: number }> = ({ id }) => {
+const Summary: FC<{ treeId: number }> = ({ treeId }) => {
   const { user } = useAppContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const [tree, setTree] = useState<any>({});
@@ -22,12 +22,12 @@ const Summary: FC<{ id: number }> = ({ id }) => {
   const { dialog } = useAppLayout();
   const classes = useStyles();
 
-  const getTree = async (id) => {
+  const getTree = async (itreeIdd) => {
     const organizationId = user.currentOrganization.id;
-    const newTree = await apiRest.trees.get(organizationId, id);
+    const newTree = await apiRest.trees.get(organizationId, treeId);
     const newInterventions = await apiRest.trees.getInterventions(
       organizationId,
-      id
+      treeId
     );
 
     setTree(newTree);
@@ -35,10 +35,10 @@ const Summary: FC<{ id: number }> = ({ id }) => {
   };
 
   useEffect(() => {
-    if (id) {
-      getTree(id);
+    if (treeId) {
+      getTree(treeId);
     }
-  }, [id]);
+  }, [treeId]);
 
   return (
     <Grid className={classes.root} container direction="column" spacing={2}>

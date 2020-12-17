@@ -38,7 +38,8 @@ const InterventionsTable: FC<{
           <Button
             fullWidth
             size="small"
-            variant="contained"
+            color="primary"
+            variant="outlined"
             onClick={() => {
               onNewIntervention();
               router.push(`/edition/?panel=intervention&tree=${tree.id}`);

@@ -227,9 +227,106 @@
   },
 
   "Intervention": {
-    "required_documents": "Required documents",
-    "required_material": "Required material",
-    "intervenant": "Intervenant"
+    "title": "Demande d'intervention",
+    "plannew": "Nouvelle demande",
+    "success": "Demande enregistrée",
+    "whatnow": "Que souhaitez vous faire ?",
+    "required_documents": "Documents requis",
+    "required_material": "Materiel requis",
+    "intervention_type": "Type d'intervention",
+    "intervenant": "Intervenant",
+    "intervention_period": "Période d'intervention",
+    "estimated_cost": "Coût estimatif",
+    "tree_id": "Arbre",
+    "back": "Back to the tree",
+    "steps": {
+      "interventionselection": "Sur quoi porte votre demande ?",
+      "treeselection": "Localisez l'arbre sur lequel intervenir",
+      "intervention": "Détails de l'intervention",
+      "validation": "Planifiez votre intervention",
+      "finish": "Terminer"
+    },
+    "types": {
+      "pruning": "Elagage",
+      "felling": "Abattage",
+      "streanremoval": "Dessouchage",
+      "indepthdiagnostic": "Diagnostic approfondi",
+      "treatment": "Traîtement",
+      "surveillance": "Surveillance"
+    },
+    "documents": {
+      "dt": "DT/DICT",
+      "trafficpolice": "Police de circulation"
+    },
+    "material": {
+      "pole": "Perche",
+      "climb": "A la grime",
+      "ladder": "Echelle",
+      "raiser": "Engine élevateur",
+      "retentionkit": "Kit de rétention",
+      "foot": "Pieds",
+      "pull": "A la tire",
+      "trimmer": "Tondeuse",
+      "crane": "Grue",
+      "coredrill": "Carotteuse",
+      "crunchy": "Croqueuse",
+      "mecanicshovel": "Pelle mécanique",
+      "canon": "Au canon",
+      "watering": "Arrosage",
+      "amendment": "Amendement/Apport organique",
+      "collectprotection": "Protection du collet",
+      "scald": "Kit échaudure",
+      "globalcheck": "Vérification globale de l'arbre",
+      "tutorrefection": "Réfection du tuteur",
+      "soil": "Au sol"
+    },
+    "pruning": {
+      "method": "Méthode d'élagage",
+      "comment": "Commentaire",
+      "pruning": "Elagage",
+      "carpenterremoval": "Suppression de charpentière",
+      "lightning": "Eclaircissage",
+      "maintenance": "Entretien",
+      "crownraising": "Remontée de couronne"
+    },
+    "felling": {
+      "comment": "Commentaire",
+      "method": "Méthode d'abattage",
+      "live": "En direct",
+      "rentention": "Avec rétention",
+      "unmounting": "Par démontage"
+    },
+    "streanremoval": {
+      "diameter": "Diamètre de la souche",
+      "method": "Méthode de déssouchage",
+      "drilling": "Carottage",
+      "trimming": "Rognage",
+      "grubbing": "Arrachage"
+    },
+    "indepthdiagnostic": {
+      "method": "Méthode de diagnostic",
+      "comment": "Commentaire",
+      "resistograph": "Résistographe",
+      "tomograph": "Tomographe",
+      "computing": "Calcul",
+      "tractiontest": "Test de traction",
+      "penetrometer": "Pénétromètre"
+    },
+    "treatment": {
+      "method": "Méthode",
+      "disease": "Maladie",
+      "comment": "Commentaire",
+      "auxilaryrelease": "Lâché d'auxilière",
+      "biologictreatment": "Traitement biologique"
+    },
+    "surveillance": {
+      "method": "Méthode",
+      "comment": "Commentaire",
+      "watering": "Arrosage",
+      "amendment": "Amendement/Apport organique",
+      "tutorcheck": "Vérification du tuteurage et des protections",
+      "globalcheck": "Vérification globale de l'arbre"
+    }
   },
 
   "Tree": {
