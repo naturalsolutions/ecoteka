@@ -8,7 +8,6 @@ import {
   TableCell,
   Paper,
   Button,
-  Avatar,
   MobileStepper,
   Fab,
 } from "@material-ui/core";
