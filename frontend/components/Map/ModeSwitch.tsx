@@ -8,6 +8,7 @@ import EditLocationIcon from "@material-ui/icons/EditLocation";
 export type TMapMode = "analysis" | "edition";
 
 export interface IMapModeSwitchProps {
+  initValue?: TMapMode;
   onChange?(value: TMapMode): void;
 }
 
@@ -17,9 +18,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MapModeSwitch: React.FC<IMapModeSwitchProps> = ({ onChange }) => {
+const MapModeSwitch: React.FC<IMapModeSwitchProps> = ({
+  initValue = "analysis",
+  onChange,
+}) => {
   const classes = useStyles();
-  const [mode, setMode] = useState<TMapMode>("analysis");
+  const [mode, setMode] = useState<TMapMode>(initValue);
   const { t } = useTranslation("components");
 
   const handleOnChange = (e, value: TMapMode) => {

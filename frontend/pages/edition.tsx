@@ -125,6 +125,7 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
+  const [selection, setSelection] = useState([]);
   const [hoveredTreeId, setHoveredTreeId] = useState<number>(null);
   const [boxSelect, setBoxSelect] = useState<boolean>(false);
   const [filterQuery, setFilterQuery] = useState<string>("");
@@ -217,10 +218,18 @@ const EditionPage = ({}) => {
 
   const switchPanel = (panel) => {
     switch (panel) {
+      case "start":
+        setDrawerLeftComponent(<PanelStartGeneralInfo />);
+        break;
       case "info":
         setDrawerLeftComponent(
           <TreeSummary treeId={Number(router.query.tree)} />
         );
+        break;
+      case "tree":
+        const Tree = dynamic(() => import("@/components/Tree/Form"));
+        setBoxSelect(true);
+        setDrawerLeftComponent(<Tree selection={selection} />);
         break;
       case "import":
         const Import = dynamic(() => import("@/components/Import/Panel/Index"));
@@ -237,6 +246,9 @@ const EditionPage = ({}) => {
           () => import("@/components/Interventions/Form")
         );
         setDrawerLeftComponent(<Intervention map={mapRef.current.getMap()} />);
+        break;
+      default:
+        setDrawerLeftComponent(<PanelStartGeneralInfo />);
         break;
     }
   };
@@ -263,11 +275,7 @@ const EditionPage = ({}) => {
   };
 
   const onClick = (event) => {
-    if (mode !== "simple_select" || boxSelect) {
-      return;
-    }
-
-    if (event.features.length > 0) {
+    if (event.features.length > 0 && !boxSelect) {
       router.push(
         `/edition/?panel=info&tree=${event.features[0].properties.id}`
       );
@@ -446,6 +454,10 @@ const EditionPage = ({}) => {
                     }, 200);
                   }
                 }}
+                onDrawSelectionChange={(selection) => {
+                  setSelection(selection.features);
+                  router.push("/edition/?panel=tree");
+                }}
               />
             )}
             {hoveredTreeId && (
@@ -462,10 +474,12 @@ const EditionPage = ({}) => {
           <Grid container spacing={2} justify="center" alignItems="center">
             <Grid item>
               <MapModeSwitch
+                initValue={boxSelect ? "edition" : "analysis"}
                 onChange={(value) => {
                   switch (value) {
                     case "analysis":
                       setBoxSelect(false);
+                      router.push("/edition/?panel=start");
                       break;
                     case "edition":
                       setBoxSelect(true);
