@@ -226,77 +226,78 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.rows.map((row) => {
-              const isItemSelected = isSelected(row.id);
-              return (
-                <TableRow
-                  hover
-                  key={row.id}
-                  selected={isItemSelected}
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isItemSelected}
-                      color="primary"
-                      onClick={(e) => onRowClick(e, row.id)}
-                    />
-                  </TableCell>
-                  <TableCell padding="checkbox"></TableCell>
-                  <TableCell scope="row">
-                    <Button
-                      style={{ justifyContent: "flex-start" }}
-                      size="small"
-                      onClick={() => props.openTeamPage(row.id)}
-                    >
-                      {row.name}
-                    </Button>
-                  </TableCell>
-                  <TableCell align="center" style={{ width: 100 }}>
-                    {row.total_members || "-"}
-                  </TableCell>
-                  <TableCell align="center" style={{ width: 100 }}>
-                    {row.total_trees || "-"}
-                  </TableCell>
-                  <TableCell style={{ width: 120 }}>
-                    <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
-                      <IconButton
-                        size="small"
+            {props.rows.length > 0 &&
+              props.rows.map((row) => {
+                const isItemSelected = isSelected(row.id);
+                return (
+                  <TableRow
+                    hover
+                    key={row.id}
+                    selected={isItemSelected}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={isItemSelected}
                         color="primary"
-                        onClick={() => {
-                          props.openArea(row);
-                        }}
-                      >
-                        <PhotoSizeSelectSmall fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title={t("Teams.tooltipInfoEdit")}>
-                      <IconButton
+                        onClick={(e) => onRowClick(e, row.id)}
+                      />
+                    </TableCell>
+                    <TableCell padding="checkbox"></TableCell>
+                    <TableCell scope="row">
+                      <Button
+                        style={{ justifyContent: "flex-start" }}
                         size="small"
-                        color="primary"
-                        onClick={() => {
-                          props.openForm(row);
-                        }}
+                        onClick={() => props.openTeamPage(row.id)}
                       >
-                        <Edit fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title={t("Teams.tooltipLink")}>
-                      <IconButton
-                        size="small"
-                        color="primary"
-                        onClick={() => {
-                          props.openTeamPage(row.id);
-                        }}
-                      >
-                        <Visibility fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        {row.name}
+                      </Button>
+                    </TableCell>
+                    <TableCell align="center" style={{ width: 100 }}>
+                      {row.total_members || "-"}
+                    </TableCell>
+                    <TableCell align="center" style={{ width: 100 }}>
+                      {row.total_trees || "-"}
+                    </TableCell>
+                    <TableCell style={{ width: 120 }}>
+                      <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => {
+                            props.openArea(row);
+                          }}
+                        >
+                          <PhotoSizeSelectSmall fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={t("Teams.tooltipInfoEdit")}>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => {
+                            props.openForm(row);
+                          }}
+                        >
+                          <Edit fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={t("Teams.tooltipLink")}>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => {
+                            props.openTeamPage(row.id);
+                          }}
+                        >
+                          <Visibility fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>

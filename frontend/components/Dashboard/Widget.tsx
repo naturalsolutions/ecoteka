@@ -5,6 +5,7 @@ import {
   Paper,
   GridProps,
   PaperProps,
+  Box,
 } from "@material-ui/core";
 import { animated, useSpring } from "react-spring";
 
@@ -60,10 +61,10 @@ const ETKWidget: React.FC<ETKWidgetProps> = ({
   return (
     <AnimatedGrid {...gridProps} style={springProps}>
       <Paper {...paperProps} className={classes.paper}>
-        <Fragment>
+        <Box>
           {component}
           {children}
-        </Fragment>
+        </Box>
       </Paper>
     </AnimatedGrid>
   );

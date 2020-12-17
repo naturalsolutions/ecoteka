@@ -5,15 +5,14 @@ import { Group } from "@visx/group";
 import { Grid } from "@visx/grid";
 import { AxisBottom } from "@visx/axis";
 import { TreeInterventions } from "@/lib/mock/data/treeInterventions";
-import { treeInterventionsRaw } from "@/lib/mock";
 import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale";
 import { timeParse, timeFormat } from "d3-time-format";
-import * as d3 from "d3";
 import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip";
 import { LegendOrdinal } from "@visx/legend";
 import { localPoint } from "@visx/event";
 import { Box } from "@material-ui/core";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 
 type InterventionsCategories = "Élaguage" | "Abattage" | "Dessouchage";
 
@@ -33,7 +32,7 @@ export type ResponsiveBandScaleStackedBars = {
   height: number;
   margin?: { top: number; right: number; bottom: number; left: number };
   events?: boolean;
-  data: object[];
+  chartData: object[];
   isXScaleTimeFormat?: boolean;
   xScaleKey: string;
   yScaleUnit?: string;
@@ -42,7 +41,6 @@ export type ResponsiveBandScaleStackedBars = {
 };
 
 export const strokeColor = "#4d4d4d";
-export const background = "#ecedee";
 const defaultMargin = { top: 40, right: 0, bottom: 0, left: 0 };
 const tooltipStyles = {
   ...defaultStyles,
@@ -53,21 +51,24 @@ const tooltipStyles = {
 
 let tooltipTimeout: number;
 
-export default function ResponsiveBandScaleStackedBars({
+function ResponsiveBandScaleStackedBars({
   width,
   height,
   events = false,
   margin = defaultMargin,
-  data,
+  chartData,
   xScaleKey,
   isXScaleTimeFormat = false,
   colorScheme,
   yScaleUnit,
 }: ResponsiveBandScaleStackedBars) {
-  const chartData = data.slice(0, 12);
-
   const categories = Object.keys(chartData[0]).filter((d) => d !== xScaleKey);
   type StackedBarsCategories = typeof categories[number];
+
+  const { theme } = useThemeContext();
+  const bgColor = theme.palette.background.default;
+  const strokeColor = theme.palette.grey[500];
+  const legendColor = theme.palette.text.primary;
 
   const keys = Object.keys(chartData[0]).filter(
     (d) => d !== xScaleKey
@@ -95,37 +96,6 @@ export default function ResponsiveBandScaleStackedBars({
     },
     [] as number[]
   ) as number[];
-
-  // struct
-  const formatTime = timeFormat("%Y-%m");
-  const interventionByMonth = treeInterventionsRaw.map(
-    (i) => (i.date = formatTime(new Date(i.date)))
-  );
-  const interventionGroup = d3.group(
-    treeInterventionsRaw,
-    (d) => d.date,
-    (d) => d.intervention_type
-  );
-  const hierarchy = d3.hierarchy(interventionGroup);
-  const interventionsNestedCostsSum = d3.rollup(
-    treeInterventionsRaw,
-    (v) => d3.sum(v, (d) => d.estimated_cost),
-    (d) => d.date,
-    (d) => d.intervention_type
-  );
-  const interventionsNestedCount = d3.rollup(
-    treeInterventionsRaw,
-    (v) => v.length,
-    (d) => d.date,
-    (d) => d.intervention_type
-  );
-  console.group();
-  console.log("treeInterventionsRaw", treeInterventionsRaw);
-  console.log("interventionGroup", interventionGroup);
-  console.log("hierarchy", hierarchy);
-  console.log("interventionsNestedCostsSum", interventionsNestedCostsSum);
-  console.log("interventionsNestedCount", interventionsNestedCount);
-  console.groupEnd();
 
   // accessors
   const getDate = (d: any) => d[`${xScaleKey}`];
@@ -167,7 +137,6 @@ export default function ResponsiveBandScaleStackedBars({
 
   xScale.rangeRound([0, xMax]);
   yScale.range([yMax, 0]);
-
   return width < 10 ? null : (
     <Box width={width} height={height}>
       <ParentSize>
@@ -180,7 +149,7 @@ export default function ResponsiveBandScaleStackedBars({
                 y={0}
                 width={width}
                 height={height}
-                fill={background}
+                fill={bgColor}
                 rx={14}
               />
               <Grid
@@ -196,7 +165,7 @@ export default function ResponsiveBandScaleStackedBars({
               />
               <Group top={margin.top}>
                 <BarStack
-                  data={data}
+                  data={chartData}
                   keys={keys}
                   x={getDate}
                   xScale={xScale}
@@ -224,6 +193,8 @@ export default function ResponsiveBandScaleStackedBars({
                           }}
                           onMouseMove={(event) => {
                             const point = localPoint(event);
+                            console.log(event);
+                            console.log(localPoint(event));
                             if (tooltipTimeout) clearTimeout(tooltipTimeout);
                             const top = point.y;
                             const left = bar.x + bar.width / 2;
@@ -265,7 +236,9 @@ export default function ResponsiveBandScaleStackedBars({
               <LegendOrdinal
                 scale={colorScale}
                 direction="row"
-                labelMargin="0 15px 0 0"
+                legendLabelProps={{
+                  style: { color: legendColor, margin: "0 15px 0 0" },
+                }}
               />
             </div>
 
@@ -293,3 +266,4 @@ export default function ResponsiveBandScaleStackedBars({
     </Box>
   );
 }
+export default ResponsiveBandScaleStackedBars;
