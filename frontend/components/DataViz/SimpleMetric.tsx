@@ -8,13 +8,13 @@ import {
 } from "@material-ui/core";
 
 export interface ETKSimpleMetricProps {
-  metric: string;
+  metric: number;
   caption: string;
   icon?: any;
 }
 
 const defaultProps: ETKSimpleMetricProps = {
-  metric: "",
+  metric: 0,
   caption: "",
 };
 

@@ -50,7 +50,7 @@ const treeInterventionsRaw = [
     intervention_end_date: "2020-12-14T15:46:36.528Z",
     date: "2020-12-14T15:46:36.528Z",
     done: false,
-    estimated_cost: 0,
+    estimated_cost: 2000,
     required_documents: ["string"],
     required_material: ["string"],
     id: 0,
