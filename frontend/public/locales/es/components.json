@@ -453,5 +453,10 @@
   "MapModeSwitch": {
     "analysis": "Análisis",
     "edition": "Edición"
+  },
+  "MapDrawToolbar": {
+    "selection": "Selección",
+    "draw_point": "+ Árbol",
+    "draw_polygon": "+ Estación"
   }
 }
