@@ -221,6 +221,11 @@ const EditionPage = ({}) => {
 
   const switchPanel = (panel) => {
     switch (panel) {
+      case "info":
+        setDrawerLeftComponent(
+          <TreeSummary treeId={Number(router.query.tree)} />
+        );
+        break;
       case "import":
         const Import = dynamic(() => import("@/components/Import/Panel/Index"));
         setDrawerLeftComponent(
@@ -267,8 +272,8 @@ const EditionPage = ({}) => {
     }
 
     if (event.features.length > 0) {
-      setDrawerLeftComponent(
-        <TreeSummary id={event.features[0].properties.id} />
+      router.push(
+        `/edition/?panel=info&tree=${event.features[0].properties.id}`
       );
     }
   };

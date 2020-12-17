@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { ETKPanelProps } from "@/components/Panel";
 import {
   steps,
   schemaMap,
@@ -16,6 +15,7 @@ import {
 import useETKForm from "@/components/Form/useForm";
 import {
   Button,
+  Divider,
   Grid,
   makeStyles,
   Step,
@@ -25,14 +25,13 @@ import {
   Typography,
 } from "@material-ui/core";
 import { apiRest } from "@/lib/api";
-import ETKMap from "@/components/Map/Map";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
 import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 400,
+    width: "100%",
   },
   label: {
     cursor: "pointer",
@@ -151,6 +150,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { user } = useAppContext();
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
   const [interventionType, setInterventionType] = useState<TInterventionType>(
     "pruning"
@@ -239,16 +239,83 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
     setActiveStep(activeStep - 1);
   };
 
+  const handleBackToTree = () => {
+    router.push(`/edition/?panel=info&tree=${router.query.tree}`);
+  };
+
   return (
-    <React.Fragment>
-      <Typography variant="h5">{t("components:Intervention.title")}</Typography>
-      <Stepper
-        orientation="vertical"
-        activeStep={activeStep}
-        className={classes.root}
-      >
-        {steps.map((step, stepidx) => (
-          <Step key={step} className={classes.label}>
+    <Grid container spacing={2}>
+      <Grid item>
+        <Grid container>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              onClick={handleBackToTree}
+            >
+              {t("components:Intervention.back")}
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid item>
+        <Typography variant="h6">
+          {t("components:Intervention.title")}
+        </Typography>
+        <Stepper
+          orientation="vertical"
+          activeStep={activeStep}
+          className={classes.root}
+        >
+          {steps.map((step, stepidx) => (
+            <Step key={step} className={classes.label}>
+              <StepLabel
+                StepIconProps={{
+                  classes: {
+                    root: classes.icon,
+                    active: classes.icon,
+                    completed: classes.completedIcon,
+                  },
+                }}
+                onClick={(e) => stepidx < activeStep && setActiveStep(stepidx)}
+              >
+                {t(`components:Intervention.steps.${step}`)}
+              </StepLabel>
+              <StepContent>
+                <Grid container direction="column">
+                  <ETKInterventionForm
+                    ref={formRefs[step]}
+                    data={data[step]}
+                    interventionType={interventionType}
+                    step={step}
+                    map={props.map}
+                    organization={user.currentOrganization}
+                  />
+                  <Grid container direction="row" justify="flex-end">
+                    {activeStep !== 0 && (
+                      <Button onClick={() => handlePrevious(step)}>
+                        {activeStep === steps.length - 1
+                          ? t("common:buttons.previous")
+                          : t("common:buttons.previous")}
+                      </Button>
+                    )}
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => handleNext(step)}
+                    >
+                      {activeStep === steps.length - 1
+                        ? t("common:buttons.finish")
+                        : t("common:buttons.next")}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </StepContent>
+            </Step>
+          ))}
+          <Step key="finish" className={classes.label}>
             <StepLabel
               StepIconProps={{
                 classes: {
@@ -257,83 +324,41 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                   completed: classes.completedIcon,
                 },
               }}
-              onClick={(e) => stepidx < activeStep && setActiveStep(stepidx)}
             >
-              {t(`components:Intervention.steps.${step}`)}
+              {t(`components:Intervention.steps.finish`)}
             </StepLabel>
             <StepContent>
               <Grid container direction="column">
-                <ETKInterventionForm
-                  ref={formRefs[step]}
-                  data={data[step]}
-                  interventionType={interventionType}
-                  step={step}
-                  map={props.map}
-                  organization={user.currentOrganization}
-                />
-                <Grid container direction="row" justify="flex-end">
-                  {activeStep !== 0 && (
-                    <Button onClick={() => handlePrevious(step)}>
-                      {activeStep === steps.length - 1
-                        ? t("common:buttons.previous")
-                        : t("common:buttons.previous")}
+                <Grid>
+                  <Typography variant="h6">
+                    {t(`components:Intervention.success`)}
+                  </Typography>
+                </Grid>
+                <Grid>
+                  <Typography>
+                    {t("components:Intervention.whatnow")}
+                  </Typography>
+                  <Grid container direction="row" justify="flex-end">
+                    <Button onClick={handleBackToTree}>
+                      <HomeIcon />
                     </Button>
-                  )}
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={() => handleNext(step)}
-                  >
-                    {activeStep === steps.length - 1
-                      ? t("common:buttons.finish")
-                      : t("common:buttons.next")}
-                  </Button>
+                    <Button
+                      onClick={(e) => reset()}
+                      variant="contained"
+                      color="primary"
+                    >
+                      <Typography variant="caption">
+                        {t("components:Intervention.plannew")}
+                      </Typography>
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
             </StepContent>
           </Step>
-        ))}
-        <Step key="finish" className={classes.label}>
-          <StepLabel
-            StepIconProps={{
-              classes: {
-                root: classes.icon,
-                active: classes.icon,
-                completed: classes.completedIcon,
-              },
-            }}
-          >
-            {t(`components:Intervention.steps.finish`)}
-          </StepLabel>
-          <StepContent>
-            <Grid container direction="column">
-              <Grid>
-                <Typography variant="h6">
-                  {t(`components:Intervention.success`)}
-                </Typography>
-              </Grid>
-              <Grid>
-                <Typography>{t("components:Intervention.whatnow")}</Typography>
-                <Grid container direction="row" justify="flex-end">
-                  <Button>
-                    <HomeIcon />
-                  </Button>
-                  <Button
-                    onClick={(e) => reset()}
-                    variant="contained"
-                    color="primary"
-                  >
-                    <Typography variant="caption">
-                      {t("components:Intervention.plannew")}
-                    </Typography>
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </StepContent>
-        </Step>
-      </Stepper>
-    </React.Fragment>
+        </Stepper>
+      </Grid>
+    </Grid>
   );
 };
 
