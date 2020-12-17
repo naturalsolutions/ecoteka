@@ -1,10 +1,14 @@
 import React, { useEffect, useState, SetStateAction } from "react";
 import {
   Box,
+  Button,
   Container,
   Grid,
   GridSpacing,
   makeStyles,
+  Step,
+  StepLabel,
+  Stepper,
   Typography,
 } from "@material-ui/core";
 import { Nature as TreeIcon, Euro as EuroIcon } from "@material-ui/icons";
@@ -17,15 +21,12 @@ import Widget from "@/components/Dashboard/Widget";
 import { Trail as SpringTail } from "react-spring/renderprops.cjs";
 import SimpleMetric from "@/components/DataViz/SimpleMetric";
 import StackedBars from "@/components/DataViz/StackedBars";
-import { treeInterventions } from "@/lib/mock";
 import AppLayoutGeneral from "@/components/appLayout/General";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import useAPI from "@/lib/useApi";
 import useDimensions from "@/lib/hooks/useDimensions";
-import {
-  setMonthSeriesWithCount,
-  setMonthSeriesWithSum,
-} from "@/lib/utils/d3-utils";
+import { setMonthSeriesWithSum } from "@/lib/utils/d3-utils";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 export interface ETKDashboardProps {}
 
@@ -49,6 +50,14 @@ interface WidgetProps {
   name: string;
   component: React.ReactNode;
   size?: WidgetSizeProps;
+}
+
+interface MetricsProps {
+  total_tree_count: number;
+  logged_trees_count: number;
+  planted_trees_count: number;
+  planned_interventions_cost: number;
+  scheduled_interventions_cost: number;
 }
 interface WidgetSizeProps {
   xs?: GridSpacing;
@@ -85,130 +94,188 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
     return res;
   };
   const [interventions, setIterventions] = useState([]);
-  const [metrics, setMetrics] = useState({});
+  const [metrics, setMetrics] = useState({} as MetricsProps);
   const [treeWidgets, setTreeWidgets] = useState([]);
   const [interventionsWidgets, setInterventionsWidgets] = useState(
     [] as WidgetProps[]
   );
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const steps = getSteps();
+
+  function getSteps() {
+    return [
+      "Configuration de votre espace de travail",
+      "Inventaire patrimoine arboré",
+      "Pilotage de la gestion",
+      "Surveillance de l'état sanitaire",
+    ];
+  }
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return "Configuration de votre espace de travail";
+      case 1:
+        return "Inventaire patrimoine arboré";
+      case 2:
+        return "Pilotage de la gestion";
+      case 3:
+        return "Surveillance de l'état sanitaire";
+      default:
+        return "Étape non définie";
+    }
+  }
 
   useEffect(() => {
     getOrganizationMetrics().then((response) => {
       if (response.status == 200 && user) {
         setMetrics(response.data);
-        setTreeWidgets([
-          {
-            name: "a.widget.1",
-            component: (
-              <SimpleMetric
-                caption="Arbres total"
-                metric={user.currentOrganization.total_trees}
-                icon={
-                  <IconContext.Provider value={{ size: "3rem" }}>
-                    <GiFruitTree />
-                  </IconContext.Provider>
-                }
-              />
-            ),
-          },
-          {
-            name: "a.widget.2",
-            component: (
-              <SimpleMetric
-                caption="Arbres plantés en 2020"
-                metric={response.data.planted_trees_count}
-                icon={
-                  <IconContext.Provider value={{ size: "3rem" }}>
-                    <GiPlantRoots />
-                  </IconContext.Provider>
-                }
-              />
-            ),
-          },
-          {
-            name: "a.widget.3",
-            component: (
-              <SimpleMetric
-                caption="Arbres abattus en 2020"
-                metric={response.data.logged_trees_count}
-                icon={
-                  <IconContext.Provider value={{ size: "3rem" }}>
-                    <GiLogging />
-                  </IconContext.Provider>
-                }
-              />
-            ),
-          },
-        ]);
-
-        const interventionsWidgetsToAdd = [
-          {
-            name: "a.widget.4",
-            size: {
-              xs: 6,
-            },
-            component: (
-              <SimpleMetric
-                caption="Coût total des interventions planifiées en 2020"
-                metric={response.data.planned_interventions_cost}
-                icon={<EuroIcon style={{ fontSize: "3rem" }} />}
-              />
-            ),
-          },
-          {
-            name: "a.widget.5",
-            size: {
-              xs: 6,
-            },
-            component: (
-              <SimpleMetric
-                caption="Coût total des interventions programmées en 2020"
-                metric={response.data.scheduled_interventions_cost}
-                icon={<EuroIcon style={{ fontSize: "3rem" }} />}
-              />
-            ),
-          },
-        ];
-
-        setInterventionsWidgets(
-          (prevState) =>
-            [...interventionsWidgetsToAdd, ...prevState] as WidgetProps[]
-        );
       }
     });
     getInterventions().then((response) => {
       if (response.status == 200 && user) {
-        const interventionsWidgetsStackedBard = [
-          {
-            name: "Budget mensuel des interventions planifiées en 2020",
-            size: {
-              xs: 12,
-            },
-            component: (
-              <StackedBars
-                width={1060}
-                height={400}
-                chartData={setMonthSeriesWithSum(
-                  response.data,
-                  "intervention_start_date",
-                  "intervention_type",
-                  "estimated_cost",
-                  2020
-                )}
-                xScaleKey="date"
-                colorScheme={colorSchemeInterventions}
-                yScaleUnit="€ HT"
-              />
-            ),
-          },
-        ];
-
-        setInterventionsWidgets(
-          (prevState) =>
-            [...prevState, ...interventionsWidgetsStackedBard] as WidgetProps[]
-        );
+        setIterventions(response.data);
       }
     });
   }, [user]);
+
+  useEffect(() => {
+    setTreeWidgets([
+      {
+        name: "a.widget.1",
+        component: (
+          <SimpleMetric
+            caption="Arbres total"
+            metric={metrics.total_tree_count}
+            icon={
+              <IconContext.Provider value={{ size: "3rem" }}>
+                <GiFruitTree />
+              </IconContext.Provider>
+            }
+          />
+        ),
+      },
+      {
+        name: "a.widget.2",
+        component: (
+          <SimpleMetric
+            caption="Arbres plantés en 2020"
+            metric={metrics.planted_trees_count}
+            icon={
+              <IconContext.Provider value={{ size: "3rem" }}>
+                <GiPlantRoots />
+              </IconContext.Provider>
+            }
+          />
+        ),
+      },
+      {
+        name: "a.widget.3",
+        component: (
+          <SimpleMetric
+            caption="Arbres abattus en 2020"
+            metric={metrics.logged_trees_count}
+            icon={
+              <IconContext.Provider value={{ size: "3rem" }}>
+                <GiLogging />
+              </IconContext.Provider>
+            }
+          />
+        ),
+      },
+    ]);
+    if (metrics.total_tree_count > 0) {
+      setActiveStep(2);
+    } else {
+      setActiveStep(0);
+    }
+  }, [metrics]);
+
+  useEffect(() => {
+    if (interventions.length == 0) {
+      setInterventionsWidgets([
+        {
+          name: "a.widget.4",
+          size: {
+            xs: 6,
+          },
+          component: (
+            <SimpleMetric
+              caption="Coût total des interventions planifiées en 2020"
+              metric={metrics.planned_interventions_cost}
+              icon={<EuroIcon style={{ fontSize: "3rem" }} />}
+            />
+          ),
+        },
+        {
+          name: "a.widget.5",
+          size: {
+            xs: 6,
+          },
+          component: (
+            <SimpleMetric
+              caption="Coût total des interventions programmées en 2020"
+              metric={metrics.scheduled_interventions_cost}
+              icon={<EuroIcon style={{ fontSize: "3rem" }} />}
+            />
+          ),
+        },
+      ]);
+    } else {
+      setInterventionsWidgets([
+        {
+          name: "a.widget.4",
+          size: {
+            xs: 6,
+          },
+          component: (
+            <SimpleMetric
+              caption="Coût total des interventions planifiées en 2020"
+              metric={metrics.planned_interventions_cost}
+              icon={<EuroIcon style={{ fontSize: "3rem" }} />}
+            />
+          ),
+        },
+        {
+          name: "a.widget.5",
+          size: {
+            xs: 6,
+          },
+          component: (
+            <SimpleMetric
+              caption="Coût total des interventions programmées en 2020"
+              metric={metrics.scheduled_interventions_cost}
+              icon={<EuroIcon style={{ fontSize: "3rem" }} />}
+            />
+          ),
+        },
+        {
+          name: "Budget mensuel des interventions planifiées en 2020",
+          size: {
+            xs: 12 as GridSpacing,
+          },
+          component: (
+            <StackedBars
+              width={1060}
+              height={400}
+              chartData={setMonthSeriesWithSum(
+                interventions,
+                "intervention_start_date",
+                "intervention_type",
+                "estimated_cost",
+                2020
+              )}
+              xScaleKey="date"
+              colorScheme={colorSchemeInterventions}
+              yScaleUnit="€ HT"
+            />
+          ),
+        },
+      ]);
+      setActiveStep(3);
+    }
+  }, [interventions, metrics]);
 
   return (
     <AppLayoutGeneral>
@@ -223,7 +290,16 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             {user?.currentOrganization?.name}
           </Typography>
         </Box>
-        <Box py={4}>
+        <Box>
+          <Stepper alternativeLabel activeStep={activeStep}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Box>
+        <Box pt={4} pb={2}>
           <Typography
             className={classes.dashboardTitle}
             variant="h6"
@@ -232,6 +308,29 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             Votre patrimoine arboré
           </Typography>
         </Box>
+        {metrics?.total_tree_count == 0 && (
+          <Box pb={2}>
+            <Alert
+              severity="info"
+              action={
+                <Button
+                  color="inherit"
+                  size="small"
+                  variant="outlined"
+                  onClick={() => router.push("/?panel=import")}
+                >
+                  Importer des données
+                </Button>
+              }
+            >
+              <AlertTitle>
+                Ajouter les premiers arbres à votre patrimoine
+              </AlertTitle>
+              Votre espace de travail ne contient aucun arbre pour l'instant —{" "}
+              <strong>Commencer maintenant!</strong>
+            </Alert>
+          </Box>
+        )}
         <Grid container spacing={3}>
           <SpringTail
             items={treeWidgets}
@@ -261,17 +360,6 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             )}
           </SpringTail>
         </Grid>
-        {interventionsWidgets.length > 0 && (
-          <Box py={4}>
-            <Typography
-              className={classes.dashboardTitle}
-              variant="h6"
-              component="h2"
-            >
-              Commencer à piloter la gestion de votre patrimoine...
-            </Typography>
-          </Box>
-        )}
 
         {interventionsWidgets.length > 0 && (
           <>
@@ -284,6 +372,34 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                 État de gestion de votre patrimoine
               </Typography>
             </Box>
+            {interventions.length == 0 && (
+              <Box pb={2}>
+                <Alert
+                  severity="info"
+                  action={
+                    <Button
+                      color="inherit"
+                      size="small"
+                      variant="outlined"
+                      disabled={Boolean(metrics.total_tree_count == 0)}
+                      onClick={() =>
+                        router.push("/edition/?panel=intervention")
+                      }
+                    >
+                      Ajouter des interventions
+                    </Button>
+                  }
+                >
+                  <AlertTitle>
+                    Ajouter, programmer et suivre le budget des interventions
+                    sur votre patrimoine
+                  </AlertTitle>
+                  Dès que votre espace de travail contiendra des arbres, vous
+                  pourrez débuter la gestion de votre patrimoine végétal —{" "}
+                  <strong>En savoir plus!</strong>
+                </Alert>
+              </Box>
+            )}
             <Grid container spacing={3}>
               <SpringTail
                 items={interventionsWidgets}

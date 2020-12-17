@@ -68,13 +68,14 @@ const Calendar: React.FC<CalendarProps> = (props) => {
     const months = [];
 
     for (let i = 0; i < 12; i++) {
-      const interventions = props.interventions
-        ? props.interventions
-            .filter((intervention) =>
-              filters.includes(intervention.intervention_type)
-            )
-            .filter(filterInterventionMonth(i))
-        : [];
+      const interventions =
+        props.interventions.length > 0
+          ? props.interventions
+              .filter((intervention) =>
+                filters.includes(intervention.intervention_type)
+              )
+              .filter(filterInterventionMonth(i))
+          : [];
 
       months.push(
         <Grid key={`month-${i}`} item xs={3}>
