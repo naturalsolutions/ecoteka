@@ -9,3 +9,4 @@ tiles
 redis
 .vscode/*
 !.vscode/ecoteka.code-snippets
+.expo
