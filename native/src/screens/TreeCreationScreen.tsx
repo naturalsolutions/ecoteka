@@ -206,24 +206,26 @@ const TreeCreationScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <Background>
-      <BackButton goBack={() => navigation.navigate('Dashboard')} />
-      <Logo />
-      <Header>Ajouter un arbre</Header>
-      {!imageUri ? renderSelectPicker() : renderHasImage()}
+    <Fragment>
+      <Background>
+        <BackButton goBack={() => navigation.navigate('Dashboard')} />
+        <Logo />
+        <Header>Ajouter un arbre</Header>
+        {!imageUri ? renderSelectPicker() : renderHasImage()}
+        <Snackbar
+          visible={isSuccessVisible}
+          duration={2000}
+          onDismiss={() => setIsSuccessVisible(false)}
+        >
+          Arbre ajouté
+        </Snackbar>
+      </Background>
       {isLoading && (
         <View style={styles.loadingFullscreen}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       )}
-      <Snackbar
-        visible={isSuccessVisible}
-        duration={2000}
-        onDismiss={() => setIsSuccessVisible(false)}
-      >
-        Arbre ajouté
-      </Snackbar>
-    </Background>
+    </Fragment>
   );
 };
 
