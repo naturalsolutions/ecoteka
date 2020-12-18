@@ -18,6 +18,7 @@ import Fuse from "fuse.js";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
 import MapLayers from "@/components/Map/Layers";
+import MapFilter from "@/components/Map/Filter";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutCarto from "@/components/appLayout/Carto";
@@ -129,7 +130,7 @@ const EditionPage = ({}) => {
   const [hoveredTreeId, setHoveredTreeId] = useState<number>(null);
   const [boxSelect, setBoxSelect] = useState<boolean>(false);
   const [filterQuery, setFilterQuery] = useState<string>("");
-  const [flteredData, setFilteredData] = useState<any>({
+  const [filteredData, setFilteredData] = useState<any>({
     type: "FeatureCollection",
     features: [],
   });
@@ -145,17 +146,19 @@ const EditionPage = ({}) => {
     ],
   };
 
-  const fuse = new Fuse([], optionsFuse);
+  const fuse = new Fuse(data?.features, optionsFuse);
 
   const getData = async (
     organizationId: number,
     fitBounds: boolean = false
   ) => {
     const newData = await apiRest.organization.geojson(organizationId);
-
-    fuse.setCollection(newData?.features);
     setData(newData);
   };
+
+  useEffect(() => {
+    fuse.setCollection(data?.features);
+  }, [data]);
 
   useEffect(() => {
     if (user && user.currentOrganization) {
@@ -286,6 +289,10 @@ const EditionPage = ({}) => {
     setFilterQuery(event.target.value);
   };
 
+  const handleFilter = (query: string) => {
+    setFilterQuery(query);
+  };
+
   const handleOnMapToolbarChange = (action: TMapToolbarAction) => {
     const map = mapRef.current.getMap();
 
@@ -297,6 +304,17 @@ const EditionPage = ({}) => {
       case "toggle_layers":
         setDrawerRightComponent(
           drawerRightComponent === null ? <MapLayers map={map} /> : null
+        );
+        break;
+      case "filter":
+        setDrawerRightComponent(
+          drawerRightComponent === null ? (
+            <MapFilter
+              map={map}
+              handleFilter={handleFilter}
+              filterQuery={filterQuery}
+            />
+          ) : null
         );
         break;
       case "geolocate":
@@ -332,7 +350,7 @@ const EditionPage = ({}) => {
             <Source
               id="filteredTrees"
               type="geojson"
-              data={flteredData ? flteredData : null}
+              data={filteredData ? filteredData : null}
             />
             <Layer
               id="trees"
@@ -512,31 +530,6 @@ const EditionPage = ({}) => {
               )}
             </Grid>
             <Grid item xs></Grid>
-            <Grid item>
-              <Grid
-                container
-                direction="column"
-                justify="flex-start"
-                alignItems="flex-start"
-              >
-                <Grid item>
-                  <div className={classes.search}>
-                    <div className={classes.searchIconWrapper}>
-                      <Search className={classes.searchIcon} />
-                    </div>
-                    <InputBase
-                      placeholder="Filter"
-                      value={filterQuery}
-                      onChange={handleFilterChange}
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }}
-                    />
-                  </div>
-                </Grid>
-              </Grid>
-            </Grid>
           </Grid>
         </Box>
       </Grid>

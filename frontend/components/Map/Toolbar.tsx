@@ -2,6 +2,7 @@ import { FC } from "react";
 import { makeStyles, Grid, IconButton, Divider } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import AddIcon from "@material-ui/icons/Add";
+import { MdFilterList } from "react-icons/md";
 import RemoveIcon from "@material-ui/icons/Remove";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import MyLocationIcon from "@material-ui/icons/MyLocation";
@@ -13,6 +14,7 @@ export type TMapToolbarAction =
   | "zoom_in"
   | "zoom_out"
   | "search"
+  | "filter"
   | "toggle_layers"
   | "fit_to_bounds"
   | "geolocate"
@@ -73,6 +75,11 @@ const MapToolbar: FC<IMapToolbarProps> = ({ onChange }) => {
       <Grid item>
         <IconButton onClick={() => handleActionClick("search")}>
           <SearchIcon />
+        </IconButton>
+      </Grid>
+      <Grid item>
+        <IconButton onClick={() => handleActionClick("filter")}>
+          <MdFilterList />
         </IconButton>
       </Grid>
       <Grid item>
