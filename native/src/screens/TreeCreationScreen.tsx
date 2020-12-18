@@ -182,7 +182,11 @@ const TreeCreationScreen = ({ navigation }: Props) => {
   const renderHasImage = () => {
     return (
       <Fragment>
-        <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />
+        <Image
+          source={{ uri: imageUri }}
+          style={{ width: 200, height: 200 }}
+          resizeMode="contain"
+        />
         {isSent ? (
           <Button mode="outlined" onPress={() => reset()}>
             Ajouter un autre arbre
