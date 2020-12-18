@@ -7,6 +7,7 @@ import {
   RegisterScreen,
   ForgotPasswordScreen,
   Dashboard,
+  TreeCreationScreen,
 } from './screens';
 
 const Router = createStackNavigator(
@@ -16,6 +17,7 @@ const Router = createStackNavigator(
     RegisterScreen,
     ForgotPasswordScreen,
     Dashboard,
+    TreeCreationScreen,
   },
   {
     initialRouteName: 'HomeScreen',

@@ -8,7 +8,10 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/masked-view": "0.1.10",
+    "axios": "^0.21.0",
+    "axios-auth-refresh": "^3.0.0",
     "expo": "^40.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -19,7 +22,10 @@
     "react-native-status-bar-height": "^2.6.0",
     "react-native-web": "~0.13.12",
     "react-navigation": "^4.4.3",
-    "react-navigation-stack": "^2.10.2"
+    "react-navigation-stack": "^2.10.2",
+    "expo-camera": "~9.1.0",
+    "expo-image-picker": "~9.2.0",
+    "expo-location": "~10.0.0"
   },
   "devDependencies": {
     "@types/react": "~16.9.35",
