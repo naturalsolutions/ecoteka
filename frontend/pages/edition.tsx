@@ -158,7 +158,6 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     fuse.setCollection(data?.features);
-    console.log(fuse);
   }, [data]);
 
   useEffect(() => {
@@ -175,12 +174,9 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     if (filterQuery) {
-      console.log(fuse);
       const hits = fuse.search(filterQuery);
-      console.log(hits);
       if (hits.length > 0) {
         const newFeatures = hits.map((hit) => hit.item);
-        console.log(newFeatures);
         setFilteredData((prevState) => {
           return { ...prevState, features: newFeatures };
         });
