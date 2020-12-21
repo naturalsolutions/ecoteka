@@ -5,7 +5,7 @@ import {
 } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
 import { makeStyles, Grid, Button } from "@material-ui/core";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import useForm from "@/components/Form/useForm";

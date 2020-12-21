@@ -4,7 +4,7 @@ import { Button, Grid, makeStyles } from "@material-ui/core";
 import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { useAppContext } from "@/providers/AppContext";
 import TreeExpanded from "@/components/Tree/Infos/Expanded";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import { TIntervention } from "@/components/Interventions/Schema";
 import TreeInfosProperties from "@/components/Tree/Infos/Properties";
 

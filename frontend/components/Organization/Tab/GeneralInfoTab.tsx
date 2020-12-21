@@ -5,7 +5,7 @@ import Map from "@/components/Map/Map";
 import ETKMap from "@/components/Map/Map";
 import { apiRest } from "@/lib/api";
 import { makeStyles } from "@material-ui/core/styles";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import ETKFormOrganization, {
   ETKFormOrganizationActions,
 } from "@/components/Organization/Form/Form";

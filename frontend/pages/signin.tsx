@@ -12,7 +12,7 @@ import {
 import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import AppLayoutGeneral from "@/components/appLayout/General";
+import AppLayoutGeneral from "@/components/AppLayout/General";
 
 export default function SignInPage() {
   const formRef = useRef<ETKFormSignInActions>();

@@ -9,7 +9,7 @@ import MapGL, {
 } from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
@@ -21,10 +21,11 @@ import MapLayers from "@/components/Map/Layers";
 import MapFilter from "@/components/Map/Filter";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
-import AppLayoutCarto from "@/components/appLayout/Carto";
+import AppLayoutCarto from "@/components/AppLayout/Carto";
 import PanelStartGeneralInfo from "@/components/Panel/Start/GeneralInfo";
 import MapModeSwitch from "@/components/Map/ModeSwitch";
 import MapDrawToolbar from "@/components/Map/DrawToolbar";
+import MapSearchCity from "@/components/Map/SearchCity";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
@@ -354,11 +355,19 @@ const EditionPage = ({}) => {
     }
   };
 
+  const handleOnDrawerLeftClose = () => {
+    setDrawerLeftComponent(null);
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 50);
+  };
+
   return (
     <AppLayoutCarto
       drawerRightComponent={drawerRightComponent}
       drawerLeftComponent={drawerLeftComponent}
-      onMapToolbarChange={(action) => handleOnMapToolbarChange(action)}
+      onDrawerLeftClose={handleOnDrawerLeftClose}
+      onMapToolbarChange={handleOnMapToolbarChange}
     >
       <Grid className={classes.root} id="map-edition">
         {viewport && (
@@ -555,6 +564,9 @@ const EditionPage = ({}) => {
               )}
             </Grid>
             <Grid item xs></Grid>
+            <Grid item>
+              <MapSearchCity map={mapRef} />
+            </Grid>
           </Grid>
         </Box>
       </Grid>

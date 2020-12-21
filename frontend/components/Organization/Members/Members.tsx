@@ -3,7 +3,7 @@ import { IOrganization } from "@/index.d";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Button, Toolbar, useMediaQuery } from "@material-ui/core";
 import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import { apiRest } from "@/lib/api";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";

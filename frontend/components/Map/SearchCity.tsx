@@ -117,6 +117,7 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
       loading={loading}
       value={value}
       style={props.style}
+      size="small"
       onChange={onChangeHandler}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);

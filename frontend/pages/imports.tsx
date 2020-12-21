@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ETKImportHistory from "@/components/Import/History/Index";
 import { useAppContext } from "@/providers/AppContext";
 import { apiRest } from "@/lib/api";
-import AppLayoutGeneral from "@/components/appLayout/General";
+import AppLayoutGeneral from "@/components/AppLayout/General";
 
 export default function ImportsPage() {
   const { user, isLoading } = useAppContext();
