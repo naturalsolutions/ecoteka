@@ -2,8 +2,8 @@ import io
 import logging
 import os
 import shutil
-from typing import Any, List, Union
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+from typing import Any, List, Union, Optional
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Request
 from sqlalchemy.orm import Session
 from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
@@ -70,6 +70,7 @@ def trees_import(
 
 @router.get("/export/")
 def trees_export(
+    organization_id: int,
     format: str = "geojson",
     auth=Depends(authorization("trees:export")),
     db: Session = Depends(get_db),
@@ -132,8 +133,9 @@ def get(
 
 
 @router.post("/", response_model=schemas.tree.Tree_xy)
-def add(
+async def add(
     organization_id: int,
+    request: Request,
     *,
     auth=Depends(authorization("trees:add")),
     db: Session = Depends(get_db),
@@ -141,16 +143,28 @@ def add(
     current_user: models.User = Depends(get_current_active_user),
 ) -> Any:
     """Add one tree"""
-    tree_with_user_info = schemas.TreeCreate(
-        geom=f"POINT({tree.x} {tree.y})",
-        properties=tree.properties,
-        user_id=current_user.id,
-        organization_id=organization_id,
-    )
+    try:
+        tree_with_user_info = schemas.TreeCreate(
+            geom=f"POINT({tree.x} {tree.y})",
+            properties=tree.properties,
+            user_id=current_user.id,
+            organization_id=organization_id,
+        )
 
-    response = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
-    create_mbtiles_task.delay(organization_id)
-    return response
+        response = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
+        create_mbtiles_task.delay(organization_id)
+        
+        channel = request.scope.get("ws_channel")
+
+        if channel is not None:
+            await channel.broadcast_message("", "create_one_tree")
+        
+        return response
+    except Exception as error:
+        print(error)
+        return HTTPException(status_code=500, detail=error)
+
+
 
 
 @router.put("/{tree_id}", response_model=schemas.tree.Tree_xy)

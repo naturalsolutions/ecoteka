@@ -11,6 +11,7 @@ from app.api.api_v1.endpoints import (
     taxref,
     trees,
     users,
+    ws
 )
 
 api_router = APIRouter()
@@ -42,4 +43,8 @@ api_router.include_router(
 
 api_router.include_router(
     organization.router, prefix="/organization", tags=["organization"]
+)
+
+api_router.include_router(
+    ws.router, tags=["ws"]
 )

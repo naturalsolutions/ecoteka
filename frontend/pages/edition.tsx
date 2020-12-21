@@ -134,6 +134,7 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
+  const [ws, setWS] = useState<WebSocket>();
 
   const optionsFuse = {
     minMatchCharLength: 3,
@@ -216,6 +217,30 @@ const EditionPage = ({}) => {
             });
           }
         });
+    }
+
+    if (typeof window !== "undefined") {
+      const wsURI = `${
+        window.location.protocol === "https:" ? "wss:" : "ws:"
+      }//${window.location.host}/api/v1/ws`;
+
+      const ws = new WebSocket(wsURI);
+
+      ws.onmessage = (message) => {
+        if (message && message.data) {
+          try {
+            const dataMessage = JSON.parse(message.data);
+
+            switch (dataMessage.data.msg) {
+              case "create_one_tree":
+                getData(user.currentOrganization.id);
+                break;
+            }
+          } catch (e) {}
+        }
+      };
+
+      setWS(ws);
     }
   }, []);
 
