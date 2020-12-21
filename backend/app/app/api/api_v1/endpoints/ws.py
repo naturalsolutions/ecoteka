@@ -42,7 +42,7 @@ class WSChannelLive(WebSocketEndpoint):
         and finally the new user is added to the global :class:`~.WSChannel` instance.
         """
         log.info("Connecting new user...")
-        channel: Optional[WSChannel] = self.scope.get("channel")
+        channel: Optional[WSChannel] = self.scope.get("ws_channel")
         if channel is None:
             raise RuntimeError(f"Global `WSChannel` instance unavailable!")
         self.channel = channel

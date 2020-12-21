@@ -21,6 +21,6 @@ class ChannelEventMiddleware:
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] in ("lifespan", "http", "websocket"):
-            scope["channel"] = self.channel
+            scope["ws_channel"] = self.channel
         
         await self.app(scope, receive, send)
