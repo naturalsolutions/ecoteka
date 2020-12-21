@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Container } from "@material-ui/core";
 import { Header, Breadcrumb, Tabs } from "@/components/Organization";
 import { apiRest } from "@/lib/api";
-import AppLayoutGeneral from "@/components/appLayout/General";
+import AppLayoutGeneral from "@/components/AppLayout/General";
 
 interface OrganizationProps {}
 

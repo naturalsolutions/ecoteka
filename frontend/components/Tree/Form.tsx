@@ -11,7 +11,7 @@ import useETKForm from "@/components/Form/useForm";
 import useETKTreeSchema from "@/components/Tree/Schema";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import { ITree } from "@/index";
 
 const useStyles = makeStyles((theme) => ({

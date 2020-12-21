@@ -4,7 +4,7 @@ import WarningIcon from "@material-ui/icons/Warning";
 import { useAppContext } from "@/providers/AppContext";
 import { apiRest } from "@/lib/api";
 import { useTranslation } from "react-i18next";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 
 export interface ETKLogoutProps {
   buttonProps?: any;

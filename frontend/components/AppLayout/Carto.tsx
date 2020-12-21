@@ -1,7 +1,8 @@
 import { FC, createContext, useContext, ReactNode } from "react";
-import { makeStyles, Drawer } from "@material-ui/core";
+import { makeStyles, Drawer, IconButton } from "@material-ui/core";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import MapToolbar, { TMapToolbarAction } from "@/components/Map/Toolbar";
+import CloseIcon from "@material-ui/icons/Close";
 
 const toolbarHeight = 48;
 const toolbarHeightCalc = `calc(100vh - ${toolbarHeight}px)`;
@@ -43,6 +44,11 @@ const useStyles = makeStyles((theme) => ({
     height: toolbarHeightCalc,
     marginTop: toolbarHeight,
   },
+  close: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+  },
 }));
 
 const AppLayoutCartoContext = createContext(null);
@@ -53,6 +59,7 @@ export interface IAppLayoutCarto {
   drawerRightComponent?: ReactNode;
   drawerLeftComponent?: ReactNode;
   drawerLeftWidth?: number;
+  onDrawerLeftClose?(): void;
   onMapToolbarChange?(action: TMapToolbarAction): void;
 }
 
@@ -61,6 +68,7 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
   drawerRightComponent,
   drawerLeftWidth = 400,
   drawerLeftComponent,
+  onDrawerLeftClose,
   onMapToolbarChange,
 }) => {
   const classes = useStyles({
@@ -82,6 +90,13 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
             }}
           >
             {drawerLeftComponent}
+            <IconButton
+              className={classes.close}
+              size="small"
+              onClick={onDrawerLeftClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
           </Drawer>
         )}
         <main className={classes.content}>

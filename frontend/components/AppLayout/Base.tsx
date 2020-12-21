@@ -1,7 +1,7 @@
 import { FC, createContext, useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import ThemeProvider from "@/lib/hooks/useThemeSwitcher";
-import AppLayoutHeader from "@/components/appLayout/Header";
+import AppLayoutHeader from "@/components/AppLayout/Header";
 import Dialog, { ETKDialogActions } from "@/components/Dialog";
 import Snackbars from "@/components/Snackbars";
 

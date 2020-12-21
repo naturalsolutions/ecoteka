@@ -10,7 +10,7 @@ import {
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useTranslation } from "react-i18next";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import ETKFormContact, {
   ETKFormContactActions,
 } from "@/components/Contact/Form";

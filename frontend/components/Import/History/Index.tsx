@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import ETKImportHistoryTable from "@/components/Import/History/Table";
 import ETKImportHistoryEmpty from "@/components/Import/History/Empty";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import Geofile from "@/components/Geofile";
 import { useAppContext } from "@/providers/AppContext";
 
