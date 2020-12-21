@@ -3,6 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 from fastapi_jwt_auth.exceptions import AuthJWTException
 
 from app.core import authjwt_exception_handler, settings
+from app.core.middleware.channel_event_middleware import ChannelEventMiddleware
 from app.api.api_v1.api import api_router
 
 
@@ -24,4 +25,5 @@ if settings.BACKEND_CORS_ORIGINS:
     )
 
 
+app.add_middleware(ChannelEventMiddleware)
 app.include_router(api_router)
