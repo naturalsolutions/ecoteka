@@ -4,7 +4,7 @@ import { useDrag } from "react-dnd";
 import { ItemTypes } from "@/components/Interventions/Calendar/ItemTypes";
 import { TIntervention } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 export interface CalendarTodoInterventionProps {
   todoIntervention: TIntervention;
 }

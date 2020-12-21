@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Button, ButtonProps } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
 
 interface ETKFormSignInProps extends ButtonProps {

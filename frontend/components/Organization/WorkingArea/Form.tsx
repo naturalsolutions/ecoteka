@@ -11,7 +11,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { apiRest } from "@/lib/api";
 import { IOrganization } from "@/index.d";
 import { DropzoneArea } from "material-ui-dropzone";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import { useAppContext } from "@/providers/AppContext";
 
 export type ETKFormWorkingAreaActions = {

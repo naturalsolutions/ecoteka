@@ -4,7 +4,7 @@ import { apiRest } from "@/lib/api.js";
 import { useAppContext } from "@/providers/AppContext";
 import ETKSigninButton from "@/components/SignIn/Button";
 import ETKRegistrationLinkConfirmation from "@/components/RegistrationLink/Confirmation";
-import AppLayoutGeneral from "@/components/appLayout/General";
+import AppLayoutGeneral from "@/components/AppLayout/General";
 
 export default function RegistrationLinkPage() {
   const router = useRouter();

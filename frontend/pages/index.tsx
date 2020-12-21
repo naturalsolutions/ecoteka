@@ -8,7 +8,7 @@ import ETKLanding from "../components/Landing";
 import { useAppContext } from "../providers/AppContext";
 import { apiRest } from "../lib/api";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
-import AppLayoutCarto from "@/components/appLayout/Carto";
+import AppLayoutCarto from "@/components/AppLayout/Carto";
 
 const useStyles = makeStyles((theme) => ({
   root: {

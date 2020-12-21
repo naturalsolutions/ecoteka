@@ -21,7 +21,7 @@ import Widget from "@/components/Dashboard/Widget";
 import { Trail as SpringTail } from "react-spring/renderprops.cjs";
 import SimpleMetric from "@/components/DataViz/SimpleMetric";
 import StackedBars from "@/components/DataViz/StackedBars";
-import AppLayoutGeneral from "@/components/appLayout/General";
+import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import useAPI from "@/lib/useApi";
 import useDimensions from "@/lib/hooks/useDimensions";

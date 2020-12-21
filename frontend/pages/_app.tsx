@@ -3,7 +3,7 @@ import Head from "next/head";
 import { I18nextProvider } from "react-i18next";
 import i18n from "@/i18n";
 import "mapbox-gl/dist/mapbox-gl.css";
-import AppLayoutBase from "@/components/appLayout/Base";
+import AppLayoutBase from "@/components/AppLayout/Base";
 import "@/styles/global.css";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";

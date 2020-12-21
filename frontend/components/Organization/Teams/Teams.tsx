@@ -20,7 +20,7 @@ import {
 } from "@material-ui/icons";
 import { useRouter } from "next/router";
 
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import ETKFormOrganization, {
   ETKFormOrganizationActions,
 } from "@/components/Organization/Form/Form";
