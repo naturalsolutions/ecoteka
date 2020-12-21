@@ -25,6 +25,7 @@ import AppLayoutCarto from "@/components/AppLayout/Carto";
 import PanelStartGeneralInfo from "@/components/Panel/Start/GeneralInfo";
 import MapModeSwitch from "@/components/Map/ModeSwitch";
 import MapDrawToolbar from "@/components/Map/DrawToolbar";
+import MapSearchCity from "@/components/Map/SearchCity";
 
 const Draw = dynamic(() => import("@urbica/react-map-gl-draw"), {
   ssr: false,
@@ -563,6 +564,9 @@ const EditionPage = ({}) => {
               )}
             </Grid>
             <Grid item xs></Grid>
+            <Grid item>
+              <MapSearchCity map={mapRef} />
+            </Grid>
           </Grid>
         </Box>
       </Grid>
