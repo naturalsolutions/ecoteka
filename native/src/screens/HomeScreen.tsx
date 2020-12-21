@@ -1,23 +1,28 @@
 import React, { memo } from 'react';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
-import Header from '../components/Header';
-import Button from '../components/Button';
-import Paragraph from '../components/Paragraph';
 import { Navigation } from '../types';
+import useApi from '../core/useApi';
 
 type Props = {
   navigation: Navigation;
 };
 
-const HomeScreen = ({ navigation }: Props) => (
-  <Background>
-    <Logo />
+const HomeScreen = ({ navigation }: Props) => {
+  setTimeout(async () => {
+    try {
+      const session = await useApi({ navigation }).getSession();
+      if (session) {
+        navigation.navigate('Dashboard');
+      }
+    } catch (error) {}
+  }, 750);
 
-    <Button mode="contained" onPress={() => navigation.navigate('LoginScreen')}>
-      Login
-    </Button>
-  </Background>
-);
+  return (
+    <Background>
+      <Logo />
+    </Background>
+  );
+};
 
 export default memo(HomeScreen);
