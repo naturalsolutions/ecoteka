@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import { Nature as NatureIcon, Link as LinkIcon } from "@material-ui/icons";
 import useAPI from "@/lib/useApi";
-import AppLayoutGeneral from "@/components/appLayout/General";
+import AppLayoutGeneral from "@/components/AppLayout/General";
 
 export interface ETKGBIFSearchProps {}
 

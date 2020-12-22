@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Button, ButtonProps } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import ETKRegisterForm, {
   ETKFormRegisterActions,
 } from "@/components/Register/Form";

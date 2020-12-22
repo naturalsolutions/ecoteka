@@ -12,7 +12,7 @@ import {
   Fab,
 } from "@material-ui/core";
 import { DropzoneArea } from "material-ui-dropzone";
-import { useAppLayout } from "@/components/appLayout/Base";
+import { useAppLayout } from "@/components/AppLayout/Base";
 import { apiRest } from "@/lib/api";
 import SwipeableViews from "react-swipeable-views";
 import {
