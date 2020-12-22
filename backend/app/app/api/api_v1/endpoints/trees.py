@@ -151,17 +151,21 @@ async def add(
             organization_id=organization_id,
         )
 
-        response = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
+
+        tree_in_db = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
         create_mbtiles_task.delay(organization_id)
         
         channel = request.scope.get("ws_channel")
 
         if channel is not None:
-            await channel.broadcast_message("", "create_one_tree")
+            await channel.broadcast_message(
+                organization_id=organization_id, 
+                action="trees:add", 
+                data=tree_in_db
+            )
         
-        return response
+        return tree_in_db
     except Exception as error:
-        print(error)
         return HTTPException(status_code=500, detail=error)
 
 
@@ -189,8 +193,9 @@ def update(
 
 
 @router.delete("/bulk_delete")
-def bulk_delete(
+async def bulk_delete(
     organization_id: int,
+    request: Request,
     trees: List[int],
     db: Session = Depends(get_db),
     auth=Depends(authorization("trees:bulk_delete")),
@@ -198,6 +203,15 @@ def bulk_delete(
     """Bulk delete"""
     for tree_id in trees:
         crud.crud_tree.tree.remove(db, id=tree_id)
+
+    channel = request.scope.get("ws_channel")
+
+    if channel is not None:
+        await channel.broadcast_message(
+            organization_id=organization_id, 
+            action="trees:bulk_delete", 
+            data=trees
+        )
 
     create_mbtiles_task.delay(organization_id)
 

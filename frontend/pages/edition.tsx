@@ -1,6 +1,6 @@
 import { useEffect, useState, createRef } from "react";
-import { Grid, makeStyles, Box, InputBase } from "@material-ui/core";
-import { Search } from "@material-ui/icons";
+import { Grid, makeStyles, Box } from "@material-ui/core";
+import ReconnectingWebSocket from "reconnecting-websocket";
 import MapGL, {
   Source,
   Layer,
@@ -135,7 +135,7 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [ws, setWS] = useState<WebSocket>();
+  const [ws, setWS] = useState<ReconnectingWebSocket>();
 
   const optionsFuse = {
     minMatchCharLength: 3,
@@ -156,6 +156,44 @@ const EditionPage = ({}) => {
   ) => {
     const newData = await apiRest.organization.geojson(organizationId);
     setData(newData);
+  };
+
+  const onWSMessage = (message) => {
+    if (message && message.data) {
+      try {
+        const json = JSON.parse(message.data);
+
+        if (json.data.organization_id !== user.currentOrganization.id) {
+          return;
+        }
+
+        switch (json.data.action) {
+          case "trees:add":
+            const newFeature = {
+              geometry: {
+                type: "Point",
+                coordinates: [json.data.data.x, json.data.data.y],
+              },
+              id: json.data.data.id,
+              properties: json.data.data,
+              type: "Feature",
+            };
+            setData((data) => {
+              return { ...data, features: data.features.concat([newFeature]) };
+            });
+            break;
+          case "trees:bulk_delete":
+            setData((data) => {
+              return {
+                ...data,
+                features: data.features.filter(
+                  (feature) => !json.data.data.includes(feature.properties.id)
+                ),
+              };
+            });
+        }
+      } catch (e) {}
+    }
   };
 
   useEffect(() => {
@@ -221,27 +259,13 @@ const EditionPage = ({}) => {
     }
 
     if (typeof window !== "undefined") {
-      const wsURI = `${
+      const wsURL = `${
         window.location.protocol === "https:" ? "wss:" : "ws:"
       }//${window.location.host}/api/v1/ws`;
 
-      const ws = new WebSocket(wsURI);
-
-      ws.onmessage = (message) => {
-        if (message && message.data) {
-          try {
-            const dataMessage = JSON.parse(message.data);
-
-            switch (dataMessage.data.msg) {
-              case "create_one_tree":
-                getData(user.currentOrganization.id);
-                break;
-            }
-          } catch (e) {}
-        }
-      };
-
-      setWS(ws);
+      const newWS = new ReconnectingWebSocket(wsURL);
+      newWS.addEventListener("message", onWSMessage);
+      setWS(newWS);
     }
   }, []);
 
@@ -481,7 +505,6 @@ const EditionPage = ({}) => {
                       user.currentOrganization.id,
                       newTree
                     );
-                    await getData(user.currentOrganization.id);
                   }
                 }}
                 onDrawDelete={async (selection) => {

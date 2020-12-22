@@ -13,7 +13,6 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 export type TMapToolbarAction =
   | "zoom_in"
   | "zoom_out"
-  | "search"
   | "filter"
   | "toggle_layers"
   | "fit_to_bounds"
@@ -71,11 +70,6 @@ const MapToolbar: FC<IMapToolbarProps> = ({ onChange }) => {
       </Grid>
       <Grid item>
         <Divider />
-      </Grid>
-      <Grid item>
-        <IconButton onClick={() => handleActionClick("search")}>
-          <SearchIcon />
-        </IconButton>
       </Grid>
       <Grid item>
         <IconButton onClick={() => handleActionClick("filter")}>

@@ -1,8 +1,10 @@
 import logging
 import time
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from pydantic import BaseModel
 from starlette.websockets import WebSocket
+from fastapi.encoders import jsonable_encoder
+
 
 log = logging.getLogger(__name__) 
 
@@ -116,13 +118,15 @@ class WSChannel:
             }
         )
 
-    async def broadcast_message(self, user_id: str, msg: str):
+    async def broadcast_message(self, organization_id: int, action: str, data: Any):
         """
         Broadcast message to all connected users.
         """
+        data_json = jsonable_encoder(data)
+
         for websocket in self._users.values():
             await websocket.send_json(
-                {"type": "MESSAGE", "data": {"user_id": user_id, "msg": msg}}
+                {"type": "MESSAGE", "data": {"organization_id": organization_id, "action": action, "data": data_json}}
             )
 
     async def broadcast_user_joined(self, user_id: str):
