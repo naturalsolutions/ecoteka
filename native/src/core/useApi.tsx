@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function useApi({ navigation }: Props) {
-  const apiUrl = 'http://192.168.0.225:8000/api/v1/';
+  const apiUrl = 'https://dev.ecoteka.org/api/v1';
   let accessToken;
   let refreshToken;
 

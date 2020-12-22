@@ -27,6 +27,9 @@ const Dashboard = ({ navigation }: Props) => {
       >
         Ajouter un arbre
       </Button>
+      <Button mode="outlined" onPress={() => navigation.navigate('MapScreen')}>
+        Vue Carte
+      </Button>
       <Button mode="outlined" onPress={() => api.logout()}>
         Déconnexion
       </Button>

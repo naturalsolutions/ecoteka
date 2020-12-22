@@ -42,13 +42,10 @@ const LoginScreen = ({ navigation }: Props) => {
     body.append('password', password.value);
 
     try {
-      const response = await fetch(
-        'http://192.168.0.225:8000/api/v1/auth/login',
-        {
-          method: 'post',
-          body,
-        }
-      );
+      const response = await fetch(`https://dev.ecoteka.org/v1/auth/login`, {
+        method: 'post',
+        body,
+      });
       const payload = await response.json();
       console.log(response.status);
       console.log(payload);
