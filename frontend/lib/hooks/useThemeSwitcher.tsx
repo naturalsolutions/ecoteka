@@ -37,10 +37,9 @@ const themeLight = createMuiTheme({
 export const ThemeContext = createContext(null);
 
 export default function Provider({ children }) {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [dark, setDark] = useLocalStorage<boolean>(
     "etk:settings:colorScheme",
-    prefersDarkMode
+    false
   );
 
   const theme = useMemo(() => {
@@ -49,7 +48,7 @@ export default function Provider({ children }) {
 
   return (
     <ThemeContext.Provider
-      value={{ theme: theme ?? themeLight, dark, setDark }}
+      value={{ theme: theme || themeLight, dark, setDark }}
     >
       <CssBaseline />
       <ThemeProvider theme={theme}>{children}</ThemeProvider>

@@ -114,7 +114,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
               <ToggleButton
                 size="small"
                 value={dark}
-                selected={dark}
+                selected={dark || false}
                 color="primary"
                 onClick={() => setDark(!dark)}
               >
