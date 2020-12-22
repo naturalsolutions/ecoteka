@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation }: Props) => {
 
     try {
       const response = await fetch(
-        'https://dev.ecoteka.org/api/v1//auth/login',
+        'https://dev.ecoteka.org/api/v1/auth/login',
         {
           method: 'post',
           body,
