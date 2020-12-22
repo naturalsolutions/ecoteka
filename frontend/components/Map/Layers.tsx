@@ -70,7 +70,8 @@ const MapLayers: FC<IMapLayers> = ({ map }) => {
   const initialLayers = map
     ? map
         .getStyle()
-        .layers.filter((l) => !excludeLayers.includes(l.id))
+        .layers.filter((l) => !l.id.startsWith("gl-draw"))
+        .filter((l) => !excludeLayers.includes(l.id))
         .reduce(
           (a, l) => ({ ...a, [l.id]: l.layout?.visibility !== "none" }),
           {}
