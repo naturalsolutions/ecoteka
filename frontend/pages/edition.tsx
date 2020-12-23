@@ -256,15 +256,13 @@ const EditionPage = ({}) => {
         });
     }
 
-    if (typeof window !== "undefined") {
-      const wsURL = `${
-        window.location.protocol === "https:" ? "wss:" : "ws:"
-      }//${window.location.host}/api/v1/ws/${user.currentOrganization.id}`;
+    const wsURL = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
+      window.location.host
+    }/api/v1/ws/${user.currentOrganization.id}`;
 
-      const newWS = new ReconnectingWebSocket(wsURL);
-      newWS.addEventListener("message", onWSMessage);
-      setWS(newWS);
-    }
+    const newWS = new ReconnectingWebSocket(wsURL);
+    newWS.addEventListener("message", onWSMessage);
+    setWS(newWS);
   }, []);
 
   const switchPanel = (panel) => {
@@ -331,10 +329,6 @@ const EditionPage = ({}) => {
         `/edition/?panel=info&tree=${event.features[0].properties.id}`
       );
     }
-  };
-
-  const handleFilterChange = (event) => {
-    setFilterQuery(event.target.value);
   };
 
   const handleFilter = (query: string) => {
