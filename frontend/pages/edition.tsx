@@ -1,6 +1,7 @@
 import { useEffect, useState, createRef } from "react";
 import { Grid, makeStyles, Box } from "@material-ui/core";
 import ReconnectingWebSocket from "reconnecting-websocket";
+import { v4 as uuidv4 } from "uuid";
 import MapGL, {
   Source,
   Layer,
@@ -243,6 +244,20 @@ const EditionPage = ({}) => {
   }, [data, mapRef]);
 
   useEffect(() => {
+    if (!ws) {
+      const wsURL = `${
+        window.location.protocol === "https:" ? "wss:" : "ws:"
+      }//${window.location.host}/api/v1/ws/${
+        user.currentOrganization.id
+      }/${uuidv4()}`;
+
+      const newWS = new ReconnectingWebSocket(wsURL);
+      newWS.addEventListener("message", onWSMessage);
+      setWS(newWS);
+    }
+  }, [ws]);
+
+  useEffect(() => {
     if (router.query.tree) {
       apiRest.trees
         .get(user.currentOrganization.id, router.query.tree)
@@ -255,14 +270,6 @@ const EditionPage = ({}) => {
           }
         });
     }
-
-    const wsURL = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
-      window.location.host
-    }/api/v1/ws/${user.currentOrganization.id}`;
-
-    const newWS = new ReconnectingWebSocket(wsURL);
-    newWS.addEventListener("message", onWSMessage);
-    setWS(newWS);
   }, []);
 
   const switchPanel = (panel) => {
@@ -500,9 +507,9 @@ const EditionPage = ({}) => {
                   }
                 }}
                 onDrawDelete={async (selection) => {
-                  const ids = selection.features.map(
-                    (feature) => feature.properties.id
-                  );
+                  const ids = selection.features
+                    .map((feature) => feature.properties.id)
+                    .filter((id) => id);
 
                   await apiRest.trees.bulkDelete(
                     user.currentOrganization.id,

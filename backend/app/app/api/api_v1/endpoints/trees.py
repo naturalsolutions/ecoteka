@@ -153,7 +153,7 @@ async def add(
         )
 
 
-        tree_in_db = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
+        tree_in_db = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info)
         create_mbtiles_task.delay(organization_id)
         
         channel: Optional[WSManager] = request.scope.get("ws_manager")
@@ -163,11 +163,11 @@ async def add(
                 organization_id=organization_id, 
                 data={
                     "action": "trees:add",
-                    "tree": tree_in_db
+                    "tree": tree_in_db.to_xy()
                 }
             )
         
-        return tree_in_db
+        return tree_in_db.to_xy()
     except Exception as error:
         return HTTPException(status_code=500, detail=error)
 
