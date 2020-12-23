@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "React Native Paper Login Template",
-    "slug": "react-native-paper-login-template",
+    "name": "EcoTeka Native App dev",
+    "slug": "ecoteka-native-app-dev",
     "privacy": "public",
     "platforms": [
       "ios",
@@ -24,6 +24,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "Ecoteka Expo App (wip)"
   }
 }
