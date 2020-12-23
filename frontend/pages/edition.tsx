@@ -174,7 +174,7 @@ const EditionPage = ({}) => {
 
         switch (json.data.data.action) {
           case "trees:add":
-            const newFeature = {
+            const feature = {
               geometry: {
                 type: "Point",
                 coordinates: [json.data.data.tree.x, json.data.data.tree.y],
@@ -184,11 +184,8 @@ const EditionPage = ({}) => {
               type: "Feature",
             };
             setData((data) => {
-              return { ...data, features: data.features.concat([newFeature]) };
+              return { ...data, features: data.features.concat([feature]) };
             });
-            break;
-          case "trees:bulk_delete":
-            getData(user.currentOrganization.id);
             break;
         }
       } catch (e) {}
@@ -515,6 +512,7 @@ const EditionPage = ({}) => {
                     user.currentOrganization.id,
                     JSON.stringify(ids)
                   );
+                  await getData(user.currentOrganization.id);
                 }}
                 onChange={(newData) => {
                   setData(newData);
