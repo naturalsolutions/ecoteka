@@ -136,7 +136,7 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [ws, setWS] = useState<ReconnectingWebSocket>();
+  const [ws, setWS] = useState<WebSocket>();
 
   const optionsFuse = {
     minMatchCharLength: 3,
@@ -172,22 +172,7 @@ const EditionPage = ({}) => {
           return;
         }
 
-        switch (json.data.data.action) {
-          case "trees:add":
-            const feature = {
-              geometry: {
-                type: "Point",
-                coordinates: [json.data.data.tree.x, json.data.data.tree.y],
-              },
-              id: json.data.data.tree.id,
-              properties: json.data.data.tree,
-              type: "Feature",
-            };
-            setData((data) => {
-              return { ...data, features: data.features.concat([feature]) };
-            });
-            break;
-        }
+        getData(user.currentOrganization.id);
       } catch (e) {}
     }
   };
@@ -240,17 +225,29 @@ const EditionPage = ({}) => {
     }
   }, [data, mapRef]);
 
+  const connect = function (ws, setWS) {
+    const wsURL = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
+      window.location.host
+    }/api/v1/ws/${user.currentOrganization.id}/${uuidv4()}`;
+
+    const newWS = new WebSocket(wsURL);
+    newWS.addEventListener("message", onWSMessage);
+    newWS.addEventListener("close", function () {
+      ws.close();
+
+      setTimeout(() => {
+        connect(ws, setWS);
+      }, 1000);
+    });
+    newWS.addEventListener("error", function () {
+      ws.close();
+    });
+    setWS(newWS);
+  };
+
   useEffect(() => {
     if (!ws) {
-      const wsURL = `${
-        window.location.protocol === "https:" ? "wss:" : "ws:"
-      }//${window.location.host}/api/v1/ws/${
-        user.currentOrganization.id
-      }/${uuidv4()}`;
-
-      const newWS = new ReconnectingWebSocket(wsURL);
-      newWS.addEventListener("message", onWSMessage);
-      setWS(newWS);
+      connect(ws, setWS);
     }
   }, [ws]);
 
