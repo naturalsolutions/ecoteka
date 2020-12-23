@@ -52,6 +52,7 @@ class Organization(Base):
         sync_backref=False,
         viewonly=True,
     )
+    trees = relationship("Tree", back_populates="organization")
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 
@@ -77,6 +78,7 @@ class Organization(Base):
             if parent is None
             else (parent.path or Ltree("_")) + Ltree(str(_id))
         )
+        self.trees = [trees]
 
     @property
     def total_members(self):
@@ -92,9 +94,10 @@ class Organization(Base):
             **{
                 c.key: getattr(self, c.key)
                 for c in inspect(self).mapper.column_attrs
-                if not c.key in ["path", "working_area", "config"]
+                if not c.key in ["path", "working_area", "config", "trees"]
             },
             total_members=self.total_members,
             has_working_area=bool(self.working_area),
-            path=str(self.path)
+            path=str(self.path),
+            trees=self.trees
         )

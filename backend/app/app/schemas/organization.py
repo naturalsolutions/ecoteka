@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import Optional, Any
+from typing import Optional, Any, List
 from pydantic import BaseModel
+from .tree import Tree
 
 # Shared properties
 class OrganizationBase(BaseModel):
@@ -29,6 +30,7 @@ class Organization(OrganizationBase):
     total_members: Optional[int] = 0
     archived: bool = False
     archived_at: Optional[datetime]
+    trees: List[Tree] = []
 
     class Config:
         orm_mode = True
