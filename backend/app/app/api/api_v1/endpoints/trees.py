@@ -10,6 +10,7 @@ from app import crud, models, schemas
 from app.api import get_db
 from app.core import set_policies, authorization, get_current_active_user, settings
 from app.worker import import_geofile_task, create_mbtiles_task
+from app.models.ws import WSManager
 from fastapi.responses import StreamingResponse
 import geopandas as gpd
 import imghdr
@@ -155,13 +156,15 @@ async def add(
         tree_in_db = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info).to_xy()
         create_mbtiles_task.delay(organization_id)
         
-        channel = request.scope.get("ws_channel")
+        channel: Optional[WSManager] = request.scope.get("ws_manager")
 
         if channel is not None:
             await channel.broadcast_message(
                 organization_id=organization_id, 
-                action="trees:add", 
-                data=tree_in_db
+                data={
+                    "action": "trees:add",
+                    "tree": tree_in_db
+                }
             )
         
         return tree_in_db
@@ -204,13 +207,15 @@ async def bulk_delete(
     for tree_id in trees:
         crud.crud_tree.tree.remove(db, id=tree_id)
 
-    channel = request.scope.get("ws_channel")
+    channel = request.scope.get("ws_manager")
 
     if channel is not None:
         await channel.broadcast_message(
             organization_id=organization_id, 
-            action="trees:bulk_delete", 
-            data=trees
+            data={
+                "action": "trees:bulk_delete",
+                "trees": trees
+            }
         )
 
     create_mbtiles_task.delay(organization_id)

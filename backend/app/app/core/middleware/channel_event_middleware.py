@@ -17,10 +17,10 @@ class ChannelEventMiddleware:
 
     def __init__(self, app: ASGIApp) -> None:
         self.app = app
-        self.channel = ws.WSChannel()
+        self.manager = ws.WSManager()
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] in ("lifespan", "http", "websocket"):
-            scope["ws_channel"] = self.channel
+            scope["ws_manager"] = self.manager
         
         await self.app(scope, receive, send)

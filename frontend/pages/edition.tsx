@@ -167,15 +167,19 @@ const EditionPage = ({}) => {
           return;
         }
 
-        switch (json.data.action) {
+        if (!json.data.data.action) {
+          return;
+        }
+
+        switch (json.data.data.action) {
           case "trees:add":
             const newFeature = {
               geometry: {
                 type: "Point",
-                coordinates: [json.data.data.x, json.data.data.y],
+                coordinates: [json.data.data.tree.x, json.data.data.tree.y],
               },
-              id: json.data.data.id,
-              properties: json.data.data,
+              id: json.data.data.tree.id,
+              properties: json.data.data.tree,
               type: "Feature",
             };
             setData((data) => {
@@ -183,14 +187,8 @@ const EditionPage = ({}) => {
             });
             break;
           case "trees:bulk_delete":
-            setData((data) => {
-              return {
-                ...data,
-                features: data.features.filter(
-                  (feature) => !json.data.data.includes(feature.properties.id)
-                ),
-              };
-            });
+            getData(user.currentOrganization.id);
+            break;
         }
       } catch (e) {}
     }
@@ -261,7 +259,7 @@ const EditionPage = ({}) => {
     if (typeof window !== "undefined") {
       const wsURL = `${
         window.location.protocol === "https:" ? "wss:" : "ws:"
-      }//${window.location.host}/api/v1/ws`;
+      }//${window.location.host}/api/v1/ws/${user.currentOrganization.id}`;
 
       const newWS = new ReconnectingWebSocket(wsURL);
       newWS.addEventListener("message", onWSMessage);
