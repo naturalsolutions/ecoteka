@@ -136,7 +136,7 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [ws, setWS] = useState<WebSocket>();
+  const [ws, setWS] = useState<string>(uuidv4());
 
   const optionsFuse = {
     minMatchCharLength: 3,
@@ -225,7 +225,7 @@ const EditionPage = ({}) => {
     }
   }, [data, mapRef]);
 
-  const connect = function (ws, setWS) {
+  const connect = function () {
     const wsURL = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
       window.location.host
     }/api/v1/ws/${user.currentOrganization.id}/${uuidv4()}`;
@@ -233,23 +233,12 @@ const EditionPage = ({}) => {
     const newWS = new WebSocket(wsURL);
     newWS.addEventListener("message", onWSMessage);
     newWS.addEventListener("close", function () {
-      ws.close();
-
-      setTimeout(() => {
-        connect(ws, setWS);
-      }, 1000);
+      setTimeout(connect, 1000);
     });
     newWS.addEventListener("error", function () {
-      ws.close();
+      newWS.close();
     });
-    setWS(newWS);
   };
-
-  useEffect(() => {
-    if (!ws) {
-      connect(ws, setWS);
-    }
-  }, [ws]);
 
   useEffect(() => {
     if (router.query.tree) {
@@ -264,6 +253,8 @@ const EditionPage = ({}) => {
           }
         });
     }
+
+    connect();
   }, []);
 
   const switchPanel = (panel) => {
