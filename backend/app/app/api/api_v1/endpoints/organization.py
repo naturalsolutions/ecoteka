@@ -16,6 +16,7 @@ from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import text
+import sqlalchemy as sa
 from app.api import get_db
 from app import crud
 from app.core import settings, enforcer, set_policies, authorization, get_current_user
@@ -424,6 +425,7 @@ def get_geojson(
     organization_id: int,
     auth=Depends(authorization("organizations:get_geojson")),
     db: Session = Depends(get_db),
+    q: str,
 ) -> Any:
     """
     generate geojson from organization
@@ -432,6 +434,15 @@ def get_geojson(
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
+
+    # sql = db.query(Tree).filter(Tree.organization_id == organization_id).filter(
+    #             sa.or_(
+    #                 Tree.properties["gender"].astext == q,
+    #                 Tree.properties["specie"].astext == q,
+    #                 Tree.properties["vernacularName"].astext == q,
+    #             )
+    #         )
+    # sql = db.query(Tree).filter(Tree.organization_id == organization_id)
 
     sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_in_db.id}"
     df = gpd.read_postgis(sql, db.bind)
