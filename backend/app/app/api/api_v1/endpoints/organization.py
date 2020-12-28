@@ -19,9 +19,11 @@ from sqlalchemy.sql import text
 from app.api import get_db
 from app import crud
 from app.core import settings, enforcer, set_policies, authorization, get_current_user
+import pandas as pd 
 
 from app.crud import organization, user, tree
 from app.schemas import (
+    Tree,
     Organization,
     OrganizationCreate,
     OrganizationUpdate,
@@ -32,6 +34,9 @@ from app.schemas import (
     UserCreate,
 )
 from app.models import User
+
+from app.core import query_to_dict, query_to_list, only_dict, flatten_dict_to_pd_series
+
 
 
 router = APIRouter()
@@ -64,6 +69,12 @@ policies = {
         "owner",
         "manager",
         "contributor",
+    ],
+    "organizations:get_aggregates": [
+        "owner",
+        "manager",
+        "contributor",
+        "reader",
     ],
 }
 set_policies(policies)
@@ -586,3 +597,50 @@ def get_metrics(
 
 
     return metrics
+
+@router.get("/{organization_id}/aggregates")
+def get_aggregates(
+    *,
+    organization_id,
+    auth=Depends(authorization("organizations:get_aggregates")),
+    db: Session = Depends(get_db),
+) -> Any:
+    """
+    get organization aggregates
+    """
+    organization_in_db = organization.get(db, id=organization_id)
+    if not organization_in_db:
+        raise HTTPException(status_code=404, detail="Organization not found")
+
+
+    # With SQL 
+    # trees = organization.get_trees(db, id=organization_id)
+
+    # With ORM
+    trees = organization_in_db.trees
+
+    names, data = query_to_list(trees)
+    df = pd.DataFrame.from_records(data, columns=names)
+    # df_properties = pd.DataFrame(df['properties'].values.tolist(), index=df.index)
+
+    # print(df_properties.head(5))
+
+    out = pd.concat([df.drop('properties', axis=1), pd.DataFrame(df['properties'].tolist())], axis=1)
+    print(out.head(5))
+    print(out.columns)
+
+    # d = {}
+    # for col in out:
+    #     print(col)
+        # print(out.groupby([col]).size().to_dict())
+        # d[col]: out.groupby([col]).size().to_dict()
+
+
+    return {
+        "gender": out.groupby(['gender']).size().to_dict(),
+        "species": out.groupby(['specie']).size().to_dict(),
+        "height": out.groupby(['height']).size().to_dict(),
+        "diameter": out.groupby(['diameter']).size().to_dict(),
+    }
+
+

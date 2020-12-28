@@ -130,4 +130,7 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
 
         return members
 
+    def get_trees(self, db: Session, *, id: int) -> List[Tree]:
+        return db.query(Tree).filter(Tree.organization_id == id).all()
+
 organization = CRUDOrganization(Organization)

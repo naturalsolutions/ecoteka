@@ -12,6 +12,14 @@ from .security import (
     get_current_user_with_refresh_token,
 )
 
+from .utils import (
+    query_to_list,
+    query_to_dict,
+    only_dict,
+    list_of_dicts,
+    flatten_dict_to_pd_series
+)
+
 __all__ = [
     "authorization",
     "authjwt_exception_handler",
@@ -27,4 +35,9 @@ __all__ = [
     "enforcer",
     "set_policies",
     "get_current_user_with_refresh_token",
+    "query_to_list",
+    "query_to_dict",
+    "only_dict",
+    "list_of_dicts",
+    "flatten_dict_to_pd_series"
 ]
