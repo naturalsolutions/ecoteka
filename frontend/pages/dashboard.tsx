@@ -317,7 +317,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                   color="inherit"
                   size="small"
                   variant="outlined"
-                  onClick={() => router.push("/?panel=import")}
+                  onClick={() => router.push("/edition/?panel=import")}
                 >
                   Importer des données
                 </Button>
