@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Grid, Hidden, makeStyles, Toolbar } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  Hidden,
+  makeStyles,
+  Toolbar,
+  withStyles,
+} from "@material-ui/core";
 import ContactButton from "@/components/Contact/Button";
 import LanguageSelector from "@/components/LanguageSelector";
 import { useAppContext } from "@/providers/AppContext";
@@ -30,6 +37,32 @@ const useStyles = makeStyles((theme) => {
     },
   };
 });
+
+const LogoWrapperButton = withStyles({
+  root: {
+    boxShadow: "none",
+    textTransform: "none",
+    fontSize: 16,
+    border: "none",
+    borderRadius: "0px",
+    backgroundColor: "none",
+    borderColor: "none",
+    "&:hover": {
+      backgroundColor: "none",
+      borderColor: "none",
+      boxShadow: "none",
+    },
+    "&:active": {
+      boxShadow: "none",
+      backgroundColor: "none",
+      borderColor: "none",
+    },
+    "&:focus": {
+      boxShadow: "none",
+      backgroundColor: "rgba(0,0,0,.1)",
+    },
+  },
+})(Button);
 
 const AppLayoutHeader = ({}): JSX.Element => {
   const { t } = useTranslation("components");
@@ -68,7 +101,12 @@ const AppLayoutHeader = ({}): JSX.Element => {
         <Grid item xs={6}>
           <Grid container alignItems="center">
             <Grid item>
-              <img src={logo} className={classes.logo} />
+              <LogoWrapperButton
+                onClick={() => router.push("/")}
+                disableFocusRipple
+              >
+                <img src={logo} className={classes.logo} />
+              </LogoWrapperButton>
             </Grid>
             {user && (
               <Hidden smDown>
