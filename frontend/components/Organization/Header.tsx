@@ -13,6 +13,7 @@ import {
 import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
+import { useRouter } from "next/router";
 
 interface HeaderProps {}
 
@@ -36,6 +37,7 @@ const Header: FC<HeaderProps> = (props) => {
   const anchorRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(1);
   const { user } = useAppContext();
+  const router = useRouter();
 
   const downloadFile = (blob, filename) => {
     const url = window.URL.createObjectURL(blob);
@@ -83,7 +85,11 @@ const Header: FC<HeaderProps> = (props) => {
   return (
     <Box display="flex" flexDirection="row-reverse">
       <Box m={1}>
-        <Button variant="contained" color="primary" href={`/?panel=import`}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => router.push("/edition/?panel=import")}
+        >
           Importer des données
         </Button>
       </Box>

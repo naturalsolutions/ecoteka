@@ -359,7 +359,7 @@ const EditionPage = ({}) => {
         }
         break;
       case "import":
-        return router.push("/?panel=import");
+        return router.push("/edition/?panel=import");
     }
   };
 
