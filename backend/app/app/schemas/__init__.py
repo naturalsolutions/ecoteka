@@ -42,6 +42,7 @@ from .organization import (
 )
 from .coordinate import Coordinate
 from .intervention import Intervention, InterventionCreate, InterventionUpdate
+from .health_assessment import HealthAssessment, HealthAssessmentCreate, HealthAssessmentUpdate, HealthAssessmentOrgan
 
 __all__ = [
     "AccessAndRefreshToken",
@@ -56,6 +57,10 @@ __all__ = [
     "GeoFileCreate",
     "GeoFileStatus",
     "GeoFileUpdate",
+    "HealthAssessment",
+    "HealthAssessmentCreate",
+    "HealthAssessmentUpdate",
+    "HealthAssessmentOrgan",
     "Intervention",
     "InterventionCreate",
     "InterventionUpdate",
