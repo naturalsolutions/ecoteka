@@ -48,7 +48,8 @@
     "about": "Obtener más información",
     "register": "Registrar",
     "myOrganizations": "Mis organizaciones",
-    "myDashboard": "Panel de control"
+    "myDashboard": "Panel de control",
+    "addUser": "Agregar usuario"
   },
   "Map": {
     "SearchCity": {
