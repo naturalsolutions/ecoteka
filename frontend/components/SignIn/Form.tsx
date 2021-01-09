@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle } from "react";
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useETKSignInSchema from "@/components/SignIn/Schema";
@@ -54,12 +54,14 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
     }));
 
     return (
-      <form>
-        <Grid container direction="column">
-          <Grid item>{fields.username}</Grid>
-          <Grid item>{fields.password}</Grid>
-        </Grid>
-      </form>
+      <Box width={1}>
+        <form>
+          <Grid container direction="column">
+            <Grid item>{fields.username}</Grid>
+            <Grid item>{fields.password}</Grid>
+          </Grid>
+        </form>
+      </Box>
     );
   }
 );
