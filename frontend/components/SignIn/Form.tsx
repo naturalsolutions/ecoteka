@@ -4,7 +4,9 @@ import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useETKSignInSchema from "@/components/SignIn/Schema";
 import { apiRest } from "@/lib/api";
+import useAPI from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
+import getConfig from "next/config";
 
 export type ETKFormSignInActions = {
   submit: () => Promise<boolean>;
@@ -20,12 +22,44 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
     const schema = useETKSignInSchema();
     const { fields, handleSubmit, setError } = useETKForm({ schema: schema });
     const { setUser } = useAppContext();
+    const { api } = useAPI();
+    const { apiETK } = api;
     let logged = false;
+    const { publicRuntimeConfig } = getConfig();
+    const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
 
-    const onSubmit = async (data) => {
-      const token = await apiRest.auth.accessToken(data);
+    const onSubmit = async ({ username, password }) => {
+      const params = new URLSearchParams();
+      params.append("username", username);
+      params.append("password", password);
 
-      if (!token) {
+      const config = {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+      try {
+        const response = await apiETK.post("auth/login", params, config);
+        const { data, status, statusText } = response;
+        if (statusText === "OK") {
+          localStorage.setItem(tokenStorage, data.acces_token);
+          localStorage.setItem(refreshTokenStorage, data.refresh_token);
+          try {
+            const newUser = await apiRest.users.me();
+
+            if (newUser) {
+              setUser({
+                ...newUser,
+                currentOrganization: newUser.organizations[0],
+              });
+              logged = true;
+            }
+          } catch (error) {
+            // console.log(error.reponse);
+          }
+        }
+        return data;
+      } catch (error) {
         setError("username", {
           type: "manual",
           message: t("SignIn.errorMessageServer"),
@@ -34,13 +68,6 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
           type: "manual",
           message: t("SignIn.errorMessageServer"),
         });
-      }
-
-      const newUser = await apiRest.users.me();
-
-      if (newUser) {
-        setUser({ ...newUser, currentOrganization: newUser.organizations[0] });
-        logged = true;
       }
     };
 
