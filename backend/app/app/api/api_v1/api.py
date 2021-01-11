@@ -4,6 +4,7 @@ from app.api.api_v1.endpoints import (
     auth,
     contacts,
     geo_files,
+    health_assessment,
     intervention,
     maps,
     organization,
@@ -27,6 +28,9 @@ api_router.include_router(
     geo_files.router,
     prefix="/organization/{organization_id}/geo_files",
     tags=["geo_files"],
+)
+api_router.include_router(
+    health_assessment.router, prefix="/organization/{organization_id}/trees/{tree_id}/health_assessments", tags=["health_assessments"]
 )
 api_router.include_router(
     trees.router, prefix="/organization/{organization_id}/trees", tags=["trees"]

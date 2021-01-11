@@ -6,8 +6,7 @@ from .registration_link import Registration_Link
 from .taxref import Taxref
 from .tree import Tree
 from .intervention import Intervention
-
-
+from .health_assessment import HealthAssessment
 __all__ = [
     "Contact",
     "GeoFile",
@@ -18,4 +17,5 @@ __all__ = [
     "Taxref",
     "Tree",
     "Intervention",
+    "HealthAssessment"
 ]
