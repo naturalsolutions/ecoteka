@@ -48,7 +48,8 @@
     "about": "En savoir plus",
     "register": "Inscription",
     "myOrganizations": "Mes organisations",
-    "myDashboard": "Mon tableau de bord"
+    "myDashboard": "Mon tableau de bord",
+    "addUser": "Ajouter un utilisateur"
   },
   "Map": {
     "SearchCity": {

@@ -2,23 +2,33 @@ import { useRef, useState } from "react";
 import {
   Box,
   Button,
-  Card,
-  CardActions,
-  CardContent,
   CircularProgress,
+  Link,
   Grid,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
 import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 
+const useStyles = makeStyles((theme) => ({
+  formWidth: {
+    width: "80%",
+    [theme.breakpoints.up(780)]: {
+      width: "450px",
+    },
+  },
+  h5: {
+    fontWeight: 600,
+  },
+}));
+
 export default function SignInPage() {
+  const classes = useStyles();
   const formRef = useRef<ETKFormSignInActions>();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
   const onSubmit = async () => {
     setIsLoading(true);
     const isOk = await formRef.current.submit();
@@ -39,28 +49,56 @@ export default function SignInPage() {
         justify="center"
         style={{ minHeight: "calc(100vh - 48px)" }}
       >
-        <Card>
-          <CardContent>
-            <Typography variant="h6" align="center">
-              Connectez-vous à votre compte
-            </Typography>
-            <ETKFormSignIn ref={formRef}></ETKFormSignIn>
-            <Link href="/reset-password">
-              <a style={{ color: "white" }}>Mot de passe oublié?</a>
-            </Link>
-          </CardContent>
-          <CardActions disableSpacing>
-            <Box flexGrow={1} />
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={onSubmit}
-              disabled={isLoading}
-            >
-              {isLoading ? <CircularProgress size={30} /> : "Connexion"}
-            </Button>
-          </CardActions>
-        </Card>
+        <Box flexGrow={1} />
+        <Box>
+          <img src="/assets/signin-header.png" />
+        </Box>
+        <Box mb={2}>
+          <Typography
+            variant="h5"
+            align="center"
+            color="textPrimary"
+            className={classes.h5}
+          >
+            Connectez-vous à votre compte
+          </Typography>
+        </Box>
+        <Box className={classes.formWidth}>
+          <ETKFormSignIn ref={formRef}></ETKFormSignIn>
+        </Box>
+        <Box my={3}>
+          <Link
+            href="/"
+            onClick={() => router.push("/reset-password")}
+            color="textPrimary"
+          >
+            Mot de passe oublié?
+          </Link>
+        </Box>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={onSubmit}
+          disabled={isLoading}
+          className={classes.formWidth}
+        >
+          {isLoading ? <CircularProgress size={30} /> : "Connexion"}
+        </Button>
+        <Box my={2}>
+          <Typography variant="h6" align="center" color="textPrimary">
+            Vous n'avez pas encore de compte?
+          </Typography>
+        </Box>
+        <Button
+          color="primary"
+          variant="outlined"
+          href="https://www.natural-solutions.eu/ecoteka"
+          target="_blank"
+          className={classes.formWidth}
+        >
+          Demandez la création d'un compte!
+        </Button>
+        <Box flexGrow={1} />
       </Grid>
     </AppLayoutGeneral>
   );
