@@ -1,0 +1,14 @@
+{
+  "forgot": {
+    "title": "Recover Password",
+    "sentCard": {
+      "description": "If account exists, an email will be sent with further instructions",
+      "buttonOnLogin": "Login"
+    },
+    "emailCard": {
+      "description": "Don’t worry, happens to the best of us",
+      "emailTitle": "Your email",
+      "buttonSendEmail": "Email me a recovery link"
+    }
+  }
+}

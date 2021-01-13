@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import {
   Grid,
   Card,
@@ -11,15 +12,16 @@ import {
 } from "@material-ui/core";
 import MailIcon from "@material-ui/icons/Mail";
 import AppLayoutGeneral from "@/components/AppLayout/General";
-import Head from "next/head";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({}));
 
 export default function ResetPasswordPage() {
   const classes = useStyles();
+  const router = useRouter();
+  const { t } = useTranslation("pages");
   const [email, setEmail] = useState<string>("");
   const [sent, setSent] = useState<boolean>(false);
-  const router = useRouter();
 
   const handleOnLogin = () => {
     router.push("/signin");
@@ -31,12 +33,10 @@ export default function ResetPasswordPage() {
 
   const sentCard = (
     <Card>
-      <CardHeader title="Recover Password" />
+      <CardHeader title={t("forgot.title")} />
       <CardContent>
         <Grid container direction="column" spacing={2}>
-          <Grid item>
-            If account exists, an email will be sent with further instructions
-          </Grid>
+          <Grid item>{t("forgot.sentCard.description")}</Grid>
           <Grid item>
             <Button
               fullWidth
@@ -44,7 +44,7 @@ export default function ResetPasswordPage() {
               color="primary"
               onClick={handleOnLogin}
             >
-              Login
+              {t("forgot.sentCard.buttonOnLogin")}
             </Button>
           </Grid>
         </Grid>
@@ -57,8 +57,8 @@ export default function ResetPasswordPage() {
       <CardHeader title="Recover Password" />
       <CardContent>
         <Grid container direction="column" spacing={2}>
-          <Grid item>Don’t worry, happens to the best of us</Grid>
-          <Grid item>Your email</Grid>
+          <Grid item>{t("forgot.emailCard.description")}</Grid>
+          <Grid item>{t("forgot.emailCard.emailTitle")}</Grid>
           <Grid item>
             <TextField
               InputProps={{
@@ -78,7 +78,7 @@ export default function ResetPasswordPage() {
               color="primary"
               onClick={handleSendEmail}
             >
-              Email me a recovery link
+              {t("forgot.emailCard.buttonSendEmail")}
             </Button>
           </Grid>
         </Grid>
@@ -89,7 +89,7 @@ export default function ResetPasswordPage() {
   return (
     <AppLayoutGeneral>
       <Head>
-        <title>ecoTeka - Recover Password</title>
+        <title>ecoTeka · {t("forgot.title")}</title>
       </Head>
       <Grid
         container
