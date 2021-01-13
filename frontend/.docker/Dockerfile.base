@@ -9,7 +9,7 @@ RUN apt-get update \
 
 COPY package.json .
 
-RUN npm install
+RUN npm install --force
 RUN npm install -g npm-check-updates 
 RUN npx next telemetry disable
 

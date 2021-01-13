@@ -7,6 +7,7 @@ from .crud_tree import tree
 from .crud_organization import organization
 from .crud_taxref import taxref
 from .crud_intervention import intervention
+from .crud_health_assessment import health_assessment
 
 __all__ = [
     "contact",
@@ -18,6 +19,7 @@ __all__ = [
     "tree",
     "user",
     "intervention",
+    "health_assessment"
 ]
 
 # For a new basic set of CRUD operations you could just do

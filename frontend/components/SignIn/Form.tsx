@@ -40,8 +40,9 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
       };
       try {
         const response = await apiETK.post("auth/login", params, config);
-        const { data, status, statusText } = response;
-        if (statusText === "OK") {
+        const { data, status } = response;
+
+        if (status === 200) {
           localStorage.setItem(tokenStorage, data.acces_token);
           localStorage.setItem(refreshTokenStorage, data.refresh_token);
           try {
@@ -54,10 +55,9 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
               });
               logged = true;
             }
-          } catch (error) {
-            // console.log(error.reponse);
-          }
+          } catch (error) {}
         }
+
         return data;
       } catch (error) {
         setError("username", {

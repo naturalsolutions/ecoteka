@@ -52,6 +52,7 @@ class Organization(Base):
         sync_backref=False,
         viewonly=True,
     )
+    health_assessments = relationship("HealthAssessment", back_populates="organization")
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 

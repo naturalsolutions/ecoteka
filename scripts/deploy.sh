@@ -23,3 +23,7 @@ docker-compose -f docker-compose.yml \
 docker-compose -f docker-compose.yml \
                -f docker-compose.prod.yml \
                up -d
+
+# Prune 
+docker image prune -a -f
+docker container prune --filter "until=48h" -f
