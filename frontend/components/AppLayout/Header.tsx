@@ -151,7 +151,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
             <Grid item>
               <ToggleButton
                 size="small"
-                value={dark}
+                value={dark || false}
                 selected={dark || false}
                 color="primary"
                 onClick={() => setDark(!dark)}

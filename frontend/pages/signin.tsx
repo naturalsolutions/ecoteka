@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +42,9 @@ export default function SignInPage() {
 
   return (
     <AppLayoutGeneral>
+      <Head>
+        <title>ecoTeka - Sign In</title>
+      </Head>
       <Grid
         container
         spacing={0}
@@ -66,11 +70,11 @@ export default function SignInPage() {
         <Box className={classes.formWidth}>
           <ETKFormSignIn ref={formRef}></ETKFormSignIn>
         </Box>
-        <Box my={3}>
+        <Box mb={3}>
           <Link
-            href="/"
-            onClick={() => router.push("/reset-password")}
+            href="/forgot"
             color="textPrimary"
+            style={{ textAlign: "right" }}
           >
             Mot de passe oublié?
           </Link>

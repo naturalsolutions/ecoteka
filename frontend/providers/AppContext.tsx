@@ -6,10 +6,17 @@ import { useRouter } from "next/router";
 const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [user, setUser] = useLocalStorage<IUser>("user");
   const router = useRouter();
-  const validRoutes = ["/", "/signin", "/404", "/500"];
+  const validRoutes = [
+    "/",
+    "/signin",
+    "/forgot",
+    "/verify/[token]",
+    "/404",
+    "/500",
+  ];
 
   useEffect(() => {
     if (!validRoutes.includes(router.route) && !user) {
