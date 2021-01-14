@@ -92,7 +92,7 @@ export default function SignInPage() {
         <Button
           color="primary"
           variant="outlined"
-          href="https://www.natural-solutions.eu/ecoteka"
+          href="https://www.natural-solutions.eu/creation-de-compte-ecoteka"
           target="_blank"
           className={classes.formWidth}
         >
