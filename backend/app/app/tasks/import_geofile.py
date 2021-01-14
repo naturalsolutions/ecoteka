@@ -123,9 +123,15 @@ def import_geofile(db: Session, geofile: GeoFile):
             import_from_fiona(db, geofile.get_filepath(), geofile)
 
         if geofile.extension in ["xlsx", "xls"]:
+            engine = "xlrd"
+
+            if geofile.extension == "xlsx":
+                engine = "openpyxl"
+            
             df = pd.read_excel(
                 geofile.get_filepath(),
                 converters=converters,
+                engine=engine
             )
             import_from_dataframe(db, df, geofile.get_filepath(), geofile)
 

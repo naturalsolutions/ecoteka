@@ -99,7 +99,12 @@ class GeoFile(Base):
                 self.properties = dumps(c.schema["properties"])
 
         if self.extension in ["xlsx", "xls"]:
-            df = pd.read_excel(self.get_filepath())
+            engine = "xlrd"
+
+            if self.extension == "xlsx":
+                engine = "openpyxl"
+
+            df = pd.read_excel(self.get_filepath(), engine=engine)
             self.count = len(df.index)
             self.driver = "Excel"
             self.crs = "epsg:4326"
@@ -135,7 +140,12 @@ class GeoFile(Base):
                 return len(df.columns) > 0 and not df.empty
 
             if self.extension == "xls" or self.extension == "xlsx":
-                df = pd.read_excel(self.get_filepath())
+                engine = "xlrd"
+
+                if self.extension == "xlsx":
+                    engine = "openpyxl"
+                
+                df = pd.read_excel(self.get_filepath(), engine=engine)
                 return len(df.columns) > 0 and not df.empty
         except:
             return False
