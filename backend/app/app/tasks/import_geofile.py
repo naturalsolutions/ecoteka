@@ -24,7 +24,17 @@ def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
 
         for key in mapping_fields:
             properties_key = mapping_fields[key]
-            properties_tree[key] = properties[properties_key]
+
+            if isinstance(properties[properties_key], np.integer):
+                properties_tree[key] = int(properties[properties_key])
+            elif isinstance(properties[properties_key], np.floating):
+                properties_tree[key] = float(properties[properties_key])
+            elif isinstance(properties[properties_key], np.ndarray):
+                properties_tree[key] = properties[properties_key].tolist()
+            elif isinstance(properties[properties_key], datetime.datetime):
+                properties_tree[key] = properties[properties_key].__str__()
+            else:
+                properties_tree[key] = properties[properties_key]
 
     tree = Tree(
         geofile_id=geofile.id,
