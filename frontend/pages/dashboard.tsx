@@ -69,7 +69,7 @@ interface WidgetSizeProps {
 
 const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   const classes = useStyles();
-  const { t } = useTranslation("components");
+  const { t } = useTranslation(["components", "pages"]);
   const { user } = useAppContext();
   const router = useRouter();
   const { theme } = useThemeContext();
@@ -101,31 +101,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   );
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const steps = getSteps();
-
-  function getSteps() {
-    return [
-      "Configuration de votre espace de travail",
-      "Inventaire patrimoine arboré",
-      "Pilotage de la gestion",
-      "Surveillance de l'état sanitaire",
-    ];
-  }
-
-  function getStepContent(step) {
-    switch (step) {
-      case 0:
-        return "Configuration de votre espace de travail";
-      case 1:
-        return "Inventaire patrimoine arboré";
-      case 2:
-        return "Pilotage de la gestion";
-      case 3:
-        return "Surveillance de l'état sanitaire";
-      default:
-        return "Étape non définie";
-    }
-  }
+  const steps = t("pages:Dashboard.steps", { returnObjects: true }) as [];
 
   useEffect(() => {
     getOrganizationMetrics().then((response) => {
@@ -146,7 +122,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         name: "a.widget.1",
         component: (
           <SimpleMetric
-            caption={t("Dashboard.treeHeritage.totalTrees")}
+            caption={t("components:Dashboard.treeHeritage.totalTrees")}
             metric={metrics.total_tree_count}
             icon={
               <IconContext.Provider value={{ size: "3rem" }}>
@@ -160,7 +136,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         name: "a.widget.2",
         component: (
           <SimpleMetric
-            caption={t("Dashboard.treeHeritage.plantedTrees")}
+            caption={t("components:Dashboard.treeHeritage.plantedTrees")}
             metric={metrics.planted_trees_count}
             icon={
               <IconContext.Provider value={{ size: "3rem" }}>
@@ -174,7 +150,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         name: "a.widget.3",
         component: (
           <SimpleMetric
-            caption={t("Dashboard.treeHeritage.felledTrees")}
+            caption={t("components:Dashboard.treeHeritage.felledTrees")}
             metric={metrics.logged_trees_count}
             icon={
               <IconContext.Provider value={{ size: "3rem" }}>
@@ -202,7 +178,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("Dashboard.heritageManagment.totalCost")}
+              caption={t("components:Dashboard.heritageManagment.totalCost")}
               metric={metrics.planned_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -215,7 +191,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("Dashboard.heritageManagment.totalCost")}
+              caption={t("components:Dashboard.heritageManagment.totalCost")}
               metric={metrics.scheduled_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -231,7 +207,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("Dashboard.heritageManagment.totalCost")}
+              caption={t("components:Dashboard.heritageManagment.totalCost")}
               metric={metrics.planned_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -244,7 +220,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("Dashboard.heritageManagment.totalCost")}
+              caption={t("components:Dashboard.heritageManagment.totalCost")}
               metric={metrics.scheduled_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -286,8 +262,8 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             variant="h5"
             component="h1"
           >
-            {t("Dashboard.title")} 2020 {t("Dashboard.for")}{" "}
-            {user?.currentOrganization?.name}
+            {t("components:Dashboard.title")} 2020{" "}
+            {t("components:Dashboard.for")} {user?.currentOrganization?.name}
           </Typography>
         </Box>
         <Box>
@@ -305,7 +281,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             variant="h6"
             component="h2"
           >
-            {t("Dashboard.treeHeritage.title")}
+            {t("components:Dashboard.treeHeritage.title")}
           </Typography>
         </Box>
         {metrics?.total_tree_count == 0 && (
@@ -319,15 +295,15 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                   variant="outlined"
                   onClick={() => router.push("/edition/?panel=import")}
                 >
-                  {t("Dashboard.importDataButton")}
+                  {t("components:Dashboard.importDataButton")}
                 </Button>
               }
             >
               <AlertTitle>
-              {t("Dashboard.treeHeritage.alertTitle")}
+                {t("components:Dashboard.treeHeritage.alertTitle")}
               </AlertTitle>
-              {t("Dashboard.treeHeritage.alertText")} —{" "}
-              <strong>{t("Dashboard.treeHeritage.boldText")}</strong>
+              {t("components:Dashboard.treeHeritage.alertText")} —{" "}
+              <strong>{t("components:Dashboard.treeHeritage.boldText")}</strong>
             </Alert>
           </Box>
         )}
@@ -369,7 +345,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                 variant="h6"
                 component="h2"
               >
-                {t("Dashboard.heritageManagment.title")}
+                {t("components:Dashboard.heritageManagment.title")}
               </Typography>
             </Box>
             {interventions.length == 0 && (
@@ -386,15 +362,17 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                         router.push("/edition/?panel=intervention")
                       }
                     >
-                      {t("Dashboard.addInterventionButton")}
+                      {t("components:Dashboard.addInterventionButton")}
                     </Button>
                   }
                 >
                   <AlertTitle>
-                    {t("Dashboard.heritageManagment.alertTitle")}
+                    {t("components:Dashboard.heritageManagment.alertTitle")}
                   </AlertTitle>
-                  {t("Dashboard.heritageManagment.alertText")} —{" "}
-                  <strong>{t("Dashboard.heritageManagment.boldText")}</strong>
+                  {t("components:Dashboard.heritageManagment.alertText")} —{" "}
+                  <strong>
+                    {t("components:Dashboard.heritageManagment.boldText")}
+                  </strong>
                 </Alert>
               </Box>
             )}
