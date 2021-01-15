@@ -179,6 +179,7 @@
     "Upload": {
       "boxContent": "Import your data",
       "fileListHint": "File types accepted :",
+      "importHistory": "See import history",
       "buttonCancelContent": "Cancel",
       "buttonUploadContent": "Send",
       "dropzoneText": "Drop your file here\nor click to select it"
@@ -331,56 +332,58 @@
   },
 
   "Tree": {
-    "family": "Family",
-    "gender": "Gender",
-    "specie": "Specie",
-    "cultivar": "Cultivar",
-    "latinName": "Vernacular Name",
+    "properties":{
+      "family": "Family",
+      "gender": "Gender",
+      "specie": "Specie",
+      "cultivar": "Cultivar",
+      "vernacularName": "Vernacular Name",
+      "townshipCode": "Town ship code",
+      "zipCode": "Zip code",
+      "address": "Adress",
+      "zone": "Zone cutting",
+      "etkRegistrationNumber": "Ecoteka registration number",
+      "plantingDate": "Planting date",
+      "height": "Tree height",
+      "diameter": "Tree diameter",
+      "soilType": {
+        "label": "Soil type",
+        "clay": "Calyey",
+        "silt": "Silty",
+        "limestone": "Limestone",
+        "sand": "Sandy",
+        "acid": "Acid",
+        "sandyclay": "Sandy clay"
+      },
+      "rootType": {
+        "label": "Root type",
+        "swivel": "Swivel",
+        "tracing": "Tracing",
+        "oblique": "Oblique"
+      },
+      "habit": {
+        "label": "Tree habit",
+        "free": "Free",
+        "semiFree": "Semi-free",
+        "form": "Forming",
+        "cat": "Caat head",
+        "trumpet": "Trumpet",
+        "curtain": "Curtain",
+        "pyramid": "Pyramid",
+        "ball": "Ball",
+        "cone": "Cone"
+      },
+      "procted": "Protected tree",
+      "soilConstraints": "Soil constraints",
+      "aerianConstraint": "Aerian contraints",
+      "watering": "Watering",
+      "lightning": "Lighting",
+      "allergens": "Allergenic tree",
+      "remarks": "Remarks"
+    },
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "townshipCode": "Town ship code",
-    "zipCode": "Zip code",
-    "address": "Adress",
-    "zone": "Zone cutting",
-    "etkRegistrationNumber": "Ecoteka registration number",
-    "registrationNumber": "Tree registration number",
-    "plantingDate": "Planting date",
-    "height": "Tree height",
-    "diameter": "Tree diameter",
-    "soilType": {
-      "label": "Soil type",
-      "clay": "Calyey",
-      "silt": "Silty",
-      "limestone": "Limestone",
-      "sand": "Sandy",
-      "acid": "Acid",
-      "sandyclay": "Sandy clay"
-    },
-    "rootType": {
-      "label": "Root type",
-      "swivel": "Swivel",
-      "tracing": "Tracing",
-      "oblique": "Oblique"
-    },
-    "habit": {
-      "label": "Tree habit",
-      "free": "Free",
-      "semiFree": "Semi-free",
-      "form": "Forming",
-      "cat": "Caat head",
-      "trumpet": "Trumpet",
-      "curtain": "Curtain",
-      "pyramid": "Pyramid",
-      "ball": "Ball",
-      "cone": "Cone"
-    },
-    "procted": "Protected tree",
-    "soilConstraints": "Soil constraints",
-    "aerianConstraint": "Aerian contraints",
-    "watering": "Watering",
-    "lightning": "Lighting",
-    "allergens": "Allergenic tree",
-    "remarks": "Remarks"
+    "registrationNumber": "Tree registration number"
   },
 
   "TreeForm": {
@@ -463,7 +466,25 @@
   },
   "Dashboard": {
     "title": "Dashboard",
-    "for": "for"
+    "for": "for",
+    "treeHeritage":{
+      "title": "Your tree heritage",
+      "totalTrees": "Total trees",
+      "plantedTrees": "Planted trees in 2020",
+      "felledTrees": "Felled trees in 2020",
+      "alertTitle": "Add your first trees to your heritage",
+      "alertText": "Your workspace does not contain any trees yet",
+      "boldText": "Start now !"
+    },
+    "heritageManagment":{
+      "totalCost": "Total cost interventions planned in 2020",
+      "title": "State of management of your assets",
+      "alertTitle": "Add, program and monitor the budget for interventions on your assets",
+      "alertText": "As soon as your workspace contains trees, you can start managing your plant heritage",
+      "boldText": "Learn more !"
+    },
+    "addInterventionButton": "Add interventions",
+    "importDataButton": "Import datas"
   },
   "MapLayers": {
     "backgrounds": "Backgrounds",

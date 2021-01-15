@@ -9,7 +9,8 @@
     "sending": "Enviando..."
   },
   "buttons": {
-    "backToHome": "Ir a la página de inicio"
+    "backToHome": "Ir a la página de inicio",
+    "importData": "Import datas"
   },
   "errors": {
     "email": "Correo electrónico no válido",

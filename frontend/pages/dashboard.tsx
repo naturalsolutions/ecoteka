@@ -146,7 +146,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         name: "a.widget.1",
         component: (
           <SimpleMetric
-            caption="Arbres total"
+            caption={t("Dashboard.treeHeritage.totalTrees")}
             metric={metrics.total_tree_count}
             icon={
               <IconContext.Provider value={{ size: "3rem" }}>
@@ -160,7 +160,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         name: "a.widget.2",
         component: (
           <SimpleMetric
-            caption="Arbres plantés en 2020"
+            caption={t("Dashboard.treeHeritage.plantedTrees")}
             metric={metrics.planted_trees_count}
             icon={
               <IconContext.Provider value={{ size: "3rem" }}>
@@ -174,7 +174,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
         name: "a.widget.3",
         component: (
           <SimpleMetric
-            caption="Arbres abattus en 2020"
+            caption={t("Dashboard.treeHeritage.felledTrees")}
             metric={metrics.logged_trees_count}
             icon={
               <IconContext.Provider value={{ size: "3rem" }}>
@@ -202,7 +202,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption="Coût total des interventions planifiées en 2020"
+              caption={t("Dashboard.heritageManagment.totalCost")}
               metric={metrics.planned_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -215,7 +215,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption="Coût total des interventions programmées en 2020"
+              caption={t("Dashboard.heritageManagment.totalCost")}
               metric={metrics.scheduled_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -231,7 +231,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption="Coût total des interventions planifiées en 2020"
+              caption={t("Dashboard.heritageManagment.totalCost")}
               metric={metrics.planned_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -244,7 +244,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption="Coût total des interventions programmées en 2020"
+              caption={t("Dashboard.heritageManagment.totalCost")}
               metric={metrics.scheduled_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -305,7 +305,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             variant="h6"
             component="h2"
           >
-            Votre patrimoine arboré
+            {t("Dashboard.treeHeritage.title")}
           </Typography>
         </Box>
         {metrics?.total_tree_count == 0 && (
@@ -319,15 +319,15 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                   variant="outlined"
                   onClick={() => router.push("/edition/?panel=import")}
                 >
-                  Importer des données
+                  {t("Dashboard.importDataButton")}
                 </Button>
               }
             >
               <AlertTitle>
-                Ajouter les premiers arbres à votre patrimoine
+              {t("Dashboard.treeHeritage.alertTitle")}
               </AlertTitle>
-              Votre espace de travail ne contient aucun arbre pour l'instant —{" "}
-              <strong>Commencer maintenant!</strong>
+              {t("Dashboard.treeHeritage.alertText")} —{" "}
+              <strong>{t("Dashboard.treeHeritage.boldText")}</strong>
             </Alert>
           </Box>
         )}
@@ -369,7 +369,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                 variant="h6"
                 component="h2"
               >
-                État de gestion de votre patrimoine
+                {t("Dashboard.heritageManagment.title")}
               </Typography>
             </Box>
             {interventions.length == 0 && (
@@ -386,17 +386,15 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                         router.push("/edition/?panel=intervention")
                       }
                     >
-                      Ajouter des interventions
+                      {t("Dashboard.addInterventionButton")}
                     </Button>
                   }
                 >
                   <AlertTitle>
-                    Ajouter, programmer et suivre le budget des interventions
-                    sur votre patrimoine
+                    {t("Dashboard.heritageManagment.alertTitle")}
                   </AlertTitle>
-                  Dès que votre espace de travail contiendra des arbres, vous
-                  pourrez débuter la gestion de votre patrimoine végétal —{" "}
-                  <strong>En savoir plus!</strong>
+                  {t("Dashboard.heritageManagment.alertText")} —{" "}
+                  <strong>{t("Dashboard.heritageManagment.boldText")}</strong>
                 </Alert>
               </Box>
             )}

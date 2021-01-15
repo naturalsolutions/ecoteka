@@ -164,6 +164,7 @@
     "Upload": {
       "boxContent": "Importa tus datos",
       "fileListHint": "Tipos de archivos aceptados:",
+      "importHistory": "See import history",
       "buttonCancelContent": "Cancelar",
       "buttonUploadContent": "Subir",
       "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo"
@@ -313,56 +314,58 @@
     }
   },
   "Tree": {
-    "family": "Familia",
-    "gender": "Genero",
-    "specie": "Especie",
-    "cultivar": "Cultivar",
-    "latinName": "Nombre común",
+    "properties":{
+      "family": "Familia",
+      "gender": "Genero",
+      "specie": "Especie",
+      "cultivar": "Cultivar",
+      "vernacularName": "Nombre común",
+      "townshipCode": "Town ship code",
+      "zipCode": "Código Postal",
+      "address": "Dirección",
+      "zone": "Zone cutting",
+      "etkRegistrationNumber": "Identificador Ecoteka",
+      "plantingDate": "Fecha de plantación",
+      "height": "Altura",
+      "diameter": "Diámetro",
+      "soilType": {
+        "label": "Tipo de suelo",
+        "clay": "Arcilloso",
+        "silt": "Silty",
+        "limestone": "Limestone",
+        "sand": "Arenoso",
+        "acid": "Ácido",
+        "sandyclay": "Arenoso arcillosos"
+      },
+      "rootType": {
+        "label": "Root type",
+        "swivel": "Swivel",
+        "tracing": "Tracing",
+        "oblique": "Oblique"
+      },
+      "habit": {
+        "label": "Tree habit",
+        "free": "Free",
+        "semiFree": "Semi-free",
+        "form": "Forming",
+        "cat": "Caat head",
+        "trumpet": "Trumpet",
+        "curtain": "Curtain",
+        "pyramid": "Pyramid",
+        "ball": "Ball",
+        "cone": "Cone"
+      },
+      "procted": "Protected tree",
+      "soilConstraints": "Soil constraints",
+      "aerianConstraint": "Aerian contraints",
+      "watering": "Watering",
+      "lightning": "Lighting",
+      "allergens": "Allergenic tree",
+      "remarks": "Remarks"
+    },
     "latitude": "Latitud",
     "longitude": "Longitud",
-    "townshipCode": "Town ship code",
-    "zipCode": "Código Postal",
-    "address": "Dirección",
-    "zone": "Zone cutting",
-    "etkRegistrationNumber": "Identificador Ecoteka",
-    "registrationNumber": "Identificador del árbol",
-    "plantingDate": "Fecha de plantación",
-    "height": "Altura",
-    "diameter": "Diámetro",
-    "soilType": {
-      "label": "Tipo de suelo",
-      "clay": "Arcilloso",
-      "silt": "Silty",
-      "limestone": "Limestone",
-      "sand": "Arenoso",
-      "acid": "Ácido",
-      "sandyclay": "Arenoso arcillosos"
-    },
-    "rootType": {
-      "label": "Root type",
-      "swivel": "Swivel",
-      "tracing": "Tracing",
-      "oblique": "Oblique"
-    },
-    "habit": {
-      "label": "Tree habit",
-      "free": "Free",
-      "semiFree": "Semi-free",
-      "form": "Forming",
-      "cat": "Caat head",
-      "trumpet": "Trumpet",
-      "curtain": "Curtain",
-      "pyramid": "Pyramid",
-      "ball": "Ball",
-      "cone": "Cone"
-    },
-    "procted": "Protected tree",
-    "soilConstraints": "Soil constraints",
-    "aerianConstraint": "Aerian contraints",
-    "watering": "Watering",
-    "lightning": "Lighting",
-    "allergens": "Allergenic tree",
-    "remarks": "Remarks"
+    "registrationNumber": "Identificador del árbol"
   },
   "TreeForm": {
     "dialogDeleteTitle": "Eliminar los árboles seleccionados",
@@ -445,7 +448,25 @@
   },
   "Dashboard": {
     "title": "Panel de control",
-    "for": "para"
+    "for": "para",
+    "treeHeritage":{
+      "title": "Your tree heritage",
+      "totalTrees": "Total trees",
+      "plantedTrees": "Planted trees in 2020",
+      "felledTrees": "Felled trees in 2020",
+      "alertTitle": "Add your first trees to your heritage",
+      "alertText": "Your workspace does not contain any trees yet",
+      "boldText": "Start now !"
+    },
+    "heritageManagment":{
+      "totalCost": "Total cost interventions planned in 2020",
+      "title": "State of management of your assets",
+      "alertTitle": "Add, program and monitor the budget for interventions on your assets",
+      "alertText": "As soon as your workspace contains trees, you can start managing your plant heritage",
+      "boldText": "Learn more !"
+    },
+    "addInterventionButton": "Add interventions",
+    "importDataButton": "Import datas"
   },
   "MapLayers": {
     "backgrounds": "Fondos",

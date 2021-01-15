@@ -9,7 +9,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.family"),
+        label: t("components:Tree.properties.family"),
       } as any,
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -17,7 +17,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.gender"),
+        label: t("components:Tree.properties.gender"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -25,7 +25,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.specie"),
+        label: t("components:Tree.properties.specie"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -33,7 +33,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.cultivar"),
+        label: t("components:Tree.properties.cultivar"),
       },
       schema: yup.string(),
     },
@@ -41,7 +41,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.latinName"),
+        label: t("components:Tree.properties.vernacularName"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -50,7 +50,7 @@ export default function useTreeSchema() {
       category: "Identité de l'arbre",
       component: {
         type: "number",
-        label: t("components:Tree.townshipCode"),
+        label: t("components:Tree.properties.townshipCode"),
       },
       schema: yup.string(),
     },
@@ -59,7 +59,7 @@ export default function useTreeSchema() {
       category: "Identité de l'arbre",
       component: {
         type: "number",
-        label: t("components:Tree.zipCode"),
+        label: t("components:Tree.properties.zipCode"),
       },
       schema: yup.string(),
     },
@@ -67,7 +67,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.address"),
+        label: t("components:Tree.properties.address"),
       },
       schema: yup.string(),
     },
@@ -75,7 +75,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.zone"),
+        label: t("components:Tree.properties.zone"),
       },
       schema: yup.string(),
     },
@@ -84,7 +84,7 @@ export default function useTreeSchema() {
       category: "Identité de l'arbre",
       component: {
         readOnly: true,
-        label: t("components:Tree.etkRegistrationNumber"),
+        label: t("components:Tree.properties.etkRegistrationNumber"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -100,7 +100,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.plantingDate"),
+        label: t("components:Tree.properties.plantingDate"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -109,7 +109,7 @@ export default function useTreeSchema() {
       category: "Caractéristiques",
       component: {
         type: "number",
-        label: t("components:Tree.height"),
+        label: t("components:Tree.properties.height"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -118,7 +118,7 @@ export default function useTreeSchema() {
       category: "Caractéristiques",
       component: {
         type: "number",
-        label: t("components:Tree.diameter"),
+        label: t("components:Tree.properties.diameter"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -126,7 +126,7 @@ export default function useTreeSchema() {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.soilType.label"),
+        label: t("components:Tree.properties.soilType.label"),
         items: [
           { label: "Argileux", value: "Argileux" },
           { label: "Limoneux", value: "Limoneux" },
@@ -142,7 +142,7 @@ export default function useTreeSchema() {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.rootType.label"),
+        label: t("components:Tree.properties.rootType.label"),
       },
       schema: yup.string(),
     },
@@ -150,7 +150,7 @@ export default function useTreeSchema() {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.habit.label"),
+        label: t("components:Tree.properties.habit.label"),
       },
       schema: yup.string(),
     },
@@ -167,7 +167,7 @@ export default function useTreeSchema() {
       category: "Environnement extérieur",
       component: {
         multiple: true,
-        label: t("components:Tree.soilConstraints"),
+        label: t("components:Tree.properties.soilConstraints"),
       },
       schema: yup.string(),
     },
@@ -175,7 +175,7 @@ export default function useTreeSchema() {
       type: "checkbox",
       category: "Environnement extérieur",
       component: {
-        label: t("components:Tree.aerianConstraint"),
+        label: t("components:Tree.properties.aerianConstraint"),
       },
       schema: yup.string(),
     },
@@ -183,7 +183,7 @@ export default function useTreeSchema() {
       type: "checkbox",
       category: "Environnement extérieur",
       component: {
-        label: t("components:Tree.lightning"),
+        label: t("components:Tree.properties.lightning"),
       },
       schema: yup.string(),
     },
@@ -192,7 +192,7 @@ export default function useTreeSchema() {
       category: "Environnement extérieur",
       component: {
         multiple: true,
-        label: t("components:Tree.watering"),
+        label: t("components:Tree.properties.watering"),
       },
       schema: yup.string(),
     },
@@ -201,7 +201,7 @@ export default function useTreeSchema() {
       category: "Autre",
       component: {
         type: "number",
-        label: t("components:Tree.allergens"),
+        label: t("components:Tree.properties.allergens"),
       },
       schema: yup.string(),
     },
@@ -209,7 +209,7 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Autre",
       component: {
-        label: t("components:Tree.remarks"),
+        label: t("components:Tree.properties.remarks"),
       },
       schema: yup.string(),
     },

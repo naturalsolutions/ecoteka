@@ -9,7 +9,8 @@
     "sending": "Sending..."
   },
   "buttons": {
-    "backToHome": "Back to home"
+    "backToHome": "Back to home",
+    "importData": "Import datas"
   },
   "errors": {
     "email": "Email address is invalid",
