@@ -328,12 +328,13 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
               <TableCell>{props.tree.y}</TableCell>
             </TableRow>
             {props.tree.properties &&
-              Object.keys(props.tree.properties).map((key) => (
+              Object.keys(props.tree.properties).map((key) => { 
+                const labels = t("components:Tree.properties", {​​ returnObjects: true }​​)                return (
                 <TableRow key={`psti-${key}`}>
-                  <TableCell>{t(`Tree.properties.${key}`)}</TableCell>
+                  <TableCell>{​​labels[key]}​​​​</TableCell>
                   <TableCell>{props.tree.properties[key]}</TableCell>
                 </TableRow>
-              ))}
+              )})
           </TableBody>
         </Table>
       </TableContainer>

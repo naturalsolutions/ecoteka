@@ -1,10 +1,10 @@
 {
   "Dashboard": {
     "steps": [
-      "Configuration de votre espace de travail",
-      "Inventaire patrimoine arboré",
-      "Pilotage de la gestion",
-      "Surveillance de l'état sanitaire"
+      "Configuring your workspace",
+      "Tree heritage inventory",
+      "Management",
+      "Health status monitoring"
     ]
   }
 }

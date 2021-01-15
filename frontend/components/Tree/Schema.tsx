@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 
 export default function useTreeSchema() {
-  const { t } = useTranslation(["common", "components"]);
+  const { t } = useTranslation(["components", "common"]);
 
   return {
     family: {
