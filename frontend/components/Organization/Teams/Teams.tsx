@@ -30,6 +30,7 @@ import ETKFormWorkingArea, {
 import TeamsTable from "@/components/Organization/Teams/TeamsTable";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
+import useAPI from "@/lib/useApi";
 
 interface TeamsProps {
   organization: IOrganization;
@@ -78,12 +79,22 @@ const Teams: FC<TeamsProps> = (props) => {
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
   const router = useRouter();
+  const { api } = useAPI();
+  const { apiETK } = api;
   const [data, setData] = useState([]);
 
   const getData = async (organizationId: number) => {
-    const newData = await apiRest.organization.teams(organizationId);
-
-    setData(newData);
+    try {
+      const response = await apiETK.get(
+        `/organization/${organizationId}/teams`
+      );
+      const { data, status } = response;
+      if (status === 200) {
+        setData(data);
+      }
+    } catch (e) {
+      //
+    }
   };
 
   useEffect(() => {
@@ -138,7 +149,7 @@ const Teams: FC<TeamsProps> = (props) => {
         variant: "contained",
         color: "secondary",
         noClose: true,
-        onClick: addItem,
+        onClick: () => addItem(isNew),
       },
     ];
 
@@ -158,14 +169,19 @@ const Teams: FC<TeamsProps> = (props) => {
     });
   }
 
-  const addItem = async () => {
+  const addItem = async (isNew) => {
     const response = await formEditRef.current.submit();
 
     if (response.ok) {
       dialog.current.close();
       const newOrganization = await response.json();
-
-      setData([...data, newOrganization]);
+      isNew
+        ? setData([...data, newOrganization])
+        : setData(
+            data.map((team, i) =>
+              team.id === newOrganization.id ? newOrganization : team
+            )
+          );
     }
   };
 
