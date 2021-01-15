@@ -47,8 +47,8 @@ def upgrade():
         sa.Column("cover", sa.Text(), nullable= True),
         sa.Column("images", postgresql.ARRAY(sa.Text()), nullable= True),
         sa.Column("traits", sa.String(), nullable= True),
-        sa.Column("created_at", sa.DateTime(), nullable= False),
-        sa.Column("updated_at", sa.DateTime(), nullable= False),
+        sa.Column("created_at", sa.DateTime(), nullable= True),
+        sa.Column("updated_at", sa.DateTime(), nullable= True),
         sa.PrimaryKeyConstraint("id"),
     )
     op.add_column(
@@ -65,6 +65,8 @@ def upgrade():
     op.create_index('ix_taxon_fts', 'taxon',
             [sa.text("to_tsvector('english', scientific_name)")],
             postgresql_using='gin')
+
+    
 
 
 
