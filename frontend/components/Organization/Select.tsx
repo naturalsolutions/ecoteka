@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Button, MenuItem, Menu, Box } from "@material-ui/core";
 import { IOrganization, IUser } from "@/index";
+import { useRouter } from "next/router";
 
 export interface OrganizationSelectProps {
   user?: IUser;
@@ -12,6 +13,7 @@ const defaultProps: OrganizationSelectProps = {};
 const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [organization, setOrganization] = React.useState<IOrganization>();
+  const router = useRouter();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,6 +24,10 @@ const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
 
     if (o) {
       props.onChange(o);
+    }
+
+    if (router.route === "/organization/[id]") {
+      router.push(`/organization/${o.id}`);
     }
   };
 
