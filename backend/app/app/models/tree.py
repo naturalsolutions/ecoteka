@@ -16,6 +16,7 @@ class Tree(Base):
     properties = Column(JSONB, nullable=True)
     interventions = relationship("Intervention", back_populates="tree")
     health_assessments = relationship("HealthAssessment", back_populates="tree")
+    # taxon = relationship("Taxon", back_populates="tree")
 
     def to_xy(self):
         coords = to_shape(self.geom)
