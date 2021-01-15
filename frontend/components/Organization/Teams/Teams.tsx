@@ -73,12 +73,11 @@ const actionOptions = [
 
 const Teams: FC<TeamsProps> = (props) => {
   const classes = useStyles();
-  const { dialog, theme } = useAppLayout();
+  const { dialog } = useAppLayout();
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
   const router = useRouter();
-  const { user, setUser } = useAppContext();
   const [data, setData] = useState([]);
 
   const getData = async (organizationId: number) => {
@@ -160,14 +159,13 @@ const Teams: FC<TeamsProps> = (props) => {
   }
 
   const addItem = async () => {
-    const isOk = await formEditRef.current.submit();
-    if (isOk) {
-      dialog.current.close();
-      const newUser = await apiRest.users.me();
-      newUser.currentOrganization = user.currentOrganization;
+    const response = await formEditRef.current.submit();
 
-      setUser(newUser);
-      setData([...data, newUser]);
+    if (response.ok) {
+      dialog.current.close();
+      const newOrganization = await response.json();
+
+      setData([...data, newOrganization]);
     }
   };
 
