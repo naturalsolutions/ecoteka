@@ -1,6 +1,5 @@
 import React, { FC, Fragment, useRef, useState, useEffect } from "react";
 import { IOrganization } from "@/index.d";
-import { apiRest } from "@/lib/api";
 import {
   Box,
   Button,
