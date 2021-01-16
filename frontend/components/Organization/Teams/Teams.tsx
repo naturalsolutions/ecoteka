@@ -1,4 +1,11 @@
-import React, { FC, Fragment, useRef, useState, useEffect } from "react";
+import React, {
+  FC,
+  Fragment,
+  useRef,
+  useState,
+  useEffect,
+  SyntheticEvent,
+} from "react";
 import { IOrganization } from "@/index.d";
 import {
   Box,
@@ -11,8 +18,10 @@ import {
   MenuList,
   Paper,
   Popper,
+  Snackbar,
   Toolbar,
 } from "@material-ui/core";
+import MuiAlert, { AlertProps, Color } from "@material-ui/lab/Alert";
 import {
   Add as AddIcon,
   ArrowDropDown as ArrowDropDownIcon,
@@ -30,6 +39,7 @@ import TeamsTable from "@/components/Organization/Teams/TeamsTable";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import useAPI from "@/lib/useApi";
+import Organization from "@/pages/organization/[id]";
 
 interface TeamsProps {
   organization: IOrganization;
@@ -71,6 +81,47 @@ const actionOptions = [
   },
 ];
 
+interface SnackAlertProps {
+  open: boolean;
+  severity: Color;
+  message: string;
+}
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const SnackAlert: React.FC<SnackAlertProps> = ({
+  open,
+  severity,
+  message = "",
+}) => {
+  const [isOpen, setIsOpen] = React.useState(open);
+  const handleClose = (
+    event: SyntheticEvent<Element, Event>,
+    reason: string
+  ) => {
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open]);
+
+  return (
+    <Snackbar
+      open={isOpen}
+      autoHideDuration={3000}
+      onClose={handleClose}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+    >
+      <Alert onClose={handleClose} severity={severity}>
+        {message}
+      </Alert>
+    </Snackbar>
+  );
+};
+
 const Teams: FC<TeamsProps> = (props) => {
   const classes = useStyles();
   const { dialog } = useAppLayout();
@@ -81,6 +132,26 @@ const Teams: FC<TeamsProps> = (props) => {
   const { api } = useAPI();
   const { apiETK } = api;
   const [data, setData] = useState([]);
+  const anchorRef = useRef(null);
+  const [disableActions, setDisableActions] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(0);
+  const [selectedTeams, setSelectedTeams] = useState([]);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMesagge] = useState<
+    Pick<SnackAlertProps, "message" | "severity">
+  >({
+    message: "",
+    severity: "success",
+  });
+
+  useEffect(() => {
+    getData(props.organization.id);
+  }, [props.organization]);
+
+  useEffect(() => {
+    setDisableActions(Boolean(selectedTeams.length == 0));
+  }, [selectedTeams]);
 
   const getData = async (organizationId: number) => {
     try {
@@ -96,28 +167,23 @@ const Teams: FC<TeamsProps> = (props) => {
     }
   };
 
-  useEffect(() => {
-    getData(props.organization.id);
-  }, [props.organization]);
-
-  const anchorRef = useRef(null);
-  const [disableActions, setDisableActions] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [selectedAction, setSelectedAction] = useState(0);
-  const [selectedTeams, setSelectedTeams] = useState([]);
-
-  useEffect(() => {
-    setDisableActions(Boolean(selectedTeams.length == 0));
-  }, [selectedTeams]);
-
   const onSelected = (team_ids) => {
     setSelectedTeams(team_ids);
   };
 
   const handleClick = () => {
-    console.info(
-      `Export format selected ${actionOptions[selectedAction].format}`
-    );
+    switch (actionOptions[selectedAction].format) {
+      case "archive":
+        discardTeams();
+        break;
+      case "delete":
+        deleteTeams();
+        break;
+      default:
+        console.log(
+          `Error, callback for ${actionOptions[selectedAction].format} not found.`
+        );
+    }
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -221,8 +287,73 @@ const Teams: FC<TeamsProps> = (props) => {
     router.push(`/organization/${id}`);
   };
 
+  const triggerAlert = ({ message, severity }) => {
+    setAlertMesagge({
+      message: message,
+      severity: severity,
+    });
+    setOpenAlert(true);
+    setTimeout(() => setOpenAlert(false), 3000);
+  };
+
+  const removeSelectedRows = () => {
+    const filteredTeams = data.filter(
+      (team) => selectedTeams.indexOf(team.id) === -1
+    );
+    setData(filteredTeams);
+  };
+
+  const deleteTeams = async () => {
+    try {
+      const response = await apiETK.post(
+        `/organization/${props.organization.id}/teams/bulk_delete`,
+        selectedTeams
+      );
+      if (response.status === 200) {
+        triggerAlert({
+          message: `${selectedTeams.length} équipes supprimées avec succès.`,
+          severity: "success",
+        });
+        removeSelectedRows();
+        setSelectedTeams([]);
+      }
+    } catch (e) {
+      triggerAlert({
+        message: "Erreur lors de la supression des équipes",
+        severity: "error",
+      });
+    }
+  };
+
+  const discardTeams = async () => {
+    try {
+      const response = await apiETK.post(
+        `/organization/${props.organization.id}/teams/bulk_archive`,
+        selectedTeams
+      );
+      if (response.status === 200) {
+        triggerAlert({
+          message: `${selectedTeams.length} équipes archivées avec succès.`,
+          severity: "success",
+        });
+        removeSelectedRows();
+        setSelectedTeams([]);
+      }
+    } catch (e) {
+      triggerAlert({
+        message: "Erreur lors de l'archivage des équipes",
+        severity: "error",
+      });
+    }
+  };
+
   return (
     <Fragment>
+      <SnackAlert
+        open={openAlert}
+        severity={alertMessage.severity}
+        message={alertMessage.message}
+      />
       <Toolbar className={classes.toolbar}>
         <Box className={classes.root} />
         <ButtonGroup
@@ -303,11 +434,14 @@ const Teams: FC<TeamsProps> = (props) => {
         </Button>
       </Toolbar>
       <TeamsTable
+        organizationId={props.organization.id}
         rows={data}
         openArea={openArea}
         openTeamPage={openTeamPage}
         openForm={openForm}
         onSelected={onSelected}
+        discardTeams={discardTeams}
+        deleteTeams={deleteTeams}
       />
     </Fragment>
   );

@@ -27,16 +27,21 @@ import {
 } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { IOrganization } from "@/index";
+import useAPI from "@/lib/useApi";
 
 export interface ETKOrganizationTeamsTableProps {
+  organizationId: number;
   rows?: IOrganization[];
   onSelected?(selection?: number[]): void;
   openArea?(data?: IOrganization): void;
   openForm?(data?: IOrganization): void;
   openTeamPage?(data_id?: number): void;
+  discardTeams?(): void;
+  deleteTeams?(): void;
 }
 
 const defaultProps: ETKOrganizationTeamsTableProps = {
+  organizationId: 1,
   rows: [],
 };
 
@@ -87,6 +92,8 @@ const SnackAlert: React.FC<SnackAlertProps> = ({
 
 const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
   const { t } = useTranslation("components");
+  const { api } = useAPI();
+  const { apiETK } = api;
   const [headers] = React.useState([
     "Teams.Table.headers.name",
     "Teams.Table.headers.total_members",
@@ -96,7 +103,17 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
   const [selected, setSelected] = useState([] as number[]);
   const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
-  const [alertMessage, setAlertMesagge] = useState("");
+  const [alertMessage, setAlertMesagge] = useState<
+    Pick<SnackAlertProps, "message" | "severity">
+  >({
+    message: "",
+    severity: "success",
+  });
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    setRows(props.rows);
+  }, [props.rows]);
 
   const handleClick = (event: SyntheticEvent) => {
     setActionsMenuAnchorEl(event.currentTarget);
@@ -106,31 +123,21 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
     setActionsMenuAnchorEl(null);
   };
 
-  const deleteTeams = async () => {
-    setAlertMesagge(
-      `TODO: AJAX call to delete Teams with IDS: [${selected.join(", ")}]`
-    );
-    setOpenAlert(true);
-    setActionsMenuAnchorEl(null);
-    setTimeout(() => setOpenAlert(false), 3000);
+  const triggerDiscard = () => {
+    props.discardTeams();
+    setSelected([]);
   };
 
-  const discardTeams = () => {
-    setAlertMesagge(
-      `TODO: AJAX call to discard (sof_delete) teams with IDS: [${selected.join(
-        ", "
-      )}]`
-    );
-    setOpenAlert(true);
-    setActionsMenuAnchorEl(null);
-    setTimeout(() => setOpenAlert(false), 3000);
+  const triggerDelete = () => {
+    props.deleteTeams();
+    setSelected([]);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const onSelectAllClick = (e) => {
     if (e.target.checked) {
-      const newSelected = props.rows.map((n) => n.id);
+      const newSelected = rows.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -167,7 +174,11 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
 
   return (
     <>
-      <SnackAlert open={openAlert} severity="warning" message={alertMessage} />
+      <SnackAlert
+        open={openAlert}
+        severity={alertMessage.severity}
+        message={alertMessage.message}
+      />
       <TableContainer>
         <Table size="small">
           <TableHead>
@@ -175,12 +186,9 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
               <TableCell padding="checkbox">
                 <Checkbox
                   indeterminate={
-                    selected.length > 0 && selected.length < props.rows.length
+                    selected.length > 0 && selected.length < rows.length
                   }
-                  checked={
-                    props.rows.length > 0 &&
-                    selected.length === props.rows.length
-                  }
+                  checked={rows.length > 0 && selected.length === rows.length}
                   onChange={onSelectAllClick}
                   color="primary"
                 />
@@ -202,13 +210,13 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
                   open={Boolean(actionsMenuAnchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={discardTeams}>
+                  <MenuItem onClick={() => triggerDiscard()}>
                     <ListItemIcon>
                       <ArchiveIcon />
                     </ListItemIcon>
                     <ListItemText primary="Archiver" />
                   </MenuItem>
-                  <MenuItem onClick={deleteTeams}>
+                  <MenuItem onClick={() => triggerDelete()}>
                     <ListItemIcon>
                       <DeleteIcon />
                     </ListItemIcon>
@@ -224,8 +232,8 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.rows.length > 0 &&
-              props.rows.map((row) => {
+            {rows.length > 0 &&
+              rows.map((row) => {
                 const isItemSelected = isSelected(row.id);
                 return (
                   <TableRow
