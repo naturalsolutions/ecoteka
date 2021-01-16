@@ -169,16 +169,17 @@ const Teams: FC<TeamsProps> = (props) => {
   }
 
   const addItem = async (isNew) => {
-    const response = await formEditRef.current.submit();
-
-    if (response.ok) {
+    const {
+      data: organizationData,
+      status,
+    } = await formEditRef.current.submit();
+    if (status === 200) {
       dialog.current.close();
-      const newOrganization = await response.json();
       isNew
-        ? setData([...data, newOrganization])
+        ? setData([...data, organizationData])
         : setData(
             data.map((team, i) =>
-              team.id === newOrganization.id ? newOrganization : team
+              team.id === organizationData.id ? organizationData : team
             )
           );
     }
