@@ -13,10 +13,8 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
-  Snackbar,
   Tooltip,
 } from "@material-ui/core";
-import MuiAlert, { AlertProps, Color } from "@material-ui/lab/Alert";
 import {
   Edit,
   MoreHoriz as MoreHorizIcon,
@@ -45,51 +43,6 @@ const defaultProps: ETKOrganizationTeamsTableProps = {
   rows: [],
 };
 
-interface SelectRendererProps {
-  value: string;
-  handleChange?: any;
-}
-interface SnackAlertProps {
-  open: boolean;
-  severity: Color;
-  message: string;
-}
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const SnackAlert: React.FC<SnackAlertProps> = ({
-  open,
-  severity,
-  message = "",
-}) => {
-  const [isOpen, setIsOpen] = React.useState(open);
-  const handleClose = (
-    event: SyntheticEvent<Element, Event>,
-    reason: string
-  ) => {
-    setIsOpen(false);
-  };
-
-  useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
-
-  return (
-    <Snackbar
-      open={isOpen}
-      autoHideDuration={3000}
-      onClose={handleClose}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-    >
-      <Alert onClose={handleClose} severity={severity}>
-        {message}
-      </Alert>
-    </Snackbar>
-  );
-};
-
 const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
   const { t } = useTranslation("components");
   const { api } = useAPI();
@@ -102,13 +55,6 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
   ]);
   const [selected, setSelected] = useState([] as number[]);
   const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = useState(null);
-  const [openAlert, setOpenAlert] = useState(false);
-  const [alertMessage, setAlertMesagge] = useState<
-    Pick<SnackAlertProps, "message" | "severity">
-  >({
-    message: "",
-    severity: "success",
-  });
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
@@ -174,11 +120,6 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = (props) => {
 
   return (
     <>
-      <SnackAlert
-        open={openAlert}
-        severity={alertMessage.severity}
-        message={alertMessage.message}
-      />
       <TableContainer>
         <Table size="small">
           <TableHead>

@@ -21,7 +21,7 @@ import {
   Snackbar,
   Toolbar,
 } from "@material-ui/core";
-import MuiAlert, { AlertProps, Color } from "@material-ui/lab/Alert";
+import MuiAlert, { Color } from "@material-ui/lab/Alert";
 import {
   Add as AddIcon,
   ArrowDropDown as ArrowDropDownIcon,
@@ -37,9 +37,7 @@ import ETKFormWorkingArea, {
 } from "@/components/Organization/WorkingArea/Form";
 import TeamsTable from "@/components/Organization/Teams/TeamsTable";
 import { useTranslation } from "react-i18next";
-import { useAppContext } from "@/providers/AppContext";
 import useAPI from "@/lib/useApi";
-import Organization from "@/pages/organization/[id]";
 
 interface TeamsProps {
   organization: IOrganization;
