@@ -3,7 +3,6 @@ import { Grid, Typography } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useEtkOrganizationSchema from "@/components/Organization/Form/Schema";
-import { apiRest } from "@/lib/api";
 import useAPI from "@/lib/useApi";
 import { IOrganization } from "@/index.d";
 

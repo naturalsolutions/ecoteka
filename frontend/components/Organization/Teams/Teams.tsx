@@ -208,9 +208,9 @@ const Teams: FC<TeamsProps> = (props) => {
         label: t("common:buttons.cancel"),
       },
       {
-        label: t("common:buttons.send"),
+        label: t("common:buttons.create"),
         variant: "contained",
-        color: "secondary",
+        color: "primary",
         noClose: true,
         onClick: () => addItem(isNew),
       },
@@ -363,7 +363,7 @@ const Teams: FC<TeamsProps> = (props) => {
           aria-label="split button"
         >
           <Button size="small" color="secondary" onClick={handleClick}>
-            {actionOptions[selectedAction].label}
+            {t(`common:buttons.${actionOptions[selectedAction].format}`)}
           </Button>
           <Button
             size="small"
@@ -409,7 +409,7 @@ const Teams: FC<TeamsProps> = (props) => {
                         selected={index === selectedAction}
                         onClick={(event) => handleMenuItemClick(event, index)}
                       >
-                        {option.label}
+                        {t(`common:buttons.${option.format}`)}
                       </MenuItem>
                     ))}
                   </MenuList>
@@ -434,6 +434,7 @@ const Teams: FC<TeamsProps> = (props) => {
       <TeamsTable
         organizationId={props.organization.id}
         rows={data}
+        selectedTeams={selectedTeams}
         openArea={openArea}
         openTeamPage={openTeamPage}
         openForm={openForm}

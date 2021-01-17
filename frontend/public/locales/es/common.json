@@ -9,7 +9,16 @@
     "sending": "Enviando..."
   },
   "buttons": {
-    "backToHome": "Ir a la página de inicio"
+    "backToHome": "Ir a la página de inicio",
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish",
+    "create": "Create",
+    "update": "Update",
+    "send": "Send",
+    "cancel": "Cancel",
+    "archive": "Archive",
+    "delete": "Delete"
   },
   "errors": {
     "email": "Correo electrónico no válido",
