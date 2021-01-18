@@ -136,7 +136,6 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [ws, setWS] = useState<string>(uuidv4());
 
   const optionsFuse = {
     minMatchCharLength: 3,
@@ -268,9 +267,11 @@ const EditionPage = ({}) => {
         );
         break;
       case "tree":
-        const Tree = dynamic(() => import("@/components/Tree/Form"));
-        setBoxSelect(true);
-        setDrawerLeftComponent(<Tree selection={selection} />);
+        if (boxSelect) {
+          const Tree = dynamic(() => import("@/components/Tree/Form"));
+          setBoxSelect(true);
+          setDrawerLeftComponent(<Tree selection={selection} />);
+        }
         break;
       case "import":
         const Import = dynamic(() => import("@/components/Import/Panel/Index"));

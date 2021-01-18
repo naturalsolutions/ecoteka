@@ -12,7 +12,6 @@ import useETKTreeSchema from "@/components/Tree/Schema";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
 import { useAppLayout } from "@/components/AppLayout/Base";
-import { ITree } from "@/index";
 
 const useStyles = makeStyles((theme) => ({
   grid: {},
@@ -47,25 +46,28 @@ const ETKTreeForm: React.FC<{
   }, [selection]);
 
   const handlerOnSave = async () => {
-    setSaving(true);
-    const properties = getValues();
-    const response = await apiRest.trees.put(
-      user.currentOrganization.id,
-      selection[0].properties.id,
-      {
-        properties: properties,
-      }
-    );
+    try {
+      setSaving(true);
 
-    if (response.ok) {
-      const newTree = (await response.json()) as ITree;
-      snackbar.current.open({
-        message: t("common:messages.success"),
-        autoHideDuration: 2000,
+      if (!selection.length) return;
+
+      const properties = getValues();
+      const organizationId = user.currentOrganization.id;
+      const treeId = selection[0].properties.id;
+
+      const response = await apiRest.trees.put(organizationId, treeId, {
+        properties,
       });
-    }
 
-    setSaving(false);
+      if (response.ok) {
+        snackbar.current.open({
+          message: t("common:messages.success"),
+          autoHideDuration: 2000,
+        });
+      }
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
