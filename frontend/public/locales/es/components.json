@@ -406,6 +406,26 @@
         "total_trees": "Árboles",
         "actions": "Acciones"
       }
+    },
+    "delete": {
+      "teams": {
+        "success": "equipos eliminados correctamente",
+        "error": "Se ha producido un error al eliminar los equipos"
+      },
+      "team": {
+        "success": "equipo eliminado correctamente",
+        "error": "Se ha producido un error al eliminar el equipo"
+      }
+    },
+    "archive": {
+      "teams": {
+        "success": "equipos archivado correctamente",
+        "error": "Se ha producido un error al archivar los equipos"
+      },
+      "team": {
+        "success": "equipo archivado correctamente",
+        "error": "Se ha producido un error al archivar el equipo"
+      }
     }
   },
   "Team": {

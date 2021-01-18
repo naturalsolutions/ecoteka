@@ -1,6 +1,5 @@
-import { useEffect, useState, createRef } from "react";
+import { useEffect, useLayoutEffect, useState, createRef } from "react";
 import { Grid, makeStyles, Box } from "@material-ui/core";
-import ReconnectingWebSocket from "reconnecting-websocket";
 import { v4 as uuidv4 } from "uuid";
 import MapGL, {
   Source,
@@ -136,7 +135,6 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [ws, setWS] = useState<string>(uuidv4());
 
   const optionsFuse = {
     minMatchCharLength: 3,
@@ -157,6 +155,16 @@ const EditionPage = ({}) => {
   ) => {
     const newData = await apiRest.organization.geojson(organizationId);
     setData(newData);
+  };
+
+  const handleOnTreeSave = (record) => {
+    const index = data.features.findIndex((f) => f.properties.id === record.id);
+    const newData = { ...data };
+
+    if (index && newData.features[index]) {
+      newData.features[index].properties = record;
+      setData(newData);
+    }
   };
 
   const onWSMessage = (message) => {
@@ -240,7 +248,7 @@ const EditionPage = ({}) => {
     });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (router.query.tree) {
       apiRest.trees
         .get(user.currentOrganization.id, router.query.tree)
@@ -255,7 +263,7 @@ const EditionPage = ({}) => {
     }
 
     connect();
-  }, []);
+  });
 
   const switchPanel = (panel) => {
     switch (panel) {
@@ -268,9 +276,13 @@ const EditionPage = ({}) => {
         );
         break;
       case "tree":
-        const Tree = dynamic(() => import("@/components/Tree/Form"));
-        setBoxSelect(true);
-        setDrawerLeftComponent(<Tree selection={selection} />);
+        if (boxSelect) {
+          const Tree = dynamic(() => import("@/components/Tree/Form"));
+          setBoxSelect(true);
+          setDrawerLeftComponent(
+            <Tree selection={selection} onSave={handleOnTreeSave} />
+          );
+        }
         break;
       case "import":
         const Import = dynamic(() => import("@/components/Import/Panel/Index"));
@@ -525,6 +537,15 @@ const EditionPage = ({}) => {
                 id={hoveredTreeId}
                 source="trees"
                 state={{ hover: true }}
+              />
+            )}
+            {router.query.tree && data.features.length > 0 && (
+              <FeatureState
+                id={data.features.find(
+                  (f) => (f.properties.id = router.query.tree)
+                )}
+                source="trees"
+                state={{ selected: true }}
               />
             )}
             <GeolocateControl ref={geolocateControlRef} />

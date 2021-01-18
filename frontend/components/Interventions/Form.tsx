@@ -15,7 +15,6 @@ import {
 import useETKForm from "@/components/Form/useForm";
 import {
   Button,
-  Divider,
   Grid,
   makeStyles,
   Step,
@@ -63,10 +62,7 @@ type ETKInterventionFormHandles = {
   getValues: () => any;
 };
 
-const commonsteps: TInterventionStep[] = [
-  "interventionselection",
-  "treeselection",
-];
+const commonsteps: TInterventionStep[] = ["interventionselection"];
 
 const ETKInterventionForm = forwardRef<
   ETKInterventionFormHandles,
@@ -202,6 +198,8 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
           intervention_end_date: new Date(dateRange.endDate),
         } // c'est moche !!
       );
+
+    payload.tree_id = router.query.tree;
 
     await apiRest.interventions.post(user.currentOrganization.id, payload);
   };
