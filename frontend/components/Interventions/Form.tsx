@@ -15,7 +15,6 @@ import {
 import useETKForm from "@/components/Form/useForm";
 import {
   Button,
-  Divider,
   Grid,
   makeStyles,
   Step,
@@ -63,10 +62,7 @@ type ETKInterventionFormHandles = {
   getValues: () => any;
 };
 
-const commonsteps: TInterventionStep[] = [
-  "interventionselection",
-  "treeselection",
-];
+const commonsteps: TInterventionStep[] = ["interventionselection"];
 
 const ETKInterventionForm = forwardRef<
   ETKInterventionFormHandles,
