@@ -13,9 +13,12 @@
     "buttonConnexion": "Se connecter",
     "labelPassword": "Mot de passe",
     "labelUsername": "Adresse email",
+    "forgotPassword": "Mot de passe oublié ?",
     "errorMessageServer": "Adresse email ou mot de passe incorrect",
     "errorMessageEmail": "Veuillez saisir un email valide.",
-    "errorMessageRequiredField": "Veuillez renseigner ce champ."
+    "errorMessageRequiredField": "Veuillez renseigner ce champ.",
+    "noAccount" : "Vous n'avez pas encore de compte?",
+    "accountRequest" : "Demandez la création d'un compte !"
   },
   "LanguageSelector": {
     "en": "Anglais",

@@ -13,10 +13,13 @@
     "buttonCancel": "Cancel",
     "buttonConnexion": "Login",
     "labelPassword": "Password",
+    "forgotPassword": "Forgot your password ?",
     "labelUsername": "Email",
     "errorMessageServer": "Incorrect email or password",
     "errorMessageEmail": "Email address is invalid",
-    "errorMessageRequiredField": "Field required"
+    "errorMessageRequiredField": "Field required",
+    "noAccount" : "Don't have an account yet?",
+    "accountRequest" : "Request the creation of an account !"
   },
 
   "LanguageSelector": {
@@ -75,7 +78,7 @@
     "title": "You are connected to your account",
     "content": "You can see the number of trees in OpenData but also the number of trees on your private data layer.",
     "numberOfTrees": {
-      "title": "Nombre d'arbres sur la carte",
+      "title": "Number of trees in the map",
       "content": "millions of trees"
     },
     "numberOfTreesLayer": {
