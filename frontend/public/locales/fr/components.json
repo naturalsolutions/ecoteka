@@ -453,6 +453,10 @@
           "contributor": "Contributeur",
           "reader": "Lecteur",
           "guest": "Invité"
+        },
+        "updateMember": {
+          "success": "Le rôle de l'utilisateur a bien été modifié",
+          "error": "Une erreur est survenue lors de la mise à jour de l'utilisateur"
         }
       },
       "dialog": {

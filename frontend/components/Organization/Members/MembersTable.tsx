@@ -21,28 +21,25 @@ import {
   InputBase,
   Theme,
 } from "@material-ui/core";
-import MuiAlert, { AlertProps, Color } from "@material-ui/lab/Alert";
+import SnackAlert, { SnackAlertProps } from "@/components/Feedback/SnackAlert";
 import {
   Block as BlockIcon,
   MoreHoriz as MoreHorizIcon,
 } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
-
-interface IMemberProps {
-  id: number;
-  email: string;
-  name?: string;
-  role: string;
-  status: string;
-}
+import useApi from "@/lib/useApi";
+import { IMember } from "@/index";
 
 export interface ETKOrganizationMemberTableProps {
-  rows?: IMemberProps[];
+  organizationId: number;
+  rows?: IMember[];
   onSelected?(selection?: number[]): void;
   onDetachMembers?(): void;
+  onMemberUpdate?(updatedMember: IMember): void;
 }
 
 const defaultProps: ETKOrganizationMemberTableProps = {
+  organizationId: 1,
   rows: [],
 };
 
@@ -50,49 +47,6 @@ interface SelectRendererProps {
   value: string;
   handleChange?: any;
 }
-interface SnackAlertProps {
-  open: boolean;
-  severity: Color;
-  message: string;
-}
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const SnackAlert: React.FC<SnackAlertProps> = ({
-  open,
-  severity,
-  message = "",
-}) => {
-  const [isOpen, setIsOpen] = React.useState(open);
-  const handleClose = (
-    event: SyntheticEvent<Element, Event>,
-    reason: string
-  ) => {
-    // if (reason === "clickaway") {
-    //   return;
-    // }
-    setIsOpen(false);
-  };
-
-  useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
-
-  return (
-    <Snackbar
-      open={isOpen}
-      autoHideDuration={3000}
-      onClose={handleClose}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-    >
-      <Alert onClose={handleClose} severity={severity}>
-        {message}
-      </Alert>
-    </Snackbar>
-  );
-};
 
 const BootstrapInput = withStyles((theme: Theme) =>
   createStyles({
@@ -166,7 +120,15 @@ const SelectRenderer: React.FC<SelectRendererProps> = ({
   );
 };
 
-const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
+const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
+  organizationId,
+  rows,
+  onSelected,
+  onDetachMembers,
+  onMemberUpdate,
+}) => {
+  const { api } = useApi();
+  const { apiETK } = api;
   const { t } = useTranslation("components");
   const [headers] = React.useState([
     "Organization.Members.Table.headers.email",
@@ -176,7 +138,12 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
   const [selected, setSelected] = useState([] as number[]);
   const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
-  const [alertMessage, setAlertMesage] = useState("");
+  const [alertMessage, setAlertMesagge] = useState<
+    Pick<SnackAlertProps, "message" | "severity">
+  >({
+    message: "",
+    severity: "success",
+  });
 
   const handleClick = (event: SyntheticEvent) => {
     setActionsMenuAnchorEl(event.currentTarget);
@@ -186,18 +153,52 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
     setActionsMenuAnchorEl(null);
   };
 
-  const handleUserRoleChange = (userID) => {
-    setAlertMesage(`TODO: AJAX call to change role for User#${userID}`);
+  const triggerAlert = ({ message, severity }) => {
+    setAlertMesagge({
+      message: message,
+      severity: severity,
+    });
     setOpenAlert(true);
-    setActionsMenuAnchorEl(null);
     setTimeout(() => setOpenAlert(false), 3000);
+  };
+
+  const handleUserRoleChange = async (
+    user: IMember,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value: role } = event.target;
+    try {
+      const {
+        data,
+        status,
+      } = await apiETK.patch(
+        `/organization/${organizationId}/members/${user.id}/role`,
+        { role }
+      );
+      if (status === 200) {
+        onMemberUpdate(data);
+        triggerAlert({
+          message: t(
+            "components:Organization.Members.Table.updateMember.success"
+          ),
+          severity: "success",
+        });
+      } else {
+        triggerAlert({
+          message: t(
+            "components:Organization.Members.Table.updateMember.error"
+          ),
+          severity: "error",
+        });
+      }
+    } catch (e) {}
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const onSelectAllClick = (e) => {
     if (e.target.checked) {
-      const newSelected = props.rows.map((n) => n.id);
+      const newSelected = rows.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -227,14 +228,19 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
   };
 
   useEffect(() => {
-    if (props.onSelected && typeof props.onSelected === "function") {
-      props.onSelected(selected);
+    if (onSelected && typeof onSelected === "function") {
+      onSelected(selected);
     }
   }, [selected]);
 
   return (
     <>
-      <SnackAlert open={openAlert} severity="warning" message={alertMessage} />
+      <SnackAlert
+        open={openAlert}
+        severity={alertMessage.severity}
+        message={alertMessage.message}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
       <TableContainer>
         <Table size="small">
           <TableHead>
@@ -242,12 +248,9 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
               <TableCell padding="checkbox">
                 <Checkbox
                   indeterminate={
-                    selected.length > 0 && selected.length < props.rows.length
+                    selected.length > 0 && selected.length < rows.length
                   }
-                  checked={
-                    props.rows.length > 0 &&
-                    selected.length === props.rows.length
-                  }
+                  checked={rows.length > 0 && selected.length === rows.length}
                   onChange={onSelectAllClick}
                   color="primary"
                 />
@@ -267,7 +270,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
                   open={Boolean(actionsMenuAnchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={props.onDetachMembers}>
+                  <MenuItem onClick={onDetachMembers}>
                     <ListItemIcon>
                       <BlockIcon />
                     </ListItemIcon>
@@ -283,7 +286,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.rows.map((row) => {
+            {rows.map((row) => {
               const isItemSelected = isSelected(row.id);
               return (
                 <TableRow
@@ -309,7 +312,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = (props) => {
                     ) : (
                       <SelectRenderer
                         value={row.role}
-                        handleChange={() => handleUserRoleChange(row.id)}
+                        handleChange={(e) => handleUserRoleChange(row, e)}
                       />
                     )}
                   </TableCell>

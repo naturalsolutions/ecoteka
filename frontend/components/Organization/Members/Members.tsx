@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Box, Button, Toolbar, useMediaQuery } from "@material-ui/core";
 import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
 import { useAppLayout } from "@/components/AppLayout/Base";
-import { useTranslation } from "react-i18next";
+import { composeInitialProps, useTranslation } from "react-i18next";
 import { apiRest } from "@/lib/api";
 import useAPI from "@/lib/useApi";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
@@ -12,6 +12,7 @@ import AddMembers, {
   AddMembersActions,
 } from "@/components/Organization/Members/AddMembers";
 import MembersTable from "@/components/Organization/Members/MembersTable";
+import { IMember } from "@/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -91,6 +92,14 @@ const Members: FC<MembersProps> = ({ organization }) => {
     setSelectedMembers(selection);
   };
 
+  const onMemberUpdate = (updatedMember: IMember) => {
+    setData(
+      data.map((member, i) =>
+        member.id === updatedMember.id ? updatedMember : member
+      )
+    );
+  };
+
   const closeAddMembersDialog = (refetchOrganizationData: boolean) => {
     if (refetchOrganizationData) {
       getData(organization.id);
@@ -99,22 +108,13 @@ const Members: FC<MembersProps> = ({ organization }) => {
     dialog.current.close();
   };
 
-  const inviteMembers = async () => {
-    const response = await formAddMembersRef.current.submit();
-
-    if (response.ok) {
-      dialog.current.close();
-      await getData(organization.id);
-    }
-  };
-
   function addMember() {
     dialog.current.open({
       title: t("components:Organization.Members.dialog.title"),
       content: (
         <AddMembers
           ref={formAddMembersRef}
-          organizationID={organization.id}
+          organizationId={organization.id}
           closeAddMembersDialog={closeAddMembersDialog}
         />
       ),
@@ -182,9 +182,11 @@ const Members: FC<MembersProps> = ({ organization }) => {
       </Toolbar>
       {data && (
         <MembersTable
+          organizationId={organization.id}
           rows={data}
           onSelected={onSelected}
           onDetachMembers={detachMembers}
+          onMemberUpdate={onMemberUpdate}
         />
       )}
     </Fragment>

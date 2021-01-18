@@ -356,12 +356,12 @@ def update_member_role(
     organization_id: int,
     user_id: int,
     *,
-    role: str = Body(...),
+    role: str = Body(..., embed=True),
     auth=Depends(authorization("organizations:edit_member")),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    roles_order = ["owner", "manager", "contributor", "reader"]
+    roles_order = ["owner", "manager", "contributor", "reader", "guest", "admin"]
 
     if role not in roles_order:
         raise HTTPException(

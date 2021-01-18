@@ -477,6 +477,10 @@
           "contributor": "Contributor",
           "reader": "Reader",
           "guest": "Guest"
+        },
+        "updateMember": {
+          "success": "Member role was successfully updated",
+          "error": "Error occured while updatind member role"
         }
       },
       "dialog": {
