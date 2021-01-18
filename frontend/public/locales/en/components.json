@@ -443,6 +443,8 @@
     "dialogTitleEdit": "Update the organisation",
     "dialogContentTextCreate": "Use this form to create an organisation.",
     "dialogContentTextEdit": "Use this form to update the organisation.",
+    "exportPending": "Please wait and keep this page open, your request is being processed...",
+    "exportSuccess": "Your export request is ready! Download in progress...",
     "WorkingArea": {
       "dialogTitle": "Edit working area",
       "dialogContentText": "Accept : zip, geojson"

@@ -18,7 +18,9 @@
     "send": "Send",
     "cancel": "Cancel",
     "archive": "Archive",
-    "delete": "Delete"
+    "delete": "Delete",
+    "export": "Export",
+    "import": "Import data"
   },
   "errors": {
     "email": "Email address is invalid",

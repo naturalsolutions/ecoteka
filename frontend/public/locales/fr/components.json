@@ -419,6 +419,8 @@
     "dialogTitleEdit": "Modifier l'organisation",
     "dialogContentTextCreate": "Utilisez ce formulaire pour créer une organisation.",
     "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'organisation.",
+    "exportPending": "Veuillez patienter et laisser cette fenêtre ouverte, nous préparons vos données...",
+    "exportSuccess": "Vos données sont prêtes! Téléchargement en cours...",
     "WorkingArea": {
       "dialogTitle": "Editer l'emprise",
       "dialogContentText": "Extension acceptés : zip, geojson"

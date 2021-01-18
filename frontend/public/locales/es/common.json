@@ -18,7 +18,9 @@
     "send": "Enviar",
     "cancel": "Cancelar",
     "archive": "Archivar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "export": "Export",
+    "import": "Importer vos données"
   },
   "errors": {
     "email": "Correo electrónico no válido",
