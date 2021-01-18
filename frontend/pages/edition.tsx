@@ -158,6 +158,16 @@ const EditionPage = ({}) => {
     setData(newData);
   };
 
+  const handleOnTreeSave = (record) => {
+    const index = data.features.findIndex((f) => f.properties.id === record.id);
+    const newData = { ...data };
+
+    if (index && newData.features[index]) {
+      newData.features[index].properties = record;
+      setData(newData);
+    }
+  };
+
   const onWSMessage = (message) => {
     if (message && message.data) {
       try {
@@ -270,7 +280,9 @@ const EditionPage = ({}) => {
         if (boxSelect) {
           const Tree = dynamic(() => import("@/components/Tree/Form"));
           setBoxSelect(true);
-          setDrawerLeftComponent(<Tree selection={selection} />);
+          setDrawerLeftComponent(
+            <Tree selection={selection} onSave={handleOnTreeSave} />
+          );
         }
         break;
       case "import":

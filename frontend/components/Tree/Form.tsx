@@ -25,8 +25,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ETKTreeForm: React.FC<{
-  selection: { id: number; properties: { id: number; properties: {} } }[];
-}> = ({ selection }) => {
+  selection: {
+    id: number;
+    properties: { id: number; properties: {} };
+  }[];
+  onSave?(record: object): void;
+}> = ({ selection, onSave }) => {
   const { t } = useTranslation(["common", "components"]);
   const classes = useStyles();
   const schema = useETKTreeSchema();
@@ -60,6 +64,9 @@ const ETKTreeForm: React.FC<{
       });
 
       if (response.ok) {
+        const record = await response.json();
+        onSave(record);
+
         snackbar.current.open({
           message: t("common:messages.success"),
           autoHideDuration: 2000,
