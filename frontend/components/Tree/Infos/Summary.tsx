@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Summary: FC<{ treeId: number }> = ({ treeId }) => {
+const Summary: FC<{ treeId: number; map: any }> = ({ treeId, map }) => {
   const { user } = useAppContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const [tree, setTree] = useState<any>({});

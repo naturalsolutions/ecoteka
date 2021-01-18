@@ -15,6 +15,7 @@ import { DropzoneArea } from "material-ui-dropzone";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { apiRest } from "@/lib/api";
 import SwipeableViews from "react-swipeable-views";
+import { useRouter } from "next/router";
 import {
   DeleteForever,
   KeyboardArrowLeft,
@@ -214,19 +215,6 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
             marginBottom: 10,
           }}
         >
-          {/* <TableRow>
-            {images?.length > 0 && (
-              <TableCell colSpan={2}>
-                {images?.map((image) => (
-                  <Avatar
-                    variant="rounded"
-                    src={image}
-                    className={classes.etkTreeImage}
-                  />
-                ))}
-              </TableCell>
-            )}
-          </TableRow> */}
           <SwipeableViews
             index={imagesActiveIndex}
             onChangeIndex={handleStepChange}
