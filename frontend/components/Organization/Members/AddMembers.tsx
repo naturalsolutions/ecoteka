@@ -1,8 +1,18 @@
-import React, { forwardRef, useState, useEffect, useImperativeHandle } from "react";
-import { Box, Button, Chip, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
-import { Send as SendIcon } from "@material-ui/icons";
+import React, { forwardRef, useState } from "react";
+import {
+  Box,
+  Button,
+  Chip,
+  makeStyles,
+  MenuItem,
+  Select,
+  TextField,
+  Toolbar,
+} from "@material-ui/core";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   chipsContainer: {
@@ -16,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
     marginRight: theme.spacing(2),
+  },
+  grow: {
+    flexGrow: 1,
   },
 }));
 
@@ -41,13 +54,17 @@ export type AddMembersActions = {
 
 export interface AddMembersProps {
   organizationID: number;
+  closeAddMembersDialog: (refetchOrganizationData: boolean) => void;
 }
 
-const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) => {
+const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props) => {
   const classes = useStyles();
+  const { api } = useApi();
+  const { apiETK } = api;
+  const { t } = useTranslation(["components", "common"]);
   const [error, setError] = useState(null);
   const { register, control, handleSubmit, getValues, setValue } = useForm();
-  const { fields, append, prepend, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "members",
   });
@@ -83,19 +100,19 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) =
     }
   };
 
-  const handleRemoveField = (fieldIdx: number) => () => {
-    remove(fieldIdx);
-  };
-
   const isValid = (email) => {
     let error = null;
 
     if (isInList(email)) {
-      error = `<${email}> est déjà présent dans la liste des invitations.`;
+      error = `<${email}> ${t(
+        "components:Organization.Members.dialog.errorEmailAlreadyAdded"
+      )}`;
     }
 
     if (!isEmail(email)) {
-      error = `<${email}> n'est pas une adresse valide.`;
+      error = `<${email}> ${t(
+        "components:Organization.Members.dialog.errorEmailFormatNotValid"
+      )}`;
     }
 
     if (error) {
@@ -116,40 +133,41 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) =
     return /[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/.test(email);
   };
 
-  useImperativeHandle(ref, () => ({
-    submit: () => {
-      return new Promise((resolve, reject) => {
-        handleSubmit(async (data) => {
-          const { members } = data;
-          const response = await apiRest.organization.addMembers(props.organizationID, members);
-          resolve(response);
-        })();
-      });
-    },
-  }));
+  const closeDialog = () => {
+    props.closeAddMembersDialog(false);
+  };
+
+  const inviteMembers = async (data) => {
+    const { members } = data;
+    try {
+      const response = await apiETK.post(
+        `/organization/${props.organizationID}/members`,
+        members
+      );
+      if (response.status === 200) {
+        props.closeAddMembersDialog(true);
+      }
+    } catch (e) {}
+  };
 
   const roles = [
     {
-      label: "Manager",
       value: "manager",
     },
     {
-      label: "Contributeur",
       value: "contributor",
     },
     {
-      label: "Lecteur",
       value: "reader",
     },
     {
-      label: "Invité",
       value: "guest",
     },
   ];
 
   return (
     <Box width="full">
-      <form>
+      <form onSubmit={handleSubmit(inviteMembers)}>
         <TextField
           fullWidth
           name="main"
@@ -158,30 +176,60 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) =
           helperText={error?.error}
           size="small"
           id="email-input"
-          label="Emails des membres à inviter"
+          label={t("components:Organization.Members.dialog.emailsLabel")}
           variant="outlined"
           className={"input " + (error && " has-error")}
-          placeholder="Saisir les emails des membres à inviter puis appuyer sur `Entrée`..."
+          placeholder={t(
+            "components:Organization.Members.dialog.emailsPlaceholder"
+          )}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
         />
+        {!(fields.length > 0) && (
+          <Box mt={2} mb={3}>
+            <Alert severity="info">
+              <AlertTitle>
+                {t("components:Organization.Members.dialog.alertTitle")}
+              </AlertTitle>
+              {t("components:Organization.Members.dialog.alertContent1")}
+              <strong>
+                {t("components:Organization.Members.dialog.alertContent2")}
+              </strong>
+            </Alert>
+          </Box>
+        )}
+
         <Box mt={2} mb={3}>
           {fields.map((member: any, index: number) => {
             let icon;
             return (
               <Box key={member.id} flexDirection="row">
                 <Box component="span" display="none">
-                  <TextField inputRef={register} name={`members[${index}].email`} defaultValue={member.email} />
+                  <TextField
+                    inputRef={register}
+                    name={`members[${index}].email`}
+                    defaultValue={member.email}
+                  />
                 </Box>
-                <Chip icon={icon} label={member.email} onDelete={() => remove(index)} className={classes.chip} />
+                <Chip
+                  icon={icon}
+                  label={member.email}
+                  onDelete={() => remove(index)}
+                  className={classes.chip}
+                />
                 <Controller
                   as={
-                    <Select name={`members[${index}].role`} defaultValue={member.role}>
+                    <Select
+                      name={`members[${index}].role`}
+                      defaultValue={member.role}
+                    >
                       {roles.map((role, i) => {
                         return (
                           <MenuItem value={role.value} key={i}>
-                            {role.label}
+                            {t(
+                              `components:Organization.Members.Table.roles.${role.value}`
+                            )}
                           </MenuItem>
                         );
                       })}
@@ -195,6 +243,20 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) =
             );
           })}
         </Box>
+        <Toolbar disableGutters={true}>
+          <Button onClick={closeDialog}>
+            {t("components:Organization.Members.close")}
+          </Button>
+          <div className={classes.grow} />
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!Boolean(fields.length > 0)}
+            type="submit"
+          >
+            {t("components:Organization.Members.invite")}
+          </Button>
+        </Toolbar>
       </form>
     </Box>
   );

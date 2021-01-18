@@ -87,34 +87,17 @@ const Members: FC<MembersProps> = ({ organization }) => {
     dialog.current.close();
   };
 
-  function addMember() {
-    const dialogActions = [
-      {
-        label: t("components:Organization.Members.done"),
-      },
-      {
-        label: t("common:buttons.send"),
-        variant: "contained",
-        color: "secondary",
-        noClose: true,
-        onClick: inviteMembers,
-      },
-    ];
+  const onSelected = (selection) => {
+    setSelectedMembers(selection);
+  };
 
-    dialog.current.open({
-      title: t("components:Organization.Members.dialogAddMemberTitle"),
-      content: (
-        <AddMembers ref={formAddMembersRef} organizationID={organization.id} />
-      ),
-      actions: dialogActions,
-      dialogProps: {
-        maxWidth: "sm",
-        fullWidth: true,
-        fullScreen: matches,
-        disableBackdropClick: true,
-      },
-    });
-  }
+  const closeAddMembersDialog = (refetchOrganizationData: boolean) => {
+    if (refetchOrganizationData) {
+      getData(organization.id);
+    }
+    console.log("close dialog");
+    dialog.current.close();
+  };
 
   const inviteMembers = async () => {
     const response = await formAddMembersRef.current.submit();
@@ -124,6 +107,25 @@ const Members: FC<MembersProps> = ({ organization }) => {
       await getData(organization.id);
     }
   };
+
+  function addMember() {
+    dialog.current.open({
+      title: t("components:Organization.Members.dialog.title"),
+      content: (
+        <AddMembers
+          ref={formAddMembersRef}
+          organizationID={organization.id}
+          closeAddMembersDialog={closeAddMembersDialog}
+        />
+      ),
+      dialogProps: {
+        maxWidth: "sm",
+        fullWidth: true,
+        fullScreen: matches,
+        disableBackdropClick: true,
+      },
+    });
+  }
 
   function detachMembers() {
     const dialogActions = [
@@ -151,10 +153,6 @@ const Members: FC<MembersProps> = ({ organization }) => {
       },
     });
   }
-
-  const onSelected = (selection) => {
-    setSelectedMembers(selection);
-  };
 
   return (
     <Fragment>

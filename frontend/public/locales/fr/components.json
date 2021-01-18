@@ -454,6 +454,16 @@
           "reader": "Lecteur",
           "guest": "Invité"
         }
+      },
+      "dialog": {
+        "title": "Ajouter des membres à votre organisation",
+        "errorEmailAlreadyAdded": "est déjà présent dans la liste des invitations.",
+        "errorEmailFormatNotValid": "n'est pas une adresse valide.",
+        "emailsPlaceholder": "gestionnaire@ecoteka.org, invite@ecoteka.org",
+        "emailsLabel": "Emails des membres à inviter",
+        "alertTitle": "Aucun membre à inviter",
+        "alertContent1": "Ajouter l'email du destinataire dans le champ ci-dessus - ",
+        "alertContent2": "puis cliquer sur Entrée ou ajouter une virgule."
       }
     }
   },
