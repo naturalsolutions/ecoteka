@@ -194,9 +194,9 @@
     }
   },
   "Register": {
-    "dialogTitle": "Inscribir",
+    "dialogTitle": "Registrarse",
     "cancel": "Cancelar",
-    "submit": "Inscribir",
+    "submit": "Registrarse",
     "fullName": "Nombre completo",
     "email": "Correo electrónico",
     "organization": "Organización",
@@ -214,102 +214,102 @@
     "title": "Solicitar una intervención",
     "plannew": "Nueva solicitud",
     "success": "Solicitud registrada",
-    "whatnow": "Que souhaitez vous faire ?",
-    "required_documents": "Documents requis",
-    "required_material": "Materiel requis",
-    "intervention_type": "Type d'intervention",
-    "intervenant": "Intervenant",
-    "intervention_period": "Période d'intervention",
-    "estimated_cost": "Coût estimatif",
+    "whatnow": "¿Qué desea hacer?",
+    "required_documents": "Documentos requeridos",
+    "required_material": "Material requerido",
+    "intervention_type": "Tipo de intervención",
+    "intervenant": "Interventor",
+    "intervention_period": "Periodo de intervención",
+    "estimated_cost": "Coste estimado",
     "tree_id": "Árbol",
-    "back": "Retour à l'arbre",
+    "back": "Volver al árbol",
     "steps": {
-      "interventionselection": "Sur quoi porte votre demande ?",
-      "treeselection": "Localisez l'arbre sur lequel intervenir",
-      "intervention": "Détails de l'intervention",
-      "validation": "Planifiez votre intervention",
-      "finish": "Terminer"
+      "interventionselection": "¿Cuál es el objeto de su solicitud?",
+      "treeselection": "Localizar el árbol sobre el que intervenir",
+      "intervention": "Detalles de la intervención",
+      "validation": "Planifique su intervención",
+      "finish": "Finalizar"
     },
     "types": {
-      "pruning": "Elagage",
-      "felling": "Abattage",
-      "streanremoval": "Dessouchage",
-      "indepthdiagnostic": "Diagnostic approfondi",
-      "treatment": "Traîtement",
-      "surveillance": "Surveillance"
+      "pruning": "Poda",
+      "felling": "Tala",
+      "streanremoval": "Descepado",
+      "indepthdiagnostic": "Diagnóstico detallado",
+      "treatment": "Tratamiento",
+      "surveillance": "Seguimiento"
     },
     "documents": {
       "dt": "DT/DICT",
-      "trafficpolice": "Police de circulation"
+      "trafficpolice": "Política de circulación"
     },
     "material": {
-      "pole": "Perche",
+      "pole": "Vara",
       "climb": "A la grime",
-      "ladder": "Echelle",
-      "raiser": "Engine élevateur",
-      "retentionkit": "Kit de rétention",
-      "foot": "Pieds",
+      "ladder": "Escalera",
+      "raiser": "Elevador",
+      "retentionkit": "Kit de retención",
+      "foot": "Pies",
       "pull": "A la tire",
-      "trimmer": "Tondeuse",
-      "crane": "Grue",
-      "coredrill": "Carotteuse",
-      "crunchy": "Croqueuse",
-      "mecanicshovel": "Pelle mécanique",
+      "trimmer": "Cortacésped",
+      "crane": "Grúa",
+      "coredrill": "Taladro",
+      "crunchy": "Sacahojas",
+      "mecanicshovel": "Pala mecánica",
       "canon": "Au canon",
-      "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
-      "collectprotection": "Protection du collet",
-      "scald": "Kit échaudure",
-      "globalcheck": "Vérification globale de l'arbre",
-      "tutorrefection": "Réfection du tuteur",
-      "soil": "Au sol"
+      "watering": "Riego",
+      "amendment": "Mejorador de suelo orgánico",
+      "collectprotection": "Protección de cuello",
+      "scald": "Kit escaldadura",
+      "globalcheck": "Verificación global del árbol",
+      "tutorrefection": "Reparación del tutor",
+      "soil": "En el suelo"
     },
     "pruning": {
-      "method": "Méthode d'élagage",
-      "comment": "Commentaire",
-      "pruning": "Elagage",
-      "carpenterremoval": "Suppression de charpentière",
-      "lightning": "Eclaircissage",
-      "maintenance": "Entretien",
-      "crownraising": "Remontée de couronne"
+      "method": "Método de poda",
+      "comment": "Comentario",
+      "pruning": "Pada",
+      "carpenterremoval": "Supresión de carpintera",
+      "lightning": "Aclareo",
+      "maintenance": "Mantenimiento",
+      "crownraising": "Levantamiento de corona"
     },
     "felling": {
-      "comment": "Commentaire",
-      "method": "Méthode d'abattage",
-      "live": "En direct",
-      "rentention": "Avec rétention",
-      "unmounting": "Par démontage"
+      "comment": "Comentario",
+      "method": "Método de tala",
+      "live": "En vivo",
+      "rentention": "Con retención",
+      "unmounting": "Desmontaje"
     },
     "streanremoval": {
-      "diameter": "Diamètre de la souche",
-      "method": "Méthode de déssouchage",
-      "drilling": "Carottage",
-      "trimming": "Rognage",
-      "grubbing": "Arrachage"
+      "diameter": "Diámetro de la cepa",
+      "method": "Método de descepado",
+      "drilling": "Perforación",
+      "trimming": "Cercenado",
+      "grubbing": "Desbroce"
     },
     "indepthdiagnostic": {
-      "method": "Méthode de diagnostic",
-      "comment": "Commentaire",
-      "resistograph": "Résistographe",
-      "tomograph": "Tomographe",
-      "computing": "Calcul",
-      "tractiontest": "Test de traction",
-      "penetrometer": "Pénétromètre"
+      "method": "Método de diagnóstico",
+      "comment": "Comentario",
+      "resistograph": "Resistografía",
+      "tomograph": "Tomografía",
+      "computing": "Cálculo",
+      "tractiontest": "Prueba de tracción",
+      "penetrometer": "Penetrómetro"
     },
     "treatment": {
-      "method": "Méthode",
-      "disease": "Maladie",
-      "comment": "Commentaire",
-      "auxilaryrelease": "Lâché d'auxilière",
-      "biologictreatment": "Traitement biologique"
+      "method": "Método",
+      "disease": "Enfermedad",
+      "comment": "Comentario",
+      "auxilaryrelease": "Liberación auxiliar",
+      "biologictreatment": "Tratamiento biológico"
     },
     "surveillance": {
-      "method": "Méthode",
-      "comment": "Commentaire",
-      "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
+      "method": "Método",
+      "comment": "Comentario",
+      "watering": "Riego",
+      "amendment": "Aporte orgánico",
       "tutorcheck": "Vérification du tuteurage et des protections",
-      "globalcheck": "Vérification globale de l'arbre"
+      "globalcheck": "Comprobación global del árbol"
     }
   },
   "Tree": {
@@ -462,14 +462,14 @@
         }
       },
       "dialog": {
-        "title": "Ajouter des membres à votre organisation",
-        "errorEmailAlreadyAdded": "est déjà présent dans la liste des invitations.",
-        "errorEmailFormatNotValid": "n'est pas une adresse valide.",
+        "title": "Añadir miembros a vuestra organización",
+        "errorEmailAlreadyAdded": "está presente en la lista de invitados.",
+        "errorEmailFormatNotValid": "no es una dirección válida.",
         "emailsPlaceholder": "gestionnaire@ecoteka.org, invite@ecoteka.org",
-        "emailsLabel": "Recipient emails",
-        "alertTitle": "No member to invite",
-        "alertContent1": "Add recipient email in the input field above - ",
-        "alertContent2": "then click Enter or add a coma."
+        "emailsLabel": "Correos de miembros a envitar",
+        "alertTitle": "Ningún miembro a invitar",
+        "alertContent1": "Añadir el correo del destinatario en el campo de arriba - ",
+        "alertContent2": "entonces hacer click o añadir una coma."
       }
     }
   },
