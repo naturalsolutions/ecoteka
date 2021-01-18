@@ -385,22 +385,17 @@ export function usePlanningSchema(it: TInterventionType) {
 
 export type TInterventionStep =
   | "interventionselection"
-  | "treeselection"
   | "intervention"
   | "validation";
 
 export const steps: TInterventionStep[] = [
-  "treeselection",
   "interventionselection",
   "intervention",
   "validation",
 ];
 
-export const schemaMap: {
-  [step in TInterventionStep]: any;
-} = {
+export const schemaMap = {
   interventionselection: useSelectionSchema,
-  treeselection: useTreeSelectionSchema,
   intervention: useInterventionSchema,
   validation: usePlanningSchema,
 };
