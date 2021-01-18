@@ -445,6 +445,8 @@
     "dialogTitleEdit": "Actualizar una organización",
     "dialogContentTextCreate": "Utiliza este formalario para crear una organización.",
     "dialogContentTextEdit": "Utiliza este formalario para actualizar la organización.",
+    "exportPending": "Por favor espere y deje la página abierta, su solicitud esta siendo procesada...",
+    "exportSuccess": "Su solicitud para exportar ha sido procesada. Descarga en progreso...",
     "WorkingArea": {
       "dialogTitle": "Editar área de trabajo",
       "dialogContentText": "Formatos aceptados : zip, geojson"
