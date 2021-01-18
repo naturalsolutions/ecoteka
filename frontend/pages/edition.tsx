@@ -136,7 +136,6 @@ const EditionPage = ({}) => {
     type: "FeatureCollection",
     features: [],
   });
-  const [ws, setWS] = useState<string>(uuidv4());
 
   const optionsFuse = {
     minMatchCharLength: 3,
@@ -157,6 +156,16 @@ const EditionPage = ({}) => {
   ) => {
     const newData = await apiRest.organization.geojson(organizationId);
     setData(newData);
+  };
+
+  const handleOnTreeSave = (record) => {
+    const index = data.features.findIndex((f) => f.properties.id === record.id);
+    const newData = { ...data };
+
+    if (index && newData.features[index]) {
+      newData.features[index].properties = record;
+      setData(newData);
+    }
   };
 
   const onWSMessage = (message) => {
@@ -268,9 +277,13 @@ const EditionPage = ({}) => {
         );
         break;
       case "tree":
-        const Tree = dynamic(() => import("@/components/Tree/Form"));
-        setBoxSelect(true);
-        setDrawerLeftComponent(<Tree selection={selection} />);
+        if (boxSelect) {
+          const Tree = dynamic(() => import("@/components/Tree/Form"));
+          setBoxSelect(true);
+          setDrawerLeftComponent(
+            <Tree selection={selection} onSave={handleOnTreeSave} />
+          );
+        }
         break;
       case "import":
         const Import = dynamic(() => import("@/components/Import/Panel/Index"));
