@@ -19,7 +19,7 @@ import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import MapIcon from "@material-ui/icons/Map";
-import TodayIcon from "@material-ui/icons/Today";
+import TodayIcon from "@material-ui/icons/CalendarToday";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 

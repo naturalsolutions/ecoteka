@@ -13,9 +13,12 @@
     "buttonConnexion": "Se connecter",
     "labelPassword": "Mot de passe",
     "labelUsername": "Adresse email",
+    "forgotPassword": "Mot de passe oublié ?",
     "errorMessageServer": "Adresse email ou mot de passe incorrect",
     "errorMessageEmail": "Veuillez saisir un email valide.",
-    "errorMessageRequiredField": "Veuillez renseigner ce champ."
+    "errorMessageRequiredField": "Veuillez renseigner ce champ.",
+    "noAccount" : "Vous n'avez pas encore de compte?",
+    "accountRequest" : "Demandez la création d'un compte !"
   },
   "LanguageSelector": {
     "en": "Anglais",
@@ -164,6 +167,7 @@
     "Upload": {
       "boxContent": "Importez vos données",
       "fileListHint": "Types de fichiers acceptés :",
+      "importHistory": "Voir l'historique de l'import",
       "buttonCancelContent": "Annuler",
       "buttonUploadContent": "Envoi",
       "dropzoneText": "Déposez votre fichier ici\nou cliquez pour le selectionner"
@@ -310,65 +314,81 @@
       "amendment": "Amendement/Apport organique",
       "tutorcheck": "Vérification du tuteurage et des protections",
       "globalcheck": "Vérification globale de l'arbre"
+    },
+    "interventionsTable":{
+      "requestAnItervention": "Demander une intervention",
+      "date": "Date",
+      "type": "Type",
+      "state": "Etat"
     }
   },
   "Tree": {
-    "family": "Famille",
-    "gender": "Genre",
-    "specie": "Espèce",
-    "cultivar": "Cultiver",
-    "latinName": "Nom vernaculaire",
+    "properties": {
+      "family": "Famille",
+      "gender": "Genre",
+      "specie": "Espèce",
+      "cultivar": "Cultivar",
+      "vernacularName": "Nom vernaculaire",
+      "townshipCode": "Code commune",
+      "zipCode": "Code postal",
+      "address": "Adresse",
+      "zone": "Découpage en zone",
+      "etkRegistrationNumber": "Matricule Ecoteka",
+      "plantingDate": "Date de plantation",
+      "height": "Hauteur de l'arbre",
+      "diameter": "Diamètre de l'arbre",
+      "soilType": {
+        "label": "Type de sol",
+        "clay": "Argileux",
+        "silt": "Limoneux",
+        "limestone": "Calcaire",
+        "sand": "Sableux",
+        "acid": "Acide",
+        "sandyclay": "Argilo-sableux"
+      },
+      "rootType": {
+        "label": "Type d'enracinement",
+        "swivel": "Pivotant",
+        "tracing": "Tracant",
+        "oblique": "Oblique"
+      },
+      "habit": {
+        "label": "Port de l'arbre",
+        "free": "Port libre",
+        "semiFree": "Semi-libre",
+        "form": "En formation",
+        "cat": "Tête de chat",
+        "trumpet": "En trogne",
+        "curtain": "Rideau",
+        "pyramid": "Pyramide",
+        "ball": "Boule",
+        "cone": "Cône"
+      },
+      "procted": "Arbre protégé",
+      "soilConstraints": "Contraintes au sol",
+      "aerianConstraint": "Contraintes aériennes",
+      "lightning": "Présence d'éclairage",
+      "watering": "Arrosage",
+      "allergens": "Arbre allergène",
+      "remarks": "Remarques"
+    },
+    "summary": {
+      "moreDetails": "Plus de détails"
+    },
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "townshipCode": "Code commune",
-    "zipCode": "Code postal",
-    "address": "Adresse",
-    "zone": "Découpage en zone",
-    "etkRegistrationNumber": "Matricule Ecoteka",
-    "registrationNumber": "Matricule de l'arbre",
-    "plantingDate": "Date de plantation",
-    "height": "Hauteur de l'arbre",
-    "diameter": "Diamètre de l'arbre",
-    "soilType": {
-      "label": "Type de sol",
-      "clay": "Argileux",
-      "silt": "Limoneux",
-      "limestone": "Calcaire",
-      "sand": "Sableux",
-      "acid": "Acide",
-      "sandyclay": "Argilo-sableux"
-    },
-    "rootType": {
-      "label": "Type d'enracinement",
-      "swivel": "Pivotant",
-      "tracing": "Tracant",
-      "oblique": "Oblique"
-    },
-    "habit": {
-      "label": "Port de l'arbre",
-      "free": "Port libre",
-      "semiFree": "Semi-libre",
-      "form": "En formation",
-      "cat": "Tête de chat",
-      "trumpet": "En trogne",
-      "curtain": "Rideau",
-      "pyramid": "Pyramide",
-      "ball": "Boule",
-      "cone": "Cône"
-    },
-    "procted": "Arbre protégé",
-    "soilConstraints": "Contraintes au sol",
-    "aerianConstraint": "Contraintes aériennes",
-    "watering": "Arrosage",
-    "lightning": "Présence d'éclairage",
-    "allergens": "Arbre allergène",
-    "remarks": "Remarques"
+    "registrationNumber": "Matricule de l'arbre"
   },
   "TreeForm": {
     "dialogDeleteTitle": "Supprimer les arbres sélectionnés",
     "dialogDeleteContent": "Êtes-vous sûr de vouloir supprimer les arbres sélectionnés ?",
     "dialogDeleteActionYes": "Oui",
     "dialogDeleteActionCancel": "Non",
+    "title": "Edition",
+    "treeIdentity": "Identité de l'arbre",
+    "characteristics": "Caractéristiques",
+    "outdoorEnvironment": "Environnement extérieur",
+    "other": "Autre",
     "imagesUpload": {
       "select": "Déposer ici les photos ou cliquer (max.{{max}})"
     }
@@ -459,7 +479,25 @@
   },
   "Dashboard": {
     "title": "Tableau de bord",
-    "for": "pour"
+    "for": "pour",
+    "treeHeritage":{
+      "title": "Votre patrimoine arboré",
+      "totalTrees": "Total des arbres",
+      "plantedTrees": "Arbres plantés en 2020",
+      "felledTrees": "Arbres abattus en 2020",
+      "alertTitle": "Ajouter les premiers arbres à votre patrimoine",
+      "alertText": "Votre espace de travail ne contient aucun arbre pour l'instant",
+      "boldText": "Commencer maintenant!"
+    },
+    "heritageManagment":{
+      "totalCost": "Coût total des interventions planifiées en 2020",
+      "title": "État de gestion de votre patrimoine",
+      "alertTitle": "Ajouter, programmer et suivre le budget des interventions sur votre patrimoine",
+      "alertText": "Dès que votre espace de travail contiendra des arbres, vous pourrez débuter la gestion de votre patrimoine végétal",
+      "boldText": "En savoir plus!"
+    },
+    "addInterventionButton": "Ajouter des interventions",
+    "importDataButton": "Importer des données"
   },
   "MapLayers": {
     "backgrounds": "Fonds",

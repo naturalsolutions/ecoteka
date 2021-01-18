@@ -9,6 +9,7 @@ import ETKUpload from "@/components/Import/Panel/Upload";
 import ETKError from "@/components/Import/Panel/Error";
 import ETKImportImporting from "@/components/Import/Panel/Importing";
 import { apiRest } from "@/lib/api";
+import { useTranslation, Trans } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
 
@@ -23,6 +24,7 @@ interface IImportPanel {
 
 const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
   const [step, setStep] = useState("start");
+  const { t } = useTranslation("components");
   const [geofile, setGeofile] = useState<ETKGeofile>();
   const [missingInfo, setMissingInfo] = useState<[string?]>([]);
   const { user } = useAppContext();
@@ -155,7 +157,7 @@ const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
                 router.push("/imports/");
               }}
             >
-              Voir historique d'imports
+              {t("Import.Upload.importHistory")}
             </Button>
           </Box>
           <Box mt={5}>
