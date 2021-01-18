@@ -13,8 +13,12 @@
     "previous": "Précédent",
     "next": "Ok",
     "finish": "Terminer",
+    "create": "Ajouter",
+    "update": "Mettre à jour",
     "send": "Envoyer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "archive": "Archiver",
+    "delete": "Supprimer"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",

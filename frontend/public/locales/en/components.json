@@ -405,6 +405,26 @@
         "total_trees": "Trees",
         "actions": "Actions"
       }
+    },
+    "delete": {
+      "teams": {
+        "success": "teams deleted with success",
+        "error": "An error occured while deleting teams"
+      },
+      "team": {
+        "success": "team deleted with success",
+        "error": "An error occured while deleting team"
+      }
+    },
+    "archive": {
+      "teams": {
+        "success": "teams archied with success",
+        "error": "An error occured while archiving teams"
+      },
+      "team": {
+        "success": "team archived with success",
+        "error": "An error occured while archiving team"
+      }
     }
   },
 
@@ -418,7 +438,7 @@
   },
 
   "Organization": {
-    "name": "Apelido",
+    "name": "Name",
     "dialogTitleCreate": "Add an organisation",
     "dialogTitleEdit": "Update the organisation",
     "dialogContentTextCreate": "Use this form to create an organisation.",

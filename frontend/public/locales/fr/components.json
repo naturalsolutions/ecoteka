@@ -385,6 +385,26 @@
         "total_trees": "Arbres",
         "actions": "Actions"
       }
+    },
+    "delete": {
+      "teams": {
+        "success": "équipes suppriméees avec succès.",
+        "error": "Erreur lors de la suppression des équipes."
+      },
+      "team": {
+        "success": "équipe suppriméee avec succès.",
+        "error": "Erreur lors de la suppression de l'équipe."
+      }
+    },
+    "archive": {
+      "teams": {
+        "success": "équipes archivées avec succès.",
+        "error": "Erreur lors de l'archivage des équipes."
+      },
+      "team": {
+        "success": "équipe arrchivée avec succès.",
+        "error": "Erreur lors de l'achivage de l'équipe."
+      }
     }
   },
   "Team": {

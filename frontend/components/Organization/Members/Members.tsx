@@ -6,6 +6,7 @@ import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import { apiRest } from "@/lib/api";
+import useAPI from "@/lib/useApi";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AddMembers, {
   AddMembersActions,
@@ -43,6 +44,8 @@ const Members: FC<MembersProps> = ({ organization }) => {
   const classes = useStyles();
   const { theme } = useThemeContext();
   const { dialog, snackbar } = useAppLayout();
+  const { api } = useAPI();
+  const { apiETK } = api;
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const { t } = useTranslation(["components", "common"]);
   const formAddMembersRef = useRef<AddMembersActions>();
@@ -51,9 +54,14 @@ const Members: FC<MembersProps> = ({ organization }) => {
   const [data, setData] = useState([]);
 
   const getData = async (organizationId: number) => {
-    const newData = await apiRest.organization.members(organization.id);
-
-    setData(newData);
+    try {
+      const { data, status } = await apiETK.get(
+        `/organization/${organizationId}/members`
+      );
+      if (status === 200) {
+        setData(data);
+      }
+    } catch (e) {}
   };
 
   useEffect(() => {
