@@ -15,7 +15,8 @@
     "finish": "Terminer",
     "send": "Envoyer",
     "cancel": "Annuler",
-    "importData": "Importer des données"
+    "importData": "Importer des données",
+    "save": "Enregistrer"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",

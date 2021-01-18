@@ -215,6 +215,7 @@
     "title": "Solicitar una intervención",
     "plannew": "Nueva solicitud",
     "success": "Solicitud registrada",
+    "requestAnItervention": "Solicitar una intervención",
     "whatnow": "Que souhaitez vous faire ?",
     "required_documents": "Documents requis",
     "required_material": "Materiel requis",
@@ -311,6 +312,12 @@
       "amendment": "Amendement/Apport organique",
       "tutorcheck": "Vérification du tuteurage et des protections",
       "globalcheck": "Vérification globale de l'arbre"
+    },
+    "interventionsTable":{
+      "requestAnItervention": "Request an intervention",
+      "date": "Fetcha",
+      "type": "Typo",
+      "state": "Estado"
     }
   },
   "Tree": {
@@ -363,6 +370,9 @@
       "allergens": "Allergenic tree",
       "remarks": "Remarks"
     },
+    "summary": {
+      "moreDetails": "Mas detalles"
+    },
     "latitude": "Latitud",
     "longitude": "Longitud",
     "registrationNumber": "Identificador del árbol"
@@ -372,6 +382,11 @@
     "dialogDeleteContent": "¿Seguro que deseas eliminar los árboles seleccionados?",
     "dialogDeleteActionYes": "Si",
     "dialogDeleteActionCancel": "No",
+    "title": "Edición",
+    "treeIdentity": "Tree identity",
+    "characteristics": "Caracteristicas",
+    "outdoorEnvironment": "Outdoor Environment",
+    "other": "Otro",
     "imagesUpload": {
       "select": "Arrasta y suelta las imágenes aquí o haz click (max.{{max}})"
     }

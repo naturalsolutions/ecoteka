@@ -229,105 +229,111 @@
   },
 
   "Intervention": {
-    "title": "Demande d'intervention",
-    "plannew": "Nouvelle demande",
-    "success": "Demande enregistrée",
-    "whatnow": "Que souhaitez vous faire ?",
-    "required_documents": "Documents requis",
-    "required_material": "Materiel requis",
-    "intervention_type": "Type d'intervention",
+    "title": "Request for intervention",
+    "plannew": "New request",
+    "success": "Registered request",
+    "whatnow": "What do you want to do now?",
+    "required_documents": "Required documents",
+    "required_material": "Required material",
+    "intervention_type": "Intervention type",
     "intervenant": "Intervenant",
-    "intervention_period": "Période d'intervention",
-    "estimated_cost": "Coût estimatif",
-    "tree_id": "Arbre",
+    "intervention_period": "Intervention period",
+    "estimated_cost": "Estimated",
+    "tree_id": "Tree",
     "back": "Back to the tree",
     "steps": {
-      "interventionselection": "Sur quoi porte votre demande ?",
-      "treeselection": "Localisez l'arbre sur lequel intervenir",
-      "intervention": "Détails de l'intervention",
-      "validation": "Planifiez votre intervention",
-      "finish": "Terminer"
+      "interventionselection": "What is your request about?",
+      "treeselection": "Locate the tree on which to intervene",
+      "intervention": "Intervention details",
+      "validation": "Plan your intervention",
+      "finish": "Finish"
     },
     "types": {
-      "pruning": "Elagage",
-      "felling": "Abattage",
-      "streanremoval": "Dessouchage",
-      "indepthdiagnostic": "Diagnostic approfondi",
-      "treatment": "Traîtement",
+      "pruning": "Pruning",
+      "felling": "Felling",
+      "streanremoval": "Strean removal",
+      "indepthdiagnostic": "Indepth diagnostic",
+      "treatment": "Treatment",
       "surveillance": "Surveillance"
     },
     "documents": {
       "dt": "DT/DICT",
-      "trafficpolice": "Police de circulation"
+      "trafficpolice": "Traffic police"
     },
     "material": {
-      "pole": "Perche",
-      "climb": "A la grime",
-      "ladder": "Echelle",
-      "raiser": "Engine élevateur",
-      "retentionkit": "Kit de rétention",
-      "foot": "Pieds",
-      "pull": "A la tire",
-      "trimmer": "Tondeuse",
-      "crane": "Grue",
-      "coredrill": "Carotteuse",
-      "crunchy": "Croqueuse",
-      "mecanicshovel": "Pelle mécanique",
-      "canon": "Au canon",
-      "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
-      "collectprotection": "Protection du collet",
-      "scald": "Kit échaudure",
-      "globalcheck": "Vérification globale de l'arbre",
-      "tutorrefection": "Réfection du tuteur",
-      "soil": "Au sol"
+      "pole": "Pole",
+      "climb": "Climb",
+      "ladder": "Ladder",
+      "raiser": "Raiser",
+      "retentionkit": "Retention kit",
+      "foot": "Foot",
+      "pull": "Pull",
+      "trimmer": "Trimmer",
+      "crane": "Crane",
+      "coredrill": "Coredrill",
+      "crunchy": "Crunchy",
+      "mecanicshovel": "Mecanics hovel",
+      "canon": "Canon",
+      "watering": "Watering",
+      "amendment": "Amendment/organic contribution",
+      "collectprotection": "Collet protection",
+      "scald": "Scald kit",
+      "globalcheck": "Global tree check",
+      "tutorrefection": "Tutor refection",
+      "soil": "Soil"
     },
     "pruning": {
-      "method": "Méthode d'élagage",
-      "comment": "Commentaire",
-      "pruning": "Elagage",
-      "carpenterremoval": "Suppression de charpentière",
-      "lightning": "Eclaircissage",
-      "maintenance": "Entretien",
-      "crownraising": "Remontée de couronne"
+      "method": "Pruning method",
+      "comment": "Comment",
+      "pruning": "Pruning",
+      "carpenterremoval": "Carpenter removal",
+      "lightning": "Lightning",
+      "maintenance": "Maintenance",
+      "crownraising": "Crownraising"
     },
     "felling": {
-      "comment": "Commentaire",
-      "method": "Méthode d'abattage",
-      "live": "En direct",
-      "rentention": "Avec rétention",
-      "unmounting": "Par démontage"
+      "comment": "Comment",
+      "method": "Pruning method",
+      "live": "Live",
+      "rentention": "With retention",
+      "unmounting": "Unmounting"
     },
     "streanremoval": {
-      "diameter": "Diamètre de la souche",
-      "method": "Méthode de déssouchage",
-      "drilling": "Carottage",
-      "trimming": "Rognage",
-      "grubbing": "Arrachage"
+      "diameter": "Stump diameter",
+      "method": "Method of draining",
+      "drilling": "Drilling",
+      "trimming": "Trimming",
+      "grubbing": "Grubbing"
     },
     "indepthdiagnostic": {
-      "method": "Méthode de diagnostic",
-      "comment": "Commentaire",
-      "resistograph": "Résistographe",
-      "tomograph": "Tomographe",
-      "computing": "Calcul",
-      "tractiontest": "Test de traction",
-      "penetrometer": "Pénétromètre"
+      "method": "Diagnostic method",
+      "comment": "Comment",
+      "resistograph": "Resistograph",
+      "tomograph": "Tomograph",
+      "computing": "Computing",
+      "tractiontest": "Traction test",
+      "penetrometer": "Penetrometer"
     },
     "treatment": {
-      "method": "Méthode",
-      "disease": "Maladie",
-      "comment": "Commentaire",
-      "auxilaryrelease": "Lâché d'auxilière",
-      "biologictreatment": "Traitement biologique"
+      "method": "Method",
+      "disease": "Disease",
+      "comment": "Comment",
+      "auxilaryrelease": "Auxilary release",
+      "biologictreatment": "Biologic treatment"
     },
     "surveillance": {
-      "method": "Méthode",
-      "comment": "Commentaire",
-      "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
-      "tutorcheck": "Vérification du tuteurage et des protections",
-      "globalcheck": "Vérification globale de l'arbre"
+      "method": "Method",
+      "comment": "Comment",
+      "watering": "Watering",
+      "amendment": "Amendment/organic contribution",
+      "tutorcheck": "Verification of staking and protections",
+      "globalcheck": "Global tree check"
+    },
+    "interventionsTable":{
+      "requestAnItervention": "Request an intervention",
+      "date": "Date",
+      "type": "Type",
+      "state": "State"
     }
   },
 
@@ -381,6 +387,9 @@
       "allergens": "Allergenic tree",
       "remarks": "Remarks"
     },
+    "summary": {
+      "moreDetails": "More details"
+    },
     "latitude": "Latitude",
     "longitude": "Longitude",
     "registrationNumber": "Tree registration number"
@@ -391,6 +400,11 @@
     "dialogDeleteContent": "Are you sure you want to remove the selected trees?",
     "dialogDeleteActionYes": "Yes",
     "dialogDeleteActionCancel": "No",
+    "title": "Edition",
+    "treeIdentity": "Tree identity",
+    "characteristics": "Characteristics",
+    "outdoorEnvironment": "Outdoor Environment",
+    "other": "Other",
     "imagesUpload": {
       "select": "Drop files here or click (max.{{max}})"
     }

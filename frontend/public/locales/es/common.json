@@ -10,7 +10,13 @@
   },
   "buttons": {
     "backToHome": "Ir a la página de inicio",
-    "importData": "Import datas"
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish",
+    "send": "Send",
+    "cancel": "Cancel",
+    "importData": "Import datas",
+    "save": "Save"
   },
   "errors": {
     "email": "Correo electrónico no válido",

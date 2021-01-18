@@ -311,6 +311,12 @@
       "amendment": "Amendement/Apport organique",
       "tutorcheck": "Vérification du tuteurage et des protections",
       "globalcheck": "Vérification globale de l'arbre"
+    },
+    "interventionsTable":{
+      "requestAnItervention": "Demander une intervention",
+      "date": "Date",
+      "type": "Type",
+      "state": "Etat"
     }
   },
   "Tree": {
@@ -363,6 +369,9 @@
       "allergens": "Arbre allergène",
       "remarks": "Remarques"
     },
+    "summary": {
+      "moreDetails": "Plus de détails"
+    },
     "latitude": "Latitude",
     "longitude": "Longitude",
     "registrationNumber": "Matricule de l'arbre"
@@ -372,6 +381,11 @@
     "dialogDeleteContent": "Êtes-vous sûr de vouloir supprimer les arbres sélectionnés ?",
     "dialogDeleteActionYes": "Oui",
     "dialogDeleteActionCancel": "Non",
+    "title": "Edition",
+    "treeIdentity": "Identité de l'arbre",
+    "characteristics": "Caractéristiques",
+    "outdoorEnvironment": "Environnement extérieur",
+    "other": "Autre",
     "imagesUpload": {
       "select": "Déposer ici les photos ou cliquer (max.{{max}})"
     }
