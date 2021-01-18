@@ -10,15 +10,15 @@
   },
   "buttons": {
     "backToHome": "Ir a la página de inicio",
-    "previous": "Previous",
-    "next": "Next",
-    "finish": "Finish",
-    "create": "Create",
-    "update": "Update",
-    "send": "Send",
-    "cancel": "Cancel",
-    "archive": "Archive",
-    "delete": "Delete"
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "finish": "Finalizar",
+    "create": "Crear",
+    "update": "Actualizar",
+    "send": "Enviar",
+    "cancel": "Cancelar",
+    "archive": "Archivar",
+    "delete": "Eliminar"
   },
   "errors": {
     "email": "Correo electrónico no válido",
