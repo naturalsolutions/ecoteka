@@ -8,6 +8,7 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
 import { useRouter } from "next/router";
 import AppLayoutGeneral from "@/components/AppLayout/General";
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignInPage() {
   const classes = useStyles();
   const formRef = useRef<ETKFormSignInActions>();
+  const { t } = useTranslation("components");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const onSubmit = async () => {
@@ -60,7 +62,7 @@ export default function SignInPage() {
             color="textPrimary"
             className={classes.h5}
           >
-            Connectez-vous à votre compte
+            {t("SignIn.title")}
           </Typography>
         </Box>
         <Box className={classes.formWidth}>
@@ -72,7 +74,7 @@ export default function SignInPage() {
             onClick={() => router.push("/reset-password")}
             color="textPrimary"
           >
-            Mot de passe oublié?
+            {t("SignIn.forgotPassword")}
           </Link>
         </Box>
         <Button
@@ -86,7 +88,7 @@ export default function SignInPage() {
         </Button>
         <Box my={2}>
           <Typography variant="h6" align="center" color="textPrimary">
-            Vous n'avez pas encore de compte?
+          {t("SignIn.noAccount")}
           </Typography>
         </Box>
         <Button
@@ -96,7 +98,7 @@ export default function SignInPage() {
           target="_blank"
           className={classes.formWidth}
         >
-          Demandez la création d'un compte!
+          {t("SignIn.accountRequest")}
         </Button>
         <Box flexGrow={1} />
       </Grid>
