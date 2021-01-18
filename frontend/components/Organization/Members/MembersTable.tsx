@@ -307,14 +307,22 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
                   <TableCell scope="row">{row.email}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>
-                    {row.role === "owner" ? (
-                      "Propriétaire"
-                    ) : (
-                      <SelectRenderer
-                        value={row.role}
-                        handleChange={(e) => handleUserRoleChange(row, e)}
-                      />
-                    )}
+                    {(() => {
+                      switch (row.role) {
+                        case "admin":
+                        case "owner":
+                          return t(
+                            `components:Organization.Members.Table.roles.${row.role}`
+                          );
+                        default:
+                          return (
+                            <SelectRenderer
+                              value={row.role}
+                              handleChange={(e) => handleUserRoleChange(row, e)}
+                            />
+                          );
+                      }
+                    })()}
                   </TableCell>
                 </TableRow>
               );

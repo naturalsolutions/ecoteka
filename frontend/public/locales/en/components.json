@@ -472,6 +472,7 @@
         },
         "roles": {
           "defineRole": "Define role",
+          "admin": "Administrator",
           "owner": "Owner",
           "manager": "Manager",
           "contributor": "Contributor",
