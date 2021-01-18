@@ -76,9 +76,10 @@ const CalendarIntervention: React.FC<CalendarInterventionProps> = (props) => {
           ))}
           <Grid item>
             <Button
-              onClick={() =>
-                router.push(`/edition/?tree=${props.intervention.tree_id}`)
-              }
+              onClick={() => {
+                dialog.current.close();
+                router.push(`/edition/?tree=${props.intervention.tree_id}`);
+              }}
             >
               Vue arbre
             </Button>
