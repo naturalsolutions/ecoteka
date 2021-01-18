@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Container } from "@material-ui/core";
 import { Header, Breadcrumb, Tabs } from "@/components/Organization";
-import { apiRest } from "@/lib/api";
 import useAPI from "@/lib/useApi";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 

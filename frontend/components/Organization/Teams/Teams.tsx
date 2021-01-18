@@ -18,10 +18,9 @@ import {
   MenuList,
   Paper,
   Popper,
-  Snackbar,
   Toolbar,
 } from "@material-ui/core";
-import MuiAlert, { Color } from "@material-ui/lab/Alert";
+import SnackAlert, { SnackAlertProps } from "@/components/Feedback/SnackAlert";
 import {
   Add as AddIcon,
   ArrowDropDown as ArrowDropDownIcon,
@@ -78,47 +77,6 @@ const actionOptions = [
     format: "delete",
   },
 ];
-
-interface SnackAlertProps {
-  open: boolean;
-  severity: Color;
-  message: string;
-}
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const SnackAlert: React.FC<SnackAlertProps> = ({
-  open,
-  severity,
-  message = "",
-}) => {
-  const [isOpen, setIsOpen] = React.useState(open);
-  const handleClose = (
-    event: SyntheticEvent<Element, Event>,
-    reason: string
-  ) => {
-    setIsOpen(false);
-  };
-
-  useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
-
-  return (
-    <Snackbar
-      open={isOpen}
-      autoHideDuration={3000}
-      onClose={handleClose}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-    >
-      <Alert onClose={handleClose} severity={severity}>
-        {message}
-      </Alert>
-    </Snackbar>
-  );
-};
 
 const Teams: FC<TeamsProps> = (props) => {
   const classes = useStyles();
@@ -309,7 +267,11 @@ const Teams: FC<TeamsProps> = (props) => {
       );
       if (response.status === 200) {
         triggerAlert({
-          message: `${selectedTeams.length} équipes supprimées avec succès.`,
+          message: `${selectedTeams.length} ${
+            selectedTeams.length > 1
+              ? t("components:Teams.delete.teams.success")
+              : t("components:Teams.delete.team.success")
+          }`,
           severity: "success",
         });
         removeSelectedRows();
@@ -317,7 +279,10 @@ const Teams: FC<TeamsProps> = (props) => {
       }
     } catch (e) {
       triggerAlert({
-        message: "Erreur lors de la supression des équipes",
+        message:
+          selectedTeams.length > 1
+            ? t("components:Teams.delete.teams.error")
+            : t("components:Teams.delete.team.error"),
         severity: "error",
       });
     }
@@ -331,7 +296,11 @@ const Teams: FC<TeamsProps> = (props) => {
       );
       if (response.status === 200) {
         triggerAlert({
-          message: `${selectedTeams.length} équipes archivées avec succès.`,
+          message: `${selectedTeams.length} ${
+            selectedTeams.length > 1
+              ? t("components:Teams.archive.teams.success")
+              : t("components:Teams.archive.team.success")
+          }`,
           severity: "success",
         });
         removeSelectedRows();
@@ -339,7 +308,10 @@ const Teams: FC<TeamsProps> = (props) => {
       }
     } catch (e) {
       triggerAlert({
-        message: "Erreur lors de l'archivage des équipes",
+        message:
+          selectedTeams.length > 1
+            ? t("components:Teams.archive.teams.error")
+            : t("components:Teams.archive.team.error"),
         severity: "error",
       });
     }
@@ -351,6 +323,7 @@ const Teams: FC<TeamsProps> = (props) => {
         open={openAlert}
         severity={alertMessage.severity}
         message={alertMessage.message}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
       <Toolbar className={classes.toolbar}>
         <Box className={classes.root} />
