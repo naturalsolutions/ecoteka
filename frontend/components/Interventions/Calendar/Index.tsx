@@ -92,10 +92,6 @@ const Calendar: React.FC<CalendarProps> = (props) => {
     return months;
   };
 
-  const handleNewIntervention = () => {
-    router.push("/edition/?panel=intervention");
-  };
-
   return (
     <DndProvider backend={HTML5Backend}>
       <Paper square className={classes.root} elevation={0}>
@@ -113,15 +109,6 @@ const Calendar: React.FC<CalendarProps> = (props) => {
                       Calandrier d'interventions
                     </Typography>
                     <Box mb={3} />
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      variant="outlined"
-                      size="large"
-                      onClick={handleNewIntervention}
-                    >
-                      Demander une intervention
-                    </Button>
                   </Grid>
                   <Grid item>
                     <Filter onChange={handleFilterChange} />
