@@ -388,22 +388,22 @@
     },
     "delete": {
       "teams": {
-        "success": "teams deleted with success",
-        "error": "An error occured while deleting teams"
+        "success": "equipos eliminados correctamente",
+        "error": "Se ha producido un error al eliminar los equipos"
       },
       "team": {
-        "success": "team deleted with success",
-        "error": "An error occured while deleting team"
+        "success": "equipo eliminado correctamente",
+        "error": "Se ha producido un error al eliminar el equipo"
       }
     },
     "archive": {
       "teams": {
-        "success": "teams archied with success",
-        "error": "An error occured while archiving teams"
+        "success": "equipos archivado correctamente",
+        "error": "Se ha producido un error al archivar los equipos"
       },
       "team": {
-        "success": "team archived with success",
-        "error": "An error occured while archiving team"
+        "success": "equipo archivado correctamente",
+        "error": "Se ha producido un error al archivar el equipo"
       }
     }
   },
