@@ -203,6 +203,8 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
         } // c'est moche !!
       );
 
+    payload.tree_id = router.query.tree;
+
     await apiRest.interventions.post(user.currentOrganization.id, payload);
   };
 
