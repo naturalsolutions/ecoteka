@@ -7,6 +7,7 @@ import TreeExpanded from "@/components/Tree/Infos/Expanded";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { TIntervention } from "@/components/Interventions/Schema";
 import TreeInfosProperties from "@/components/Tree/Infos/Properties";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles(() => ({
 
 const Summary: FC<{ treeId: number; map: any }> = ({ treeId, map }) => {
   const { user } = useAppContext();
+  const { t } = useTranslation("components");
   const [isExpanded, setIsExpanded] = useState(false);
   const [tree, setTree] = useState<any>({});
   const [interventions, setInterventions] = useState<TIntervention[]>();
@@ -63,7 +65,7 @@ const Summary: FC<{ treeId: number; map: any }> = ({ treeId, map }) => {
           color="primary"
           onClick={() => setIsExpanded(true)}
         >
-          Plus de détails
+          {t("Tree.summary.moreDetails")}
         </Button>
       </Grid>
       <TreeExpanded

@@ -45,14 +45,14 @@ const InterventionsTable: FC<{
               router.push(`/edition/?panel=intervention&tree=${tree.id}`);
             }}
           >
-            Demander une intervention
+            {t("Intervention.interventionsTable.requestAnItervention")}
           </Button>
         </caption>
         <TableHead>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>État</TableCell>
+            <TableCell>{t("Intervention.interventionsTable.date")}</TableCell>
+            <TableCell>{t("Intervention.interventionsTable.type")}</TableCell>
+            <TableCell>{t("Intervention.interventionsTable.state")}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

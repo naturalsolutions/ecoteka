@@ -41,6 +41,7 @@
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",
     "mapbox-gl": "^1.13.0",
+    "material-ui": "^0.20.2",
     "material-ui-dropzone": "^3.5.0",
     "materialui-daterange-picker": "^1.1.92",
     "next": "10.0.3",
