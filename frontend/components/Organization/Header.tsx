@@ -12,8 +12,10 @@ import {
 } from "@material-ui/core";
 import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
 import { apiRest } from "@/lib/api";
+import useAPI from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 interface HeaderProps {}
 
@@ -33,14 +35,19 @@ const exportFormats = [
 ];
 
 const Header: FC<HeaderProps> = (props) => {
-  const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const [selectedIndex, setSelectedIndex] = useState(1);
   const { user } = useAppContext();
   const router = useRouter();
+  const { api } = useAPI();
+  const { t } = useTranslation(["components", "common"]);
+  const { apiETK } = api;
+  const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(1);
 
   const downloadFile = (blob, filename) => {
+    console.log(blob);
     const url = window.URL.createObjectURL(blob);
+    console.log(blob);
     const a = document.createElement("a");
 
     a.href = url;
@@ -53,15 +60,26 @@ const Header: FC<HeaderProps> = (props) => {
   };
 
   const handleClick = async (index: number) => {
-    const response = await apiRest.trees.export(
-      user.currentOrganization.id,
-      exportFormats[index].format
-    );
-
-    if (response.ok) {
-      const blob = await response.blob();
-      const filename = `export-trees-${user.currentOrganization.slug}.${exportFormats[index].format}`;
-      downloadFile(blob, filename);
+    try {
+      console.log("pending)");
+      const response = await apiETK.get(
+        `/organization/${user.currentOrganization.id}/trees/export/?format=${exportFormats[index].format}`
+      );
+      if (response.status === 200) {
+        console.log("stale)");
+        try {
+          console.log("wait blob");
+          const blob = await response.data.blob();
+          const filename = `export-trees-${user.currentOrganization.slug}.${exportFormats[index].format}`;
+          downloadFile(blob, filename);
+        } catch (e) {
+          console.log(e);
+        } finally {
+          console.log("blob ready to export!");
+        }
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

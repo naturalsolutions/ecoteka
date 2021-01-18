@@ -1,6 +1,12 @@
-import React, { FC, Fragment, useRef, useState, useEffect } from "react";
+import React, {
+  FC,
+  Fragment,
+  useRef,
+  useState,
+  useEffect,
+  SyntheticEvent,
+} from "react";
 import { IOrganization } from "@/index.d";
-import { apiRest } from "@/lib/api";
 import {
   Box,
   Button,
@@ -14,6 +20,7 @@ import {
   Popper,
   Toolbar,
 } from "@material-ui/core";
+import SnackAlert, { SnackAlertProps } from "@/components/Feedback/SnackAlert";
 import {
   Add as AddIcon,
   ArrowDropDown as ArrowDropDownIcon,
@@ -29,7 +36,7 @@ import ETKFormWorkingArea, {
 } from "@/components/Organization/WorkingArea/Form";
 import TeamsTable from "@/components/Organization/Teams/TeamsTable";
 import { useTranslation } from "react-i18next";
-import { useAppContext } from "@/providers/AppContext";
+import useAPI from "@/lib/useApi";
 
 interface TeamsProps {
   organization: IOrganization;
@@ -78,36 +85,61 @@ const Teams: FC<TeamsProps> = (props) => {
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
   const router = useRouter();
+  const { api } = useAPI();
+  const { apiETK } = api;
   const [data, setData] = useState([]);
-
-  const getData = async (organizationId: number) => {
-    const newData = await apiRest.organization.teams(organizationId);
-
-    setData(newData);
-  };
-
-  useEffect(() => {
-    getData(props.organization.id);
-  }, [props.organization]);
-
   const anchorRef = useRef(null);
   const [disableActions, setDisableActions] = useState(true);
   const [open, setOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState(0);
   const [selectedTeams, setSelectedTeams] = useState([]);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMesagge] = useState<
+    Pick<SnackAlertProps, "message" | "severity">
+  >({
+    message: "",
+    severity: "success",
+  });
+
+  useEffect(() => {
+    getData(props.organization.id);
+  }, [props.organization]);
 
   useEffect(() => {
     setDisableActions(Boolean(selectedTeams.length == 0));
   }, [selectedTeams]);
+
+  const getData = async (organizationId: number) => {
+    try {
+      const response = await apiETK.get(
+        `/organization/${organizationId}/teams`
+      );
+      const { data, status } = response;
+      if (status === 200) {
+        setData(data);
+      }
+    } catch (e) {
+      //
+    }
+  };
 
   const onSelected = (team_ids) => {
     setSelectedTeams(team_ids);
   };
 
   const handleClick = () => {
-    console.info(
-      `Export format selected ${actionOptions[selectedAction].format}`
-    );
+    switch (actionOptions[selectedAction].format) {
+      case "archive":
+        discardTeams();
+        break;
+      case "delete":
+        deleteTeams();
+        break;
+      default:
+        console.log(
+          `Error, callback for ${actionOptions[selectedAction].format} not found.`
+        );
+    }
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -134,11 +166,11 @@ const Teams: FC<TeamsProps> = (props) => {
         label: t("common:buttons.cancel"),
       },
       {
-        label: t("common:buttons.send"),
+        label: t("common:buttons.create"),
         variant: "contained",
-        color: "secondary",
+        color: "primary",
         noClose: true,
-        onClick: addItem,
+        onClick: () => addItem(isNew),
       },
     ];
 
@@ -158,14 +190,20 @@ const Teams: FC<TeamsProps> = (props) => {
     });
   }
 
-  const addItem = async () => {
-    const response = await formEditRef.current.submit();
-
-    if (response.ok) {
+  const addItem = async (isNew) => {
+    const {
+      data: organizationData,
+      status,
+    } = await formEditRef.current.submit();
+    if (status === 200) {
       dialog.current.close();
-      const newOrganization = await response.json();
-
-      setData([...data, newOrganization]);
+      isNew
+        ? setData([...data, organizationData])
+        : setData(
+            data.map((team, i) =>
+              team.id === organizationData.id ? organizationData : team
+            )
+          );
     }
   };
 
@@ -205,8 +243,88 @@ const Teams: FC<TeamsProps> = (props) => {
     router.push(`/organization/${id}`);
   };
 
+  const triggerAlert = ({ message, severity }) => {
+    setAlertMesagge({
+      message: message,
+      severity: severity,
+    });
+    setOpenAlert(true);
+    setTimeout(() => setOpenAlert(false), 3000);
+  };
+
+  const removeSelectedRows = () => {
+    const filteredTeams = data.filter(
+      (team) => selectedTeams.indexOf(team.id) === -1
+    );
+    setData(filteredTeams);
+  };
+
+  const deleteTeams = async () => {
+    try {
+      const response = await apiETK.post(
+        `/organization/${props.organization.id}/teams/bulk_delete`,
+        selectedTeams
+      );
+      if (response.status === 200) {
+        triggerAlert({
+          message: `${selectedTeams.length} ${
+            selectedTeams.length > 1
+              ? t("components:Teams.delete.teams.success")
+              : t("components:Teams.delete.team.success")
+          }`,
+          severity: "success",
+        });
+        removeSelectedRows();
+        setSelectedTeams([]);
+      }
+    } catch (e) {
+      triggerAlert({
+        message:
+          selectedTeams.length > 1
+            ? t("components:Teams.delete.teams.error")
+            : t("components:Teams.delete.team.error"),
+        severity: "error",
+      });
+    }
+  };
+
+  const discardTeams = async () => {
+    try {
+      const response = await apiETK.post(
+        `/organization/${props.organization.id}/teams/bulk_archive`,
+        selectedTeams
+      );
+      if (response.status === 200) {
+        triggerAlert({
+          message: `${selectedTeams.length} ${
+            selectedTeams.length > 1
+              ? t("components:Teams.archive.teams.success")
+              : t("components:Teams.archive.team.success")
+          }`,
+          severity: "success",
+        });
+        removeSelectedRows();
+        setSelectedTeams([]);
+      }
+    } catch (e) {
+      triggerAlert({
+        message:
+          selectedTeams.length > 1
+            ? t("components:Teams.archive.teams.error")
+            : t("components:Teams.archive.team.error"),
+        severity: "error",
+      });
+    }
+  };
+
   return (
     <Fragment>
+      <SnackAlert
+        open={openAlert}
+        severity={alertMessage.severity}
+        message={alertMessage.message}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
       <Toolbar className={classes.toolbar}>
         <Box className={classes.root} />
         <ButtonGroup
@@ -218,7 +336,7 @@ const Teams: FC<TeamsProps> = (props) => {
           aria-label="split button"
         >
           <Button size="small" color="secondary" onClick={handleClick}>
-            {actionOptions[selectedAction].label}
+            {t(`common:buttons.${actionOptions[selectedAction].format}`)}
           </Button>
           <Button
             size="small"
@@ -264,7 +382,7 @@ const Teams: FC<TeamsProps> = (props) => {
                         selected={index === selectedAction}
                         onClick={(event) => handleMenuItemClick(event, index)}
                       >
-                        {option.label}
+                        {t(`common:buttons.${option.format}`)}
                       </MenuItem>
                     ))}
                   </MenuList>
@@ -287,11 +405,15 @@ const Teams: FC<TeamsProps> = (props) => {
         </Button>
       </Toolbar>
       <TeamsTable
+        organizationId={props.organization.id}
         rows={data}
+        selectedTeams={selectedTeams}
         openArea={openArea}
         openTeamPage={openTeamPage}
         openForm={openForm}
         onSelected={onSelected}
+        discardTeams={discardTeams}
+        deleteTeams={deleteTeams}
       />
     </Fragment>
   );

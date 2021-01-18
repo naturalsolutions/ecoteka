@@ -137,58 +137,60 @@ def get_teams(
     ]
 
 
-@router.delete("/{organization_id}/teams")
-def remove_teams(
+@router.post("/{organization_id}/teams/bulk_delete", response_model=List[Organization])
+def delete_teams(
     organization_id: int,
     *,
-    auth=Depends(authorization("organizations:delete_teams")),
+    auth=Depends(authorization("organizations:delete_team")),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-    teams_in: List[Organization],
+    team_ids_in: List[int],
 ):
     """
-    bulk_delete teams and their members
+    bulk delete teams and their members
     """
-
-    for team in teams_in:
-        organization_in_db = organization.get(db, id=team.id)
+    teams_out = []
+    for team_id in team_ids_in:   
+        organization_in_db = organization.get(db, id=team_id)
 
         if not organization_in_db:
             raise HTTPException(status_code=404, detail="Team not found")
+
         try:
-            members_in_db = crud.organization.get_members(db, id=team.id)
+            members_in_db = crud.organization.get_members(db, id=team_id)
 
             for member in members_in_db:
                 current_roles = enforcer.get_roles_for_user_in_domain(
-                    str(member["id"]), str(team.id)
+                    str(member["id"]), str(team_id)
                 )
 
                 for current_role in current_roles:
                     enforcer.delete_roles_for_user_in_domain(
-                        str(member["id"]), current_role, str(team.id)
+                        str(member["id"]), current_role, str(team_id)
                     )
         except Exception as e:
             logging.error(e)
-            return False
-        organization.remove(db, id=team.id)
-    return True
+        organization.remove(db, id=team_id)
+        teams_out.append(dict(organization_in_db.as_dict()))
+        
+    return teams_out
 
 
-@router.delete("/{organization_id}/teams/archive/", response_model=List[Organization])
+@router.post("/{organization_id}/teams/bulk_archive", response_model=List[Organization])
 def archive_teams(
     organization_id: int,
     *,
     auth=Depends(authorization("organizations:delete_team")),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
-    teams_in: List[Organization],
+    team_ids_in: List[int],
 ):
     """
     Bulk archive teams
     """
     teams_out = []
-    for team in teams_in:
-        organization_in_db = organization.get(db, id=team.id)
+    for team_id in team_ids_in:
+        organization_in_db = organization.get(db, id=team_id)
 
         if not organization_in_db:
             raise HTTPException(status_code=404, detail="Team not found")
@@ -199,6 +201,7 @@ def archive_teams(
         db.refresh(organization_in_db)
         teams_out.append(dict(organization_in_db.as_dict()))
     return teams_out
+
 
 
 @router.delete("/{organization_id}/teams/{team_id}")
