@@ -241,6 +241,7 @@ const EditionPage = ({}) => {
           source: "osm",
           sourceLayer: "ecoteka-data",
         });
+
         map.setFeatureState(
           {
             source: "osm",
@@ -248,7 +249,7 @@ const EditionPage = ({}) => {
             id: e.features[0].id,
           },
           {
-            click: true,
+            click: !e.features[0].state.click,
           }
         );
       }
@@ -572,10 +573,16 @@ const EditionPage = ({}) => {
                 onChange={(value) => {
                   switch (value) {
                     case "analysis":
+                      mapRef.current
+                        .getMap()
+                        .setLayoutProperty("osm", "visibility", "visible");
                       setBoxSelect(false);
                       router.push("/edition/?panel=start");
                       break;
                     case "edition":
+                      mapRef.current
+                        .getMap()
+                        .setLayoutProperty("osm", "visibility", "none");
                       setBoxSelect(true);
                       break;
                   }
