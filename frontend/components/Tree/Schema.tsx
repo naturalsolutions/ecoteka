@@ -145,22 +145,22 @@ export default function useTreeSchema() {
       },
       schema: yup.string(),
     },
-    protected: {
-      type: "checkbox",
-      category: "Caractéristiques",
-      component: {
-        label: t("components:Tree.protected"),
-      },
-      schema: yup.string(),
-    },
-    remarkableTree: {
-      type: "checkbox",
-      category: "Caractéristiques",
-      component: {
-        label: t("components:Tree.remarkableTree"),
-      },
-      schema: yup.string(),
-    },
+    // protected: {
+    //   type: "checkbox",
+    //   category: "Caractéristiques",
+    //   component: {
+    //     label: t("components:Tree.protected"),
+    //   },
+    //   schema: yup.string(),
+    // },
+    // remarkableTree: {
+    //   type: "checkbox",
+    //   category: "Caractéristiques",
+    //   component: {
+    //     label: t("components:Tree.remarkableTree"),
+    //   },
+    //   schema: yup.string(),
+    // },
     soilConstraints: {
       type: "select",
       category: "Environnement extérieur",
@@ -182,9 +182,10 @@ export default function useTreeSchema() {
       type: "checkbox",
       category: "Environnement extérieur",
       component: {
-        label: t("components:Tree.properties.lightning"),
+        // label: t("components:Tree.properties.lightning"),
+        checked: true,
       },
-      schema: yup.string(),
+      schema: yup.boolean(),
     },
     watering: {
       type: "select",

@@ -5,6 +5,7 @@ import useTextField from "@/components/Form/useTextField";
 import useSelect from "@/components/Form/useSelect";
 import usePasswordField from "@/components/Form/usePasswordField";
 import useDateRangeField from "@/components/Form/useDateRange";
+import useCheckbox from "@/components/Form/useCheckbox";
 
 interface useETKFormSchema {
   [key: string]: {
@@ -25,6 +26,7 @@ export default function useETKForm(props: useETKFormProps) {
   const passwordfields = {};
   const selects = {};
   const dateranges = {};
+  const checkboxes = {};
 
   for (const field in props.schema) {
     shape[field] = props.schema[field].schema;
@@ -42,6 +44,11 @@ export default function useETKForm(props: useETKFormProps) {
       case "daterange":
         dateranges[field] = props.schema[field].component;
         break;
+      case "checkbox":
+        checkboxes[field] = props.schema[field].component;
+        break;
+      default:
+        textfields[field] = props.schema[field].component;
     }
   }
 
@@ -58,8 +65,9 @@ export default function useETKForm(props: useETKFormProps) {
   const b = useSelect({ fields: selects, ...form });
   const c = usePasswordField({ fields: passwordfields, ...form });
   const d = useDateRangeField({ fields: dateranges, ...form });
+  const e = useCheckbox({ fields: checkboxes, ...form });
 
-  const fields = Object.assign({}, a, b, c, d);
+  const fields = Object.assign({}, a, b, c, d, e);
 
   return {
     fields,
