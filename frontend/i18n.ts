@@ -7,6 +7,9 @@ import CommonFR from "./public/locales/fr/common.json";
 import ComponentsEN from "./public/locales/en/components.json";
 import ComponentsES from "./public/locales/es/components.json";
 import ComponentsFR from "./public/locales/fr/components.json";
+import PagesEN from "./public/locales/en/pages.json";
+import PagesES from "./public/locales/es/pages.json";
+import PagesFR from "./public/locales/fr/pages.json";
 
 i18n
   .use(LanguageDetector)
@@ -15,20 +18,23 @@ i18n
     preload: ["en", "fr", "es"],
     lng: "fr",
     fallbackLng: "fr",
-    ns: ["common", "components"],
+    ns: ["common", "components", "pages"],
     defaultNS: "common",
     resources: {
       en: {
         common: CommonEN,
         components: ComponentsEN,
+        pages: PagesEN,
       },
       es: {
         common: CommonES,
         components: ComponentsES,
+        pages: PagesES,
       },
       fr: {
         common: CommonFR,
         components: ComponentsFR,
+        pages: PagesFR,
       },
     },
     interpolation: {

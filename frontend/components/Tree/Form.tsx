@@ -81,11 +81,11 @@ const ETKTreeForm: React.FC<{
     <Grid container direction="column" spacing={2} className={classes.grid}>
       <Grid item>
         <Typography variant="h6" className={classes.title}>
-          Edition
+        {t("components:TreeForm.title")}
         </Typography>
       </Grid>
       <Grid item>
-        <Typography className={classes.heading}>Identité de l'arbre</Typography>
+        <Typography className={classes.heading}>{t("components:TreeForm.treeIdentity")}</Typography>
         <Grid container direction="column">
           {Object.keys(schema)
             .filter((f) => schema[f].category === "Identité de l'arbre")
@@ -97,7 +97,7 @@ const ETKTreeForm: React.FC<{
         </Grid>
       </Grid>
       <Grid item>
-        <Typography className={classes.heading}>Caractéristiques</Typography>
+        <Typography className={classes.heading}>{t("components:TreeForm.characteristics")}</Typography>
         <Grid container direction="column">
           {Object.keys(schema)
             .filter((f) => schema[f].category === "Caractéristiques")
@@ -110,7 +110,7 @@ const ETKTreeForm: React.FC<{
       </Grid>
       <Grid item>
         <Typography className={classes.heading}>
-          Environnement extérieur
+        {t("components:TreeForm.outdoorEnvironment")}
         </Typography>
         <Grid container direction="column">
           {Object.keys(schema)
@@ -123,7 +123,7 @@ const ETKTreeForm: React.FC<{
         </Grid>
       </Grid>
       <Grid item>
-        <Typography className={classes.heading}>Autre</Typography>
+        <Typography className={classes.heading}>{t("components:TreeForm.other")}</Typography>
 
         <Grid container direction="column">
           {Object.keys(schema)
@@ -140,7 +140,7 @@ const ETKTreeForm: React.FC<{
           <Grid item xs></Grid>
           <Grid item>
             <Button color="primary" variant="contained" onClick={handlerOnSave}>
-              {saving ? <CircularProgress size={30} /> : "Enregistrer"}
+              {saving ? <CircularProgress size={30} /> : t("common:buttons.save")}
             </Button>
           </Grid>
         </Grid>

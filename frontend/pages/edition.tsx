@@ -1,6 +1,5 @@
-import { useEffect, useState, createRef } from "react";
+import { useEffect, useLayoutEffect, useState, createRef } from "react";
 import { Grid, makeStyles, Box } from "@material-ui/core";
-import ReconnectingWebSocket from "reconnecting-websocket";
 import { v4 as uuidv4 } from "uuid";
 import MapGL, {
   Source,
@@ -250,32 +249,11 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
-    if (router.query.tree) {
-      apiRest.trees
-        .get(user.currentOrganization.id, router.query.tree)
-        .then((tree) => {
-          if (mapRef.current) {
-            mapRef.current.getMap().flyTo({
-              zoom: 20,
-              center: [tree.x, tree.y],
-            });
-          }
-        });
-    }
-
     connect();
   }, []);
 
   const switchPanel = (panel) => {
     switch (panel) {
-      case "start":
-        setDrawerLeftComponent(<PanelStartGeneralInfo />);
-        break;
-      case "info":
-        setDrawerLeftComponent(
-          <TreeSummary treeId={Number(router.query.tree)} />
-        );
-        break;
       case "tree":
         if (boxSelect) {
           const Tree = dynamic(() => import("@/components/Tree/Form"));
@@ -284,6 +262,14 @@ const EditionPage = ({}) => {
             <Tree selection={selection} onSave={handleOnTreeSave} />
           );
         }
+        break;
+      case "start":
+        setDrawerLeftComponent(<PanelStartGeneralInfo />);
+        break;
+      case "info":
+        setDrawerLeftComponent(
+          <TreeSummary treeId={Number(router.query.tree)} map={mapRef} />
+        );
         break;
       case "import":
         const Import = dynamic(() => import("@/components/Import/Panel/Index"));
@@ -299,7 +285,7 @@ const EditionPage = ({}) => {
         const Intervention = dynamic(
           () => import("@/components/Interventions/Form")
         );
-        setDrawerLeftComponent(<Intervention map={mapRef.current.getMap()} />);
+        setDrawerLeftComponent(<Intervention map={mapRef} />);
         break;
       default:
         setDrawerLeftComponent(<PanelStartGeneralInfo />);
@@ -308,6 +294,10 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
+    if (!router.query.panel && router.query.tree) {
+      router.query.panel = "info";
+    }
+
     if (!router.query.panel) return;
 
     switchPanel(router.query.panel);
@@ -538,6 +528,15 @@ const EditionPage = ({}) => {
                 id={hoveredTreeId}
                 source="trees"
                 state={{ hover: true }}
+              />
+            )}
+            {router.query.tree && data.features.length > 0 && (
+              <FeatureState
+                id={data.features.find(
+                  (f) => (f.properties.id = router.query.tree)
+                )}
+                source="trees"
+                state={{ selected: true }}
               />
             )}
             <GeolocateControl ref={geolocateControlRef} />
