@@ -454,7 +454,7 @@
         },
         "roles": {
           "defineRole": "Definir el role",
-          "admin": "Administrator",
+          "admin": "Administrador",
           "owner": "Propietario",
           "manager": "Gestor",
           "contributor": "Contributor",
@@ -462,8 +462,8 @@
           "guest": "Invitado"
         },
         "updateMember": {
-          "success": "Member role was successfully updated",
-          "error": "Error occured while updatind member role"
+          "success": "El rol ha sido actualizado",
+          "error": "Se ha producido un error al actualizar el rol"
         }
       },
       "dialog": {
