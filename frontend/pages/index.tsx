@@ -9,6 +9,7 @@ import Landing from "@/components/Landing";
 import { useAppContext } from "@/providers/AppContext";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutCarto from "@/components/AppLayout/Carto";
+import { TMapToolbarAction } from "@/components/Map/Toolbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
