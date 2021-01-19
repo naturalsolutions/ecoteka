@@ -446,14 +446,14 @@
       "invite": "Invitar",
       "detachFromGroup": "Eliminar miembros de la organización",
       "onDetach": {
-        "success": "a été retiré du groupe avec succès",
-        "errorAlert": "Erreur Serveur.",
-        "errorContent": "n'a pas pas pu être rétiré du groupe",
+        "success": "ha sido retirado del grupo con existo",
+        "errorAlert": "Error de servidor",
+        "errorContent": "no ha podido ser retirado del grupo",
         "dialog": {
-          "alertTitle": "Cette action est irréversible",
-          "alertContent1": "Vous vous apprêtez à retirer des membres de votre organisation. Cette action conduira à la perte des droits pour les utilisateurs concernés.",
-          "alertContent2": "Êtes-vous sûr de vouloir continuer?",
-          "confirmButton": "Oui, je confirme!"
+          "alertTitle": "Está acción es irreversible",
+          "alertContent1": "Esta apunto de eliminar a algunos miembros de su organización. Esta acción provocará la perdida de derechos de los miembros afectados.",
+          "alertContent2": "¿Quiere continuar?",
+          "confirmButton": "Sí, ¡confirmo!"
         }
       },
       "Table": {
