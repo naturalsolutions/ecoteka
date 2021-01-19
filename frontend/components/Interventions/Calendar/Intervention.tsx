@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   TIntervention,
   useInterventionSchema,
 } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
-import {
-  makeStyles,
-  Grid,
-  Button,
-  Switch,
-  FormControlLabel,
-} from "@material-ui/core";
+import { makeStyles, Grid, Button } from "@material-ui/core";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import useForm from "@/components/Form/useForm";
+import useApi from "@/lib/useApi";
+import { useAppContext } from "@/providers/AppContext";
+import * as yup from "yup";
 
 export interface CalendarInterventionProps {
   intervention: TIntervention;
+  onSave?(intervention: TIntervention): void;
 }
 
 const defaultProps: CalendarInterventionProps = {
@@ -32,33 +30,63 @@ const useStyles = makeStyles(() => ({
 
 const CalendarInterventionForm = (props) => {
   const router = useRouter();
-  const [done, setDone] = useState<boolean>(
-    props.intervention.done ? props.intervention.done : false
-  );
   const schema = useInterventionSchema(props.intervention.intervention_type);
+
+  schema.done = {
+    type: "switch",
+    component: {
+      label: "done",
+      color: "primary",
+    },
+    schema: yup.boolean(),
+  };
+
   const form = useForm({ schema });
+  const { apiETK } = useApi().api;
+  const { user } = useAppContext();
+
+  useEffect(() => {
+    Object.keys(form.fields)
+      .filter((field) => field !== "done")
+      .map((field) => {
+        form.setValue(field, props.intervention.properties[field]);
+      });
+
+    console.log(props.intervention.done);
+    form.setValue("done", props.intervention.done);
+  }, [form, props.intervention]);
+
+  const handleOnSave = async () => {
+    const organizationId = user.currentOrganization.id;
+    const { done, ...properties } = form.getValues();
+
+    const payload = {
+      done,
+      properties,
+    };
+
+    const { status, data: intervention } = await apiETK.patch(
+      `/organization/${organizationId}/interventions/${props.intervention.id}`,
+      payload
+    );
+
+    if (status === 200) {
+      props.onSave(intervention);
+    }
+  };
 
   return (
     <Grid container direction="column">
-      {Object.keys(form.fields).map((field) => (
-        <Grid item key={`field-${field}`}>
-          {form.fields[field]}
-        </Grid>
-      ))}
+      {Object.keys(form.fields)
+        .filter((key) => key !== "done")
+        .map((field) => (
+          <Grid item key={`field-${field}`}>
+            {form.fields[field]}
+          </Grid>
+        ))}
       <Grid item>
         <Grid container>
-          <Grid item>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={done}
-                  onChange={() => setDone(!done)}
-                  color="primary"
-                />
-              }
-              label="Done"
-            />
-          </Grid>
+          <Grid item>{form.fields.done}</Grid>
           <Grid item xs />
           <Grid item>
             <Button
@@ -74,6 +102,17 @@ const CalendarInterventionForm = (props) => {
           </Grid>
         </Grid>
       </Grid>
+      <Grid item>
+        <Grid container>
+          <Grid item>
+            <Button onClick={handleOnSave}>Save</Button>
+          </Grid>
+          <Grid item xs />
+          <Grid item>
+            <Button onClick={() => props.dialog.current.close()}>Close</Button>
+          </Grid>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };
@@ -84,18 +123,6 @@ const CalendarIntervention: React.FC<CalendarInterventionProps> = (props) => {
   const { t } = useTranslation(["common", "components"]);
   const backgroundColor =
     INTERVENTION_COLORS[props.intervention.intervention_type];
-  const schema = useInterventionSchema(props.intervention.intervention_type);
-  const form = useForm({ schema });
-
-  useEffect(() => {
-    Object.keys(form.fields).map((field) => {
-      if (schema[field].component.multiple) {
-        form.setValue(field, [props.intervention[field]]);
-      } else {
-        form.setValue(field, props.intervention[field]);
-      }
-    });
-  }, [form]);
 
   const handleInterventionDialog = () => {
     dialog.current.open({
@@ -121,13 +148,9 @@ const CalendarIntervention: React.FC<CalendarInterventionProps> = (props) => {
         <CalendarInterventionForm
           dialog={dialog}
           intervention={props.intervention}
+          onSave={props.onSave}
         />
       ),
-      actions: [
-        {
-          label: "Fermer",
-        },
-      ],
     });
   };
 

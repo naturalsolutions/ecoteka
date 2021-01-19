@@ -37,6 +37,7 @@ const CalendarPage: FC = ({}) => {
         year={year}
         onYearChange={handleYearChange}
         onInterventionPlan={() => getData(user.currentOrganization.id, year)}
+        onSave={() => getData(user.currentOrganization.id, year)}
       />
     </AppLayoutGeneral>
   );

@@ -1,6 +1,5 @@
 import { useEffect, useState, createRef } from "react";
 import { Grid, makeStyles, Box } from "@material-ui/core";
-import ReconnectingWebSocket from "reconnecting-websocket";
 import { v4 as uuidv4 } from "uuid";
 import MapGL, {
   Source,

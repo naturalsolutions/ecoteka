@@ -5,6 +5,7 @@ import useTextField from "@/components/Form/useTextField";
 import useSelect from "@/components/Form/useSelect";
 import usePasswordField from "@/components/Form/usePasswordField";
 import useDateRangeField from "@/components/Form/useDateRange";
+import useSwitch from "@/components/Form/useSwitch";
 
 interface useETKFormSchema {
   [key: string]: {
@@ -25,6 +26,7 @@ export default function useETKForm(props: useETKFormProps) {
   const passwordfields = {};
   const selects = {};
   const dateranges = {};
+  const switchs = {};
 
   for (const field in props.schema) {
     shape[field] = props.schema[field].schema;
@@ -42,6 +44,9 @@ export default function useETKForm(props: useETKFormProps) {
       case "daterange":
         dateranges[field] = props.schema[field].component;
         break;
+      case "switch":
+        switchs[field] = props.schema[field].component;
+        break;
     }
   }
 
@@ -54,12 +59,29 @@ export default function useETKForm(props: useETKFormProps) {
     resolver: yupResolver(schema),
   });
 
-  const a = useTextField({ fields: textfields, ...form });
-  const b = useSelect({ fields: selects, ...form });
-  const c = usePasswordField({ fields: passwordfields, ...form });
-  const d = useDateRangeField({ fields: dateranges, ...form });
+  const textfieldsComponents = useTextField({ fields: textfields, ...form });
+  const selectsComponents = useSelect({ fields: selects, ...form });
+  const passwordsComponents = usePasswordField({
+    fields: passwordfields,
+    ...form,
+  });
+  const dataragesComponents = useDateRangeField({
+    fields: dateranges,
+    ...form,
+  });
+  const switchsComponents = useSwitch({
+    fields: switchs,
+    ...form,
+  });
 
-  const fields = Object.assign({}, a, b, c, d);
+  const fields = Object.assign(
+    {},
+    textfieldsComponents,
+    selectsComponents,
+    passwordsComponents,
+    dataragesComponents,
+    switchsComponents
+  );
 
   return {
     fields,

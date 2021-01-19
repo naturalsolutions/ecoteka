@@ -15,6 +15,7 @@ export interface CalendarDayProps {
   month: number;
   year: number;
   onInterventionPlan?(intervention: TIntervention): void;
+  onSave?(intervention: TIntervention): void;
 }
 
 const defaultProps: CalendarDayProps = {
@@ -91,7 +92,10 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
     props.interventions.map((intervention) => {
       return (
         <Grid key={`day-intervention-${intervention.id}`} item>
-          <CalendarIntervention intervention={intervention} />
+          <CalendarIntervention
+            intervention={intervention}
+            onSave={props.onSave}
+          />
         </Grid>
       );
     });
