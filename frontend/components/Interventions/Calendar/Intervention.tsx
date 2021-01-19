@@ -32,6 +32,13 @@ const CalendarInterventionForm = (props) => {
   const router = useRouter();
   const schema = useInterventionSchema(props.intervention.intervention_type);
 
+  // hotfix : ideally defaultValues should be define from schema
+  const defaultValues = {
+    comment: "",
+    method: "",
+    done: false,
+  };
+
   schema.done = {
     type: "switch",
     component: {
@@ -41,7 +48,7 @@ const CalendarInterventionForm = (props) => {
     schema: yup.boolean(),
   };
 
-  const form = useForm({ schema });
+  const form = useForm({ schema, defaultValues });
   const { apiETK } = useApi().api;
   const { user } = useAppContext();
 
@@ -52,7 +59,7 @@ const CalendarInterventionForm = (props) => {
         form.setValue(field, props.intervention.properties[field]);
       });
 
-    console.log(props.intervention.done);
+    // console.log(props.intervention.done);
     form.setValue("done", props.intervention.done);
   }, [form, props.intervention]);
 

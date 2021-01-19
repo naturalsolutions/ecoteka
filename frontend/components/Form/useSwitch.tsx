@@ -24,7 +24,23 @@ export default function useTextField(props: ETKSwitchProps): Fields {
     const fieldProps = Object.assign({}, field);
 
     switchFields[name] = (
-      <Switch {...fieldProps} inputRef={props.register} name={name} />
+      <FormControlLabel
+        control={
+          <Controller
+            name={name}
+            control={props.control}
+            render={(props) => (
+              <Switch
+                {...fieldProps}
+                onChange={(e) => props.onChange(e.target.checked)}
+                checked={props.value}
+              />
+            )}
+          />
+        }
+        key={name}
+        label={name}
+      />
     );
   }
 

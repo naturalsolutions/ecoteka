@@ -18,6 +18,7 @@ interface useETKFormSchema {
 interface useETKFormProps {
   mode?: "onBlur" | "onChange" | "onSubmit" | "onTouched" | "all";
   schema: useETKFormSchema;
+  defaultValues?: any;
 }
 
 export default function useETKForm(props: useETKFormProps) {
@@ -57,6 +58,7 @@ export default function useETKForm(props: useETKFormProps) {
   const form = useForm<useETKFormSchema>({
     mode: props.mode || "onSubmit",
     resolver: yupResolver(schema),
+    defaultValues: props.defaultValues,
   });
 
   const textfieldsComponents = useTextField({ fields: textfields, ...form });
