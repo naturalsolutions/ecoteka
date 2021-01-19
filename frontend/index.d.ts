@@ -26,3 +26,11 @@ export interface ITree {
   user_id: number;
   organization_id: number;
 }
+
+export interface IMember {
+  id: number;
+  email: string;
+  name?: string;
+  role: string;
+  status: string;
+}
