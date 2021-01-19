@@ -58,7 +58,9 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
 
       const { status, data: intervention } = await apiETK.patch(
         `/organization/${organizationId}/interventions/${interventionId}`,
-        dateIntervention
+        {
+          date: dateIntervention,
+        }
       );
 
       if (status === 200) {
