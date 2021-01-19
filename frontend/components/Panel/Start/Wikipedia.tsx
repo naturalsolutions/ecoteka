@@ -19,12 +19,6 @@ async function getInformationByProp(prop, genre) {
   let response = await fetch(url);
   let json = await response.json();
 
-  if (json.warnings) {
-    url = `https://en.wikipedia.org/w/api.php?action=query&prop=${prop}&titles=${genre}&formatversion=2&origin=*&format=json`;
-    response = await fetch(url);
-    json = await response.json();
-  }
-
   if (prop === "extracts" && json.hasOwnProperty("query")) {
     return json.query.pages.pop().extract;
   }

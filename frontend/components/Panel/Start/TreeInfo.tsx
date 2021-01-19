@@ -103,7 +103,8 @@ const ETKPanelStartTreeInfo: React.FC<ETKPanelStartTreeInfoProps> = (props) => {
           genre={
             properties.gender ||
             properties["genus:fr"] ||
-            properties["taxon:species"]
+            properties["taxon:species"] ||
+            properties["species:fr"]
           }
         />
       </Grid>
