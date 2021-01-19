@@ -365,6 +365,7 @@
         "cone": "Cône"
       },
       "procted": "Arbre protégé",
+      "remarkableTree" : "Arbre remarquable",
       "soilConstraints": "Contraintes au sol",
       "aerianConstraint": "Contraintes aériennes",
       "lightning": "Présence d'éclairage",

@@ -79,15 +79,6 @@ export default function useTreeSchema() {
       },
       schema: yup.string(),
     },
-    etkRegistrationNumber: {
-      type: "textfield",
-      category: "Identité de l'arbre",
-      component: {
-        readOnly: true,
-        label: t("components:Tree.properties.etkRegistrationNumber"),
-      },
-      schema: yup.string().required(t("common:errors.required")),
-    },
     registrationNumber: {
       type: "textfield",
       category: "Identité de l'arbre",
@@ -162,6 +153,14 @@ export default function useTreeSchema() {
       },
       schema: yup.string(),
     },
+    remarkableTree: {
+      type: "checkbox",
+      category: "Caractéristiques",
+      component: {
+        label: t("components:Tree.remarkableTree"),
+      },
+      schema: yup.string(),
+    },
     soilConstraints: {
       type: "select",
       category: "Environnement extérieur",
@@ -172,7 +171,7 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     aerianConstraint: {
-      type: "checkbox",
+      type: "textfield",
       category: "Environnement extérieur",
       component: {
         label: t("components:Tree.properties.aerianConstraint"),
