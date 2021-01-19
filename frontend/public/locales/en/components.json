@@ -463,6 +463,17 @@
       "confirm": "Confirm",
       "confirmDetach": "Confirm",
       "invite": "Invite",
+      "onDetach": {
+        "success": "was removed successfully removed from group",
+        "errorAlert": "Server error.",
+        "errorContent": "cannot be removed from group",
+        "dialog": {
+          "alertTitle": "This action cannot be undone!",
+          "alertContent1": "You are about to remove members from your organization. This will lead to organization access rights loss for these users.",
+          "alertContent2": "Do you still want to proceed?",
+          "confirmButton": "Yes, I do!"
+        }
+      },
       "Table": {
         "headers": {
           "email": "Email",

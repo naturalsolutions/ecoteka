@@ -439,6 +439,17 @@
       "confirm": "Confirmer",
       "confirmDetach": "Confirmer le retrait",
       "invite": "Inviter",
+      "onDetach": {
+        "success": "a été retiré du groupe avec succès",
+        "errorAlert": "Erreur Serveur.",
+        "errorContent": "n'a pas pas pu être rétiré du groupe",
+        "dialog": {
+          "alertTitle": "Cette action est irréversible",
+          "alertContent1": "Vous vous apprêtez à retirer des membres de votre organisation. Cette action conduira à la perte des droits pour les utilisateurs concernés.",
+          "alertContent2": "Êtes-vous sûr de vouloir continuer?",
+          "confirmButton": "Oui, je confirme!"
+        }
+      },
       "Table": {
         "headers": {
           "email": "Email",

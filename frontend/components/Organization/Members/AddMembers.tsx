@@ -142,7 +142,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
       const { members } = data;
       try {
         const response = await apiETK.post(
-          `/organization/$organizationID}/members`,
+          `/organization/${organizationId}/members`,
           members
         );
         if (response.status === 200) {

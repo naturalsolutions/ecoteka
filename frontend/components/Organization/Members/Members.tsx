@@ -3,8 +3,10 @@ import { IOrganization } from "@/index.d";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Button, Toolbar, useMediaQuery } from "@material-ui/core";
 import { Block as BlockIcon, Add as AddIcon } from "@material-ui/icons";
+import { Alert, AlertTitle } from "@material-ui/lab";
 import { useAppLayout } from "@/components/AppLayout/Base";
-import { composeInitialProps, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 import { apiRest } from "@/lib/api";
 import useAPI from "@/lib/useApi";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
@@ -41,17 +43,37 @@ interface MembersProps {
   index: string;
 }
 
+const ConfirmAlertMessage = (props) => {
+  const { t } = useTranslation(["components", "common"]);
+  return (
+    <Box my={1}>
+      <Alert severity="warning">
+        <AlertTitle>
+          {t("components:Organization.Members.onDetach.dialog.alertTitle")}
+        </AlertTitle>
+        {t("components:Organization.Members.onDetach.dialog.alertContent1")}
+        <p>
+          <strong>
+            {t("components:Organization.Members.onDetach.dialog.alertContent2")}
+          </strong>
+        </p>
+      </Alert>
+    </Box>
+  );
+};
+
 const Members: FC<MembersProps> = ({ organization }) => {
   const classes = useStyles();
   const { theme } = useThemeContext();
   const { dialog, snackbar } = useAppLayout();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { api } = useAPI();
   const { apiETK } = api;
   const matches = useMediaQuery(theme.breakpoints.down("md"));
   const { t } = useTranslation(["components", "common"]);
   const formAddMembersRef = useRef<AddMembersActions>();
   const [disableActions, setDisableActions] = useState(true);
-  const [selectedMembers, setSelectedMembers] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState<IMember[]>([]);
   const [data, setData] = useState([]);
 
   const getData = async (organizationId: number) => {
@@ -70,21 +92,61 @@ const Members: FC<MembersProps> = ({ organization }) => {
   }, [selectedMembers]);
 
   useEffect(() => {
+    console.table(data);
+  }, [data]);
+
+  useEffect(() => {
     getData(organization.id);
   }, [organization]);
 
+  const removeSelectedRows = () => {
+    const filteredMembers = data.filter(
+      (member) => selectedMembers.indexOf(member.id) === -1
+    );
+    setData(filteredMembers);
+  };
+
   const onDetachMembers = () => {
-    selectedMembers.map(async (id) => {
-      try {
-        await apiRest.organization.detachMember(organization.id, id);
-        await getData(organization.id);
-      } catch (e) {
-        snackbar.current.open({
-          message: `Une erreur est survenue... votre action n'a pas pu être traitée.`,
-          severity: "error",
-        });
-      }
+    selectedMembers.map(async (member, index) => {
+      // This happens to fast and lead to "sqlalchemy.exc.InvalidRequestError: This session is in 'prepared' state; no further SQL can be emitted within this transaction"
+      // Add bulk_remove_members in backend
+      setTimeout(async () => {
+        try {
+          const { status, data: memberData } = await apiETK.delete(
+            `/organization/${organization.id}/members/${member.id}`
+          );
+          if (status === 200) {
+            enqueueSnackbar(
+              `${member.email} ${t(
+                "components:Organization.Members.onDetach.success"
+              )}`,
+              {
+                variant: "success",
+              }
+            );
+            setData((prev) => {
+              const newData = prev.filter((row) => row.id !== member.id);
+              return newData;
+            });
+          }
+          if (status !== 200) {
+            enqueueSnackbar(
+              `${t("components:Organization.Members.onDetach.errorAlert")}. ${
+                member.email
+              } ${t("components:Organization.Members.onDetach.errorContent")}`,
+              {
+                variant: "error",
+              }
+            );
+          }
+        } catch (e) {
+          enqueueSnackbar(`Error`, {
+            variant: "error",
+          });
+        }
+      }, 400 * index);
     });
+    setSelectedMembers([]);
     dialog.current.close();
   };
 
@@ -143,7 +205,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
 
     dialog.current.open({
       title: t("components:Organization.Members.dialogDdetachMembersTitle"),
-      content: <div>Action irréversible!</div>,
+      content: <ConfirmAlertMessage />,
       actions: dialogActions,
       dialogProps: {
         maxWidth: "sm",
@@ -184,6 +246,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
         <MembersTable
           organizationId={organization.id}
           rows={data}
+          selectedMembers={selectedMembers}
           onSelected={onSelected}
           onDetachMembers={detachMembers}
           onMemberUpdate={onMemberUpdate}

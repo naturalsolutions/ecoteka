@@ -32,8 +32,9 @@ import { IMember } from "@/index";
 
 export interface ETKOrganizationMemberTableProps {
   organizationId: number;
+  selectedMembers: IMember[];
   rows?: IMember[];
-  onSelected?(selection?: number[]): void;
+  onSelected?(selection?: IMember[]): void;
   onDetachMembers?(): void;
   onMemberUpdate?(updatedMember: IMember): void;
 }
@@ -41,6 +42,7 @@ export interface ETKOrganizationMemberTableProps {
 const defaultProps: ETKOrganizationMemberTableProps = {
   organizationId: 1,
   rows: [],
+  selectedMembers: [],
 };
 
 interface SelectRendererProps {
@@ -122,6 +124,7 @@ const SelectRenderer: React.FC<SelectRendererProps> = ({
 
 const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
   organizationId,
+  selectedMembers,
   rows,
   onSelected,
   onDetachMembers,
@@ -135,7 +138,6 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
     "Organization.Members.Table.headers.name",
     "Organization.Members.Table.headers.role",
   ]);
-  const [selected, setSelected] = useState([] as number[]);
   const [actionsMenuAnchorEl, setActionsMenuAnchorEl] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMesagge] = useState<
@@ -194,44 +196,55 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
     } catch (e) {}
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (member: IMember) => {
+    const { id } = member;
+    return (
+      selectedMembers
+        .map(function (member) {
+          return member.id;
+        })
+        .indexOf(id) !== -1
+    );
+  };
 
   const onSelectAllClick = (e) => {
     if (e.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
+      const newSelected = rows.filter(
+        (r) => ["admin", "owner"].indexOf(r.role) === -1
+      );
+      newSelected.length === selectedMembers.length
+        ? onSelected([])
+        : onSelected(newSelected);
       return;
     }
-
-    setSelected([]);
+    onSelected([]);
   };
 
-  const onRowClick = (e, id) => {
-    const selectedIndex = selected.indexOf(id);
+  const onRowClick = (e, member: IMember) => {
+    const { id } = member;
+    const selectedIndex = selectedMembers
+      .map(function (member) {
+        return member.id;
+      })
+      .indexOf(id);
 
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selectedMembers, member);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelected = newSelected.concat(selectedMembers.slice(1));
+    } else if (selectedIndex === selectedMembers.length - 1) {
+      newSelected = newSelected.concat(selectedMembers.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+        selectedMembers.slice(0, selectedIndex),
+        selectedMembers.slice(selectedIndex + 1)
       );
     }
 
-    setSelected(newSelected);
+    onSelected(newSelected);
   };
-
-  useEffect(() => {
-    if (onSelected && typeof onSelected === "function") {
-      onSelected(selected);
-    }
-  }, [selected]);
 
   return (
     <>
@@ -248,16 +261,19 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
               <TableCell padding="checkbox">
                 <Checkbox
                   indeterminate={
-                    selected.length > 0 && selected.length < rows.length
+                    selectedMembers.length > 0 &&
+                    selectedMembers.length < rows.length
                   }
-                  checked={rows.length > 0 && selected.length === rows.length}
+                  checked={
+                    rows.length > 0 && selectedMembers.length === rows.length
+                  }
                   onChange={onSelectAllClick}
                   color="primary"
                 />
               </TableCell>
               <TableCell padding="checkbox">
                 <IconButton
-                  disabled={!selected.length}
+                  disabled={!selectedMembers.length}
                   aria-owns={actionsMenuAnchorEl ? "membersActionsMenu" : null}
                   aria-haspopup="true"
                   onClick={handleClick}
@@ -287,7 +303,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isItemSelected = isSelected(row.id);
+              const isItemSelected = isSelected(row);
               return (
                 <TableRow
                   hover
@@ -298,9 +314,12 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
+                      disabled={Boolean(
+                        row.role === "admin" || row.role === "owner"
+                      )}
                       checked={isItemSelected}
                       color="primary"
-                      onClick={(e) => onRowClick(e, row.id)}
+                      onClick={(e) => onRowClick(e, row)}
                     />
                   </TableCell>
                   <TableCell padding="checkbox" />

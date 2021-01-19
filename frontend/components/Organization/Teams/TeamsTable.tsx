@@ -1,4 +1,4 @@
-import React, { useEffect, useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent } from "react";
 import {
   Checkbox,
   Table,
