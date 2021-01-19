@@ -1,8 +1,18 @@
-import React, { forwardRef, useState, useEffect, useImperativeHandle } from "react";
-import { Box, Button, Chip, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
-import { Send as SendIcon } from "@material-ui/icons";
+import React, { forwardRef, useState } from "react";
+import {
+  Box,
+  Button,
+  Chip,
+  makeStyles,
+  MenuItem,
+  Select,
+  TextField,
+  Toolbar,
+} from "@material-ui/core";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   chipsContainer: {
@@ -16,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
     marginRight: theme.spacing(2),
+  },
+  grow: {
+    flexGrow: 1,
   },
 }));
 
@@ -40,164 +53,215 @@ export type AddMembersActions = {
 };
 
 export interface AddMembersProps {
-  organizationID: number;
+  organizationId: number;
+  closeAddMembersDialog: (refetchOrganizationData: boolean) => void;
 }
 
-const AddMembers = forwardRef<AddMembersActions, AddMembersProps>((props, ref) => {
-  const classes = useStyles();
-  const [error, setError] = useState(null);
-  const { register, control, handleSubmit, getValues, setValue } = useForm();
-  const { fields, append, prepend, remove } = useFieldArray({
-    control,
-    name: "members",
-  });
+const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
+  ({ organizationId, closeAddMembersDialog }) => {
+    const classes = useStyles();
+    const { api } = useApi();
+    const { apiETK } = api;
+    const { t } = useTranslation(["components", "common"]);
+    const [error, setError] = useState(null);
+    const { register, control, handleSubmit, getValues, setValue } = useForm();
+    const { fields, append, remove } = useFieldArray({
+      control,
+      name: "members",
+    });
 
-  const handleKeyDown = (evt) => {
-    if (["Enter", "Tab", ","].includes(evt.key)) {
+    const handleKeyDown = (evt) => {
+      if (["Enter", "Tab", ","].includes(evt.key)) {
+        evt.preventDefault();
+
+        const input = getValues("main").trim();
+
+        if (input && isValid(input)) {
+          append({ email: input, role: "guest" });
+          setValue("main", "");
+        }
+      }
+    };
+
+    const handleChange = (evt) => {
+      setError(null);
+    };
+
+    const handlePaste = (evt) => {
       evt.preventDefault();
 
-      const input = getValues("main").trim();
+      const paste = evt.clipboardData.getData("text");
+      const emails = paste.match(/[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/g);
 
-      if (input && isValid(input)) {
-        append({ email: input, role: "guest" });
-        setValue("main", "");
+      if (emails) {
+        const toBeAdded = emails.filter((email) => !isInList(email));
+        toBeAdded.map((email, index) => {
+          setTimeout(() => append({ email: email, role: "guest" }), 50);
+        });
       }
-    }
-  };
+    };
 
-  const handleChange = (evt) => {
-    setError(null);
-  };
+    const isValid = (email) => {
+      let error = null;
 
-  const handlePaste = (evt) => {
-    evt.preventDefault();
+      if (isInList(email)) {
+        error = `<${email}> ${t(
+          "components:Organization.Members.dialog.errorEmailAlreadyAdded"
+        )}`;
+      }
 
-    const paste = evt.clipboardData.getData("text");
-    const emails = paste.match(/[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/g);
+      if (!isEmail(email)) {
+        error = `<${email}> ${t(
+          "components:Organization.Members.dialog.errorEmailFormatNotValid"
+        )}`;
+      }
 
-    if (emails) {
-      const toBeAdded = emails.filter((email) => !isInList(email));
-      toBeAdded.map((email, index) => {
-        setTimeout(() => append({ email: email, role: "guest" }), 50);
+      if (error) {
+        setError({ error });
+        return false;
+      }
+      return true;
+    };
+
+    const isInList = (email) => {
+      const emails = fields.map((field) => {
+        return field.email;
       });
-    }
-  };
+      return emails.includes(email);
+    };
 
-  const handleRemoveField = (fieldIdx: number) => () => {
-    remove(fieldIdx);
-  };
+    const isEmail = (email) => {
+      return /[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/.test(email);
+    };
 
-  const isValid = (email) => {
-    let error = null;
+    const closeDialog = () => {
+      closeAddMembersDialog(false);
+    };
 
-    if (isInList(email)) {
-      error = `<${email}> est déjà présent dans la liste des invitations.`;
-    }
+    const inviteMembers = async (data) => {
+      const { members } = data;
+      try {
+        const response = await apiETK.post(
+          `/organization/${organizationId}/members`,
+          members
+        );
+        if (response.status === 200) {
+          closeAddMembersDialog(true);
+        }
+      } catch (e) {}
+    };
 
-    if (!isEmail(email)) {
-      error = `<${email}> n'est pas une adresse valide.`;
-    }
+    const roles = [
+      {
+        value: "manager",
+      },
+      {
+        value: "contributor",
+      },
+      {
+        value: "reader",
+      },
+      {
+        value: "guest",
+      },
+    ];
 
-    if (error) {
-      setError({ error });
-      return false;
-    }
-    return true;
-  };
+    return (
+      <Box width="full">
+        <form onSubmit={handleSubmit(inviteMembers)}>
+          <TextField
+            fullWidth
+            name="main"
+            inputRef={register}
+            error={Boolean(error)}
+            helperText={error?.error}
+            size="small"
+            id="email-input"
+            label={t("components:Organization.Members.dialog.emailsLabel")}
+            variant="outlined"
+            className={"input " + (error && " has-error")}
+            placeholder={t(
+              "components:Organization.Members.dialog.emailsPlaceholder"
+            )}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onPaste={handlePaste}
+          />
+          {!(fields.length > 0) && (
+            <Box mt={2} mb={3}>
+              <Alert severity="info">
+                <AlertTitle>
+                  {t("components:Organization.Members.dialog.alertTitle")}
+                </AlertTitle>
+                {t("components:Organization.Members.dialog.alertContent1")}
+                <strong>
+                  {t("components:Organization.Members.dialog.alertContent2")}
+                </strong>
+              </Alert>
+            </Box>
+          )}
 
-  const isInList = (email) => {
-    const emails = fields.map((field) => {
-      return field.email;
-    });
-    return emails.includes(email);
-  };
-
-  const isEmail = (email) => {
-    return /[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/.test(email);
-  };
-
-  useImperativeHandle(ref, () => ({
-    submit: () => {
-      return new Promise((resolve, reject) => {
-        handleSubmit(async (data) => {
-          const { members } = data;
-          const response = await apiRest.organization.addMembers(props.organizationID, members);
-          resolve(response);
-        })();
-      });
-    },
-  }));
-
-  const roles = [
-    {
-      label: "Manager",
-      value: "manager",
-    },
-    {
-      label: "Contributeur",
-      value: "contributor",
-    },
-    {
-      label: "Lecteur",
-      value: "reader",
-    },
-    {
-      label: "Invité",
-      value: "guest",
-    },
-  ];
-
-  return (
-    <Box width="full">
-      <form>
-        <TextField
-          fullWidth
-          name="main"
-          inputRef={register}
-          error={Boolean(error)}
-          helperText={error?.error}
-          size="small"
-          id="email-input"
-          label="Emails des membres à inviter"
-          variant="outlined"
-          className={"input " + (error && " has-error")}
-          placeholder="Saisir les emails des membres à inviter puis appuyer sur `Entrée`..."
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          onPaste={handlePaste}
-        />
-        <Box mt={2} mb={3}>
-          {fields.map((member: any, index: number) => {
-            let icon;
-            return (
-              <Box key={member.id} flexDirection="row">
-                <Box component="span" display="none">
-                  <TextField inputRef={register} name={`members[${index}].email`} defaultValue={member.email} />
+          <Box mt={2} mb={3}>
+            {fields.map((member: any, index: number) => {
+              let icon;
+              return (
+                <Box key={member.id} flexDirection="row">
+                  <Box component="span" display="none">
+                    <TextField
+                      inputRef={register}
+                      name={`members[${index}].email`}
+                      defaultValue={member.email}
+                    />
+                  </Box>
+                  <Chip
+                    icon={icon}
+                    label={member.email}
+                    onDelete={() => remove(index)}
+                    className={classes.chip}
+                  />
+                  <Controller
+                    as={
+                      <Select
+                        name={`members[${index}].role`}
+                        defaultValue={member.role}
+                      >
+                        {roles.map((role, i) => {
+                          return (
+                            <MenuItem value={role.value} key={i}>
+                              {t(
+                                `components:Organization.Members.Table.roles.${role.value}`
+                              )}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    }
+                    name={`members[${index}].role`}
+                    defaultValue={member.role}
+                    control={control}
+                  />
                 </Box>
-                <Chip icon={icon} label={member.email} onDelete={() => remove(index)} className={classes.chip} />
-                <Controller
-                  as={
-                    <Select name={`members[${index}].role`} defaultValue={member.role}>
-                      {roles.map((role, i) => {
-                        return (
-                          <MenuItem value={role.value} key={i}>
-                            {role.label}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  }
-                  name={`members[${index}].role`}
-                  defaultValue={member.role}
-                  control={control}
-                />
-              </Box>
-            );
-          })}
-        </Box>
-      </form>
-    </Box>
-  );
-});
+              );
+            })}
+          </Box>
+          <Toolbar disableGutters={true}>
+            <Button onClick={closeDialog}>
+              {t("components:Organization.Members.close")}
+            </Button>
+            <div className={classes.grow} />
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={!Boolean(fields.length > 0)}
+              type="submit"
+            >
+              {t("components:Organization.Members.invite")}
+            </Button>
+          </Toolbar>
+        </form>
+      </Box>
+    );
+  }
+);
 
 export default AddMembers;

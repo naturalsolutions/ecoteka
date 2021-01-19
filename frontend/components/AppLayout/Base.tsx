@@ -1,5 +1,6 @@
 import { FC, createContext, useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { SnackbarProvider } from "notistack";
 import ThemeProvider from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutHeader from "@/components/AppLayout/Header";
 import Dialog, { ETKDialogActions } from "@/components/Dialog";
@@ -16,12 +17,14 @@ const AppLayoutBase: FC = ({ children }) => {
 
   return (
     <ThemeProvider>
-      <AppLayout.Provider value={{ dialog, snackbar, t }}>
-        <AppLayoutHeader />
-        {children}
-        <Dialog ref={dialog} />
-        <Snackbars ref={snackbar} />
-      </AppLayout.Provider>
+      <SnackbarProvider maxSnack={4}>
+        <AppLayout.Provider value={{ dialog, snackbar, t }}>
+          <AppLayoutHeader />
+          {children}
+          <Dialog ref={dialog} />
+          <Snackbars ref={snackbar} />
+        </AppLayout.Provider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };
