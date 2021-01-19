@@ -1,10 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TIntervention,
   useInterventionSchema,
 } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
-import { makeStyles, Grid, Button } from "@material-ui/core";
+import {
+  makeStyles,
+  Grid,
+  Button,
+  Switch,
+  FormControlLabel,
+} from "@material-ui/core";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
@@ -20,14 +26,61 @@ const defaultProps: CalendarInterventionProps = {
 
 const useStyles = makeStyles(() => ({
   root: {
-    minWidth: "20rem",
+    minWidth: "25rem",
   },
 }));
+
+const CalendarInterventionForm = (props) => {
+  const router = useRouter();
+  const [done, setDone] = useState<boolean>(
+    props.intervention.done ? props.intervention.done : false
+  );
+  const schema = useInterventionSchema(props.intervention.intervention_type);
+  const form = useForm({ schema });
+
+  return (
+    <Grid container direction="column">
+      {Object.keys(form.fields).map((field) => (
+        <Grid item key={`field-${field}`}>
+          {form.fields[field]}
+        </Grid>
+      ))}
+      <Grid item>
+        <Grid container>
+          <Grid item>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={done}
+                  onChange={() => setDone(!done)}
+                  color="primary"
+                />
+              }
+              label="Done"
+            />
+          </Grid>
+          <Grid item xs />
+          <Grid item>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                props.dialog.current.close();
+                router.push(`/edition/?tree=${props.intervention.tree_id}`);
+              }}
+            >
+              Vue arbre
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+};
 
 const CalendarIntervention: React.FC<CalendarInterventionProps> = (props) => {
   const classes = useStyles();
   const { dialog } = useAppLayout();
-  const router = useRouter();
   const { t } = useTranslation(["common", "components"]);
   const backgroundColor =
     INTERVENTION_COLORS[props.intervention.intervention_type];
@@ -62,28 +115,13 @@ const CalendarIntervention: React.FC<CalendarInterventionProps> = (props) => {
               )}
             </Button>
           </Grid>
-          <Grid item>
-            <Button variant="outlined">Done</Button>
-          </Grid>
         </Grid>
       ),
       content: (
-        <Grid container direction="column">
-          {Object.keys(form.fields).map((field) => (
-            <Grid item key={`field-${field}`}>
-              {form.fields[field]}
-            </Grid>
-          ))}
-          <Grid item>
-            <Button
-              onClick={() =>
-                router.push(`/edition/?tree=${props.intervention.tree_id}`)
-              }
-            >
-              Vue arbre
-            </Button>
-          </Grid>
-        </Grid>
+        <CalendarInterventionForm
+          dialog={dialog}
+          intervention={props.intervention}
+        />
       ),
       actions: [
         {
