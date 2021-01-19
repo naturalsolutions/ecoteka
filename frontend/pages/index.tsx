@@ -48,7 +48,27 @@ export default function IndexPage() {
     if (user) {
       router.push("/edition/");
     } else {
-      mapRef.current.map.setStyle(`/api/v1/maps/style/?theme=${mapTheme}`);
+      const map = mapRef.current.map;
+
+      map.setStyle(`/api/v1/maps/style/?theme=${mapTheme}`);
+      map.on("click", "osm", (e) => {
+        if (e.features.length > 0) {
+          map.removeFeatureState({
+            source: "osm",
+            sourceLayer: "ecoteka-data",
+          });
+          map.setFeatureState(
+            {
+              source: "osm",
+              sourceLayer: "ecoteka-data",
+              id: e.features[0].id,
+            },
+            {
+              click: true,
+            }
+          );
+        }
+      });
     }
   }, [user, mapRef]);
 
