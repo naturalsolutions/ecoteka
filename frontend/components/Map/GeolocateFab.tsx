@@ -9,9 +9,10 @@ export interface ETKMapGeolocateFabProps {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     fab: {
+      background: theme.palette.background.default,
       position: "absolute",
       bottom: theme.spacing(2),
-      right: theme.spacing(2),
+      right: theme.spacing(8),
     },
   })
 );
@@ -21,12 +22,13 @@ const ETKMapGeolocateFab: React.FC<ETKMapGeolocateFabProps> = (props) => {
 
   return (
     <Fab
+      size="small"
       className={classes.fab}
       onClick={async () => {
         await props.map.current?.map.geolocate?.trigger();
       }}
     >
-      <MyLocationIcon color="secondary" />
+      <MyLocationIcon fontSize="small" color="primary" />
     </Fab>
   );
 };

@@ -3,6 +3,7 @@ import { Grid, makeStyles, Hidden } from "@material-ui/core";
 import { useRouter } from "next/router";
 import Map from "@/components/Map/Map";
 import MapSearchCity from "@/components/Map/SearchCity";
+import MapGeolocateFab from "@/components/Map/GeolocateFab";
 import Panel from "@/components/Panel";
 import Landing from "@/components/Landing";
 import { useAppContext } from "@/providers/AppContext";
@@ -51,8 +52,19 @@ export default function IndexPage() {
     }
   }, [user, mapRef]);
 
+  const handleOnMapToolbarChange = (action: TMapToolbarAction) => {
+    const map = mapRef.current.map;
+
+    switch (action) {
+      case "zoom_in":
+        return map.setZoom(map.getZoom() + 1);
+      case "zoom_out":
+        return map.setZoom(map.getZoom() - 1);
+    }
+  };
+
   return !user ? (
-    <AppLayoutCarto>
+    <AppLayoutCarto onMapToolbarChange={handleOnMapToolbarChange}>
       <Grid
         container
         justify="flex-start"
@@ -73,6 +85,7 @@ export default function IndexPage() {
           {!landing && (
             <MapSearchCity map={mapRef} className={classes.mapSearchCity} />
           )}
+          <MapGeolocateFab map={mapRef} />
         </Grid>
       </Grid>
     </AppLayoutCarto>
