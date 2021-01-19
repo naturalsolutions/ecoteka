@@ -233,6 +233,28 @@ const EditionPage = ({}) => {
     }
   }, [data, mapRef]);
 
+  useEffect(() => {
+    const map = mapRef.current.getMap();
+    map.on("click", "osm", (e) => {
+      if (e.features.length > 0) {
+        map.removeFeatureState({
+          source: "osm",
+          sourceLayer: "ecoteka-data",
+        });
+        map.setFeatureState(
+          {
+            source: "osm",
+            sourceLayer: "ecoteka-data",
+            id: e.features[0].id,
+          },
+          {
+            click: true,
+          }
+        );
+      }
+    });
+  }, [mapRef.current]);
+
   const connect = function () {
     const wsURL = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
       window.location.host
