@@ -9,7 +9,8 @@ import {
 import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useETKTreeSchema from "@/components/Tree/Schema";
-import { apiRest } from "@/lib/api";
+import { useSnackbar } from "notistack";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useAppLayout } from "@/components/AppLayout/Base";
 
@@ -34,7 +35,9 @@ const ETKTreeForm: React.FC<{
   const { t } = useTranslation(["common", "components"]);
   const classes = useStyles();
   const schema = useETKTreeSchema();
-  const { snackbar } = useAppLayout();
+  const { api } = useApi();
+  const { apiETK } = api;
+  const { enqueueSnackbar } = useSnackbar();
   const [saving, setSaving] = useState(false);
   const { fields, setValue, getValues } = useETKForm({
     schema: schema,
@@ -59,19 +62,24 @@ const ETKTreeForm: React.FC<{
       const organizationId = user.currentOrganization.id;
       const treeId = selection[0].properties.id;
 
-      const response = await apiRest.trees.put(organizationId, treeId, {
-        properties,
-      });
-
-      if (response.ok) {
-        const record = await response.json();
-        onSave(record);
-
-        snackbar.current.open({
-          message: t("common:messages.success"),
-          autoHideDuration: 2000,
+      const { data, status } = await apiETK.put(
+        `/organization/${organizationId}/trees/${treeId}`,
+        {
+          properties,
+        }
+      );
+      if (status === 200) {
+        onSave(data);
+        enqueueSnackbar("Arbre mis à jour avec succès", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "center",
+          },
         });
       }
+    } catch (e) {
+      //
     } finally {
       setSaving(false);
     }
@@ -81,11 +89,13 @@ const ETKTreeForm: React.FC<{
     <Grid container direction="column" spacing={2} className={classes.grid}>
       <Grid item>
         <Typography variant="h6" className={classes.title}>
-        {t("components:TreeForm.title")}
+          {t("components:TreeForm.title")}
         </Typography>
       </Grid>
       <Grid item>
-        <Typography className={classes.heading}>{t("components:TreeForm.treeIdentity")}</Typography>
+        <Typography className={classes.heading}>
+          {t("components:TreeForm.treeIdentity")}
+        </Typography>
         <Grid container direction="column">
           {Object.keys(schema)
             .filter((f) => schema[f].category === "Identité de l'arbre")
@@ -97,7 +107,9 @@ const ETKTreeForm: React.FC<{
         </Grid>
       </Grid>
       <Grid item>
-        <Typography className={classes.heading}>{t("components:TreeForm.characteristics")}</Typography>
+        <Typography className={classes.heading}>
+          {t("components:TreeForm.characteristics")}
+        </Typography>
         <Grid container direction="column">
           {Object.keys(schema)
             .filter((f) => schema[f].category === "Caractéristiques")
@@ -110,7 +122,7 @@ const ETKTreeForm: React.FC<{
       </Grid>
       <Grid item>
         <Typography className={classes.heading}>
-        {t("components:TreeForm.outdoorEnvironment")}
+          {t("components:TreeForm.outdoorEnvironment")}
         </Typography>
         <Grid container direction="column">
           {Object.keys(schema)
@@ -123,7 +135,9 @@ const ETKTreeForm: React.FC<{
         </Grid>
       </Grid>
       <Grid item>
-        <Typography className={classes.heading}>{t("components:TreeForm.other")}</Typography>
+        <Typography className={classes.heading}>
+          {t("components:TreeForm.other")}
+        </Typography>
 
         <Grid container direction="column">
           {Object.keys(schema)
@@ -140,7 +154,11 @@ const ETKTreeForm: React.FC<{
           <Grid item xs></Grid>
           <Grid item>
             <Button color="primary" variant="contained" onClick={handlerOnSave}>
-              {saving ? <CircularProgress size={30} /> : t("common:buttons.save")}
+              {saving ? (
+                <CircularProgress size={30} />
+              ) : (
+                t("common:buttons.save")
+              )}
             </Button>
           </Grid>
         </Grid>

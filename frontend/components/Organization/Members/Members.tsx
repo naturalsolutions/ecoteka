@@ -7,7 +7,6 @@ import { Alert, AlertTitle } from "@material-ui/lab";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
-import { apiRest } from "@/lib/api";
 import useAPI from "@/lib/useApi";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AddMembers, {
