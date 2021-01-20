@@ -8,9 +8,11 @@ import MapGL, {
   GeolocateControl,
 } from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
 import { bbox } from "@turf/turf";
@@ -106,6 +108,9 @@ const EditionPage = ({}) => {
   const { dialog } = useAppLayout();
   const { user } = useAppContext();
   const { dark } = useThemeContext();
+  const { api } = useApi();
+  const { apiETK } = api;
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [drawerLeftComponent, setDrawerLeftComponent] = useState(
     <PanelStartGeneralInfo />
   );
@@ -153,8 +158,36 @@ const EditionPage = ({}) => {
     organizationId: number,
     fitBounds: boolean = false
   ) => {
-    const newData = await apiRest.organization.geojson(organizationId);
-    setData(newData);
+    const pendindSnack = enqueueSnackbar(
+      "Récupération des données géographiques en cours...",
+      {
+        variant: "info",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+        persist: true,
+      }
+    );
+    try {
+      const { data: geoData, status } = await apiETK.get(
+        `/organization/${organizationId}/geojson/`
+      );
+      if (status === 200) {
+        closeSnackbar(pendindSnack);
+        enqueueSnackbar(
+          "Données géographiques récupérées avec succès. Mise à jour de la carte...",
+          {
+            variant: "success",
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "right",
+            },
+          }
+        );
+        setData(geoData);
+      }
+    } catch (e) {}
   };
 
   const handleOnTreeSave = (record) => {
