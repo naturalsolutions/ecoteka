@@ -128,7 +128,6 @@ const EditionPage = ({}) => {
     features: [],
   });
   const [selection, setSelection] = useState([]);
-  const [hoveredTreeId, setHoveredTreeId] = useState<number>(null);
   const [boxSelect, setBoxSelect] = useState<boolean>(false);
   const [filterQuery, setFilterQuery] = useState<string>("");
   const [filteredData, setFilteredData] = useState<any>({
@@ -235,23 +234,30 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     const map = mapRef.current.getMap();
-    map.on("click", "osm", (e) => {
-      if (e.features.length > 0) {
-        map.removeFeatureState({
-          source: "osm",
-          sourceLayer: "ecoteka-data",
-        });
+    map.on("click", (e) => {
+      const features = map.queryRenderedFeatures(e.point);
 
-        map.setFeatureState(
-          {
-            source: "osm",
-            sourceLayer: "ecoteka-data",
-            id: e.features[0].id,
-          },
-          {
-            click: !e.features[0].state.click,
-          }
-        );
+      if (features.length > 0) {
+        ["osm:ecoteka-data", "trees"].map((layer) => {
+          const source = layer.split(":");
+          let sourceLayer = source.length > 0 ? source[1] : undefined;
+
+          map.removeFeatureState({
+            source: source[0],
+            sourceLayer: sourceLayer,
+          });
+
+          map.setFeatureState(
+            {
+              source: source[0],
+              sourceLayer: sourceLayer,
+              id: features[0].id,
+            },
+            {
+              click: !features[0].state.click,
+            }
+          );
+        });
       }
     });
   }, [mapRef.current]);
@@ -325,21 +331,6 @@ const EditionPage = ({}) => {
 
     switchPanel(router.query.panel);
   }, [router.query]);
-
-  const onHover = (event) => {
-    if (event.features.length > 0) {
-      const nextHoveredTreeId = event.features[0].id;
-      if (hoveredTreeId !== nextHoveredTreeId) {
-        setHoveredTreeId(nextHoveredTreeId);
-      }
-    }
-  };
-
-  const onLeave = () => {
-    if (hoveredTreeId) {
-      setHoveredTreeId(null);
-    }
-  };
 
   const onClick = (event) => {
     if (event.features.length > 0 && !boxSelect) {
@@ -425,10 +416,17 @@ const EditionPage = ({}) => {
               type="circle"
               source="trees"
               paint={{
+                "circle-radius": {
+                  base: 1.75,
+                  stops: [
+                    [12, 2],
+                    [22, 180],
+                  ],
+                },
                 "circle-color": [
                   "case",
                   ["boolean", ["feature-state", "click"], false],
-                  "#076ee4",
+                  "#f44336",
                   "#ebb215",
                 ],
                 "circle-stroke-color": "#fff",
@@ -438,22 +436,7 @@ const EditionPage = ({}) => {
                   2,
                   0,
                 ],
-                "circle-radius": [
-                  "case",
-                  ["boolean", ["feature-state", "hover"], false],
-                  12,
-                  5,
-                ],
-                "circle-pitch-scale": "map",
-                "circle-opacity": [
-                  "case",
-                  ["boolean", ["feature-state", "hover"], false],
-                  1,
-                  0.8,
-                ],
               }}
-              onHover={onHover}
-              onLeave={onLeave}
               onClick={onClick}
             />
             <Layer
@@ -461,6 +444,13 @@ const EditionPage = ({}) => {
               type="circle"
               source="filteredTrees"
               paint={{
+                "circle-radius": {
+                  base: 1.75,
+                  stops: [
+                    [12, 2],
+                    [22, 180],
+                  ],
+                },
                 "circle-color": [
                   "case",
                   ["boolean", ["feature-state", "click"], false],
@@ -474,22 +464,7 @@ const EditionPage = ({}) => {
                   2,
                   0,
                 ],
-                "circle-radius": [
-                  "case",
-                  ["boolean", ["feature-state", "hover"], false],
-                  12,
-                  5,
-                ],
-                "circle-pitch-scale": "map",
-                "circle-opacity": [
-                  "case",
-                  ["boolean", ["feature-state", "hover"], false],
-                  1,
-                  0.8,
-                ],
               }}
-              onHover={onHover}
-              onLeave={onLeave}
               onClick={onClick}
             />
             {boxSelect && (
@@ -546,13 +521,6 @@ const EditionPage = ({}) => {
                 }}
               />
             )}
-            {hoveredTreeId && (
-              <FeatureState
-                id={hoveredTreeId}
-                source="trees"
-                state={{ hover: true }}
-              />
-            )}
             {router.query.tree && data.features.length > 0 && (
               <FeatureState
                 id={data.features.find(
@@ -573,16 +541,20 @@ const EditionPage = ({}) => {
                 onChange={(value) => {
                   switch (value) {
                     case "analysis":
-                      mapRef.current
-                        .getMap()
-                        .setLayoutProperty("osm", "visibility", "visible");
+                      ["osm", "trees"].map((layer) =>
+                        mapRef.current
+                          .getMap()
+                          .setLayoutProperty(layer, "visibility", "visible")
+                      );
                       setBoxSelect(false);
                       router.push("/edition/?panel=start");
                       break;
                     case "edition":
-                      mapRef.current
-                        .getMap()
-                        .setLayoutProperty("osm", "visibility", "none");
+                      ["osm", "trees"].map((layer) =>
+                        mapRef.current
+                          .getMap()
+                          .setLayoutProperty(layer, "visibility", "none")
+                      );
                       setBoxSelect(true);
                       break;
                   }
