@@ -206,6 +206,7 @@
     "organization": "Organisation",
     "password": "Mot de passe",
     "passwordConfirm": "Confirmer mot de passe",
+    "validationButton" : "Créer le compte",
     "registrationCompleted": "Inscription réussie",
     "registrationFailed": "Une erreur s'est produite lors de l'inscription"
   },
@@ -320,6 +321,10 @@
       "date": "Date",
       "type": "Type",
       "state": "Etat"
+    },
+    "interventionSchedule": {
+      "title": "Calendrier d'interventions",
+      "headerButton": "Aujourd'hui"
     }
   },
   "Tree": {
@@ -392,6 +397,12 @@
     "imagesUpload": {
       "select": "Déposer ici les photos ou cliquer (max.{{max}})"
     }
+  },
+  "TreeAccordion" : {
+    "treeIdentity": "Identité de l'arbre",
+    "characteristics": "Caractéristiques",
+    "outdoorEnvironment": "Environnement extérieur",
+    "other": "Autre"
   },
   "Teams": {
     "buttonAdd": "Ajouter une équipe",

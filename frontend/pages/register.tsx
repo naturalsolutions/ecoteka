@@ -16,12 +16,14 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAppContext } from "@/providers/AppContext";
 import AppLayoutGeneral from "@/components/AppLayout/General";
+import { useTranslation } from "react-i18next";
 
 export default function SignInPage() {
   const formRef = useRef<ETKFormRegisterActions>();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAppContext();
+  const { t } = useTranslation("components");
 
   const onSubmit = async () => {
     setIsLoading(true);
@@ -53,7 +55,7 @@ export default function SignInPage() {
           <Card>
             <CardContent>
               <Typography variant="h6" align="center">
-                Créer un compte utilisateur
+                {t("Register.dialogTitle")}
               </Typography>
               <ETKFormRegister ref={formRef}></ETKFormRegister>
             </CardContent>
@@ -65,7 +67,7 @@ export default function SignInPage() {
                 onClick={onSubmit}
                 disabled={isLoading}
               >
-                {isLoading ? <CircularProgress size={30} /> : "Créer le compte"}
+                {isLoading ? <CircularProgress size={30} /> : t("Register.validationButton")}
               </Button>
             </CardActions>
           </Card>

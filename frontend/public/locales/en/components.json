@@ -222,6 +222,7 @@
     "organization": "Organization",
     "password": "Password",
     "passwordConfirm": "Password confirm",
+    "validationButton" : "Create account",
     "registrationCompleted": "Registration completed",
     "registrationFailed": "The registration has failed"
   },
@@ -235,7 +236,7 @@
     "title": "Request for intervention",
     "plannew": "New request",
     "success": "Registered request",
-    "whatnow": "What do you want to do now?",
+    "whatnow": "What do you want to do now ?",
     "required_documents": "Required documents",
     "required_material": "Required material",
     "intervention_type": "Intervention type",
@@ -337,6 +338,10 @@
       "date": "Date",
       "type": "Type",
       "state": "State"
+    },
+    "interventionSchedule": {
+      "title": "Intervention schedule",
+      "headerButton": "Today"
     }
   },
 
@@ -412,7 +417,12 @@
       "select": "Drop files here or click (max.{{max}})"
     }
   },
-
+  "TreeAccordion" : {
+    "treeIdentity": "Tree identity",
+    "characteristics": "Characteristics",
+    "outdoorEnvironment": "Outdoor environment",
+    "other": "Other"
+  },
   "Teams": {
     "buttonAdd": "Add a team",
     "tooltipWorkingAreaEdit": "Edit working area",

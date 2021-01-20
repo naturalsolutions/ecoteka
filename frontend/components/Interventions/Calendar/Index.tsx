@@ -17,6 +17,7 @@ import { TIntervention } from "@/components/Interventions/Schema";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 export interface CalendarProps {
   interventions: TIntervention[];
@@ -42,6 +43,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
   const classes = useStyles();
   const router = useRouter();
   const [filters, setFilters] = useState([]);
+  const { t } = useTranslation("components");
 
   const handleFilterChange = (filters) => {
     setFilters(filters);
@@ -106,7 +108,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
                 <Grid container direction="column" spacing={1}>
                   <Grid item>
                     <Typography variant="h5">
-                      Calandrier d'interventions
+                      {t("Intervention.interventionSchedule.title")}
                     </Typography>
                     <Box mb={3} />
                   </Grid>

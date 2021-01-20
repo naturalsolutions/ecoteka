@@ -16,6 +16,7 @@
     "create": "Create",
     "update": "Update",
     "send": "Send",
+    "save": "Save",
     "cancel": "Cancel",
     "archive": "Archive",
     "delete": "Delete",

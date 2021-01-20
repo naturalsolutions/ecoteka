@@ -13,6 +13,7 @@ import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { ITree } from "@/index";
 import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
+import { useTranslation } from "react-i18next";
 
 export interface ETKTreeInfosExpandedProps {
   open: boolean;
@@ -30,6 +31,8 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
   const [scroll, setScroll] = React.useState("paper");
   const treeAccordionRef = createRef<TTreeAccordion>();
   const { user } = useAppContext();
+  const { t } = useTranslation("common");
+
 
   const handlerOnSave = async () => {
     const properties = treeAccordionRef.current.getValues();
@@ -78,12 +81,12 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
               color="primary"
               onClick={() => handlerOnSave()}
             >
-              Enregistrer
+              {t("buttons.save")}
             </Button>
           </Grid>
           <Grid item xs></Grid>
           <Grid item>
-            <Button onClick={props.onClose}>Fermer</Button>
+            <Button onClick={props.onClose}>{t("buttons.cancel")}</Button>
           </Grid>
         </Grid>
       </DialogActions>

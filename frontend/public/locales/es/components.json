@@ -206,6 +206,7 @@
     "organization": "Organización",
     "password": "Contraseña",
     "passwordConfirm": "Confirmar contraseña",
+    "validationButton" : "Create account",
     "registrationCompleted": "Registro completado",
     "registrationFailed": "El registro ha fallado"
   },
@@ -219,49 +220,49 @@
     "plannew": "Nueva solicitud",
     "success": "Solicitud registrada",
     "requestAnItervention": "Solicitar una intervención",
-    "whatnow": "Que souhaitez vous faire ?",
-    "required_documents": "Documents requis",
-    "required_material": "Materiel requis",
-    "intervention_type": "Type d'intervention",
-    "intervenant": "Intervenant",
-    "intervention_period": "Période d'intervention",
-    "estimated_cost": "Coût estimatif",
+    "whatnow": "What do you want to do now?",
+    "required_documents": "Documentos requeridos",
+    "required_material": "Material requerido",
+    "intervention_type": "Tipo de intervención",
+    "intervenant": "Altavoz",
+    "intervention_period": "Periodo de intervención",
+    "estimated_cost": "Costo estimado",
     "tree_id": "Árbol",
-    "back": "Retour à l'arbre",
+    "back": "Volver al árbol",
     "steps": {
       "interventionselection": "Sur quoi porte votre demande ?",
       "treeselection": "Localisez l'arbre sur lequel intervenir",
       "intervention": "Détails de l'intervention",
       "validation": "Planifiez votre intervention",
-      "finish": "Terminer"
+      "finish": "Terminar"
     },
     "types": {
-      "pruning": "Elagage",
-      "felling": "Abattage",
+      "pruning": "Poda",
+      "felling": "Tala",
       "streanremoval": "Dessouchage",
       "indepthdiagnostic": "Diagnostic approfondi",
-      "treatment": "Traîtement",
-      "surveillance": "Surveillance"
+      "treatment": "Tratamiento",
+      "surveillance": "Supervisión"
     },
     "documents": {
       "dt": "DT/DICT",
       "trafficpolice": "Police de circulation"
     },
     "material": {
-      "pole": "Perche",
+      "pole": "Perca",
       "climb": "A la grime",
-      "ladder": "Echelle",
+      "ladder": "Escalera",
       "raiser": "Engine élevateur",
       "retentionkit": "Kit de rétention",
-      "foot": "Pieds",
+      "foot": "Pies",
       "pull": "A la tire",
-      "trimmer": "Tondeuse",
-      "crane": "Grue",
+      "trimmer": "Cortacésped",
+      "crane": "Grua",
       "coredrill": "Carotteuse",
       "crunchy": "Croqueuse",
       "mecanicshovel": "Pelle mécanique",
       "canon": "Au canon",
-      "watering": "Arrosage",
+      "watering": "Regando",
       "amendment": "Amendement/Apport organique",
       "collectprotection": "Protection du collet",
       "scald": "Kit échaudure",
@@ -270,48 +271,48 @@
       "soil": "Au sol"
     },
     "pruning": {
-      "method": "Méthode d'élagage",
-      "comment": "Commentaire",
-      "pruning": "Elagage",
+      "method": "Método d'élagage",
+      "comment": "Comentario",
+      "pruning": "Poda",
       "carpenterremoval": "Suppression de charpentière",
       "lightning": "Eclaircissage",
-      "maintenance": "Entretien",
+      "maintenance": "Entrevista",
       "crownraising": "Remontée de couronne"
     },
     "felling": {
-      "comment": "Commentaire",
-      "method": "Méthode d'abattage",
-      "live": "En direct",
+      "comment": "Comentario",
+      "method": "Método d'abattage",
+      "live": "En directo",
       "rentention": "Avec rétention",
       "unmounting": "Par démontage"
     },
     "streanremoval": {
       "diameter": "Diamètre de la souche",
-      "method": "Méthode de déssouchage",
+      "method": "Método de déssouchage",
       "drilling": "Carottage",
       "trimming": "Rognage",
       "grubbing": "Arrachage"
     },
     "indepthdiagnostic": {
-      "method": "Méthode de diagnostic",
-      "comment": "Commentaire",
-      "resistograph": "Résistographe",
-      "tomograph": "Tomographe",
+      "method": "Método de diagnostic",
+      "comment": "Comentario",
+      "resistograph": "Resistógrafo",
+      "tomograph": "Tomógrafo",
       "computing": "Calcul",
       "tractiontest": "Test de traction",
-      "penetrometer": "Pénétromètre"
+      "penetrometer": "Penetrómetro"
     },
     "treatment": {
-      "method": "Méthode",
-      "disease": "Maladie",
-      "comment": "Commentaire",
+      "method": "Método",
+      "disease": "Enfermedad",
+      "comment": "Comentario",
       "auxilaryrelease": "Lâché d'auxilière",
       "biologictreatment": "Traitement biologique"
     },
     "surveillance": {
-      "method": "Méthode",
-      "comment": "Commentaire",
-      "watering": "Arrosage",
+      "method": "Método",
+      "comment": "Comentario",
+      "watering": "Regando",
       "amendment": "Amendement/Apport organique",
       "tutorcheck": "Vérification du tuteurage et des protections",
       "globalcheck": "Vérification globale de l'arbre"
@@ -321,6 +322,10 @@
       "date": "Fetcha",
       "type": "Typo",
       "state": "Estado"
+    },
+    "interventionSchedule": {
+      "title": "Programa de intervención",
+      "headerButton": "Hoy"
     }
   },
   "Tree": {
@@ -349,9 +354,9 @@
       },
       "rootType": {
         "label": "Root type",
-        "swivel": "Swivel",
-        "tracing": "Tracing",
-        "oblique": "Oblique"
+        "swivel": "Girar",
+        "tracing": "Rastreo",
+        "oblique": "Oblicuo"
       },
       "habit": {
         "label": "Tree habit",
@@ -361,17 +366,17 @@
         "cat": "Caat head",
         "trumpet": "Trumpet",
         "curtain": "Curtain",
-        "pyramid": "Pyramid",
-        "ball": "Ball",
+        "pyramid": "Pirámide",
+        "ball": "Pelota",
         "cone": "Cone"
       },
-      "procted": "Protected tree",
+      "procted": "Árbol protegido",
       "soilConstraints": "Soil constraints",
       "aerianConstraint": "Aerian contraints",
-      "watering": "Watering",
-      "lightning": "Lighting",
-      "allergens": "Allergenic tree",
-      "remarks": "Remarks"
+      "watering": "Regando",
+      "lightning": "Encendiendo",
+      "allergens": "Árbol alergénico",
+      "remarks": "Observaciones"
     },
     "summary": {
       "moreDetails": "Mas detalles"

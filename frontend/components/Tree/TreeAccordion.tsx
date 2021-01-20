@@ -7,6 +7,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useETKForm from "@/components/Form/useForm";
 import useTreeSchema from "@/components/Tree//Schema";
@@ -31,6 +32,7 @@ export const TreeAccordion = forwardRef<
   }
 >((props, ref) => {
   const classes = useStyles();
+  const { t } = useTranslation("components");
   const schema = useTreeSchema();
   const { fields, setValue, getValues } = useETKForm({
     schema: schema,
@@ -56,9 +58,7 @@ export const TreeAccordion = forwardRef<
     <Fragment>
       <Accordion expanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>
-            Identité de l'arbre
-          </Typography>
+          <Typography className={classes.heading}>{t("TreeAccordion.treeIdentity")}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container direction="column">
@@ -74,7 +74,7 @@ export const TreeAccordion = forwardRef<
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>Caractéristiques</Typography>
+          <Typography className={classes.heading}>{t("TreeAccordion.characteristics")}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container direction="column">
@@ -90,9 +90,7 @@ export const TreeAccordion = forwardRef<
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>
-            Environnement extérieur
-          </Typography>
+          <Typography className={classes.heading}>{t("TreeAccordion.outdoorEnvironment")}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container direction="column">
@@ -108,7 +106,7 @@ export const TreeAccordion = forwardRef<
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>Autre</Typography>
+          <Typography className={classes.heading}>{t("TreeAccordion.other")}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container direction="column">

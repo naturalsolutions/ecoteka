@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
+import { useTranslation } from "react-i18next";
 
 export interface CalendarHeaderProps {
   year: number;
@@ -25,6 +26,7 @@ const useStyles = makeStyles(() => ({
 
 const CalendarHeader: React.FC<CalendarHeaderProps> = (props) => {
   const classes = useStyles();
+  const { t } = useTranslation("components");
 
   return (
     <Grid container alignItems="center">
@@ -34,7 +36,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = (props) => {
           props.onYearChange(TODAY.getFullYear());
         }}
       >
-        Today
+        {t("Intervention.interventionSchedule.headerButton")}
       </Button>
       <IconButton
         size="medium"
