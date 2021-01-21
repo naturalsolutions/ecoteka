@@ -193,7 +193,12 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
           severity: "error",
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      triggerAlert({
+        message: t("components:Organization.Members.Table.updateMember.error"),
+        severity: "error",
+      });
+    }
   };
 
   const isSelected = (member: IMember) => {
