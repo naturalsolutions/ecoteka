@@ -47,7 +47,11 @@ def generate_style(
                 "source-layer": "ecoteka-data",
                 "paint": {
                     "circle-radius": {"base": 1.75, "stops": [[12, 2], [22, 180]]},
-                    "circle-color": "#6F8F72",
+                    "circle-color": [
+                        'case', ['boolean', ['feature-state', 'click'], False], 
+                        '#f44336', 
+                        "#6F8F72"
+                    ],
                 },
             },
         )
