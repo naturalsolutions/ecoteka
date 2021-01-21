@@ -16,12 +16,13 @@ export interface CalendarMonthProps {
   month: number;
   year: number;
   onInterventionPlan?(intervention: TIntervention): void;
+  onSave?(intervention: TIntervention): void;
 }
 
 const defaultProps: CalendarMonthProps = {
   interventions: [],
   month: 0,
-  year: 2020,
+  year: 2021,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -111,6 +112,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
                     filterInterventionsDay(props.month, day++)
                   )}
                   onInterventionPlan={props.onInterventionPlan}
+                  onSave={props.onSave}
                 />
               </Grid>
             );

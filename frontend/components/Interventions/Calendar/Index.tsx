@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Divider,
@@ -23,6 +22,7 @@ export interface CalendarProps {
   year: number;
   onYearChange?(newYear: number): void;
   onInterventionPlan?(intervention: TIntervention): void;
+  onSave?(intervention: TIntervention): void;
 }
 
 const TODAY = new Date();
@@ -84,6 +84,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
             year={props.year}
             interventions={interventions}
             onInterventionPlan={props.onInterventionPlan}
+            onSave={props.onSave}
           />
         </Grid>
       );
