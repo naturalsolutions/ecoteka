@@ -14,6 +14,7 @@ import {
 import { DropzoneArea } from "material-ui-dropzone";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import SwipeableViews from "react-swipeable-views";
 import {
   DeleteForever,
@@ -76,6 +77,8 @@ const NB_IMAGES_MAX = 6;
 const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
   const classes = useStyles();
   const id = props.tree?.id;
+  const { api } = useApi();
+  const { apiETK } = api;
   const [uploadImages, setUploadImages] = useState<File[]>([]);
   const { snackbar, dialog } = useAppLayout();
   const [imagesProgress, setImagesProgress] = useState(0);
@@ -101,12 +104,17 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
   };
 
   const getImages = async () => {
-    const response = await apiRest.trees.getImages(
-      props.tree.organization_id,
-      id
-    );
-    setImages(response);
-    setNbImagesMax(NB_IMAGES_MAX - response.length);
+    try {
+      const { data, status } = await apiETK.get(
+        `/organization/${props.tree.organization_id}/trees/${id}/images`
+      );
+      if (status === 200) {
+        setImages(data);
+        setNbImagesMax(NB_IMAGES_MAX - data.length);
+      }
+    } catch (error) {
+      //
+    }
   };
 
   useEffect(() => {
@@ -214,19 +222,6 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
             marginBottom: 10,
           }}
         >
-          {/* <TableRow>
-            {images?.length > 0 && (
-              <TableCell colSpan={2}>
-                {images?.map((image) => (
-                  <Avatar
-                    variant="rounded"
-                    src={image}
-                    className={classes.etkTreeImage}
-                  />
-                ))}
-              </TableCell>
-            )}
-          </TableRow> */}
           <SwipeableViews
             index={imagesActiveIndex}
             onChangeIndex={handleStepChange}
@@ -328,12 +323,18 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
               <TableCell>{props.tree.y}</TableCell>
             </TableRow>
             {props.tree.properties &&
-              Object.keys(props.tree.properties).map((key) => (
-                <TableRow key={`psti-${key}`}>
-                  <TableCell>{key}</TableCell>
-                  <TableCell>{props.tree.properties[key]}</TableCell>
-                </TableRow>
-              ))}
+              Object.keys(props.tree.properties).map((key) => {
+                const labels = t("components:Tree.properties", {
+                  returnObjects: true,
+                });
+
+                return (
+                  <TableRow key={`psti-${key}`}>
+                    <TableCell>{labels[key]}​​​​</TableCell>
+                    <TableCell>{props.tree.properties[key]}</TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>

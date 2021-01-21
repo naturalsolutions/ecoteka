@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { useAppContext } from "@/providers/AppContext";
@@ -7,6 +7,7 @@ import TreeExpanded from "@/components/Tree/Infos/Expanded";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { TIntervention } from "@/components/Interventions/Schema";
 import TreeInfosProperties from "@/components/Tree/Infos/Properties";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -14,8 +15,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Summary: FC<{ treeId: number }> = ({ treeId }) => {
+const Summary: FC<{ treeId: number; map: any }> = ({ treeId, map }) => {
   const { user } = useAppContext();
+  const { api } = useApi();
+  const { apiETK } = api;
+  const { t } = useTranslation("components");
   const [isExpanded, setIsExpanded] = useState(false);
   const [tree, setTree] = useState<any>({});
   const [interventions, setInterventions] = useState<TIntervention[]>();
@@ -23,22 +27,40 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
   const classes = useStyles();
 
   const getTree = async (itreeIdd) => {
-    const organizationId = user.currentOrganization.id;
-    const newTree = await apiRest.trees.get(organizationId, treeId);
-    const newInterventions = await apiRest.trees.getInterventions(
-      organizationId,
-      treeId
-    );
-
-    setTree(newTree);
-    setInterventions(newInterventions);
+    if (user.currentOrganization) {
+      try {
+        const { data, status } = await apiETK.get(
+          `/organization/${user.currentOrganization.id}/trees/${treeId}`
+        );
+        if (status === 200) {
+          setTree(data);
+        }
+      } catch (error) {
+        //
+      }
+    }
+  };
+  const getInterventions = async (treeId: number) => {
+    if (user.currentOrganization) {
+      try {
+        const { data, status } = await apiETK.get(
+          `/organization/${user.currentOrganization.id}/trees/${treeId}/interventions`
+        );
+        if (status === 200) {
+          setInterventions(data);
+        }
+      } catch (error) {
+        //
+      }
+    }
   };
 
   useEffect(() => {
     if (treeId) {
       getTree(treeId);
+      getInterventions(treeId);
     }
-  }, [treeId]);
+  }, [treeId, user]);
 
   return (
     <Grid className={classes.root} container direction="column" spacing={2}>
@@ -63,7 +85,7 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
           color="primary"
           onClick={() => setIsExpanded(true)}
         >
-          Plus de détails
+          {t("Tree.summary.moreDetails")}
         </Button>
       </Grid>
       <TreeExpanded

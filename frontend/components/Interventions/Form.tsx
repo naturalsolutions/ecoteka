@@ -113,7 +113,7 @@ const ETKInterventionForm = forwardRef<
 
       flyToTree(Number(router.query.tree));
     }
-  }, [router.query.tree]);
+  }, []);
 
   let valid = false;
 

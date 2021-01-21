@@ -6,6 +6,7 @@ export interface IOrganization {
   parent_id: number;
   total_trees: number;
   total_members: number;
+  archived: boolean;
 }
 
 export interface IUser {
@@ -25,4 +26,12 @@ export interface ITree {
   properties: object;
   user_id: number;
   organization_id: number;
+}
+
+export interface IMember {
+  id: number;
+  email: string;
+  name?: string;
+  role: string;
+  status: string;
 }

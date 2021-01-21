@@ -13,10 +13,13 @@
     "buttonCancel": "Cancel",
     "buttonConnexion": "Login",
     "labelPassword": "Password",
+    "forgotPassword": "Forgot your password ?",
     "labelUsername": "Email",
     "errorMessageServer": "Incorrect email or password",
     "errorMessageEmail": "Email address is invalid",
-    "errorMessageRequiredField": "Field required"
+    "errorMessageRequiredField": "Field required",
+    "noAccount" : "Don't have an account yet?",
+    "accountRequest" : "Request the creation of an account !"
   },
 
   "LanguageSelector": {
@@ -75,7 +78,7 @@
     "title": "You are connected to your account",
     "content": "You can see the number of trees in OpenData but also the number of trees on your private data layer.",
     "numberOfTrees": {
-      "title": "Nombre d'arbres sur la carte",
+      "title": "Number of trees in the map",
       "content": "millions of trees"
     },
     "numberOfTreesLayer": {
@@ -179,6 +182,7 @@
     "Upload": {
       "boxContent": "Import your data",
       "fileListHint": "File types accepted :",
+      "importHistory": "See import history",
       "buttonCancelContent": "Cancel",
       "buttonUploadContent": "Send",
       "dropzoneText": "Drop your file here\nor click to select it"
@@ -228,159 +232,170 @@
   },
 
   "Intervention": {
-    "title": "Demande d'intervention",
-    "plannew": "Nouvelle demande",
-    "success": "Demande enregistrée",
-    "whatnow": "Que souhaitez vous faire ?",
-    "required_documents": "Documents requis",
-    "required_material": "Materiel requis",
-    "intervention_type": "Type d'intervention",
+    "title": "Request for intervention",
+    "plannew": "New request",
+    "success": "Registered request",
+    "whatnow": "What do you want to do now?",
+    "required_documents": "Required documents",
+    "required_material": "Required material",
+    "intervention_type": "Intervention type",
     "intervenant": "Intervenant",
-    "intervention_period": "Période d'intervention",
-    "estimated_cost": "Coût estimatif",
-    "tree_id": "Arbre",
+    "intervention_period": "Intervention period",
+    "estimated_cost": "Estimated",
+    "tree_id": "Tree",
     "back": "Back to the tree",
     "steps": {
-      "interventionselection": "Sur quoi porte votre demande ?",
-      "treeselection": "Localisez l'arbre sur lequel intervenir",
-      "intervention": "Détails de l'intervention",
-      "validation": "Planifiez votre intervention",
-      "finish": "Terminer"
+      "interventionselection": "What is your request about?",
+      "treeselection": "Locate the tree on which to intervene",
+      "intervention": "Intervention details",
+      "validation": "Plan your intervention",
+      "finish": "Finish"
     },
     "types": {
-      "pruning": "Elagage",
-      "felling": "Abattage",
-      "streanremoval": "Dessouchage",
-      "indepthdiagnostic": "Diagnostic approfondi",
-      "treatment": "Traîtement",
+      "pruning": "Pruning",
+      "felling": "Felling",
+      "streanremoval": "Strean removal",
+      "indepthdiagnostic": "Indepth diagnostic",
+      "treatment": "Treatment",
       "surveillance": "Surveillance"
     },
     "documents": {
       "dt": "DT/DICT",
-      "trafficpolice": "Police de circulation"
+      "trafficpolice": "Traffic police"
     },
     "material": {
-      "pole": "Perche",
-      "climb": "A la grime",
-      "ladder": "Echelle",
-      "raiser": "Engine élevateur",
-      "retentionkit": "Kit de rétention",
-      "foot": "Pieds",
-      "pull": "A la tire",
-      "trimmer": "Tondeuse",
-      "crane": "Grue",
-      "coredrill": "Carotteuse",
-      "crunchy": "Croqueuse",
-      "mecanicshovel": "Pelle mécanique",
-      "canon": "Au canon",
-      "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
-      "collectprotection": "Protection du collet",
-      "scald": "Kit échaudure",
-      "globalcheck": "Vérification globale de l'arbre",
-      "tutorrefection": "Réfection du tuteur",
-      "soil": "Au sol"
+      "pole": "Pole",
+      "climb": "Climb",
+      "ladder": "Ladder",
+      "raiser": "Raiser",
+      "retentionkit": "Retention kit",
+      "foot": "Foot",
+      "pull": "Pull",
+      "trimmer": "Trimmer",
+      "crane": "Crane",
+      "coredrill": "Coredrill",
+      "crunchy": "Crunchy",
+      "mecanicshovel": "Mecanics hovel",
+      "canon": "Canon",
+      "watering": "Watering",
+      "amendment": "Amendment/organic contribution",
+      "collectprotection": "Collet protection",
+      "scald": "Scald kit",
+      "globalcheck": "Global tree check",
+      "tutorrefection": "Tutor refection",
+      "soil": "Soil"
     },
     "pruning": {
-      "method": "Méthode d'élagage",
-      "comment": "Commentaire",
-      "pruning": "Elagage",
-      "carpenterremoval": "Suppression de charpentière",
-      "lightning": "Eclaircissage",
-      "maintenance": "Entretien",
-      "crownraising": "Remontée de couronne"
+      "method": "Pruning method",
+      "comment": "Comment",
+      "pruning": "Pruning",
+      "carpenterremoval": "Carpenter removal",
+      "lightning": "Lightning",
+      "maintenance": "Maintenance",
+      "crownraising": "Crownraising"
     },
     "felling": {
-      "comment": "Commentaire",
-      "method": "Méthode d'abattage",
-      "live": "En direct",
-      "rentention": "Avec rétention",
-      "unmounting": "Par démontage"
+      "comment": "Comment",
+      "method": "Pruning method",
+      "live": "Live",
+      "rentention": "With retention",
+      "unmounting": "Unmounting"
     },
     "streanremoval": {
-      "diameter": "Diamètre de la souche",
-      "method": "Méthode de déssouchage",
-      "drilling": "Carottage",
-      "trimming": "Rognage",
-      "grubbing": "Arrachage"
+      "diameter": "Stump diameter",
+      "method": "Method of draining",
+      "drilling": "Drilling",
+      "trimming": "Trimming",
+      "grubbing": "Grubbing"
     },
     "indepthdiagnostic": {
-      "method": "Méthode de diagnostic",
-      "comment": "Commentaire",
-      "resistograph": "Résistographe",
-      "tomograph": "Tomographe",
-      "computing": "Calcul",
-      "tractiontest": "Test de traction",
-      "penetrometer": "Pénétromètre"
+      "method": "Diagnostic method",
+      "comment": "Comment",
+      "resistograph": "Resistograph",
+      "tomograph": "Tomograph",
+      "computing": "Computing",
+      "tractiontest": "Traction test",
+      "penetrometer": "Penetrometer"
     },
     "treatment": {
-      "method": "Méthode",
-      "disease": "Maladie",
-      "comment": "Commentaire",
-      "auxilaryrelease": "Lâché d'auxilière",
-      "biologictreatment": "Traitement biologique"
+      "method": "Method",
+      "disease": "Disease",
+      "comment": "Comment",
+      "auxilaryrelease": "Auxilary release",
+      "biologictreatment": "Biologic treatment"
     },
     "surveillance": {
-      "method": "Méthode",
-      "comment": "Commentaire",
-      "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
-      "tutorcheck": "Vérification du tuteurage et des protections",
-      "globalcheck": "Vérification globale de l'arbre"
+      "method": "Method",
+      "comment": "Comment",
+      "watering": "Watering",
+      "amendment": "Amendment/organic contribution",
+      "tutorcheck": "Verification of staking and protections",
+      "globalcheck": "Global tree check"
+    },
+    "interventionsTable":{
+      "requestAnItervention": "Request an intervention",
+      "date": "Date",
+      "type": "Type",
+      "state": "State"
     }
   },
 
   "Tree": {
-    "family": "Family",
-    "gender": "Gender",
-    "specie": "Specie",
-    "cultivar": "Cultivar",
-    "latinName": "Vernacular Name",
+    "properties":{
+      "family": "Family",
+      "gender": "Gender",
+      "specie": "Specie",
+      "cultivar": "Cultivar",
+      "vernacularName": "Vernacular Name",
+      "townshipCode": "Town ship code",
+      "zipCode": "Zip code",
+      "address": "Adress",
+      "zone": "Zone cutting",
+      "etkRegistrationNumber": "Ecoteka registration number",
+      "plantingDate": "Planting date",
+      "height": "Tree height",
+      "diameter": "Tree diameter",
+      "soilType": {
+        "label": "Soil type",
+        "clay": "Calyey",
+        "silt": "Silty",
+        "limestone": "Limestone",
+        "sand": "Sandy",
+        "acid": "Acid",
+        "sandyclay": "Sandy clay"
+      },
+      "rootType": {
+        "label": "Root type",
+        "swivel": "Swivel",
+        "tracing": "Tracing",
+        "oblique": "Oblique"
+      },
+      "habit": {
+        "label": "Tree habit",
+        "free": "Free",
+        "semiFree": "Semi-free",
+        "form": "Forming",
+        "cat": "Caat head",
+        "trumpet": "Trumpet",
+        "curtain": "Curtain",
+        "pyramid": "Pyramid",
+        "ball": "Ball",
+        "cone": "Cone"
+      },
+      "procted": "Protected tree",
+      "soilConstraints": "Soil constraints",
+      "aerianConstraint": "Aerian contraints",
+      "watering": "Watering",
+      "lightning": "Lighting",
+      "allergens": "Allergenic tree",
+      "remarks": "Remarks"
+    },
+    "summary": {
+      "moreDetails": "More details"
+    },
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "townshipCode": "Town ship code",
-    "zipCode": "Zip code",
-    "address": "Adress",
-    "zone": "Zone cutting",
-    "etkRegistrationNumber": "Ecoteka registration number",
-    "registrationNumber": "Tree registration number",
-    "plantingDate": "Planting date",
-    "height": "Tree height",
-    "diameter": "Tree diameter",
-    "soilType": {
-      "label": "Soil type",
-      "clay": "Calyey",
-      "silt": "Silty",
-      "limestone": "Limestone",
-      "sand": "Sandy",
-      "acid": "Acid",
-      "sandyclay": "Sandy clay"
-    },
-    "rootType": {
-      "label": "Root type",
-      "swivel": "Swivel",
-      "tracing": "Tracing",
-      "oblique": "Oblique"
-    },
-    "habit": {
-      "label": "Tree habit",
-      "free": "Free",
-      "semiFree": "Semi-free",
-      "form": "Forming",
-      "cat": "Caat head",
-      "trumpet": "Trumpet",
-      "curtain": "Curtain",
-      "pyramid": "Pyramid",
-      "ball": "Ball",
-      "cone": "Cone"
-    },
-    "procted": "Protected tree",
-    "soilConstraints": "Soil constraints",
-    "aerianConstraint": "Aerian contraints",
-    "watering": "Watering",
-    "lightning": "Lighting",
-    "allergens": "Allergenic tree",
-    "remarks": "Remarks"
+    "registrationNumber": "Tree registration number"
   },
 
   "TreeForm": {
@@ -388,6 +403,11 @@
     "dialogDeleteContent": "Are you sure you want to remove the selected trees?",
     "dialogDeleteActionYes": "Yes",
     "dialogDeleteActionCancel": "No",
+    "title": "Edition",
+    "treeIdentity": "Tree identity",
+    "characteristics": "Characteristics",
+    "outdoorEnvironment": "Outdoor Environment",
+    "other": "Other",
     "imagesUpload": {
       "select": "Drop files here or click (max.{{max}})"
     }
@@ -443,6 +463,8 @@
     "dialogTitleEdit": "Update the organisation",
     "dialogContentTextCreate": "Use this form to create an organisation.",
     "dialogContentTextEdit": "Use this form to update the organisation.",
+    "exportPending": "Please wait and keep this page open, your request is being processed...",
+    "exportSuccess": "Your export request is ready! Download in progress...",
     "WorkingArea": {
       "dialogTitle": "Edit working area",
       "dialogContentText": "Accept : zip, geojson"
@@ -463,6 +485,17 @@
       "confirm": "Confirm",
       "confirmDetach": "Confirm",
       "invite": "Invite",
+      "onDetach": {
+        "success": "was removed successfully removed from group",
+        "errorAlert": "Server error.",
+        "errorContent": "cannot be removed from group",
+        "dialog": {
+          "alertTitle": "This action cannot be undone!",
+          "alertContent1": "You are about to remove members from your organization. This will lead to organization access rights loss for these users.",
+          "alertContent2": "Do you still want to proceed?",
+          "confirmButton": "Yes, I do!"
+        }
+      },
       "Table": {
         "headers": {
           "email": "Email",
@@ -472,18 +505,51 @@
         },
         "roles": {
           "defineRole": "Define role",
+          "admin": "Administrator",
           "owner": "Owner",
           "manager": "Manager",
           "contributor": "Contributor",
           "reader": "Reader",
           "guest": "Guest"
+        },
+        "updateMember": {
+          "success": "Member role was successfully updated",
+          "error": "Error occured while updatind member role"
         }
+      },
+      "dialog": {
+        "title": "Add members to your organization",
+        "errorEmailAlreadyAdded": "already present in recepients list.",
+        "errorEmailFormatNotValid": "is not a valid email format.",
+        "emailsPlaceholder": "gestionnaire@ecoteka.org, invite@ecoteka.org",
+        "emailsLabel": "Recipient emails",
+        "alertTitle": "No member to invite",
+        "alertContent1": "Add recipient email in the input field above - ",
+        "alertContent2": "then click Enter or add a coma."
       }
     }
   },
   "Dashboard": {
     "title": "Dashboard",
-    "for": "for"
+    "for": "for",
+    "treeHeritage":{
+      "title": "Your tree heritage",
+      "totalTrees": "Total trees",
+      "plantedTrees": "Planted trees in 2020",
+      "felledTrees": "Felled trees in 2020",
+      "alertTitle": "Add your first trees to your heritage",
+      "alertText": "Your workspace does not contain any trees yet",
+      "boldText": "Start now !"
+    },
+    "heritageManagment":{
+      "totalCost": "Total cost interventions planned in 2020",
+      "title": "State of management of your assets",
+      "alertTitle": "Add, program and monitor the budget for interventions on your assets",
+      "alertText": "As soon as your workspace contains trees, you can start managing your plant heritage",
+      "boldText": "Learn more !"
+    },
+    "addInterventionButton": "Add interventions",
+    "importDataButton": "Import datas"
   },
   "MapLayers": {
     "backgrounds": "Backgrounds",

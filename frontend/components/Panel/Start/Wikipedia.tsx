@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardMedia, CardContent } from "@material-ui/core";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  CircularProgress,
+  Grid,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -9,9 +15,9 @@ const useStyles = makeStyles({
 });
 
 async function getInformationByProp(prop, genre) {
-  const url = `https://en.wikipedia.org/w/api.php?action=query&prop=${prop}&titles=${genre}&formatversion=2&origin=*&format=json`;
-  const response = await fetch(url);
-  const json = await response.json();
+  let url = `https://fr.wikipedia.org/w/api.php?action=query&prop=${prop}&titles=${genre}&formatversion=2&origin=*&format=json`;
+  let response = await fetch(url);
+  let json = await response.json();
 
   if (prop === "extracts" && json.hasOwnProperty("query")) {
     return json.query.pages.pop().extract;
@@ -29,39 +35,47 @@ async function getInformationByProp(prop, genre) {
   }
 }
 
+const initalData = async (query) => {
+  const data = { image: null, html: null };
+
+  data.html = await getInformationByProp("extracts", query);
+
+  if (data.html) {
+    data.image = await getInformationByProp("pageimages", query);
+  }
+
+  return data;
+};
+
 export default function Wikipedia(props) {
   const classes = useStyles();
-  const [genre, setGenre] = useState(props.genre);
-  const [data, setData] = useState({ image: null, html: null });
+  const [data, setData] = useState({ html: null, image: null });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setGenre(props.genre);
-
-    (async (genre) => {
-      if (!genre) {
-        setData({ image: null, html: null });
-        return;
-      }
-      const html = await getInformationByProp("extracts", genre);
-      let image = null;
-
-      if (html) {
-        image = await getInformationByProp("pageimages", genre);
-      }
-
-      setData({
-        image,
-        html,
-      });
-    })(props.genre);
+    setLoading(true);
+    initalData(props.genre).then((newData) => {
+      setData(newData);
+      setLoading(false);
+    });
   }, [props.genre]);
 
-  return genre ? (
-    <Card elevation={0}>
-      {data.image && <CardMedia className={classes.media} image={data.image} />}
-      <CardContent>
-        <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
-      </CardContent>
-    </Card>
+  return props.genre ? (
+    loading ? (
+      <Grid container>
+        <Grid item>
+          <CircularProgress />
+        </Grid>
+      </Grid>
+    ) : (
+      <Card elevation={0}>
+        {data.image && (
+          <CardMedia className={classes.media} image={data.image} />
+        )}
+        <CardContent>
+          <div dangerouslySetInnerHTML={{ __html: data.html }}></div>
+        </CardContent>
+      </Card>
+    )
   ) : null;
 }

@@ -6,9 +6,9 @@ import { MdFilterList } from "react-icons/md";
 import RemoveIcon from "@material-ui/icons/Remove";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import MyLocationIcon from "@material-ui/icons/MyLocation";
-import SearchIcon from "@material-ui/icons/Search";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import { fade } from "@material-ui/core/styles/colorManipulator";
+import { useAppContext } from "@/providers/AppContext";
 
 export type TMapToolbarAction =
   | "zoom_in"
@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MapToolbar: FC<IMapToolbarProps> = ({ onChange }) => {
   const classes = useStyles();
+  const { user } = useAppContext();
 
   const handleActionClick = (action: TMapToolbarAction) => {
     if (typeof onChange === "function") {
@@ -71,38 +72,48 @@ const MapToolbar: FC<IMapToolbarProps> = ({ onChange }) => {
       <Grid item>
         <Divider />
       </Grid>
-      <Grid item>
-        <IconButton onClick={() => handleActionClick("filter")}>
-          <MdFilterList />
-        </IconButton>
-      </Grid>
-      <Grid item>
-        <IconButton onClick={() => handleActionClick("toggle_layers")}>
-          <LayersIcon />
-        </IconButton>
-      </Grid>
+      {user && (
+        <Grid item>
+          <IconButton onClick={() => handleActionClick("filter")}>
+            <MdFilterList />
+          </IconButton>
+        </Grid>
+      )}
+      {user && (
+        <Grid item>
+          <IconButton onClick={() => handleActionClick("toggle_layers")}>
+            <LayersIcon />
+          </IconButton>
+        </Grid>
+      )}
       <Grid item>
         <Divider />
       </Grid>
-      <Grid item>
-        <IconButton onClick={() => handleActionClick("fit_to_bounds")}>
-          <CenterFocusStrongIcon />
-        </IconButton>
-      </Grid>
-      <Grid item>
-        <IconButton onClick={() => handleActionClick("geolocate")}>
-          <MyLocationIcon />
-        </IconButton>
-      </Grid>
+      {user && (
+        <Grid item>
+          <IconButton onClick={() => handleActionClick("fit_to_bounds")}>
+            <CenterFocusStrongIcon />
+          </IconButton>
+        </Grid>
+      )}
+      {user && (
+        <Grid item>
+          <IconButton onClick={() => handleActionClick("geolocate")}>
+            <MyLocationIcon />
+          </IconButton>
+        </Grid>
+      )}
       <Grid item xs />
       <Grid item>
         <Divider />
       </Grid>
-      <Grid item>
-        <IconButton onClick={() => handleActionClick("import")}>
-          <CloudDownloadIcon />
-        </IconButton>
-      </Grid>
+      {user && (
+        <Grid item>
+          <IconButton onClick={() => handleActionClick("import")}>
+            <CloudDownloadIcon />
+          </IconButton>
+        </Grid>
+      )}
     </Grid>
   );
 };
