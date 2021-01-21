@@ -361,7 +361,7 @@ def update_member_role(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    roles_order = ["owner", "manager", "contributor", "reader", "guest", "admin"]
+    roles_order = ["admin", "owner", "manager", "contributor", "reader", "guest"]
 
     if role not in roles_order:
         raise HTTPException(
@@ -382,8 +382,8 @@ def update_member_role(
 
     if len(current_user_roles) > 0:
         current_user_role = current_user_roles[0]
-
-    if roles_order.index(current_user_role) > roles_order.index(role):
+        
+    if roles_order.index(current_user_role) >= roles_order.index(role):
         raise HTTPException(
             status_code=403, detail="You can only set roles below yours"
         )
@@ -395,7 +395,7 @@ def update_member_role(
     # Role exist for this user (it's a patch)
     if len(user_roles) > 0:
         user_role = user_roles[0]
-        if roles_order.index(current_user_role) > roles_order.index(user_role):
+        if roles_order.index(current_user_role) >= roles_order.index(user_role):
             raise HTTPException(
                 status_code=403, detail="You can't edit a role above yours"
             )
