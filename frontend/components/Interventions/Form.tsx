@@ -23,7 +23,7 @@ import {
   Stepper,
   Typography,
 } from "@material-ui/core";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
 import { useRouter } from "next/router";
@@ -71,6 +71,25 @@ const ETKInterventionForm = forwardRef<
   const schema = schemaMap[props.step](props.interventionType);
   const form = useETKForm({ schema });
   const router = useRouter();
+  const { user } = useAppContext();
+  const { apiETK } = useApi().api;
+
+  const flyToTree = async (treeId: number) => {
+    try {
+      const organizationId = user.currentOrganization.id;
+
+      const { data: tree } = await apiETK.get(
+        `/organization/${organizationId}/trees/${treeId}`
+      );
+
+      if (tree && tree.x && tree.y) {
+        props.map.flyTo({
+          zoom: 20,
+          center: [tree.x, tree.y],
+        });
+      }
+    } catch (e) {}
+  };
 
   useEffect(() => {
     const formFields = Object.keys(props.data).filter(
@@ -91,6 +110,8 @@ const ETKInterventionForm = forwardRef<
   useEffect(() => {
     if (router.query.tree) {
       form.setValue("tree_id", router.query.tree);
+
+      flyToTree(Number(router.query.tree));
     }
   }, []);
 
@@ -134,6 +155,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
   const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
   const [interventionType, setInterventionType] = useState<TInterventionType>(
@@ -189,7 +211,8 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
 
     payload.tree_id = router.query.tree;
 
-    await apiRest.interventions.post(user.currentOrganization.id, payload);
+    const organizationId = user.currentOrganization.id;
+    await apiETK.post(`/organization/${organizationId}/interventions`, payload);
   };
 
   const handleNext = async (step: TInterventionStep) => {

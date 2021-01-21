@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import Calendar from "@/components/Interventions/Calendar/Index";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 
@@ -10,9 +10,12 @@ const CalendarPage: FC = ({}) => {
   const [interventions, setInterventions] = useState([]);
   const [year, setYear] = useState(initialYear);
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
 
   const getData = async (organizationId: number, year: number) => {
-    const data = await apiRest.interventions.getByYear(organizationId, year);
+    const { data } = await apiETK.get(
+      `/organization/${organizationId}/interventions/year/${year}`
+    );
 
     setInterventions(data);
   };
@@ -34,6 +37,7 @@ const CalendarPage: FC = ({}) => {
         year={year}
         onYearChange={handleYearChange}
         onInterventionPlan={() => getData(user.currentOrganization.id, year)}
+        onSave={() => getData(user.currentOrganization.id, year)}
       />
     </AppLayoutGeneral>
   );
