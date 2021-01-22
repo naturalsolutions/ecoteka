@@ -32,6 +32,7 @@ services:
 
   redis:
     image: ${NS_ECOTEKA_REDIS_IMAGE}
+    restart: always
     networks:
       - traefik
     volumes:
@@ -43,6 +44,7 @@ services:
     networks:
       - traefik
     command: bash /app/worker-start.sh
+    restart: always
     volumes:
       - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
       - ${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}:/app/app/uploaded_files
@@ -80,6 +82,7 @@ services:
     depends_on:
       - db
       - redis
+    restart: always
     networks:
       - traefik
     volumes:
@@ -122,6 +125,7 @@ services:
       - CELERY_BACKEND=${NS_ECOTEKA_BACKEND_CELERY_BACKEND}
 
   frontend:
+    restart: always
     depends_on:
       - backend
     networks:
@@ -135,6 +139,7 @@ services:
       - REFRESH_TOKEN_STORAGE=${NS_ECOTEKA_FRONTEND_REFRESH_TOKEN_STORAGE}
 
   tile_server:
+    restart: always
     image: ${NS_ECOTEKA_TILE_SERVER_IMAGE}
     networks:
       - traefik
