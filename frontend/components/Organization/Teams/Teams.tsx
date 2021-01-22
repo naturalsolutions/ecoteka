@@ -166,7 +166,7 @@ const Teams: FC<TeamsProps> = (props) => {
         label: t("common:buttons.cancel"),
       },
       {
-        label: t("common:buttons.create"),
+        label: isNew ? t("common:buttons.create") : t("common:buttons.update"),
         variant: "contained",
         color: "primary",
         noClose: true,

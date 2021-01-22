@@ -69,7 +69,7 @@ policies = {
 set_policies(policies)
 
 
-@router.post("/", response_model=Organization)
+@router.post("", response_model=Organization)
 def create_organization(
     *,
     db: Session = Depends(get_db),
