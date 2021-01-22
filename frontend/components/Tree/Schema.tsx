@@ -13,19 +13,19 @@ export default function useTreeSchema() {
       } as any,
       schema: yup.string().required(t("common:errors.required")),
     },
-    gender: {
+    genus: {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.properties.gender"),
+        label: t("components:Tree.properties.genus"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
-    specie: {
+    species: {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.properties.specie"),
+        label: t("components:Tree.properties.species"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -34,6 +34,14 @@ export default function useTreeSchema() {
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.properties.cultivar"),
+      },
+      schema: yup.string(),
+    },
+    canonicalName: {
+      type: "textfield",
+      category: "Identité de l'arbre",
+      component: {
+        label: t("components:Tree.properties.canonicalName"),
       },
       schema: yup.string(),
     },

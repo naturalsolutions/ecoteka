@@ -17,8 +17,8 @@
     "errorMessageServer": "Correo electrónico o contraseña incorrectos",
     "errorMessageEmail": "Correo electrónico no válido",
     "errorMessageRequiredField": "Campo obligatorio",
-    "noAccount" : "Don't have an account yet?",
-    "accountRequest" : "Request the creation of an account !"
+    "noAccount": "Don't have an account yet?",
+    "accountRequest": "Request the creation of an account !"
   },
   "LanguageSelector": {
     "en": "Inglés",
@@ -316,7 +316,7 @@
       "tutorcheck": "Vérification du tuteurage et des protections",
       "globalcheck": "Comprobación global del árbol"
     },
-    "interventionsTable":{
+    "interventionsTable": {
       "requestAnItervention": "Request an intervention",
       "date": "Fetcha",
       "type": "Typo",
@@ -324,11 +324,12 @@
     }
   },
   "Tree": {
-    "properties":{
+    "properties": {
       "family": "Familia",
       "gender": "Genero",
       "specie": "Especie",
       "cultivar": "Cultivar",
+      "canonicalName": "Scientific name",
       "vernacularName": "Nombre común",
       "townshipCode": "Town ship code",
       "zipCode": "Código Postal",
@@ -515,7 +516,7 @@
   "Dashboard": {
     "title": "Panel de control",
     "for": "para",
-    "treeHeritage":{
+    "treeHeritage": {
       "title": "Your tree heritage",
       "totalTrees": "Total trees",
       "plantedTrees": "Planted trees in 2020",
@@ -524,7 +525,7 @@
       "alertText": "Your workspace does not contain any trees yet",
       "boldText": "Start now !"
     },
-    "heritageManagment":{
+    "heritageManagment": {
       "totalCost": "Total cost interventions planned in 2020",
       "title": "State of management of your assets",
       "alertTitle": "Add, program and monitor the budget for interventions on your assets",

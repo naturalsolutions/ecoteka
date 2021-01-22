@@ -18,8 +18,8 @@
     "errorMessageServer": "Incorrect email or password",
     "errorMessageEmail": "Email address is invalid",
     "errorMessageRequiredField": "Field required",
-    "noAccount" : "Don't have an account yet?",
-    "accountRequest" : "Request the creation of an account !"
+    "noAccount": "Don't have an account yet?",
+    "accountRequest": "Request the creation of an account !"
   },
 
   "LanguageSelector": {
@@ -332,7 +332,7 @@
       "tutorcheck": "Verification of staking and protections",
       "globalcheck": "Global tree check"
     },
-    "interventionsTable":{
+    "interventionsTable": {
       "requestAnItervention": "Request an intervention",
       "date": "Date",
       "type": "Type",
@@ -341,11 +341,12 @@
   },
 
   "Tree": {
-    "properties":{
+    "properties": {
       "family": "Family",
       "gender": "Gender",
       "specie": "Specie",
       "cultivar": "Cultivar",
+      "canonicalName": "Scientific name",
       "vernacularName": "Vernacular Name",
       "townshipCode": "Town ship code",
       "zipCode": "Zip code",
@@ -532,7 +533,7 @@
   "Dashboard": {
     "title": "Dashboard",
     "for": "for",
-    "treeHeritage":{
+    "treeHeritage": {
       "title": "Your tree heritage",
       "totalTrees": "Total trees",
       "plantedTrees": "Planted trees in 2020",
@@ -541,7 +542,7 @@
       "alertText": "Your workspace does not contain any trees yet",
       "boldText": "Start now !"
     },
-    "heritageManagment":{
+    "heritageManagment": {
       "totalCost": "Total cost interventions planned in 2020",
       "title": "State of management of your assets",
       "alertTitle": "Add, program and monitor the budget for interventions on your assets",

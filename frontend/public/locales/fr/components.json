@@ -17,8 +17,8 @@
     "errorMessageServer": "Adresse email ou mot de passe incorrect",
     "errorMessageEmail": "Veuillez saisir un email valide.",
     "errorMessageRequiredField": "Veuillez renseigner ce champ.",
-    "noAccount" : "Vous n'avez pas encore de compte?",
-    "accountRequest" : "Demandez la création d'un compte !"
+    "noAccount": "Vous n'avez pas encore de compte?",
+    "accountRequest": "Demandez la création d'un compte !"
   },
   "LanguageSelector": {
     "en": "Anglais",
@@ -315,7 +315,7 @@
       "tutorcheck": "Vérification du tuteurage et des protections",
       "globalcheck": "Vérification globale de l'arbre"
     },
-    "interventionsTable":{
+    "interventionsTable": {
       "requestAnItervention": "Demander une intervention",
       "date": "Date",
       "type": "Type",
@@ -325,9 +325,10 @@
   "Tree": {
     "properties": {
       "family": "Famille",
-      "gender": "Genre",
-      "specie": "Espèce",
+      "genus": "Genre",
+      "species": "Espèce",
       "cultivar": "Cultivar",
+      "canonicalName": "Nom scientifique",
       "vernacularName": "Nom vernaculaire",
       "townshipCode": "Code commune",
       "zipCode": "Code postal",
@@ -365,7 +366,7 @@
         "cone": "Cône"
       },
       "procted": "Arbre protégé",
-      "remarkableTree" : "Arbre remarquable",
+      "remarkableTree": "Arbre remarquable",
       "soilConstraints": "Contraintes au sol",
       "aerianConstraint": "Contraintes aériennes",
       "lightning": "Présence d'éclairage",
@@ -509,7 +510,7 @@
   "Dashboard": {
     "title": "Tableau de bord",
     "for": "pour",
-    "treeHeritage":{
+    "treeHeritage": {
       "title": "Votre patrimoine arboré",
       "totalTrees": "Total des arbres",
       "plantedTrees": "Arbres plantés en 2020",
@@ -518,7 +519,7 @@
       "alertText": "Votre espace de travail ne contient aucun arbre pour l'instant",
       "boldText": "Commencer maintenant!"
     },
-    "heritageManagment":{
+    "heritageManagment": {
       "totalCost": "Coût total des interventions planifiées en 2020",
       "title": "État de gestion de votre patrimoine",
       "alertTitle": "Ajouter, programmer et suivre le budget des interventions sur votre patrimoine",
