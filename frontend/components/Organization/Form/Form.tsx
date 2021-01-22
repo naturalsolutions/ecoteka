@@ -54,7 +54,7 @@ const ETKFormOrganization = forwardRef<
           }
           try {
             const response = isNew
-              ? await apiETK.post("/organization/", data)
+              ? await apiETK.post("/organization", data)
               : await apiETK.patch(`/organization/${organization.id}`, data);
             if (response.status === 200) {
               resolve(response);
