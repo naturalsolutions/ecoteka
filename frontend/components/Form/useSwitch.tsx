@@ -16,7 +16,7 @@ interface ETKSwitchProps {
   fields: Fields;
 }
 
-export default function useTextField(props: ETKSwitchProps): Fields {
+export default function useSwitch(props: ETKSwitchProps): Fields {
   const switchFields = {};
 
   for (const name in props.fields) {

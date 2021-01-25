@@ -7,6 +7,7 @@ import usePasswordField from "@/components/Form/usePasswordField";
 import useDateRangeField from "@/components/Form/useDateRange";
 import useSwitch from "@/components/Form/useSwitch";
 import useCheckbox from "@/components/Form/useCheckbox";
+import useAutocomplete from "@/components/Form/useAutocomplete";
 
 interface useETKFormSchema {
   [key: string]: {
@@ -30,6 +31,7 @@ export default function useETKForm(props: useETKFormProps) {
   const dateranges = {};
   const checkboxes = {};
   const switchs = {};
+  const autocompletes = {};
 
   for (const field in props.schema) {
     shape[field] = props.schema[field].schema;
@@ -52,6 +54,9 @@ export default function useETKForm(props: useETKFormProps) {
         break;
       case "checkbox":
         checkboxes[field] = props.schema[field].component;
+        break;
+      case "autocomplete":
+        autocompletes[field] = props.schema[field].component;
         break;
       default:
         textfields[field] = props.schema[field].component;
@@ -83,13 +88,19 @@ export default function useETKForm(props: useETKFormProps) {
     ...form,
   });
 
+  const autocompletesComponents = useAutocomplete({
+    fields: autocompletes,
+    ...form,
+  });
+
   const fields = Object.assign(
     {},
     textfieldsComponents,
     selectsComponents,
     passwordsComponents,
     dataragesComponents,
-    switchsComponents
+    switchsComponents,
+    autocompletesComponents
   );
 
   return {

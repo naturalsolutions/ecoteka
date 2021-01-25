@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
+import taxaOptions from "@/data/ecotekaTaxa";
 
 export default function useTreeSchema() {
   const { t } = useTranslation(["components", "common"]);
@@ -83,12 +84,13 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     canonicalName: {
-      type: "textfield",
+      type: "autocomplete",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.properties.canonicalName"),
         placeholder: t("components:Tree.placeholder.canonicalName"),
         helperText: t("components:Tree.helperText.canonicalName"),
+        options: taxaOptions,
       },
       schema: yup.string(),
     },
