@@ -151,7 +151,16 @@ services:
       - ${NS_ECOTEKA_TILE_SERVER_PRIVATE_FOLDER}:/tiles/private
     environment:
       - KEY_SECRET=${NS_ECOTEKA_BACKEND_SECRET_KEY}
-
+  meilisearch:
+    image: ${NS_ECOTEKA_MEILISEARCH_IMAGE}
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.meilisearch.rule=PathPrefix(`/meilisearch`)
+      - traefik.http.services.meilisearch.loadbalancer.server.port=80
+    volumes:
+      - app-search-data:/data.ms
   docs:
     image: ${NS_ECOTEKA_DOCS_IMAGE}
     networks:
@@ -162,6 +171,7 @@ services:
 
 volumes:
   app-db-data:
+  app-search-data:
 
 networks:
   traefik:
