@@ -9,6 +9,7 @@ import useSwitch from "@/components/Form/useSwitch";
 import useCheckbox from "@/components/Form/useCheckbox";
 import useAutocomplete from "@/components/Form/useAutocomplete";
 import useControlledTextField from "@/components/Form/useControlledTextField";
+import useTaxonAsyncAutocomplete from "@/components/Form/useTaxonAsyncAutocomplete";
 
 interface useETKFormSchema {
   [key: string]: {
@@ -34,6 +35,7 @@ export default function useETKForm(props: useETKFormProps) {
   const checkboxes = {};
   const switchs = {};
   const autocompletes = {};
+  const taxonAsyncAutocompletes = {};
 
   for (const field in props.schema) {
     shape[field] = props.schema[field].schema;
@@ -62,6 +64,9 @@ export default function useETKForm(props: useETKFormProps) {
         break;
       case "autocomplete":
         autocompletes[field] = props.schema[field].component;
+        break;
+      case "taxonAsyncAutocomplete":
+        taxonAsyncAutocompletes[field] = props.schema[field].component;
         break;
       default:
         textfields[field] = props.schema[field].component;
@@ -102,6 +107,11 @@ export default function useETKForm(props: useETKFormProps) {
     ...form,
   });
 
+  const taxonAsyncAutocompletesComponents = useTaxonAsyncAutocomplete({
+    fields: taxonAsyncAutocompletes,
+    ...form,
+  });
+
   const fields = Object.assign(
     {},
     textfieldsComponents,
@@ -110,7 +120,8 @@ export default function useETKForm(props: useETKFormProps) {
     passwordsComponents,
     dataragesComponents,
     switchsComponents,
-    autocompletesComponents
+    autocompletesComponents,
+    taxonAsyncAutocompletesComponents
   );
 
   return {

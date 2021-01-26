@@ -3,7 +3,7 @@ import { Autocomplete } from "@material-ui/lab";
 import { Controller } from "react-hook-form";
 
 interface Fields {
-  [key: string]: TextFieldProps;
+  [key: string]: TextFieldProps | any;
 }
 
 interface ETKTextFieldProps {
@@ -17,16 +17,6 @@ interface ETKTextFieldProps {
 export default function useAutocomplete(props: ETKTextFieldProps): Fields {
   const autocompleteFields = {};
 
-  const setTaxonomicValues = (data) => {
-    if (data) {
-      const [genus, species] = data.t.split(" ");
-      props.setValue("genus", genus);
-      props.setValue("species", species);
-    } else {
-      props.setValue("genus", "");
-      props.setValue("species", "");
-    }
-  };
   for (const name in props.fields) {
     const field = props.fields[name];
     const options = field.options;
@@ -63,10 +53,7 @@ export default function useAutocomplete(props: ETKTextFieldProps): Fields {
                 {option.id} -{option.t}
               </span>
             )}
-            onChange={(e, data) => {
-              onChange(data);
-              setTaxonomicValues(data);
-            }}
+            onChange={(e, data) => onChange(data)}
             {...props}
             renderInput={(params) => {
               return (

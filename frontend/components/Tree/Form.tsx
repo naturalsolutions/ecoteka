@@ -42,8 +42,9 @@ const ETKTreeForm: React.FC<{
   const { user } = useAppContext();
   const defaultValues = {
     family: "",
-    genus: undefined,
-    species: undefined,
+    genus: "",
+    species: "",
+    canonicalName: "",
     isLit: false,
     isProtected: false,
     isTreeOfInterest: false,
