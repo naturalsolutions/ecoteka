@@ -14,7 +14,7 @@ let config = {
 config.env = {};
 
 const snakeToCamel = (str) =>
-  str.replace(/([-_][a-z])/g, (group) =>
+  str.toLowerCase().replace(/([-_][a-z])/g, (group) =>
     group.toUpperCase().replace("-", "").replace("_", "")
   );
 
