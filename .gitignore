@@ -10,3 +10,4 @@ redis
 .vscode/*
 !.vscode/ecoteka.code-snippets
 .expo
+data.ms
