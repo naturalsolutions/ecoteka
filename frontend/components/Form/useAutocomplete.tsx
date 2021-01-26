@@ -7,23 +7,30 @@ interface Fields {
 }
 
 interface ETKTextFieldProps {
+  setValue: any;
   control: any;
   register: any;
   errors: any;
-  options: any[];
   fields: Fields;
 }
 
-export default function useAutocomplete(
-  props: ETKTextFieldProps
-): ETKTextFieldProps {
+export default function useAutocomplete(props: ETKTextFieldProps): Fields {
   const autocompleteFields = {};
-  console.log(props);
+
+  const setTaxonomicValues = (data) => {
+    if (data) {
+      const [genus, species] = data.t.split(" ");
+      props.setValue("genus", genus);
+      props.setValue("species", species);
+    } else {
+      props.setValue("genus", "");
+      props.setValue("species", "");
+    }
+  };
   for (const name in props.fields) {
     const field = props.fields[name];
     const options = field.options;
-    console.log(options);
-    const defaultFieldProps: ETKTextFieldProps = {
+    const defaultFieldProps: TextFieldProps = {
       name,
       inputRef: props.register,
       variant: "filled",
@@ -56,7 +63,10 @@ export default function useAutocomplete(
                 {option.id} -{option.t}
               </span>
             )}
-            onChange={(e, data) => onChange(data.t)}
+            onChange={(e, data) => {
+              onChange(data);
+              setTaxonomicValues(data);
+            }}
             {...props}
             renderInput={(params) => {
               return (
@@ -72,17 +82,16 @@ export default function useAutocomplete(
             }}
           />
         )}
-        onChange={([, data]) => data}
         defaultValue={{
-          id: 839,
-          t: "Acer yui",
+          id: 0,
+          t: "",
         }}
+        onChange={([, data]) => data}
         name={name}
         control={props.control}
         key={name}
       />
     );
   }
-  console.log(autocompleteFields);
   return autocompleteFields;
 }

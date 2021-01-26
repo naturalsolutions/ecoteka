@@ -36,10 +36,19 @@ const ETKTreeForm: React.FC<{
   const schema = useETKTreeSchema();
   const { snackbar } = useAppLayout();
   const [saving, setSaving] = useState(false);
-  const { fields, setValue, getValues } = useETKForm({
-    schema: schema,
-  });
   const { user } = useAppContext();
+  const defaultValues = {
+    family: "",
+    genus: undefined,
+    species: undefined,
+    isLit: false,
+    isProtected: false,
+    isTreeOfInterest: false,
+  };
+  const { fields, setValue, getValues } = useETKForm({
+    schema,
+    defaultValues,
+  });
 
   useEffect(() => {
     if (selection.length === 1) {

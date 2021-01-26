@@ -54,7 +54,7 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     genus: {
-      type: "textfield",
+      type: "controlledTextfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.properties.genus"),
@@ -64,7 +64,7 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     species: {
-      type: "textfield",
+      type: "controlledTextfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.properties.species"),
@@ -221,7 +221,7 @@ export default function useTreeSchema() {
       schema: yup.boolean(),
     },
     isTreeOfInterest: {
-      type: "checkbox",
+      type: "switch",
       category: "Caractéristiques",
       component: {
         label: t("components:Tree.properties.isTreeOfInterest"),
@@ -239,7 +239,7 @@ export default function useTreeSchema() {
       },
       schema: yup.string(),
     },
-    aerianConstraint: {
+    airConstraints: {
       type: "textfield",
       category: "Environnement extérieur",
       component: {
@@ -259,10 +259,9 @@ export default function useTreeSchema() {
       schema: yup.boolean(),
     },
     watering: {
-      type: "select",
+      type: "textfield",
       category: "Environnement extérieur",
       component: {
-        multiple: true,
         label: t("components:Tree.properties.watering"),
       },
       schema: yup.string(),
