@@ -152,6 +152,21 @@ services:
     environment:
       - KEY_SECRET=${NS_ECOTEKA_BACKEND_SECRET_KEY}
 
+  meilisearch:
+    image: ${NS_ECOTEKA_MEILISEARCH_IMAGE}
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.meilisearch.rule=PathPrefix(`/meilisearch`)
+      - traefik.http.services.meilisearch.loadbalancer.server.port=7700
+      - traefik.http.routers.meilisearch.middlewares=meilisearch-stripprefix
+      - traefik.http.middlewares.meilisearch-stripprefix.stripprefix.prefixes=/meilisearch
+    volumes:
+      - ${NS_ECOTEKA_MEILISEARCH_VOLUME}:/data.ms
+    environment:
+      - MEILI_NO_SENTRY=true
+
   docs:
     image: ${NS_ECOTEKA_DOCS_IMAGE}
     networks:
