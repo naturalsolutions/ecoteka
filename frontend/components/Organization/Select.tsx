@@ -54,11 +54,13 @@ const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {props.user?.organizations.map((o) => (
-          <MenuItem key={`mi-${o.id}`} onClick={() => handleClose(o)}>
-            {o.name}
-          </MenuItem>
-        ))}
+        {props.user?.organizations
+          .filter((o) => !o.archived)
+          .map((o) => (
+            <MenuItem key={`mi-${o.id}`} onClick={() => handleClose(o)}>
+              {o.name}
+            </MenuItem>
+          ))}
       </Menu>
     </Box>
   );

@@ -8,9 +8,11 @@ import MapGL, {
   GeolocateControl,
 } from "@urbica/react-map-gl";
 import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
 import { bbox } from "@turf/turf";
@@ -106,6 +108,9 @@ const EditionPage = ({}) => {
   const { dialog } = useAppLayout();
   const { user } = useAppContext();
   const { dark } = useThemeContext();
+  const { api } = useApi();
+  const { apiETK } = api;
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [drawerLeftComponent, setDrawerLeftComponent] = useState(
     <PanelStartGeneralInfo />
   );
@@ -128,7 +133,6 @@ const EditionPage = ({}) => {
     features: [],
   });
   const [selection, setSelection] = useState([]);
-  const [hoveredTreeId, setHoveredTreeId] = useState<number>(null);
   const [boxSelect, setBoxSelect] = useState<boolean>(false);
   const [filterQuery, setFilterQuery] = useState<string>("");
   const [filteredData, setFilteredData] = useState<any>({
@@ -153,8 +157,36 @@ const EditionPage = ({}) => {
     organizationId: number,
     fitBounds: boolean = false
   ) => {
-    const newData = await apiRest.organization.geojson(organizationId);
-    setData(newData);
+    const pendindSnack = enqueueSnackbar(
+      "Récupération des données géographiques en cours...",
+      {
+        variant: "info",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+        persist: true,
+      }
+    );
+    try {
+      const { data: geoData, status } = await apiETK.get(
+        `/organization/${organizationId}/geojson/`
+      );
+      if (status === 200) {
+        closeSnackbar(pendindSnack);
+        enqueueSnackbar(
+          "Données géographiques récupérées avec succès. Mise à jour de la carte...",
+          {
+            variant: "success",
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "right",
+            },
+          }
+        );
+        setData(geoData);
+      }
+    } catch (e) {}
   };
 
   const handleOnTreeSave = (record) => {
@@ -233,6 +265,36 @@ const EditionPage = ({}) => {
     }
   }, [data, mapRef]);
 
+  useEffect(() => {
+    const map = mapRef.current.getMap();
+    map.on("click", (e) => {
+      const features = map.queryRenderedFeatures(e.point);
+
+      if (features.length > 0) {
+        ["osm:ecoteka-data", "trees"].map((layer) => {
+          const source = layer.split(":");
+          let sourceLayer = source.length > 0 ? source[1] : undefined;
+
+          map.removeFeatureState({
+            source: source[0],
+            sourceLayer: sourceLayer,
+          });
+
+          map.setFeatureState(
+            {
+              source: source[0],
+              sourceLayer: sourceLayer,
+              id: features[0].id,
+            },
+            {
+              click: !features[0].state.click,
+            }
+          );
+        });
+      }
+    });
+  }, [mapRef.current]);
+
   const connect = function () {
     const wsURL = `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
       window.location.host
@@ -302,21 +364,6 @@ const EditionPage = ({}) => {
 
     switchPanel(router.query.panel);
   }, [router.query]);
-
-  const onHover = (event) => {
-    if (event.features.length > 0) {
-      const nextHoveredTreeId = event.features[0].id;
-      if (hoveredTreeId !== nextHoveredTreeId) {
-        setHoveredTreeId(nextHoveredTreeId);
-      }
-    }
-  };
-
-  const onLeave = () => {
-    if (hoveredTreeId) {
-      setHoveredTreeId(null);
-    }
-  };
 
   const onClick = (event) => {
     if (event.features.length > 0 && !boxSelect) {
@@ -402,10 +449,17 @@ const EditionPage = ({}) => {
               type="circle"
               source="trees"
               paint={{
+                "circle-radius": {
+                  base: 1.75,
+                  stops: [
+                    [12, 2],
+                    [22, 180],
+                  ],
+                },
                 "circle-color": [
                   "case",
                   ["boolean", ["feature-state", "click"], false],
-                  "#076ee4",
+                  "#f44336",
                   "#ebb215",
                 ],
                 "circle-stroke-color": "#fff",
@@ -415,22 +469,7 @@ const EditionPage = ({}) => {
                   2,
                   0,
                 ],
-                "circle-radius": [
-                  "case",
-                  ["boolean", ["feature-state", "hover"], false],
-                  12,
-                  5,
-                ],
-                "circle-pitch-scale": "map",
-                "circle-opacity": [
-                  "case",
-                  ["boolean", ["feature-state", "hover"], false],
-                  1,
-                  0.8,
-                ],
               }}
-              onHover={onHover}
-              onLeave={onLeave}
               onClick={onClick}
             />
             <Layer
@@ -438,6 +477,13 @@ const EditionPage = ({}) => {
               type="circle"
               source="filteredTrees"
               paint={{
+                "circle-radius": {
+                  base: 1.75,
+                  stops: [
+                    [12, 2],
+                    [22, 180],
+                  ],
+                },
                 "circle-color": [
                   "case",
                   ["boolean", ["feature-state", "click"], false],
@@ -451,22 +497,7 @@ const EditionPage = ({}) => {
                   2,
                   0,
                 ],
-                "circle-radius": [
-                  "case",
-                  ["boolean", ["feature-state", "hover"], false],
-                  12,
-                  5,
-                ],
-                "circle-pitch-scale": "map",
-                "circle-opacity": [
-                  "case",
-                  ["boolean", ["feature-state", "hover"], false],
-                  1,
-                  0.8,
-                ],
               }}
-              onHover={onHover}
-              onLeave={onLeave}
               onClick={onClick}
             />
             {boxSelect && (
@@ -523,13 +554,6 @@ const EditionPage = ({}) => {
                 }}
               />
             )}
-            {hoveredTreeId && (
-              <FeatureState
-                id={hoveredTreeId}
-                source="trees"
-                state={{ hover: true }}
-              />
-            )}
             {router.query.tree && data.features.length > 0 && (
               <FeatureState
                 id={data.features.find(
@@ -550,10 +574,20 @@ const EditionPage = ({}) => {
                 onChange={(value) => {
                   switch (value) {
                     case "analysis":
+                      ["osm", "trees"].map((layer) =>
+                        mapRef.current
+                          .getMap()
+                          .setLayoutProperty(layer, "visibility", "visible")
+                      );
                       setBoxSelect(false);
                       router.push("/edition/?panel=start");
                       break;
                     case "edition":
+                      ["osm", "trees"].map((layer) =>
+                        mapRef.current
+                          .getMap()
+                          .setLayoutProperty(layer, "visibility", "none")
+                      );
                       setBoxSelect(true);
                       break;
                   }

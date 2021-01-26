@@ -56,6 +56,10 @@ services:
     labels:
       - traefik.http.services.frontend.loadbalancer.server.port=3000
 
+  meilisearch:
+    ports:
+      - 7700:7700
+
   docs:
     volumes:
       - ./docs:/docs

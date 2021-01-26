@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TIntervention,
   useInterventionSchema,
 } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
-import { makeStyles, Grid, Button } from "@material-ui/core";
+import { makeStyles, Grid, Button, CircularProgress } from "@material-ui/core";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
@@ -12,6 +12,7 @@ import useForm from "@/components/Form/useForm";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import * as yup from "yup";
+import GpsFixedIcon from "@material-ui/icons/GpsFixed";
 
 export interface CalendarInterventionProps {
   intervention: TIntervention;
@@ -51,6 +52,7 @@ const CalendarInterventionForm = (props) => {
   const form = useForm({ schema, defaultValues });
   const { apiETK } = useApi().api;
   const { user } = useAppContext();
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     Object.keys(form.fields)
@@ -59,26 +61,30 @@ const CalendarInterventionForm = (props) => {
         form.setValue(field, props.intervention.properties[field]);
       });
 
-    // console.log(props.intervention.done);
     form.setValue("done", props.intervention.done);
-  }, [form, props.intervention]);
+  }, []);
 
   const handleOnSave = async () => {
-    const organizationId = user.currentOrganization.id;
-    const { done, ...properties } = form.getValues();
+    try {
+      const organizationId = user.currentOrganization.id;
+      const { done, ...properties } = form.getValues();
 
-    const payload = {
-      done,
-      properties,
-    };
+      const payload = {
+        done,
+        properties,
+      };
 
-    const { status, data: intervention } = await apiETK.patch(
-      `/organization/${organizationId}/interventions/${props.intervention.id}`,
-      payload
-    );
+      setSaving(true);
+      const { status, data: intervention } = await apiETK.patch(
+        `/organization/${organizationId}/interventions/${props.intervention.id}`,
+        payload
+      );
 
-    if (status === 200) {
-      props.onSave(intervention);
+      if (status === 200) {
+        props.onSave(intervention);
+      }
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -97,6 +103,7 @@ const CalendarInterventionForm = (props) => {
           <Grid item xs />
           <Grid item>
             <Button
+              startIcon={<GpsFixedIcon />}
               variant="outlined"
               size="small"
               onClick={() => {
@@ -112,7 +119,9 @@ const CalendarInterventionForm = (props) => {
       <Grid item>
         <Grid container>
           <Grid item>
-            <Button onClick={handleOnSave}>Save</Button>
+            <Button onClick={handleOnSave}>
+              {saving ? <CircularProgress /> : "Save"}
+            </Button>
           </Grid>
           <Grid item xs />
           <Grid item>

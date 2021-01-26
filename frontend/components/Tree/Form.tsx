@@ -9,7 +9,8 @@ import {
 import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useETKTreeSchema from "@/components/Tree/Schema";
-import { apiRest } from "@/lib/api";
+import { useSnackbar } from "notistack";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useAppLayout } from "@/components/AppLayout/Base";
 
@@ -34,7 +35,9 @@ const ETKTreeForm: React.FC<{
   const { t } = useTranslation(["common", "components"]);
   const classes = useStyles();
   const schema = useETKTreeSchema();
-  const { snackbar } = useAppLayout();
+  const { api } = useApi();
+  const { apiETK } = api;
+  const { enqueueSnackbar } = useSnackbar();
   const [saving, setSaving] = useState(false);
   const { user } = useAppContext();
   const defaultValues = {
@@ -69,19 +72,24 @@ const ETKTreeForm: React.FC<{
       const organizationId = user.currentOrganization.id;
       const treeId = selection[0].properties.id;
 
-      const response = await apiRest.trees.put(organizationId, treeId, {
-        properties,
-      });
-
-      if (response.ok) {
-        const record = await response.json();
-        onSave(record);
-
-        snackbar.current.open({
-          message: t("common:messages.success"),
-          autoHideDuration: 2000,
+      const { data, status } = await apiETK.put(
+        `/organization/${organizationId}/trees/${treeId}`,
+        {
+          properties,
+        }
+      );
+      if (status === 200) {
+        onSave(data);
+        enqueueSnackbar("Arbre mis à jour avec succès", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "center",
+          },
         });
       }
+    } catch (e) {
+      //
     } finally {
       setSaving(false);
     }

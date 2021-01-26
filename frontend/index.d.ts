@@ -6,6 +6,7 @@ export interface IOrganization {
   parent_id: number;
   total_trees: number;
   total_members: number;
+  archived: boolean;
 }
 
 export interface IUser {

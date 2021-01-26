@@ -1,26 +1,33 @@
-const assetPrefix = process.env["ASSET_PREFIX"] || "";
-const apiUrl = process.env["API_URL"] || "%api_url%";
-const tokenStorage = process.env["TOKEN_STORAGE"] || "%token_storage%";
-const refreshTokenStorage =
-  process.env["REFRESH_TOKEN_STORAGE"] || "%refresh_token_storage%";
+const envVars = {
+  API_URL: "%api_url%",
+  TOKEN_STORAGE: "%token_storage%",
+  REFRESH_TOKEN_STORAGE: "%refresh_token_storage%",
+};
+
+const excludeEnvVars = ["ASSET_PREFIX"];
 
 let config = {
   trailingSlash: true,
 };
 
-// CDN Support with Asset Prefix
-// https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
-config.assetPrefix = assetPrefix;
+config.env = {};
 
-config.env = {
-  assetPrefix: assetPrefix,
-};
+const snakeToCamel = (str) =>
+  str
+    .toLowerCase()
+    .replace(/([-_][a-z])/g, (group) =>
+      group.toUpperCase().replace("-", "").replace("_", "")
+    );
 
-config.publicRuntimeConfig = {
-  apiUrl,
-  tokenStorage,
-  refreshTokenStorage,
-};
+config.env.assetPrefix = process.env.ASSET_PREFIX || envVars.ASSET_PREFIX;
+config.publicRuntimeConfig = {};
+
+for (let env in envVars) {
+  if (!excludeEnvVars.includes(env)) {
+    config.publicRuntimeConfig[snakeToCamel(env)] =
+      process.env[env] || envVars[env];
+  }
+}
 
 config.webpack = (config, { isServer }) => {
   // Fixes npm packages that depend on `fs` module
@@ -33,4 +40,5 @@ config.webpack = (config, { isServer }) => {
   return config;
 };
 
+config.envVars = envVars;
 module.exports = config;

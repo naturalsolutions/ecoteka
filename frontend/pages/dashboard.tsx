@@ -3,9 +3,13 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
   Grid,
   GridSpacing,
+  InputLabel,
   makeStyles,
+  MenuItem,
+  Select,
   Step,
   StepLabel,
   Stepper,
@@ -44,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
   dashboardTitle: {
     color: theme.palette.text.primary,
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 }));
 
 interface WidgetProps {
@@ -73,48 +81,59 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   const { user } = useAppContext();
   const router = useRouter();
   const { theme } = useThemeContext();
-  const [containerRef, containerSize] = useDimensions();
-  const colorSchemeInterventions =
-    theme.palette.type == "light"
-      ? ["#a53b67", "#fbb13c", "#218380", "#2871d1"]
-      : ["#a53b67", "#218380", "#2871d1", "#fbb13c"];
-
   const { api } = useAPI();
-  const { apiETK: ecotekaV1 } = api;
-  const getOrganizationMetrics = async () => {
-    const res = await ecotekaV1.get(
-      `organization/${user.currentOrganization.id}/metrics_by_year/2020`
-    );
-    return res;
-  };
-  const getInterventions = async () => {
-    const res = await ecotekaV1.get(
-      `/organization/${user.currentOrganization.id}/interventions/year/2020`
-    );
-    return res;
-  };
+  const { apiETK } = api;
+  const [containerRef, containerSize] = useDimensions();
   const [interventions, setIterventions] = useState([]);
   const [metrics, setMetrics] = useState({} as MetricsProps);
   const [treeWidgets, setTreeWidgets] = useState([]);
   const [interventionsWidgets, setInterventionsWidgets] = useState(
     [] as WidgetProps[]
   );
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const [year, setYear] = useState(2021);
+
+  const colorSchemeInterventions =
+    theme.palette.type == "light"
+      ? ["#a53b67", "#fbb13c", "#218380", "#2871d1"]
+      : ["#a53b67", "#218380", "#2871d1", "#fbb13c"];
 
   const steps = t("pages:Dashboard.steps", { returnObjects: true }) as [];
 
+  const getOrganizationMetrics = async (year: number) => {
+    if (user) {
+      try {
+        const { data, status } = await apiETK.get(
+          `organization/${user.currentOrganization.id}/metrics_by_year/${year}`
+        );
+        if (status === 200 && user) {
+          setMetrics(data);
+        }
+      } catch (e) {}
+    }
+  };
+
+  const getInterventions = async (year: number) => {
+    if (user) {
+      try {
+        const { data, status } = await apiETK.get(
+          `/organization/${user.currentOrganization.id}/interventions/year/${year}`
+        );
+        if (status === 200 && user) {
+          setIterventions(data);
+        }
+      } catch (e) {}
+    }
+  };
+
+  const handleYearChange = (event) => {
+    setYear(event.target.value);
+  };
+
   useEffect(() => {
-    getOrganizationMetrics().then((response) => {
-      if (response.status == 200 && user) {
-        setMetrics(response.data);
-      }
-    });
-    getInterventions().then((response) => {
-      if (response.status == 200 && user) {
-        setIterventions(response.data);
-      }
-    });
-  }, [user]);
+    getOrganizationMetrics(year);
+    getInterventions(year);
+  }, [user, year]);
 
   useEffect(() => {
     setTreeWidgets([
@@ -240,7 +259,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                 "intervention_start_date",
                 "intervention_type",
                 "estimated_cost",
-                2020
+                year
               )}
               xScaleKey="date"
               colorScheme={colorSchemeInterventions}
@@ -251,18 +270,47 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
       ]);
       setActiveStep(3);
     }
-  }, [interventions, metrics]);
+  }, [interventions, metrics, year]);
 
   return (
     <AppLayoutGeneral>
       <Container ref={containerRef}>
-        <Box py={4}>
+        <Box
+          py={4}
+          display="flex"
+          flexDirection="row"
+          justifyContent="start"
+          alignItems="center"
+        >
           <Typography
             className={classes.dashboardTitle}
             variant="h5"
-            component="h1"
+            component="div"
           >
-            {t("components:Dashboard.title")} 2020{" "}
+            {t("components:Dashboard.title")}
+          </Typography>
+          <FormControl
+            variant="outlined"
+            size="small"
+            className={classes.formControl}
+          >
+            <InputLabel id="dashboard-select-year-label">Année</InputLabel>
+            <Select
+              labelId="dashboard-select-year-label"
+              id="dashboard-select-year"
+              value={year}
+              onChange={handleYearChange}
+            >
+              <MenuItem value={2020}>2020</MenuItem>
+              <MenuItem value={2021}>2021</MenuItem>
+              <MenuItem value={2021}>2022</MenuItem>
+            </Select>
+          </FormControl>
+          <Typography
+            className={classes.dashboardTitle}
+            variant="h5"
+            component="div"
+          >
             {t("components:Dashboard.for")} {user?.currentOrganization?.name}
           </Typography>
         </Box>
@@ -330,9 +378,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                 }}
                 springProps={props}
                 component={widget.component}
-              >
-                {widget.name}
-              </Widget>
+              ></Widget>
             )}
           </SpringTail>
         </Grid>
@@ -399,9 +445,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                     }}
                     springProps={props}
                     component={widget.component}
-                  >
-                    {widget.name}
-                  </Widget>
+                  ></Widget>
                 )}
               </SpringTail>
             </Grid>
