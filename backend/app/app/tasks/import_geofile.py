@@ -5,6 +5,7 @@ import datetime
 import json
 from pathlib import Path
 from typing import Any
+from math import isnan
 
 import numpy as np
 from sqlalchemy.orm import Session
@@ -95,7 +96,7 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
         if transformer is not None:
             coord = transformer.transform(x, y)
 
-        properties = df.loc[i]
+        properties = df.loc[i].replace(np.nan, '', regex=True)
         tree = create_tree(geofile, coord[0], coord[1], properties)
         db.add(tree)
 
@@ -133,6 +134,7 @@ def import_geofile(db: Session, geofile: GeoFile):
                 converters=converters,
                 engine=engine
             )
+            
             import_from_dataframe(db, df, geofile.get_filepath(), geofile)
 
         if geofile.extension == "csv":
