@@ -1,5 +1,4 @@
 const envVars = {
-  ASSET_PREFIX: "",
   API_URL: "%api_url%",
   TOKEN_STORAGE: "%token_storage%",
   REFRESH_TOKEN_STORAGE: "%refresh_token_storage%",
@@ -14,9 +13,11 @@ let config = {
 config.env = {};
 
 const snakeToCamel = (str) =>
-  str.toLowerCase().replace(/([-_][a-z])/g, (group) =>
-    group.toUpperCase().replace("-", "").replace("_", "")
-  );
+  str
+    .toLowerCase()
+    .replace(/([-_][a-z])/g, (group) =>
+      group.toUpperCase().replace("-", "").replace("_", "")
+    );
 
 config.env.assetPrefix = process.env.ASSET_PREFIX || envVars.ASSET_PREFIX;
 config.publicRuntimeConfig = {};
@@ -39,4 +40,5 @@ config.webpack = (config, { isServer }) => {
   return config;
 };
 
+config.envVars = envVars;
 module.exports = config;

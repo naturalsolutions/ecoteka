@@ -1,42 +1,28 @@
-const envVars = {
-  ASSET_PREFIX: "",
-  API_URL: "%api_url%",
-  TOKEN_STORAGE: "%token_storage%",
-  REFRESH_TOKEN_STORAGE: "%refresh_token_storage%",
-};
+const fastReplace = require("fast-replace/src/fastReplace");
+const nextConfig = require("../next.config");
 
-const excludeEnvVars = ["ASSET_PREFIX"];
+async function main(process) {
+  for (let keyName in nextConfig.envVars) {
+    if (process.env[keyName]) {
+      const options = {
+        globs: [".next/**"],
+        quiet: false,
+      };
 
-let config = {
-  trailingSlash: true,
-};
-
-config.env = {};
-
-const snakeToCamel = (str) =>
-  str.replace(/([-_][a-z])/g, (group) =>
-    group.toUpperCase().replace("-", "").replace("_", "")
-  );
-
-config.env.assetPrefix = process.env.ASSET_PREFIX || envVars.ASSET_PREFIX;
-config.publicRuntimeConfig = {};
-
-for (let env in envVars) {
-  if (!excludeEnvVars.includes(env)) {
-    config.publicRuntimeConfig[snakeToCamel(env)] =
-      process.env[env] || envVars[env];
+      await fastReplace(
+        nextConfig.envVars[keyName],
+        process.env[keyName],
+        options
+      );
+    }
   }
 }
 
-config.webpack = (config, { isServer }) => {
-  // Fixes npm packages that depend on `fs` module
-  if (!isServer) {
-    config.node = {
-      fs: "empty",
-    };
-  }
-
-  return config;
-};
-
-module.exports = config;
+main(process)
+  .then(() => {
+    process.exit();
+  })
+  .catch((e) => {
+    console.log(e);
+    process.exit(-1);
+  });
