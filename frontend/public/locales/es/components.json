@@ -325,6 +325,7 @@
   },
   "Tree": {
     "properties": {
+      "taxon": "Taxon",
       "family": "Famille",
       "genus": "Genre",
       "species": "Espèce",
@@ -376,6 +377,7 @@
       "notes": "Remarques"
     },
     "placeholder": {
+      "taxon": "",
       "family": "ex: Platanaceae",
       "genus": "ex: Platanus",
       "species": "ex: occidentalis",
@@ -403,6 +405,7 @@
       "notes": "Remarques"
     },
     "helperText": {
+      "taxon": "Select a species from our checklist; following fiels will be auto filled.",
       "family": "Taxon auquel appartient l'arbre en latin (cinquième niveau de la classification classique)",
       "genus": "Subdivision de la famille auquel appartient l'arbre en latin (sixième niveau de la classification classique)",
       "species": "Subdivision du genre auquel appartient l'arbre en latin (septième niveau de la classification classique)",

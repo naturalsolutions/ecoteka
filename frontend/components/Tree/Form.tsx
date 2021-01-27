@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
+import { DevTool } from "@hookform/devtools";
 import useETKTreeSchema from "@/components/Tree/Schema";
 import { useSnackbar } from "notistack";
 import useApi from "@/lib/useApi";
@@ -41,15 +42,11 @@ const ETKTreeForm: React.FC<{
   const [saving, setSaving] = useState(false);
   const { user } = useAppContext();
   const defaultValues = {
-    family: "",
-    genus: "",
-    species: "",
-    canonicalName: "",
     isLit: false,
     isProtected: false,
     isTreeOfInterest: false,
   };
-  const { fields, setValue, getValues } = useETKForm({
+  const { fields, setValue, getValues, control } = useETKForm({
     schema,
     defaultValues,
   });
@@ -97,84 +94,91 @@ const ETKTreeForm: React.FC<{
   };
 
   return (
-    <Grid container direction="column" spacing={2} className={classes.grid}>
-      <Grid item>
-        <Typography variant="h6" className={classes.title}>
-          {t("components:TreeForm.title")}
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.heading}>
-          {t("components:TreeForm.treeIdentity")}
-        </Typography>
-        <Grid container direction="column">
-          {Object.keys(schema)
-            .filter((f) => schema[f].category === "Identité de l'arbre")
-            .map((f) => (
-              <Grid key={`${schema[f].category}-${f}`} item>
-                {fields[f]}
-              </Grid>
-            ))}
+    <>
+      <Grid container direction="column" spacing={2} className={classes.grid}>
+        <Grid item>
+          <Typography variant="h6" className={classes.title}>
+            {t("components:TreeForm.title")}
+          </Typography>
         </Grid>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.heading}>
-          {t("components:TreeForm.characteristics")}
-        </Typography>
-        <Grid container direction="column">
-          {Object.keys(schema)
-            .filter((f) => schema[f].category === "Caractéristiques")
-            .map((f) => (
-              <Grid key={`${schema[f].category}-${f}`} item>
-                {fields[f]}
-              </Grid>
-            ))}
+        <Grid item>
+          <Typography className={classes.heading}>
+            {t("components:TreeForm.treeIdentity")}
+          </Typography>
+          <Grid container direction="column">
+            {Object.keys(schema)
+              .filter((f) => schema[f].category === "Identité de l'arbre")
+              .map((f) => (
+                <Grid key={`${schema[f].category}-${f}`} item>
+                  {fields[f]}
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.heading}>
-          {t("components:TreeForm.outdoorEnvironment")}
-        </Typography>
-        <Grid container direction="column">
-          {Object.keys(schema)
-            .filter((f) => schema[f].category === "Environnement extérieur")
-            .map((f) => (
-              <Grid key={`${schema[f].category}-${f}`} item>
-                {fields[f]}
-              </Grid>
-            ))}
+        <Grid item>
+          <Typography className={classes.heading}>
+            {t("components:TreeForm.characteristics")}
+          </Typography>
+          <Grid container direction="column">
+            {Object.keys(schema)
+              .filter((f) => schema[f].category === "Caractéristiques")
+              .map((f) => (
+                <Grid key={`${schema[f].category}-${f}`} item>
+                  {fields[f]}
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.heading}>
-          {t("components:TreeForm.other")}
-        </Typography>
+        <Grid item>
+          <Typography className={classes.heading}>
+            {t("components:TreeForm.outdoorEnvironment")}
+          </Typography>
+          <Grid container direction="column">
+            {Object.keys(schema)
+              .filter((f) => schema[f].category === "Environnement extérieur")
+              .map((f) => (
+                <Grid key={`${schema[f].category}-${f}`} item>
+                  {fields[f]}
+                </Grid>
+              ))}
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Typography className={classes.heading}>
+            {t("components:TreeForm.other")}
+          </Typography>
 
-        <Grid container direction="column">
-          {Object.keys(schema)
-            .filter((f) => schema[f].category === "Autre")
-            .map((f) => (
-              <Grid key={`${schema[f].category}-${f}`} item>
-                {fields[f]}
-              </Grid>
-            ))}
+          <Grid container direction="column">
+            {Object.keys(schema)
+              .filter((f) => schema[f].category === "Autres")
+              .map((f) => (
+                <Grid key={`${schema[f].category}-${f}`} item>
+                  {fields[f]}
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid item>
-        <Grid container>
-          <Grid item xs></Grid>
-          <Grid item>
-            <Button color="primary" variant="contained" onClick={handlerOnSave}>
-              {saving ? (
-                <CircularProgress size={30} />
-              ) : (
-                t("common:buttons.save")
-              )}
-            </Button>
+        <Grid item>
+          <Grid container>
+            <Grid item xs></Grid>
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handlerOnSave}
+              >
+                {saving ? (
+                  <CircularProgress size={30} />
+                ) : (
+                  t("common:buttons.save")
+                )}
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      <DevTool control={control} />
+    </>
   );
 };
 

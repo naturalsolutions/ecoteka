@@ -43,8 +43,38 @@ export default function useTreeSchema() {
   });
 
   return {
+    taxon: {
+      type: "taxonAsyncAutocomplete",
+      category: "Identité de l'arbre",
+      component: {
+        label: t("components:Tree.properties.taxon"),
+        placeholder: t("components:Tree.placeholder.taxon"),
+        helperText: t("components:Tree.helperText.taxon"),
+      },
+      schema: yup.string(),
+    },
+    canonicalName: {
+      type: "controlledTextfield",
+      category: "Identité de l'arbre",
+      component: {
+        label: t("components:Tree.properties.canonicalName"),
+        placeholder: t("components:Tree.placeholder.canonicalName"),
+        helperText: t("components:Tree.helperText.canonicalName"),
+      },
+      schema: yup.string(),
+    },
+    vernacularName: {
+      type: "controlledTextfield",
+      category: "Identité de l'arbre",
+      component: {
+        label: t("components:Tree.properties.vernacularName"),
+        placeholder: t("components:Tree.placeholder.vernacularName"),
+        helperText: t("components:Tree.helperText.vernacularName"),
+      },
+      schema: yup.string(),
+    },
     family: {
-      type: "textfield",
+      type: "controlledTextfield",
       category: "Identité de l'arbre",
       component: {
         label: t("components:Tree.properties.family"),
@@ -80,26 +110,6 @@ export default function useTreeSchema() {
         label: t("components:Tree.properties.cultivar"),
         placeholder: t("components:Tree.placeholder.cultivar"),
         helperText: t("components:Tree.helperText.cultivar"),
-      },
-      schema: yup.string(),
-    },
-    canonicalName: {
-      type: "taxonAsyncAutocomplete",
-      category: "Identité de l'arbre",
-      component: {
-        label: t("components:Tree.properties.canonicalName"),
-        placeholder: t("components:Tree.placeholder.canonicalName"),
-        helperText: t("components:Tree.helperText.canonicalName"),
-      },
-      schema: yup.string(),
-    },
-    vernacularName: {
-      type: "textfield",
-      category: "Identité de l'arbre",
-      component: {
-        label: t("components:Tree.properties.vernacularName"),
-        placeholder: t("components:Tree.placeholder.vernacularName"),
-        helperText: t("components:Tree.helperText.vernacularName"),
       },
       schema: yup.string(),
     },
@@ -267,7 +277,7 @@ export default function useTreeSchema() {
     },
     allergenicRiskScore: {
       type: "textfield",
-      category: "Autre",
+      category: "Autres",
       component: {
         type: "number",
         label: t("components:Tree.properties.allergenicRiskScore"),
@@ -276,11 +286,11 @@ export default function useTreeSchema() {
       },
       schema: yup.number().required().positive().integer(),
     },
-    remarks: {
+    notes: {
       type: "textfield",
-      category: "Autre",
+      category: "Autres",
       component: {
-        label: t("components:Tree.properties.remarks"),
+        label: t("components:Tree.properties.notes"),
       },
       schema: yup.string(),
     },

@@ -342,6 +342,7 @@
 
   "Tree": {
     "properties": {
+      "taxon": "Taxon",
       "family": "Family",
       "gender": "Gender",
       "specie": "Specie",
@@ -392,6 +393,7 @@
       "remarks": "Remarks"
     },
     "helperText": {
+      "taxon": "Select a species from our checklist; following fiels will be auto filled.",
       "family": "Famille",
       "genus": "Genre",
       "species": "Espèce",
@@ -419,6 +421,7 @@
       "remarks": "Remarques"
     },
     "placeholder": {
+      "taxon": "",
       "family": "ex: Platanaceae",
       "genus": "ex: Platanus",
       "species": "ex: occidentalis",

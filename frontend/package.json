@@ -66,5 +66,8 @@
     "use-debounce": "^5.2.0",
     "uuid": "^8.3.2",
     "yup": "^0.31.0"
+  },
+  "devDependencies": {
+    "@hookform/devtools": "^2.2.1"
   }
 }

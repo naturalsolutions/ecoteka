@@ -324,6 +324,7 @@
   },
   "Tree": {
     "properties": {
+      "taxon": "Taxon",
       "family": "Famille",
       "genus": "Genre",
       "species": "Espèce",
@@ -366,7 +367,7 @@
         "cone": "Cône"
       },
       "isProtected": "Arbre protégé?",
-      "isTreeOfInterest": "Arbre remarquable",
+      "isTreeOfInterest": "Arbre remarquable?",
       "soilConstraints": "Contraintes au sol",
       "airConstraints": "Contraintes aériennes",
       "isLit": "Présence d'éclairage?",
@@ -375,6 +376,7 @@
       "notes": "Remarques"
     },
     "placeholder": {
+      "taxon": "",
       "family": "ex: Platanaceae",
       "genus": "ex: Platanus",
       "species": "ex: occidentalis",
@@ -402,6 +404,7 @@
       "notes": "Remarques"
     },
     "helperText": {
+      "taxon": "Sélectionner une espèce de notre référentiel; les champs suivants seront remplis automatiquement.",
       "family": "Taxon auquel appartient l'arbre en latin (cinquième niveau de la classification classique)",
       "genus": "Subdivision de la famille auquel appartient l'arbre en latin (sixième niveau de la classification classique)",
       "species": "Subdivision du genre auquel appartient l'arbre en latin (septième niveau de la classification classique)",
@@ -444,7 +447,7 @@
     "treeIdentity": "Identité de l'arbre",
     "characteristics": "Caractéristiques",
     "outdoorEnvironment": "Environnement extérieur",
-    "other": "Autre",
+    "other": "Autres",
     "imagesUpload": {
       "select": "Déposer ici les photos ou cliquer (max.{{max}})"
     }

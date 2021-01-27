@@ -44,6 +44,11 @@ export default function useTaxonAsyncAutocomplete({
     }
   }, [open, query]);
 
+  useEffect(() => {
+    const species = () => setValue("species", "species");
+    species;
+  }, []);
+
   const searchTaxa = async (q: string) => {
     setIsLoading(true);
     try {
@@ -65,10 +70,12 @@ export default function useTaxonAsyncAutocomplete({
 
   const setTaxonomicValues = (data) => {
     if (!data) {
+      setValue("canonicalName", "");
       setValue("genus", "");
       setValue("species", "");
     }
     if (data?.ecoteka_canonical) {
+      setValue("canonicalName", data.ecoteka_canonical);
       const [genus, species] = data.ecoteka_canonical.split(" ");
       setValue("genus", genus);
       setValue("species", species);
@@ -117,7 +124,9 @@ export default function useTaxonAsyncAutocomplete({
             }}
             options={taxa}
             loading={isLoading}
-            getOptionLabel={(option) => option.ecoteka_canonical}
+            getOptionLabel={(option) => {
+              return option ? option.ecoteka_canonical : "";
+            }}
             filterOptions={(options, state) => options}
             renderOption={(option) => (
               <span>
@@ -125,8 +134,9 @@ export default function useTaxonAsyncAutocomplete({
               </span>
             )}
             onChange={(e, data) => {
-              onChange(data);
+              console.log("changing", data);
               setTaxonomicValues(data);
+              onChange(data);
             }}
             {...props}
             renderInput={(params) => {
@@ -154,12 +164,8 @@ export default function useTaxonAsyncAutocomplete({
             }}
           />
         )}
-        defaultValue={{
-          id: 0,
-          t: "",
-        }}
-        onChange={([, data]) => data}
         name={name}
+        onChange={(data) => data}
         control={control}
         key={name}
       />

@@ -39,7 +39,7 @@ export default function useTextField(props: ETKSwitchProps): Fields {
           />
         }
         key={name}
-        label={name}
+        label={field.label}
       />
     );
   }
