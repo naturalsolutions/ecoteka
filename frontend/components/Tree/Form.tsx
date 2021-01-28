@@ -8,12 +8,10 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
-import { DevTool } from "@hookform/devtools";
 import useETKTreeSchema from "@/components/Tree/Schema";
 import { useSnackbar } from "notistack";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
-import { useAppLayout } from "@/components/AppLayout/Base";
 
 const useStyles = makeStyles((theme) => ({
   grid: {},
@@ -177,7 +175,6 @@ const ETKTreeForm: React.FC<{
           </Grid>
         </Grid>
       </Grid>
-      <DevTool control={control} />
     </>
   );
 };
