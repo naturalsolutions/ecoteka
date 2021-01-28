@@ -106,6 +106,9 @@ services:
       - traefik.http.services.tile_server.loadbalancer.server.port=80
 
   meilisearch:
+    labels:
+      - traefik.http.routers.meilisearch.entrypoints=websecure
+      - traefik.http.routers.meilisearch.tls=true
     environment:
       - MEILI_ENV=production
       - MEILI_MASTER_KEY=${NS_ECOTEKA_MEILISEARCH_MASTER_KEY}
