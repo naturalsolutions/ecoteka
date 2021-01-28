@@ -2,6 +2,8 @@ const envVars = {
   API_URL: "%api_url%",
   TOKEN_STORAGE: "%token_storage%",
   REFRESH_TOKEN_STORAGE: "%refresh_token_storage%",
+  MEILI_API_URL: "%meili_api_url%",
+  MEILI_MASTER_KEY: "%meili_master_key%",
 };
 
 const excludeEnvVars = ["ASSET_PREFIX"];

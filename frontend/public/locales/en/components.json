@@ -18,8 +18,8 @@
     "errorMessageServer": "Incorrect email or password",
     "errorMessageEmail": "Email address is invalid",
     "errorMessageRequiredField": "Field required",
-    "noAccount" : "Don't have an account yet?",
-    "accountRequest" : "Request the creation of an account !"
+    "noAccount": "Don't have an account yet?",
+    "accountRequest": "Request the creation of an account !"
   },
 
   "LanguageSelector": {
@@ -332,7 +332,7 @@
       "tutorcheck": "Verification of staking and protections",
       "globalcheck": "Global tree check"
     },
-    "interventionsTable":{
+    "interventionsTable": {
       "requestAnItervention": "Request an intervention",
       "date": "Date",
       "type": "Type",
@@ -341,22 +341,24 @@
   },
 
   "Tree": {
-    "properties":{
+    "properties": {
+      "taxon": "Taxon",
       "family": "Family",
       "gender": "Gender",
       "specie": "Specie",
       "cultivar": "Cultivar",
+      "canonicalName": "Scientific name",
       "vernacularName": "Vernacular Name",
       "townshipCode": "Town ship code",
       "zipCode": "Zip code",
       "address": "Adress",
       "zone": "Zone cutting",
-      "etkRegistrationNumber": "Ecoteka registration number",
-      "plantingDate": "Planting date",
+      "code": "registration number",
+      "plantationDate": "Planting date",
       "height": "Tree height",
       "diameter": "Tree diameter",
-      "soilType": {
-        "label": "Soil type",
+      "soilTexture": {
+        "label": "Soil texture",
         "clay": "Calyey",
         "silt": "Silty",
         "limestone": "Limestone",
@@ -364,14 +366,14 @@
         "acid": "Acid",
         "sandyclay": "Sandy clay"
       },
-      "rootType": {
-        "label": "Root type",
+      "rootsType": {
+        "label": "Roots type",
         "swivel": "Swivel",
         "tracing": "Tracing",
         "oblique": "Oblique"
       },
-      "habit": {
-        "label": "Tree habit",
+      "shape": {
+        "label": "Tree shape",
         "free": "Free",
         "semiFree": "Semi-free",
         "form": "Forming",
@@ -389,6 +391,62 @@
       "lightning": "Lighting",
       "allergens": "Allergenic tree",
       "remarks": "Remarks"
+    },
+    "helperText": {
+      "taxon": "Select a species from our checklist; following fiels will be auto filled.",
+      "family": "Famille",
+      "genus": "Genre",
+      "species": "Espèce",
+      "cultivar": "Cultivar",
+      "canonicalName": "Nom scientifique",
+      "vernacularName": "Nom vernaculaire",
+      "townshipCode": "Code commune",
+      "zipCode": "Code postal",
+      "address": "Adresse",
+      "zone": "Découpage en zone",
+      "code": "Matricule Ecoteka",
+      "plantationDate": "Date de plantation",
+      "height": "Hauteur de l'arbre",
+      "diameter": "Diamètre de l'arbre",
+      "soilTexture": "Type de sol",
+      "rootType": "Type d'enracinement",
+      "shape": "Port de l'arbre",
+      "procted": "Arbre protégé",
+      "remarkableTree": "Arbre remarquable",
+      "soilConstraints": "Contraintes au sol",
+      "aerianConstraint": "Contraintes aériennes",
+      "lightning": "Présence d'éclairage",
+      "watering": "Arrosage",
+      "allergens": "Arbre allergène",
+      "remarks": "Remarques"
+    },
+    "placeholder": {
+      "taxon": "",
+      "family": "ex: Platanaceae",
+      "genus": "ex: Platanus",
+      "species": "ex: occidentalis",
+      "cultivar": "Cultivar",
+      "canonicalName": "Nom scientifique",
+      "vernacularName": "Nom vernaculaire",
+      "townshipCode": "Code commune",
+      "zipCode": "Code postal",
+      "address": "Adresse",
+      "zone": "Découpage en zone",
+      "code": "Matricule Ecoteka",
+      "plantationDate": "Date de plantation",
+      "height": "Hauteur de l'arbre",
+      "diameter": "Diamètre de l'arbre",
+      "soilTexture": "Type de sol",
+      "rootType": "Type d'enracinement",
+      "shape": "Port de l'arbre",
+      "procted": "Arbre protégé",
+      "remarkableTree": "Arbre remarquable",
+      "soilConstraints": "Contraintes au sol",
+      "aerianConstraint": "Contraintes aériennes",
+      "lightning": "Présence d'éclairage",
+      "watering": "Arrosage",
+      "allergens": "Arbre allergène",
+      "remarks": "Remarques"
     },
     "summary": {
       "moreDetails": "More details"
@@ -532,7 +590,7 @@
   "Dashboard": {
     "title": "Dashboard",
     "for": "for",
-    "treeHeritage":{
+    "treeHeritage": {
       "title": "Your tree heritage",
       "totalTrees": "Total trees",
       "plantedTrees": "Planted trees in 2020",
@@ -541,7 +599,7 @@
       "alertText": "Your workspace does not contain any trees yet",
       "boldText": "Start now !"
     },
-    "heritageManagment":{
+    "heritageManagment": {
       "totalCost": "Total cost interventions planned in 2020",
       "title": "State of management of your assets",
       "alertTitle": "Add, program and monitor the budget for interventions on your assets",
