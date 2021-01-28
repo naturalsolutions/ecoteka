@@ -15,11 +15,8 @@ export default function useTextField(props: ETKCheckboxProps): Fields {
 
   for (const name in props.fields) {
     const field = props.fields[name];
-    const defaultFieldProps: ETKCheckboxProps = {
+    const defaultFieldProps: CheckboxProps = {
       checked: field.checked,
-      fullWidth: true,
-      error: Boolean(props.errors[name]),
-      helperText: props.errors[name]?.message,
     };
 
     const fieldProps = Object.assign({}, defaultFieldProps, field);
