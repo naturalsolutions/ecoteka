@@ -10,6 +10,7 @@ import {
   Button,
   MobileStepper,
   Fab,
+  Checkbox,
 } from "@material-ui/core";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useAppLayout } from "@/components/AppLayout/Base";
@@ -22,6 +23,7 @@ import {
   KeyboardArrowRight,
 } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
+import useTreeSchema from "@/components/Tree/Schema";
 
 export interface TreeInfosPropertiesProps {
   tree: {
@@ -79,6 +81,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
   const id = props.tree?.id;
   const { api } = useApi();
   const { apiETK } = api;
+  const schema = useTreeSchema();
   const [uploadImages, setUploadImages] = useState<File[]>([]);
   const { snackbar, dialog } = useAppLayout();
   const [imagesProgress, setImagesProgress] = useState(0);
@@ -323,18 +326,54 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
               <TableCell>{props.tree.y}</TableCell>
             </TableRow>
             {props.tree.properties &&
-              Object.keys(props.tree.properties).map((key) => {
-                const labels = t("components:Tree.properties", {
-                  returnObjects: true,
-                });
-
-                return (
-                  <TableRow key={`psti-${key}`}>
-                    <TableCell>{labels[key]}​​​​</TableCell>
-                    <TableCell>{props.tree.properties[key]}</TableCell>
-                  </TableRow>
-                );
-              })}
+              Object.keys(props.tree.properties)
+                .filter((key) => key !== "taxon")
+                .map((key) => {
+                  const labels = t("components:Tree.properties", {
+                    returnObjects: true,
+                  });
+                  switch (schema[key].type) {
+                    case "select":
+                      return (
+                        <TableRow key={`psti-${key}`}>
+                          <TableCell>
+                            {t(`components:Tree.properties.${key}.label`)}​​​​
+                          </TableCell>
+                          <TableCell>
+                            {t(
+                              `components:Tree.properties.${key}.${props.tree.properties[key]}`
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                      break;
+                    case "switch":
+                    case "checkbox":
+                      return (
+                        <TableRow key={`psti-${key}`}>
+                          <TableCell>
+                            {t(`components:Tree.properties.${key}`)}​​​​
+                          </TableCell>
+                          <TableCell>
+                            <Checkbox
+                              disabled
+                              checked={props.tree.properties[key]}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                      break;
+                    default:
+                      return (
+                        <TableRow key={`psti-${key}`}>
+                          <TableCell>
+                            {t(`components:Tree.properties.${key}`)}​​​​
+                          </TableCell>
+                          <TableCell>{props.tree.properties[key]}</TableCell>
+                        </TableRow>
+                      );
+                  }
+                })}
           </TableBody>
         </Table>
       </TableContainer>

@@ -1,10 +1,12 @@
 import { TextField, TextFieldProps } from "@material-ui/core";
+import { Controller } from "react-hook-form";
 
 interface Fields {
   [key: string]: TextFieldProps;
 }
 
 interface ETKTextFieldProps {
+  control: any;
   register: any;
   errors: any;
   fields: Fields;
@@ -35,7 +37,13 @@ export default function useTextField(props: ETKTextFieldProps): Fields {
 
     const fieldProps = Object.assign({}, defaultFieldProps, field);
 
-    textfields[name] = <TextField {...fieldProps} />;
+    textfields[name] = (
+      <Controller
+        as={<TextField {...fieldProps} InputLabelProps={{ shrink: true }} />}
+        control={props.control}
+        name={name}
+      />
+    );
   }
 
   return textfields;
