@@ -303,7 +303,7 @@ def add_members(
                 user_in_db = user.create(
                     db,
                     obj_in=UserCreate(
-                        full_name=invite.email,
+                        full_name=invite.full_name,
                         email=invite.email,
                         password=pwd.genword(),
                     ),
