@@ -46,6 +46,11 @@ def send_new_registration_link_email_task(email_to: str, full_name: str, link: s
     send_new_registration_link_email(email_to, full_name, link)
     return "ok"
 
+@celery_app.task
+def send_new_invitation_email_task(email_to: str, full_name: str, password: str):
+    send_new_registration_email(email_to, full_name, password)
+    return "ok"
+
 
 @celery_app.task
 def generate_and_insert_registration_link_task(user_id: int):

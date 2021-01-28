@@ -124,9 +124,11 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
 
         for (user_id, role) in user_ids:
             user_in_db = crud.user.get(db, id=int(user_id))
-
+            
             if user_in_db:
-                members.append(dict(user_in_db.as_dict(), role=role))
+                user_data = user_in_db.as_dict()
+                del user_data["hashed_password"]
+                members.append(dict(user_data, role=role))
 
         return members
 

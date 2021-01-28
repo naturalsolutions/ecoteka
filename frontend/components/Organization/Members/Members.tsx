@@ -91,10 +91,6 @@ const Members: FC<MembersProps> = ({ organization }) => {
   }, [selectedMembers]);
 
   useEffect(() => {
-    console.table(data);
-  }, [data]);
-
-  useEffect(() => {
     getData(organization.id);
   }, [organization]);
 
