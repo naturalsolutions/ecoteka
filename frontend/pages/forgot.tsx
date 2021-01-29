@@ -53,20 +53,16 @@ export default function ResetPasswordPage() {
   );
 
   const emailCard = (
-    <Card>
-      <CardHeader title="Recover Password" />
+    <Card style={{ width: 568 }}>
+      <CardHeader title={t("Forgot.EmailForm.CardHeader.title")} />
       <CardContent>
         <Grid container direction="column" spacing={2}>
-          <Grid item>{t("forgot.emailCard.description")}</Grid>
-          <Grid item>{t("forgot.emailCard.emailTitle")}</Grid>
+          <Grid item>{t("Forgot.EmailForm.CardHeader.description")}</Grid>
           <Grid item>
             <TextField
-              InputProps={{
-                startAdornment: <MailIcon />,
-              }}
               autoFocus
-              size="small"
               fullWidth
+              placeholder={t("Forgot.EmailForm.CardHeader.emailPlaceholder")}
               variant="outlined"
               value={email}
             />
@@ -78,7 +74,7 @@ export default function ResetPasswordPage() {
               color="primary"
               onClick={handleSendEmail}
             >
-              {t("forgot.emailCard.buttonSendEmail")}
+              {t("Forgot.EmailForm.CardHeader.sendButton")}
             </Button>
           </Grid>
         </Grid>
@@ -89,7 +85,7 @@ export default function ResetPasswordPage() {
   return (
     <AppLayoutGeneral>
       <Head>
-        <title>ecoTeka · {t("forgot.title")}</title>
+        <title>ecoTeka · {t("Forgot.EmailForm.CardHeader.title")}</title>
       </Head>
       <Grid
         container

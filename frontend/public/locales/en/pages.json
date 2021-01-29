@@ -1,10 +1,12 @@
 {
   "forgot": {
-    "title": "Recover Password",
-    "emailCard": {
-      "description": "Don’t worry, happens to the best of us",
-      "emailTitle": "Your email",
-      "buttonSendEmail": "Email me a recovery link"
+    "EmailForm": {
+      "CardHeader": {
+        "title": "Forgot password?",
+        "description": "Enter the email address associated with your account, and we'll email you a link to reset your password",
+        "emailPlaceholder": "Email",
+        "sendButton": "Send reset link"
+      }
     }
   },
   "Dashboard": {
