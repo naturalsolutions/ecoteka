@@ -17,8 +17,24 @@ depends_on = None
 
 
 def upgrade():
-    pass
+    op.drop_index(op.f("ix_contact_id"), table_name="contact")
+    op.drop_index(op.f("ix_contact_email"), table_name="contact")
+    op.drop_table("contact")
 
 
 def downgrade():
-    pass
+    op.create_table(
+        "contact",
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("first_name", sa.String(), nullable=False),
+        sa.Column("last_name", sa.String(), nullable=False),
+        sa.Column("email", sa.String(), nullable=True),
+        sa.Column("phone_number", sa.String(), nullable=True),
+        sa.Column("township", sa.String(), nullable=False),
+        sa.Column("position", sa.String(), nullable=True),
+        sa.Column("contact_request", sa.String(), nullable=False),
+        sa.PrimaryKeyConstraint("id"),
+    )
+
+    op.create_index(op.f("ix_contact_id"), "contact", ["id"], unique=True)
+    op.create_index(op.f("ix_contact_email"), "contact", ["email"])
