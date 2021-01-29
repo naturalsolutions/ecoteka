@@ -10,5 +10,13 @@
       "emailTitle": "Your email",
       "buttonSendEmail": "Email me a recovery link"
     }
+  },
+  "Dashboard": {
+    "steps": [
+      "Configuration de votre espace de travail",
+      "Inventaire patrimoine arboré",
+      "Pilotage de la gestion",
+      "Surveillance de l'état sanitaire"
+    ]
   }
 }

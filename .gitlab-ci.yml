@@ -9,7 +9,7 @@ build_frontend_dev:
   image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-dev-latest -f ./frontend/.docker/Dockerfile ./frontend --build-arg  API_URL_ARG=https://dev.ecoteka.org/api/v1
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-dev-latest -f ./frontend/.docker/Dockerfile ./frontend
     - docker push ${CI_REGISTRY_IMAGE}:frontend-dev-latest
     - docker system prune -a -f
   only:
@@ -35,7 +35,7 @@ build_frontend_master:
   image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-latest -f ./frontend/.docker/Dockerfile ./frontend  --build-arg  API_URL_ARG=https://dev.ecoteka.org/api/v1
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-latest -f ./frontend/.docker/Dockerfile ./frontend
     - docker push ${CI_REGISTRY_IMAGE}:frontend-latest
     - docker system prune -a -f
   only:

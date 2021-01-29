@@ -9,7 +9,19 @@
     "sending": "Sending..."
   },
   "buttons": {
-    "backToHome": "Back to home"
+    "backToHome": "Back to Home",
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish",
+    "save": "Save",
+    "create": "Create",
+    "update": "Update",
+    "send": "Send",
+    "cancel": "Cancel",
+    "archive": "Archive",
+    "delete": "Delete",
+    "export": "Export",
+    "import": "Import data"
   },
   "errors": {
     "email": "Email address is invalid",

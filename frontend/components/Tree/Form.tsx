@@ -9,10 +9,9 @@ import {
 import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useETKTreeSchema from "@/components/Tree/Schema";
-import { apiRest } from "@/lib/api";
+import { useSnackbar } from "notistack";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
-import { useAppLayout } from "@/components/AppLayout/Base";
-import { ITree } from "@/index";
 
 const useStyles = makeStyles((theme) => ({
   grid: {},
@@ -26,20 +25,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ETKTreeForm: React.FC<{
-  selection: { id: number; properties: { id: number; properties: {} } }[];
-}> = ({ selection }) => {
+  selection: {
+    id: number;
+    properties: { id: number; properties: {} };
+  }[];
+  onSave?(record: object): void;
+}> = ({ selection, onSave }) => {
   const { t } = useTranslation(["common", "components"]);
   const classes = useStyles();
   const schema = useETKTreeSchema();
-  const { snackbar } = useAppLayout();
+  const { api } = useApi();
+  const { apiETK } = api;
+  const { enqueueSnackbar } = useSnackbar();
   const [saving, setSaving] = useState(false);
-  const { fields, setValue, getValues } = useETKForm({
-    schema: schema,
-  });
   const { user } = useAppContext();
+  const defaultValues = {
+    isLit: false,
+    isProtected: false,
+    isTreeOfInterest: false,
+  };
+  const { fields, setValue, getValues, control } = useETKForm({
+    schema,
+    defaultValues,
+  });
 
   useEffect(() => {
     if (selection.length === 1) {
+      console.log(selection);
       for (let key in selection[0].properties.properties) {
         setValue(key, selection[0].properties.properties[key]);
       }
@@ -47,96 +59,123 @@ const ETKTreeForm: React.FC<{
   }, [selection]);
 
   const handlerOnSave = async () => {
-    setSaving(true);
-    const properties = getValues();
-    const response = await apiRest.trees.put(
-      user.currentOrganization.id,
-      selection[0].properties.id,
-      {
-        properties: properties,
+    try {
+      setSaving(true);
+
+      if (!selection.length) return;
+
+      const properties = getValues();
+      const organizationId = user.currentOrganization.id;
+      const treeId = selection[0].properties.id;
+
+      const { data, status } = await apiETK.put(
+        `/organization/${organizationId}/trees/${treeId}`,
+        {
+          properties,
+        }
+      );
+      if (status === 200) {
+        onSave(data);
+        enqueueSnackbar("Arbre mis à jour avec succès", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "center",
+          },
+        });
       }
-    );
-
-    if (response.ok) {
-      const newTree = (await response.json()) as ITree;
-      snackbar.current.open({
-        message: t("common:messages.success"),
-        autoHideDuration: 2000,
-      });
+    } catch (e) {
+      //
+    } finally {
+      setSaving(false);
     }
-
-    setSaving(false);
   };
 
   return (
-    <Grid container direction="column" spacing={2} className={classes.grid}>
-      <Grid item>
-        <Typography variant="h6" className={classes.title}>
-          Edition
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.heading}>Identité de l'arbre</Typography>
-        <Grid container direction="column">
-          {Object.keys(schema)
-            .filter((f) => schema[f].category === "Identité de l'arbre")
-            .map((f) => (
-              <Grid key={`${schema[f].category}-${f}`} item>
-                {fields[f]}
-              </Grid>
-            ))}
+    <>
+      <Grid container direction="column" spacing={2} className={classes.grid}>
+        <Grid item>
+          <Typography variant="h6" className={classes.title}>
+            {t("components:TreeForm.title")}
+          </Typography>
         </Grid>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.heading}>Caractéristiques</Typography>
-        <Grid container direction="column">
-          {Object.keys(schema)
-            .filter((f) => schema[f].category === "Caractéristiques")
-            .map((f) => (
-              <Grid key={`${schema[f].category}-${f}`} item>
-                {fields[f]}
-              </Grid>
-            ))}
+        <Grid item>
+          <Typography className={classes.heading}>
+            {t("components:TreeForm.treeIdentity")}
+          </Typography>
+          <Grid container direction="column">
+            {Object.keys(schema)
+              .filter((f) => schema[f].category === "Identité de l'arbre")
+              .map((f) => (
+                <Grid key={`${schema[f].category}-${f}`} item>
+                  {fields[f]}
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.heading}>
-          Environnement extérieur
-        </Typography>
-        <Grid container direction="column">
-          {Object.keys(schema)
-            .filter((f) => schema[f].category === "Environnement extérieur")
-            .map((f) => (
-              <Grid key={`${schema[f].category}-${f}`} item>
-                {fields[f]}
-              </Grid>
-            ))}
+        <Grid item>
+          <Typography className={classes.heading}>
+            {t("components:TreeForm.characteristics")}
+          </Typography>
+          <Grid container direction="column">
+            {Object.keys(schema)
+              .filter((f) => schema[f].category === "Caractéristiques")
+              .map((f) => (
+                <Grid key={`${schema[f].category}-${f}`} item>
+                  {fields[f]}
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid item>
-        <Typography className={classes.heading}>Autre</Typography>
+        <Grid item>
+          <Typography className={classes.heading}>
+            {t("components:TreeForm.outdoorEnvironment")}
+          </Typography>
+          <Grid container direction="column">
+            {Object.keys(schema)
+              .filter((f) => schema[f].category === "Environnement extérieur")
+              .map((f) => (
+                <Grid key={`${schema[f].category}-${f}`} item>
+                  {fields[f]}
+                </Grid>
+              ))}
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Typography className={classes.heading}>
+            {t("components:TreeForm.other")}
+          </Typography>
 
-        <Grid container direction="column">
-          {Object.keys(schema)
-            .filter((f) => schema[f].category === "Autre")
-            .map((f) => (
-              <Grid key={`${schema[f].category}-${f}`} item>
-                {fields[f]}
-              </Grid>
-            ))}
+          <Grid container direction="column">
+            {Object.keys(schema)
+              .filter((f) => schema[f].category === "Autres")
+              .map((f) => (
+                <Grid key={`${schema[f].category}-${f}`} item>
+                  {fields[f]}
+                </Grid>
+              ))}
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid item>
-        <Grid container>
-          <Grid item xs></Grid>
-          <Grid item>
-            <Button color="primary" variant="contained" onClick={handlerOnSave}>
-              {saving ? <CircularProgress size={30} /> : "Enregistrer"}
-            </Button>
+        <Grid item>
+          <Grid container>
+            <Grid item xs></Grid>
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handlerOnSave}
+              >
+                {saving ? (
+                  <CircularProgress size={30} />
+                ) : (
+                  t("common:buttons.save")
+                )}
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

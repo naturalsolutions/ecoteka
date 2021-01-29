@@ -13,8 +13,15 @@
     "previous": "Précédent",
     "next": "Ok",
     "finish": "Terminer",
+    "save": "Enregistrer",
+    "create": "Ajouter",
+    "update": "Mettre à jour",
     "send": "Envoyer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "archive": "Archiver",
+    "delete": "Supprimer",
+    "export": "Export",
+    "import": "Importer vos données"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",

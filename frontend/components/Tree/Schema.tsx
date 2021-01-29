@@ -1,56 +1,126 @@
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
+import taxaOptions from "@/data/ecotekaTaxa";
 
 export default function useTreeSchema() {
-  const { t } = useTranslation(["common", "components"]);
+  const { t } = useTranslation(["components", "common"]);
+  const soilTextureOptions = [
+    "clay",
+    "silt",
+    "limestone",
+    "sand",
+    "acid",
+    "sandyclay",
+  ].map((option) => {
+    return {
+      label: t(`components:Tree.properties.soilTexture.${option}`),
+      value: option,
+    };
+  });
+
+  const rootsTypeOptions = ["swivel", "tracing", "oblique"].map((option) => {
+    return {
+      label: t(`components:Tree.properties.rootsType.${option}`),
+      value: option,
+    };
+  });
+
+  const shapeOptions = [
+    "free",
+    "semiFree",
+    "form",
+    "cat",
+    "trumpet",
+    "curtain",
+    "pyramid",
+    "ball",
+    "cone",
+  ].map((option) => {
+    return {
+      label: t(`components:Tree.properties.shape.${option}`),
+      value: option,
+    };
+  });
 
   return {
+    taxon: {
+      type: "taxonAsyncAutocomplete",
+      category: "Identité de l'arbre",
+      component: {
+        label: t("components:Tree.properties.taxon"),
+        placeholder: t("components:Tree.placeholder.taxon"),
+        helperText: t("components:Tree.helperText.taxon"),
+      },
+      schema: yup.string(),
+    },
+    canonicalName: {
+      type: "controlledTextfield",
+      category: "Identité de l'arbre",
+      component: {
+        label: t("components:Tree.properties.canonicalName"),
+        placeholder: t("components:Tree.placeholder.canonicalName"),
+        helperText: t("components:Tree.helperText.canonicalName"),
+      },
+      schema: yup.string(),
+    },
+    vernacularName: {
+      type: "controlledTextfield",
+      category: "Identité de l'arbre",
+      component: {
+        label: t("components:Tree.properties.vernacularName"),
+        placeholder: t("components:Tree.placeholder.vernacularName"),
+        helperText: t("components:Tree.helperText.vernacularName"),
+      },
+      schema: yup.string(),
+    },
     family: {
-      type: "textfield",
+      type: "controlledTextfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.family"),
+        label: t("components:Tree.properties.family"),
+        placeholder: t("components:Tree.placeholder.family"),
+        helperText: t("components:Tree.helperText.family"),
       } as any,
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
-    gender: {
-      type: "textfield",
+    genus: {
+      type: "controlledTextfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.gender"),
+        label: t("components:Tree.properties.genus"),
+        placeholder: t("components:Tree.placeholder.genus"),
+        helperText: t("components:Tree.helperText.genus"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
-    specie: {
-      type: "textfield",
+    species: {
+      type: "controlledTextfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.specie"),
+        label: t("components:Tree.properties.species"),
+        placeholder: t("components:Tree.placeholder.species"),
+        helperText: t("components:Tree.helperText.species"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string(),
     },
     cultivar: {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.cultivar"),
+        label: t("components:Tree.properties.cultivar"),
+        placeholder: t("components:Tree.placeholder.cultivar"),
+        helperText: t("components:Tree.helperText.cultivar"),
       },
       schema: yup.string(),
-    },
-    vernacularName: {
-      type: "textfield",
-      category: "Identité de l'arbre",
-      component: {
-        label: t("components:Tree.latinName"),
-      },
-      schema: yup.string().required(t("common:errors.required")),
     },
     townshipCode: {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
         type: "number",
-        label: t("components:Tree.townshipCode"),
+        label: t("components:Tree.properties.townshipCode"),
+        placeholder: t("components:Tree.placeholder.townshipCode"),
+        helperText: t("components:Tree.helperText.townshipCode"),
       },
       schema: yup.string(),
     },
@@ -59,7 +129,8 @@ export default function useTreeSchema() {
       category: "Identité de l'arbre",
       component: {
         type: "number",
-        label: t("components:Tree.zipCode"),
+        label: t("components:Tree.properties.zipCode"),
+        placeholder: t("components:Tree.placeholder.zipCode"),
       },
       schema: yup.string(),
     },
@@ -67,7 +138,8 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.address"),
+        label: t("components:Tree.properties.address"),
+        placeholder: t("components:Tree.placeholder.address"),
       },
       schema: yup.string(),
     },
@@ -75,32 +147,28 @@ export default function useTreeSchema() {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.zone"),
+        label: t("components:Tree.properties.zone"),
+        placeholder: t("components:Tree.placeholder.zone"),
+        helperText: t("components:Tree.helperText.zone"),
       },
       schema: yup.string(),
     },
-    etkRegistrationNumber: {
+    code: {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        readOnly: true,
-        label: t("components:Tree.etkRegistrationNumber"),
-      },
-      schema: yup.string().required(t("common:errors.required")),
-    },
-    registrationNumber: {
-      type: "textfield",
-      category: "Identité de l'arbre",
-      component: {
-        label: t("components:Tree.registrationNumber"),
+        label: t("components:Tree.code"),
+        placeholder: t("components:Tree.placeholder.code"),
+        helperText: t("components:Tree.helperText.code"),
       },
       schema: yup.string(),
     },
-    plantingDate: {
+    plantationDate: {
       type: "textfield",
       category: "Identité de l'arbre",
       component: {
-        label: t("components:Tree.plantingDate"),
+        label: t("components:Tree.properties.plantationDate"),
+        placeholder: t("components:Tree.placeholder.plantationDate"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -109,7 +177,8 @@ export default function useTreeSchema() {
       category: "Caractéristiques",
       component: {
         type: "number",
-        label: t("components:Tree.height"),
+        label: t("components:Tree.properties.height"),
+        helperText: t("components:Tree.helperText.height"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
@@ -118,98 +187,110 @@ export default function useTreeSchema() {
       category: "Caractéristiques",
       component: {
         type: "number",
-        label: t("components:Tree.diameter"),
+        label: t("components:Tree.properties.diameter"),
+        placeholder: t("components:Tree.placeholder.diameter"),
+        helperText: t("components:Tree.helperText.diameter"),
       },
       schema: yup.string().required(t("common:errors.required")),
     },
-    soilType: {
+    soilTexture: {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.soilType.label"),
-        items: [
-          { label: "Argileux", value: "Argileux" },
-          { label: "Limoneux", value: "Limoneux" },
-          { label: "Calcaire", value: "Calcaire" },
-          { label: "Sableux", value: "Sableux" },
-          { label: "Acide", value: "Acide" },
-          { label: "Argilo-sableux", value: "Argilo-sableux" },
-        ],
+        label: t("components:Tree.properties.soilTexture.label"),
+        items: soilTextureOptions,
       },
       schema: yup.string(),
     },
-    rootType: {
+    rootsType: {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.rootType.label"),
+        label: t("components:Tree.properties.rootsType.label"),
+        items: rootsTypeOptions,
       },
       schema: yup.string(),
     },
-    habit: {
+    shape: {
       type: "select",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.habit.label"),
+        label: t("components:Tree.properties.shape.label"),
+        items: shapeOptions,
       },
       schema: yup.string(),
     },
-    protected: {
-      type: "checkbox",
+    isProtected: {
+      type: "switch",
       category: "Caractéristiques",
       component: {
-        label: t("components:Tree.protected"),
+        label: t("components:Tree.properties.isProtected"),
+        color: "primary",
       },
-      schema: yup.string(),
+      schema: yup.boolean(),
+    },
+    isTreeOfInterest: {
+      type: "switch",
+      category: "Caractéristiques",
+      component: {
+        label: t("components:Tree.properties.isTreeOfInterest"),
+        color: "primary",
+      },
+      schema: yup.boolean(),
     },
     soilConstraints: {
-      type: "select",
+      type: "textfield",
       category: "Environnement extérieur",
       component: {
         multiple: true,
-        label: t("components:Tree.soilConstraints"),
+        label: t("components:Tree.properties.soilConstraints"),
+        helperText: t("components:Tree.helperText.soilConstraints"),
       },
       schema: yup.string(),
     },
-    aerianConstraint: {
-      type: "checkbox",
+    airConstraints: {
+      type: "textfield",
       category: "Environnement extérieur",
       component: {
-        label: t("components:Tree.aerianConstraint"),
+        label: t("components:Tree.properties.airConstraints"),
+        helperText: t("components:Tree.helperText.airConstraints"),
       },
       schema: yup.string(),
     },
-    lightning: {
-      type: "checkbox",
+    isLit: {
+      type: "switch",
       category: "Environnement extérieur",
       component: {
-        label: t("components:Tree.lightning"),
+        label: t("components:Tree.properties.isLit"),
+        helperText: t("components:Tree.helperText.isLit"),
+        color: "primary",
       },
-      schema: yup.string(),
+      schema: yup.boolean(),
     },
     watering: {
-      type: "select",
+      type: "textfield",
       category: "Environnement extérieur",
       component: {
-        multiple: true,
-        label: t("components:Tree.watering"),
+        label: t("components:Tree.properties.watering"),
       },
       schema: yup.string(),
     },
-    allergens: {
+    allergenicRiskScore: {
       type: "textfield",
-      category: "Autre",
+      category: "Autres",
       component: {
         type: "number",
-        label: t("components:Tree.allergens"),
+        label: t("components:Tree.properties.allergenicRiskScore"),
+        placelholder: t("components:Tree.placelholder.allergenicRiskScore"),
+        helperText: t("components:Tree.helperText.allergenicRiskScore"),
       },
-      schema: yup.string(),
+      schema: yup.number().required().positive().integer(),
     },
-    remarks: {
+    notes: {
       type: "textfield",
-      category: "Autre",
+      category: "Autres",
       component: {
-        label: t("components:Tree.remarks"),
+        label: t("components:Tree.properties.notes"),
       },
       schema: yup.string(),
     },

@@ -6,8 +6,13 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 export default function useApi() {
   const { publicRuntimeConfig } = getConfig();
-  const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
-  const { apiUrl } = publicRuntimeConfig;
+  const {
+    tokenStorage,
+    refreshTokenStorage,
+    meiliMasterKey,
+    apiUrl,
+    meiliApiUrl,
+  } = publicRuntimeConfig;
   const router = useRouter();
   const [accessToken, setAccessToken] = useLocalStorage(tokenStorage);
   const [refreshToken, setRefreshToken] = useLocalStorage(refreshTokenStorage);
@@ -35,6 +40,15 @@ export default function useApi() {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${refreshToken}`,
+    },
+  });
+
+  // Axios instance to retrieve results from ecoTeka search engine;
+  let meiliApi = axios.create({
+    baseURL: meiliApiUrl,
+    headers: {
+      "Content-Type": "application/json",
+      "X-Meili-API-Key": meiliMasterKey,
     },
   });
 
@@ -76,6 +90,7 @@ export default function useApi() {
 
   const api = {
     apiETK: ecotekaV1,
+    apiMeili: meiliApi,
     apiGBIF: gbif,
   };
 

@@ -9,7 +9,19 @@
     "sending": "Enviando..."
   },
   "buttons": {
-    "backToHome": "Ir a la página de inicio"
+    "backToHome": "Ir a la página de inicio",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "save": "Enregistrer",
+    "finish": "Finalizar",
+    "create": "Crear",
+    "update": "Actualizar",
+    "send": "Enviar",
+    "cancel": "Cancelar",
+    "archive": "Archivar",
+    "delete": "Eliminar",
+    "export": "Export",
+    "import": "Importer vos données"
   },
   "errors": {
     "email": "Correo electrónico no válido",

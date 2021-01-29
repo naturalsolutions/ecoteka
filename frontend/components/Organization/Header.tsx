@@ -1,8 +1,9 @@
-import React, { FC, useState, useRef } from "react";
+import React, { FC, useState, useRef, Fragment } from "react";
 import {
   Box,
   Button,
   ButtonGroup,
+  CircularProgress,
   ClickAwayListener,
   Grow,
   MenuItem,
@@ -10,34 +11,64 @@ import {
   Paper,
   Popper,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { green, blue } from "@material-ui/core/colors";
 import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
-import { apiRest } from "@/lib/api";
+import useAPI from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
+import SnackAlert, { SnackAlertProps } from "@/components/Feedback/SnackAlert";
 
 interface HeaderProps {}
 
 const exportFormats = [
   {
-    label: "Export CSV",
     format: "csv",
   },
   {
-    label: "Export XLSX",
     format: "xlsx",
   },
   {
-    label: "Export GeoJSON",
     format: "geojson",
   },
 ];
 
+const useStyles = makeStyles((theme) => ({
+  buttonSuccess: {
+    backgroundColor: blue[500],
+    "&:hover": {
+      backgroundColor: blue[700],
+    },
+  },
+  buttonProgress: {
+    color: blue[500],
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
+}));
+
 const Header: FC<HeaderProps> = (props) => {
-  const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const [selectedIndex, setSelectedIndex] = useState(1);
   const { user } = useAppContext();
   const router = useRouter();
+  const { api } = useAPI();
+  const { t } = useTranslation(["components", "common"]);
+  const classes = useStyles();
+  const { apiETK } = api;
+  const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [pending, setPending] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMesagge] = useState<
+    Pick<SnackAlertProps, "message" | "severity">
+  >({
+    message: "",
+    severity: "success",
+  });
 
   const downloadFile = (blob, filename) => {
     const url = window.URL.createObjectURL(blob);
@@ -52,17 +83,53 @@ const Header: FC<HeaderProps> = (props) => {
     a.remove();
   };
 
-  const handleClick = async (index: number) => {
-    const response = await apiRest.trees.export(
-      user.currentOrganization.id,
-      exportFormats[index].format
-    );
+  const triggerAlert = ({ message, severity }) => {
+    setAlertMesagge({
+      message: message,
+      severity: severity,
+    });
+    setOpenAlert(true);
+    setTimeout(() => setOpenAlert(false), 3000);
+  };
 
-    if (response.ok) {
-      const blob = await response.blob();
-      const filename = `export-trees-${user.currentOrganization.slug}.${exportFormats[index].format}`;
-      downloadFile(blob, filename);
-    }
+  const handleClick = async (index: number) => {
+    try {
+      setPending(true);
+      triggerAlert({
+        message: t("components:Organization.exportPending"),
+        severity: "info",
+      });
+      let response = await apiETK.get(
+        `/organization/${user.currentOrganization.id}/trees/export/?format=${exportFormats[index].format}`,
+        {
+          responseType: "blob",
+          onDownloadProgress: (progressEvent) => {
+            // console.log(progressEvent);
+            // // Unfortunately request response length is not computable
+            // console.log(progressEvent.lengthComputable);
+            // // But we could access response Blob size
+            // console.log(progressEvent.target);
+            // // and track with EventTarget loaded
+            // console.log(progressEvent.loaded);
+          },
+        }
+      );
+      if (response.status === 200) {
+        // request is stale
+        setPending(false);
+        triggerAlert({
+          message: t("components:Organization.exportSuccess"),
+          severity: "success",
+        });
+        try {
+          const blob = await response.data;
+          const filename = `export-trees-${user.currentOrganization.slug}.${exportFormats[index].format}`;
+          downloadFile(blob, filename);
+        } catch (e) {
+        } finally {
+        }
+      }
+    } catch (e) {}
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -83,81 +150,100 @@ const Header: FC<HeaderProps> = (props) => {
   };
 
   return (
-    <Box display="flex" flexDirection="row-reverse">
-      <Box m={1}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => router.push("/edition/?panel=import")}
-        >
-          Importer des données
-        </Button>
-      </Box>
-      <Box m={1}>
-        <ButtonGroup
-          variant="contained"
-          color="primary"
-          ref={anchorRef}
-          aria-label="split button"
-        >
-          <Button onClick={() => handleClick(selectedIndex)}>
-            {exportFormats[selectedIndex].label}
-          </Button>
+    <Fragment>
+      <SnackAlert
+        open={openAlert}
+        severity={alertMessage.severity}
+        message={alertMessage.message}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      />
+      <Box display="flex" flexDirection="row-reverse">
+        <Box m={1}>
           <Button
+            variant="contained"
             color="primary"
-            size="small"
-            aria-controls={open ? "split-button-menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            aria-label="select export format"
-            aria-haspopup="menu"
-            onClick={handleToggle}
+            onClick={() => router.push("/edition/?panel=import")}
           >
-            <ArrowDropDownIcon />
+            {t("common:buttons.import")}
           </Button>
-        </ButtonGroup>
-        <Popper
-          open={open}
-          anchorEl={anchorRef.current}
-          role={undefined}
-          transition
-          modifiers={{
-            flip: {
-              enabled: true,
-            },
-            preventOverflow: {
-              enabled: true,
-              boundariesElement: "window",
-            },
-          }}
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin:
-                  placement === "bottom" ? "center top" : "center bottom",
-              }}
+        </Box>
+        <Box m={1}>
+          <ButtonGroup
+            variant="contained"
+            color="primary"
+            ref={anchorRef}
+            aria-label="split button"
+          >
+            <Button
+              disabled={pending}
+              onClick={() => handleClick(selectedIndex)}
             >
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList id="split-button-menu">
-                    {exportFormats.map((option, index) => (
-                      <MenuItem
-                        key={option.label}
-                        selected={index === selectedIndex}
-                        onClick={(event) => handleMenuItemClick(event, index)}
-                      >
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
+              {`${t("common:buttons.export")} ${
+                exportFormats[selectedIndex].format
+              }`}
+              {pending && (
+                <CircularProgress
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
+            </Button>
+            <Button
+              color="primary"
+              size="small"
+              aria-controls={open ? "split-button-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-label="select export format"
+              aria-haspopup="menu"
+              onClick={handleToggle}
+            >
+              <ArrowDropDownIcon />
+            </Button>
+          </ButtonGroup>
+          <Popper
+            open={open}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            transition
+            modifiers={{
+              flip: {
+                enabled: true,
+              },
+              preventOverflow: {
+                enabled: true,
+                boundariesElement: "window",
+              },
+            }}
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === "bottom" ? "center top" : "center bottom",
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList id="split-button-menu">
+                      {exportFormats.map((option, index) => (
+                        <MenuItem
+                          key={option.format}
+                          selected={index === selectedIndex}
+                          onClick={(event) => handleMenuItemClick(event, index)}
+                        >
+                          {`${t("common:buttons.export")} ${option.format}`}
+                        </MenuItem>
+                      ))}
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </Box>
       </Box>
-    </Box>
+    </Fragment>
   );
 };
 

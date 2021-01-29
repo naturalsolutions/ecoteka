@@ -5,6 +5,7 @@ import datetime
 import json
 from pathlib import Path
 from typing import Any
+from math import isnan
 
 import numpy as np
 from sqlalchemy.orm import Session
@@ -24,7 +25,17 @@ def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
 
         for key in mapping_fields:
             properties_key = mapping_fields[key]
-            properties_tree[key] = properties[properties_key]
+
+            if isinstance(properties[properties_key], np.integer):
+                properties_tree[key] = int(properties[properties_key])
+            elif isinstance(properties[properties_key], np.floating):
+                properties_tree[key] = float(properties[properties_key])
+            elif isinstance(properties[properties_key], np.ndarray):
+                properties_tree[key] = properties[properties_key].tolist()
+            elif isinstance(properties[properties_key], datetime.datetime):
+                properties_tree[key] = properties[properties_key].__str__()
+            else:
+                properties_tree[key] = properties[properties_key]
 
     tree = Tree(
         geofile_id=geofile.id,
@@ -85,7 +96,7 @@ def import_from_dataframe(db: Session, df: pd.DataFrame, path: Path, geofile: Ge
         if transformer is not None:
             coord = transformer.transform(x, y)
 
-        properties = df.loc[i]
+        properties = df.loc[i].replace(np.nan, '', regex=True)
         tree = create_tree(geofile, coord[0], coord[1], properties)
         db.add(tree)
 
@@ -113,10 +124,17 @@ def import_geofile(db: Session, geofile: GeoFile):
             import_from_fiona(db, geofile.get_filepath(), geofile)
 
         if geofile.extension in ["xlsx", "xls"]:
+            engine = "xlrd"
+
+            if geofile.extension == "xlsx":
+                engine = "openpyxl"
+            
             df = pd.read_excel(
                 geofile.get_filepath(),
                 converters=converters,
+                engine=engine
             )
+            
             import_from_dataframe(db, df, geofile.get_filepath(), geofile)
 
         if geofile.extension == "csv":

@@ -3,7 +3,7 @@ import { makeStyles, IconButton, Grid } from "@material-ui/core";
 import { useDrop } from "react-dnd";
 import { DragObjectWithType } from "react-dnd/lib/interfaces/hooksApi";
 import { ItemTypes } from "@/components/Interventions/Calendar/ItemTypes";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import CalendarIntervention from "@/components/Interventions/Calendar/Intervention";
 import { TIntervention } from "@/components/Interventions/Schema";
@@ -15,6 +15,7 @@ export interface CalendarDayProps {
   month: number;
   year: number;
   onInterventionPlan?(intervention: TIntervention): void;
+  onSave?(intervention: TIntervention): void;
 }
 
 const defaultProps: CalendarDayProps = {
@@ -42,33 +43,35 @@ interface InterventionType extends DragObjectWithType {
   id: number;
 }
 
-async function interventionPlan(
-  organizationId: Number,
-  interventionId: Number,
-  date: CalendarDayProps
-) {
-  try {
-    const dateIntervention = new Date(date.year, date.month, date.day + 1);
-    const response = await apiRest.interventions.plan(
-      organizationId,
-      interventionId,
-      dateIntervention
-    );
-
-    if (response.ok) {
-      const intervention = await response.json();
-
-      return intervention;
-    }
-
-    return false;
-  } catch (e) {}
-}
-
 const CalendarDay: React.FC<CalendarDayProps> = (props) => {
   const classes = useStyles();
   const { theme } = useThemeContext();
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
+
+  async function interventionPlan(
+    organizationId: Number,
+    interventionId: Number,
+    date: CalendarDayProps
+  ) {
+    try {
+      const dateIntervention = new Date(date.year, date.month, date.day + 1);
+
+      const { status, data: intervention } = await apiETK.patch(
+        `/organization/${organizationId}/interventions/${interventionId}`,
+        {
+          date: dateIntervention,
+        }
+      );
+
+      if (status === 200) {
+        return intervention;
+      }
+
+      return false;
+    } catch (e) {}
+  }
+
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.BOX,
     drop: async function (newIntervention: InterventionType) {
@@ -89,7 +92,10 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
     props.interventions.map((intervention) => {
       return (
         <Grid key={`day-intervention-${intervention.id}`} item>
-          <CalendarIntervention intervention={intervention} />
+          <CalendarIntervention
+            intervention={intervention}
+            onSave={props.onSave}
+          />
         </Grid>
       );
     });

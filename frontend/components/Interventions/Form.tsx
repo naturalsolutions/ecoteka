@@ -15,7 +15,6 @@ import {
 import useETKForm from "@/components/Form/useForm";
 import {
   Button,
-  Divider,
   Grid,
   makeStyles,
   Step,
@@ -24,7 +23,7 @@ import {
   Stepper,
   Typography,
 } from "@material-ui/core";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
 import { useRouter } from "next/router";
@@ -63,10 +62,7 @@ type ETKInterventionFormHandles = {
   getValues: () => any;
 };
 
-const commonsteps: TInterventionStep[] = [
-  "interventionselection",
-  "treeselection",
-];
+const commonsteps: TInterventionStep[] = ["interventionselection"];
 
 const ETKInterventionForm = forwardRef<
   ETKInterventionFormHandles,
@@ -76,6 +72,24 @@ const ETKInterventionForm = forwardRef<
   const form = useETKForm({ schema });
   const router = useRouter();
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
+
+  const flyToTree = async (treeId: number) => {
+    try {
+      const organizationId = user.currentOrganization.id;
+
+      const { data: tree } = await apiETK.get(
+        `/organization/${organizationId}/trees/${treeId}`
+      );
+
+      if (tree && tree.x && tree.y) {
+        props.map.flyTo({
+          zoom: 20,
+          center: [tree.x, tree.y],
+        });
+      }
+    } catch (e) {}
+  };
 
   useEffect(() => {
     const formFields = Object.keys(props.data).filter(
@@ -97,18 +111,9 @@ const ETKInterventionForm = forwardRef<
     if (router.query.tree) {
       form.setValue("tree_id", router.query.tree);
 
-      apiRest.trees
-        .get(user.currentOrganization.id, router.query.tree)
-        .then((tree) => {
-          try {
-            props.map.flyTo({
-              zoom: 20,
-              center: [tree.x, tree.y],
-            });
-          } catch (e) {}
-        });
+      flyToTree(Number(router.query.tree));
     }
-  }, [router.query.tree]);
+  }, []);
 
   let valid = false;
 
@@ -150,6 +155,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
   const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
   const [interventionType, setInterventionType] = useState<TInterventionType>(
@@ -203,7 +209,10 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
         } // c'est moche !!
       );
 
-    await apiRest.interventions.post(user.currentOrganization.id, payload);
+    payload.tree_id = router.query.tree;
+
+    const organizationId = user.currentOrganization.id;
+    await apiETK.post(`/organization/${organizationId}/interventions`, payload);
   };
 
   const handleNext = async (step: TInterventionStep) => {

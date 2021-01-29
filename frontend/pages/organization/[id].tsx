@@ -2,27 +2,35 @@ import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Container } from "@material-ui/core";
 import { Header, Breadcrumb, Tabs } from "@/components/Organization";
-import { apiRest } from "@/lib/api";
+import useAPI from "@/lib/useApi";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 
 interface OrganizationProps {}
 
 const Organization: FC<OrganizationProps> = (props) => {
   const router = useRouter();
+  const { api } = useAPI();
+  const { apiETK } = api;
   const [organization, setOrganization] = useState(null);
   const [parents, setParents] = useState([]);
 
   const getData = async (id) => {
     try {
-      const newOrganization = await apiRest.organization.get(id);
-      const newParents = await apiRest.organization.parents(id);
+      const {
+        data: organizationData,
+        status: organizationResponseStatus,
+      } = await apiETK.get(`/organization/${id}`);
+      const {
+        data: parentsData,
+        status: parentsResponseStatus,
+      } = await apiETK.get(`/organization/${id}/path`);
 
-      if (newOrganization) {
-        setOrganization(newOrganization);
+      if (organizationResponseStatus === 200) {
+        setOrganization(organizationData);
       }
 
-      if (newParents && newParents.length > 0) {
-        setParents(newParents);
+      if (parentsResponseStatus === 200 && parentsData.length > 0) {
+        setParents(parentsData);
       }
     } catch (e) {}
   };

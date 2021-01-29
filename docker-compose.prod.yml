@@ -104,3 +104,16 @@ services:
       - traefik.http.routers.tile_server.entrypoints=websecure
       - traefik.http.routers.tile_server.tls=true
       - traefik.http.services.tile_server.loadbalancer.server.port=80
+
+  meilisearch:
+    labels:
+      - traefik.http.routers.meilisearch.entrypoints=websecure
+      - traefik.http.routers.meilisearch.tls=true
+    environment:
+      - MEILI_ENV=production
+      - MEILI_MASTER_KEY=${NS_ECOTEKA_MEILISEARCH_MASTER_KEY}
+
+  osm:
+    image: ${NS_ECOTEKA_OSM_IMAGE}
+    volumes:
+      - ${NS_ECOTEKA_TILE_SERVER_PUBLIC_FOLDER}:/data

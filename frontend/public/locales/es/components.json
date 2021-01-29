@@ -12,10 +12,13 @@
     "buttonCancel": "Cancelar",
     "buttonConnexion": "Iniciar sesión",
     "labelPassword": "Contraseña",
+    "forgotPassword": "Forgot your password ?",
     "labelUsername": "Correo electrónico",
     "errorMessageServer": "Correo electrónico o contraseña incorrectos",
     "errorMessageEmail": "Correo electrónico no válido",
-    "errorMessageRequiredField": "Campo obligatorio"
+    "errorMessageRequiredField": "Campo obligatorio",
+    "noAccount": "Don't have an account yet?",
+    "accountRequest": "Request the creation of an account !"
   },
   "LanguageSelector": {
     "en": "Inglés",
@@ -164,6 +167,7 @@
     "Upload": {
       "boxContent": "Importa tus datos",
       "fileListHint": "Tipos de archivos aceptados:",
+      "importHistory": "See import history",
       "buttonCancelContent": "Cancelar",
       "buttonUploadContent": "Subir",
       "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo"
@@ -194,9 +198,9 @@
     }
   },
   "Register": {
-    "dialogTitle": "Inscribir",
+    "dialogTitle": "Registrarse",
     "cancel": "Cancelar",
-    "submit": "Inscribir",
+    "submit": "Registrarse",
     "fullName": "Nombre completo",
     "email": "Correo electrónico",
     "organization": "Organización",
@@ -214,161 +218,237 @@
     "title": "Solicitar una intervención",
     "plannew": "Nueva solicitud",
     "success": "Solicitud registrada",
-    "whatnow": "Que souhaitez vous faire ?",
-    "required_documents": "Documents requis",
-    "required_material": "Materiel requis",
-    "intervention_type": "Type d'intervention",
-    "intervenant": "Intervenant",
-    "intervention_period": "Période d'intervention",
-    "estimated_cost": "Coût estimatif",
+    "requestAnItervention": "Solicitar una intervención",
+    "whatnow": "¿Qué desea hacer?",
+    "required_documents": "Documentos requeridos",
+    "required_material": "Material requerido",
+    "intervention_type": "Tipo de intervención",
+    "intervenant": "Interventor",
+    "intervention_period": "Periodo de intervención",
+    "estimated_cost": "Coste estimado",
     "tree_id": "Árbol",
-    "back": "Retour à l'arbre",
+    "back": "Volver al árbol",
     "steps": {
-      "interventionselection": "Sur quoi porte votre demande ?",
-      "treeselection": "Localisez l'arbre sur lequel intervenir",
-      "intervention": "Détails de l'intervention",
-      "validation": "Planifiez votre intervention",
-      "finish": "Terminer"
+      "interventionselection": "¿Cuál es el objeto de su solicitud?",
+      "treeselection": "Localizar el árbol sobre el que intervenir",
+      "intervention": "Detalles de la intervención",
+      "validation": "Planifique su intervención",
+      "finish": "Finalizar"
     },
     "types": {
-      "pruning": "Elagage",
-      "felling": "Abattage",
-      "streanremoval": "Dessouchage",
-      "indepthdiagnostic": "Diagnostic approfondi",
-      "treatment": "Traîtement",
-      "surveillance": "Surveillance"
+      "pruning": "Poda",
+      "felling": "Tala",
+      "streanremoval": "Descepado",
+      "indepthdiagnostic": "Diagnóstico detallado",
+      "treatment": "Tratamiento",
+      "surveillance": "Seguimiento"
     },
     "documents": {
       "dt": "DT/DICT",
-      "trafficpolice": "Police de circulation"
+      "trafficpolice": "Política de circulación"
     },
     "material": {
-      "pole": "Perche",
+      "pole": "Vara",
       "climb": "A la grime",
-      "ladder": "Echelle",
-      "raiser": "Engine élevateur",
-      "retentionkit": "Kit de rétention",
-      "foot": "Pieds",
+      "ladder": "Escalera",
+      "raiser": "Elevador",
+      "retentionkit": "Kit de retención",
+      "foot": "Pies",
       "pull": "A la tire",
-      "trimmer": "Tondeuse",
-      "crane": "Grue",
-      "coredrill": "Carotteuse",
-      "crunchy": "Croqueuse",
-      "mecanicshovel": "Pelle mécanique",
+      "trimmer": "Cortacésped",
+      "crane": "Grúa",
+      "coredrill": "Taladro",
+      "crunchy": "Sacahojas",
+      "mecanicshovel": "Pala mecánica",
       "canon": "Au canon",
-      "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
-      "collectprotection": "Protection du collet",
-      "scald": "Kit échaudure",
-      "globalcheck": "Vérification globale de l'arbre",
-      "tutorrefection": "Réfection du tuteur",
-      "soil": "Au sol"
+      "watering": "Riego",
+      "amendment": "Mejorador de suelo orgánico",
+      "collectprotection": "Protección de cuello",
+      "scald": "Kit escaldadura",
+      "globalcheck": "Verificación global del árbol",
+      "tutorrefection": "Reparación del tutor",
+      "soil": "En el suelo"
     },
     "pruning": {
-      "method": "Méthode d'élagage",
-      "comment": "Commentaire",
-      "pruning": "Elagage",
-      "carpenterremoval": "Suppression de charpentière",
-      "lightning": "Eclaircissage",
-      "maintenance": "Entretien",
-      "crownraising": "Remontée de couronne"
+      "method": "Método de poda",
+      "comment": "Comentario",
+      "pruning": "Pada",
+      "carpenterremoval": "Supresión de carpintera",
+      "lightning": "Aclareo",
+      "maintenance": "Mantenimiento",
+      "crownraising": "Levantamiento de corona"
     },
     "felling": {
-      "comment": "Commentaire",
-      "method": "Méthode d'abattage",
-      "live": "En direct",
-      "rentention": "Avec rétention",
-      "unmounting": "Par démontage"
+      "comment": "Comentario",
+      "method": "Método de tala",
+      "live": "En vivo",
+      "rentention": "Con retención",
+      "unmounting": "Desmontaje"
     },
     "streanremoval": {
-      "diameter": "Diamètre de la souche",
-      "method": "Méthode de déssouchage",
-      "drilling": "Carottage",
-      "trimming": "Rognage",
-      "grubbing": "Arrachage"
+      "diameter": "Diámetro de la cepa",
+      "method": "Método de descepado",
+      "drilling": "Perforación",
+      "trimming": "Cercenado",
+      "grubbing": "Desbroce"
     },
     "indepthdiagnostic": {
-      "method": "Méthode de diagnostic",
-      "comment": "Commentaire",
-      "resistograph": "Résistographe",
-      "tomograph": "Tomographe",
-      "computing": "Calcul",
-      "tractiontest": "Test de traction",
-      "penetrometer": "Pénétromètre"
+      "method": "Método de diagnóstico",
+      "comment": "Comentario",
+      "resistograph": "Resistografía",
+      "tomograph": "Tomografía",
+      "computing": "Cálculo",
+      "tractiontest": "Prueba de tracción",
+      "penetrometer": "Penetrómetro"
     },
     "treatment": {
-      "method": "Méthode",
-      "disease": "Maladie",
-      "comment": "Commentaire",
-      "auxilaryrelease": "Lâché d'auxilière",
-      "biologictreatment": "Traitement biologique"
+      "method": "Método",
+      "disease": "Enfermedad",
+      "comment": "Comentario",
+      "auxilaryrelease": "Liberación auxiliar",
+      "biologictreatment": "Tratamiento biológico"
     },
     "surveillance": {
-      "method": "Méthode",
-      "comment": "Commentaire",
-      "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
+      "method": "Método",
+      "comment": "Comentario",
+      "watering": "Riego",
+      "amendment": "Aporte orgánico",
       "tutorcheck": "Vérification du tuteurage et des protections",
-      "globalcheck": "Vérification globale de l'arbre"
+      "globalcheck": "Comprobación global del árbol"
+    },
+    "interventionsTable": {
+      "requestAnItervention": "Request an intervention",
+      "date": "Fetcha",
+      "type": "Typo",
+      "state": "Estado"
     }
   },
   "Tree": {
-    "family": "Familia",
-    "gender": "Genero",
-    "specie": "Especie",
-    "cultivar": "Cultivar",
-    "latinName": "Nombre común",
+    "properties": {
+      "taxon": "Taxon",
+      "family": "Famille",
+      "genus": "Genre",
+      "species": "Espèce",
+      "cultivar": "Cultivar",
+      "canonicalName": "Nom scientifique",
+      "vernacularName": "Nom vernaculaire",
+      "townshipCode": "Code commune",
+      "zipCode": "Code postal",
+      "address": "Adresse",
+      "zone": "Découpage en zone",
+      "code": "Matricule de l'arbre",
+      "plantationDate": "Date de plantation",
+      "height": "Hauteur de l'arbre",
+      "diameter": "Diamètre de l'arbre",
+      "soilTexture": {
+        "label": "Type de sol",
+        "clay": "Argileux",
+        "silt": "Limoneux",
+        "limestone": "Calcaire",
+        "sand": "Sableux",
+        "acid": "Acide",
+        "sandyclay": "Argilo-sableux"
+      },
+      "rootsType": {
+        "label": "Type d'enracinement",
+        "swivel": "Pivotant",
+        "tracing": "Tracant",
+        "oblique": "Oblique"
+      },
+      "shape": {
+        "label": "Port de l'arbre",
+        "free": "Port libre",
+        "semiFree": "Semi-libre",
+        "form": "En formation",
+        "cat": "Tête de chat",
+        "trumpet": "En trogne",
+        "curtain": "Rideau",
+        "pyramid": "Pyramide",
+        "ball": "Boule",
+        "cone": "Cône"
+      },
+      "isProtected": "Arbre protégé",
+      "isTreeOfInterest": "Arbre remarquable",
+      "soilConstraints": "Contraintes au sol",
+      "airConstraints": "Contraintes aériennes",
+      "lightning": "Présence d'éclairage",
+      "watering": "Arrosage",
+      "allergenicRiskScore": "Potentiel allergisant",
+      "notes": "Remarques"
+    },
+    "placeholder": {
+      "taxon": "",
+      "family": "ex: Platanaceae",
+      "genus": "ex: Platanus",
+      "species": "ex: occidentalis",
+      "cultivar": "ex: 'Cripps Pink'",
+      "canonicalName": "ex: Platanus occidentalis 'Cripps Pink'",
+      "vernacularName": "ex: Platane commun 'Cripps Pink'",
+      "townshipCode": "ex: 59599",
+      "zipCode": "ex: 13010",
+      "address": "ex: 61 rue de la Poste",
+      "zone": "ex: Zone A, Quartier de la poste...",
+      "code": "Matricule de l'arbre",
+      "plantationDate": "ex: 20/08/2019",
+      "height": "Hauteur de l'arbre",
+      "diameter": "Diamètre de l'arbre",
+      "soilTexture": "Type de sol",
+      "rootsType": "Type d'enracinement",
+      "shape": "Port de l'arbre",
+      "isProtected": "Arbre protégé",
+      "isTreeOfInterest": "Arbre remarquable",
+      "soilConstraints": "Contraintes au sol",
+      "airConstraints": "Contraintes aériennes",
+      "lightning": "Indique la présence d'éclairage à proximité de l'arbre",
+      "watering": "ex: Goutte à goutte",
+      "allergenicRiskScore": "Arbre allergène",
+      "notes": "Remarques"
+    },
+    "helperText": {
+      "taxon": "Select a species from our checklist; following fiels will be auto filled.",
+      "family": "Taxon auquel appartient l'arbre en latin (cinquième niveau de la classification classique)",
+      "genus": "Subdivision de la famille auquel appartient l'arbre en latin (sixième niveau de la classification classique)",
+      "species": "Subdivision du genre auquel appartient l'arbre en latin (septième niveau de la classification classique)",
+      "cultivar": "Subdivision de l'espèce auquel appartient l'arbre en latin",
+      "canonicalName": "Nom scientifique en latin, sans le nom de l'auteur botanique",
+      "vernacularName": "Nom d'usage en français",
+      "townshipCode": "Code INSEE",
+      "zipCode": "Code postal",
+      "address": "Adresse",
+      "zone": "Nom de la zone géographique de l'arbre (ex: quartier, arrondissement, zone d'intervention)",
+      "code": "Identifiant unique de l'arbre utilisé par vos services",
+      "plantationDate": "Date de plantation",
+      "height": "en mètres",
+      "diameter": "Diamètre à hauteur de poitrine (1,30 m au-dessus du niveau du sol). Exprimé en cm.",
+      "soilTexture": "Version simplifié du triangle des textures",
+      "rootsType": "Type d'enracinement",
+      "shape": "Port de l'arbre",
+      "isProtected": "Arbre protégé",
+      "isTreeOfInterest": "Cochez la case pour indiquer si cet arbre est remarquable.",
+      "soilConstraints": "Indique la présence de contraintes physiques au niveau du sol ",
+      "airConstraints": "Indique la présence de contraintes physiques au-dessus du sol",
+      "isLit": "Indique la présence d'éclairage à proximité de l'arbre",
+      "watering": "Indique le type d'arrosage de l'arbre",
+      "allergenicRiskScore": "Indique le potentiel allergisant de l'arbre (0 = nul --> 5 = très fort)",
+      "notes": "Remarques"
+    },
+    "summary": {
+      "moreDetails": "Mas detalles"
+    },
     "latitude": "Latitud",
     "longitude": "Longitud",
-    "townshipCode": "Town ship code",
-    "zipCode": "Código Postal",
-    "address": "Dirección",
-    "zone": "Zone cutting",
-    "etkRegistrationNumber": "Identificador Ecoteka",
-    "registrationNumber": "Identificador del árbol",
-    "plantingDate": "Fecha de plantación",
-    "height": "Altura",
-    "diameter": "Diámetro",
-    "soilType": {
-      "label": "Tipo de suelo",
-      "clay": "Arcilloso",
-      "silt": "Silty",
-      "limestone": "Limestone",
-      "sand": "Arenoso",
-      "acid": "Ácido",
-      "sandyclay": "Arenoso arcillosos"
-    },
-    "rootType": {
-      "label": "Root type",
-      "swivel": "Swivel",
-      "tracing": "Tracing",
-      "oblique": "Oblique"
-    },
-    "habit": {
-      "label": "Tree habit",
-      "free": "Free",
-      "semiFree": "Semi-free",
-      "form": "Forming",
-      "cat": "Caat head",
-      "trumpet": "Trumpet",
-      "curtain": "Curtain",
-      "pyramid": "Pyramid",
-      "ball": "Ball",
-      "cone": "Cone"
-    },
-    "procted": "Protected tree",
-    "soilConstraints": "Soil constraints",
-    "aerianConstraint": "Aerian contraints",
-    "watering": "Watering",
-    "lightning": "Lighting",
-    "allergens": "Allergenic tree",
-    "remarks": "Remarks"
+    "registrationNumber": "Identificador del árbol"
   },
   "TreeForm": {
     "dialogDeleteTitle": "Eliminar los árboles seleccionados",
     "dialogDeleteContent": "¿Seguro que deseas eliminar los árboles seleccionados?",
     "dialogDeleteActionYes": "Si",
     "dialogDeleteActionCancel": "No",
+    "title": "Edición",
+    "treeIdentity": "Tree identity",
+    "characteristics": "Caracteristicas",
+    "outdoorEnvironment": "Outdoor Environment",
+    "other": "Otro",
     "imagesUpload": {
       "select": "Arrasta y suelta las imágenes aquí o haz click (max.{{max}})"
     }
@@ -384,6 +464,26 @@
         "total_members": "Miembros",
         "total_trees": "Árboles",
         "actions": "Acciones"
+      }
+    },
+    "delete": {
+      "teams": {
+        "success": "equipos eliminados correctamente",
+        "error": "Se ha producido un error al eliminar los equipos"
+      },
+      "team": {
+        "success": "equipo eliminado correctamente",
+        "error": "Se ha producido un error al eliminar el equipo"
+      }
+    },
+    "archive": {
+      "teams": {
+        "success": "equipos archivado correctamente",
+        "error": "Se ha producido un error al archivar los equipos"
+      },
+      "team": {
+        "success": "equipo archivado correctamente",
+        "error": "Se ha producido un error al archivar el equipo"
       }
     }
   },
@@ -404,6 +504,8 @@
     "dialogTitleEdit": "Actualizar una organización",
     "dialogContentTextCreate": "Utiliza este formalario para crear una organización.",
     "dialogContentTextEdit": "Utiliza este formalario para actualizar la organización.",
+    "exportPending": "Por favor espere y deje la página abierta, su solicitud esta siendo procesada...",
+    "exportSuccess": "Su solicitud para exportar ha sido procesada. Descarga en progreso...",
     "WorkingArea": {
       "dialogTitle": "Editar área de trabajo",
       "dialogContentText": "Formatos aceptados : zip, geojson"
@@ -425,6 +527,17 @@
       "confirmDetach": "Confirmar",
       "invite": "Invitar",
       "detachFromGroup": "Eliminar miembros de la organización",
+      "onDetach": {
+        "success": "ha sido retirado del grupo con existo",
+        "errorAlert": "Error de servidor",
+        "errorContent": "no ha podido ser retirado del grupo",
+        "dialog": {
+          "alertTitle": "Está acción es irreversible",
+          "alertContent1": "Esta apunto de eliminar a algunos miembros de su organización. Esta acción provocará la perdida de derechos de los miembros afectados.",
+          "alertContent2": "¿Quiere continuar?",
+          "confirmButton": "Sí, ¡confirmo!"
+        }
+      },
       "Table": {
         "headers": {
           "email": "Correo electrónico",
@@ -434,18 +547,51 @@
         },
         "roles": {
           "defineRole": "Definir el role",
+          "admin": "Administrador",
           "owner": "Propietario",
           "manager": "Gestor",
           "contributor": "Contributor",
           "reader": "Lectura",
           "guest": "Invitado"
+        },
+        "updateMember": {
+          "success": "El rol ha sido actualizado",
+          "error": "Se ha producido un error al actualizar el rol"
         }
+      },
+      "dialog": {
+        "title": "Añadir miembros a vuestra organización",
+        "errorEmailAlreadyAdded": "está presente en la lista de invitados.",
+        "errorEmailFormatNotValid": "no es una dirección válida.",
+        "emailsPlaceholder": "gestionnaire@ecoteka.org, invite@ecoteka.org",
+        "emailsLabel": "Correos de miembros a envitar",
+        "alertTitle": "Ningún miembro a invitar",
+        "alertContent1": "Añadir el correo del destinatario en el campo de arriba - ",
+        "alertContent2": "entonces hacer click o añadir una coma."
       }
     }
   },
   "Dashboard": {
     "title": "Panel de control",
-    "for": "para"
+    "for": "para",
+    "treeHeritage": {
+      "title": "Your tree heritage",
+      "totalTrees": "Total trees",
+      "plantedTrees": "Planted trees in 2020",
+      "felledTrees": "Felled trees in 2020",
+      "alertTitle": "Add your first trees to your heritage",
+      "alertText": "Your workspace does not contain any trees yet",
+      "boldText": "Start now !"
+    },
+    "heritageManagment": {
+      "totalCost": "Total cost interventions planned in 2020",
+      "title": "State of management of your assets",
+      "alertTitle": "Add, program and monitor the budget for interventions on your assets",
+      "alertText": "As soon as your workspace contains trees, you can start managing your plant heritage",
+      "boldText": "Learn more !"
+    },
+    "addInterventionButton": "Add interventions",
+    "importDataButton": "Import datas"
   },
   "MapLayers": {
     "backgrounds": "Fondos",

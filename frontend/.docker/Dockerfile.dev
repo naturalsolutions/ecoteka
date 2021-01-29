@@ -1,3 +1,15 @@
-FROM registry.gitlab.com/natural-solutions/ecoteka:frontend-base
+FROM node:alpine
 
-COPY .docker/start-dev.sh /docker-entrypoint.sh
+WORKDIR /app
+
+COPY package.json /app
+COPY package-lock.json /app
+
+RUN npm install -g npm-check-updates 
+RUN npm install --force
+
+COPY . .
+
+EXPOSE 3000
+
+CMD [ "npm", "run", "dev" ]

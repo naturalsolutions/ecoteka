@@ -337,7 +337,7 @@ def delete_image(
 def get_interventions(
     tree_id: int,
     *,
-    auth=Depends(authorization("trees:export")),
+    auth=Depends(authorization("trees:get_interventions")),
     db: Session = Depends(get_db),
 ):
     """Get all interventions from a tree"""

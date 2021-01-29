@@ -13,9 +13,12 @@
     "buttonConnexion": "Se connecter",
     "labelPassword": "Mot de passe",
     "labelUsername": "Adresse email",
+    "forgotPassword": "Mot de passe oublié ?",
     "errorMessageServer": "Adresse email ou mot de passe incorrect",
     "errorMessageEmail": "Veuillez saisir un email valide.",
-    "errorMessageRequiredField": "Veuillez renseigner ce champ."
+    "errorMessageRequiredField": "Veuillez renseigner ce champ.",
+    "noAccount": "Vous n'avez pas encore de compte?",
+    "accountRequest": "Demandez la création d'un compte !"
   },
   "LanguageSelector": {
     "en": "Anglais",
@@ -73,7 +76,7 @@
     },
     "numberOfTreesLayer": {
       "title": "Nombre d'arbres de la couche",
-      "content": "d'arbres"
+      "content": "arbres"
     },
     "card": {
       "title": "Vous souhaitez ajouter un arbre ?",
@@ -164,6 +167,7 @@
     "Upload": {
       "boxContent": "Importez vos données",
       "fileListHint": "Types de fichiers acceptés :",
+      "importHistory": "Voir l'historique de l'import",
       "buttonCancelContent": "Annuler",
       "buttonUploadContent": "Envoi",
       "dropzoneText": "Déposez votre fichier ici\nou cliquez pour le selectionner"
@@ -269,7 +273,7 @@
       "comment": "Commentaire",
       "pruning": "Elagage",
       "carpenterremoval": "Suppression de charpentière",
-      "lightning": "Eclaircissage",
+      "isLit": "Eclaircissage",
       "maintenance": "Entretien",
       "crownraising": "Remontée de couronne"
     },
@@ -310,65 +314,140 @@
       "amendment": "Amendement/Apport organique",
       "tutorcheck": "Vérification du tuteurage et des protections",
       "globalcheck": "Vérification globale de l'arbre"
+    },
+    "interventionsTable": {
+      "requestAnItervention": "Demander une intervention",
+      "date": "Date",
+      "type": "Type",
+      "state": "Etat"
     }
   },
   "Tree": {
-    "family": "Famille",
-    "gender": "Genre",
-    "specie": "Espèce",
-    "cultivar": "Cultiver",
-    "latinName": "Nom vernaculaire",
+    "properties": {
+      "taxon": "Taxon",
+      "family": "Famille",
+      "genus": "Genre",
+      "species": "Espèce",
+      "cultivar": "Cultivar",
+      "canonicalName": "Nom scientifique",
+      "vernacularName": "Nom vernaculaire",
+      "townshipCode": "Code commune",
+      "zipCode": "Code postal",
+      "address": "Adresse",
+      "zone": "Découpage en zone",
+      "code": "Matricule de l'arbre",
+      "plantationDate": "Date de plantation",
+      "height": "Hauteur de l'arbre",
+      "diameter": "Diamètre de l'arbre",
+      "soilTexture": {
+        "label": "Type de sol",
+        "clay": "Argileux",
+        "silt": "Limoneux",
+        "limestone": "Calcaire",
+        "sand": "Sableux",
+        "acid": "Acide",
+        "sandyclay": "Argilo-sableux"
+      },
+      "rootsType": {
+        "label": "Type d'enracinement",
+        "swivel": "Pivotant",
+        "tracing": "Tracant",
+        "oblique": "Oblique"
+      },
+      "shape": {
+        "label": "Port de l'arbre",
+        "free": "Port libre",
+        "semiFree": "Semi-libre",
+        "form": "En formation",
+        "cat": "Tête de chat",
+        "trumpet": "En trogne",
+        "curtain": "Rideau",
+        "pyramid": "Pyramide",
+        "ball": "Boule",
+        "cone": "Cône"
+      },
+      "isProtected": "Arbre protégé?",
+      "isTreeOfInterest": "Arbre remarquable?",
+      "soilConstraints": "Contraintes au sol",
+      "airConstraints": "Contraintes aériennes",
+      "isLit": "Présence d'éclairage?",
+      "watering": "Arrosage",
+      "allergenicRiskScore": "Potentiel allergisant",
+      "notes": "Remarques"
+    },
+    "placeholder": {
+      "taxon": "",
+      "family": "ex: Platanaceae",
+      "genus": "ex: Platanus",
+      "species": "ex: occidentalis",
+      "cultivar": "ex: 'Cripps Pink'",
+      "canonicalName": "ex: Platanus occidentalis 'Cripps Pink'",
+      "vernacularName": "ex: Platane commun 'Cripps Pink'",
+      "townshipCode": "ex: 59599",
+      "zipCode": "ex: 13010",
+      "address": "ex: 61 rue de la Poste",
+      "zone": "ex: Zone A, Quartier de la poste...",
+      "code": "Matricule de l'arbre",
+      "plantationDate": "ex: 20/08/2019",
+      "height": "Hauteur de l'arbre",
+      "diameter": "Diamètre de l'arbre",
+      "soilTexture": "Type de sol",
+      "rootsType": "Type d'enracinement",
+      "shape": "Port de l'arbre",
+      "isProtected": "Arbre protégé",
+      "isTreeOfInterest": "Arbre remarquable",
+      "soilConstraints": "Contraintes au sol",
+      "airConstraints": "Contraintes aériennes",
+      "isLit": "Indique la présence d'éclairage à proximité de l'arbre",
+      "watering": "ex: Goutte à goutte",
+      "allergenicRiskScore": "Arbre allergène",
+      "notes": "Remarques"
+    },
+    "helperText": {
+      "taxon": "Sélectionner une espèce de notre référentiel; les champs suivants seront remplis automatiquement.",
+      "family": "Taxon auquel appartient l'arbre en latin (cinquième niveau de la classification classique)",
+      "genus": "Subdivision de la famille auquel appartient l'arbre en latin (sixième niveau de la classification classique)",
+      "species": "Subdivision du genre auquel appartient l'arbre en latin (septième niveau de la classification classique)",
+      "cultivar": "Subdivision de l'espèce auquel appartient l'arbre en latin",
+      "canonicalName": "Nom scientifique en latin, sans le nom de l'auteur botanique",
+      "vernacularName": "Nom d'usage en français",
+      "townshipCode": "Code INSEE",
+      "zipCode": "Code postal",
+      "address": "Adresse",
+      "zone": "Nom de la zone géographique de l'arbre (ex: quartier, arrondissement, zone d'intervention)",
+      "code": "Identifiant unique de l'arbre utilisé par vos services",
+      "plantationDate": "Date de plantation",
+      "height": "en mètres",
+      "diameter": "Diamètre à hauteur de poitrine (1,30 m au-dessus du niveau du sol). Exprimé en cm.",
+      "soilTexture": "Version simplifié du triangle des textures",
+      "rootsType": "Type d'enracinement",
+      "shape": "Port de l'arbre",
+      "isProtected": "Arbre protégé",
+      "isTreeOfInterest": "Cochez la case pour indiquer si cet arbre est remarquable.",
+      "soilConstraints": "Indique la présence de contraintes physiques au niveau du sol ",
+      "airConstraints": "Indique la présence de contraintes physiques au-dessus du sol",
+      "isLit": "Présence d'éclairage",
+      "watering": "Indique la présence ou non d'un arrosage et quel type d'arrosage",
+      "allergenicRiskScore": "Indique le potentiel allergisant de l'arbre (0 = nul --> 5 = très fort)",
+      "notes": "Remarques"
+    },
+    "summary": {
+      "moreDetails": "Plus de détails"
+    },
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "townshipCode": "Code commune",
-    "zipCode": "Code postal",
-    "address": "Adresse",
-    "zone": "Découpage en zone",
-    "etkRegistrationNumber": "Matricule Ecoteka",
-    "registrationNumber": "Matricule de l'arbre",
-    "plantingDate": "Date de plantation",
-    "height": "Hauteur de l'arbre",
-    "diameter": "Diamètre de l'arbre",
-    "soilType": {
-      "label": "Type de sol",
-      "clay": "Argileux",
-      "silt": "Limoneux",
-      "limestone": "Calcaire",
-      "sand": "Sableux",
-      "acid": "Acide",
-      "sandyclay": "Argilo-sableux"
-    },
-    "rootType": {
-      "label": "Type d'enracinement",
-      "swivel": "Pivotant",
-      "tracing": "Tracant",
-      "oblique": "Oblique"
-    },
-    "habit": {
-      "label": "Port de l'arbre",
-      "free": "Port libre",
-      "semiFree": "Semi-libre",
-      "form": "En formation",
-      "cat": "Tête de chat",
-      "trumpet": "En trogne",
-      "curtain": "Rideau",
-      "pyramid": "Pyramide",
-      "ball": "Boule",
-      "cone": "Cône"
-    },
-    "procted": "Arbre protégé",
-    "soilConstraints": "Contraintes au sol",
-    "aerianConstraint": "Contraintes aériennes",
-    "watering": "Arrosage",
-    "lightning": "Présence d'éclairage",
-    "allergens": "Arbre allergène",
-    "remarks": "Remarques"
+    "code": "Matricule de l'arbre"
   },
   "TreeForm": {
     "dialogDeleteTitle": "Supprimer les arbres sélectionnés",
     "dialogDeleteContent": "Êtes-vous sûr de vouloir supprimer les arbres sélectionnés ?",
     "dialogDeleteActionYes": "Oui",
     "dialogDeleteActionCancel": "Non",
+    "title": "Edition",
+    "treeIdentity": "Identité de l'arbre",
+    "characteristics": "Caractéristiques",
+    "outdoorEnvironment": "Environnement extérieur",
+    "other": "Autres",
     "imagesUpload": {
       "select": "Déposer ici les photos ou cliquer (max.{{max}})"
     }
@@ -385,6 +464,26 @@
         "total_trees": "Arbres",
         "actions": "Actions"
       }
+    },
+    "delete": {
+      "teams": {
+        "success": "équipes suppriméees avec succès.",
+        "error": "Erreur lors de la suppression des équipes."
+      },
+      "team": {
+        "success": "équipe suppriméee avec succès.",
+        "error": "Erreur lors de la suppression de l'équipe."
+      }
+    },
+    "archive": {
+      "teams": {
+        "success": "équipes archivées avec succès.",
+        "error": "Erreur lors de l'archivage des équipes."
+      },
+      "team": {
+        "success": "équipe arrchivée avec succès.",
+        "error": "Erreur lors de l'achivage de l'équipe."
+      }
     }
   },
   "Team": {
@@ -399,6 +498,8 @@
     "dialogTitleEdit": "Modifier l'organisation",
     "dialogContentTextCreate": "Utilisez ce formulaire pour créer une organisation.",
     "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'organisation.",
+    "exportPending": "Veuillez patienter et laisser cette fenêtre ouverte, nous préparons vos données...",
+    "exportSuccess": "Vos données sont prêtes! Téléchargement en cours...",
     "WorkingArea": {
       "dialogTitle": "Editer l'emprise",
       "dialogContentText": "Extension acceptés : zip, geojson"
@@ -419,6 +520,17 @@
       "confirm": "Confirmer",
       "confirmDetach": "Confirmer le retrait",
       "invite": "Inviter",
+      "onDetach": {
+        "success": "a été retiré du groupe avec succès",
+        "errorAlert": "Erreur Serveur.",
+        "errorContent": "n'a pas pas pu être rétiré du groupe",
+        "dialog": {
+          "alertTitle": "Cette action est irréversible",
+          "alertContent1": "Vous vous apprêtez à retirer des membres de votre organisation. Cette action conduira à la perte des droits pour les utilisateurs concernés.",
+          "alertContent2": "Êtes-vous sûr de vouloir continuer?",
+          "confirmButton": "Oui, je confirme!"
+        }
+      },
       "Table": {
         "headers": {
           "email": "Email",
@@ -428,18 +540,51 @@
         },
         "roles": {
           "defineRole": "Définir le rôle",
+          "admin": "Administrateur",
           "owner": "Propriétaire",
           "manager": "Manager",
           "contributor": "Contributeur",
           "reader": "Lecteur",
           "guest": "Invité"
+        },
+        "updateMember": {
+          "success": "Le rôle de l'utilisateur a bien été modifié",
+          "error": "Une erreur est survenue lors de la mise à jour de l'utilisateur"
         }
+      },
+      "dialog": {
+        "title": "Ajouter des membres à votre organisation",
+        "errorEmailAlreadyAdded": "est déjà présent dans la liste des invitations.",
+        "errorEmailFormatNotValid": "n'est pas une adresse valide.",
+        "emailsPlaceholder": "gestionnaire@ecoteka.org, invite@ecoteka.org",
+        "emailsLabel": "Emails des membres à inviter",
+        "alertTitle": "Aucun membre à inviter",
+        "alertContent1": "Ajouter l'email du destinataire dans le champ ci-dessus - ",
+        "alertContent2": "puis cliquer sur Entrée ou ajouter une virgule."
       }
     }
   },
   "Dashboard": {
     "title": "Tableau de bord",
-    "for": "pour"
+    "for": "pour",
+    "treeHeritage": {
+      "title": "Votre patrimoine arboré",
+      "totalTrees": "Total des arbres",
+      "plantedTrees": "Arbres plantés en 2020",
+      "felledTrees": "Arbres abattus en 2020",
+      "alertTitle": "Ajouter les premiers arbres à votre patrimoine",
+      "alertText": "Votre espace de travail ne contient aucun arbre pour l'instant",
+      "boldText": "Commencer maintenant!"
+    },
+    "heritageManagment": {
+      "totalCost": "Coût total des interventions planifiées en 2020",
+      "title": "État de gestion de votre patrimoine",
+      "alertTitle": "Ajouter, programmer et suivre le budget des interventions sur votre patrimoine",
+      "alertText": "Dès que votre espace de travail contiendra des arbres, vous pourrez débuter la gestion de votre patrimoine végétal",
+      "boldText": "En savoir plus!"
+    },
+    "addInterventionButton": "Ajouter des interventions",
+    "importDataButton": "Importer des données"
   },
   "MapLayers": {
     "backgrounds": "Fonds",

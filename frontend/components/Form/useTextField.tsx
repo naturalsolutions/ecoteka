@@ -24,10 +24,13 @@ export default function useTextField(props: ETKTextFieldProps): Fields {
         disableUnderline: true,
       },
       label: field.label,
+      placeholder: field.placeholder,
       type: field.type,
       fullWidth: true,
       error: Boolean(props.errors[name]),
-      helperText: props.errors[name]?.message,
+      helperText: props.errors[name]?.message
+        ? props.errors[name]?.message
+        : field.helperText,
     };
 
     const fieldProps = Object.assign({}, defaultFieldProps, field);
