@@ -11,6 +11,7 @@
       "buttonOnLogin": "aller à Connexion"
     }
   },
+
   "Dashboard": {
     "steps": [
       "Configuration de votre espace de travail",
@@ -18,5 +19,13 @@
       "Pilotage de la gestion",
       "Surveillance de l'état sanitaire"
     ]
+  },
+
+  "UsersSetPassword": {
+    "title": "Modifiez votre mot de passe",
+    "description": "Doit contenir au moins un symbole ou chiffre et comporter un minimum de 8 caractères.",
+    "password": "Mot de passe",
+    "passwordConfirmation": "Saisissez à nouveau votre mot de passe",
+    "button": "Modifier"
   }
 }

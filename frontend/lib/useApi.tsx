@@ -17,12 +17,12 @@ export default function useApi() {
   const [accessToken, setAccessToken] = useLocalStorage(tokenStorage);
   const [refreshToken, setRefreshToken] = useLocalStorage(refreshTokenStorage);
 
-  const allowedRoutes = ["/signin", "/forgot"];
+  const allowedRoutes = ["/signin", "/forgot", "/users/set_password"];
 
   if (
     (!accessToken || !refreshToken) &&
     typeof window !== "undefined" &&
-    !allowedRoutes.includes(router.pathname)
+    !allowedRoutes.includes(router.route)
   ) {
     router.push("/signin");
   }

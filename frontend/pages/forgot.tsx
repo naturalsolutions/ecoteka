@@ -16,7 +16,6 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useApi from "@/lib/useApi";
-import classes from "*.module.css";
 
 const useStyles = makeStyles((theme) => ({
   baseCard: {

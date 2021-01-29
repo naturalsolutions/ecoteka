@@ -14,6 +14,7 @@ export const Provider = ({ children }) => {
     "/signin",
     "/forgot",
     "/verify/[token]",
+    "/users/set_password",
     "/404",
     "/500",
   ];

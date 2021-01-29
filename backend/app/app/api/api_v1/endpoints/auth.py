@@ -18,6 +18,7 @@ from app.schemas import (
 from app.api import get_db
 from app.core import (
     get_current_user,
+    get_current_active_user,
     get_password_hash,
     generate_access_token_and_refresh_token_response,
     get_current_user_if_is_superuser,
@@ -122,24 +123,18 @@ def recover_password(email: str, db: Session = Depends(get_db)) -> Any:
 def reset_password(
     token: str = Body(...),
     new_password: str = Body(...),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> Any:
     """
     Reset Password
     """
-    email = verify_password_reset_token(token)
-    if not email:
-        raise HTTPException(status_code=400, detail="Invalid token")
-    user_in_db = user.get_by_email(db, email=email)
-    if not user_in_db:
-        raise HTTPException(
-            status_code=404,
-            detail="The user with this username does not exist in the system.",
-        )
+    
     hashed_password = get_password_hash(new_password)
-    user_in_db.hashed_password = hashed_password
-    db.add(user_in_db)
+    current_user.hashed_password = hashed_password
+    db.add(current_user)
     db.commit()
+    
     return {"msg": "Password updated successfully"}
 
 

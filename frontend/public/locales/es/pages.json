@@ -11,6 +11,7 @@
       "buttonOnLogin": "ir a Iniciar Sesión"
     }
   },
+
   "Dashboard": {
     "steps": [
       "Configuration de votre espace de travail",
@@ -18,5 +19,13 @@
       "Pilotage de la gestion",
       "Surveillance de l'état sanitaire"
     ]
+  },
+
+  "UsersSetPassword": {
+    "title": "Actualizar la contraseña",
+    "description": "Debe contener al menos un símbolo o número y tener 8 caracteres como mínimo.",
+    "password": "Contraseña",
+    "passwordConfirmation": "Vuelve a introducir tu contraseña",
+    "button": "Actualizar"
   }
 }
