@@ -37,11 +37,9 @@ export default function ResetPasswordPage() {
     const valid = await trigger("email");
     const email = getValues("email");
 
-    console.log(valid, email);
-
     if (valid && email) {
       try {
-        await apiETK.post(`/auth/password-recovery/${email}}`);
+        await apiETK.post(`/auth/password-recovery/${email}`);
       } catch (e) {
       } finally {
         setSent(true);

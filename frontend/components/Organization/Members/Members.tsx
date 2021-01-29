@@ -165,7 +165,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
     if (refetchOrganizationData) {
       getData(organization.id);
     }
-    console.log("close dialog");
+
     dialog.current.close();
   };
 
