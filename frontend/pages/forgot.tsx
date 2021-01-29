@@ -16,9 +16,22 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useApi from "@/lib/useApi";
+import classes from "*.module.css";
+
+const useStyles = makeStyles((theme) => ({
+  baseCard: {
+    width: 568,
+  },
+  [theme.breakpoints.only("xs")]: {
+    baseCard: {
+      width: "100%",
+    },
+  },
+}));
 
 export default function ResetPasswordPage() {
   const router = useRouter();
+  const classes = useStyles();
   const { t } = useTranslation(["pages", "common"]);
   const [sent, setSent] = useState<boolean>(false);
   const schema = yup.object().shape({
@@ -48,7 +61,7 @@ export default function ResetPasswordPage() {
   };
 
   const BaseCard = ({ children }) => (
-    <Card style={{ width: 568 }}>
+    <Card className={classes.baseCard}>
       <CardHeader title={t("pages:Forgot.EmailCard.title")} />
       <CardContent>
         <Grid container direction="column" spacing={2}>
