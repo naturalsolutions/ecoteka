@@ -1,17 +1,14 @@
 {
   "Forgot": {
-    "EmailForm": {
-      "CardHeader": {
-        "title": "Mot de passe oublié ?",
-        "description": "Saisissez l'adresse e-mail associée à votre compte. Nous vous enverrons un lien par e-mail pour réinitialiser votre mot de passe.",
-        "emailPlaceholder": "Email",
-        "sendButton": "Envoyer le lien de réinitialisation"
-      }
+    "EmailCard": {
+      "title": "Mot de passe oublié ?",
+      "description": "Saisissez l'adresse e-mail associée à votre compte. Nous vous enverrons un lien par e-mail pour réinitialiser votre mot de passe.",
+      "emailPlaceholder": "Email",
+      "sendButton": "Envoyer le lien de réinitialisation"
     },
-    "emailCard": {
+    "SentCard": {
       "description": "Don’t worry, happens to the best of us",
-      "emailTitle": "Your email",
-      "buttonSendEmail": "Email me a recovery link"
+      "buttonOnLogin": "Email me a recovery link"
     }
   },
   "Dashboard": {

@@ -10,82 +10,108 @@ import {
   Button,
   TextField,
 } from "@material-ui/core";
-import MailIcon from "@material-ui/icons/Mail";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
-
-const useStyles = makeStyles((theme) => ({}));
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import useApi from "@/lib/useApi";
 
 export default function ResetPasswordPage() {
-  const classes = useStyles();
   const router = useRouter();
-  const { t } = useTranslation("pages");
-  const [email, setEmail] = useState<string>("");
+  const { t } = useTranslation(["pages", "common"]);
   const [sent, setSent] = useState<boolean>(false);
+  const schema = yup.object().shape({
+    email: yup.string().email().required(),
+  });
+  const { register, getValues, trigger, errors } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const { apiETK } = useApi().api;
 
   const handleOnLogin = () => {
     router.push("/signin");
   };
 
-  const handleSendEmail = () => {
-    setSent(true);
+  const handleSendEmail = async () => {
+    const valid = await trigger("email");
+    const email = getValues("email");
+
+    console.log(valid, email);
+
+    if (valid && email) {
+      try {
+        await apiETK.post(`/auth/password-recovery/${email}}`);
+      } catch (e) {
+      } finally {
+        setSent(true);
+      }
+    }
   };
 
-  const sentCard = (
-    <Card>
-      <CardHeader title={t("forgot.title")} />
+  const BaseCard = ({ children }) => (
+    <Card style={{ width: 568 }}>
+      <CardHeader title={t("pages:Forgot.EmailCard.title")} />
       <CardContent>
         <Grid container direction="column" spacing={2}>
-          <Grid item>{t("forgot.sentCard.description")}</Grid>
-          <Grid item>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={handleOnLogin}
-            >
-              {t("forgot.sentCard.buttonOnLogin")}
-            </Button>
-          </Grid>
+          {children}
         </Grid>
       </CardContent>
     </Card>
   );
 
-  const emailCard = (
-    <Card style={{ width: 568 }}>
-      <CardHeader title={t("Forgot.EmailForm.CardHeader.title")} />
-      <CardContent>
-        <Grid container direction="column" spacing={2}>
-          <Grid item>{t("Forgot.EmailForm.CardHeader.description")}</Grid>
-          <Grid item>
-            <TextField
-              autoFocus
-              fullWidth
-              placeholder={t("Forgot.EmailForm.CardHeader.emailPlaceholder")}
-              variant="outlined"
-              value={email}
-            />
-          </Grid>
-          <Grid item>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={handleSendEmail}
-            >
-              {t("Forgot.EmailForm.CardHeader.sendButton")}
-            </Button>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+  const SentCard = (
+    <BaseCard>
+      <Grid item>
+        {t("pages:Forgot.SentCard.description")} {getValues("email")}.
+      </Grid>
+      <Grid item>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          onClick={handleOnLogin}
+        >
+          {t("pages:Forgot.SentCard.buttonOnLogin")}
+        </Button>
+      </Grid>
+    </BaseCard>
+  );
+
+  const EmailCard = (
+    <BaseCard>
+      <Grid item>{t("pages:Forgot.EmailCard.description")}</Grid>
+      <Grid item>
+        <TextField
+          error={Boolean(errors?.email?.message)}
+          id="email"
+          name="email"
+          inputRef={register}
+          autoFocus
+          required
+          fullWidth
+          placeholder={t("pages:Forgot.EmailCard.emailPlaceholder")}
+          helperText={errors?.email?.message && t("common:errors.email")}
+          variant="outlined"
+        />
+      </Grid>
+      <Grid item>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          onClick={handleSendEmail}
+        >
+          {t("pages:Forgot.EmailCard.sendButton")}
+        </Button>
+      </Grid>
+    </BaseCard>
   );
 
   return (
     <AppLayoutGeneral>
       <Head>
-        <title>ecoTeka · {t("Forgot.EmailForm.CardHeader.title")}</title>
+        <title>ecoTeka · {t("pages:Forgot.EmailCard.title")}</title>
       </Head>
       <Grid
         container
@@ -95,7 +121,7 @@ export default function ResetPasswordPage() {
         justify="center"
         style={{ minHeight: "calc(100vh - 48px)" }}
       >
-        {sent ? sentCard : emailCard}
+        {sent ? SentCard : EmailCard}
       </Grid>
     </AppLayoutGeneral>
   );
