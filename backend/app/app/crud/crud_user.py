@@ -28,7 +28,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
         if settings.EMAILS_ENABLED and db_obj.email:
             send_new_account_email(
-                email_to=db_obj.email, username=db_obj.email, password=obj_in.password
+                email_to=db_obj.email, username=db_obj.full_name, password=obj_in.password
             )
         return db_obj
 

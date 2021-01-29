@@ -307,6 +307,7 @@ def add_members(
                         password=pwd.genword(),
                     ),
                 )
+            
             enforcer.add_role_for_user_in_domain(
                 str(user_in_db.id),
                 invite.role if invite.role else "guest",
