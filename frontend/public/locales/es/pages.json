@@ -7,8 +7,8 @@
       "sendButton": "Enviar enlace para restablecer contraseña"
     },
     "SentCard": {
-      "description": "Don’t worry, happens to the best of us",
-      "buttonOnLogin": "Email me a recovery link"
+      "description": "Hemos enviado un enlace para restablecer tu contraseña a la dirección",
+      "buttonOnLogin": "ir a Iniciar Sesión"
     }
   },
   "Dashboard": {

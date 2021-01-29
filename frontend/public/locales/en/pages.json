@@ -7,8 +7,8 @@
       "sendButton": "Send reset link"
     },
     "SentCard": {
-      "description": "Don’t worry, happens to the best of us",
-      "buttonOnLogin": "Email me a recovery link"
+      "description": "Un lien pour réinitialiser votre mot de passe a été envoyé par e-mail à",
+      "buttonOnLogin": "go to Log In"
     }
   },
   "Dashboard": {

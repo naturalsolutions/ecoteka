@@ -34,8 +34,8 @@ export default function ResetPasswordPage() {
   };
 
   const handleSendEmail = async () => {
-    const valid = await trigger("email");
     const email = getValues("email");
+    const valid = await trigger("email");
 
     if (valid && email) {
       try {
