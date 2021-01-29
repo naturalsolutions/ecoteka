@@ -16,7 +16,7 @@ from .user import (
     UserInvite,
     UserWithRole,
 )
-from .contact import ContactCreate, ContactDB, ContactUpdate, ContactOut
+
 from .registration_link import (
     RegistrationLinkCreate,
     RegistrationLinkDB,
@@ -47,10 +47,6 @@ from .health_assessment import HealthAssessment, HealthAssessmentCreate, HealthA
 __all__ = [
     "AccessAndRefreshToken",
     "AccessToken",
-    "ContactCreate",
-    "ContactDB",
-    "ContactOut",
-    "ContactUpdate",
     "Coordinate",
     "CurrentUser",
     "GeoFile",

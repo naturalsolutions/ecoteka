@@ -6,8 +6,6 @@ from app.api import deps
 from app import crud
 from app.utils import send_new_registration_email
 from app.utils import send_new_registration_link_email
-from app.utils import send_new_contact_notification
-from app.utils import send_contact_request_confirmation
 
 
 @celery_app.task
@@ -53,31 +51,3 @@ def generate_and_insert_registration_link_task(user_id: int):
         crud.registration_link.generate_and_insert(db, user_id)
         return "ok"
 
-
-@celery_app.task
-def send_new_contact_notification_task(contact_id):
-    with deps.dbcontext() as db:
-        contact_in_db = crud.contact.get(db, contact_id)
-        send_new_contact_notification(
-            email_to=settings.SUPERUSERS_CONTACT_LIST,
-            contactId=contact_in_db.id,
-            first_name=contact_in_db.first_name,
-            last_name=contact_in_db.last_name,
-            email=contact_in_db.email,
-            phone_number=contact_in_db.phone_number,
-            township=contact_in_db.township,
-            position=contact_in_db.position,
-            contact_request=contact_in_db.contact_request,
-        )
-        return "contact notification sent"
-
-
-@celery_app.task
-def send_contact_request_confirmation_task(contact_id: int):
-    with deps.dbcontext() as db:
-        contact_in_db = crud.contact.get(db, contact_id)
-        send_contact_request_confirmation(
-            contact_in_db.email, contact_in_db.first_name, contact_in_db.last_name
-        )
-
-    return "contact request confirmation task completed"
