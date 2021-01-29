@@ -1,4 +1,3 @@
-from .contact import Contact
 from .geo_file import GeoFile, GeoFileStatus
 from .user import User
 from .organization import Organization
@@ -8,7 +7,6 @@ from .tree import Tree
 from .intervention import Intervention
 from .health_assessment import HealthAssessment
 __all__ = [
-    "Contact",
     "GeoFile",
     "GeoFileStatus",
     "User",

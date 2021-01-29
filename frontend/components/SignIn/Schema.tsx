@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 
-export default function useContactSchema() {
+export default function useSignInSchema() {
   const { t } = useTranslation("components");
 
   return {

@@ -7,7 +7,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import ETKContactButton from "@/components/Contact/Button";
+import ContactButton from "@/components/Contact/Button";
 import Hidden from "@material-ui/core/Hidden";
 
 export interface ETKCardAboutProps {
@@ -59,7 +59,7 @@ const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
           </Grid>
           <Grid item>
             <Hidden mdDown>
-              <ETKContactButton
+              <ContactButton
                 className={classes.contactButton}
                 variant={props.buttonVariant}
                 color="primary"
