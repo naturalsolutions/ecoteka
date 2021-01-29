@@ -110,61 +110,6 @@ def verify_password_reset_token(token: str) -> Optional[str]:
         return None
 
 
-def send_contact_request_confirmation(
-    email_to: str, first_name: str, last_name: str
-) -> None:
-    project_name = settings.PROJECT_NAME
-    subject = f"{project_name} - contact request"
-    pathToTemplate = Path(settings.EMAIL_TEMPLATES_DIR) / "contact_request.html"
-    with open(pathToTemplate) as f:
-        template_str = f.read()
-    send_email(
-        email_to=email_to,
-        subject_template=subject,
-        html_template=template_str,
-        environment={
-            "project_name": settings.PROJECT_NAME,
-            "first_name": first_name,
-            "last_name": last_name,
-        },
-    )
-
-
-def send_new_contact_notification(
-    email_to: str,
-    contactId: int,
-    first_name: str,
-    last_name: str,
-    email: EmailStr,
-    phone_number: Optional[str],
-    township: Optional[str],
-    position: Optional[str],
-    contact_request: str,
-) -> None:
-    project_name = settings.PROJECT_NAME
-    subject = f"{project_name} - New contact request"
-    pathToTemplate = (
-        Path(settings.EMAIL_TEMPLATES_DIR) / "new_contact_notification.html"
-    )
-    with open(pathToTemplate) as f:
-        template_str = f.read()
-    send_email(
-        email_to=email_to,
-        subject_template=subject,
-        html_template=template_str,
-        environment={
-            "project_name": settings.PROJECT_NAME,
-            "contactId": contactId,
-            "first_name": first_name,
-            "last_name": last_name,
-            "email": email,
-            "phone_number": phone_number,
-            "township": township,
-            "position": position,
-            "contact_request": contact_request,
-        },
-    )
-
 
 def send_new_registration_email(email_to: str, full_name: str, password: str):
     project_name = settings.PROJECT_NAME
