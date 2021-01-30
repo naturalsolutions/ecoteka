@@ -1,17 +1,17 @@
 {
   "Forgot": {
-    "EmailForm": {
+    "EmailCard": {
       "title": "Forgot password?",
       "description": "Enter the email address associated with your account, and we'll email you a link to reset your password",
       "emailPlaceholder": "Email",
-      "sendButton": "Send reset link"
+      "sendButton": "Send reset link",
+      "signin": "Or go to login"
     },
     "SentCard": {
-      "description": "Un lien pour réinitialiser votre mot de passe a été envoyé par e-mail à",
+      "description": "A link to reset your password has been sent to",
       "buttonOnLogin": "go to Log In"
     }
   },
-
   "Dashboard": {
     "steps": [
       "Configuring your workspace",
@@ -20,7 +20,6 @@
       "Health status monitoring"
     ]
   },
-
   "UsersSetPassword": {
     "title": "Update password",
     "description": "Must include at least one symbol or number and have at least 8 characters.",

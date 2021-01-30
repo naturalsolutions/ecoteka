@@ -84,19 +84,19 @@ const SelectRenderer: React.FC<SelectRendererProps> = ({
   );
   const roles = [
     {
-      label: t("components:Organization.Members.Table.roles.manager"),
+      label: t("components.Organization.Members.Table.roles.manager"),
       value: "manager",
     },
     {
-      label: t("components:Organization.Members.Table.roles.contributor"),
+      label: t("components.Organization.Members.Table.roles.contributor"),
       value: "contributor",
     },
     {
-      label: t("components:Organization.Members.Table.roles.reader"),
+      label: t("components.Organization.Members.Table.roles.reader"),
       value: "reader",
     },
     {
-      label: t("components:Organization.Members.Table.roles.guest"),
+      label: t("components.Organization.Members.Table.roles.guest"),
       value: "guest",
     },
   ];
@@ -195,7 +195,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
       }
     } catch (e) {
       triggerAlert({
-        message: t("components:Organization.Members.Table.updateMember.error"),
+        message: t("components.Organization.Members.Table.updateMember.error"),
         severity: "error",
       });
     }

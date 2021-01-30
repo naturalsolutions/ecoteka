@@ -61,7 +61,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
           defaultValue: latLonChoice[0]?.value,
           items: latLonChoice,
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       };
     }
 
@@ -73,7 +73,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
           defaultValue: latLonChoice[0]?.value,
           items: latLonChoice,
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       };
     }
 
@@ -86,7 +86,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
           items: crsColumnChoices,
           label: t("Import.MissingData.labelColumn.crs"),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       };
     }
 

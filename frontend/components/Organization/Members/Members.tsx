@@ -48,12 +48,12 @@ const ConfirmAlertMessage = (props) => {
     <Box my={1}>
       <Alert severity="warning">
         <AlertTitle>
-          {t("components:Organization.Members.onDetach.dialog.alertTitle")}
+          {t("components.Organization.Members.onDetach.dialog.alertTitle")}
         </AlertTitle>
-        {t("components:Organization.Members.onDetach.dialog.alertContent1")}
+        {t("components.Organization.Members.onDetach.dialog.alertContent1")}
         <p>
           <strong>
-            {t("components:Organization.Members.onDetach.dialog.alertContent2")}
+            {t("components.Organization.Members.onDetach.dialog.alertContent2")}
           </strong>
         </p>
       </Alert>
@@ -130,9 +130,9 @@ const Members: FC<MembersProps> = ({ organization }) => {
           }
           if (status !== 200) {
             enqueueSnackbar(
-              `${t("components:Organization.Members.onDetach.errorAlert")}. ${
+              `${t("components.Organization.Members.onDetach.errorAlert")}. ${
                 member.email
-              } ${t("components:Organization.Members.onDetach.errorContent")}`,
+              } ${t("components.Organization.Members.onDetach.errorContent")}`,
               {
                 variant: "error",
               }
@@ -171,7 +171,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
 
   function addMember() {
     dialog.current.open({
-      title: t("components:Organization.Members.dialog.title"),
+      title: t("components.Organization.Members.dialog.title"),
       content: (
         <AddMembers
           ref={formAddMembersRef}
@@ -191,10 +191,10 @@ const Members: FC<MembersProps> = ({ organization }) => {
   function detachMembers() {
     const dialogActions = [
       {
-        label: t("components:Organization.Members.cancel"),
+        label: t("components.Organization.Members.cancel"),
       },
       {
-        label: t("components:Organization.Members.confirmDetach"),
+        label: t("components.Organization.Members.confirmDetach"),
         variant: "contained",
         color: "primary",
         noClose: true,
@@ -203,7 +203,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
     ];
 
     dialog.current.open({
-      title: t("components:Organization.Members.dialogDdetachMembersTitle"),
+      title: t("components.Organization.Members.dialogDdetachMembersTitle"),
       content: <ConfirmAlertMessage />,
       actions: dialogActions,
       dialogProps: {
@@ -228,7 +228,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
           startIcon={<BlockIcon />}
           onClick={detachMembers}
         >
-          {t("components:Organization.Members.detachMembers")}
+          {t("components.Organization.Members.detachMembers")}
         </Button>
         <Button
           variant="contained"
@@ -238,7 +238,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
           startIcon={<AddIcon />}
           onClick={addMember}
         >
-          {t("components:Organization.Members.addMembers")}
+          {t("components.Organization.Members.addMembers")}
         </Button>
       </Toolbar>
       {data && (

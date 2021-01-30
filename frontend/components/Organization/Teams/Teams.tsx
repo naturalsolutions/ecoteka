@@ -163,10 +163,10 @@ const Teams: FC<TeamsProps> = (props) => {
     const isNew = !Boolean(organization);
     const dialogActions = [
       {
-        label: t("common:buttons.cancel"),
+        label: t("common.buttons.cancel"),
       },
       {
-        label: isNew ? t("common:buttons.create") : t("common:buttons.update"),
+        label: isNew ? t("common.buttons.create") : t("common.buttons.update"),
         variant: "contained",
         color: "primary",
         noClose: true,
@@ -210,10 +210,10 @@ const Teams: FC<TeamsProps> = (props) => {
   function openArea(organization) {
     const dialogActions = [
       {
-        label: t("common:buttons.cancel"),
+        label: t("common.buttons.cancel"),
       },
       {
-        label: t("common:buttons.send"),
+        label: t("common.buttons.send"),
         variant: "contained",
         color: "secondary",
         noClose: true,
@@ -222,7 +222,7 @@ const Teams: FC<TeamsProps> = (props) => {
     ];
 
     dialog.current.open({
-      title: t("components:Organization.WorkingArea.dialogTitle"),
+      title: t("components.Organization.WorkingArea.dialogTitle"),
       content: (
         <ETKFormWorkingArea ref={formAreaRef} organization={organization} />
       ),
@@ -269,8 +269,8 @@ const Teams: FC<TeamsProps> = (props) => {
         triggerAlert({
           message: `${selectedTeams.length} ${
             selectedTeams.length > 1
-              ? t("components:Teams.delete.teams.success")
-              : t("components:Teams.delete.team.success")
+              ? t("components.Teams.delete.teams.success")
+              : t("components.Teams.delete.team.success")
           }`,
           severity: "success",
         });
@@ -281,8 +281,8 @@ const Teams: FC<TeamsProps> = (props) => {
       triggerAlert({
         message:
           selectedTeams.length > 1
-            ? t("components:Teams.delete.teams.error")
-            : t("components:Teams.delete.team.error"),
+            ? t("components.Teams.delete.teams.error")
+            : t("components.Teams.delete.team.error"),
         severity: "error",
       });
     }
@@ -298,8 +298,8 @@ const Teams: FC<TeamsProps> = (props) => {
         triggerAlert({
           message: `${selectedTeams.length} ${
             selectedTeams.length > 1
-              ? t("components:Teams.archive.teams.success")
-              : t("components:Teams.archive.team.success")
+              ? t("components.Teams.archive.teams.success")
+              : t("components.Teams.archive.team.success")
           }`,
           severity: "success",
         });
@@ -310,8 +310,8 @@ const Teams: FC<TeamsProps> = (props) => {
       triggerAlert({
         message:
           selectedTeams.length > 1
-            ? t("components:Teams.archive.teams.error")
-            : t("components:Teams.archive.team.error"),
+            ? t("components.Teams.archive.teams.error")
+            : t("components.Teams.archive.team.error"),
         severity: "error",
       });
     }

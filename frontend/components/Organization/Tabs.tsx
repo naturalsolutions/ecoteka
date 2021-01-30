@@ -43,12 +43,12 @@ const ETKTabs: FC<TabsProps> = ({ organization, activeTab }) => {
           aria-label="organization tabs"
         >
           <Tab
-            label={t("components:Organization.Tabs.general")}
+            label={t("components.Organization.Tabs.general")}
             value="general"
           />
-          <Tab label={t("components:Organization.Tabs.teams")} value="teams" />
+          <Tab label={t("components.Organization.Tabs.teams")} value="teams" />
           <Tab
-            label={t("components:Organization.Tabs.members")}
+            label={t("components.Organization.Tabs.members")}
             value="members"
           />
         </Tabs>

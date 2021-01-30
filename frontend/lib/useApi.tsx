@@ -24,7 +24,7 @@ export default function useApi() {
     typeof window !== "undefined" &&
     !allowedRoutes.includes(router.route)
   ) {
-    router.push("/signin");
+    //  router.push("/signin");
   }
 
   let ecotekaV1 = axios.create({
@@ -82,8 +82,8 @@ export default function useApi() {
         return Promise.resolve();
       })
       .catch((error) => {
-        router.push("/signin");
-        return Promise.reject();
+        // router.push("/signin");
+        return Promise.reject(error);
       });
 
   createAuthRefreshInterceptor(ecotekaV1, refreshAuthLogic, {
