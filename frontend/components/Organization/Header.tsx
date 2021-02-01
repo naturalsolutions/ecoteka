@@ -96,7 +96,7 @@ const Header: FC<HeaderProps> = (props) => {
     try {
       setPending(true);
       triggerAlert({
-        message: t("components:Organization.exportPending"),
+        message: t("components.Organization.exportPending"),
         severity: "info",
       });
       let response = await apiETK.get(
@@ -118,7 +118,7 @@ const Header: FC<HeaderProps> = (props) => {
         // request is stale
         setPending(false);
         triggerAlert({
-          message: t("components:Organization.exportSuccess"),
+          message: t("components.Organization.exportSuccess"),
           severity: "success",
         });
         try {
@@ -164,7 +164,7 @@ const Header: FC<HeaderProps> = (props) => {
             color="primary"
             onClick={() => router.push("/edition/?panel=import")}
           >
-            {t("common:buttons.import")}
+            {t("common.buttons.import")}
           </Button>
         </Box>
         <Box m={1}>
@@ -178,7 +178,7 @@ const Header: FC<HeaderProps> = (props) => {
               disabled={pending}
               onClick={() => handleClick(selectedIndex)}
             >
-              {`${t("common:buttons.export")} ${
+              {`${t("common.buttons.export")} ${
                 exportFormats[selectedIndex].format
               }`}
               {pending && (
@@ -232,7 +232,7 @@ const Header: FC<HeaderProps> = (props) => {
                           selected={index === selectedIndex}
                           onClick={(event) => handleMenuItemClick(event, index)}
                         >
-                          {`${t("common:buttons.export")} ${option.format}`}
+                          {`${t("common.buttons.export")} ${option.format}`}
                         </MenuItem>
                       ))}
                     </MenuList>

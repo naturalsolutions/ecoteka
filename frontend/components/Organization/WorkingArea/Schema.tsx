@@ -8,11 +8,11 @@ export default function useEtkWorkingAreaSchema() {
     file: {
       type: "textfield",
       component: {
-        label: t("components:Organization.WorkingArea.file"),
+        label: t("components.Organization.WorkingArea.file"),
         required: true,
-        type: 'file'
+        type: "file",
       },
-      schema: yup.mixed() //TODO
-    }
+      schema: yup.mixed(), //TODO
+    },
   };
 }

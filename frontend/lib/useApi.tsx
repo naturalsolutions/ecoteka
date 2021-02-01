@@ -17,14 +17,14 @@ export default function useApi() {
   const [accessToken, setAccessToken] = useLocalStorage(tokenStorage);
   const [refreshToken, setRefreshToken] = useLocalStorage(refreshTokenStorage);
 
-  const allowedRoutes = ["/signin", "/forgot"];
+  const allowedRoutes = ["/signin", "/forgot", "/users/set_password"];
 
   if (
     (!accessToken || !refreshToken) &&
     typeof window !== "undefined" &&
-    !allowedRoutes.includes(router.pathname)
+    !allowedRoutes.includes(router.route)
   ) {
-    router.push("/signin");
+    //  router.push("/signin");
   }
 
   let ecotekaV1 = axios.create({
@@ -82,8 +82,8 @@ export default function useApi() {
         return Promise.resolve();
       })
       .catch((error) => {
-        router.push("/signin");
-        return Promise.reject();
+        // router.push("/signin");
+        return Promise.reject(error);
       });
 
   createAuthRefreshInterceptor(ecotekaV1, refreshAuthLogic, {

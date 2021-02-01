@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -7,6 +7,7 @@ import {
   makeStyles,
   Toolbar,
   withStyles,
+  NoSsr,
 } from "@material-ui/core";
 import ContactButton from "@/components/Contact/Button";
 import LanguageSelector from "@/components/LanguageSelector";
@@ -72,6 +73,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
   const { dark, setDark } = useThemeContext();
   const [logo, setLogo] = useState("/assets/light/logo.svg");
   const [menu, setMenu] = useState<string | null>(router.asPath);
+  const [toggleIcon, setToggleIcon] = useState<ReactNode>(<Brightness7Icon />);
 
   const handleOrganizationSelectChange = (organization: IOrganization) => {
     if (!organization || !organization.id) {
@@ -148,21 +150,23 @@ const AppLayoutHeader = ({}): JSX.Element => {
             alignItems="center"
             spacing={1}
           >
-            <Grid item>
-              <ToggleButton
-                size="small"
-                value={dark || false}
-                selected={dark || false}
-                color="primary"
-                onClick={() => setDark(!dark)}
-              >
-                {dark ? (
-                  <Brightness7Icon fontSize="small" />
-                ) : (
-                  <Brightness4Icon fontSize="small" />
-                )}
-              </ToggleButton>
-            </Grid>
+            <NoSsr>
+              <Grid item>
+                <ToggleButton
+                  size="small"
+                  value={dark}
+                  selected={dark}
+                  color="primary"
+                  onClick={() => setDark(!dark)}
+                >
+                  {dark || false ? (
+                    <Brightness7Icon fontSize="small" />
+                  ) : (
+                    <Brightness4Icon fontSize="small" />
+                  )}
+                </ToggleButton>
+              </Grid>
+            </NoSsr>
             <Grid item>
               <LanguageSelector />
             </Grid>

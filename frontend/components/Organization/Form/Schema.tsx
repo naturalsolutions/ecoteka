@@ -8,10 +8,10 @@ export default function useEtkOrganizationSchema() {
     name: {
       type: "textfield",
       component: {
-        label: t("components:Organization.name"),
+        label: t("components.Organization.name"),
         required: true,
       },
-      schema: yup.string().required(t("common:errors.required")),
-    }
+      schema: yup.string().required(t("common.errors.required")),
+    },
   };
 }

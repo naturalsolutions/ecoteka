@@ -1,10 +1,11 @@
 {
   "Forgot": {
-    "EmailForm": {
+    "EmailCard": {
       "title": "¿Has olvidado tu contraseña?",
       "description": "Introduce la dirección de correo electrónico asociada a tu cuenta y te enviaremos un enlace para restablecer tu contraseña",
       "emailPlaceholder": "Correo electrónico",
-      "sendButton": "Enviar enlace para restablecer contraseña"
+      "sendButton": "Enviar enlace para restablecer contraseña",
+      "signin": "O ir a iniciar sesión"
     },
     "SentCard": {
       "description": "Hemos enviado un enlace para restablecer tu contraseña a la dirección",
@@ -18,5 +19,17 @@
       "Pilotage de la gestion",
       "Surveillance de l'état sanitaire"
     ]
+  },
+  "UsersSetPassword": {
+    "title": "Actualizar la contraseña",
+    "description": "Debe contener al menos un símbolo o número y tener 8 caracteres como mínimo.",
+    "password": "Contraseña",
+    "passwordConfirmation": "Vuelve a introducir tu contraseña",
+    "button": "Actualizar",
+    "orGoToLogin": "O ir a iniciar sesión",
+    "tokenHasExpired": "Tu token de restablecimiento de contraseña ha caducado, ¿te gustaría solicitar otro?",
+    "requestNewToken": "Solicitar nuevo token",
+    "goToLogin": "Ir a iniciar sesión",
+    "success": "Tu contraseña ha sido cambiada exitosamente."
   }
 }
