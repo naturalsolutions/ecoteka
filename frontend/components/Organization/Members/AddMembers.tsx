@@ -106,13 +106,13 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
 
       if (isInList(email)) {
         error = `<${email}> ${t(
-          "components:Organization.Members.dialog.errorEmailAlreadyAdded"
+          "components.Organization.Members.dialog.errorEmailAlreadyAdded"
         )}`;
       }
 
       if (!isEmail(email)) {
         error = `<${email}> ${t(
-          "components:Organization.Members.dialog.errorEmailFormatNotValid"
+          "components.Organization.Members.dialog.errorEmailFormatNotValid"
         )}`;
       }
 
@@ -181,7 +181,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
             variant="outlined"
             className={"input " + (error && " has-error")}
             placeholder={t(
-              "components:Organization.Members.dialog.emailsPlaceholder"
+              "components.Organization.Members.dialog.emailsPlaceholder"
             )}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
@@ -229,7 +229,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
                           return (
                             <MenuItem value={role.value} key={i}>
                               {t(
-                                `components:Organization.Members.Table.roles.${role.value}`
+                                `components.Organization.Members.Table.roles.${role.value}`
                               )}
                             </MenuItem>
                           );

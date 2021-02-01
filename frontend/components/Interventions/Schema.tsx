@@ -133,13 +133,13 @@ function sitem(value, t, tpath) {
 
 function requiredDocumentsItems(it: TInterventionType, t) {
   return ["dt", "trafficpolice"].map((item) =>
-    sitem(item, t, "components:Intervention.documents")
+    sitem(item, t, "components.Intervention.documents")
   );
 }
 
 function requiredMaterialItems(it: TInterventionType, t) {
   return requiredMaterial[it].map((item) =>
-    sitem(item, t, "components:Intervention.material")
+    sitem(item, t, "components.Intervention.material")
   );
 }
 
@@ -155,7 +155,7 @@ export function useSelectionSchema(it: TInterventionType) {
         required: true,
         label: t("components.Intervention.intervention_type"),
         items: interventionTypes.map((it) =>
-          sitem(it, t, "components:Intervention.types")
+          sitem(it, t, "components.Intervention.types")
         ),
       },
       schema: yup.string().required(t("common.errors.required")),
@@ -192,7 +192,7 @@ export function useInterventionSchema(it: TInterventionType) {
         component: {
           label: t("components.Intervention.pruning.method"),
           items: interventionMethod.pruning.map((m) =>
-            sitem(m, t, "components:Intervention.pruning")
+            sitem(m, t, "components.Intervention.pruning")
           ),
         },
         schema: yup.string().required(t("common.errors.required")),
@@ -211,7 +211,7 @@ export function useInterventionSchema(it: TInterventionType) {
         component: {
           label: t("components.Intervention.felling.method"),
           items: interventionMethod.felling.map((m) =>
-            sitem(m, t, "components:Intervention.felling")
+            sitem(m, t, "components.Intervention.felling")
           ),
         },
         schema: yup.string().required(t("common.errors.required")),
@@ -238,7 +238,7 @@ export function useInterventionSchema(it: TInterventionType) {
         component: {
           label: t("components.Intervention.streanremoval.method"),
           items: interventionMethod.streanremoval.map((m) =>
-            sitem(m, t, "components:Intervention.streanremoval")
+            sitem(m, t, "components.Intervention.streanremoval")
           ),
         },
         schema: yup.string().required(t("common.errors.required")),
@@ -251,7 +251,7 @@ export function useInterventionSchema(it: TInterventionType) {
           multiple: true,
           label: t("components.Intervention.surveillance.method"),
           items: interventionMethod.surveillance.map((m) =>
-            sitem(m, t, "components:Intervention.surveillance")
+            sitem(m, t, "components.Intervention.surveillance")
           ),
         },
         schema: yup
@@ -274,7 +274,7 @@ export function useInterventionSchema(it: TInterventionType) {
           required: true,
           label: t("components.Intervention.treatment.method"),
           items: interventionMethod.treatment.map((m) =>
-            sitem(m, t, "components:Intervention.treatment")
+            sitem(m, t, "components.Intervention.treatment")
           ),
         },
         schema: yup.string().required(t("common.errors.required")),
@@ -302,7 +302,7 @@ export function useInterventionSchema(it: TInterventionType) {
           label: t("components.Intervention.indepthdiagnostic.method"),
           multiple: true,
           items: interventionMethod.indepthdiagnostic.map((m) =>
-            sitem(m, t, "components:Intervention.indepthdiagnostic")
+            sitem(m, t, "components.Intervention.indepthdiagnostic")
           ),
         },
         schema: yup

@@ -117,7 +117,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
           if (status === 200) {
             enqueueSnackbar(
               `${member.email} ${t(
-                "components:Organization.Members.onDetach.success"
+                "components.Organization.Members.onDetach.success"
               )}`,
               {
                 variant: "success",
