@@ -175,7 +175,7 @@ const Teams: FC<TeamsProps> = (props) => {
     ];
 
     dialog.current.open({
-      title: t(`components:Team.dialogTitle${isNew ? "Create" : "Edit"}`),
+      title: t(`components.Team.dialogTitle${isNew ? "Create" : "Edit"}`),
       content: (
         <ETKFormOrganization
           ref={formEditRef}
@@ -336,7 +336,7 @@ const Teams: FC<TeamsProps> = (props) => {
           aria-label="split button"
         >
           <Button size="small" color="secondary" onClick={handleClick}>
-            {t(`common:buttons.${actionOptions[selectedAction].format}`)}
+            {t(`common.buttons.${actionOptions[selectedAction].format}`)}
           </Button>
           <Button
             size="small"
@@ -382,7 +382,7 @@ const Teams: FC<TeamsProps> = (props) => {
                         selected={index === selectedAction}
                         onClick={(event) => handleMenuItemClick(event, index)}
                       >
-                        {t(`common:buttons.${option.format}`)}
+                        {t(`common.buttons.${option.format}`)}
                       </MenuItem>
                     ))}
                   </MenuList>

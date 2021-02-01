@@ -290,7 +290,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                 }}
                 onClick={(e) => stepidx < activeStep && setActiveStep(stepidx)}
               >
-                {t(`components:Intervention.steps.${step}`)}
+                {t(`components.Intervention.steps.${step}`)}
               </StepLabel>
               <StepContent>
                 <Grid container direction="column">
@@ -334,13 +334,13 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                 },
               }}
             >
-              {t(`components:Intervention.steps.finish`)}
+              {t(`components.Intervention.steps.finish`)}
             </StepLabel>
             <StepContent>
               <Grid container direction="column">
                 <Grid>
                   <Typography variant="h6">
-                    {t(`components:Intervention.success`)}
+                    {t(`components.Intervention.success`)}
                   </Typography>
                 </Grid>
                 <Grid>

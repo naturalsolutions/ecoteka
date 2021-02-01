@@ -90,7 +90,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
     ];
 
     dialog.current.open({
-      title: t(`components:Team.dialogTitleEdit`),
+      title: t(`components.Team.dialogTitleEdit`),
       content: (
         <ETKFormOrganization ref={formEditRef} organization={organization} />
       ),

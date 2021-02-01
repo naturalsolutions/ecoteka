@@ -80,7 +80,7 @@ const SelectRenderer: React.FC<SelectRendererProps> = ({
 }) => {
   const { t } = useTranslation(["components", "common"]);
   const placeholder = t(
-    "components:Organization.Members.Table.roles.defineRole"
+    "components.Organization.Members.Table.roles.defineRole"
   );
   const roles = [
     {
@@ -181,14 +181,14 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
         onMemberUpdate(data);
         triggerAlert({
           message: t(
-            "components:Organization.Members.Table.updateMember.success"
+            "components.Organization.Members.Table.updateMember.success"
           ),
           severity: "success",
         });
       } else {
         triggerAlert({
           message: t(
-            "components:Organization.Members.Table.updateMember.error"
+            "components.Organization.Members.Table.updateMember.error"
           ),
           severity: "error",
         });
@@ -336,7 +336,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
                         case "admin":
                         case "owner":
                           return t(
-                            `components:Organization.Members.Table.roles.${row.role}`
+                            `components.Organization.Members.Table.roles.${row.role}`
                           );
                         default:
                           return (
