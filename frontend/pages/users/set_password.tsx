@@ -1,4 +1,4 @@
-import { useEffect, useState, ReactNode } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import {
@@ -197,16 +197,16 @@ const ChangePasswordForm = ({
         };
 
         await apiETK.post("/auth/reset-password/", payload, config);
+        setUpdating(false);
         setStatus("goToLogin");
       }
     } catch (error) {
       const { response } = error;
 
       if (response.status === 422) {
+        setUpdating(false);
         setStatus("tokenInvalid");
       }
-    } finally {
-      setUpdating(false);
     }
   };
 
@@ -280,29 +280,6 @@ export default function UsersSetPasswordPage() {
   });
 
   const [status, setStatus] = useState("password");
-  const [component, setComponent] = useState<ReactNode>();
-
-  useEffect(() => {
-    switch (status) {
-      case "password":
-        setComponent(
-          <ChangePasswordForm
-            register={register}
-            getValues={getValues}
-            trigger={trigger}
-            errors={errors}
-            setStatus={setStatus}
-          />
-        );
-        break;
-      case "tokenInvalid":
-        setComponent(<ResendMail />);
-        break;
-      case "goToLogin":
-        setComponent(<GoToLogin />);
-        break;
-    }
-  }, [status]);
 
   return (
     <AppLayoutGeneral>
@@ -317,7 +294,17 @@ export default function UsersSetPasswordPage() {
         justify="center"
         style={{ minHeight: "calc(100vh - 96px)" }}
       >
-        {component}
+        {status === "password" && (
+          <ChangePasswordForm
+            register={register}
+            getValues={getValues}
+            trigger={trigger}
+            errors={errors}
+            setStatus={setStatus}
+          />
+        )}
+        {status === "tokenInvalid" && <ResendMail />}
+        {status === "goToLogin" && <GoToLogin />}
       </Grid>
     </AppLayoutGeneral>
   );
