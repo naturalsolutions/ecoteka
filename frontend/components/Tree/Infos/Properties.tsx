@@ -337,11 +337,11 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                       return (
                         <TableRow key={`psti-${key}`}>
                           <TableCell>
-                            {t(`components:Tree.properties.${key}.label`)}​​​​
+                            {t(`components.Tree.properties.${key}.label`)}​​​​
                           </TableCell>
                           <TableCell>
                             {t(
-                              `components:Tree.properties.${key}.${props.tree.properties[key]}`
+                              `components.Tree.properties.${key}.${props.tree.properties[key]}`
                             )}
                           </TableCell>
                         </TableRow>
@@ -352,7 +352,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                       return (
                         <TableRow key={`psti-${key}`}>
                           <TableCell>
-                            {t(`components:Tree.properties.${key}`)}​​​​
+                            {t(`components.Tree.properties.${key}`)}​​​​
                           </TableCell>
                           <TableCell>
                             <Checkbox
@@ -367,7 +367,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                       return (
                         <TableRow key={`psti-${key}`}>
                           <TableCell>
-                            {t(`components:Tree.properties.${key}`)}​​​​
+                            {t(`components.Tree.properties.${key}`)}​​​​
                           </TableCell>
                           <TableCell>{props.tree.properties[key]}</TableCell>
                         </TableRow>

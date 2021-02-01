@@ -13,14 +13,14 @@ export default function useTreeSchema() {
     "sandyclay",
   ].map((option) => {
     return {
-      label: t(`components:Tree.properties.soilTexture.${option}`),
+      label: t(`components.Tree.properties.soilTexture.${option}`),
       value: option,
     };
   });
 
   const rootsTypeOptions = ["swivel", "tracing", "oblique"].map((option) => {
     return {
-      label: t(`components:Tree.properties.rootsType.${option}`),
+      label: t(`components.Tree.properties.rootsType.${option}`),
       value: option,
     };
   });
@@ -37,7 +37,7 @@ export default function useTreeSchema() {
     "cone",
   ].map((option) => {
     return {
-      label: t(`components:Tree.properties.shape.${option}`),
+      label: t(`components.Tree.properties.shape.${option}`),
       value: option,
     };
   });

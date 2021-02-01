@@ -154,7 +154,7 @@ const CalendarIntervention: React.FC<CalendarInterventionProps> = (props) => {
               }}
             >
               {t(
-                `components:Intervention.types.${props.intervention.intervention_type}`
+                `components.Intervention.types.${props.intervention.intervention_type}`
               )}
             </Button>
           </Grid>

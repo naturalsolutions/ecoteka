@@ -158,13 +158,13 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = ({
                     <ListItemIcon>
                       <ArchiveIcon />
                     </ListItemIcon>
-                    <ListItemText primary={t(`common:buttons.archive`)} />
+                    <ListItemText primary={t(`common.buttons.archive`)} />
                   </MenuItem>
                   <MenuItem onClick={() => triggerDelete()}>
                     <ListItemIcon>
                       <DeleteIcon />
                     </ListItemIcon>
-                    <ListItemText primary={t(`common:buttons.delete`)} />
+                    <ListItemText primary={t(`common.buttons.delete`)} />
                   </MenuItem>
                 </Menu>
               </TableCell>
