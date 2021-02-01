@@ -121,8 +121,7 @@ def recover_password(email: str, db: Session = Depends(get_db)) -> Any:
 
 @router.post("/reset-password/", response_model=Msg)
 def reset_password(
-    token: str = Body(...),
-    new_password: str = Body(...),
+    new_password: str = Body(..., embed=True),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> Any:

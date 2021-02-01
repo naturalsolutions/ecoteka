@@ -87,12 +87,12 @@ const EmailCard = ({ onSendEmail = (email: string) => {}, onLogin }) => {
   const [passwordRecovery, setPasswordRecovery] = useState<boolean>(false);
 
   const handleSendEmail = async () => {
-    setPasswordRecovery(true);
     const email = getValues("email");
     const valid = await trigger("email");
 
     if (valid && email) {
       try {
+        setPasswordRecovery(true);
         await apiETK.post(`/auth/password-recovery/${email}`);
       } catch (e) {
       } finally {

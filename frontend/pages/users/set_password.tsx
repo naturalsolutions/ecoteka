@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import {
@@ -10,7 +10,13 @@ import {
   CardHeader,
   CardContent,
   CircularProgress,
+  InputAdornment,
+  Typography,
+  Box,
+  IconButton,
 } from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,6 +27,10 @@ import { useRouter } from "next/router";
 const useStyles = makeStyles((theme) => ({
   baseCard: {
     width: 568,
+    background: "transparent",
+  },
+  baseCardTitle: {
+    textAlign: "center",
   },
   [theme.breakpoints.only("xs")]: {
     baseCard: {
@@ -34,8 +44,11 @@ const BaseCard = ({ children }) => {
   const { t } = useTranslation("pages");
 
   return (
-    <Card className={classes.baseCard}>
-      <CardHeader title={t("UsersSetPassword.title")} />
+    <Card elevation={0} className={classes.baseCard}>
+      <CardHeader
+        className={classes.baseCardTitle}
+        title={t("pages.UsersSetPassword.title")}
+      />
       <CardContent>
         <Grid container direction="column" spacing={2}>
           {children}
@@ -45,43 +58,124 @@ const BaseCard = ({ children }) => {
   );
 };
 
-const Updated = () => {
+const GoToLogin = () => {
   const router = useRouter();
+  const { t } = useTranslation(["pages", "commons"]);
 
-  const handleBack = () => {
-    // router.push("/signin");
+  const handleGoToLogin = () => {
+    router.push("/signin");
   };
 
   return (
     <BaseCard>
       <Grid container justify="center">
-        <Grid item>cambiado</Grid>
+        <Grid item>
+          <Typography></Typography>
+        </Grid>
       </Grid>
       <Grid item>
         <Button
           fullWidth
           variant="contained"
           color="primary"
-          onClick={handleBack}
+          onClick={handleGoToLogin}
         >
-          Volver
+          {t("pages.UsersSetPassword.orGoToLogin").replace("Or ", "")}
         </Button>
       </Grid>
     </BaseCard>
   );
 };
 
+const ResendMail = () => {
+  const router = useRouter();
+  const { t } = useTranslation(["pages", "commons"]);
+
+  const handleRequestToken = () => {
+    router.push("/forgot");
+  };
+
+  const handleGoToLogin = () => {
+    router.push("/signin");
+  };
+
+  return (
+    <BaseCard>
+      <Grid container justify="center">
+        <Grid item>
+          <Box mb={2}>
+            <Typography>
+              {t("pages.UsersSetPassword.tokenHasExpired")}
+            </Typography>
+          </Box>
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          onClick={handleRequestToken}
+        >
+          {t("pages.UsersSetPassword.requestNewToken")}
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button fullWidth onClick={handleGoToLogin}>
+          {t("pages.UsersSetPassword.orGoToLogin")}
+        </Button>
+      </Grid>
+    </BaseCard>
+  );
+};
+
+const PasswordField = ({ name, register, errors, trigger }) => {
+  const { t } = useTranslation(["pages", "commons"]);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  return (
+    <TextField
+      inputRef={register}
+      name={name}
+      id={name}
+      type={showPassword ? "text" : "password"}
+      variant="outlined"
+      required
+      fullWidth
+      placeholder={t(`pages.UsersSetPassword.${name}`)}
+      error={Boolean(errors[name]?.message)}
+      helperText={errors[name]?.message}
+      onChange={() => {
+        trigger(name);
+      }}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={() => setShowPassword(!showPassword)}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              {showPassword ? <Visibility /> : <VisibilityOff />}
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+    />
+  );
+};
+
 const ChangePasswordForm = ({
-  token,
   trigger,
   register,
   getValues,
   errors,
-  setIsPasswordUpdate,
+  setStatus = (status) => status,
 }) => {
   const { t } = useTranslation("pages");
   const [updating, setUpdating] = useState(false);
   const { apiETK } = useApi().api;
+  const router = useRouter();
 
   const handleChangePassword = async () => {
     try {
@@ -90,63 +184,46 @@ const ChangePasswordForm = ({
 
       if (valid) {
         const payload = {
-          token,
           new_password: getValues("password"),
         };
         const config = {
+          skipAuthRefresh: true,
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${router.query.c}`,
           },
         };
-        const response = await apiETK.post(
-          "/auth/reset-password/",
-          payload,
-          config
-        );
 
-        console.log("aaa", response);
-
-        // setIsPasswordUpdate(true);
+        await apiETK.post("/auth/reset-password/", payload, config);
+        setStatus("goToLogin");
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      const { response } = error;
+
+      if (response.status === 422) {
+        setStatus("tokenInvalid");
+      }
     } finally {
       setUpdating(false);
     }
   };
 
+  const propsPasswordField = {
+    register,
+    errors,
+    trigger,
+  };
+
   return (
     <BaseCard>
-      <Grid item>{t("pages.UsersSetPassword.description")}</Grid>
       <Grid item>
-        <TextField
-          inputRef={register}
-          name="password"
-          id="password"
-          type="password"
-          variant="outlined"
-          required
-          fullWidth
-          placeholder={t("pages.UsersSetPassword.password")}
-          error={Boolean(errors?.password?.message)}
-          helperText={errors?.email?.message && t("common.errors.password")}
-        />
+        <Typography>{t("pages.UsersSetPassword.description")}</Typography>
       </Grid>
       <Grid item>
-        <TextField
-          inputRef={register}
-          name="passwordConfirmation"
-          id="passwordConfirmation"
-          type="password"
-          variant="outlined"
-          required
-          fullWidth
-          placeholder={t("pages.UsersSetPassword.passwordConfirmation")}
-          error={Boolean(errors?.passwordConfirmation?.message)}
-          helperText={
-            errors?.passwordConfirmation?.message && t("common.errors.password")
-          }
-        />
+        <PasswordField name="password" {...propsPasswordField} />
+      </Grid>
+      <Grid item>
+        <PasswordField name="passwordConfirmation" {...propsPasswordField} />
       </Grid>
       <Grid item>
         <Button
@@ -167,20 +244,63 @@ const ChangePasswordForm = ({
   );
 };
 
+const isNullOrUndefined = function (value) {
+  return value === null || value === undefined;
+};
+
 export default function UsersSetPasswordPage() {
   const { t } = useTranslation(["pages", "common"]);
   const schema = yup.object().shape({
-    password: yup.string().required(),
+    password: yup
+      .string()
+      .min(8, t("common.errors.passwordMin"))
+      .max(255)
+      .required()
+      .test(
+        "minOneNumberOrSymbol",
+        t("common.errors.passwordMustContainOneNumberOrSymbol"),
+        (value) => {
+          return (
+            isNullOrUndefined(value) ||
+            (value.match(/[^a-zA-Z\s]/g) || []).length >= 1
+          );
+        }
+      ),
     passwordConfirmation: yup
       .string()
-      .required()
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
+      .oneOf(
+        [yup.ref("password"), null],
+        t("common.errors.passwordsShouldMatch")
+      ),
   });
   const { register, getValues, trigger, errors } = useForm({
     resolver: yupResolver(schema),
   });
-  const router = useRouter();
-  const [isPasswordUpdate, setIsPasswordUpdate] = useState(false);
+
+  const [status, setStatus] = useState("password");
+  const [component, setComponent] = useState<ReactNode>();
+
+  useEffect(() => {
+    switch (status) {
+      case "password":
+        setComponent(
+          <ChangePasswordForm
+            register={register}
+            getValues={getValues}
+            trigger={trigger}
+            errors={errors}
+            setStatus={setStatus}
+          />
+        );
+        break;
+      case "tokenInvalid":
+        setComponent(<ResendMail />);
+        break;
+      case "goToLogin":
+        setComponent(<GoToLogin />);
+        break;
+    }
+  }, [status]);
 
   return (
     <AppLayoutGeneral>
@@ -195,18 +315,7 @@ export default function UsersSetPasswordPage() {
         justify="center"
         style={{ minHeight: "calc(100vh - 96px)" }}
       >
-        {!isPasswordUpdate ? (
-          <ChangePasswordForm
-            register={register}
-            getValues={getValues}
-            trigger={trigger}
-            errors={errors}
-            setIsPasswordUpdate={setIsPasswordUpdate}
-            token={router.query.c}
-          />
-        ) : (
-          <Updated />
-        )}
+        {component}
       </Grid>
     </AppLayoutGeneral>
   );

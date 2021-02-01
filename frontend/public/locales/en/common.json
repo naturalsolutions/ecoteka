@@ -26,8 +26,10 @@
   "errors": {
     "email": "Email address is invalid",
     "required": "Field required",
+    "passwordMustContainOneNumberOrSymbol": "The password must contain at least one number or symbol",
     "passwordsShouldMatch": "Passwords should match",
-    "fileRequired": "Please select a file"
+    "fileRequired": "Please select a file",
+    "passwordMin": "Password must be at least 8 characters"
   },
   "months": [
     "January",
@@ -42,5 +44,8 @@
     "October",
     "November",
     "December"
-  ]
+  ],
+  "sersSetPassword": {
+    "orGoToLogin": "Or Sign In"
+  }
 }

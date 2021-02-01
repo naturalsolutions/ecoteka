@@ -25,6 +25,9 @@
     "description": "Doit contenir au moins un symbole ou chiffre et comporter un minimum de 8 caractères.",
     "password": "Mot de passe",
     "passwordConfirmation": "Saisissez à nouveau votre mot de passe",
-    "button": "Modifier"
+    "button": "Modifier",
+    "orGoToLogin": "Ou allez à la connexion",
+    "tokenHasExpired": "Votre token de réinitialisation de mot de passe a expiré, souhaitez-vous en demander un autre?",
+    "requestNewToken": "Demander un nouveau token"
   }
 }

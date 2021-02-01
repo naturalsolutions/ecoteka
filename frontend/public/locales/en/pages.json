@@ -24,6 +24,9 @@
     "title": "Update password",
     "description": "Must include at least one symbol or number and have at least 8 characters.",
     "password": "Password",
-    "passwordConfirmation": ""
+    "passwordConfirmation": "",
+    "orGoToLogin": "Or go to login",
+    "tokenHasExpired": "Your password reset token has expired, would you like to request another one?",
+    "requestNewToken": "Request new token"
   }
 }
