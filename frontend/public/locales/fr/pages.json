@@ -28,6 +28,8 @@
     "button": "Modifier",
     "orGoToLogin": "Ou allez à la connexion",
     "tokenHasExpired": "Votre token de réinitialisation de mot de passe a expiré, souhaitez-vous en demander un autre?",
-    "requestNewToken": "Demander un nouveau token"
+    "requestNewToken": "Demander un nouveau token",
+    "goToLogin": "Aller à la connexion",
+    "success": "Votre mot de passe a été changé avec succès."
   }
 }

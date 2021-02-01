@@ -70,7 +70,9 @@ const GoToLogin = () => {
     <BaseCard>
       <Grid container justify="center">
         <Grid item>
-          <Typography></Typography>
+          <Box mb={3} mt={2}>
+            <Typography>{t("pages.UsersSetPassword.success")}</Typography>
+          </Box>
         </Grid>
       </Grid>
       <Grid item>
@@ -80,7 +82,7 @@ const GoToLogin = () => {
           color="primary"
           onClick={handleGoToLogin}
         >
-          {t("pages.UsersSetPassword.orGoToLogin").replace("Or ", "")}
+          {t("pages.UsersSetPassword.goToLogin")}
         </Button>
       </Grid>
     </BaseCard>

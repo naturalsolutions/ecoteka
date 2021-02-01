@@ -27,6 +27,8 @@
     "passwordConfirmation": "",
     "orGoToLogin": "Or go to login",
     "tokenHasExpired": "Your password reset token has expired, would you like to request another one?",
-    "requestNewToken": "Request new token"
+    "requestNewToken": "Request new token",
+    "goToLogin": "Go to LogIn",
+    "success": "Your password has been changed successfully."
   }
 }

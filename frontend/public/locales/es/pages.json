@@ -28,6 +28,8 @@
     "button": "Actualizar",
     "orGoToLogin": "O ir a iniciar sesión",
     "tokenHasExpired": "Tu token de restablecimiento de contraseña ha caducado, ¿te gustaría solicitar otro?",
-    "requestNewToken": "Solicitar nuevo token"
+    "requestNewToken": "Solicitar nuevo token",
+    "goToLogin": "Ir a iniciar sesión",
+    "success": "Tu contraseña ha sido cambiada exitosamente."
   }
 }
