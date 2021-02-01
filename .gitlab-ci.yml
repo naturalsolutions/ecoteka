@@ -59,17 +59,21 @@ build_backend_master:
 deploy_dev:
   stage: deploy_dev
   script:
-    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
+    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_dev deploy.yml
   only:
     - dev
   tags:
     - ns01
+  variables:
+    ANSIBLE_INVENTORY_UNPARSED_FAILED: "true"
 
 deploy_master:
   stage: deploy_master
   script:
-    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_master --vault-password-file password-file deploy.yml
+    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_master deploy.yml
   only:
     - master
   tags:
     - ns01
+  variables:
+    ANSIBLE_INVENTORY_UNPARSED_FAILED: "true"
