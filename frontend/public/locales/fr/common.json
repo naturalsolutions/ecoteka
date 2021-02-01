@@ -27,7 +27,9 @@
     "email": "Veuillez saisir un email valide",
     "required": "Veuillez renseigner ce champ",
     "passwordsShouldMatch": "Les mots de passe ne correspondent pas",
-    "fileRequired": "Veuillez sélectionner un fichier"
+    "fileRequired": "Veuillez sélectionner un fichier",
+    "passwordMustContainOneNumberOrSymbol": "Le mot de passe doit contenir au moins un symbole ou un chiffre",
+    "passwordMin": "Mot de passe doit être d'au moins 8 caractères"
   },
   "months": [
     "Janvier",

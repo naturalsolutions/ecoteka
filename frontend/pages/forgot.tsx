@@ -2,13 +2,16 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import {
-  Grid,
-  Card,
-  CardHeader,
-  CardContent,
-  makeStyles,
+  Box,
   Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  Grid,
+  makeStyles,
   TextField,
+  Typography,
 } from "@material-ui/core";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
@@ -16,11 +19,14 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useApi from "@/lib/useApi";
-import classes from "*.module.css";
 
 const useStyles = makeStyles((theme) => ({
   baseCard: {
     width: 568,
+    background: "transparent",
+  },
+  baseCardTitle: {
+    textAlign: "center",
   },
   [theme.breakpoints.only("xs")]: {
     baseCard: {
@@ -29,11 +35,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ResetPasswordPage() {
-  const router = useRouter();
+const BaseCard = ({ children }) => {
   const classes = useStyles();
   const { t } = useTranslation(["pages", "common"]);
-  const [sent, setSent] = useState<boolean>(false);
+
+  return (
+    <Card elevation={0} className={classes.baseCard}>
+      <CardHeader
+        title={t("pages.Forgot.EmailCard.title")}
+        className={classes.baseCardTitle}
+      />
+      <CardContent>
+        <Grid container direction="column" spacing={1}>
+          {children}
+        </Grid>
+      </CardContent>
+    </Card>
+  );
+};
+
+const SentCard = ({ email, onLogin }) => {
+  const { t } = useTranslation(["pages", "common"]);
+
+  return (
+    <BaseCard>
+      <Grid item>
+        <Box mt={2} mb={3}>
+          <Typography align="center">
+            {t("pages.Forgot.SentCard.description")} <strong>{email}</strong>.
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid item>
+        <Button fullWidth variant="contained" color="primary" onClick={onLogin}>
+          {t("pages.Forgot.SentCard.buttonOnLogin")}
+        </Button>
+      </Grid>
+    </BaseCard>
+  );
+};
+
+const EmailCard = ({ onSendEmail = (email: string) => {}, onLogin }) => {
+  const { t } = useTranslation(["pages", "common"]);
   const schema = yup.object().shape({
     email: yup.string().email().required(),
   });
@@ -41,10 +84,7 @@ export default function ResetPasswordPage() {
     resolver: yupResolver(schema),
   });
   const { apiETK } = useApi().api;
-
-  const handleOnLogin = () => {
-    router.push("/signin");
-  };
+  const [passwordRecovery, setPasswordRecovery] = useState<boolean>(false);
 
   const handleSendEmail = async () => {
     const email = getValues("email");
@@ -52,77 +92,80 @@ export default function ResetPasswordPage() {
 
     if (valid && email) {
       try {
+        setPasswordRecovery(true);
         await apiETK.post(`/auth/password-recovery/${email}`);
       } catch (e) {
       } finally {
-        setSent(true);
+        setPasswordRecovery(false);
+        onSendEmail(email);
       }
     }
   };
 
-  const BaseCard = ({ children }) => (
-    <Card className={classes.baseCard}>
-      <CardHeader title={t("pages:Forgot.EmailCard.title")} />
-      <CardContent>
-        <Grid container direction="column" spacing={2}>
-          {children}
-        </Grid>
-      </CardContent>
-    </Card>
-  );
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      handleSendEmail();
+    }
+  };
 
-  const SentCard = (
+  return (
     <BaseCard>
       <Grid item>
-        {t("pages:Forgot.SentCard.description")} {getValues("email")}.
+        <Typography>{t("pages.Forgot.EmailCard.description")}</Typography>
+      </Grid>
+      <Grid item>
+        <Box my={2}>
+          <TextField
+            error={Boolean(errors?.email?.message)}
+            id="email"
+            name="email"
+            inputRef={register}
+            required
+            fullWidth
+            placeholder={t("pages.Forgot.EmailCard.emailPlaceholder")}
+            helperText={errors?.email?.message && t("common.errors.email")}
+            variant="outlined"
+            onKeyDown={handleKeyDown}
+          />
+        </Box>
       </Grid>
       <Grid item>
         <Button
           fullWidth
-          variant="contained"
-          color="primary"
-          onClick={handleOnLogin}
-        >
-          {t("pages:Forgot.SentCard.buttonOnLogin")}
-        </Button>
-      </Grid>
-    </BaseCard>
-  );
-
-  const EmailCard = (
-    <BaseCard>
-      <Grid item>{t("pages:Forgot.EmailCard.description")}</Grid>
-      <Grid item>
-        <TextField
-          error={Boolean(errors?.email?.message)}
-          id="email"
-          name="email"
-          inputRef={register}
-          autoFocus
-          required
-          fullWidth
-          placeholder={t("pages:Forgot.EmailCard.emailPlaceholder")}
-          helperText={errors?.email?.message && t("common:errors.email")}
-          variant="outlined"
-        />
-      </Grid>
-      <Grid item>
-        <Button
-          fullWidth
+          size="large"
           variant="contained"
           color="primary"
           onClick={handleSendEmail}
         >
-          {t("pages:Forgot.EmailCard.sendButton")}
+          {!passwordRecovery ? (
+            t("pages.Forgot.EmailCard.sendButton")
+          ) : (
+            <CircularProgress color="primary" />
+          )}
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button fullWidth onClick={onLogin}>
+          {t("pages.Forgot.EmailCard.signin")}
         </Button>
       </Grid>
     </BaseCard>
   );
+};
+
+export default function ResetPasswordPage() {
+  const router = useRouter();
+  const { t } = useTranslation(["pages", "common"]);
+  const [email, setEmail] = useState<string>("");
+
+  const handleOnLogin = () => {
+    router.push("/signin");
+  };
 
   return (
     <AppLayoutGeneral>
       <Head>
-        <title>ecoTeka · {t("pages:Forgot.EmailCard.title")}</title>
+        <title>ecoTeka · {t("pages.Forgot.EmailCard.title")}</title>
       </Head>
       <Grid
         container
@@ -130,9 +173,16 @@ export default function ResetPasswordPage() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ minHeight: "calc(100vh - 48px)" }}
+        style={{ minHeight: "calc(100vh - 96px)" }}
       >
-        {sent ? SentCard : EmailCard}
+        {!email ? (
+          <EmailCard
+            onSendEmail={(newEmail) => setEmail(newEmail)}
+            onLogin={handleOnLogin}
+          />
+        ) : (
+          <SentCard email={email} onLogin={handleOnLogin} />
+        )}
       </Grid>
     </AppLayoutGeneral>
   );

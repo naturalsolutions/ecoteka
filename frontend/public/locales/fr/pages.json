@@ -4,10 +4,11 @@
       "title": "Mot de passe oublié ?",
       "description": "Saisissez l'adresse e-mail associée à votre compte. Nous vous enverrons un lien par e-mail pour réinitialiser votre mot de passe.",
       "emailPlaceholder": "Email",
-      "sendButton": "Envoyer le lien de réinitialisation"
+      "sendButton": "Envoyer le lien de réinitialisation",
+      "signin": "Ou allez à la page de connexion"
     },
     "SentCard": {
-      "description": "A link to reset your password has been sent to",
+      "description": "Un lien pour réinitialiser votre mot de passe a été envoyé par e-mail à",
       "buttonOnLogin": "aller à Connexion"
     }
   },
@@ -18,5 +19,17 @@
       "Pilotage de la gestion",
       "Surveillance de l'état sanitaire"
     ]
+  },
+  "UsersSetPassword": {
+    "title": "Modifiez votre mot de passe",
+    "description": "Doit contenir au moins un symbole ou chiffre et comporter un minimum de 8 caractères.",
+    "password": "Mot de passe",
+    "passwordConfirmation": "Saisissez à nouveau votre mot de passe",
+    "button": "Modifier",
+    "orGoToLogin": "Ou allez à la connexion",
+    "tokenHasExpired": "Votre token de réinitialisation de mot de passe a expiré, souhaitez-vous en demander un autre?",
+    "requestNewToken": "Demander un nouveau token",
+    "goToLogin": "Aller à la connexion",
+    "success": "Votre mot de passe a été changé avec succès."
   }
 }

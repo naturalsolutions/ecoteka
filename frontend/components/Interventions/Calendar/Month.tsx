@@ -157,7 +157,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
             <Grid container spacing={2}>
               <Grid item>
                 <Typography variant="h5">
-                  {t("common:months", { returnObjects: true })[props.month]}
+                  {t("common.months", { returnObjects: true })[props.month]}
                 </Typography>
               </Grid>
               <Grid item xs>

@@ -19,6 +19,7 @@ i18n
     lng: "fr",
     fallbackLng: "fr",
     ns: ["common", "components", "pages"],
+    nsSeparator: ".",
     defaultNS: "common",
     resources: {
       en: {

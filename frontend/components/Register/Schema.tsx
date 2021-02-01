@@ -23,48 +23,48 @@ export default function useRegisterSchema() {
     full_name: {
       type: "textfield",
       component: {
-        label: t("components:Register.fullName"),
+        label: t("components.Register.fullName"),
         required: true,
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string().required(t("common.errors.required")),
     },
     email: {
       type: "textfield",
       component: {
-        label: t("components:Register.email"),
+        label: t("components.Register.email"),
         required: true,
       },
       schema: yup
         .string()
-        .email(t("common:errors.email"))
-        .required(t("common:errors.required")),
+        .email(t("common.errors.email"))
+        .required(t("common.errors.required")),
     },
     organization: {
       type: "textfield",
       component: {
-        label: t("components:Register.organization"),
+        label: t("components.Register.organization"),
         required: true,
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string().required(t("common.errors.required")),
     },
     password: {
       type: "passwordfield",
       component: {
-        label: t("components:Register.password"),
+        label: t("components.Register.password"),
         required: true,
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string().required(t("common.errors.required")),
     },
     password_confirm: {
       type: "passwordfield",
       component: {
-        label: t("components:Register.passwordConfirm"),
+        label: t("components.Register.passwordConfirm"),
         required: true,
       },
       schema: yup
         .string()
-        .equalTo(yup.ref("password"), t("common:errors.passwordsShouldMatch"))
-        .required(t("common:errors.required")),
+        .equalTo(yup.ref("password"), t("common.errors.passwordsShouldMatch"))
+        .required(t("common.errors.required")),
     },
   };
 }
