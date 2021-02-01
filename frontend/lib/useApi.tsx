@@ -24,7 +24,7 @@ export default function useApi() {
     typeof window !== "undefined" &&
     !allowedRoutes.includes(router.route)
   ) {
-    //  router.push("/signin");
+    router.push("/signin");
   }
 
   let ecotekaV1 = axios.create({
