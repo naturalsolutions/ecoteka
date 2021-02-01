@@ -59,7 +59,10 @@ build_backend_master:
 deploy_dev:
   stage: deploy_dev
   script:
-    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
+    - cd /opt/ns-ansible-infrastructure 
+    - echo ${VAULT_PASSWORD_KEY} > password-file
+    - ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
+    - rm password-file
   only:
     - dev
   tags:
@@ -70,7 +73,10 @@ deploy_dev:
 deploy_master:
   stage: deploy_master
   script:
-    - cd /opt/ns-ansible-infrastructure && ansible-playbook -i hosts -l ecoteka_master --vault-password-file password-file deploy.yml
+    - cd /opt/ns-ansible-infrastructure 
+    - echo ${VAULT_PASSWORD_KEY} > password-file
+    - ansible-playbook -i hosts -l ecoteka_master --vault-password-file password-file deploy.yml
+    - rm password-file
   only:
     - master
   tags:
