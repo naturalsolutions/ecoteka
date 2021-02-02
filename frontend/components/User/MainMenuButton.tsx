@@ -121,13 +121,13 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
                   {t("Toolbar.myDashboard")}
                 </Button>
               </Grid>
-              {user.is_superuser && (
+              {/* {user.is_superuser && (
                 <Grid item>
                   <Button fullWidth onClick={handlerAddUserClick}>
                     {t("Toolbar.addUser")}
                   </Button>
                 </Grid>
-              )}
+              )} */}
               <Box mt={2} mb={1}>
                 <Divider />
               </Box>

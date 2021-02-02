@@ -6,7 +6,7 @@ from fastapi_jwt_auth import AuthJWT
 from sqlalchemy.orm import Session
 
 # rom app import crud, models, schemas
-from app.crud import organization, user
+from app.crud import user
 from app.models import User
 from app.schemas import (
     AccessToken,

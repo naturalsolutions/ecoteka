@@ -1,4 +1,4 @@
-import React, { useEffect, useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useEffect } from "react";
 import {
   Checkbox,
   Table,
@@ -11,14 +11,12 @@ import {
   MenuItem,
   IconButton,
   Menu,
-  MenuList,
   ListItemIcon,
   ListItemText,
-  Box,
-  Snackbar,
   withStyles,
   createStyles,
   InputBase,
+  TextField,
   Theme,
 } from "@material-ui/core";
 import SnackAlert, { SnackAlertProps } from "@/components/Feedback/SnackAlert";
@@ -146,6 +144,11 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
     message: "",
     severity: "success",
   });
+  const [privateRows, setPrivateRows] = useState<IMember[]>([]);
+
+  useEffect(() => {
+    setPrivateRows([...rows]);
+  }, [rows]);
 
   const handleClick = (event: SyntheticEvent) => {
     setActionsMenuAnchorEl(event.currentTarget);
@@ -177,6 +180,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
         `/organization/${organizationId}/members/${user.id}/role`,
         { role }
       );
+
       if (status === 200) {
         onMemberUpdate(data);
         triggerAlert({
@@ -185,12 +189,26 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
           ),
           severity: "success",
         });
-      } else {
+      }
+    } catch (e) {
+      triggerAlert({
+        message: t("components.Organization.Members.Table.updateMember.error"),
+        severity: "error",
+      });
+    }
+  };
+
+  const handleUserUpdate = async (user: IMember) => {
+    try {
+      const { hashed_password, ...payload } = user;
+      const { status } = await apiETK.put(`/users/${user.id}`, payload);
+
+      if (status === 200) {
         triggerAlert({
           message: t(
-            "components.Organization.Members.Table.updateMember.error"
+            "components.Organization.Members.Table.updateMember.success"
           ),
-          severity: "error",
+          severity: "success",
         });
       }
     } catch (e) {
@@ -307,8 +325,9 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
+            {privateRows.map((row, index) => {
               const isItemSelected = isSelected(row);
+
               return (
                 <TableRow
                   hover
@@ -329,7 +348,25 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
                   </TableCell>
                   <TableCell padding="checkbox" />
                   <TableCell scope="row">{row.email}</TableCell>
-                  <TableCell>{row.name}</TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      value={privateRows[index].full_name}
+                      onChange={(e) => {
+                        if (privateRows[index].full_name !== e.target.value) {
+                          const newRows = [...privateRows];
+
+                          newRows[index].full_name = e.target.value;
+                          setPrivateRows(newRows);
+                        }
+                      }}
+                      onBlur={() => {
+                        handleUserUpdate(row);
+                      }}
+                    />
+                  </TableCell>
                   <TableCell>
                     {(() => {
                       switch (row.role) {

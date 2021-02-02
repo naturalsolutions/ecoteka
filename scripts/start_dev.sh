@@ -7,7 +7,7 @@ docker network create traefik 2> /dev/null
 docker run --rm -v $(pwd):/data vikingco/jinja2cli .env.example > .env
 
 # Build email template
-docker run -v $(pwd)/backend/app/app/email-templates:/email-templates --rm -it node:alpine sh -c "npx mjml /email-templates/src/*.mjml -o /email-templates/build"
+docker run -v $(pwd)/backend/app/app/email-templates:/email-templates --rm -it node:alpine sh -c "npm i mjml && npx mjml /email-templates/src/*.mjml -o /email-templates/build"
 
 # Start
 docker-compose build --parallel

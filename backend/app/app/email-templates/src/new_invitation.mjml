@@ -3,16 +3,14 @@
     <mj-section>
       <mj-column width="600px">
         <mj-text font-size="18px" color="#484848"
-          >Bonjour {{ username }} et bienvenu sur ecoTeka,
-        </mj-text>
-        <mj-text font-size="18px" color="#484848"
-          >Toute l’équipe est très heureuse de vous compter parmi nos membres.
-          Nous espérons qu’ecoTeka répondra à vos besoins et facilitera la
-          gestion de votre patrimoine arboré. 🌳
-        </mj-text>
-        <mj-text font-size="18px" color="#484848"
-          >Votre mot de passe est: <strong>{{ password }}<strong></mj-text
+          >Bonjour {{ username }}</mj-text
         >
+        <mj-text font-size="18px" color="#484848"
+          >Vous avez été ajouté à une nouvelle équipe sur ecoTeka !</mj-text
+        >
+        <mj-text font-size="18px" color="#484848"
+          >Pour rejoindre {{ organization }}, cliquez ici :
+        </mj-text>
         <mj-button
           font-size="18px"
           align="left"
@@ -22,7 +20,6 @@
         >
           Aller à la connexion
         </mj-button>
-        <mj-text font-size="18px" color="#484848">Merci et à bientôt.</mj-text>
         <mj-text font-size="18px" color="#484848">L'équipe ecoTeka.</mj-text>
         <mj-divider border-color="#ddd" border-width="1px" />
         <mj-text font-size="14px" color="#9ca299"
