@@ -53,13 +53,6 @@ class Auth {
       return {};
     }
   }
-
-  logout() {
-    localStorage.removeItem(tokenStorage);
-    localStorage.removeItem(refreshTokenStorage);
-    localStorage.removeItem("etk:editor:firstLoad");
-    localStorage.removeItem("etk:editor:viewport");
-  }
 }
 
 export default function authFactory(url, api) {
