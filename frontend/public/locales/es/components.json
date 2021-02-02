@@ -173,30 +173,7 @@
       "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo"
     }
   },
-  "Contact": {
-    "dialogTile": "Obtener más información",
-    "dialogContentText": "¿Te interesa esta plataforma? <br/> ¿Quieres saber más?",
-    "dialogContentHint": "Por favor, rellene este formulario. Nos pondremos en contacto contigo lo antes posible.",
-    "successMessageContent": "Tu mensaje ha sido enviado, nos pondremos en contacto contigo lo antes posible.",
-    "buttonHomeContent": "Volver al inico",
-    "buttonCancelContent": "Cancelar",
-    "buttonSubmitContent": "Enviar solicitud de contacto",
-    "postErrorMessage": "Error interno. Vuelve a intentarlo más tarde.",
-    "lastName": "Apellidos",
-    "firstName": "Nombre",
-    "email": "Correo electrónico",
-    "errorMessageEmail": "Correo electrónico no válido.",
-    "phone": "Número de teléfono",
-    "township": "Municipio en el que ejerces",
-    "contactRequest": "Hola, ¿podéis darme más información sobre esta plataforma?",
-    "position": "Puesto que ocupas",
-    "positionItems": {
-      "none": "Ninguno",
-      "greenSpacesManager": "Gestor de espacios verdes",
-      "technicalServiceManagers": "Director de servicios técnico",
-      "others": "Otros"
-    }
-  },
+
   "Register": {
     "dialogTitle": "Registrarse",
     "cancel": "Cancelar",
@@ -209,11 +186,13 @@
     "registrationCompleted": "Registro completado",
     "registrationFailed": "El registro ha fallado"
   },
+
   "Layout": {
     "Mobile": {
       "treeHeritage": "Patrimonio arbóreo"
     }
   },
+
   "Intervention": {
     "title": "Solicitar una intervención",
     "plannew": "Nueva solicitud",

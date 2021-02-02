@@ -144,11 +144,11 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
 
   const sendImages = () => {
     if (!uploadImages.length) {
-      openError(t("common:errors.fileRequired"));
+      openError(t("common.errors.fileRequired"));
       return Promise.reject(false);
     }
     snackbar.current.open({
-      message: t("common:messages.sending"),
+      message: t("common.messages.sending"),
     });
 
     let newXHR = apiRest.trees.postImages(
@@ -167,7 +167,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
             return;
           }
           snackbar.current.open({
-            message: t("common:messages.success"),
+            message: t("common.messages.success"),
             autoHideDuration: 2000,
           });
 
@@ -190,11 +190,11 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
 
   const removeImage = (image, index) => {
     dialog.current.open({
-      title: t("common:permanentDeletion"),
-      content: t("common:confirmContinue"),
+      title: t("common.permanentDeletion"),
+      content: t("common.confirmContinue"),
       actions: [
         {
-          label: t("common:yes"),
+          label: t("common.yes"),
           variant: "text",
           size: "large",
           onClick: () => {
@@ -208,7 +208,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
           },
         },
         {
-          label: t("common:no"),
+          label: t("common.no"),
           color: "primary",
           variant: "text",
           size: "large",
@@ -287,7 +287,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                     key={imagesDropzoneKey}
                     acceptedFiles={["image/*"]}
                     filesLimit={nbImagesMax}
-                    dropzoneText={t("components:TreeForm.imagesUpload.select", {
+                    dropzoneText={t("components.TreeForm.imagesUpload.select", {
                       max: nbImagesMax,
                     })}
                     showAlerts={["error"]}
@@ -329,7 +329,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
               Object.keys(props.tree.properties)
                 .filter((key) => key !== "taxon")
                 .map((key) => {
-                  const labels = t("components:Tree.properties", {
+                  const labels = t("components.Tree.properties", {
                     returnObjects: true,
                   });
                   switch (schema[key].type) {
@@ -337,11 +337,11 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                       return (
                         <TableRow key={`psti-${key}`}>
                           <TableCell>
-                            {t(`components:Tree.properties.${key}.label`)}​​​​
+                            {t(`components.Tree.properties.${key}.label`)}​​​​
                           </TableCell>
                           <TableCell>
                             {t(
-                              `components:Tree.properties.${key}.${props.tree.properties[key]}`
+                              `components.Tree.properties.${key}.${props.tree.properties[key]}`
                             )}
                           </TableCell>
                         </TableRow>
@@ -352,7 +352,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                       return (
                         <TableRow key={`psti-${key}`}>
                           <TableCell>
-                            {t(`components:Tree.properties.${key}`)}​​​​
+                            {t(`components.Tree.properties.${key}`)}​​​​
                           </TableCell>
                           <TableCell>
                             <Checkbox
@@ -367,7 +367,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                       return (
                         <TableRow key={`psti-${key}`}>
                           <TableCell>
-                            {t(`components:Tree.properties.${key}`)}​​​​
+                            {t(`components.Tree.properties.${key}`)}​​​​
                           </TableCell>
                           <TableCell>{props.tree.properties[key]}</TableCell>
                         </TableRow>

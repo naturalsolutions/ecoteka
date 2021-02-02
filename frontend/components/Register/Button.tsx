@@ -13,14 +13,14 @@ const ETKRegisterButton: React.FC<ButtonProps> = (props) => {
 
   const onButtonClick = async () => {
     dialog.current.open({
-      title: t("components:Register.dialogTitle"),
+      title: t("components.Register.dialogTitle"),
       content: <ETKRegisterForm ref={formRef} />,
       actions: [
         {
-          label: t("components:Register.cancel"),
+          label: t("components.Register.cancel"),
         },
         {
-          label: t("components:Register.submit"),
+          label: t("components.Register.submit"),
           noClose: true,
           variant: "contained",
           color: "primary",
@@ -40,8 +40,8 @@ const ETKRegisterButton: React.FC<ButtonProps> = (props) => {
 
     if (valid) {
       dialog.current.open({
-        title: t("common:messages.success"),
-        content: t("components:Register.registrationCompleted"),
+        title: t("common.messages.success"),
+        content: t("components.Register.registrationCompleted"),
         actions: [{ label: "ok" }],
       });
     }

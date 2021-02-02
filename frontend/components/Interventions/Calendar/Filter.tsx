@@ -49,7 +49,7 @@ const CalendarFilter: React.FC<CalendarFilterProps> = (props) => {
             />
           </ListItemIcon>
           <ListItemText
-            primary={t(`components:Intervention.types.${interventionType}`)}
+            primary={t(`components.Intervention.types.${interventionType}`)}
           />
         </ListItem>
       ))}

@@ -78,10 +78,10 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   function openForm() {
     const dialogActions = [
       {
-        label: t("common:buttons.cancel"),
+        label: t("common.buttons.cancel"),
       },
       {
-        label: t("common:buttons.send"),
+        label: t("common.buttons.send"),
         variant: "contained",
         color: "secondary",
         noClose: true,
@@ -90,7 +90,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
     ];
 
     dialog.current.open({
-      title: t(`components:Team.dialogTitleEdit`),
+      title: t(`components.Team.dialogTitleEdit`),
       content: (
         <ETKFormOrganization ref={formEditRef} organization={organization} />
       ),
@@ -111,10 +111,10 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   function openArea() {
     const dialogActions = [
       {
-        label: t("common:buttons.cancel"),
+        label: t("common.buttons.cancel"),
       },
       {
-        label: t("common:buttons.send"),
+        label: t("common.buttons.send"),
         variant: "contained",
         color: "secondary",
         noClose: true,
@@ -123,7 +123,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
     ];
 
     dialog.current.open({
-      title: t("components:Organization.WorkingArea.dialogTitle"),
+      title: t("components.Organization.WorkingArea.dialogTitle"),
       content: (
         <ETKFormWorkingArea ref={formAreaRef} organization={organization} />
       ),

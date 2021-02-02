@@ -78,23 +78,23 @@ const SelectRenderer: React.FC<SelectRendererProps> = ({
 }) => {
   const { t } = useTranslation(["components", "common"]);
   const placeholder = t(
-    "components:Organization.Members.Table.roles.defineRole"
+    "components.Organization.Members.Table.roles.defineRole"
   );
   const roles = [
     {
-      label: t("components:Organization.Members.Table.roles.manager"),
+      label: t("components.Organization.Members.Table.roles.manager"),
       value: "manager",
     },
     {
-      label: t("components:Organization.Members.Table.roles.contributor"),
+      label: t("components.Organization.Members.Table.roles.contributor"),
       value: "contributor",
     },
     {
-      label: t("components:Organization.Members.Table.roles.reader"),
+      label: t("components.Organization.Members.Table.roles.reader"),
       value: "reader",
     },
     {
-      label: t("components:Organization.Members.Table.roles.guest"),
+      label: t("components.Organization.Members.Table.roles.guest"),
       value: "guest",
     },
   ];
@@ -185,7 +185,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
         onMemberUpdate(data);
         triggerAlert({
           message: t(
-            "components:Organization.Members.Table.updateMember.success"
+            "components.Organization.Members.Table.updateMember.success"
           ),
           severity: "success",
         });
@@ -213,7 +213,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
       }
     } catch (e) {
       triggerAlert({
-        message: t("components:Organization.Members.Table.updateMember.error"),
+        message: t("components.Organization.Members.Table.updateMember.error"),
         severity: "error",
       });
     }
@@ -373,7 +373,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
                         case "admin":
                         case "owner":
                           return t(
-                            `components:Organization.Members.Table.roles.${row.role}`
+                            `components.Organization.Members.Table.roles.${row.role}`
                           );
                         default:
                           return (

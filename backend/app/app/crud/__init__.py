@@ -1,6 +1,5 @@
 from .base import CRUDBase
 from .crud_user import user
-from .crud_contact import contact
 from .crud_registration_link import registration_link
 from .crud_geo_file import geo_file
 from .crud_tree import tree
@@ -10,7 +9,6 @@ from .crud_intervention import intervention
 from .crud_health_assessment import health_assessment
 
 __all__ = [
-    "contact",
     "CRUDBase",
     "geo_file",
     "organization",

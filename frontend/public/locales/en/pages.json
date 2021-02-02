@@ -1,4 +1,17 @@
 {
+  "Forgot": {
+    "EmailCard": {
+      "title": "Forgot password?",
+      "description": "Enter the email address associated with your account, and we'll email you a link to reset your password",
+      "emailPlaceholder": "Email",
+      "sendButton": "Send reset link",
+      "signin": "Or go to login"
+    },
+    "SentCard": {
+      "description": "A link to reset your password has been sent to",
+      "buttonOnLogin": "go to Log In"
+    }
+  },
   "Dashboard": {
     "steps": [
       "Configuring your workspace",
@@ -6,5 +19,16 @@
       "Management",
       "Health status monitoring"
     ]
+  },
+  "UsersSetPassword": {
+    "title": "Update password",
+    "description": "Must include at least one symbol or number and have at least 8 characters.",
+    "password": "Password",
+    "passwordConfirmation": "",
+    "orGoToLogin": "Or go to login",
+    "tokenHasExpired": "Your password reset token has expired, would you like to request another one?",
+    "requestNewToken": "Request new token",
+    "goToLogin": "Go to LogIn",
+    "success": "Your password has been changed successfully."
   }
 }

@@ -107,13 +107,13 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
 
       if (isInList(email)) {
         error = `<${email}> ${t(
-          "components:Organization.Members.dialog.errorEmailAlreadyAdded"
+          "components.Organization.Members.dialog.errorEmailAlreadyAdded"
         )}`;
       }
 
       if (!isEmail(email)) {
         error = `<${email}> ${t(
-          "components:Organization.Members.dialog.errorEmailFormatNotValid"
+          "components.Organization.Members.dialog.errorEmailFormatNotValid"
         )}`;
       }
 
@@ -178,11 +178,11 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
             helperText={error?.error}
             size="small"
             id="email-input"
-            label={t("components:Organization.Members.dialog.emailsLabel")}
+            label={t("components.Organization.Members.dialog.emailsLabel")}
             variant="outlined"
             className={"input " + (error && " has-error")}
             placeholder={t(
-              "components:Organization.Members.dialog.emailsPlaceholder"
+              "components.Organization.Members.dialog.emailsPlaceholder"
             )}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
@@ -192,11 +192,11 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
             <Box mt={2} mb={3}>
               <Alert severity="info">
                 <AlertTitle>
-                  {t("components:Organization.Members.dialog.alertTitle")}
+                  {t("components.Organization.Members.dialog.alertTitle")}
                 </AlertTitle>
-                {t("components:Organization.Members.dialog.alertContent1")}
+                {t("components.Organization.Members.dialog.alertContent1")}
                 <strong>
-                  {t("components:Organization.Members.dialog.alertContent2")}
+                  {t("components.Organization.Members.dialog.alertContent2")}
                 </strong>
               </Alert>
             </Box>
@@ -263,7 +263,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
           </Box>
           <Toolbar disableGutters={true}>
             <Button onClick={closeDialog}>
-              {t("components:Organization.Members.close")}
+              {t("components.Organization.Members.close")}
             </Button>
             <div className={classes.grow} />
             <Button
@@ -272,7 +272,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
               disabled={!Boolean(fields.length > 0)}
               type="submit"
             >
-              {t("components:Organization.Members.invite")}
+              {t("components.Organization.Members.invite")}
             </Button>
           </Toolbar>
         </form>

@@ -133,13 +133,13 @@ function sitem(value, t, tpath) {
 
 function requiredDocumentsItems(it: TInterventionType, t) {
   return ["dt", "trafficpolice"].map((item) =>
-    sitem(item, t, "components:Intervention.documents")
+    sitem(item, t, "components.Intervention.documents")
   );
 }
 
 function requiredMaterialItems(it: TInterventionType, t) {
   return requiredMaterial[it].map((item) =>
-    sitem(item, t, "components:Intervention.material")
+    sitem(item, t, "components.Intervention.material")
   );
 }
 
@@ -153,12 +153,12 @@ export function useSelectionSchema(it: TInterventionType) {
       type: "select",
       component: {
         required: true,
-        label: t("components:Intervention.intervention_type"),
+        label: t("components.Intervention.intervention_type"),
         items: interventionTypes.map((it) =>
-          sitem(it, t, "components:Intervention.types")
+          sitem(it, t, "components.Intervention.types")
         ),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string().required(t("common.errors.required")),
     },
   };
 }
@@ -173,12 +173,12 @@ export function useTreeSelectionSchema(it: TInterventionType) {
         type: "number",
         defaultValue: null,
         required: true,
-        label: t("components:Intervention.tree_id"),
+        label: t("components.Intervention.tree_id"),
         InputLabelProps: {
           shrink: true,
         },
       },
-      schema: yup.number().required(t("common:errors.required")),
+      schema: yup.number().required(t("common.errors.required")),
     },
   };
 }
@@ -190,17 +190,17 @@ export function useInterventionSchema(it: TInterventionType) {
       method: {
         type: "select",
         component: {
-          label: t("components:Intervention.pruning.method"),
+          label: t("components.Intervention.pruning.method"),
           items: interventionMethod.pruning.map((m) =>
-            sitem(m, t, "components:Intervention.pruning")
+            sitem(m, t, "components.Intervention.pruning")
           ),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       },
       comment: {
         type: "textfield",
         component: {
-          label: t("components:Intervention.pruning.comment"),
+          label: t("components.Intervention.pruning.comment"),
         },
         schema: yup.string(),
       },
@@ -209,17 +209,17 @@ export function useInterventionSchema(it: TInterventionType) {
       method: {
         type: "select",
         component: {
-          label: t("components:Intervention.felling.method"),
+          label: t("components.Intervention.felling.method"),
           items: interventionMethod.felling.map((m) =>
-            sitem(m, t, "components:Intervention.felling")
+            sitem(m, t, "components.Intervention.felling")
           ),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       },
       comment: {
         type: "textfield",
         component: {
-          label: t("components:Intervention.felling.comment"),
+          label: t("components.Intervention.felling.comment"),
         },
         schema: yup.string(),
       },
@@ -229,19 +229,19 @@ export function useInterventionSchema(it: TInterventionType) {
         type: "textfield",
         component: {
           type: "number",
-          label: t("components:Intervention.streanremoval.diameter"),
+          label: t("components.Intervention.streanremoval.diameter"),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       },
       method: {
         type: "select",
         component: {
-          label: t("components:Intervention.streanremoval.method"),
+          label: t("components.Intervention.streanremoval.method"),
           items: interventionMethod.streanremoval.map((m) =>
-            sitem(m, t, "components:Intervention.streanremoval")
+            sitem(m, t, "components.Intervention.streanremoval")
           ),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       },
     },
     surveillance: {
@@ -249,20 +249,20 @@ export function useInterventionSchema(it: TInterventionType) {
         type: "select",
         component: {
           multiple: true,
-          label: t("components:Intervention.surveillance.method"),
+          label: t("components.Intervention.surveillance.method"),
           items: interventionMethod.surveillance.map((m) =>
-            sitem(m, t, "components:Intervention.surveillance")
+            sitem(m, t, "components.Intervention.surveillance")
           ),
         },
         schema: yup
           .array()
           .of(yup.string())
-          .required(t("common:errors.required")),
+          .required(t("common.errors.required")),
       },
       comment: {
         type: "textfield",
         component: {
-          label: t("components:Intervention.surveillance.comment"),
+          label: t("components.Intervention.surveillance.comment"),
         },
         schema: yup.string(),
       },
@@ -272,25 +272,25 @@ export function useInterventionSchema(it: TInterventionType) {
         type: "select",
         component: {
           required: true,
-          label: t("components:Intervention.treatment.method"),
+          label: t("components.Intervention.treatment.method"),
           items: interventionMethod.treatment.map((m) =>
-            sitem(m, t, "components:Intervention.treatment")
+            sitem(m, t, "components.Intervention.treatment")
           ),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       },
       disease: {
         type: "textfield",
         component: {
           required: true,
-          label: t("components:Intervention.treatment.disease"),
+          label: t("components.Intervention.treatment.disease"),
         },
-        schema: yup.string().required(t("common:errors.required")),
+        schema: yup.string().required(t("common.errors.required")),
       },
       comment: {
         type: "textfield",
         component: {
-          label: t("components:Intervention.treatment.comment"),
+          label: t("components.Intervention.treatment.comment"),
         },
         schema: yup.string(),
       },
@@ -299,21 +299,21 @@ export function useInterventionSchema(it: TInterventionType) {
       method: {
         type: "select",
         component: {
-          label: t("components:Intervention.indepthdiagnostic.method"),
+          label: t("components.Intervention.indepthdiagnostic.method"),
           multiple: true,
           items: interventionMethod.indepthdiagnostic.map((m) =>
-            sitem(m, t, "components:Intervention.indepthdiagnostic")
+            sitem(m, t, "components.Intervention.indepthdiagnostic")
           ),
         },
         schema: yup
           .array()
           .of(yup.string())
-          .required(t("common:errors.required")),
+          .required(t("common.errors.required")),
       },
       comment: {
         type: "textfield",
         component: {
-          label: t("components:Intervention.indepthdiagnostic.comment"),
+          label: t("components.Intervention.indepthdiagnostic.comment"),
         },
         schema: yup.string(),
       },
@@ -330,55 +330,55 @@ export function usePlanningSchema(it: TInterventionType) {
     intervention_period: {
       type: "daterange",
       component: {
-        label: t("components:Intervention.intervention_period"),
+        label: t("components.Intervention.intervention_period"),
       },
       schema: yup
         .object({
           startDate: yup.string(),
           endDate: yup.string(),
         })
-        .required(t("common:errors.required")),
+        .required(t("common.errors.required")),
     },
     estimated_cost: {
       type: "textfield",
       component: {
         required: true,
         type: "number",
-        label: t("components:Intervention.estimated_cost"),
+        label: t("components.Intervention.estimated_cost"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string().required(t("common.errors.required")),
     },
     required_documents: {
       type: "select",
       component: {
         multiple: true,
-        label: t("components:Intervention.required_documents"),
+        label: t("components.Intervention.required_documents"),
         items: requiredDocumentsItems(it, t),
       },
       schema: yup
         .array()
         .of(yup.string())
-        .required(t("common:errors.required")),
+        .required(t("common.errors.required")),
     },
     required_material: {
       type: "select",
       component: {
         multiple: true,
         items: requiredMaterialItems(it, t),
-        label: t("components:Intervention.required_material"),
+        label: t("components.Intervention.required_material"),
       },
       schema: yup
         .array()
         .of(yup.string())
-        .required(t("common:errors.required")),
+        .required(t("common.errors.required")),
     },
     intervenant: {
       type: "textfield",
       component: {
         required: true,
-        label: t("components:Intervention.intervenant"),
+        label: t("components.Intervention.intervenant"),
       },
-      schema: yup.string().required(t("common:errors.required")),
+      schema: yup.string().required(t("common.errors.required")),
     },
   };
 }

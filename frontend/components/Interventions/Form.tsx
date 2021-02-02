@@ -263,7 +263,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
               size="small"
               onClick={handleBackToTree}
             >
-              {t("components:Intervention.back")}
+              {t("components.Intervention.back")}
             </Button>
           </Grid>
         </Grid>
@@ -271,7 +271,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
 
       <Grid item>
         <Typography variant="h6">
-          {t("components:Intervention.title")}
+          {t("components.Intervention.title")}
         </Typography>
         <Stepper
           orientation="vertical"
@@ -290,7 +290,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                 }}
                 onClick={(e) => stepidx < activeStep && setActiveStep(stepidx)}
               >
-                {t(`components:Intervention.steps.${step}`)}
+                {t(`components.Intervention.steps.${step}`)}
               </StepLabel>
               <StepContent>
                 <Grid container direction="column">
@@ -306,8 +306,8 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                     {activeStep !== 0 && (
                       <Button onClick={() => handlePrevious(step)}>
                         {activeStep === steps.length - 1
-                          ? t("common:buttons.previous")
-                          : t("common:buttons.previous")}
+                          ? t("common.buttons.previous")
+                          : t("common.buttons.previous")}
                       </Button>
                     )}
                     <Button
@@ -316,8 +316,8 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                       onClick={() => handleNext(step)}
                     >
                       {activeStep === steps.length - 1
-                        ? t("common:buttons.finish")
-                        : t("common:buttons.next")}
+                        ? t("common.buttons.finish")
+                        : t("common.buttons.next")}
                     </Button>
                   </Grid>
                 </Grid>
@@ -334,18 +334,18 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                 },
               }}
             >
-              {t(`components:Intervention.steps.finish`)}
+              {t(`components.Intervention.steps.finish`)}
             </StepLabel>
             <StepContent>
               <Grid container direction="column">
                 <Grid>
                   <Typography variant="h6">
-                    {t(`components:Intervention.success`)}
+                    {t(`components.Intervention.success`)}
                   </Typography>
                 </Grid>
                 <Grid>
                   <Typography>
-                    {t("components:Intervention.whatnow")}
+                    {t("components.Intervention.whatnow")}
                   </Typography>
                   <Grid container direction="row" justify="flex-end">
                     <Button onClick={handleBackToTree}>
@@ -357,7 +357,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                       color="primary"
                     >
                       <Typography variant="caption">
-                        {t("components:Intervention.plannew")}
+                        {t("components.Intervention.plannew")}
                       </Typography>
                     </Button>
                   </Grid>
