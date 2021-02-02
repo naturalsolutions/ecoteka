@@ -27,7 +27,7 @@ const Summary: FC<{ treeId: number; map: any }> = ({ treeId, map }) => {
   const classes = useStyles();
 
   const getTree = async (itreeIdd) => {
-    if (user.currentOrganization) {
+    if (user?.currentOrganization) {
       try {
         const { data, status } = await apiETK.get(
           `/organization/${user.currentOrganization.id}/trees/${treeId}`
@@ -41,7 +41,7 @@ const Summary: FC<{ treeId: number; map: any }> = ({ treeId, map }) => {
     }
   };
   const getInterventions = async (treeId: number) => {
-    if (user.currentOrganization) {
+    if (user?.currentOrganization) {
       try {
         const { data, status } = await apiETK.get(
           `/organization/${user.currentOrganization.id}/trees/${treeId}/interventions`

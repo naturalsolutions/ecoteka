@@ -1,4 +1,4 @@
-import React, { createRef, useState } from "react";
+import React, { createRef } from "react";
 import {
   Button,
   Grid,
@@ -11,7 +11,7 @@ import TreeAccordion, { TTreeAccordion } from "@/components/Tree/TreeAccordion";
 import { TIntervention } from "@/components/Interventions/Schema";
 import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { ITree } from "@/index";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKTreeInfosExpandedProps {
@@ -30,24 +30,28 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
   const [scroll, setScroll] = React.useState("paper");
   const treeAccordionRef = createRef<TTreeAccordion>();
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
 
   const handlerOnSave = async () => {
-    const properties = treeAccordionRef.current.getValues();
-    const response = await apiRest.trees.put(
-      user.currentOrganization.id,
-      props.tree.id,
-      {
-        properties: properties,
-      }
-    );
+    try {
+      const properties = treeAccordionRef.current.getValues();
 
-    if (response.ok) {
-      const newTree = (await response.json()) as ITree;
+      const {
+        status,
+        data,
+      } = await apiETK.put(
+        `/organization/${user.currentOrganization.id}/trees/${props.tree.id}`,
+        { properties }
+      );
 
-      if (props.onChange) {
-        props.onChange(newTree);
+      if (status === 200) {
+        const newTree = data as ITree;
+
+        if (props.onChange) {
+          props.onChange(newTree);
+        }
       }
-    }
+    } catch (error) {}
   };
 
   return (

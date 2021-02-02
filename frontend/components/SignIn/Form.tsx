@@ -3,7 +3,6 @@ import { Box, Grid } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
 import useETKSignInSchema from "@/components/SignIn/Schema";
-import { apiRest } from "@/lib/api";
 import useAPI from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import getConfig from "next/config";
@@ -22,8 +21,7 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
     const schema = useETKSignInSchema();
     const { fields, handleSubmit, setError } = useETKForm({ schema: schema });
     const { setUser } = useAppContext();
-    const { api } = useAPI();
-    const { apiETK } = api;
+    const { apiETK } = useAPI().api;
     let logged = false;
     const { publicRuntimeConfig } = getConfig();
     const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
@@ -43,10 +41,16 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
         const { data, status } = response;
 
         if (status === 200) {
-          localStorage.setItem(tokenStorage, data.acces_token);
+          localStorage.setItem(tokenStorage, data.access_token);
           localStorage.setItem(refreshTokenStorage, data.refresh_token);
+
           try {
-            const newUser = await apiRest.users.me();
+            const { data: newUser } = await apiETK.get("/users/me", {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${data.access_token}`,
+              },
+            });
 
             if (newUser) {
               setUser({
@@ -62,11 +66,11 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
       } catch (error) {
         setError("username", {
           type: "manual",
-          message: t("SignIn.errorMessageServer"),
+          message: t("components.SignIn.errorMessageServer"),
         });
         setError("password", {
           type: "manual",
-          message: t("SignIn.errorMessageServer"),
+          message: t("components.SignIn.errorMessageServer"),
         });
       }
     };

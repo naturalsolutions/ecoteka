@@ -170,10 +170,10 @@
       "importHistory": "Voir l'historique de l'import",
       "buttonCancelContent": "Annuler",
       "buttonUploadContent": "Envoi",
-      "dropzoneText": "Déposez votre fichier ici\nou cliquez pour le selectionner"
+      "dropzoneText": "Déposez votre fichier ici\nou cliquez pour le selectionner",
+      "alreadyImported": "Le fichier que vous essayez d'importer a déjà été importé"
     }
   },
-
   "Register": {
     "dialogTitle": "Inscription",
     "cancel": "Annuler",
@@ -186,13 +186,11 @@
     "registrationCompleted": "Inscription réussie",
     "registrationFailed": "Une erreur s'est produite lors de l'inscription"
   },
-
   "Layout": {
     "Mobile": {
       "treeHeritage": "Patrimoine arboré"
     }
   },
-
   "Intervention": {
     "title": "Demande d'intervention",
     "plannew": "Nouvelle demande",

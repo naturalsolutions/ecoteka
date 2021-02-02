@@ -14,7 +14,6 @@ import {
 } from "@material-ui/core";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useAppLayout } from "@/components/AppLayout/Base";
-import { apiRest } from "@/lib/api";
 import useApi from "@/lib/useApi";
 import SwipeableViews from "react-swipeable-views";
 import {
@@ -84,9 +83,6 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
   const schema = useTreeSchema();
   const [uploadImages, setUploadImages] = useState<File[]>([]);
   const { snackbar, dialog } = useAppLayout();
-  const [imagesProgress, setImagesProgress] = useState(0);
-  const [isImagesProgress, setIsImagesProgress] = useState(false);
-  const [imagesXHR, setImagesXHR] = useState(null);
   const [images, setImages] = useState(null);
   const [imagesDropzoneKey, setImagesDropzoneKey] = useState(0);
   const [nbImagesMax, setNbImagesMax] = useState(0);
@@ -137,55 +133,40 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
     });
   };
 
-  const onUploadProgress = (e) => {
-    const progress = (e.loaded / e.total) * 100;
-    setImagesProgress(progress);
-  };
-
-  const sendImages = () => {
+  const sendImages = async () => {
     if (!uploadImages.length) {
       openError(t("common.errors.fileRequired"));
       return Promise.reject(false);
     }
+
     snackbar.current.open({
       message: t("common.messages.sending"),
     });
 
-    let newXHR = apiRest.trees.postImages(
-      props.tree.organization_id,
-      props.tree.id,
-      uploadImages,
-      {
-        onProgress: onUploadProgress,
-        onLoad: (cXHR) => {
-          setImagesDropzoneKey(imagesDropzoneKey + 1);
-          setIsImagesProgress(false);
-          setImagesXHR(null);
+    try {
+      const formData = new FormData();
 
-          if (cXHR.status !== 200) {
-            openError(cXHR.response);
-            return;
-          }
-          snackbar.current.open({
-            message: t("common.messages.success"),
-            autoHideDuration: 2000,
-          });
+      Array.from(uploadImages).map((file) => {
+        formData.append("images", file, file.name);
+      });
 
-          getImages();
-        },
-        onError: (cXHR) => {
-          setImagesDropzoneKey(imagesDropzoneKey + 1);
-          const response = JSON.parse(cXHR.response);
+      await apiETK.post(
+        `/organization/${props.tree.organization_id}/trees/${props.tree.id}/images`,
+        formData
+      );
 
-          openError(response.detail);
-          setIsImagesProgress(false);
-          setImagesXHR(null);
-        },
-      }
-    );
+      setImagesDropzoneKey(imagesDropzoneKey + 1);
 
-    setImagesXHR(newXHR);
-    setIsImagesProgress(true);
+      snackbar.current.open({
+        message: t("common.messages.success"),
+        autoHideDuration: 2000,
+      });
+
+      getImages();
+    } catch (error) {
+      setImagesDropzoneKey(imagesDropzoneKey + 1);
+      openError(error?.response?.data?.detail);
+    }
   };
 
   const removeImage = (image, index) => {
@@ -197,14 +178,18 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
           label: t("common.yes"),
           variant: "text",
           size: "large",
-          onClick: () => {
+          onClick: async () => {
             images.splice(index, 1);
             setImages([...images]);
             setNbImagesMax(NB_IMAGES_MAX - images.length);
+
             if (imagesActiveIndex > images.length - 1) {
               setImagesActiveIndex(images.length - 1);
             }
-            apiRest.trees.deleteImage(props.tree.organization_id, id, image);
+
+            const filename = (image.match(/[^\\/]+\.[^\\/]+$/) || []).pop();
+            const url = `/organization/${props.tree.organization_id}/trees/${id}/images/${filename}`;
+            await apiETK.delete(url);
           },
         },
         {

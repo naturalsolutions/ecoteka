@@ -5,8 +5,8 @@ import * as yup from "yup";
 
 import useETKForm from "@/components/Form/useForm";
 import ETKGeofile from "@/components/Geofile";
-import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
+import useApi from "@/lib/useApi";
 
 export interface ETKMissingDatasProps {
   geoFile?: ETKGeofile;
@@ -24,6 +24,7 @@ const defaultProps: ETKMissingDatasProps = {
 const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   const { t } = useTranslation("components");
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
   const crsColumnChoices = [
     { value: "epsg:4326", label: "EPSG:4326" },
     { value: "epsg:3034", label: "ETRS89-LCC" },
@@ -57,7 +58,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
       data["latitude_column"] = {
         type: "select",
         component: {
-          label: t("Import.MissingData.labelColumn.lat"),
+          label: t("components.Import.MissingData.labelColumn.lat"),
           defaultValue: latLonChoice[0]?.value,
           items: latLonChoice,
         },
@@ -69,7 +70,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
       data["longitude_column"] = {
         type: "select",
         component: {
-          label: t("Import.MissingData.labelColumn.lng"),
+          label: t("components.Import.MissingData.labelColumn.lng"),
           defaultValue: latLonChoice[0]?.value,
           items: latLonChoice,
         },
@@ -84,7 +85,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
           select: true,
           defaultValue: crsColumnChoices[0].value,
           items: crsColumnChoices,
-          label: t("Import.MissingData.labelColumn.crs"),
+          label: t("components.Import.MissingData.labelColumn.crs"),
         },
         schema: yup.string().required(t("common.errors.required")),
       };
@@ -104,11 +105,14 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
       newGeofile[key] = data[key];
     }
 
-    const response = await apiRest.geofiles.update(
-      user.currentOrganization.id,
-      newGeofile
-    );
-    props.onUpdateGeofile(response);
+    try {
+      const { data } = await apiETK.put(
+        `/organization/${user.currentOrganization.id}/geo_files/`,
+        newGeofile
+      );
+
+      props.onUpdateGeofile(data);
+    } catch (error) {}
   };
 
   if (!props.missingInfo.length) {
@@ -120,11 +124,11 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
           <Grid container direction="column">
             <Grid item>
               <Typography component="h2">
-                {t("Import.MissingData.titleText")}
+                {t("components.Import.MissingData.titleText")}
               </Typography>
             </Grid>
             <Grid item>
-              <p>{t("Import.MissingData.hintText")}</p>
+              <p>{t("components.Import.MissingData.hintText")}</p>
             </Grid>
             <Grid item>{fields.latitude_column}</Grid>
             <Grid item>{fields.longitude_column}</Grid>
@@ -134,14 +138,14 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
         <Grid item>
           <Grid container justify="space-between">
             <Button variant="contained" onClick={props.onCancel}>
-              {t("Import.MissingData.buttonCancelText")}
+              {t("components.Import.MissingData.buttonCancelText")}
             </Button>
             <Button
               variant="contained"
               color="primary"
               onClick={handleSubmit(onUpdate)}
             >
-              {t("Import.MissingData.buttonSubmitContent")}
+              {t("components.Import.MissingData.buttonSubmitContent")}
             </Button>
           </Grid>
         </Grid>
