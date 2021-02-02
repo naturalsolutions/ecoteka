@@ -230,8 +230,13 @@ export function useInterventionSchema(it: TInterventionType) {
         component: {
           type: "number",
           label: t("components.Intervention.streanremoval.diameter"),
+          InputProps: { inputProps: { min: 0 } },
         },
-        schema: yup.string().required(t("common.errors.required")),
+        schema: yup
+          .number()
+          .nullable()
+          .positive()
+          .transform((value) => (isNaN(value) ? null : value)),
       },
       method: {
         type: "select",
@@ -342,11 +347,15 @@ export function usePlanningSchema(it: TInterventionType) {
     estimated_cost: {
       type: "textfield",
       component: {
-        required: true,
         type: "number",
         label: t("components.Intervention.estimated_cost"),
+        InputProps: { inputProps: { min: 0 } },
       },
-      schema: yup.string().required(t("common.errors.required")),
+      schema: yup
+        .number()
+        .nullable()
+        .positive()
+        .transform((value) => (isNaN(value) ? null : value)),
     },
     required_documents: {
       type: "select",
@@ -355,10 +364,7 @@ export function usePlanningSchema(it: TInterventionType) {
         label: t("components.Intervention.required_documents"),
         items: requiredDocumentsItems(it, t),
       },
-      schema: yup
-        .array()
-        .of(yup.string())
-        .required(t("common.errors.required")),
+      schema: yup.array().of(yup.string()),
     },
     required_material: {
       type: "select",
@@ -367,18 +373,14 @@ export function usePlanningSchema(it: TInterventionType) {
         items: requiredMaterialItems(it, t),
         label: t("components.Intervention.required_material"),
       },
-      schema: yup
-        .array()
-        .of(yup.string())
-        .required(t("common.errors.required")),
+      schema: yup.array().of(yup.string()),
     },
     intervenant: {
       type: "textfield",
       component: {
-        required: true,
         label: t("components.Intervention.intervenant"),
       },
-      schema: yup.string().required(t("common.errors.required")),
+      schema: yup.string(),
     },
   };
 }
