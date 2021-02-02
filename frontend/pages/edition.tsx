@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, createRef } from "react";
+import { useEffect, useState, createRef } from "react";
 import { Grid, makeStyles, Box } from "@material-ui/core";
 import { v4 as uuidv4 } from "uuid";
 import MapGL, {
@@ -7,7 +7,6 @@ import MapGL, {
   FeatureState,
   GeolocateControl,
 } from "@urbica/react-map-gl";
-import { apiRest } from "@/lib/api";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useAppLayout } from "@/components/AppLayout/Base";
@@ -519,22 +518,27 @@ const EditionPage = ({}) => {
                       properties: {},
                     };
 
-                    await apiRest.trees.post(
-                      user.currentOrganization.id,
-                      newTree
-                    );
+                    try {
+                      const organizationId = user.currentOrganization.id;
+                      await apiETK.post(
+                        `/organization/${organizationId}/trees`,
+                        newTree
+                      );
+                    } catch (error) {}
                   }
                 }}
                 onDrawDelete={async (selection) => {
-                  const ids = selection.features
-                    .map((feature) => feature.properties.id)
-                    .filter((id) => id);
-
-                  await apiRest.trees.bulkDelete(
-                    user.currentOrganization.id,
-                    JSON.stringify(ids)
-                  );
-                  await getData(user.currentOrganization.id);
+                  try {
+                    const trees = selection.features
+                      .map((feature) => feature.properties.id)
+                      .filter((id) => id);
+                    const organizationId = user.currentOrganization.id;
+                    await apiETK.delete(
+                      `/organization/${organizationId}/trees/bulk_delete`,
+                      { data: { trees } }
+                    );
+                    await getData(user.currentOrganization.id);
+                  } catch (error) {}
                 }}
                 onChange={(newData) => {
                   setData(newData);

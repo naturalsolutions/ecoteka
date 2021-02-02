@@ -3,7 +3,7 @@ import logging
 import os
 import shutil
 from typing import Any, List, Union, Optional
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Request
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Request, Body
 from sqlalchemy.orm import Session
 from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
@@ -133,7 +133,7 @@ def get(
     return tree.to_xy()
 
 
-@router.post("/", response_model=schemas.tree.Tree_xy)
+@router.post("", response_model=schemas.tree.Tree_xy)
 async def add(
     organization_id: int,
     request: Request,
@@ -199,7 +199,7 @@ def update(
 async def bulk_delete(
     organization_id: int,
     request: Request,
-    trees: List[int],
+    trees: List[int] = Body(..., embed=True),
     db: Session = Depends(get_db),
     auth=Depends(authorization("trees:bulk_delete")),
 ) -> Any:
