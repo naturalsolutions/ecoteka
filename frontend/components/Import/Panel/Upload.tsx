@@ -17,7 +17,6 @@ import { useTranslation, Trans } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 
 import Geofile from "@/components/Geofile";
-import { apiRest } from "@/lib/api";
 import useApi from "@/lib/useApi";
 
 export interface ETKUploadProps {
@@ -173,6 +172,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
     } catch (error) {
       if (error.response.status === 400) {
         setError(t("components.Import.Upload.alreadyImported"));
+        setLinearProgressValue(0);
       } else {
         setError(error.response.data.detail);
       }
