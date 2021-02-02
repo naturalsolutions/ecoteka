@@ -7,20 +7,17 @@ import ETKImportHistoryTable from "@/components/Import/History/Table";
 import ETKImportHistoryEmpty from "@/components/Import/History/Empty";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import Geofile from "@/components/Geofile";
-import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportHistoryIndexProps {
   rows?: Geofile[];
   onSelected?(selected: string[]): void;
   onDelete?(selected: string[]): void;
-  onImport?(name: string): void;
 }
 
 const defaultProps: ETKImportHistoryIndexProps = {
   rows: [],
   onSelected: (selected: string[]) => {},
   onDelete: (selected: string[]) => {},
-  onImport: (name: string) => {},
 };
 
 const useStyles = makeStyles(() =>
@@ -40,7 +37,6 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
   const { t } = useTranslation("components");
   const { dialog } = useAppLayout();
   const [selected, setSelected] = useState([]);
-  const { user } = useAppContext();
 
   const onSelected = (newSelected) => {
     setSelected(newSelected);
@@ -49,11 +45,11 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
 
   const onDeleteClick = () => {
     dialog.current.open({
-      title: t("ImportHistoryIndex.dialog.title"),
-      content: t("ImportHistoryIndex.dialog.content"),
+      title: t("components.ImportHistoryIndex.dialog.title"),
+      content: t("components.ImportHistoryIndex.dialog.content"),
       actions: [
         {
-          label: t("ImportHistoryIndex.dialog.yes"),
+          label: t("components.ImportHistoryIndex.dialog.yes"),
           variant: "outlined",
           color: "primary",
           onClick: () => {
@@ -61,7 +57,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
           },
         },
         {
-          label: t("ImportHistoryIndex.dialog.cancel"),
+          label: t("components.ImportHistoryIndex.dialog.cancel"),
           variant: "contained",
           color: "primary",
         },
@@ -83,7 +79,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
             <Grid container alignItems="center">
               <Grid item xs={6}>
                 <Typography variant="h5">
-                  {t("ImportHistoryIndex.title")}
+                  {t("components.ImportHistoryIndex.title")}
                 </Typography>
               </Grid>
               {props.rows.length > 0 && (
@@ -97,20 +93,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
                         size="large"
                         onClick={onDeleteClick}
                       >
-                        {t("ImportHistoryIndex.deleteText")}
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        disabled={
-                          !Boolean(selected.length === 1) || !props.rows.length
-                        }
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        onClick={() => props.onImport(selected.pop())}
-                      >
-                        {t("ImportHistoryIndex.importText")}
+                        {t("components.ImportHistoryIndex.deleteText")}
                       </Button>
                     </Grid>
                   </Grid>
