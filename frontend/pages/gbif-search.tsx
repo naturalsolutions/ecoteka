@@ -54,7 +54,6 @@ const ETKGBIFSearch: React.FC<ETKGBIFSearchProps> = (props) => {
 
   useEffect(() => {
     speciesSearch(query).then((res) => {
-      // console.log(res);
       setTaxa(res.data?.results);
       // TODO : Limit results, use debounced query, aggregate media and vernacularNames in results
     });

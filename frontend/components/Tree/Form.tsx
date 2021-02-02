@@ -51,7 +51,6 @@ const ETKTreeForm: React.FC<{
 
   useEffect(() => {
     if (selection.length === 1) {
-      console.log(selection);
       for (let key in selection[0].properties.properties) {
         setValue(key, selection[0].properties.properties[key]);
       }

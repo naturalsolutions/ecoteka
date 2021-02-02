@@ -193,11 +193,12 @@ function ResponsiveBandScaleStackedBars({
                           }}
                           onMouseMove={(event) => {
                             const point = localPoint(event);
-                            console.log(event);
-                            console.log(localPoint(event));
+
                             if (tooltipTimeout) clearTimeout(tooltipTimeout);
+
                             const top = point.y;
                             const left = bar.x + bar.width / 2;
+
                             showTooltip({
                               tooltipData: bar,
                               tooltipTop: top,

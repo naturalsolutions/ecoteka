@@ -129,7 +129,6 @@ const ETKInterventionForm = forwardRef<
       valid = true;
     },
     (errors, e) => {
-      console.log(errors);
       valid = false;
     }
   );

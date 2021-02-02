@@ -24,7 +24,6 @@ export default function useLocalStorage<T>(key: string, initialValue?: T) {
         return item ? item : initialValue;
       }
     } catch (error) {
-      console.log(error);
       return null;
     }
   });
@@ -43,9 +42,7 @@ export default function useLocalStorage<T>(key: string, initialValue?: T) {
         const item = JSON.stringify(value);
         window.localStorage.setItem(key, item);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return [storedValue, setValue] as const;

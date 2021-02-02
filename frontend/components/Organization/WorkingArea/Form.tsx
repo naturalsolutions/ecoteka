@@ -107,7 +107,6 @@ const ETKFormWorkingArea = forwardRef<
         newUser.currentOrganization.has_working_area = true;
         setUser(newUser);
       } catch (error) {
-        console.log(error);
         openError(error?.response?.detail);
         reject(error?.response?.detail);
       }

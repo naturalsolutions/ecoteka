@@ -70,7 +70,6 @@ export const setMonthSeriesWithSum = (
   }, [] as string[]) as string[];
   const frame = initMonthDataFrame(year, dataKeys);
   const seriesReducer = data.reduce((a, v) => {
-    console.log(v);
     const date = new Date(v[xLabel]);
     const key = `${date.getFullYear()}-${date.getMonth() + 1}-01`;
     if (!a[key]) a[key] = {};
@@ -87,7 +86,6 @@ export const setMonthSeriesWithSum = (
   const series = Object.entries(seriesReducer).map(([key, value], i) => {
     return Object.assign({ date: key }, { ...(value as object) });
   });
-  console.log(series);
   mergeByProperty(frame, series, "date");
   return frame;
 };

@@ -39,7 +39,6 @@ export default function useAutocomplete(props: ETKTextFieldProps): Fields {
     };
 
     const fieldProps = Object.assign({}, defaultFieldProps, field);
-    console.log(fieldProps);
 
     autocompleteFields[name] = (
       <Controller

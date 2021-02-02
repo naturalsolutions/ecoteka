@@ -57,7 +57,6 @@ export default function useTaxonAsyncAutocomplete({
       );
 
       if (status === 200) {
-        console.log(data);
         setTaxa(data.hits);
       } else {
         setTaxa([]);
@@ -134,7 +133,6 @@ export default function useTaxonAsyncAutocomplete({
               </span>
             )}
             onChange={(e, data) => {
-              console.log("changing", data);
               setTaxonomicValues(data);
               onChange(data);
             }}
