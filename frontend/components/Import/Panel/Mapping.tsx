@@ -11,8 +11,8 @@ import {
 import { useTranslation } from "react-i18next";
 import Geofile from "@/components/Geofile";
 import useTreeSchema from "@/components/Tree/Schema";
-import { apiRest } from "@/lib/api";
 import { useAppContext } from "@/providers/AppContext";
+import useApi from "@/lib/useApi";
 
 export interface ETKImportPanelMappingProps {
   geofile?: Geofile;
@@ -33,6 +33,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
   const [values, setValues] = useState({});
   const fields = Object.keys(treeSchema).filter((f) => !["x", "y"].includes(f));
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
 
   useEffect(() => {
     if (props.geofile.properties) {
@@ -83,11 +84,14 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
       const newGeofile = { ...props.geofile } as Geofile;
 
       newGeofile.mapping_fields = JSON.stringify(data);
-      const response = await apiRest.geofiles.update(
-        user.currentOrganization.id,
-        newGeofile
-      );
-      props.onSend(response);
+
+      try {
+        const { data } = await apiETK.put(
+          `/organization/${user.currentOrganization.id}/geo_files/`,
+          newGeofile
+        );
+        props.onSend(data);
+      } catch (error) {}
     } else {
       props.onSend(props.geofile);
     }
@@ -97,7 +101,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
     <Grid container direction="column" spacing={1}>
       <Grid item>
         <Typography variant="h6" paragraph>
-          {t("ImportPanelMapping.title")}
+          {t("components.ImportPanelMapping.title")}
         </Typography>
       </Grid>
       {Object.keys(values).length > 0 &&
@@ -126,11 +130,11 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
       <Grid item>
         <Grid container>
           <Button variant="outlined" onClick={props.onCancel}>
-            {t("ImportPanelMapping.cancel")}
+            {t("components.ImportPanelMapping.cancel")}
           </Button>
           <Grid item xs></Grid>
           <Button variant="contained" color="primary" onClick={onSend}>
-            {t("ImportPanelMapping.send")}
+            {t("components.ImportPanelMapping.send")}
           </Button>
         </Grid>
       </Grid>
