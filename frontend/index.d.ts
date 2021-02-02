@@ -31,7 +31,8 @@ export interface ITree {
 export interface IMember {
   id: number;
   email: string;
-  name?: string;
+  full_name?: string;
   role: string;
   status: string;
+  hashed_password: string;
 }

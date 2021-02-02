@@ -15,7 +15,6 @@ from passlib import pwd
 from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import text
 from app.api import get_db
 from app import crud
 from app.core import settings, enforcer, set_policies, authorization, get_current_user
@@ -32,6 +31,7 @@ from app.schemas import (
     UserCreate,
 )
 from app.models import User
+from app.worker import send_new_invitation_email_task
 
 
 router = APIRouter()
@@ -297,20 +297,30 @@ def add_members(
 
         for invite in users_to_add:
             user_in_db = user.get_by_email(db, email=invite.email)
-
+            role = invite.role if invite.role else "guest"
+            
             if not user_in_db:
                 user_in_db = user.create(
                     db,
                     obj_in=UserCreate(
-                        full_name=invite.email,
+                        full_name=invite.full_name,
                         email=invite.email,
                         password=pwd.genword(),
                     ),
                 )
-            
+            else:
+                organization_in_db = crud.organization.get(db, id=organization_id)
+
+                if organization_in_db:
+                    send_new_invitation_email_task.delay(
+                        full_name=user_in_db.full_name,
+                        email_to=user_in_db.email,
+                        organization=organization_in_db.name, 
+                        role=role)
+
             enforcer.add_role_for_user_in_domain(
                 str(user_in_db.id),
-                invite.role if invite.role else "guest",
+                role,
                 str(organization_id),
             )
             enforcer.load_policy()
