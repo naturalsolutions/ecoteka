@@ -32,13 +32,6 @@ class Tree {
     return response;
   }
 
-  async bulkDelete(organizationId, trees) {
-    const url = `/organization/${organizationId}/trees/bulk_delete`;
-    const response = await this.api.delete(url, {}, trees);
-
-    return await response.json();
-  }
-
   async delete(organizationId, id) {
     const url = `/organization/${organizationId}/trees/${id}`;
     const response = await this.api.delete(url);
