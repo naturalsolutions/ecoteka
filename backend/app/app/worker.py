@@ -6,6 +6,7 @@ from app.api import deps
 from app import crud
 from app.utils import send_new_registration_email
 from app.utils import send_new_registration_link_email
+from app.utils import send_new_invitation_email
 
 
 @celery_app.task
@@ -45,8 +46,8 @@ def send_new_registration_link_email_task(email_to: str, full_name: str, link: s
     return "ok"
 
 @celery_app.task
-def send_new_invitation_email_task(email_to: str, full_name: str, password: str):
-    send_new_registration_email(email_to, full_name, password)
+def send_new_invitation_email_task(email_to: str, full_name: str, organization: str, role: str):
+    send_new_invitation_email(email_to, full_name, organization, role)
     return "ok"
 
 

@@ -69,20 +69,19 @@ def send_reset_password_email(email_to: str, username: str, token: str) -> None:
 
 
 def send_new_account_email(email_to: str, username: str, password: str) -> None:
-    project_name = settings.PROJECT_NAME
-    subject = f"{project_name} - New account for user {username}"
+    subject = "Confirmation d’inscription au service ecoTeka"
     path = Path(settings.EMAIL_TEMPLATES_DIR) / "new_account.html"
 
     if path.is_file():
         f = open(path)
         template_str = f.read()
-        link = f"{settings.EXTERNAL_PATH}/signin/"
+        link = f"{settings.EXTERNAL_PATH.replace('/api/v1', '')}/signin/"
+
         send_email(
             email_to=email_to,
             subject_template=subject,
             html_template=template_str,
             environment={
-                "project_name": settings.PROJECT_NAME,
                 "username": username,
                 "password": password,
                 "email": email_to,
@@ -152,6 +151,27 @@ def send_new_registration_link_email(email_to: str, full_name: str, link: str) -
         },
     )
 
+def send_new_invitation_email(email_to: str, full_name: str, organization: str, role: str) -> None:
+    subject = "Invitation à une nouvelle équipe ecoTeka"
+    path = Path(settings.EMAIL_TEMPLATES_DIR) / "new_invitation.html"
+
+    if path.is_file():
+        f = open(path)
+        template_str = f.read()
+        link = f"{settings.EXTERNAL_PATH.replace('/api/v1', '')}/signin/"
+
+        send_email(
+            email_to=email_to,
+            subject_template=subject,
+            html_template=template_str,
+            environment={
+                "username": full_name,
+                "organization": organization,
+                "email": email_to,
+                "role": role,
+                "link": link,
+            },
+        )
 
 def generate_registration_link_value() -> str:
     return str(uuid.uuid4())

@@ -34,4 +34,5 @@ export interface IMember {
   full_name?: string;
   role: string;
   status: string;
+  hashed_password: string;
 }

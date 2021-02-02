@@ -309,7 +309,14 @@ def add_members(
                     ),
                 )
             else:
-                send_new_invitation_email_task.delay(user=user_in_db, organization=organization, role=role)
+                organization_in_db = crud.organization.get(db, id=organization_id)
+
+                if organization_in_db:
+                    send_new_invitation_email_task.delay(
+                        full_name=user_in_db.full_name,
+                        email_to=user_in_db.email,
+                        organization=organization_in_db.name, 
+                        role=role)
 
             enforcer.add_role_for_user_in_domain(
                 str(user_in_db.id),

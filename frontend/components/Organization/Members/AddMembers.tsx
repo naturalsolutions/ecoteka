@@ -230,7 +230,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
                       variant="outlined"
                       size="small"
                       placeholder={t(
-                        "components:Organization.Members.Table.headers.name"
+                        "components.Organization.Members.Table.headers.name"
                       )}
                     />
                   </Grid>
@@ -245,7 +245,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
                             return (
                               <MenuItem value={role.value} key={i}>
                                 {t(
-                                  `components:Organization.Members.Table.roles.${role.value}`
+                                  `components.Organization.Members.Table.roles.${role.value}`
                                 )}
                               </MenuItem>
                             );

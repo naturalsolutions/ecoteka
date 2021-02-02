@@ -192,7 +192,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
       }
     } catch (e) {
       triggerAlert({
-        message: t("components:Organization.Members.Table.updateMember.error"),
+        message: t("components.Organization.Members.Table.updateMember.error"),
         severity: "error",
       });
     }
@@ -206,7 +206,7 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
       if (status === 200) {
         triggerAlert({
           message: t(
-            "components:Organization.Members.Table.updateMember.success"
+            "components.Organization.Members.Table.updateMember.success"
           ),
           severity: "success",
         });
