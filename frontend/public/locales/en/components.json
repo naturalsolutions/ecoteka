@@ -7,7 +7,6 @@
       "content": "Are you sure you want to log out?"
     }
   },
-
   "SignIn": {
     "title": "Login",
     "buttonCancel": "Cancel",
@@ -19,15 +18,13 @@
     "errorMessageEmail": "Email address is invalid",
     "errorMessageRequiredField": "Field required",
     "noAccount": "Don't have an account yet?",
-    "accountRequest": "Request the creation of an account !"
+    "accountRequest": "Request the creation of an account!"
   },
-
   "LanguageSelector": {
     "en": "English",
     "fr": "French",
     "es": "Spanish"
   },
-
   "Template": {
     "organizationSelect": "Select an organization",
     "menuItems": {
@@ -48,7 +45,6 @@
       }
     }
   },
-
   "Toolbar": {
     "slogan": "For a greener city!",
     "login": "Login",
@@ -58,7 +54,6 @@
     "myDashboard": "Dashboard",
     "addUser": "Add a user"
   },
-
   "Map": {
     "SearchCity": {
       "label": "Search for a city"
@@ -68,12 +63,10 @@
       "satellite": "Satellite"
     }
   },
-
   "Sidebar": {
     "treeCard": "Tree Card",
     "wikipediaInformation": "Wikipedia Information"
   },
-
   "PanelStart": {
     "title": "You are connected to your account",
     "content": "You can see the number of trees in OpenData but also the number of trees on your private data layer.",
@@ -91,7 +84,6 @@
       "button": "Import a data file"
     }
   },
-
   "PanelWelcome": {
     "tabLabel": "Plant heritage",
     "title": "Welcome to EcoTeka !",
@@ -100,13 +92,11 @@
       "title": "Number of trees on the map"
     }
   },
-
   "CardAbout": {
     "title": "Are you a green space manager ?",
     "content": "You can contact us to learn more and try the first tree-based heritage inventory features.",
     "button": "More informations"
   },
-
   "ImportHistoryIndex": {
     "title": "Imports history",
     "importText": "Import",
@@ -118,7 +108,6 @@
       "cancel": "Cancel"
     }
   },
-
   "ImportHistoryTable": {
     "headers": {
       "file": "File name",
@@ -128,12 +117,10 @@
       "importStatus": "Import status"
     }
   },
-
   "ImportHistoryEmpty": {
     "content": "You haven't done any import yet! <br/> Everything has a beginning",
     "button": "Import my data"
   },
-
   "ImportTemplate": {
     "title": "A doubt with your file?",
     "content": "Make sure your file contains the following information:",
@@ -143,13 +130,11 @@
     "crs": "Coordinate Reference System",
     "download": "Feel free to download our template in xlsx format"
   },
-
   "ImportPanelMapping": {
     "title": "Select fields to import",
     "cancel": "Cancel",
     "send": "Send"
   },
-
   "Import": {
     "Index": {
       "tooltipContent": "- Importing data is an action which may require several tens of minutes <br/> - Find the progress of your import in the menu: \"History of imports \"",
@@ -188,7 +173,6 @@
       "dropzoneText": "Drop your file here\nor click to select it"
     }
   },
-
   "Register": {
     "dialogTitle": "Register",
     "cancel": "Cancel",
@@ -201,13 +185,11 @@
     "registrationCompleted": "Registration completed",
     "registrationFailed": "The registration has failed"
   },
-
   "Layout": {
     "Mobile": {
       "treeHeritage": "Tree heritage"
     }
   },
-
   "Intervention": {
     "title": "Request for intervention",
     "plannew": "New request",
@@ -316,7 +298,6 @@
       "state": "State"
     }
   },
-
   "Tree": {
     "properties": {
       "taxon": "Taxon",
@@ -432,7 +413,6 @@
     "longitude": "Longitude",
     "registrationNumber": "Tree registration number"
   },
-
   "TreeForm": {
     "dialogDeleteTitle": "Remove selected trees",
     "dialogDeleteContent": "Are you sure you want to remove the selected trees?",
@@ -447,7 +427,6 @@
       "select": "Drop files here or click (max.{{max}})"
     }
   },
-
   "Teams": {
     "buttonAdd": "Add a team",
     "tooltipWorkingAreaEdit": "Edit working area",
@@ -482,7 +461,6 @@
       }
     }
   },
-
   "Team": {
     "name": "Name",
     "slug": "Slug",
@@ -491,7 +469,6 @@
     "dialogContentTextCreate": "You will add a team in the current organization.",
     "dialogContentTextEdit": "Use this form to update a team."
   },
-
   "Organization": {
     "name": "Name",
     "dialogTitleCreate": "Add an organisation",

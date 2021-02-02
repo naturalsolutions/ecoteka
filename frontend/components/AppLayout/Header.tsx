@@ -3,11 +3,17 @@ import { useTranslation } from "react-i18next";
 import {
   Button,
   Grid,
-  Hidden,
+  Box,
   makeStyles,
   Toolbar,
   withStyles,
   NoSsr,
+  IconButton,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  Divider,
 } from "@material-ui/core";
 import ContactButton from "@/components/Contact/Button";
 import LanguageSelector from "@/components/LanguageSelector";
@@ -20,8 +26,9 @@ import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import MapIcon from "@material-ui/icons/Map";
-import TodayIcon from "@material-ui/icons/CalendarToday";
+import TodayIcon from "@material-ui/icons/Today";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import MenuIcon from "@material-ui/icons/Menu";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => {
@@ -65,15 +72,41 @@ const LogoWrapperButton = withStyles({
   },
 })(Button);
 
-const AppLayoutHeader = ({}): JSX.Element => {
-  const { t } = useTranslation("components");
+const Logo = () => {
+  const { dark } = useThemeContext();
+  const router = useRouter();
+  const classes = useStyles();
+
+  return (
+    <Grid item>
+      <LogoWrapperButton onClick={() => router.push("/")} disableFocusRipple>
+        <img
+          src={`/assets/${dark ? "dark" : "light"}/logo.svg`}
+          className={classes.logo}
+        />
+      </LogoWrapperButton>
+    </Grid>
+  );
+};
+
+const OnlyAuthenticated = ({ children }) => {
+  const { user } = useAppContext();
+
+  return user ? children : null;
+};
+
+const NotAuthenticated = ({ children }) => {
+  const { user } = useAppContext();
+
+  return !user ? children : null;
+};
+
+const HeaderDesktop = () => {
   const classes = useStyles();
   const router = useRouter();
   const { user, setUser } = useAppContext();
+  const { t } = useTranslation("components");
   const { dark, setDark } = useThemeContext();
-  const [logo, setLogo] = useState("/assets/light/logo.svg");
-  const [menu, setMenu] = useState<string | null>(router.asPath);
-  const [toggleIcon, setToggleIcon] = useState<ReactNode>(<Brightness7Icon />);
 
   const handleOrganizationSelectChange = (organization: IOrganization) => {
     if (!organization || !organization.id) {
@@ -85,14 +118,6 @@ const AppLayoutHeader = ({}): JSX.Element => {
     setUser(newUser);
   };
 
-  useEffect(() => {
-    setLogo(`/assets/${dark ? "dark" : "light"}/logo.svg`);
-  }, [dark]);
-
-  useEffect(() => {
-    setMenu(router.asPath);
-  }, [router.asPath]);
-
   const handleSignInClick = () => {
     router.push("/signin/");
   };
@@ -100,58 +125,43 @@ const AppLayoutHeader = ({}): JSX.Element => {
   return (
     <Toolbar className={classes.toolbar} variant="dense">
       <Grid container alignItems="center">
-        <Grid item xs={6}>
-          <Grid container alignItems="center">
+        <Logo />
+        <NoSsr>
+          <OnlyAuthenticated>
             <Grid item>
-              <LogoWrapperButton
-                onClick={() => router.push("/")}
-                disableFocusRipple
-              >
-                <img src={logo} className={classes.logo} />
-              </LogoWrapperButton>
+              <OrganizationSelect
+                user={user}
+                onChange={handleOrganizationSelectChange}
+              />
             </Grid>
-            {user && (
-              <Hidden smDown>
-                <>
-                  <OrganizationSelect
-                    user={user}
-                    onChange={handleOrganizationSelectChange}
-                  />
-                  <ToggleButtonGroup value={menu} size="small">
-                    <ToggleButton
-                      value="/edition/"
-                      onClick={() => router.push("/edition/")}
-                    >
-                      <MapIcon fontSize="small" />
-                    </ToggleButton>
-                    <ToggleButton
-                      value="/scheduler/"
-                      onClick={() => router.push("/scheduler/")}
-                    >
-                      <TodayIcon fontSize="small" />
-                    </ToggleButton>
-                    <ToggleButton
-                      value="/dashboard/"
-                      onClick={() => router.push("/dashboard/")}
-                    >
-                      <DashboardIcon fontSize="small" />
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </>
-              </Hidden>
-            )}
-          </Grid>
-        </Grid>
-        <Grid item xs={6}>
-          <Grid
-            container
-            justify="flex-end"
-            direction="row"
-            alignItems="center"
-            spacing={1}
-          >
-            <NoSsr>
-              <Grid item>
+
+            <Grid item>
+              <ToggleButtonGroup value={router.asPath} size="small">
+                <ToggleButton
+                  value="/edition/"
+                  onClick={() => router.push("/edition/")}
+                >
+                  <MapIcon fontSize="small" />
+                </ToggleButton>
+                <ToggleButton
+                  value="/scheduler/"
+                  onClick={() => router.push("/scheduler/")}
+                >
+                  <TodayIcon fontSize="small" />
+                </ToggleButton>
+                <ToggleButton
+                  value="/dashboard/"
+                  onClick={() => router.push("/dashboard/")}
+                >
+                  <DashboardIcon fontSize="small" />
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+          </OnlyAuthenticated>
+          <Grid item xs />
+          <NoSsr>
+            <Grid item>
+              <Box mx={1}>
                 <ToggleButton
                   size="small"
                   value={dark}
@@ -165,25 +175,135 @@ const AppLayoutHeader = ({}): JSX.Element => {
                     <Brightness4Icon fontSize="small" />
                   )}
                 </ToggleButton>
-              </Grid>
-            </NoSsr>
-            <Grid item>
-              <LanguageSelector />
+              </Box>
             </Grid>
-            <Grid item>{!user && <ContactButton />}</Grid>
-            <Grid item>{user && <UserMainMenuButton />}</Grid>
-            {!user && (
-              <Grid item>
-                <Button onClick={handleSignInClick}>
-                  {t("SignIn.buttonConnexion")}
-                </Button>
-              </Grid>
-            )}
+          </NoSsr>
+          <Grid item>
+            <LanguageSelector />
           </Grid>
-        </Grid>
+          <NotAuthenticated>
+            <Grid item>
+              <ContactButton />
+            </Grid>
+          </NotAuthenticated>
+          <OnlyAuthenticated>
+            <Grid item>
+              {" "}
+              <UserMainMenuButton />
+            </Grid>
+          </OnlyAuthenticated>
+          <NotAuthenticated>
+            <Grid item>
+              <Button onClick={handleSignInClick}>
+                {t("components.SignIn.buttonConnexion")}
+              </Button>
+            </Grid>
+          </NotAuthenticated>
+        </NoSsr>
       </Grid>
     </Toolbar>
   );
+};
+
+const MenuMobile = ({ isOpen = true, setOpen }) => {
+  const { t } = useTranslation("components");
+  const router = useRouter();
+
+  const handleAction = (route) => {
+    setOpen(false);
+    router.push(route);
+  };
+
+  return (
+    isOpen && (
+      <Card
+        square={true}
+        style={{
+          position: "absolute",
+          top: 48,
+          left: 0,
+          right: 0,
+          width: "100%",
+          zIndex: 1300,
+          background: "#f6faf8",
+        }}
+      >
+        <CardContent>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <LanguageSelector />
+            </Grid>
+          </Grid>
+          <List>
+            <ListItem onClick={() => handleAction("/dashboard/")}>
+              Dashboard
+            </ListItem>
+            <ListItem onClick={() => handleAction("/edition/")}>Map</ListItem>
+            <ListItem onClick={() => handleAction("/scheduler/")}>
+              Calendar
+            </ListItem>
+            <ListItem>Logout</ListItem>
+          </List>
+          <NotAuthenticated>
+            <Grid item>
+              <Box textAlign="right">
+                <Button
+                  color="primary"
+                  onClick={() => handleAction("/signin/")}
+                >
+                  {t("components.SignIn.buttonConnexion")}
+                </Button>
+              </Box>
+            </Grid>
+          </NotAuthenticated>
+        </CardContent>
+      </Card>
+    )
+  );
+};
+
+const HeaderMobile = () => {
+  const classes = useStyles();
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  return (
+    <Toolbar className={classes.toolbar} variant="dense">
+      <Grid container alignItems="center">
+        <Logo />
+        <Grid item xs></Grid>
+        <Grid item>
+          <IconButton
+            onClick={(e) => {
+              setIsMenuOpen(!isMenuOpen);
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Grid>
+        <MenuMobile isOpen={isMenuOpen} setOpen={setIsMenuOpen} />
+      </Grid>
+    </Toolbar>
+  );
+};
+
+const AppLayoutHeader = ({}): JSX.Element => {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const setResponsiveness = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+
+    setResponsiveness();
+
+    window.addEventListener("resize", () => setResponsiveness());
+  }, []);
+
+  return isMobile ? <HeaderMobile /> : <HeaderDesktop />;
 };
 
 export default AppLayoutHeader;

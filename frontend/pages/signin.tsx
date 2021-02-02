@@ -53,7 +53,7 @@ export default function SignInPage() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ minHeight: "calc(100vh - 48px)" }}
+        style={{ minHeight: "calc(100vh - 96px)" }}
       >
         <Box flexGrow={1} />
         <Box>
@@ -66,7 +66,7 @@ export default function SignInPage() {
             color="textPrimary"
             className={classes.h5}
           >
-            {t("SignIn.title")}
+            {t("components.SignIn.title")}
           </Typography>
         </Box>
         <Box className={classes.formWidth}>
@@ -78,7 +78,7 @@ export default function SignInPage() {
             color="textPrimary"
             style={{ textAlign: "right" }}
           >
-            {t("SignIn.forgotPassword")}
+            {t("components.SignIn.forgotPassword")}
           </Link>
         </Box>
         <Button
@@ -92,7 +92,7 @@ export default function SignInPage() {
         </Button>
         <Box my={2}>
           <Typography variant="h6" align="center" color="textPrimary">
-          {t("SignIn.noAccount")}
+            {t("components.SignIn.noAccount")}
           </Typography>
         </Box>
         <Button
@@ -102,7 +102,7 @@ export default function SignInPage() {
           target="_blank"
           className={classes.formWidth}
         >
-          {t("SignIn.accountRequest")}
+          {t("components.SignIn.accountRequest")}
         </Button>
         <Box flexGrow={1} />
       </Grid>
