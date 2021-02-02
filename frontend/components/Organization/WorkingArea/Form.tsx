@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { useTranslation, Trans } from "react-i18next";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { IOrganization } from "@/index.d";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useAppLayout } from "@/components/AppLayout/Base";
@@ -63,11 +63,9 @@ const ETKFormWorkingArea = forwardRef<
 >((props, ref) => {
   const classes = useStyle();
   const [file, setFile] = useState<File>();
-  const [linearProgressValue, setLinearProgressValue] = useState(0);
-  const [inProgress, setInProgress] = useState(false);
-  const [xhr, setXHR] = useState(null);
   const { user, setUser } = useAppContext();
   const { snackbar } = useAppLayout();
+  const { apiETK } = useApi().api;
 
   const { t } = useTranslation("components");
   let isOk = false;
@@ -88,40 +86,31 @@ const ETKFormWorkingArea = forwardRef<
       message: "Envoi en cours...",
     });
 
-    return new Promise((resolve, reject) => {
-      let newXHR = apiRest.organization.postWorkingArea(
-        props.organization.id,
-        file,
-        {
-          onProgress: onUploadProgress,
-          onLoad: (cXHR) => {
-            setInProgress(false);
-            setXHR(null);
+    return new Promise(async (resolve, reject) => {
+      try {
+        const formData = new FormData();
+        formData.append("file", file, file.name);
 
-            if (cXHR.status !== 200) {
-              openError(cXHR.response);
-              return reject(cXHR.response);
-            }
-            isOk = true;
-            resolve(JSON.parse(cXHR.response));
-            const newUser = { ...user };
-            newUser.currentOrganization.has_working_area = true;
-            setUser(newUser);
-          },
-          onError: (cXHR) => {
-            const response = JSON.parse(cXHR.response);
+        const { status, data } = await apiETK.post(
+          `/organization/${props.organization.id}/working_area`,
+          formData
+        );
 
-            openError(response.detail);
-            setInProgress(false);
-            setXHR(null);
-
-            reject(response.detail);
-          },
+        if (status !== 200) {
+          openError(data);
+          return reject(data);
         }
-      );
 
-      setXHR(newXHR);
-      setInProgress(true);
+        isOk = true;
+        resolve(data);
+        const newUser = { ...user };
+        newUser.currentOrganization.has_working_area = true;
+        setUser(newUser);
+      } catch (error) {
+        console.log(error);
+        openError(error?.response?.detail);
+        reject(error?.response?.detail);
+      }
     });
   };
 
@@ -148,12 +137,6 @@ const ETKFormWorkingArea = forwardRef<
     return [];
   };
 
-  const onUploadProgress = (e) => {
-    const progress = (e.loaded / e.total) * 100;
-
-    setLinearProgressValue(progress);
-  };
-
   const ETKFiles = (
     <React.Fragment key={file?.name}>
       {file && (
@@ -173,14 +156,16 @@ const ETKFormWorkingArea = forwardRef<
     <Grid container direction="column">
       <Grid item>
         <Typography variant="h5" paragraph>
-          <Trans>{t("Organization.WorkingArea.dialogContentText")}</Trans>
+          <Trans>
+            {t("components.Organization.WorkingArea.dialogContentText")}
+          </Trans>
         </Typography>
       </Grid>
       <Grid item>
         <DropzoneArea
           acceptedFiles={[".geojson", ".zip"]}
           Icon={GetAppIcon as any}
-          dropzoneText={t("Import.Upload.dropzoneText")}
+          dropzoneText={t("components.Import.Upload.dropzoneText")}
           dropzoneProps={{
             getFilesFromEvent: onAddFiles,
           }}

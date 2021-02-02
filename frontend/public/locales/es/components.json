@@ -76,7 +76,7 @@
     },
     "numberOfTreesLayer": {
       "title": "Número de árboles en la capa",
-      "content": "de árboles"
+      "content": "árboles"
     },
     "card": {
       "title": "¿Te gustaría añadir un árbol?",
@@ -167,13 +167,13 @@
     "Upload": {
       "boxContent": "Importa tus datos",
       "fileListHint": "Tipos de archivos aceptados:",
-      "importHistory": "See import history",
+      "importHistory": "Ver el historial de importaciones",
       "buttonCancelContent": "Cancelar",
       "buttonUploadContent": "Subir",
-      "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo"
+      "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo",
+      "alreadyImported": "El archivo que intentas importar ya ha sido importado"
     }
   },
-
   "Register": {
     "dialogTitle": "Registrarse",
     "cancel": "Cancelar",
@@ -186,13 +186,11 @@
     "registrationCompleted": "Registro completado",
     "registrationFailed": "El registro ha fallado"
   },
-
   "Layout": {
     "Mobile": {
       "treeHeritage": "Patrimonio arbóreo"
     }
   },
-
   "Intervention": {
     "title": "Solicitar una intervención",
     "plannew": "Nueva solicitud",
@@ -476,7 +474,6 @@
     "buttonSubmitContent": "Enviar",
     "buttonCancelContent": "Cancelar"
   },
-
   "Organization": {
     "name": "Nombre",
     "dialogTitleCreate": "Añadir una organización",
@@ -520,7 +517,7 @@
       "Table": {
         "headers": {
           "email": "Correo electrónico",
-          "name": "Nombre",
+          "name": "Nombre completo",
           "role": "Rol",
           "status": "Estado"
         },

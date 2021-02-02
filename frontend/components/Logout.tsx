@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { Button, Grid, Box, Typography } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
 import { useAppContext } from "@/providers/AppContext";
-import { apiRest } from "@/lib/api";
 import { useTranslation } from "react-i18next";
 import { useAppLayout } from "@/components/AppLayout/Base";
 
@@ -12,7 +11,7 @@ export interface ETKLogoutProps {
 }
 
 const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
-  const { t } = useTranslation("components");
+  const { t } = useTranslation();
   const { dialog } = useAppLayout();
   const { setUser } = useAppContext();
   const router = useRouter();
@@ -24,7 +23,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
           <WarningIcon style={{ color: "#ff9629" }} fontSize="large" />
         </Grid>
         <Grid item>
-          <Typography>{t("Logout.dialog.content")}</Typography>
+          <Typography>{t("components.Logout.dialog.content")}</Typography>
         </Grid>
       </Grid>
     </Box>
@@ -32,7 +31,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
 
   const actions = [
     {
-      label: t("Logout.dialog.backHome"),
+      label: t("components.Logout.dialog.backHome"),
       color: "primary",
       variant: "text",
       size: "large",
@@ -45,7 +44,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
       },
     },
     {
-      label: t("Logout.dialog.logout"),
+      label: t("components.Logout.dialog.logout"),
       color: "primary",
       variant: "contained",
       size: "large",
@@ -54,7 +53,7 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
           props.onClick();
         }
 
-        apiRest.auth.logout();
+        localStorage.clear();
         setUser(null);
       },
     },
@@ -65,13 +64,13 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
       {...props.buttonProps}
       onClick={(e) => {
         dialog.current.open({
-          title: t("Logout.dialog.logout"),
+          title: t("components.Logout.dialog.logout"),
           content: dialogContent,
           actions,
         });
       }}
     >
-      {t("Logout.logout")}
+      {t("components.Logout.logout")}
     </Button>
   );
 };

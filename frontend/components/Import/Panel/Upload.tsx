@@ -17,7 +17,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 
 import Geofile from "@/components/Geofile";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 
 export interface ETKUploadProps {
   geofile?: Geofile;
@@ -87,8 +87,8 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   const [linearProgressValue, setLinearProgressValue] = useState(0);
   const [error, setError] = useState(null);
   const [inProgress, setInProgress] = useState(false);
-  const [xhr, setXHR] = useState(null);
   const { user } = useAppContext();
+  const { apiETK } = useApi().api;
 
   const ETKFiles = (
     <React.Fragment key={file?.name}>
@@ -119,11 +119,11 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
     if (props.step === "uploaded") {
       setFile(null);
     }
-  }, [t("Import.Upload.step")]);
+  }, [props.step]);
 
   const htmlTooltip = (
     <Typography>
-      <Trans>{t("Import.Index.tooltipContent")}</Trans>
+      <Trans>{t("components.Import.Index.tooltipContent")}</Trans>
     </Typography>
   );
 
@@ -151,37 +151,35 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
     }
   };
 
-  const onUploadLoad = (cXHR) => {
-    setInProgress(false);
-    setXHR(null);
+  const onUploadClick = async () => {
+    try {
+      setInProgress(true);
+      const formData = new FormData();
+      formData.append("file", file);
+      const { status, data } = await apiETK.post(
+        `/organization/${user.currentOrganization.id}/geo_files/upload`,
+        formData,
+        {
+          onUploadProgress: onUploadProgress,
+        }
+      );
 
-    const response = JSON.parse(cXHR.response);
+      if (status !== 200) {
+        setError(data.detail);
+      }
 
-    if (cXHR.status !== 200) {
-      setError(response.detail);
-      return;
+      props.onUploaded(data);
+    } catch (error) {
+      if (error.response.status === 400) {
+        setError(t("components.Import.Upload.alreadyImported"));
+        setLinearProgressValue(0);
+      } else {
+        setError(error.response.data.detail);
+      }
+      setInProgress(false);
+    } finally {
+      setInProgress(false);
     }
-
-    props.onUploaded(response);
-  };
-
-  const onUploadError = (cXHR) => {
-    const response = JSON.parse(cXHR.response);
-
-    setError(response.detail);
-    setInProgress(false);
-    setXHR(null);
-  };
-
-  const onUploadClick = () => {
-    let newXHR = apiRest.geofiles.upload(user.currentOrganization.id, file, {
-      onProgress: onUploadProgress,
-      onLoad: onUploadLoad,
-      onError: onUploadError,
-    });
-
-    setXHR(newXHR);
-    setInProgress(true);
   };
 
   return (
@@ -190,7 +188,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
         <Typography variant="h6">
           <Grid container alignItems="center">
             <Box component="span" mr={1}>
-              {t("Import.Upload.boxContent")}
+              {t("components.Import.Upload.boxContent")}
             </Box>
             <HtmlTooltip title={htmlTooltip}>
               <HelpIcon color="primary" />
@@ -211,7 +209,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
               <DropzoneArea
                 acceptedFiles={ALLOWED_EXTENSIONS}
                 Icon={GetAppIcon as any}
-                dropzoneText={t("Import.Upload.dropzoneText")}
+                dropzoneText={t("components.Import.Upload.dropzoneText")}
                 dropzoneProps={{
                   getFilesFromEvent: onAddFiles,
                 }}
@@ -224,7 +222,8 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                 dropzoneClass={classes.etkDropzone}
               />
               <Typography style={{ marginTop: ".7rem" }}>
-                {t("Import.Upload.fileListHint")} {ALLOWED_EXTENSIONS.join(",")}
+                {t("components.Import.Upload.fileListHint")}{" "}
+                {ALLOWED_EXTENSIONS.join(",")}
               </Typography>
             </Grid>
           ) : null}
@@ -244,15 +243,10 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                   onClick={() => {
                     setFile(null);
                     setError(null);
-
-                    if (xhr?.abort()) {
-                      xhr.abort();
-                    }
-
                     setLinearProgressValue(0);
                   }}
                 >
-                  {t("Import.Upload.buttonCancelContent")}
+                  {t("components.Import.Upload.buttonCancelContent")}
                 </Button>
                 <Button
                   className={classes.submitbtn}
@@ -261,7 +255,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
                   variant="contained"
                   onClick={onUploadClick}
                 >
-                  {t("Import.Upload.buttonUploadContent")}
+                  {t("components.Import.Upload.buttonUploadContent")}
                 </Button>
               </Grid>
             )}

@@ -8,7 +8,6 @@ import {
   CardContent,
   Button,
 } from "@material-ui/core";
-import { apiRest } from "@/lib/api";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import CardInfoPanel from "@/components/Card/InfoPanel";
@@ -35,22 +34,22 @@ const ETKPanelStartGeneralInfo: FC = () => {
   return (
     <Grid container direction="column" spacing={2} className={classes.root}>
       <Grid item>
-        <Typography variant="h5">{t("PanelStart.title")}</Typography>
+        <Typography variant="h5">{t("components.PanelStart.title")}</Typography>
       </Grid>
       <Grid item>
-        <Typography>{t("PanelStart.content")}</Typography>
+        <Typography>{t("components.PanelStart.content")}</Typography>
       </Grid>
       <Grid item>
         <CardInfoPanel
-          title={t("PanelStart.numberOfTrees.title")}
-          content={`14.5 ${t("PanelStart.numberOfTrees.content")}`}
+          title={t("components.PanelStart.numberOfTrees.title")}
+          content={`14.5 ${t("components.PanelStart.numberOfTrees.content")}`}
         />
       </Grid>
       <Grid item>
         <CardInfoPanel
-          title={t("PanelStart.numberOfTreesLayer.title")}
+          title={t("components.PanelStart.numberOfTreesLayer.title")}
           content={`${user?.currentOrganization?.total_trees || 0} ${t(
-            "PanelStart.numberOfTreesLayer.content"
+            "components.PanelStart.numberOfTreesLayer.content"
           )}`}
         />
       </Grid>
@@ -61,11 +60,13 @@ const ETKPanelStartGeneralInfo: FC = () => {
             <Grid container direction="column" alignItems="center" spacing={2}>
               <Grid item>
                 <Typography className={classes.cardTitle} variant="h6">
-                  {t("PanelStart.card.title")}
+                  {t("components.PanelStart.card.title")}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography>{t("PanelStart.card.content")}</Typography>
+                <Typography>
+                  {t("components.PanelStart.card.content")}
+                </Typography>
               </Grid>
               <Grid item>
                 <Box mt={2}>
@@ -77,7 +78,7 @@ const ETKPanelStartGeneralInfo: FC = () => {
                       router.push("/edition/?panel=import");
                     }}
                   >
-                    {t("PanelStart.card.button")}
+                    {t("components.PanelStart.card.button")}
                   </Button>
                 </Box>
               </Grid>
