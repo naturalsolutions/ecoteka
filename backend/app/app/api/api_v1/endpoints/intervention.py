@@ -19,7 +19,7 @@ policies = {
 set_policies(policies)
 
 
-@router.post("/", response_model=Intervention)
+@router.post("", response_model=Intervention)
 def create(
     organization_id: int,
     *,
