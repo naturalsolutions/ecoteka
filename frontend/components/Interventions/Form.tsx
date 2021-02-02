@@ -15,7 +15,7 @@ import {
 import useETKForm from "@/components/Form/useForm";
 import {
   Button,
-  Grid,
+  Grid as GridBase,
   makeStyles,
   Step,
   StepContent,
@@ -23,6 +23,7 @@ import {
   Stepper,
   Typography,
 } from "@material-ui/core";
+import styled from "styled-components";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
@@ -63,6 +64,12 @@ type ETKInterventionFormHandles = {
 };
 
 const commonsteps: TInterventionStep[] = ["interventionselection"];
+
+const Grid = styled(GridBase)`
+  .MuiGrid-root {
+    flex-grow: 1;
+  }
+`;
 
 const ETKInterventionForm = forwardRef<
   ETKInterventionFormHandles,
@@ -196,6 +203,10 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
 
   const submit = async () => {
     const dateRange = data["validation"].intervention_period;
+    const estimatedCost =
+      data["validation"].estimated_cost === ""
+        ? null
+        : data["validation"].estimated_cost;
     const payload = steps
       .filter((step) => step != "intervention")
       .reduce(
@@ -210,6 +221,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
       );
 
     payload.tree_id = router.query.tree;
+    payload.estimated_cost = estimatedCost;
 
     const organizationId = user.currentOrganization.id;
     await apiETK.post(`/organization/${organizationId}/interventions`, payload);
