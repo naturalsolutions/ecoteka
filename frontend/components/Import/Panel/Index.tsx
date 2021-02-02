@@ -8,10 +8,10 @@ import ETKImported from "@/components/Import/Panel/Imported";
 import ETKUpload from "@/components/Import/Panel/Upload";
 import ETKError from "@/components/Import/Panel/Error";
 import ETKImportImporting from "@/components/Import/Panel/Importing";
-import { apiRest } from "@/lib/api";
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
+import useApi from "@/lib/useApi";
 
 export interface Choice {
   value?: string;
@@ -29,6 +29,7 @@ const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
   const [missingInfo, setMissingInfo] = useState<[string?]>([]);
   const { user } = useAppContext();
   const router = useRouter();
+  const { apiETK } = useApi().api;
 
   const checkMissingInfo = (geofileToCheck: ETKGeofile): [string?] => {
     const driversToCheck = ["CSV", "Excel"];
@@ -82,13 +83,15 @@ const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
 
     setStep("imported");
 
-    const coordinates = await apiRest.organization.getCentroidFromOrganization(
-      geofile.organization_id
-    );
+    try {
+      const {
+        data: { longitude, latitude },
+      } = await apiETK.get(
+        `/organization/${geofile.organization_id}/get-centroid-organization`
+      );
 
-    const { longitude, latitude } = coordinates;
-
-    onFileImported([longitude, latitude]);
+      onFileImported([longitude, latitude]);
+    } catch (error) {}
   };
 
   const onReset = () => {
@@ -98,10 +101,11 @@ const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
   };
 
   const importGeofile = async () => {
-    await apiRest.trees.importFromGeofile(
-      user.currentOrganization.id,
-      geofile.name
-    );
+    try {
+      await apiETK.post(
+        `/organization/${user.currentOrganization.id}/trees/import?name=${geofile.name}`
+      );
+    } catch (error) {}
     setStep("importing");
   };
 
@@ -157,7 +161,7 @@ const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
                 router.push("/imports/");
               }}
             >
-              {t("Import.Upload.importHistory")}
+              {t("components.Import.Upload.importHistory")}
             </Button>
           </Box>
           <Box mt={5}>

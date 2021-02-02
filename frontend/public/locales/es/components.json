@@ -167,10 +167,11 @@
     "Upload": {
       "boxContent": "Importa tus datos",
       "fileListHint": "Tipos de archivos aceptados:",
-      "importHistory": "See import history",
+      "importHistory": "Ver el historial de importaciones",
       "buttonCancelContent": "Cancelar",
       "buttonUploadContent": "Subir",
-      "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo"
+      "dropzoneText": "Arrastra tu archivo aquí\no haz clic para seleccionarlo",
+      "alreadyImported": "El archivo que intentas importar ya ha sido importado"
     }
   },
   "Register": {
