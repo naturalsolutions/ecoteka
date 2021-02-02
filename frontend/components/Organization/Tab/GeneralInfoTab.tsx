@@ -3,7 +3,7 @@ import React, { createRef, FC, useEffect, useRef, useState } from "react";
 import { Grid, Button } from "@material-ui/core";
 import Map from "@/components/Map/Map";
 import ETKMap from "@/components/Map/Map";
-import { apiRest } from "@/lib/api";
+import useApi from "@/lib/useApi";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import ETKFormOrganization, {
@@ -35,14 +35,19 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const mapRef = createRef<ETKMap>();
   const [isMapReady, setIsMapReady] = useState(false);
   const cache = useQueryCache();
+  const { apiETK } = useApi().api;
 
   const queryName = `working_area_${organization.id}`;
   const { status, data: workingArea, error, isFetching } = useQuery(
     queryName,
     async () => {
-      const data = await apiRest.organization.getWorkingArea(organization.id);
+      try {
+        const { data } = await apiETK.get(
+          `/organization/${organization.id}/working_area`
+        );
 
-      return data;
+        return data;
+      } catch (error) {}
     },
     {
       enabled: Boolean(organization),
