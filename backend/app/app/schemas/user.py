@@ -47,6 +47,7 @@ class UserDB(UserPrimaryKey, UserBase):
 
 class UserInvite(BaseModel):
     email: EmailStr
+    full_name: Optional[str]
     role: Optional[str]
 
 

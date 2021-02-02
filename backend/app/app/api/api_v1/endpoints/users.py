@@ -130,5 +130,5 @@ def update_user(
             status_code=404,
             detail="The user with this username does not exist in the system",
         )
-    user_in_db = user.update(db, db_obj=user, obj_in=user_in)
+    user_in_db = user.update(db, db_obj=user_in_db, obj_in=user_in)
     return user_in_db

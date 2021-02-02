@@ -4,6 +4,7 @@ import {
   Button,
   Chip,
   makeStyles,
+  Grid,
   MenuItem,
   Select,
   TextField,
@@ -205,42 +206,58 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
             {fields.map((member: any, index: number) => {
               let icon;
               return (
-                <Box key={member.id} flexDirection="row">
-                  <Box component="span" display="none">
-                    <TextField
-                      inputRef={register}
-                      name={`members[${index}].email`}
-                      defaultValue={member.email}
+                <Grid container key={member.id} spacing={1}>
+                  <Grid item>
+                    <Box component="span" display="none">
+                      <TextField
+                        inputRef={register}
+                        name={`members[${index}].email`}
+                        defaultValue={member.email}
+                      />
+                    </Box>
+                    <Chip
+                      icon={icon}
+                      label={member.email}
+                      onDelete={() => remove(index)}
+                      className={classes.chip}
                     />
-                  </Box>
-                  <Chip
-                    icon={icon}
-                    label={member.email}
-                    onDelete={() => remove(index)}
-                    className={classes.chip}
-                  />
-                  <Controller
-                    as={
-                      <Select
-                        name={`members[${index}].role`}
-                        defaultValue={member.role}
-                      >
-                        {roles.map((role, i) => {
-                          return (
-                            <MenuItem value={role.value} key={i}>
-                              {t(
-                                `components.Organization.Members.Table.roles.${role.value}`
-                              )}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    }
-                    name={`members[${index}].role`}
-                    defaultValue={member.role}
-                    control={control}
-                  />
-                </Box>
+                  </Grid>
+                  <Grid item xs>
+                    <TextField
+                      fullWidth
+                      inputRef={register}
+                      name={`members[${index}].full_name`}
+                      variant="outlined"
+                      size="small"
+                      placeholder={t(
+                        "components.Organization.Members.Table.headers.name"
+                      )}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Controller
+                      as={
+                        <Select
+                          name={`members[${index}].role`}
+                          defaultValue={member.role}
+                        >
+                          {roles.map((role, i) => {
+                            return (
+                              <MenuItem value={role.value} key={i}>
+                                {t(
+                                  `components.Organization.Members.Table.roles.${role.value}`
+                                )}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      }
+                      name={`members[${index}].role`}
+                      defaultValue={member.role}
+                      control={control}
+                    />
+                  </Grid>
+                </Grid>
               );
             })}
           </Box>
