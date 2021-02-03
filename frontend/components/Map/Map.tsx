@@ -1,5 +1,5 @@
 import { Component } from "react";
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "maplibre-gl";
 
 export interface ETKMapProps {
   styleSource: string;
