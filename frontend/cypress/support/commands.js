@@ -23,3 +23,41 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+import "cypress-localstorage-commands";
+
+function logLocalStorage() {
+  Object.keys(localStorage).forEach((key) => {
+    cy.log(key + ": " + localStorage[key]);
+  });
+}
+
+Cypress.Commands.add("login", () =>
+  cy
+    .request({
+      method: "POST",
+      url: "http://localhost:8000/api/v1/auth/login",
+      form: true,
+      body: {
+        username: Cypress.env("username"),
+        password: Cypress.env("password"),
+      },
+    })
+    .then((resp) => {
+      cy.setLocalStorage("ecoteka_access_token", resp.body.access_token);
+      cy.setLocalStorage("ecoteka_refresh_token", resp.body.refresh_token);
+      cy.request({
+        method: "GET",
+        url: "http://localhost:8000/api/v1/users/me",
+        headers: {
+          Authorization: `Bearer ${resp.body.access_token}`,
+        },
+      }).then((resp) => {
+        const user = {
+          ...resp.body,
+          currentOrganization: resp.body.organizations[0],
+        };
+        cy.setLocalStorage("user", JSON.stringify(user));
+      });
+    })
+);

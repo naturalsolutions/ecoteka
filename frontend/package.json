@@ -68,6 +68,7 @@
     "yup": "^0.31.0"
   },
   "devDependencies": {
-    "@hookform/devtools": "^2.2.1"
+    "@hookform/devtools": "^2.2.1",
+    "cypress-localstorage-commands": "^1.4.0"
   }
 }

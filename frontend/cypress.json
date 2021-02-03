@@ -1,7 +1,9 @@
 {
-    "baseUrl": "http://localhost:8000",
-    "env": {
-        "username": "admin@ecoteka.natural-solutions.eu",
-        "password": "password"
-    }
+  "baseUrl": "http://localhost:8000",
+  "env": {
+    "username": "admin@ecoteka.natural-solutions.eu",
+    "password": "password",
+    "auth_token_sorage": "ecoteka_access_token",
+    "refresh_token_storage": "ecoteka_refresh_token"
+  }
 }
