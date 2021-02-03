@@ -14,7 +14,7 @@ import ETKFormWorkingArea, {
 } from "@/components/Organization/WorkingArea/Form";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryCache } from "react-query";
-import { bbox } from "@turf/turf";
+import bbox from "@turf/bbox";
 
 const useStyles = makeStyles((theme) => ({
   map: {
