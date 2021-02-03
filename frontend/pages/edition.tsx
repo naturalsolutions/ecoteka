@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import dynamic from "next/dynamic";
-import { bbox } from "@turf/turf";
+import bbox from "@turf/bbox";
 import Fuse from "fuse.js";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
