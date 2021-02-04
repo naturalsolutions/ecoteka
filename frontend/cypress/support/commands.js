@@ -25,6 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import "cypress-localstorage-commands";
+import "@testing-library/cypress/add-commands";
 
 function logLocalStorage() {
   Object.keys(localStorage).forEach((key) => {

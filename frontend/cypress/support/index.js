@@ -13,7 +13,6 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
 import "./commands";
 
 // Cypress.on("uncaught:exception", (err, runnable) => {
@@ -21,6 +20,3 @@ import "./commands";
 //   // failing the test
 //   return false;
 // });
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
