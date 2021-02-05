@@ -9,6 +9,7 @@ import {
   Card,
   CardHeader,
   CardContent,
+  CardMedia,
   CircularProgress,
   InputAdornment,
   Typography,
@@ -37,6 +38,10 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  image: {
+    height: "250px",
+    backgroundSize: "contain",
+  }
 }));
 
 const BaseCard = ({ children }) => {
@@ -45,6 +50,11 @@ const BaseCard = ({ children }) => {
 
   return (
     <Card elevation={0} className={classes.baseCard}>
+      <CardMedia
+          image="/assets/password.svg"
+          title="Password"
+          className={classes.image}
+        />
       <CardHeader
         className={classes.baseCardTitle}
         title={t("pages.UsersSetPassword.title")}
