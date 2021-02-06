@@ -15,11 +15,13 @@ def create_mbtiles(db: Session, organization: Organization):
         geojson = f"/app/tiles/private/{organization.slug}.geojson"
         target_tmp = f"/app/tiles/private/{organization.slug}_tmp.mbtiles"
         target = target_tmp.replace("_tmp", "")
+        db.execute("update tree set properties = '{}' where properties = 'null'")
+        db.commit()
         sql = f"SELECT * FROM public.tree WHERE organization_id = {organization.id}"
         df = gpd.read_postgis(sql, db.bind)
 
         if not df.empty:
-            properties = df['properties'].apply(pd.Series)
+            properties = pd.DataFrame(df['properties'].tolist())
             properties.columns = [f"properties_{col}" for col in properties.columns]
             df = pd.concat([df, properties], axis=1)
             df.to_file(geojson, driver="GeoJSON")
@@ -30,6 +32,7 @@ def create_mbtiles(db: Session, organization: Organization):
             shutil.move(target_tmp, target)
             os.remove(geojson)
             db.execute(f"update tree set status = 'frozen' where organization_id = {organization.id}")
+            db.commit()
         else:
             os.remove(target)
     except:
