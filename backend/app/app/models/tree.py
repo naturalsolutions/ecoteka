@@ -1,9 +1,10 @@
-from sqlalchemy import Column, Integer, ForeignKey, inspect
+from sqlalchemy import Column, Integer, ForeignKey, Enum, inspect
 from sqlalchemy.dialects.postgresql import JSONB
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
 from sqlalchemy.orm import relationship
-from app.schemas.tree import Tree_xy
+from sqlalchemy.sql.sqltypes import Boolean
+from app.schemas.tree import Tree_xy, TreeStatus
 from app.db.base_class import Base
 
 
@@ -14,6 +15,11 @@ class Tree(Base):
     organization_id = Column(Integer, ForeignKey("organization.id"))
     geom = Column("geom", Geometry("POINT"))
     properties = Column(JSONB, nullable=True)
+    status = Column(
+        Enum(TreeStatus, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False,
+        default=TreeStatus.NEW.value,
+    )
     interventions = relationship("Intervention", back_populates="tree")
     health_assessments = relationship("HealthAssessment", back_populates="tree")
 

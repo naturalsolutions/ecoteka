@@ -5,7 +5,6 @@ Revises: 178242739b82
 Create Date: 2020-08-12 11:15:32.317531
 
 """
-import datetime
 from alembic import op
 import sqlalchemy as sa
 
