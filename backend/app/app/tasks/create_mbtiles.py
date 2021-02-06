@@ -3,6 +3,7 @@ import shutil
 import logging
 import sys
 
+import pandas as pd
 import geopandas as gpd
 from sqlalchemy.orm import Session
 
@@ -18,6 +19,9 @@ def create_mbtiles(db: Session, organization: Organization):
         df = gpd.read_postgis(sql, db.bind)
 
         if not df.empty:
+            properties = df['properties'].apply(pd.Series)
+            properties.columns = [f"properties_{col}" for col in properties.columns]
+            df = pd.concat([df, properties], axis=1)
             df.to_file(geojson, driver="GeoJSON")
             cmd = "/opt/tippecanoe/tippecanoe"
             os.system(
@@ -25,6 +29,7 @@ def create_mbtiles(db: Session, organization: Organization):
             )
             shutil.move(target_tmp, target)
             os.remove(geojson)
+            db.execute(f"update tree set status = 'frozen' where organization_id = {organization.id}")
         else:
             os.remove(target)
     except:

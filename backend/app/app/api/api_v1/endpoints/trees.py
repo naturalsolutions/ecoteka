@@ -154,7 +154,6 @@ async def add(
 
 
         tree_in_db = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info)
-        create_mbtiles_task.delay(organization_id)
         
         channel: Optional[WSManager] = request.scope.get("ws_manager")
 
@@ -218,8 +217,6 @@ async def bulk_delete(
             }
         )
 
-    create_mbtiles_task.delay(organization_id)
-
     return trees
 
 
@@ -232,8 +229,7 @@ def delete(
 ) -> Any:
     """Deletes a tree"""
     response = crud.crud_tree.tree.remove(db, id=tree_id).to_xy()
-    create_mbtiles_task.delay(organization_id)
-
+    
     return response
 
 @router.post("/{tree_id}/images")

@@ -5,7 +5,7 @@ import uuid
 import fiona
 from datetime import datetime
 import numpy as np
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Dict
 import geopandas as gpd
 from shapely.geometry import shape
 from shapely.geometry.geo import mapping
@@ -421,13 +421,13 @@ def update_member_role(
     return dict(user_in_db, role=role)
 
 
-@router.get("/{organization_id}/geojson/")
+@router.get("/{organization_id}/geojson", dependencies=[
+    Depends(authorization("organizations:get_geojson"))
+])
 def get_geojson(
-    *,
     organization_id: int,
-    auth=Depends(authorization("organizations:get_geojson")),
     db: Session = Depends(get_db),
-) -> Any:
+) -> Dict:
     """
     generate geojson from organization
     """
@@ -436,7 +436,7 @@ def get_geojson(
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
 
-    sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_in_db.id}"
+    sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_in_db.id} AND status NOT IN ('frozen', 'import', 'delete')"
     df = gpd.read_postgis(sql, db.bind)
     data = df.to_json()
     response = json.loads(data)
