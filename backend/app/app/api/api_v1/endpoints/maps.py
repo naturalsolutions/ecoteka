@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Dict, Optional
 from pydantic import Json
 from fastapi_jwt_auth import AuthJWT
 import json
@@ -10,9 +10,17 @@ from app import crud
 from app.api import get_db
 from app.core import (
     settings,
+    authorization,
+    set_policies
 )
 
 router = APIRouter()
+
+policies = {
+    "maps:get_filters": ["owner", "manager", "contributor", "reader"]
+}
+
+set_policies(policies)
 
 
 @router.get("/style/")
@@ -28,33 +36,6 @@ def generate_style(
     """
     with open(f"/app/app/assets/styles/{theme}.json") as style_json:
         style = json.load(style_json)
-
-        style["sources"]["osm"] = {
-            "type": "vector",
-            "tiles": [
-                f"{settings.TILES_SERVER}/osm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
-            ],
-            "minzoom": 0,
-            "maxzoom": 13,
-        }
-
-        style["layers"].insert(
-            len(style["layers"]),
-            {
-                "id": "osm",
-                "type": "circle",
-                "source": "osm",
-                "source-layer": "ecoteka-data",
-                "paint": {
-                    "circle-radius": {"base": 1.75, "stops": [[12, 2], [22, 180]]},
-                    "circle-color": [
-                        'case', ['boolean', ['feature-state', 'click'], False], 
-                        '#f44336', 
-                        "#6F8F72"
-                    ],
-                },
-            },
-        )
 
         style["sources"]["cadastre-france"] = {
             "type": "vector",
@@ -182,3 +163,25 @@ def generate_style(
             if conn is not None:
                 conn.close()
             return style
+
+
+@router.get("/filter", dependencies=[Depends(authorization("maps:get_filters"))])
+def get_filters(
+    organization_id: int,
+    db: Session = Depends(get_db)
+) -> Dict:
+    """
+    Get filters 
+    """
+    fields = ["canonicalName", "vernacularName"]
+    filter = {}
+
+    for field in fields:
+        rows = db.execute(f"""
+            select distinct properties ->> '{field}' as value
+            from tree
+            where organization_id = {organization_id}
+            order by value;""")
+        filter[field] = [dict(row) for row in rows if row[0] not in ["", None]]
+    
+    return filter
