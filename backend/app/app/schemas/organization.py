@@ -29,6 +29,7 @@ class Organization(OrganizationBase):
     total_members: Optional[int] = 0
     archived: bool = False
     archived_at: Optional[datetime]
+    current_user_role: Optional[str]
 
     class Config:
         orm_mode = True

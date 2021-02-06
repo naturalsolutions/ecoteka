@@ -154,7 +154,10 @@ def get_current_user_with_organizations(
     for row in db.execute(query, params=params):
         organization = crud_organization.get(db, id=row[0])
         if organization is not None and isinstance(organization, Organization):
-            organizations.append(organization.to_current_user_schema())
+            current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization.id))
+            organization_as_dict = organization.to_current_user_schema().__dict__
+            organization_as_dict["current_user_role"] = current_roles[0]
+            organizations.append(organization_as_dict)
 
     result = CurrentUser(
         **current_user.as_dict(),
