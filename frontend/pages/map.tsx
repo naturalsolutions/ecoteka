@@ -136,7 +136,7 @@ const EditionPage = ({}) => {
     "etk:map:viewstate",
     defaultViewState
   );
-  const [viewState, setViewState] = useState({ ...initialViewState });
+  const [viewState, setViewState] = useState();
   const [mode, setMode] = useState(new ViewMode());
   const [data, setData] = useState<any>(initialData);
   const [currentData, setCurrentData] = useState([]);
@@ -225,7 +225,7 @@ const EditionPage = ({}) => {
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
     renderSubLayers: (props) => {
-      if (currentData.length && viewState.zoom > 20) {
+      if (currentData.length) {
         return new GeoJsonLayer({
           ...props,
           data: props.data.filter(
@@ -274,16 +274,23 @@ const EditionPage = ({}) => {
       });
 
       if (status === 200) {
-        const viewport = new WebMercatorViewport(viewState);
+        const { viewport } = treesLayer.context;
+        const newViewState = viewport.fitBounds([
+          [bbox.xmin, bbox.ymin],
+          [bbox.xmax, bbox.ymax],
+        ]);
 
-        setViewState(
-          viewport.fitBounds([
-            [bbox.xmin, bbox.ymin],
-            [bbox.xmax, bbox.ymax],
-          ])
-        );
+        setInitialViewState({
+          longitude: newViewState.longitude,
+          latitude: newViewState.latitude,
+          zoom: newViewState.zoom,
+        });
+
+        setViewState(newViewState);
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getData = async (organizationId: number) => {
@@ -305,6 +312,7 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     getData(user.currentOrganization?.id);
+    setViewState({ ...initialViewState });
   }, []);
 
   const switchPanel = (panel) => {
@@ -398,12 +406,12 @@ const EditionPage = ({}) => {
         controller={true}
         layers={[treesLayer, editLayer]}
         onViewStateChange={(e) => {
-          setViewState(e.viewState);
           setInitialViewState({
             longitude: e.viewState.longitude,
             latitude: e.viewState.latitude,
             zoom: e.viewState.zoom,
           });
+          setViewState(e.viewState);
         }}
         onClick={(info) => {
           setSelection([info.object]);
