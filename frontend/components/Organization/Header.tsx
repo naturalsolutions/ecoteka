@@ -159,8 +159,8 @@ const Header: FC<HeaderProps> = (props) => {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       />
       <Box display="flex" flexDirection="row-reverse">
-        <Box m={1}>
-          <Can do="create" on="Trees">
+        <Can do="create" on="Trees">
+          <Box m={1}>
             <Button
               variant="contained"
               color="primary"
@@ -168,83 +168,87 @@ const Header: FC<HeaderProps> = (props) => {
             >
               {t("common.buttons.import")}
             </Button>
-          </Can>
-        </Box>
-        <Box m={1}>
-          <ButtonGroup
-            variant="contained"
-            color="primary"
-            ref={anchorRef}
-            aria-label="split button"
-          >
-            <Button
-              disabled={pending}
-              onClick={() => handleClick(selectedIndex)}
-            >
-              {`${t("common.buttons.export")} ${
-                exportFormats[selectedIndex].format
-              }`}
-              {pending && (
-                <CircularProgress
-                  size={24}
-                  className={classes.buttonProgress}
-                />
-              )}
-            </Button>
-            <Button
+          </Box>
+        </Can>
+        <Can do="read" on="Trees">
+          <Box m={1}>
+            <ButtonGroup
+              variant="contained"
               color="primary"
-              size="small"
-              aria-controls={open ? "split-button-menu" : undefined}
-              aria-expanded={open ? "true" : undefined}
-              aria-label="select export format"
-              aria-haspopup="menu"
-              onClick={handleToggle}
+              ref={anchorRef}
+              aria-label="split button"
             >
-              <ArrowDropDownIcon />
-            </Button>
-          </ButtonGroup>
-          <Popper
-            open={open}
-            anchorEl={anchorRef.current}
-            role={undefined}
-            transition
-            modifiers={{
-              flip: {
-                enabled: true,
-              },
-              preventOverflow: {
-                enabled: true,
-                boundariesElement: "window",
-              },
-            }}
-          >
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                style={{
-                  transformOrigin:
-                    placement === "bottom" ? "center top" : "center bottom",
-                }}
+              <Button
+                disabled={pending}
+                onClick={() => handleClick(selectedIndex)}
               >
-                <Paper>
-                  <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList id="split-button-menu">
-                      {exportFormats.map((option, index) => (
-                        <MenuItem
-                          key={option.format}
-                          selected={index === selectedIndex}
-                          onClick={(event) => handleMenuItemClick(event, index)}
-                        >
-                          {`${t("common.buttons.export")} ${option.format}`}
-                        </MenuItem>
-                      ))}
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
-        </Box>
+                {`${t("common.buttons.export")} ${
+                  exportFormats[selectedIndex].format
+                }`}
+                {pending && (
+                  <CircularProgress
+                    size={24}
+                    className={classes.buttonProgress}
+                  />
+                )}
+              </Button>
+              <Button
+                color="primary"
+                size="small"
+                aria-controls={open ? "split-button-menu" : undefined}
+                aria-expanded={open ? "true" : undefined}
+                aria-label="select export format"
+                aria-haspopup="menu"
+                onClick={handleToggle}
+              >
+                <ArrowDropDownIcon />
+              </Button>
+            </ButtonGroup>
+            <Popper
+              open={open}
+              anchorEl={anchorRef.current}
+              role={undefined}
+              transition
+              modifiers={{
+                flip: {
+                  enabled: true,
+                },
+                preventOverflow: {
+                  enabled: true,
+                  boundariesElement: "window",
+                },
+              }}
+            >
+              {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{
+                    transformOrigin:
+                      placement === "bottom" ? "center top" : "center bottom",
+                  }}
+                >
+                  <Paper>
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList id="split-button-menu">
+                        {exportFormats.map((option, index) => (
+                          <MenuItem
+                            key={option.format}
+                            selected={index === selectedIndex}
+                            onClick={(event) =>
+                              handleMenuItemClick(event, index)
+                            }
+                          >
+                            {`${t("common.buttons.export")} ${option.format}`}
+                          </MenuItem>
+                        ))}
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
+          </Box>
+        </Can>
       </Box>
     </Fragment>
   );
