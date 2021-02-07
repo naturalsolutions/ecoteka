@@ -19,8 +19,6 @@ const AppLayoutBase: FC = ({ children }) => {
   const dialog = useRef<ETKDialogActions>(null);
   const { user } = useAppContext();
 
-  console.log(user);
-
   const ability = buildAbilityFor(user?.currentOrganization?.current_user_role); //Just for test
 
   return (
