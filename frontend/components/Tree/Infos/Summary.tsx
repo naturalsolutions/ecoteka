@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Summary: FC<{ treeId: number; map: any }> = ({ treeId, map }) => {
+const Summary: FC<{ treeId: number }> = ({ treeId }) => {
   const { user } = useAppContext();
   const { api } = useApi();
   const { apiETK } = api;
@@ -85,7 +85,7 @@ const Summary: FC<{ treeId: number; map: any }> = ({ treeId, map }) => {
           color="primary"
           onClick={() => setIsExpanded(true)}
         >
-          {t("Tree.summary.moreDetails")}
+          {t("components.Tree.summary.moreDetails")}
         </Button>
       </Grid>
       <TreeExpanded

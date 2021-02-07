@@ -51,8 +51,8 @@ const ETKTreeForm: React.FC<{
 
   useEffect(() => {
     if (selection.length === 1) {
-      for (let key in selection[0].properties.properties) {
-        setValue(key, selection[0].properties.properties[key]);
+      for (let key in selection[0].properties) {
+        setValue(key, selection[0].properties[key]);
       }
     }
   }, [selection]);
@@ -73,6 +73,7 @@ const ETKTreeForm: React.FC<{
           properties,
         }
       );
+
       if (status === 200) {
         onSave(data);
         enqueueSnackbar("Arbre mis à jour avec succès", {
@@ -84,7 +85,7 @@ const ETKTreeForm: React.FC<{
         });
       }
     } catch (e) {
-      //
+      console.log(e);
     } finally {
       setSaving(false);
     }

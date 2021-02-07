@@ -38,7 +38,7 @@ export default function SignInPage() {
     setIsLoading(false);
 
     if (isOk) {
-      router.push("/edition/");
+      router.push("/map/");
     }
   };
 
@@ -92,7 +92,7 @@ export default function SignInPage() {
         </Button>
         <Box my={2}>
           <Typography variant="h6" align="center" color="textPrimary">
-          {t("SignIn.noAccount")}
+            {t("SignIn.noAccount")}
           </Typography>
         </Box>
         <Button

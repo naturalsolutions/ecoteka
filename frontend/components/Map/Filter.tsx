@@ -1,100 +1,109 @@
-import React, { FC, useEffect, useState, memo } from "react";
+import React, { FC, useState, memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import MapGL from "@urbica/react-map-gl";
-import { Grid, InputBase, makeStyles } from "@material-ui/core";
-import { Search } from "@material-ui/icons";
+import { TextField, Grid, makeStyles } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
+import useApi from "@/lib/useApi";
 
 export interface IMapFilter {
-  map: MapGL;
-  handleFilter: (query: string) => void;
-  filterQuery;
+  initialValue: object;
+  organizationId: number;
+  onChange?(values: object): void;
 }
 
-const useStyles = makeStyles(
-  ({ direction, spacing, transitions, breakpoints, palette, shape }) => {
-    return {
-      search: {
-        position: "relative",
-        marginRight: 8,
-        borderRadius: shape.borderRadius,
-        background:
-          palette.type === "dark"
-            ? palette.background.default
-            : palette.grey[200],
-        "&:hover": {
-          background:
-            palette.type === "dark"
-              ? palette.background.paper
-              : palette.grey[300],
-        },
-        marginLeft: 0,
-        width: "100%",
-        [breakpoints.up("sm")]: {
-          marginLeft: spacing(1),
-          width: "auto",
-        },
-      },
-      searchIconWrapper: {
-        width: spacing(6),
-        height: "100%",
-        position: "absolute",
-        pointerEvents: "none",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      },
-      searchIcon: {
-        color: palette.text.primary,
-      },
-      inputRoot: {
-        color: palette.text.primary,
-        width: "100%",
-      },
-      inputInput: {
-        borderRadius: 4,
-        paddingTop: spacing(1),
-        paddingRight: spacing(direction === "rtl" ? 5 : 1),
-        paddingBottom: spacing(1),
-        paddingLeft: spacing(direction === "rtl" ? 1 : 5),
-        transition: transitions.create("width"),
-        width: "100%",
-        [breakpoints.up("sm")]: {
-          width: 300,
-        },
-      },
-    };
-  }
-);
+const useStyles = makeStyles({
+  autocomplete: {
+    width: 400,
+  },
+});
 
-const MapFilter: FC<IMapFilter> = ({ map, handleFilter, filterQuery }) => {
+const defaultValue = {
+  canonicalName: [],
+  vernacularName: [],
+};
+
+const MapFilter: FC<IMapFilter> = ({
+  initialValue,
+  organizationId,
+  onChange,
+}) => {
   const { t } = useTranslation("components");
   const classes = useStyles();
-  const [query, setQuery] = useState(filterQuery);
+  const { apiETK } = useApi().api;
+  const [filter, setFilter] = useState(defaultValue);
+  const [value, setValue] = useState(initialValue || defaultValue);
 
-  const handleChange = (event) => {
-    setQuery(event.target.value);
-    handleFilter(event.target.value);
+  async function getData() {
+    try {
+      const { status, data } = await apiETK.get("/maps/filter", {
+        params: {
+          organization_id: organizationId,
+        },
+      });
+
+      if (status === 200) {
+        setFilter(data);
+      }
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const handleValue = (key, newValue) => {
+    const data = {
+      ...value,
+      [key]: newValue,
+    };
+
+    setValue(data);
+
+    if (onChange) {
+      const newData = { ...data };
+
+      for (let key in newData) {
+        newData[key] = newData[key].map((v) => v.value);
+      }
+
+      onChange(newData);
+    }
   };
 
   return (
     <Grid container direction="column" spacing={3}>
       <Grid item>
-        <Grid item>
-          <div className={classes.search}>
-            <div className={classes.searchIconWrapper}>
-              <Search className={classes.searchIcon} />
-            </div>
-            <InputBase
-              placeholder="Nom commun ou scientifique de l'arbre"
-              value={query}
-              onChange={handleChange}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-            />
-          </div>
-        </Grid>
+        <Autocomplete
+          className={classes.autocomplete}
+          freeSolo
+          multiple
+          selectOnFocus
+          clearOnBlur
+          options={filter.canonicalName}
+          getOptionLabel={(option) => option.value}
+          fullWidth
+          value={value.canonicalName}
+          renderInput={(params) => (
+            <TextField {...params} label="Canonical Name" variant="outlined" />
+          )}
+          onChange={(e, v) => handleValue("canonicalName", v)}
+        />
+      </Grid>
+      <Grid item>
+        <Autocomplete
+          className={classes.autocomplete}
+          freeSolo
+          multiple
+          selectOnFocus
+          clearOnBlur
+          options={filter.vernacularName}
+          getOptionLabel={(option) => option.value}
+          fullWidth
+          value={value.vernacularName}
+          renderInput={(params) => (
+            <TextField {...params} label="Vernacular Name" variant="outlined" />
+          )}
+          onChange={(e, v) => handleValue("vernacularName", v)}
+        />
       </Grid>
     </Grid>
   );

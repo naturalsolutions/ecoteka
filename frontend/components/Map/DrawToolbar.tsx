@@ -3,10 +3,7 @@ import { makeStyles } from "@material-ui/core";
 import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab";
 import { useTranslation } from "react-i18next";
 
-export type TMapDrawToolbarMode =
-  | "simple_select"
-  | "draw_point"
-  | "draw_polygon";
+export type TMapDrawToolbarMode = "selection" | "drawPoint" | "drawPolygon";
 
 export interface IMapDrawToolbarProps {
   onChange?(mode: TMapDrawToolbarMode): void;
@@ -20,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MapDrawToolbar: FC<IMapDrawToolbarProps> = ({ onChange }) => {
   const classes = useStyles();
-  const [mode, setMode] = useState<TMapDrawToolbarMode>("simple_select");
+  const [mode, setMode] = useState<TMapDrawToolbarMode>("selection");
   const { t } = useTranslation("components");
 
   const handleOnChange = (e, value: TMapDrawToolbarMode) => {
@@ -41,14 +38,14 @@ const MapDrawToolbar: FC<IMapDrawToolbarProps> = ({ onChange }) => {
       exclusive
       onChange={handleOnChange}
     >
-      <ToggleButton value="simple_select">
-        {t("MapDrawToolbar.selection")}
+      <ToggleButton value="selection">
+        {t("components.MapDrawToolbar.selection")}
       </ToggleButton>
-      <ToggleButton value="draw_point">
-        {t("MapDrawToolbar.draw_point")}
+      <ToggleButton value="drawPoint">
+        {t("components.MapDrawToolbar.draw_point")}
       </ToggleButton>
-      <ToggleButton value="draw_polygon" disabled>
-        {t("MapDrawToolbar.draw_polygon")}
+      <ToggleButton value="drawPolygon" disabled>
+        {t("components.MapDrawToolbar.draw_polygon")}
       </ToggleButton>
     </ToggleButtonGroup>
   );

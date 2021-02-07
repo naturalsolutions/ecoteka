@@ -47,7 +47,7 @@ export default function IndexPage() {
     const mapTheme = `${dark ? "dark" : "light"}`;
 
     if (user) {
-      router.push("/edition/");
+      router.push("/map/");
     } else {
       const map = mapRef.current.map;
 
