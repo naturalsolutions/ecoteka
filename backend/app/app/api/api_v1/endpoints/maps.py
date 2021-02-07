@@ -120,10 +120,13 @@ def get_bbox(
 
     rows = db.execute(f"""
         SELECT 
-            ST_XMin(geom) as xmin, ST_YMin(geom) as ymin, ST_XMax(geom) as xmax, ST_YMax(geom) as ymax
+            ST_XMIN(ST_EXTENT(geom)) as xmin, 
+            ST_YMIN(ST_EXTENT(geom)) as ymin, 
+            ST_XMAX(ST_EXTENT(geom)) as xmax, 
+            ST_YMAX(ST_EXTENT(geom)) as ymax
         FROM tree 
         WHERE organization_id = {organization_id}
-        AND status IN ('new', 'edit', 'frozen');
+        AND status NOT IN ('delete', 'import');
     """)
 
     return rows.first()

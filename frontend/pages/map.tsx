@@ -19,7 +19,7 @@ import MapSearchCity from "@/components/Map/SearchCity";
 import ImportPanel from "@/components/Import/Panel/Index";
 import getConfig from "next/config";
 
-import { FlyToInterpolator } from "@deck.gl/core";
+import { FlyToInterpolator, WebMercatorViewport } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { MVTLayer } from "@deck.gl/geo-layers";
@@ -274,17 +274,14 @@ const EditionPage = ({}) => {
       });
 
       if (status === 200) {
-        const { viewport } = treesLayer.context;
-        const { longitude, latitude, zoom } = viewport.fitBounds([
-          [bbox.xmin, bbox.ymin],
-          [bbox.ymax, bbox.ymax],
-        ]);
+        const viewport = new WebMercatorViewport(viewState);
 
-        setViewState({
-          latitude,
-          longitude,
-          zoom,
-        });
+        setViewState(
+          viewport.fitBounds([
+            [bbox.xmin, bbox.ymin],
+            [bbox.xmax, bbox.ymax],
+          ])
+        );
       }
     } catch (e) {}
   };
