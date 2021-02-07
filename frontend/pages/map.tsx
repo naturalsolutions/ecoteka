@@ -24,6 +24,7 @@ import DeckGL from "@deck.gl/react";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import {
+  SelectionLayer,
   EditableGeoJsonLayer,
   DrawPointMode,
   ViewMode,
@@ -216,18 +217,21 @@ const EditionPage = ({}) => {
       getLineColor: [filter],
     },
     pickable: true,
+    autoHighlight: true,
     getRadius: 1,
     radiusScale: 10,
     radiusMinPixels: 0.25,
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
     renderSubLayers: (props) => {
-      if (currentData.length) {
+      if (currentData.length && viewState.zoom > 20) {
+        const newData = props.data.filter(
+          (d) => !currentData.includes(d.properties.id)
+        );
+
         return new GeoJsonLayer({
           ...props,
-          data: props.data.filter(
-            (d) => !currentData.includes(d.properties.id)
-          ),
+          data: newData,
         });
       }
 
@@ -238,7 +242,6 @@ const EditionPage = ({}) => {
   const editLayer = new EditableGeoJsonLayer({
     id: "edit",
     data: data,
-    selectedFeatureIndexes,
     pickable: true,
     getRadius: 1,
     radiusScale: 10,
@@ -248,6 +251,18 @@ const EditionPage = ({}) => {
     getLineColor: [34, 139, 34],
     getFillColor: [34, 139, 34],
     onEdit: handleOnEditLayer,
+  });
+
+  const selectionLayer = new SelectionLayer({
+    selectionType: "rectangle",
+    onSelect: (a) => {
+      console.log(a);
+    },
+    layerIds: ["edit", "trees"],
+    getTentativeFillColor: () => [255, 0, 255, 100],
+    getTentativeLineColor: () => [0, 0, 255, 255],
+    getTentativeLineDashArray: () => [0, 0],
+    lineWidthMinPixels: 1,
   });
 
   const getData = async (organizationId: number) => {
@@ -358,14 +373,8 @@ const EditionPage = ({}) => {
     >
       <DeckGL
         viewState={viewState}
-        controller={{
-          doubleClickZoom: !editionMode,
-        }}
-        layers={
-          editionMode
-            ? [treesLayer, editLayer]
-            : [osmLayer, treesLayer, editLayer]
-        }
+        controller={true}
+        layers={[treesLayer, editLayer, selectionLayer]}
         onViewStateChange={(e) => {
           setViewState(e.viewState);
           setInitialViewState({
