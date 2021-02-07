@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import ETKImportHistory from "@/components/Import/History/Index";
+import ImportHistory from "@/components/Import/History/Index";
 import { useAppContext } from "@/providers/AppContext";
 import useAPI from "@/lib/useApi";
 import AppLayoutGeneral from "@/components/AppLayout/General";
@@ -16,9 +16,10 @@ export default function ImportsPage() {
           apiETK.delete(
             `/organization/${user.currentOrganization.id}/geo_files/${name}`
           );
-          setRows(rows.filter((row) => row.name !== name));
         } catch (error) {}
       }
+
+      setRows(rows.filter((row) => !selected.includes(row.name)));
     } catch (e) {}
   };
 
@@ -40,7 +41,7 @@ export default function ImportsPage() {
 
   return (
     <AppLayoutGeneral>
-      <ETKImportHistory rows={rows} onDelete={onDelete} />
+      <ImportHistory rows={rows} onDelete={onDelete} />
     </AppLayoutGeneral>
   );
 }
