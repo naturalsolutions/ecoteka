@@ -21,6 +21,7 @@ import getConfig from "next/config";
 
 import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
+import { GeoJsonLayer } from "@deck.gl/layers";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import {
   EditableGeoJsonLayer,
@@ -112,6 +113,8 @@ const initialData = {
 
 const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
+  const { apiUrl } = publicRuntimeConfig;
+
   const modes = {
     selection: ViewMode,
     drawPoint: DrawPointMode,
@@ -134,14 +137,48 @@ const EditionPage = ({}) => {
   const [viewState, setViewState] = useState({ ...initialViewState });
   const [mode, setMode] = useState(new ViewMode());
   const [data, setData] = useState<any>(initialData);
+  const [currentData, setCurrentData] = useState([]);
   const [filter, setFilter] = useState({});
   const [selection, setSelection] = useState([]);
   const [selectedFeatureIndexes] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
 
+  const handleOnEditLayer = async ({ updatedData, editType, editContext }) => {
+    if (editType === "addFeature") {
+      try {
+        const organizationId = user.currentOrganization.id;
+        const feature = updatedData.features[editContext.featureIndexes[0]];
+        const [x, y] = feature.geometry.coordinates;
+        const payload = { x, y };
+        const url = `/organization/${organizationId}/trees`;
+
+        const { status, data: tree } = await apiETK.post(url, payload);
+
+        if (status === 200) {
+          feature.properties = tree;
+          updatedData.features[editContext.featureIndexes[0]] = feature;
+          setData(updatedData);
+          setDrawerLeftComponent(
+            <TreeForm
+              selection={[feature]}
+              onSave={(newTree) => {
+                console.log(newTree);
+              }}
+            />
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const osmLayer = new MVTLayer({
     id: "osm",
-    data: `http://localhost:8000/tiles/osm/{z}/{x}/{y}.pbf?scope=public`,
+    data: `${apiUrl.replace(
+      "/api/v1",
+      ""
+    )}/tiles/osm/{z}/{x}/{y}.pbf?scope=public`,
     minZoom: 0,
     maxZoom: 13,
     getLineColor: [192, 192, 192],
@@ -151,7 +188,9 @@ const EditionPage = ({}) => {
 
   const treesLayer = new MVTLayer({
     id: "trees",
-    data: `http://localhost:8000/tiles/${user?.currentOrganization.slug}/{z}/{x}/{y}.pbf?scope=private&token=${token}`,
+    data: `${apiUrl.replace("/api/v1", "")}/tiles/${
+      user?.currentOrganization.slug
+    }/{z}/{x}/{y}.pbf?scope=private&token=${token}`,
     minZoom: 0,
     maxZoom: 12,
     getLineColor: (d) => {
@@ -159,14 +198,14 @@ const EditionPage = ({}) => {
         d.properties?.properties_canonicalName
       )
         ? [255, 0, 0]
-        : [0, 0, 255];
+        : [34, 139, 34];
     },
     getFillColor: (d) => {
       return filter.canonicalName?.includes(
         d.properties?.properties_canonicalName
       )
         ? [255, 0, 0]
-        : [0, 0, 255];
+        : [34, 139, 34];
     },
     updateTriggers: {
       getFillColor: [filter],
@@ -178,6 +217,12 @@ const EditionPage = ({}) => {
     radiusMinPixels: 0.25,
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
+    renderSubLayers: (props) => {
+      return new GeoJsonLayer({
+        ...props,
+        data: props.data.filter((d) => !currentData.includes(d.properties.id)),
+      });
+    },
   });
 
   const editLayer = new EditableGeoJsonLayer({
@@ -190,37 +235,9 @@ const EditionPage = ({}) => {
     radiusMinPixels: 0.25,
     lineWidthMinPixels: 1,
     mode,
-    getLineColor: [0, 0, 255],
-    getFillColor: [0, 0, 255],
-    onEdit: async ({ updatedData, editType, editContext }) => {
-      if (editType === "addFeature") {
-        try {
-          const organizationId = user.currentOrganization.id;
-          const feature = updatedData.features[editContext.featureIndexes[0]];
-          const [x, y] = feature.geometry.coordinates;
-          const payload = { x, y };
-          const url = `/organization/${organizationId}/trees`;
-
-          const { status, data: tree } = await apiETK.post(url, payload);
-
-          if (status === 200) {
-            feature.properties = tree;
-            updatedData.features[editContext.featureIndexes[0]] = feature;
-            setData(updatedData);
-            setDrawerLeftComponent(
-              <TreeForm
-                selection={[feature]}
-                onSave={(newTree) => {
-                  console.log(newTree);
-                }}
-              />
-            );
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    },
+    getLineColor: [34, 139, 34],
+    getFillColor: [34, 139, 34],
+    onEdit: handleOnEditLayer,
   });
 
   const getData = async (organizationId: number) => {
@@ -229,8 +246,13 @@ const EditionPage = ({}) => {
       const { data: geoData, status } = await apiETK.get(url);
 
       if (status === 200) {
+        setCurrentData(geoData.features.map((f) => f.properties.id));
+
+        geoData.features = geoData.features.filter(
+          (f) => f.properties.status !== "delete"
+        );
+
         setData(geoData);
-        render();
       }
     } catch (e) {}
   };
