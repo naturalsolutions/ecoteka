@@ -19,6 +19,7 @@ import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import SnackAlert, { SnackAlertProps } from "@/components/Feedback/SnackAlert";
+import Can from "@/components/Can";
 
 interface HeaderProps {}
 
@@ -159,13 +160,15 @@ const Header: FC<HeaderProps> = (props) => {
       />
       <Box display="flex" flexDirection="row-reverse">
         <Box m={1}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => router.push("/edition/?panel=import")}
-          >
-            {t("common.buttons.import")}
-          </Button>
+          <Can do="create" on="Trees">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => router.push("/edition/?panel=import")}
+            >
+              {t("common.buttons.import")}
+            </Button>
+          </Can>
         </Box>
         <Box m={1}>
           <ButtonGroup
