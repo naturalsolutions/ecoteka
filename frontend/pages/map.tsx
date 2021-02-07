@@ -31,6 +31,7 @@ import {
   DrawPolygonMode,
 } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
+import Organization from "./organization/[id]";
 
 const useStyles = makeStyles(
   ({ direction, spacing, transitions, breakpoints, palette, shape }) => {
@@ -225,13 +226,11 @@ const EditionPage = ({}) => {
     getPosition: (d) => d.coordinates,
     renderSubLayers: (props) => {
       if (currentData.length && viewState.zoom > 20) {
-        const newData = props.data.filter(
-          (d) => !currentData.includes(d.properties.id)
-        );
-
         return new GeoJsonLayer({
           ...props,
-          data: newData,
+          data: props.data.filter(
+            (d) => !currentData.includes(d.properties.id)
+          ),
         });
       }
 
@@ -243,6 +242,7 @@ const EditionPage = ({}) => {
     id: "edit",
     data: data,
     pickable: true,
+    autoHighlight: true,
     getRadius: 1,
     radiusScale: 10,
     radiusMinPixels: 0.25,
@@ -264,6 +264,30 @@ const EditionPage = ({}) => {
     getTentativeLineDashArray: () => [0, 0],
     lineWidthMinPixels: 1,
   });
+
+  const fitToBounds = async (organizationId: number) => {
+    try {
+      const { status, data: bbox } = await apiETK.get(`/maps/bbox`, {
+        params: {
+          organization_id: organizationId,
+        },
+      });
+
+      if (status === 200) {
+        const { viewport } = treesLayer.context;
+        const { longitude, latitude, zoom } = viewport.fitBounds([
+          [bbox.xmin, bbox.ymin],
+          [bbox.ymax, bbox.ymax],
+        ]);
+
+        setViewState({
+          latitude,
+          longitude,
+          zoom,
+        });
+      }
+    } catch (e) {}
+  };
 
   const getData = async (organizationId: number) => {
     try {
@@ -354,6 +378,7 @@ const EditionPage = ({}) => {
       case "geolocate":
         break;
       case "fit_to_bounds":
+        fitToBounds(user.currentOrganization.id);
         break;
       case "import":
         return router.push("/map/?panel=import");
@@ -374,7 +399,7 @@ const EditionPage = ({}) => {
       <DeckGL
         viewState={viewState}
         controller={true}
-        layers={[treesLayer, editLayer, selectionLayer]}
+        layers={[treesLayer, editLayer]}
         onViewStateChange={(e) => {
           setViewState(e.viewState);
           setInitialViewState({

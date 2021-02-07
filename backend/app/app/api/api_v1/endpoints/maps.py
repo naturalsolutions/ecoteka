@@ -1,15 +1,11 @@
-import logging
-from typing import Dict, Optional
-from pydantic import Json
-from fastapi_jwt_auth import AuthJWT
+from typing import Dict, Optional, List
 import json
-import sqlite3
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app import crud
+from shapely import wkt
+
 from app.api import get_db
 from app.core import (
-    settings,
     authorization,
     set_policies
 )
@@ -17,7 +13,8 @@ from app.core import (
 router = APIRouter()
 
 policies = {
-    "maps:get_filters": ["owner", "manager", "contributor", "reader"]
+    "maps:get_filters": ["owner", "manager", "contributor", "reader"],
+    "maps:get_bbox": ["owner", "manager", "contributor", "reader"]
 }
 
 set_policies(policies)
@@ -111,3 +108,22 @@ def get_filters(
         filter[field] = [dict(row) for row in rows if row[0] not in ["", None]]
     
     return filter
+
+@router.get("/bbox", dependencies=[Depends(authorization("maps:get_bbox"))])
+def get_bbox(
+    organization_id: int,
+    db: Session = Depends(get_db)
+) -> List:
+    """
+    Get the bounding box of all active trees within a organization
+    """
+
+    rows = db.execute(f"""
+        SELECT 
+            ST_XMin(geom) as xmin, ST_YMin(geom) as ymin, ST_XMax(geom) as xmax, ST_YMax(geom) as ymax
+        FROM tree 
+        WHERE organization_id = {organization_id}
+        AND status IN ('new', 'edit', 'frozen');
+    """)
+
+    return rows.first()
