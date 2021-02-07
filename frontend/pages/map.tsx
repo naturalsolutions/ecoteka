@@ -181,6 +181,10 @@ const EditionPage = ({}) => {
     )}/tiles/osm/{z}/{x}/{y}.pbf?scope=public`,
     minZoom: 0,
     maxZoom: 13,
+    getRadius: 1,
+    radiusScale: 10,
+    radiusMinPixels: 0.25,
+    lineWidthMinPixels: 1,
     getLineColor: [192, 192, 192],
     getFillColor: [140, 170, 180],
     pickable: true,
@@ -218,10 +222,16 @@ const EditionPage = ({}) => {
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
     renderSubLayers: (props) => {
-      return new GeoJsonLayer({
-        ...props,
-        data: props.data.filter((d) => !currentData.includes(d.properties.id)),
-      });
+      if (currentData.length) {
+        return new GeoJsonLayer({
+          ...props,
+          data: props.data.filter(
+            (d) => !currentData.includes(d.properties.id)
+          ),
+        });
+      }
+
+      return new GeoJsonLayer(props);
     },
   });
 
