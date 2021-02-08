@@ -356,41 +356,53 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
                   </Can>
                   <TableCell scope="row">{row.email}</TableCell>
                   <TableCell>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      variant="outlined"
-                      value={privateRows[index].full_name}
-                      onChange={(e) => {
-                        if (privateRows[index].full_name !== e.target.value) {
-                          const newRows = [...privateRows];
+                    <Can do="manage" on="Members">
+                      <TextField
+                        fullWidth
+                        size="small"
+                        variant="outlined"
+                        value={privateRows[index].full_name}
+                        onChange={(e) => {
+                          if (privateRows[index].full_name !== e.target.value) {
+                            const newRows = [...privateRows];
 
-                          newRows[index].full_name = e.target.value;
-                          setPrivateRows(newRows);
-                        }
-                      }}
-                      onBlur={() => {
-                        handleUserUpdate(row);
-                      }}
-                    />
+                            newRows[index].full_name = e.target.value;
+                            setPrivateRows(newRows);
+                          }
+                        }}
+                        onBlur={() => {
+                          handleUserUpdate(row);
+                        }}
+                      />
+                    </Can>
+                    <Can not do="manage" on="Members">
+                      {row.full_name}
+                    </Can>
                   </TableCell>
                   <TableCell>
-                    {(() => {
-                      switch (row.role) {
-                        case "admin":
-                        case "owner":
-                          return t(
-                            `components.Organization.Members.Table.roles.${row.role}`
-                          );
-                        default:
-                          return (
-                            <SelectRenderer
-                              value={row.role}
-                              handleChange={(e) => handleUserRoleChange(row, e)}
-                            />
-                          );
-                      }
-                    })()}
+                    <Can do="manage" on="Members">
+                      {(() => {
+                        switch (row.role) {
+                          case "admin":
+                          case "owner":
+                            return t(
+                              `components.Organization.Members.Table.roles.${row.role}`
+                            );
+                          default:
+                            return (
+                              <SelectRenderer
+                                value={row.role}
+                                handleChange={(e) =>
+                                  handleUserRoleChange(row, e)
+                                }
+                              />
+                            );
+                        }
+                      })()}
+                    </Can>
+                    <Can not do="manage" on="Members">
+                      {row.role}
+                    </Can>
                   </TableCell>
                 </TableRow>
               );
