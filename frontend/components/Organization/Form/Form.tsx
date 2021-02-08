@@ -5,6 +5,7 @@ import useETKForm from "@/components/Form/useForm";
 import useEtkOrganizationSchema from "@/components/Organization/Form/Schema";
 import useAPI from "@/lib/useApi";
 import { IOrganization } from "@/index.d";
+import { useAppContext } from "@/providers/AppContext";
 
 export type ETKFormOrganizationActions = {
   submit: () => Promise<any>;
@@ -29,6 +30,7 @@ const ETKFormOrganization = forwardRef<
   const { api } = useAPI();
   const { apiETK } = api;
   const isNew = !Boolean(organization?.id);
+  const { refetchUserData } = useAppContext();
 
   // Why a useEffect to make setValue works ?
   useEffect(() => {
@@ -58,6 +60,7 @@ const ETKFormOrganization = forwardRef<
               : await apiETK.patch(`/organization/${organization.id}`, data);
             if (response.status === 200) {
               resolve(response);
+              refetchUserData();
             }
           } catch (e) {
             reject(e);
