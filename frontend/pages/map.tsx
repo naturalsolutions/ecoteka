@@ -17,6 +17,7 @@ import MapModeSwitch from "@/components/Map/ModeSwitch";
 import MapDrawToolbar from "@/components/Map/DrawToolbar";
 import MapSearchCity from "@/components/Map/SearchCity";
 import ImportPanel from "@/components/Import/Panel/Index";
+import InterventionForm from "@/components/Interventions/Form";
 import getConfig from "next/config";
 
 import { FlyToInterpolator, WebMercatorViewport } from "@deck.gl/core";
@@ -199,29 +200,19 @@ const EditionPage = ({}) => {
     }/{z}/{x}/{y}.pbf?scope=private&token=${token}`,
     minZoom: 0,
     maxZoom: 12,
-    getLineColor: (d) => {
-      return filter.canonicalName?.includes(
-        d.properties?.properties_canonicalName
-      )
-        ? [255, 0, 0]
-        : [34, 139, 34];
-    },
-    getFillColor: (d) => {
-      return filter.canonicalName?.includes(
-        d.properties?.properties_canonicalName
-      )
-        ? [255, 0, 0]
-        : [34, 139, 34];
-    },
+    getLineColor: [34, 169, 54],
+    getFillColor: [34, 139, 34],
     updateTriggers: {
       getFillColor: [filter],
       getLineColor: [filter],
     },
     pickable: true,
     autoHighlight: true,
-    getRadius: 1,
-    radiusScale: 10,
-    radiusMinPixels: 0.25,
+    pointRadiusMinPixels: 3,
+    pointRadiusMaxPixels: 10,
+    pointRadiusScale: 2,
+    minRadius: 10,
+    radiusMinPixels: 0.5,
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
     renderSubLayers: (props) => {
@@ -265,7 +256,7 @@ const EditionPage = ({}) => {
     lineWidthMinPixels: 1,
   });
 
-  const fitToBounds = async (organizationId: number) => {
+  const fitToBounds = async (organizationId: number, viewport) => {
     try {
       const { status, data: bbox } = await apiETK.get(`/maps/bbox`, {
         params: {
@@ -274,7 +265,6 @@ const EditionPage = ({}) => {
       });
 
       if (status === 200) {
-        const { viewport } = treesLayer.context;
         const newViewState = viewport.fitBounds([
           [bbox.xmin, bbox.ymin],
           [bbox.xmax, bbox.ymax],
@@ -288,9 +278,7 @@ const EditionPage = ({}) => {
 
         setViewState(newViewState);
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const getData = async (organizationId: number) => {
@@ -310,6 +298,16 @@ const EditionPage = ({}) => {
     } catch (e) {}
   };
 
+  const handleOnFileImported = (coordinates) => {
+    setViewState({
+      longitude: coordinates[0],
+      latitude: coordinates[1],
+      zoom: 15,
+      transitionDuration: 1200,
+      transitionInterpolator: new FlyToInterpolator(),
+    });
+  };
+
   useEffect(() => {
     getData(user.currentOrganization?.id);
     setViewState({ ...initialViewState });
@@ -318,25 +316,19 @@ const EditionPage = ({}) => {
   const switchPanel = (panel) => {
     switch (panel) {
       case "start":
-        setDrawerLeftComponent(<PanelStartGeneralInfo />);
-        break;
+        return setDrawerLeftComponent(<PanelStartGeneralInfo />);
       case "info":
-        setDrawerLeftComponent(
+        return setDrawerLeftComponent(
           <TreeSummary treeId={Number(router.query.tree)} />
         );
-        break;
       case "import":
-        setDrawerLeftComponent(<ImportPanel onFileImported={() => {}} />);
-        break;
-      case "intervention":
-        const Intervention = dynamic(
-          () => import("@/components/Interventions/Form")
+        return setDrawerLeftComponent(
+          <ImportPanel onFileImported={handleOnFileImported} />
         );
-        setDrawerLeftComponent(<Intervention />);
-        break;
+      case "intervention":
+        return setDrawerLeftComponent(<InterventionForm />);
       default:
-        setDrawerLeftComponent(<PanelStartGeneralInfo />);
-        break;
+        return setDrawerLeftComponent(<PanelStartGeneralInfo />);
     }
   };
 
@@ -383,7 +375,7 @@ const EditionPage = ({}) => {
       case "geolocate":
         break;
       case "fit_to_bounds":
-        fitToBounds(user.currentOrganization.id);
+        fitToBounds(user.currentOrganization.id, treesLayer.context.viewport);
         break;
       case "import":
         return router.push("/map/?panel=import");
@@ -392,6 +384,7 @@ const EditionPage = ({}) => {
 
   const handleOnDrawerLeftClose = () => {
     setDrawerLeftComponent(null);
+    router.push("/map");
   };
 
   return (
