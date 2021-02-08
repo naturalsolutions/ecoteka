@@ -10,11 +10,7 @@ export interface IMapFilter {
   onChange?(values: object): void;
 }
 
-const useStyles = makeStyles({
-  autocomplete: {
-    width: 400,
-  },
-});
+const useStyles = makeStyles({});
 
 const defaultValue = {
   canonicalName: [],

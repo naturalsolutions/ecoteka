@@ -14,7 +14,7 @@ from app.models.ws import WSManager
 from fastapi.responses import StreamingResponse
 import geopandas as gpd
 import imghdr
-import aiofiles
+from app.tasks.create_mbtiles import update_mbtiles
 
 router = APIRouter()
 policies = {
@@ -136,8 +136,8 @@ def get(
 @router.post("", response_model=schemas.tree.Tree_xy)
 async def add(
     organization_id: int,
-    request: Request,
     *,
+    request: Request,
     auth=Depends(authorization("trees:add")),
     db: Session = Depends(get_db),
     tree: schemas.TreePost,
@@ -152,8 +152,9 @@ async def add(
             organization_id=organization_id,
         )
 
-
         tree_in_db = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info)
+        update_mbtiles(db, organization_id)
+        
         
         channel: Optional[WSManager] = request.scope.get("ws_manager")
 

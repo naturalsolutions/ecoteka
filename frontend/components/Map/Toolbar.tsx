@@ -16,8 +16,7 @@ export type TMapToolbarAction =
   | "filter"
   | "toggle_layers"
   | "fit_to_bounds"
-  | "geolocate"
-  | "import";
+  | "geolocate";
 
 export interface IMapToolbarProps {
   onChange?(action: TMapToolbarAction): void;
@@ -25,13 +24,6 @@ export interface IMapToolbarProps {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    transition: "background-color 0.3s ease",
-    background: fade(theme.palette.background.default, 0.3),
-    borderLeft: "1px solid #ccc",
-    borderLeftColor: fade(theme.palette.background.default, 0.7),
-    "&:hover": {
-      background: fade(theme.palette.background.default, 0.5),
-    },
     position: "absolute",
     bottom: 0,
     right: 0,
@@ -59,58 +51,40 @@ const MapToolbar: FC<IMapToolbarProps> = ({ onChange }) => {
       justify="flex-start"
       alignContent="center"
     >
-      <Grid item>
-        <IconButton onClick={() => handleActionClick("zoom_in")}>
-          <AddIcon />
-        </IconButton>
-      </Grid>
-      <Grid item>
-        <IconButton onClick={() => handleActionClick("zoom_out")}>
-          <RemoveIcon />
-        </IconButton>
-      </Grid>
-      <Grid item>
-        <Divider />
-      </Grid>
       {user && (
         <Grid item>
-          <IconButton onClick={() => handleActionClick("filter")}>
+          <IconButton size="small" onClick={() => handleActionClick("filter")}>
             <MdFilterList />
           </IconButton>
         </Grid>
       )}
       {user && (
         <Grid item>
-          <IconButton onClick={() => handleActionClick("toggle_layers")}>
+          <IconButton
+            size="small"
+            onClick={() => handleActionClick("toggle_layers")}
+          >
             <LayersIcon />
           </IconButton>
         </Grid>
       )}
-      <Grid item>
-        <Divider />
-      </Grid>
       {user && (
         <Grid item>
-          <IconButton onClick={() => handleActionClick("fit_to_bounds")}>
+          <IconButton
+            size="small"
+            onClick={() => handleActionClick("fit_to_bounds")}
+          >
             <CenterFocusStrongIcon />
           </IconButton>
         </Grid>
       )}
       {user && (
         <Grid item>
-          <IconButton onClick={() => handleActionClick("geolocate")}>
+          <IconButton
+            size="small"
+            onClick={() => handleActionClick("geolocate")}
+          >
             <MyLocationIcon />
-          </IconButton>
-        </Grid>
-      )}
-      <Grid item xs />
-      <Grid item>
-        <Divider />
-      </Grid>
-      {user && (
-        <Grid item>
-          <IconButton onClick={() => handleActionClick("import")}>
-            <CloudDownloadIcon />
           </IconButton>
         </Grid>
       )}

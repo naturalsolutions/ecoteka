@@ -7,11 +7,12 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import useETKForm from "@/components/Form/useForm";
-import useETKTreeSchema from "@/components/Tree/Schema";
+import useForm from "@/components/Form/useForm";
+import useTreeSchema from "@/components/Tree/Schema";
 import { useSnackbar } from "notistack";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
+import { ITree } from "@/index";
 
 const useStyles = makeStyles((theme) => ({
   grid: {},
@@ -24,16 +25,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ETKTreeForm: React.FC<{
-  selection: {
-    id: number;
-    properties: { id: number; properties: {} };
-  }[];
+const TreeForm: React.FC<{
+  tree: ITree;
   onSave?(record: object): void;
-}> = ({ selection, onSave }) => {
+}> = ({ tree, onSave }) => {
   const { t } = useTranslation(["common", "components"]);
   const classes = useStyles();
-  const schema = useETKTreeSchema();
+  const schema = useTreeSchema();
   const { api } = useApi();
   const { apiETK } = api;
   const { enqueueSnackbar } = useSnackbar();
@@ -44,31 +42,28 @@ const ETKTreeForm: React.FC<{
     isProtected: false,
     isTreeOfInterest: false,
   };
-  const { fields, setValue, getValues, control } = useETKForm({
+  const { fields, setValue, getValues } = useForm({
     schema,
     defaultValues,
   });
 
   useEffect(() => {
-    if (selection.length === 1) {
-      for (let key in selection[0].properties) {
-        setValue(key, selection[0].properties[key]);
-      }
+    for (let key in tree.properties) {
+      setValue(key, tree[key]);
     }
-  }, [selection]);
+  }, [tree]);
 
   const handlerOnSave = async () => {
     try {
       setSaving(true);
 
-      if (!selection.length) return;
+      if (!tree) return;
 
       const properties = getValues();
       const organizationId = user.currentOrganization.id;
-      const treeId = selection[0].properties.id;
 
       const { data, status } = await apiETK.put(
-        `/organization/${organizationId}/trees/${treeId}`,
+        `/organization/${organizationId}/trees/${tree.id}`,
         {
           properties,
         }
@@ -179,4 +174,4 @@ const ETKTreeForm: React.FC<{
   );
 };
 
-export default ETKTreeForm;
+export default TreeForm;

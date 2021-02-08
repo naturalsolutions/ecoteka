@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { Grid, makeStyles, Box } from "@material-ui/core";
+import { Grid, makeStyles, Box, Button, IconButton } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import MenuOpenIcon from "@material-ui/icons/MenuOpen";
+import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import TreeForm from "@/components/Tree/Form";
-import dynamic from "next/dynamic";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
 import MapLayers from "@/components/Map/Layers";
 import MapFilter from "@/components/Map/Filter";
@@ -18,12 +22,11 @@ import MapDrawToolbar from "@/components/Map/DrawToolbar";
 import MapSearchCity from "@/components/Map/SearchCity";
 import ImportPanel from "@/components/Import/Panel/Index";
 import InterventionForm from "@/components/Interventions/Form";
+import BackupIcon from "@material-ui/icons/Backup";
 import getConfig from "next/config";
-import qs from "qs";
 
 import { FlyToInterpolator, WebMercatorViewport } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
-import { GeoJsonLayer } from "@deck.gl/layers";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import {
   SelectionLayer,
@@ -119,12 +122,6 @@ const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
   const [time, setTime] = useState(Date.now());
-
-  const modes = {
-    selection: ViewMode,
-    drawPoint: DrawPointMode,
-    drawPolygon: DrawPolygonMode,
-  };
   const classes = useStyles();
   const router = useRouter();
   const { user } = useAppContext();
@@ -133,7 +130,6 @@ const EditionPage = ({}) => {
   const [drawerLeftComponent, setDrawerLeftComponent] = useState(
     <PanelStartGeneralInfo />
   );
-  const [drawerRightComponent, setDrawerRightComponent] = useState(null);
   const [token] = useLocalStorage("ecoteka_access_token");
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
@@ -141,41 +137,35 @@ const EditionPage = ({}) => {
   );
   const [viewState, setViewState] = useState();
   const [mode, setMode] = useState(new ViewMode());
-  const [data, setData] = useState<any>(initialData);
-  const [currentData, setCurrentData] = useState([]);
   const [filter, setFilter] = useState({});
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
   const [layers, setLayers] = useState([]);
   const [activeTree, setActiveTree] = useState(Number(router.query?.tree));
 
-  const handleOnEditLayer = async ({ updatedData, editType, editContext }) => {
-    if (editType === "addFeature") {
-      try {
-        const organizationId = user.currentOrganization.id;
-        const feature = updatedData.features[editContext.featureIndexes[0]];
-        const [x, y] = feature.geometry.coordinates;
-        const payload = { x, y };
-        const url = `/organization/${organizationId}/trees`;
+  const createTree = async (x, y) => {
+    try {
+      const organizationId = user.currentOrganization.id;
+      const payload = { x, y };
+      const url = `/organization/${organizationId}/trees`;
 
-        const { status, data: tree } = await apiETK.post(url, payload);
+      const { status, data: tree } = await apiETK.post(url, payload);
 
-        if (status === 200) {
-          feature.properties = tree;
-          updatedData.features[editContext.featureIndexes[0]] = feature;
-          setData(updatedData);
-          setDrawerLeftComponent(
-            <TreeForm
-              selection={[feature]}
-              onSave={(newTree) => {
-                console.log(newTree);
-              }}
-            />
-          );
-        }
-      } catch (error) {
-        console.log(error);
+      if (status === 200) {
+        setTime(Date.now());
+        setDrawerLeftComponent(
+          <TreeForm
+            tree={tree}
+            onSave={(newTree) => {
+              console.log(newTree);
+            }}
+          />
+        );
+        setActiveTree(tree.id);
+        renderLayers();
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -205,29 +195,29 @@ const EditionPage = ({}) => {
     maxZoom: 12,
     getLineColor: (d) => {
       if (activeTree === d.properties.id) {
-        return [255, 255, 0];
+        return [255, 255, 0, 100];
       }
 
       if (selection.includes(d.properties.id)) {
-        return [255, 0, 0];
+        return [255, 0, 0, 100];
       }
 
-      return [34, 169, 54];
+      return [34, 169, 54, 100];
     },
     getFillColor: (d) => {
       if (activeTree === d.properties.id) {
-        return [255, 255, 0];
+        return [255, 255, 0, 100];
       }
 
       if (router.query?.tree === d.properties.id) {
-        return [255, 255, 0];
+        return [255, 255, 0, 100];
       }
 
       if (selection.includes(d.properties.id)) {
-        return [255, 0, 0];
+        return [255, 0, 0, 100];
       }
 
-      return [34, 139, 34];
+      return [34, 139, 34, 100];
     },
     updateTriggers: {
       getFillColor: [activeTree],
@@ -244,21 +234,6 @@ const EditionPage = ({}) => {
     getPosition: (d) => d.coordinates,
   });
 
-  const editLayer = new EditableGeoJsonLayer({
-    id: "edit",
-    data: data,
-    pickable: true,
-    autoHighlight: true,
-    getRadius: 1,
-    radiusScale: 10,
-    radiusMinPixels: 0.25,
-    lineWidthMinPixels: 1,
-    mode,
-    getLineColor: [34, 139, 34],
-    getFillColor: [34, 139, 34],
-    onEdit: handleOnEditLayer,
-  });
-
   const selectionLayer = new SelectionLayer({
     selectionType: "rectangle",
     onSelect: ({ pickingInfos }) => {
@@ -272,7 +247,7 @@ const EditionPage = ({}) => {
     lineWidthMinPixels: 1,
   });
 
-  const fitToBounds = async (organizationId: number, viewport) => {
+  const fitToBounds = async (organizationId: number) => {
     try {
       const { status, data: bbox } = await apiETK.get(`/maps/bbox`, {
         params: {
@@ -281,7 +256,7 @@ const EditionPage = ({}) => {
       });
 
       if (status === 200) {
-        const newViewState = viewport.fitBounds([
+        const newViewState = layers[0].context.viewport.fitBounds([
           [bbox.xmin, bbox.ymin],
           [bbox.xmax, bbox.ymax],
         ]);
@@ -297,23 +272,6 @@ const EditionPage = ({}) => {
     } catch (e) {}
   };
 
-  const getData = async (organizationId: number) => {
-    try {
-      const url = `/organization/${organizationId}/geojson`;
-      const { data: geoData, status } = await apiETK.get(url);
-
-      if (status === 200) {
-        setCurrentData(geoData.features.map((f) => f.properties.id));
-
-        geoData.features = geoData.features.filter(
-          (f) => f.properties.status !== "delete"
-        );
-
-        setData(geoData);
-      }
-    } catch (e) {}
-  };
-
   const handleOnFileImported = (coordinates) => {
     setViewState({
       longitude: coordinates[0],
@@ -325,7 +283,6 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
-    getData(user.currentOrganization?.id);
     setViewState({ ...initialViewState });
     renderLayers();
   }, []);
@@ -335,15 +292,29 @@ const EditionPage = ({}) => {
       case "start":
         return setDrawerLeftComponent(<PanelStartGeneralInfo />);
       case "info":
-        return setDrawerLeftComponent(
-          <TreeSummary treeId={Number(router.query.tree)} />
-        );
+        return setDrawerLeftComponent(<TreeSummary treeId={activeTree} />);
       case "import":
         return setDrawerLeftComponent(
           <ImportPanel onFileImported={handleOnFileImported} />
         );
       case "intervention":
         return setDrawerLeftComponent(<InterventionForm />);
+      case "filter":
+        const initialValue = Object.keys(filter).reduce((a, v) => {
+          a[v] = filter[v].map((f) => {
+            return { value: f };
+          });
+
+          return a;
+        }, {});
+
+        return setDrawerLeftComponent(
+          <MapFilter
+            initialValue={initialValue}
+            organizationId={user?.currentOrganization?.id}
+            onChange={handleOnFilter}
+          />
+        );
       default:
         return setDrawerLeftComponent(<PanelStartGeneralInfo />);
     }
@@ -365,37 +336,11 @@ const EditionPage = ({}) => {
 
   const handleOnMapToolbarChange = (action: TMapToolbarAction) => {
     switch (action) {
-      case "zoom_in":
-        return setViewState({ ...viewState, zoom: viewState.zoom + 1 });
-      case "zoom_out":
-        return setViewState({ ...viewState, zoom: viewState.zoom - 1 });
-      case "toggle_layers":
-        break;
-      case "filter":
-        const initialValue = Object.keys(filter).reduce((a, v) => {
-          a[v] = filter[v].map((f) => {
-            return { value: f };
-          });
-
-          return a;
-        }, {});
-
-        return setDrawerRightComponent(
-          drawerRightComponent ? null : (
-            <MapFilter
-              initialValue={initialValue}
-              organizationId={user?.currentOrganization?.id}
-              onChange={handleOnFilter}
-            />
-          )
-        );
       case "geolocate":
         break;
       case "fit_to_bounds":
-        fitToBounds(user.currentOrganization.id, treesLayer.context.viewport);
+        fitToBounds(user.currentOrganization.id);
         break;
-      case "import":
-        return router.push("/map/?panel=import");
     }
   };
 
@@ -405,20 +350,12 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapModeSwitch = () => {
-    if (editionMode) {
-      setMode(new modes.selection());
-    }
-
     setEditionMode(!editionMode);
     renderLayers();
   };
 
   const renderLayers = () => {
-    setLayers(
-      !editionMode
-        ? [treesLayer, editLayer, selectionLayer]
-        : [osmLayer, treesLayer, editLayer]
-    );
+    setLayers([treesLayer]);
   };
 
   useEffect(() => {
@@ -427,7 +364,6 @@ const EditionPage = ({}) => {
 
   return (
     <AppLayoutCarto
-      drawerRightComponent={drawerRightComponent}
       drawerLeftComponent={drawerLeftComponent}
       onDrawerLeftClose={handleOnDrawerLeftClose}
       onMapToolbarChange={handleOnMapToolbarChange}
@@ -445,9 +381,21 @@ const EditionPage = ({}) => {
           setViewState(e.viewState);
         }}
         onClick={(info) => {
-          setActiveTree(info.object?.properties?.id);
+          if (mode === "drawPoint") {
+            const [x, y] = info.coordinate;
 
-          if (["trees", "edit"].includes(info.layer?.id)) {
+            return createTree(x, y);
+          }
+          if (editionMode) return;
+          if (
+            info.object?.properties?.id === activeTree ||
+            !info.object?.properties?.id
+          ) {
+            setActiveTree();
+            router.push("/map");
+            setDrawerLeftComponent();
+          } else {
+            setActiveTree(info.object?.properties?.id);
             router.push(`/map/?panel=info&tree=${info.object?.properties.id}`);
           }
         }}
@@ -457,20 +405,40 @@ const EditionPage = ({}) => {
         />
       </DeckGL>
       <Box className={classes.toolbar} p={1}>
-        <Grid container spacing={2} justify="center" alignItems="center">
+        <Grid container spacing={2} justify="center">
+          <Grid item>
+            <Grid container direction="column">
+              <IconButton
+                onClick={() => {
+                  !drawerLeftComponent
+                    ? switchPanel(router.query.panel)
+                    : setDrawerLeftComponent();
+                }}
+              >
+                {drawerLeftComponent ? <CloseIcon /> : <MenuOpenIcon />}
+              </IconButton>
+              <IconButton onClick={() => router.push("/map?panel=filter")}>
+                <FilterListIcon />
+              </IconButton>
+              <IconButton onClick={() => switchPanel("import")}>
+                <BackupIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
           <Grid item>
             <MapModeSwitch
               initValue={editionMode ? "edition" : "analysis"}
               onChange={handleOnMapModeSwitch}
             />
           </Grid>
+
           <Grid item xs></Grid>
           {editionMode && (
             <Grid item>
               <MapDrawToolbar
                 onChange={(newMode) => {
                   if (newMode) {
-                    setMode(new modes[newMode]());
+                    setMode(newMode);
                   }
                 }}
               />
