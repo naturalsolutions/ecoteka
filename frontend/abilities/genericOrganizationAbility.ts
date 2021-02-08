@@ -7,6 +7,7 @@ type Subjects =
   | "Interventions"
   | "Trees"
   | "Dashboard"
+  | "Organization"
   | "all";
 
 export type AppAbility = Ability<[Actions, Subjects]>;
@@ -17,18 +18,22 @@ export default function defineRulesFor(role: string) {
 
   switch (role) {
     case "admin":
+    case "owner":
       can("manage", "all");
       break;
     case "manager":
       can("manage", ["Trees", "Interventions", "Teams"]);
       can(["create", "read", "update"], "Members");
       can("read", "Dashboard");
+      can("read", "Organization");
       break;
     case "contributor":
-      can(["create", "read", "update"], ["Trees", "Interventions", "Teams"]);
+      can(["create", "read", "update"], ["Trees", "Interventions"]);
       cannot("delete", ["Trees", "Interventions", "Teams"]);
+      can("read", "Teams");
       can("read", "Dashboard");
       cannot("manage", "Members");
+      can("read", "Organization");
       break;
     case "reader":
       can("read", "all");

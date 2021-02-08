@@ -6,6 +6,7 @@ import useAPI from "@/lib/useApi";
 import { AbilityContext } from "@/components/Can";
 import { buildAbilityFor } from "@/abilities/genericOrganizationAbility";
 import AppLayoutGeneral from "@/components/AppLayout/General";
+import { subject } from "@casl/ability";
 
 interface OrganizationProps {}
 
@@ -28,7 +29,7 @@ const Organization: FC<OrganizationProps> = (props) => {
       } = await apiETK.get(`/organization/${id}/path`);
 
       if (organizationResponseStatus === 200) {
-        setOrganization(organizationData);
+        setOrganization(subject("Organization", organizationData));
       }
 
       if (parentsResponseStatus === 200 && parentsData.length > 0) {

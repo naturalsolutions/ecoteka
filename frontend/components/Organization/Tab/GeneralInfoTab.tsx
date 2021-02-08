@@ -15,6 +15,7 @@ import ETKFormWorkingArea, {
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryCache } from "react-query";
 import bbox from "@turf/bbox";
+import Can from "@/components/Can";
 
 const useStyles = makeStyles((theme) => ({
   map: {
@@ -153,15 +154,17 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
       <Grid item xs={6}>
         {organization?.name}
         <div>
-          <Button
-            color="secondary"
-            variant="contained"
-            onClick={() => {
-              openForm();
-            }}
-          >
-            Edit
-          </Button>
+          <Can do="update" on="Organization">
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={() => {
+                openForm();
+              }}
+            >
+              Edit
+            </Button>
+          </Can>
         </div>
       </Grid>
       <Grid item xs={6} className={classes.map}>
@@ -172,15 +175,17 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
             setIsMapReady(true);
           }}
         />
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => {
-            openArea();
-          }}
-        >
-          Edit map
-        </Button>
+        <Can do="update" on="Organization">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              openArea();
+            }}
+          >
+            Edit map
+          </Button>
+        </Can>
       </Grid>
     </Grid>
   );
