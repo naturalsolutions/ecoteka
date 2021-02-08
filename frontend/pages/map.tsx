@@ -136,7 +136,7 @@ const EditionPage = ({}) => {
     defaultViewState
   );
   const [viewState, setViewState] = useState();
-  const [mode, setMode] = useState(new ViewMode());
+  const [mode, setMode] = useState("selection");
   const [filter, setFilter] = useState({});
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
@@ -349,18 +349,23 @@ const EditionPage = ({}) => {
     router.push("/map");
   };
 
-  const handleOnMapModeSwitch = () => {
-    setEditionMode(!editionMode);
-    renderLayers();
+  const handleOnMapModeSwitch = (newMode) => {
+    if (newMode === "analysis") {
+      setSelection([]);
+    }
+
+    if (newMode) {
+      setEditionMode(newMode === "edition");
+    }
   };
 
   const renderLayers = () => {
-    setLayers([treesLayer]);
+    setLayers(editionMode ? [treesLayer, selectionLayer] : [treesLayer]);
   };
 
   useEffect(() => {
     renderLayers();
-  }, [activeTree]);
+  }, [activeTree, editionMode, selection]);
 
   return (
     <AppLayoutCarto
