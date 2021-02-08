@@ -19,6 +19,7 @@ import MapSearchCity from "@/components/Map/SearchCity";
 import ImportPanel from "@/components/Import/Panel/Index";
 import InterventionForm from "@/components/Interventions/Form";
 import getConfig from "next/config";
+import qs from "qs";
 
 import { FlyToInterpolator, WebMercatorViewport } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
@@ -117,6 +118,7 @@ const initialData = {
 const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
+  const [time, setTime] = useState(Date.now());
 
   const modes = {
     selection: ViewMode,
@@ -143,8 +145,9 @@ const EditionPage = ({}) => {
   const [currentData, setCurrentData] = useState([]);
   const [filter, setFilter] = useState({});
   const [selection, setSelection] = useState([]);
-  const [selectedFeatureIndexes] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
+  const [layers, setLayers] = useState([]);
+  const [activeTree, setActiveTree] = useState(Number(router.query?.tree));
 
   const handleOnEditLayer = async ({ updatedData, editType, editContext }) => {
     if (editType === "addFeature") {
@@ -197,14 +200,38 @@ const EditionPage = ({}) => {
     id: "trees",
     data: `${apiUrl.replace("/api/v1", "")}/tiles/${
       user?.currentOrganization.slug
-    }/{z}/{x}/{y}.pbf?scope=private&token=${token}`,
+    }/{z}/{x}/{y}.pbf?scope=private&token=${token}&dt=${time}`,
     minZoom: 0,
     maxZoom: 12,
-    getLineColor: [34, 169, 54],
-    getFillColor: [34, 139, 34],
+    getLineColor: (d) => {
+      if (activeTree === d.properties.id) {
+        return [255, 255, 0];
+      }
+
+      if (selection.includes(d.properties.id)) {
+        return [255, 0, 0];
+      }
+
+      return [34, 169, 54];
+    },
+    getFillColor: (d) => {
+      if (activeTree === d.properties.id) {
+        return [255, 255, 0];
+      }
+
+      if (router.query?.tree === d.properties.id) {
+        return [255, 255, 0];
+      }
+
+      if (selection.includes(d.properties.id)) {
+        return [255, 0, 0];
+      }
+
+      return [34, 139, 34];
+    },
     updateTriggers: {
-      getFillColor: [filter],
-      getLineColor: [filter],
+      getFillColor: [activeTree],
+      getLineColor: [activeTree],
     },
     pickable: true,
     autoHighlight: true,
@@ -215,18 +242,6 @@ const EditionPage = ({}) => {
     radiusMinPixels: 0.5,
     lineWidthMinPixels: 1,
     getPosition: (d) => d.coordinates,
-    renderSubLayers: (props) => {
-      if (currentData.length) {
-        return new GeoJsonLayer({
-          ...props,
-          data: props.data.filter(
-            (d) => !currentData.includes(d.properties.id)
-          ),
-        });
-      }
-
-      return new GeoJsonLayer(props);
-    },
   });
 
   const editLayer = new EditableGeoJsonLayer({
@@ -246,8 +261,9 @@ const EditionPage = ({}) => {
 
   const selectionLayer = new SelectionLayer({
     selectionType: "rectangle",
-    onSelect: (a) => {
-      console.log(a);
+    onSelect: ({ pickingInfos }) => {
+      const ids = pickingInfos.map((o) => o.object.properties.id);
+      setSelection(ids);
     },
     layerIds: ["edit", "trees"],
     getTentativeFillColor: () => [255, 0, 255, 100],
@@ -311,6 +327,7 @@ const EditionPage = ({}) => {
   useEffect(() => {
     getData(user.currentOrganization?.id);
     setViewState({ ...initialViewState });
+    renderLayers();
   }, []);
 
   const switchPanel = (panel) => {
@@ -387,6 +404,27 @@ const EditionPage = ({}) => {
     router.push("/map");
   };
 
+  const handleOnMapModeSwitch = () => {
+    if (editionMode) {
+      setMode(new modes.selection());
+    }
+
+    setEditionMode(!editionMode);
+    renderLayers();
+  };
+
+  const renderLayers = () => {
+    setLayers(
+      !editionMode
+        ? [treesLayer, editLayer, selectionLayer]
+        : [osmLayer, treesLayer, editLayer]
+    );
+  };
+
+  useEffect(() => {
+    renderLayers();
+  }, [activeTree]);
+
   return (
     <AppLayoutCarto
       drawerRightComponent={drawerRightComponent}
@@ -397,7 +435,7 @@ const EditionPage = ({}) => {
       <DeckGL
         viewState={viewState}
         controller={true}
-        layers={[treesLayer, editLayer]}
+        layers={layers}
         onViewStateChange={(e) => {
           setInitialViewState({
             longitude: e.viewState.longitude,
@@ -407,7 +445,7 @@ const EditionPage = ({}) => {
           setViewState(e.viewState);
         }}
         onClick={(info) => {
-          setSelection([info.object]);
+          setActiveTree(info.object?.properties?.id);
 
           if (["trees", "edit"].includes(info.layer?.id)) {
             router.push(`/map/?panel=info&tree=${info.object?.properties.id}`);
@@ -423,13 +461,7 @@ const EditionPage = ({}) => {
           <Grid item>
             <MapModeSwitch
               initValue={editionMode ? "edition" : "analysis"}
-              onChange={() => {
-                if (editionMode) {
-                  setMode(new modes.selection());
-                }
-
-                setEditionMode(!editionMode);
-              }}
+              onChange={handleOnMapModeSwitch}
             />
           </Grid>
           <Grid item xs></Grid>

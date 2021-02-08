@@ -45,7 +45,9 @@ const InterventionsTable: FC<{
               router.push(`/map/?panel=intervention&tree=${tree.id}`);
             }}
           >
-            {t("Intervention.interventionsTable.requestAnItervention")}
+            {t(
+              "components.Intervention.interventionsTable.requestAnItervention"
+            )}
           </Button>
         </caption>
         <TableHead>
