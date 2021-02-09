@@ -75,7 +75,10 @@ const EditionPage = ({}) => {
     canonicalName: [],
     vernacularName: [],
   });
-  const [filterOpts, setFilterOpts] = useState({});
+  const [filterOpts, setFilterOpts] = useState({
+    canonicalName: [],
+    vernacularName: [],
+  });
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
   const [layers, setLayers] = useState([]);
