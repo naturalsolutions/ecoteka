@@ -575,11 +575,13 @@
   },
   "MapModeSwitch": {
     "analysis": "Análisis",
-    "edition": "Edición"
+    "edition": "Edición",
+    "import": "Importar"
   },
   "MapDrawToolbar": {
     "selection": "Selección",
     "draw_point": "+ Árbol",
-    "draw_polygon": "+ Estación"
+    "draw_polygon": "+ Estación",
+    "delete": "Eliminar"
   }
 }

@@ -53,23 +53,6 @@ const MapToolbar: FC<IMapToolbarProps> = ({ onChange }) => {
     >
       {user && (
         <Grid item>
-          <IconButton size="small" onClick={() => handleActionClick("filter")}>
-            <MdFilterList />
-          </IconButton>
-        </Grid>
-      )}
-      {user && (
-        <Grid item>
-          <IconButton
-            size="small"
-            onClick={() => handleActionClick("toggle_layers")}
-          >
-            <LayersIcon />
-          </IconButton>
-        </Grid>
-      )}
-      {user && (
-        <Grid item>
           <IconButton
             size="small"
             onClick={() => handleActionClick("fit_to_bounds")}

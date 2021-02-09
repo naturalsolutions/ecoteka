@@ -14,7 +14,7 @@ from app.models.ws import WSManager
 from fastapi.responses import StreamingResponse
 import geopandas as gpd
 import imghdr
-from app.tasks.create_mbtiles import update_mbtiles
+from app.tasks.create_mbtiles import update_mbtiles, create_mbtiles
 
 router = APIRouter()
 policies = {
@@ -191,7 +191,6 @@ def update(
     properties = {k: v for (k, v) in payload.properties.items() if v is not ""}
     tree_in_db.properties = properties
     db.commit()
-    create_mbtiles_task.delay(tree_in_db.organization_id)
     return tree_in_db.to_xy()
 
 
@@ -206,6 +205,11 @@ async def bulk_delete(
     """Bulk delete"""
     for tree_id in trees:
         crud.crud_tree.tree.remove(db, id=tree_id)
+
+    organization_in_db = crud.crud_organization.organization.get(db, id=organization_id)
+
+    if organization_in_db:
+        create_mbtiles(db, organization_in_db)
 
     channel = request.scope.get("ws_manager")
 

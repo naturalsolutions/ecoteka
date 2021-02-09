@@ -3,6 +3,7 @@ import shutil
 import logging
 import sys
 
+from typing import List
 import pandas as pd
 import geopandas as gpd
 from sqlalchemy.orm import Session
@@ -40,7 +41,7 @@ def create_mbtiles(db: Session, organization: Organization):
         logging.error(sys.exc_info()[0])
         raise
 
-def update_mbtiles(db: Session, organization_id: int):
+def update_mbtiles(db: Session, organization_id: int, filter: List[int] = []):
     try:
         organization = crud_organization.organization.get(db, id=organization_id)
         geojson = f"/app/tiles/private/{organization.id}.geojson"

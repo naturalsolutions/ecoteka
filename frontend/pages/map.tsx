@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Grid, makeStyles, Box, Button, IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
-import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
@@ -25,97 +23,30 @@ import InterventionForm from "@/components/Interventions/Form";
 import BackupIcon from "@material-ui/icons/Backup";
 import getConfig from "next/config";
 
-import { FlyToInterpolator, WebMercatorViewport } from "@deck.gl/core";
+import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
 import { MVTLayer } from "@deck.gl/geo-layers";
-import {
-  SelectionLayer,
-  EditableGeoJsonLayer,
-  DrawPointMode,
-  ViewMode,
-  DrawPolygonMode,
-} from "nebula.gl";
+import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
 import Organization from "./organization/[id]";
 
-const useStyles = makeStyles(
-  ({ direction, spacing, transitions, breakpoints, palette, shape }) => {
-    return {
-      root: {
-        height: "100%",
-        position: "relative",
-      },
-      toolbar: {
-        position: "absolute",
-        top: 10,
-        left: 0,
-        width: "calc(100% - 50px)",
-      },
-      search: {
-        position: "relative",
-        marginRight: 8,
-        borderRadius: shape.borderRadius,
-        background:
-          palette.type === "dark"
-            ? palette.background.default
-            : palette.grey[200],
-        "&:hover": {
-          background:
-            palette.type === "dark"
-              ? palette.background.paper
-              : palette.grey[300],
-        },
-        marginLeft: 0,
-        width: "100%",
-        [breakpoints.up("sm")]: {
-          marginLeft: spacing(1),
-          width: "auto",
-        },
-      },
-      searchIconWrapper: {
-        width: spacing(6),
-        height: "100%",
-        position: "absolute",
-        pointerEvents: "none",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      },
-      searchIcon: {
-        color: palette.text.primary,
-      },
-      inputRoot: {
-        color: palette.text.primary,
-        width: "100%",
-      },
-      inputInput: {
-        borderRadius: 4,
-        paddingTop: spacing(1),
-        paddingRight: spacing(direction === "rtl" ? 5 : 1),
-        paddingBottom: spacing(1),
-        paddingLeft: spacing(direction === "rtl" ? 1 : 5),
-        transition: transitions.create("width"),
-        width: "100%",
-        [breakpoints.up("sm")]: {
-          width: 120,
-          "&:focus": {
-            width: 200,
-          },
-        },
-      },
-    };
-  }
-);
+const useStyles = makeStyles({
+  toolbar: {
+    position: "absolute",
+    top: 10,
+    left: 0,
+    width: "calc(100% - 50px)",
+    pointerEvents: "none",
+  },
+  actionsBar: {
+    pointerEvents: "fill",
+  },
+});
 
 const defaultViewState = {
   longitude: 2.54,
   latitude: 46.7,
   zoom: 5,
-};
-
-const initialData = {
-  type: "FeatureCollection",
-  features: [],
 };
 
 const EditionPage = ({}) => {
@@ -162,7 +93,6 @@ const EditionPage = ({}) => {
           />
         );
         setActiveTree(tree.id);
-        renderLayers();
       }
     } catch (error) {
       console.log(error);
@@ -181,6 +111,9 @@ const EditionPage = ({}) => {
     radiusScale: 10,
     radiusMinPixels: 0.25,
     lineWidthMinPixels: 1,
+    pointRadiusMinPixels: 1,
+    pointRadiusMaxPixels: 10,
+    pointRadiusScale: 2,
     getLineColor: [192, 192, 192],
     getFillColor: [140, 170, 180],
     pickable: true,
@@ -194,34 +127,30 @@ const EditionPage = ({}) => {
     minZoom: 0,
     maxZoom: 12,
     getLineColor: (d) => {
-      if (activeTree === d.properties.id) {
-        return [255, 255, 0, 100];
-      }
-
       if (selection.includes(d.properties.id)) {
         return [255, 0, 0, 100];
+      }
+
+      if (activeTree === d.properties.id) {
+        return [255, 255, 0, 100];
       }
 
       return [34, 169, 54, 100];
     },
     getFillColor: (d) => {
-      if (activeTree === d.properties.id) {
-        return [255, 255, 0, 100];
-      }
-
-      if (router.query?.tree === d.properties.id) {
-        return [255, 255, 0, 100];
-      }
-
       if (selection.includes(d.properties.id)) {
         return [255, 0, 0, 100];
+      }
+
+      if (activeTree === d.properties.id) {
+        return [255, 255, 0, 100];
       }
 
       return [34, 139, 34, 100];
     },
     updateTriggers: {
-      getFillColor: [activeTree],
-      getLineColor: [activeTree],
+      getFillColor: [activeTree, selection, editionMode],
+      getLineColor: [activeTree, selection, editionMode],
     },
     pickable: true,
     autoHighlight: true,
@@ -231,7 +160,6 @@ const EditionPage = ({}) => {
     minRadius: 10,
     radiusMinPixels: 0.5,
     lineWidthMinPixels: 1,
-    getPosition: (d) => d.coordinates,
   });
 
   const selectionLayer = new SelectionLayer({
@@ -355,12 +283,42 @@ const EditionPage = ({}) => {
     }
 
     if (newMode) {
+      setMode();
       setEditionMode(newMode === "edition");
     }
   };
 
+  const handleOnDeleteTrees = async () => {
+    if (!selection.length) {
+      return;
+    }
+
+    try {
+      const url = `/organization/${user.currentOrganization.id}/trees/bulk_delete`;
+      const { status, data } = await apiETK.delete(url, {
+        data: {
+          trees: selection,
+        },
+      });
+
+      if (status === 200) {
+        setTime(Date.now());
+
+        if (selection.includes(activeTree)) {
+          setActiveTree();
+          setDrawerLeftComponent();
+          router.push("/map");
+        }
+
+        setSelection([]);
+      }
+    } catch (e) {}
+  };
+
   const renderLayers = () => {
-    setLayers(editionMode ? [treesLayer, selectionLayer] : [treesLayer]);
+    setLayers(
+      editionMode ? [treesLayer, selectionLayer] : [osmLayer, treesLayer]
+    );
   };
 
   useEffect(() => {
@@ -386,12 +344,12 @@ const EditionPage = ({}) => {
           setViewState(e.viewState);
         }}
         onClick={(info) => {
-          if (mode === "drawPoint") {
+          if (editionMode && mode === "drawPoint") {
             const [x, y] = info.coordinate;
 
             return createTree(x, y);
           }
-          if (editionMode) return;
+
           if (
             info.object?.properties?.id === activeTree ||
             !info.object?.properties?.id
@@ -412,7 +370,7 @@ const EditionPage = ({}) => {
       <Box className={classes.toolbar} p={1}>
         <Grid container spacing={2} justify="center">
           <Grid item>
-            <Grid container direction="column">
+            <Grid container direction="column" className={classes.actionsBar}>
               <IconButton
                 onClick={() => {
                   !drawerLeftComponent
@@ -430,7 +388,7 @@ const EditionPage = ({}) => {
               </IconButton>
             </Grid>
           </Grid>
-          <Grid item>
+          <Grid item className={classes.actionsBar}>
             <MapModeSwitch
               initValue={editionMode ? "edition" : "analysis"}
               onChange={handleOnMapModeSwitch}
@@ -439,8 +397,10 @@ const EditionPage = ({}) => {
 
           <Grid item xs></Grid>
           {editionMode && (
-            <Grid item>
+            <Grid item className={classes.actionsBar}>
               <MapDrawToolbar
+                activeDelete={Boolean(selection.length)}
+                onDelete={handleOnDeleteTrees}
                 onChange={(newMode) => {
                   if (newMode) {
                     setMode(newMode);
@@ -450,7 +410,7 @@ const EditionPage = ({}) => {
             </Grid>
           )}
           <Grid item xs></Grid>
-          <Grid item>
+          <Grid item className={classes.actionsBar}>
             <Box mr={1}>
               <MapSearchCity
                 onChange={(coordinates) => {
