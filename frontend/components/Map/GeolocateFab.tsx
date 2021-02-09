@@ -3,7 +3,7 @@ import MyLocationIcon from "@material-ui/icons/MyLocation";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
 export interface ETKMapGeolocateFabProps {
-  map: any;
+  onGeolocate?(): void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -12,22 +12,18 @@ const useStyles = makeStyles((theme: Theme) =>
       background: theme.palette.background.default,
       position: "absolute",
       bottom: theme.spacing(2),
-      right: theme.spacing(8),
+      right: theme.spacing(2),
     },
   })
 );
 
-const ETKMapGeolocateFab: React.FC<ETKMapGeolocateFabProps> = (props) => {
+const ETKMapGeolocateFab: React.FC<ETKMapGeolocateFabProps> = ({
+  onGeolocate,
+}) => {
   const classes = useStyles();
 
   return (
-    <Fab
-      size="small"
-      className={classes.fab}
-      onClick={async () => {
-        await props.map.current?.map.geolocate?.trigger();
-      }}
-    >
+    <Fab size="small" className={classes.fab} onClick={onGeolocate}>
       <MyLocationIcon fontSize="small" color="primary" />
     </Fab>
   );

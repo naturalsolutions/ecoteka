@@ -1,6 +1,6 @@
 import React, { FC, useState, memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { TextField, Grid, makeStyles } from "@material-ui/core";
+import { TextField, Grid, makeStyles, Typography } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import useApi from "@/lib/useApi";
 
@@ -67,6 +67,9 @@ const MapFilter: FC<IMapFilter> = ({
 
   return (
     <Grid container direction="column" spacing={3}>
+      <Grid item>
+        <Typography variant="h6">{t("components.Map.Filter.title")}</Typography>
+      </Grid>
       <Grid item>
         <Autocomplete
           className={classes.autocomplete}

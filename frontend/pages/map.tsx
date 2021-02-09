@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { Grid, makeStyles, Box, Button, IconButton } from "@material-ui/core";
+import LayersIcon from "@material-ui/icons/Layers";
 import CloseIcon from "@material-ui/icons/Close";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
-import FilterListIcon from "@material-ui/icons/FilterList";
+import SearchIcon from "@material-ui/icons/Search";
+import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
 import TreeSummary from "@/components/Tree/Infos/Summary";
 import TreeForm from "@/components/Tree/Form";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
+import MapGeolocateFab from "@/components/Map/GeolocateFab";
 import MapLayers from "@/components/Map/Layers";
 import MapFilter from "@/components/Map/Filter";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
@@ -28,7 +31,6 @@ import DeckGL from "@deck.gl/react";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
-import Organization from "./organization/[id]";
 
 const useStyles = makeStyles({
   toolbar: {
@@ -80,10 +82,10 @@ const EditionPage = ({}) => {
       const payload = { x, y };
       const url = `/organization/${organizationId}/trees`;
 
+      setTime(Date.now());
       const { status, data: tree } = await apiETK.post(url, payload);
 
       if (status === 200) {
-        setTime(Date.now());
         setDrawerLeftComponent(
           <TreeForm
             tree={tree}
@@ -132,7 +134,13 @@ const EditionPage = ({}) => {
       }
 
       if (activeTree === d.properties.id) {
-        return [255, 255, 0, 100];
+        return [255, 100, 0];
+      }
+
+      if (
+        filter.vernacularName?.includes(d.properties.properties_vernacularName)
+      ) {
+        return [255, 155, 0, 100];
       }
 
       return [34, 169, 54, 100];
@@ -143,19 +151,26 @@ const EditionPage = ({}) => {
       }
 
       if (activeTree === d.properties.id) {
-        return [255, 255, 0, 100];
+        return [255, 100, 0];
+      }
+
+      if (
+        filter.vernacularName?.includes(d.properties.properties_vernacularName)
+      ) {
+        return [255, 155, 0, 100];
       }
 
       return [34, 139, 34, 100];
     },
     updateTriggers: {
-      getFillColor: [activeTree, selection, editionMode],
-      getLineColor: [activeTree, selection, editionMode],
+      getFillColor: [activeTree, selection, editionMode, filter],
+      getLineColor: [activeTree, selection, editionMode, filter],
     },
     pickable: true,
     autoHighlight: true,
+    getRadius: (d) => (activeTree === d.properties.id ? 15 : 3),
     pointRadiusMinPixels: 3,
-    pointRadiusMaxPixels: 10,
+    pointRadiusMaxPixels: 15,
     pointRadiusScale: 2,
     minRadius: 10,
     radiusMinPixels: 0.5,
@@ -208,6 +223,7 @@ const EditionPage = ({}) => {
       transitionDuration: 1200,
       transitionInterpolator: new FlyToInterpolator(),
     });
+    setTime(Date.now());
   };
 
   useEffect(() => {
@@ -272,18 +288,14 @@ const EditionPage = ({}) => {
     }
   };
 
-  const handleOnDrawerLeftClose = () => {
-    setDrawerLeftComponent(null);
-    router.push("/map");
-  };
-
   const handleOnMapModeSwitch = (newMode) => {
-    if (newMode === "analysis") {
-      setSelection([]);
-    }
-
     if (newMode) {
-      setMode();
+      if (newMode === "edtion") {
+        setMode("selection");
+      } else {
+        setMode("");
+      }
+
       setEditionMode(newMode === "edition");
     }
   };
@@ -316,19 +328,32 @@ const EditionPage = ({}) => {
   };
 
   const renderLayers = () => {
-    setLayers(
-      editionMode ? [treesLayer, selectionLayer] : [osmLayer, treesLayer]
-    );
+    setTime(Date.now());
+
+    if (editionMode && mode === "selection") {
+      return setLayers([treesLayer, selectionLayer]);
+    }
+
+    if (editionMode) {
+      return setLayers([treesLayer]);
+    }
+
+    return setLayers([osmLayer, treesLayer]);
   };
 
   useEffect(() => {
+    if (mode !== "selection") {
+      setSelection([]);
+    }
+  }, [mode]);
+
+  useEffect(() => {
     renderLayers();
-  }, [activeTree, editionMode, selection]);
+  }, [activeTree, editionMode, selection, filter, mode]);
 
   return (
     <AppLayoutCarto
       drawerLeftComponent={drawerLeftComponent}
-      onDrawerLeftClose={handleOnDrawerLeftClose}
       onMapToolbarChange={handleOnMapToolbarChange}
     >
       <DeckGL
@@ -344,6 +369,7 @@ const EditionPage = ({}) => {
           setViewState(e.viewState);
         }}
         onClick={(info) => {
+          console.log("aaa", mode);
           if (editionMode && mode === "drawPoint") {
             const [x, y] = info.coordinate;
 
@@ -366,9 +392,10 @@ const EditionPage = ({}) => {
         <StaticMap
           mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
         />
+        <MapGeolocateFab />
       </DeckGL>
-      <Box className={classes.toolbar} p={1}>
-        <Grid container spacing={2} justify="center">
+      <Box className={classes.toolbar} mt={1}>
+        <Grid container justify="center">
           <Grid item>
             <Grid container direction="column" className={classes.actionsBar}>
               <IconButton
@@ -381,18 +408,28 @@ const EditionPage = ({}) => {
                 {drawerLeftComponent ? <CloseIcon /> : <MenuOpenIcon />}
               </IconButton>
               <IconButton onClick={() => router.push("/map?panel=filter")}>
-                <FilterListIcon />
+                <SearchIcon />
+              </IconButton>
+              <IconButton onClick={() => router.push("/map?panel=layers")}>
+                <LayersIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => router.push("/map?panel=interventions")}
+              >
+                <PlaylistAddCheckIcon />
               </IconButton>
               <IconButton onClick={() => switchPanel("import")}>
                 <BackupIcon />
               </IconButton>
             </Grid>
           </Grid>
-          <Grid item className={classes.actionsBar}>
-            <MapModeSwitch
-              initValue={editionMode ? "edition" : "analysis"}
-              onChange={handleOnMapModeSwitch}
-            />
+          <Grid item>
+            <Box ml={2} className={classes.actionsBar}>
+              <MapModeSwitch
+                initValue={editionMode ? "edition" : "analysis"}
+                onChange={handleOnMapModeSwitch}
+              />
+            </Box>
           </Grid>
 
           <Grid item xs></Grid>
@@ -411,20 +448,18 @@ const EditionPage = ({}) => {
           )}
           <Grid item xs></Grid>
           <Grid item className={classes.actionsBar}>
-            <Box mr={1}>
-              <MapSearchCity
-                onChange={(coordinates) => {
-                  setViewState({
-                    ...viewState,
-                    longitude: coordinates[0],
-                    latitude: coordinates[1],
-                    zoom: 15,
-                    transitionDuration: 1500,
-                    transitionInterpolator: new FlyToInterpolator(),
-                  });
-                }}
-              />
-            </Box>
+            <MapSearchCity
+              onChange={(coordinates) => {
+                setViewState({
+                  ...viewState,
+                  longitude: coordinates[0],
+                  latitude: coordinates[1],
+                  zoom: 15,
+                  transitionDuration: 1500,
+                  transitionInterpolator: new FlyToInterpolator(),
+                });
+              }}
+            />
           </Grid>
         </Grid>
       </Box>

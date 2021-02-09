@@ -42,7 +42,6 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
   children,
   drawerLeftWidth = 400,
   drawerLeftComponent,
-  onMapToolbarChange,
 }) => {
   const classes = useStyles({
     drawerLeftWidth,
@@ -65,10 +64,7 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
             {drawerLeftComponent}
           </Drawer>
         )}
-        <main className={classes.content}>
-          {children}
-          <MapToolbar onChange={onMapToolbarChange} />
-        </main>
+        <main className={classes.content}>{children}</main>
       </div>
     </AppLayoutCartoContext.Provider>
   );
