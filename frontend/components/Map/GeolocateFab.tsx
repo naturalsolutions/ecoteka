@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "absolute",
       bottom: theme.spacing(2),
       right: theme.spacing(2),
+      "&:hover": {
+        background: theme.palette.secondary.main,
+      },
     },
   })
 );

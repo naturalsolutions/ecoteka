@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Grid, makeStyles, Box, Button, IconButton } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import CloseIcon from "@material-ui/icons/Close";
@@ -25,7 +25,7 @@ import ImportPanel from "@/components/Import/Panel/Index";
 import InterventionForm from "@/components/Interventions/Form";
 import BackupIcon from "@material-ui/icons/Backup";
 import getConfig from "next/config";
-
+import useGeolocation from "@/lib/hooks/useGeolocation";
 import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
 import { MVTLayer } from "@deck.gl/geo-layers";
@@ -249,7 +249,7 @@ const EditionPage = ({}) => {
       case "info":
         return setDrawerLeftComponent(<TreeSummary treeId={activeTree} />);
       case "edit":
-        setDrawerLeftWidth("calc(100vw / 3");
+        setDrawerLeftWidth(500);
         return setDrawerLeftComponent(
           <TreeForm treeId={activeTree} onSave={() => {}} />
         );
@@ -415,8 +415,23 @@ const EditionPage = ({}) => {
       >
         <StaticMap
           mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
-        />
-        <MapGeolocateFab />
+        ></StaticMap>
+        {navigator?.geolocation && (
+          <MapGeolocateFab
+            onGeolocate={() => {
+              navigator.geolocation.getCurrentPosition((position) => {
+                setViewState({
+                  ...viewState,
+                  longitude: position.coords.longitude,
+                  latitude: position.coords.latitude,
+                  zoom: 18,
+                  transitionDuration: 1500,
+                  transitionInterpolator: new FlyToInterpolator(),
+                });
+              });
+            }}
+          />
+        )}
       </DeckGL>
       <Box className={classes.toolbar} mt={1}>
         <Grid container justify="center">
