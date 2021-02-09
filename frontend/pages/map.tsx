@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Grid, makeStyles, Box, Button, IconButton } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import CloseIcon from "@material-ui/icons/Close";
+import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import SearchIcon from "@material-ui/icons/Search";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
@@ -25,20 +26,18 @@ import ImportPanel from "@/components/Import/Panel/Index";
 import InterventionForm from "@/components/Interventions/Form";
 import BackupIcon from "@material-ui/icons/Backup";
 import getConfig from "next/config";
-import useGeolocation from "@/lib/hooks/useGeolocation";
 import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
-import { getColorArray } from "@/lib/colors";
 
 const useStyles = makeStyles({
   toolbar: {
     position: "absolute",
     top: 10,
     left: 0,
-    width: "calc(100% - 50px)",
+    width: "calc(100% - 8px)",
     pointerEvents: "none",
   },
   actionsBar: {
@@ -72,14 +71,31 @@ const EditionPage = ({}) => {
   );
   const [viewState, setViewState] = useState();
   const [mode, setMode] = useState("selection");
-  const [filter, setFilter] = useState({});
-  const [colors, setColors] = useState({});
+  const [filter, setFilter] = useState({
+    canonicalName: [],
+    vernacularName: [],
+  });
+  const [filterOpts, setFilterOpts] = useState({});
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
   const [layers, setLayers] = useState([]);
   const [activeTree, setActiveTree] = useState<number | undefined>(
     router.query?.tree ? Number(router.query.tree) : undefined
   );
+
+  const getFilters = async (organizationId) => {
+    try {
+      const { status, data } = await apiETK.get("/maps/filter", {
+        params: {
+          organization_id: organizationId,
+        },
+      });
+
+      if (status === 200) {
+        setFilterOpts(data);
+      }
+    } catch (error) {}
+  };
 
   const createTree = async (x, y) => {
     try {
@@ -137,13 +153,30 @@ const EditionPage = ({}) => {
       }
 
       if (
+        filter.canonicalName?.includes(d.properties.properties_canonicalName)
+      ) {
+        const index = filterOpts.canonicalName.findIndex(
+          (f) => f.value === d.properties.properties_canonicalName
+        );
+        const color = filterOpts.canonicalName[index].color;
+
+        return color;
+      }
+
+      if (
         filter.vernacularName?.includes(d.properties.properties_vernacularName)
       ) {
-        return colors.vernacularName[
-          filter.vernacularName.findIndex(
-            (f) => f === d.properties.properties_vernacularName
+        return filterOpts.vernacularName[
+          filterOpts.vernacularName.findIndex(
+            (f) => f.value === d.properties.properties_vernacularName
           )
-        ];
+        ].color;
+      }
+
+      for (let key in filter) {
+        if (filter[key].length > 0) {
+          return [120, 120, 120, 128];
+        }
       }
 
       return [34, 169, 54, 100];
@@ -158,13 +191,31 @@ const EditionPage = ({}) => {
       }
 
       if (
+        filter.canonicalName?.includes(d.properties.properties_canonicalName)
+      ) {
+        const index = filterOpts.canonicalName.findIndex(
+          (f) => f.value === d.properties.properties_canonicalName
+        );
+        const color = filterOpts.canonicalName[index].color;
+
+        return color;
+      }
+
+      if (
         filter.vernacularName?.includes(d.properties.properties_vernacularName)
       ) {
-        return colors.vernacularName[
-          filter.vernacularName.findIndex(
-            (f) => f === d.properties.properties_vernacularName
-          )
-        ];
+        const index = filterOpts.vernacularName.findIndex(
+          (f) => f.value === d.properties.properties_vernacularName
+        );
+        const color = filterOpts.vernacularName[index].color;
+
+        return color;
+      }
+
+      for (let key in filter) {
+        if (filter[key].length > 0) {
+          return [120, 120, 120, 128];
+        }
       }
 
       return [34, 139, 34, 100];
@@ -176,7 +227,7 @@ const EditionPage = ({}) => {
     pickable: true,
     autoHighlight: true,
     getRadius: (d) => (activeTree === d.properties.id ? 15 : 3),
-    pointRadiusMinPixels: 3,
+    pointRadiusMinPixels: 2,
     pointRadiusMaxPixels: 15,
     pointRadiusScale: 2,
     minRadius: 10,
@@ -217,7 +268,11 @@ const EditionPage = ({}) => {
           zoom: newViewState.zoom,
         });
 
-        setViewState(newViewState);
+        setViewState({
+          ...newViewState,
+          transitionDuration: 1000,
+          transitionInterpolator: new FlyToInterpolator(),
+        });
       }
     } catch (e) {}
   };
@@ -236,6 +291,7 @@ const EditionPage = ({}) => {
   useEffect(() => {
     setViewState({ ...initialViewState });
     renderLayers();
+    getFilters(user.currentOrganization.id);
   }, []);
 
   const switchPanel = (panel) => {
@@ -271,7 +327,7 @@ const EditionPage = ({}) => {
         return setDrawerLeftComponent(
           <MapFilter
             initialValue={initialValue}
-            organizationId={user?.currentOrganization?.id}
+            options={filterOpts}
             onChange={handleOnFilter}
           />
         );
@@ -292,14 +348,6 @@ const EditionPage = ({}) => {
 
   const handleOnFilter = (newFilter) => {
     setFilter(newFilter);
-
-    let newColors = {};
-
-    for (let key in newFilter) {
-      newColors[key] = getColorArray(newFilter[key].length);
-    }
-
-    setColors(newColors);
   };
 
   const handleOnMapToolbarChange = (action: TMapToolbarAction) => {
@@ -499,6 +547,16 @@ const EditionPage = ({}) => {
                 });
               }}
             />
+          </Grid>
+          <Grid item className={classes.actionsBar}>
+            <Box mt={1} ml={1}>
+              <IconButton
+                size="small"
+                onClick={() => fitToBounds(user.currentOrganization.id)}
+              >
+                <CenterFocusStrongIcon />
+              </IconButton>
+            </Box>
           </Grid>
         </Grid>
       </Box>

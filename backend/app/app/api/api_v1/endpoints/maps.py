@@ -2,7 +2,7 @@ from typing import Dict, Optional, List
 import json
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from shapely import wkt
+from bokeh import palettes
 
 from app.api import get_db
 from app.core import (
@@ -87,6 +87,10 @@ def generate_style(
 
         return style
 
+def hex_to_rgb(hex):
+        hex = hex.lstrip('#')
+        hlen = len(hex)
+        return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
 
 @router.get("/filter", dependencies=[Depends(authorization("maps:get_filters"))])
 def get_filters(
@@ -97,7 +101,7 @@ def get_filters(
     Get filters 
     """
     fields = ["canonicalName", "vernacularName"]
-    filter = {}
+    filter: Dict = {}
 
     for field in fields:
         rows = db.execute(f"""
@@ -105,7 +109,8 @@ def get_filters(
             from tree
             where organization_id = {organization_id}
             order by value;""")
-        filter[field] = [dict(row) for row in rows if row[0] not in ["", None]]
+        colors = palettes.viridis(rows.rowcount)
+        filter[field] = [{ 'value': row.value, 'color': hex_to_rgb(colors[i]) } for i, row in enumerate(rows) if row[0] not in ["", None]]
     
     return filter
 

@@ -1,50 +1,29 @@
-import React, { FC, useState, memo, useEffect } from "react";
+import React, { FC, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { TextField, Grid, makeStyles, Typography } from "@material-ui/core";
+import {
+  TextField,
+  Grid,
+  Typography,
+  Chip,
+  Box,
+  Paper,
+} from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import useApi from "@/lib/useApi";
+
+const FILTERS = [
+  { key: "canonicalName", label: "Canonical Name" },
+  { key: "vernacularName", label: "Vernacular Name" },
+];
 
 export interface IMapFilter {
   initialValue: object;
-  organizationId: number;
+  options?: object;
   onChange?(values: object): void;
 }
 
-const useStyles = makeStyles({});
-
-const defaultValue = {
-  canonicalName: [],
-  vernacularName: [],
-};
-
-const MapFilter: FC<IMapFilter> = ({
-  initialValue,
-  organizationId,
-  onChange,
-}) => {
+const MapFilter: FC<IMapFilter> = ({ initialValue, options, onChange }) => {
   const { t } = useTranslation("components");
-  const classes = useStyles();
-  const { apiETK } = useApi().api;
-  const [filter, setFilter] = useState(defaultValue);
-  const [value, setValue] = useState(initialValue || defaultValue);
-
-  async function getData() {
-    try {
-      const { status, data } = await apiETK.get("/maps/filter", {
-        params: {
-          organization_id: organizationId,
-        },
-      });
-
-      if (status === 200) {
-        setFilter(data);
-      }
-    } catch (error) {}
-  }
-
-  useEffect(() => {
-    getData();
-  }, []);
+  const [value, setValue] = useState(initialValue);
 
   const handleValue = (key, newValue) => {
     const data = {
@@ -70,40 +49,46 @@ const MapFilter: FC<IMapFilter> = ({
       <Grid item>
         <Typography variant="h6">{t("components.Map.Filter.title")}</Typography>
       </Grid>
-      <Grid item>
-        <Autocomplete
-          className={classes.autocomplete}
-          freeSolo
-          multiple
-          selectOnFocus
-          clearOnBlur
-          options={filter.canonicalName}
-          getOptionLabel={(option) => option.value}
-          fullWidth
-          value={value.canonicalName}
-          renderInput={(params) => (
-            <TextField {...params} label="Canonical Name" variant="outlined" />
-          )}
-          onChange={(e, v) => handleValue("canonicalName", v)}
-        />
-      </Grid>
-      <Grid item>
-        <Autocomplete
-          className={classes.autocomplete}
-          freeSolo
-          multiple
-          selectOnFocus
-          clearOnBlur
-          options={filter.vernacularName}
-          getOptionLabel={(option) => option.value}
-          fullWidth
-          value={value.vernacularName}
-          renderInput={(params) => (
-            <TextField {...params} label="Vernacular Name" variant="outlined" />
-          )}
-          onChange={(e, v) => handleValue("vernacularName", v)}
-        />
-      </Grid>
+      {FILTERS.map((filter) => (
+        <Grid key={filter.key} item>
+          <Autocomplete
+            freeSolo
+            multiple
+            selectOnFocus
+            clearOnBlur
+            options={options[filter.key]}
+            getOptionLabel={(option) => option.value}
+            fullWidth
+            value={value[filter.key]}
+            renderInput={(params) => (
+              <TextField {...params} label={filter.label} variant="outlined" />
+            )}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip
+                  label={option.value}
+                  style={{ backgroundColor: `rgb(${option.color?.join(",")})` }}
+                  {...getTagProps({ index })}
+                ></Chip>
+              ))
+            }
+            renderOption={(option, { selected }) => (
+              <React.Fragment>
+                <Paper
+                  style={{
+                    backgroundColor: `rgb(${option.color?.join(",")})`,
+                    width: 20,
+                    height: 20,
+                    margin: "0 3",
+                  }}
+                />
+                <Box ml={2}>{option.value}</Box>
+              </React.Fragment>
+            )}
+            onChange={(e, v) => handleValue(filter.key, v)}
+          />
+        </Grid>
+      ))}
     </Grid>
   );
 };

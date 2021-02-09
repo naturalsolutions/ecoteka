@@ -29,7 +29,7 @@ def create_mbtiles(db: Session, organization: Organization):
             df.to_file(geojson, driver="GeoJSON")
             cmd = "/opt/tippecanoe/tippecanoe"
             os.system(
-                f"{cmd} -P -l {organization.slug} -o {target_tmp} -B10 --force --generate-ids --maximum-zoom=g --extend-zooms-if-still-dropping {geojson}"
+                f"{cmd} -P -l {organization.slug} -o {target_tmp} -z12 -d12 --force --generate-ids --drop-densest-as-needed --extend-zooms-if-still-dropping {geojson}"
             )
             shutil.move(target_tmp, target)
             os.remove(geojson)
