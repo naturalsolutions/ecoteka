@@ -209,6 +209,7 @@ export function useInterventionSchema(it: TInterventionType) {
       method: {
         type: "select",
         component: {
+          required: true,
           label: t("components.Intervention.felling.method"),
           items: interventionMethod.felling.map((m) =>
             sitem(m, t, "components.Intervention.felling")
@@ -234,7 +235,6 @@ export function useInterventionSchema(it: TInterventionType) {
         },
         schema: yup
           .number()
-          .nullable()
           .positive()
           .transform((value) => (isNaN(value) ? null : value)),
       },
@@ -347,15 +347,16 @@ export function usePlanningSchema(it: TInterventionType) {
     estimated_cost: {
       type: "textfield",
       component: {
-        type: "number",
         label: t("components.Intervention.estimated_cost"),
-        InputProps: { inputProps: { min: 0 } },
+        defaultValue: 0,
+        type: "number",
+        InputProps: {
+          inputProps: {
+            min: 0,
+          },
+        },
       },
-      schema: yup
-        .number()
-        .nullable()
-        .positive()
-        .transform((value) => (isNaN(value) ? null : value)),
+      schema: yup.number().moreThan(-1),
     },
     required_documents: {
       type: "select",

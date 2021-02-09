@@ -201,7 +201,7 @@
     "intervention_type": "Type d'intervention",
     "intervenant": "Intervenant",
     "intervention_period": "Période d'intervention",
-    "estimated_cost": "Coût estimatif",
+    "estimated_cost": "Coût estimatif (en € HT)",
     "tree_id": "Arbre",
     "back": "Retour à l'arbre",
     "steps": {
