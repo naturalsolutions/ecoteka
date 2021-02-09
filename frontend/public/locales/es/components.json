@@ -413,7 +413,7 @@
       "notes": "Remarques"
     },
     "summary": {
-      "moreDetails": "Mas detalles"
+      "moreDetails": "Editar árbol"
     },
     "latitude": "Latitud",
     "longitude": "Longitud",
@@ -425,13 +425,14 @@
     "dialogDeleteActionYes": "Si",
     "dialogDeleteActionCancel": "No",
     "title": "Edición",
-    "treeIdentity": "Tree identity",
-    "characteristics": "Caracteristicas",
+    "treeIdentity": "Identidad del árbol",
+    "characteristics": "Características",
     "outdoorEnvironment": "Outdoor Environment",
     "other": "Otro",
     "imagesUpload": {
       "select": "Arrasta y suelta las imágenes aquí o haz click (max.{{max}})"
-    }
+    },
+    "backToInfo": "Volver al árbol"
   },
   "Teams": {
     "buttonAdd": "Añadir un equipo",

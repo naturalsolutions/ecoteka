@@ -31,7 +31,7 @@ import DeckGL from "@deck.gl/react";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
-import { number } from "yup/lib/locale";
+import { getColorArray } from "@/lib/colors";
 
 const useStyles = makeStyles({
   toolbar: {
@@ -52,73 +52,6 @@ const defaultViewState = {
   zoom: 5,
 };
 
-function HSLToRGB(h, s, l) {
-  // Must be fractions of 1
-  s /= 100;
-  l /= 100;
-
-  let c = (1 - Math.abs(2 * l - 1)) * s,
-    x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
-    m = l - c / 2,
-    r = 0,
-    g = 0,
-    b = 0;
-
-  if (0 <= h && h < 60) {
-    r = c;
-    g = x;
-    b = 0;
-  } else if (60 <= h && h < 120) {
-    r = x;
-    g = c;
-    b = 0;
-  } else if (120 <= h && h < 180) {
-    r = 0;
-    g = c;
-    b = x;
-  } else if (180 <= h && h < 240) {
-    r = 0;
-    g = x;
-    b = c;
-  } else if (240 <= h && h < 300) {
-    r = x;
-    g = 0;
-    b = c;
-  } else if (300 <= h && h < 360) {
-    r = c;
-    g = 0;
-    b = x;
-  }
-
-  r = Math.round((r + m) * 255);
-  g = Math.round((g + m) * 255);
-  b = Math.round((b + m) * 255);
-
-  return [r, g, b];
-}
-
-function getRandomPastelColor() {
-  const hue = Math.floor(Math.random() * 12) * 30;
-
-  return HSLToRGB(hue, 70, 60);
-}
-
-function getColorArray(total) {
-  let colorArray = [];
-
-  for (let i = 0; i < total; i++) {
-    const newColorIndex = getRandomPastelColor();
-
-    if (colorArray.includes(newColorIndex)) {
-      i = i - 1;
-    } else {
-      colorArray.push(newColorIndex);
-    }
-  }
-
-  return colorArray;
-}
-
 const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
@@ -131,6 +64,7 @@ const EditionPage = ({}) => {
   const [drawerLeftComponent, setDrawerLeftComponent] = useState(
     <PanelStartGeneralInfo />
   );
+  const [drawerLeftWidth, setDrawerLeftWidth] = useState(400);
   const [token] = useLocalStorage("ecoteka_access_token");
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
@@ -139,11 +73,13 @@ const EditionPage = ({}) => {
   const [viewState, setViewState] = useState();
   const [mode, setMode] = useState("selection");
   const [filter, setFilter] = useState({});
+  const [colors, setColors] = useState({});
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
   const [layers, setLayers] = useState([]);
-  const [activeTree, setActiveTree] = useState(Number(router.query?.tree));
-  const [colors, setColors] = useState({});
+  const [activeTree, setActiveTree] = useState<number | undefined>(
+    router.query?.tree ? Number(router.query.tree) : undefined
+  );
 
   const createTree = async (x, y) => {
     try {
@@ -190,6 +126,7 @@ const EditionPage = ({}) => {
     }/{z}/{x}/{y}.pbf?scope=private&token=${token}&dt=${time}`,
     minZoom: 0,
     maxZoom: 12,
+    uniqueIdProperty: "id",
     getLineColor: (d) => {
       if (selection.includes(d.properties.id)) {
         return [255, 0, 0, 100];
@@ -253,7 +190,7 @@ const EditionPage = ({}) => {
       const ids = pickingInfos.map((o) => o.object.properties.id);
       setSelection(ids);
     },
-    layerIds: ["edit", "trees"],
+    layerIds: ["trees"],
     getTentativeFillColor: () => [255, 0, 255, 100],
     getTentativeLineColor: () => [0, 0, 255, 255],
     getTentativeLineDashArray: () => [0, 0],
@@ -302,14 +239,19 @@ const EditionPage = ({}) => {
   }, []);
 
   const switchPanel = (panel) => {
+    if (panel !== "edit") {
+      setDrawerLeftWidth(400);
+    }
+
     switch (panel) {
       case "start":
         return setDrawerLeftComponent(<PanelStartGeneralInfo />);
       case "info":
         return setDrawerLeftComponent(<TreeSummary treeId={activeTree} />);
       case "edit":
+        setDrawerLeftWidth("calc(100vw / 3");
         return setDrawerLeftComponent(
-          <TreeForm tree={activeTree} onSave={() => {}} />
+          <TreeForm treeId={activeTree} onSave={() => {}} />
         );
       case "import":
         return setDrawerLeftComponent(
@@ -339,12 +281,8 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
-    if (router.query.tree) {
+    if (router.query?.tree) {
       setActiveTree(Number(router.query.tree));
-    }
-
-    if (!router.query.panel && router.query.tree) {
-      router.query.panel = "info";
     }
 
     if (!router.query.panel) return;
@@ -440,6 +378,7 @@ const EditionPage = ({}) => {
   return (
     <AppLayoutCarto
       drawerLeftComponent={drawerLeftComponent}
+      drawerLeftWidth={drawerLeftWidth}
       onMapToolbarChange={handleOnMapToolbarChange}
     >
       <DeckGL

@@ -411,7 +411,7 @@
       "remarks": "Remarques"
     },
     "summary": {
-      "moreDetails": "More details"
+      "moreDetails": "Edit tree"
     },
     "latitude": "Latitude",
     "longitude": "Longitude",
@@ -429,7 +429,8 @@
     "other": "Other",
     "imagesUpload": {
       "select": "Drop files here or click (max.{{max}})"
-    }
+    },
+    "backToInfo": "Back to tree"
   },
   "Teams": {
     "buttonAdd": "Add a team",

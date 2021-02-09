@@ -12,7 +12,7 @@ import useTreeSchema from "@/components/Tree/Schema";
 import { useSnackbar } from "notistack";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
-import { ITree } from "@/index";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   grid: {},
@@ -26,10 +26,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TreeForm: React.FC<{
-  tree: number;
+  treeId: number;
   onSave?(record: object): void;
-}> = ({ tree, onSave }) => {
+}> = ({ treeId, onSave }) => {
   const { t } = useTranslation(["common", "components"]);
+  const router = useRouter();
   const classes = useStyles();
   const schema = useTreeSchema();
   const { api } = useApi();
@@ -47,23 +48,35 @@ const TreeForm: React.FC<{
     defaultValues,
   });
 
+  async function getTree(organizationId, treeId) {
+    try {
+      const url = `/organization/${organizationId}/trees/${treeId}`;
+
+      const { status, data } = await apiETK.get(url);
+
+      if (status === 200) {
+        for (let key in data.properties) {
+          setValue(key, data.properties[key]);
+        }
+      }
+    } catch (e) {}
+  }
+
   useEffect(() => {
-    for (let key in tree.properties) {
-      setValue(key, tree[key]);
+    if (typeof treeId === "number") {
+      getTree(user.currentOrganization.id, treeId);
     }
-  }, [tree]);
+  }, [treeId]);
 
   const handlerOnSave = async () => {
     try {
       setSaving(true);
 
-      if (!tree) return;
-
       const properties = getValues();
       const organizationId = user.currentOrganization.id;
 
       const { data, status } = await apiETK.put(
-        `/organization/${organizationId}/trees/${tree.id}`,
+        `/organization/${organizationId}/trees/${treeId}`,
         {
           properties,
         }
@@ -80,10 +93,13 @@ const TreeForm: React.FC<{
         });
       }
     } catch (e) {
-      console.log(e);
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleToBack = () => {
+    router.push(`/map?panel=info&tree=${treeId}`);
   };
 
   return (
@@ -93,6 +109,33 @@ const TreeForm: React.FC<{
           <Typography variant="h6" className={classes.title}>
             {t("components.TreeForm.title")}
           </Typography>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleToBack}
+              >
+                {t("components.TreeForm.backToInfo")}
+              </Button>
+            </Grid>
+            <Grid item xs />
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handlerOnSave}
+              >
+                {saving ? (
+                  <CircularProgress size={30} />
+                ) : (
+                  t("common.buttons.save")
+                )}
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item>
           <Typography className={classes.heading}>
@@ -149,24 +192,6 @@ const TreeForm: React.FC<{
                   {fields[f]}
                 </Grid>
               ))}
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Grid container>
-            <Grid item xs></Grid>
-            <Grid item>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={handlerOnSave}
-              >
-                {saving ? (
-                  <CircularProgress size={30} />
-                ) : (
-                  t("common.buttons.save")
-                )}
-              </Button>
-            </Grid>
           </Grid>
         </Grid>
       </Grid>

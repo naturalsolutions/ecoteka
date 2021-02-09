@@ -412,7 +412,7 @@
       "notes": "Remarques"
     },
     "summary": {
-      "moreDetails": "Plus de détails"
+      "moreDetails": "Modifier l'arbre"
     },
     "latitude": "Latitude",
     "longitude": "Longitude",
@@ -430,7 +430,8 @@
     "other": "Autres",
     "imagesUpload": {
       "select": "Déposer ici les photos ou cliquer (max.{{max}})"
-    }
+    },
+    "backToInfo": "Retour à l'arbre"
   },
   "Teams": {
     "buttonAdd": "Ajouter une équipe",

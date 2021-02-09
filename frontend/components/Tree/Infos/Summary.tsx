@@ -8,6 +8,7 @@ import { useAppLayout } from "@/components/AppLayout/Base";
 import { TIntervention } from "@/components/Interventions/Schema";
 import TreeInfosProperties from "@/components/Tree/Infos/Properties";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,11 +21,11 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
   const { api } = useApi();
   const { apiETK } = api;
   const { t } = useTranslation("components");
-  const [isExpanded, setIsExpanded] = useState(false);
   const [tree, setTree] = useState<any>({});
   const [interventions, setInterventions] = useState<TIntervention[]>();
   const { dialog } = useAppLayout();
   const classes = useStyles();
+  const router = useRouter();
 
   const getTree = async (itreeIdd) => {
     if (user?.currentOrganization) {
@@ -62,10 +63,24 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
     }
   }, [treeId, user]);
 
+  const handleOnEdit = () => {
+    router.push(`/map?panel=edit&tree=${treeId}`);
+  };
+
   return (
     <Grid className={classes.root} container direction="column" spacing={2}>
-      <Grid item xs={12}>
+      <Grid item>
         <TreeInfosProperties tree={tree} />
+      </Grid>
+      <Grid item>
+        <Button
+          fullWidth
+          variant="outlined"
+          color="primary"
+          onClick={handleOnEdit}
+        >
+          {t("components.Tree.summary.moreDetails")}
+        </Button>
       </Grid>
       <Grid item>
         {interventions && (
@@ -78,23 +93,6 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
           />
         )}
       </Grid>
-      <Grid item>
-        <Button
-          fullWidth
-          variant="outlined"
-          color="primary"
-          onClick={() => setIsExpanded(true)}
-        >
-          {t("components.Tree.summary.moreDetails")}
-        </Button>
-      </Grid>
-      <TreeExpanded
-        open={isExpanded}
-        tree={tree}
-        interventions={interventions}
-        onClose={() => setIsExpanded(false)}
-        onChange={(newTree) => setTree(newTree)}
-      />
     </Grid>
   );
 };
