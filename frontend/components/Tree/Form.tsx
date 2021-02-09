@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TreeForm: React.FC<{
-  tree: ITree;
+  tree: number;
   onSave?(record: object): void;
 }> = ({ tree, onSave }) => {
   const { t } = useTranslation(["common", "components"]);

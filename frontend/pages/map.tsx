@@ -31,6 +31,7 @@ import DeckGL from "@deck.gl/react";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
+import { number } from "yup/lib/locale";
 
 const useStyles = makeStyles({
   toolbar: {
@@ -50,6 +51,73 @@ const defaultViewState = {
   latitude: 46.7,
   zoom: 5,
 };
+
+function HSLToRGB(h, s, l) {
+  // Must be fractions of 1
+  s /= 100;
+  l /= 100;
+
+  let c = (1 - Math.abs(2 * l - 1)) * s,
+    x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
+    m = l - c / 2,
+    r = 0,
+    g = 0,
+    b = 0;
+
+  if (0 <= h && h < 60) {
+    r = c;
+    g = x;
+    b = 0;
+  } else if (60 <= h && h < 120) {
+    r = x;
+    g = c;
+    b = 0;
+  } else if (120 <= h && h < 180) {
+    r = 0;
+    g = c;
+    b = x;
+  } else if (180 <= h && h < 240) {
+    r = 0;
+    g = x;
+    b = c;
+  } else if (240 <= h && h < 300) {
+    r = x;
+    g = 0;
+    b = c;
+  } else if (300 <= h && h < 360) {
+    r = c;
+    g = 0;
+    b = x;
+  }
+
+  r = Math.round((r + m) * 255);
+  g = Math.round((g + m) * 255);
+  b = Math.round((b + m) * 255);
+
+  return [r, g, b];
+}
+
+function getRandomPastelColor() {
+  const hue = Math.floor(Math.random() * 12) * 30;
+
+  return HSLToRGB(hue, 70, 60);
+}
+
+function getColorArray(total) {
+  let colorArray = [];
+
+  for (let i = 0; i < total; i++) {
+    const newColorIndex = getRandomPastelColor();
+
+    if (colorArray.includes(newColorIndex)) {
+      i = i - 1;
+    } else {
+      colorArray.push(newColorIndex);
+    }
+  }
+
+  return colorArray;
+}
 
 const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
@@ -75,6 +143,7 @@ const EditionPage = ({}) => {
   const [editionMode, setEditionMode] = useState<boolean>(false);
   const [layers, setLayers] = useState([]);
   const [activeTree, setActiveTree] = useState(Number(router.query?.tree));
+  const [colors, setColors] = useState({});
 
   const createTree = async (x, y) => {
     try {
@@ -86,14 +155,7 @@ const EditionPage = ({}) => {
       const { status, data: tree } = await apiETK.post(url, payload);
 
       if (status === 200) {
-        setDrawerLeftComponent(
-          <TreeForm
-            tree={tree}
-            onSave={(newTree) => {
-              console.log(newTree);
-            }}
-          />
-        );
+        router.push(`/map/?panel=edit&tree=${tree.id}`);
         setActiveTree(tree.id);
       }
     } catch (error) {
@@ -140,7 +202,11 @@ const EditionPage = ({}) => {
       if (
         filter.vernacularName?.includes(d.properties.properties_vernacularName)
       ) {
-        return [255, 155, 0, 100];
+        return colors.vernacularName[
+          filter.vernacularName.findIndex(
+            (f) => f === d.properties.properties_vernacularName
+          )
+        ];
       }
 
       return [34, 169, 54, 100];
@@ -157,7 +223,11 @@ const EditionPage = ({}) => {
       if (
         filter.vernacularName?.includes(d.properties.properties_vernacularName)
       ) {
-        return [255, 155, 0, 100];
+        return colors.vernacularName[
+          filter.vernacularName.findIndex(
+            (f) => f === d.properties.properties_vernacularName
+          )
+        ];
       }
 
       return [34, 139, 34, 100];
@@ -237,6 +307,10 @@ const EditionPage = ({}) => {
         return setDrawerLeftComponent(<PanelStartGeneralInfo />);
       case "info":
         return setDrawerLeftComponent(<TreeSummary treeId={activeTree} />);
+      case "edit":
+        return setDrawerLeftComponent(
+          <TreeForm tree={activeTree} onSave={() => {}} />
+        );
       case "import":
         return setDrawerLeftComponent(
           <ImportPanel onFileImported={handleOnFileImported} />
@@ -265,6 +339,10 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
+    if (router.query.tree) {
+      setActiveTree(Number(router.query.tree));
+    }
+
     if (!router.query.panel && router.query.tree) {
       router.query.panel = "info";
     }
@@ -276,6 +354,14 @@ const EditionPage = ({}) => {
 
   const handleOnFilter = (newFilter) => {
     setFilter(newFilter);
+
+    let newColors = {};
+
+    for (let key in newFilter) {
+      newColors[key] = getColorArray(newFilter[key].length);
+    }
+
+    setColors(newColors);
   };
 
   const handleOnMapToolbarChange = (action: TMapToolbarAction) => {
@@ -369,7 +455,6 @@ const EditionPage = ({}) => {
           setViewState(e.viewState);
         }}
         onClick={(info) => {
-          console.log("aaa", mode);
           if (editionMode && mode === "drawPoint") {
             const [x, y] = info.coordinate;
 
