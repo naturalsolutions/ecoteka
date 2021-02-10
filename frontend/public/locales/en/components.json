@@ -482,6 +482,10 @@
       "dialogTitle": "Edit working area",
       "dialogContentText": "Accept : zip, geojson"
     },
+    "crud": {
+      "success": "Organization updated with success",
+      "failure": "Organization modification failed."
+    },
     "Tabs": {
       "general": "General informations",
       "teams": "Teams",

@@ -66,7 +66,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
   const classes = useStyles();
   const { theme } = useThemeContext();
   const { dialog, snackbar } = useAppLayout();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const { api } = useAPI();
   const { apiETK } = api;
   const matches = useMediaQuery(theme.breakpoints.down("md"));

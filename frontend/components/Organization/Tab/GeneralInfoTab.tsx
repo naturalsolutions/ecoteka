@@ -15,6 +15,7 @@ import ETKFormWorkingArea, {
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryCache } from "react-query";
 import bbox from "@turf/bbox";
+import { useSnackbar } from "notistack";
 import Can from "@/components/Can";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,18 +33,20 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
 }) => {
   const classes = useStyles();
   const { dialog, snackbar } = useAppLayout();
+  const { t } = useTranslation(["components", "common"]);
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
-  const { t } = useTranslation(["components", "common"]);
   const mapRef = createRef<ETKMap>();
   const [isMapReady, setIsMapReady] = useState(false);
-  const cache = useQueryCache();
   const { apiETK } = useApi().api;
   const [organization, setOrganization] = useState<IOrganization>(
     initialOrganization
   );
+  const { enqueueSnackbar } = useSnackbar();
 
+  // TODO: deprecate useQuery usage
   const queryName = `working_area_${organization.id}`;
+  const cache = useQueryCache();
   const { status, data: workingArea, error, isFetching } = useQuery(
     queryName,
     async () => {
@@ -113,9 +116,15 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
     try {
       const { status, data } = await formEditRef.current.submit();
       if (status === 200) {
+        enqueueSnackbar(`${t("components.Organization.crud.success")}`, {
+          variant: "success",
+        });
         setOrganization(data);
       }
     } catch (error) {
+      enqueueSnackbar(`${t("components.Organization.crud.failure")}`, {
+        variant: "error",
+      });
     } finally {
       dialog.current.close();
     }

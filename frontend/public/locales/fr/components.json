@@ -481,6 +481,10 @@
       "dialogTitle": "Editer l'emprise",
       "dialogContentText": "Extension acceptés : zip, geojson"
     },
+    "crud": {
+      "success": "Organisation mise à jour avec succès",
+      "failure": "Èchec lors de la mise à jour de l'organisation"
+    },
     "Tabs": {
       "general": "Informations générales",
       "teams": "Équipes",

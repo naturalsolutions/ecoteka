@@ -486,6 +486,10 @@
       "dialogTitle": "Editar área de trabajo",
       "dialogContentText": "Formatos aceptados : zip, geojson"
     },
+    "crud": {
+      "success": "Organisation mise à jour avec succès",
+      "failure": "Èchec lors de la mise à jour de l'organisation"
+    },
     "Tabs": {
       "general": "Información general",
       "teams": "Equipos",
