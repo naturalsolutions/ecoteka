@@ -13,7 +13,6 @@ import ETKFormWorkingArea, {
   ETKFormWorkingAreaActions,
 } from "@/components/Organization/WorkingArea/Form";
 import { useTranslation } from "react-i18next";
-import { useQuery, useQueryClient } from "react-query";
 import bbox from "@turf/bbox";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,26 +32,27 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
   const mapRef = createRef<ETKMap>();
+  const [workingArea, setWorkingArea] = useState();
   const [isMapReady, setIsMapReady] = useState(false);
-  const cache = useQueryClient();
   const { apiETK } = useApi().api;
 
   const queryName = `working_area_${organization.id}`;
-  const { status, data: workingArea, error, isFetching } = useQuery(
-    queryName,
-    async () => {
-      try {
-        const { data } = await apiETK.get(
-          `/organization/${organization.id}/working_area`
-        );
 
-        return data;
-      } catch (error) {}
-    },
-    {
-      enabled: Boolean(organization),
-    }
-  );
+  const getWorkingArea = async () => {
+    try {
+      const { status, data } = await apiETK.get(
+        `/organization/${organization.id}/working_area`
+      );
+
+      if (status === 200) {
+        setWorkingArea(data);
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getWorkingArea();
+  }, []);
 
   useEffect(() => {
     if (mapRef.current && isMapReady && workingArea) {
@@ -140,11 +140,11 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
     const isOk = await formAreaRef.current.submit();
     if (isOk) {
       dialog.current.close();
+      await getWorkingArea();
       snackbar.current.open({
         message: "Succès de l'envoi.",
         severity: "success",
       });
-      cache.invalidateQueries(queryName);
     }
   };
 
