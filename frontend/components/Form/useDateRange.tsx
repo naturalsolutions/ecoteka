@@ -1,7 +1,19 @@
-import { FormControl, FormHelperText, Grid, Icon, Input, InputLabel, Popover, TextField, TextFieldProps, Typography, withStyles } from "@material-ui/core";
+import {
+  FormControl,
+  FormHelperText,
+  Grid,
+  Icon,
+  Input,
+  InputLabel,
+  Popover,
+  TextField,
+  TextFieldProps,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import { DateRangePicker } from "materialui-daterange-picker";
 import React, { useEffect } from "react";
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { Controller } from "react-hook-form";
 import { TextFieldsOutlined } from "@material-ui/icons";
 
@@ -14,26 +26,26 @@ type drprops = {
 
 type tdaterange = {
   startDate?: Date;
-  endDate?: Date
+  endDate?: Date;
 };
 
 const CalendarToogleIcon = withStyles({
   root: {
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  },
 })(CalendarTodayIcon);
 
-const ETKDateRangePicker: React.FC<drprops> = props => {
+const ETKDateRangePicker: React.FC<drprops> = (props) => {
   const defaultValue = {
     startDate: new Date(),
-    endDate: new Date()
+    endDate: new Date(),
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const toggle = () => setAnchorEl(null);
   const onIconClick = (e) => {
     setAnchorEl(e.currentTarget);
-  }
+  };
   return (
     <Controller
       control={props.control}
@@ -45,22 +57,23 @@ const ETKDateRangePicker: React.FC<drprops> = props => {
             <TextField
               label={props.label}
               variant="filled"
-              value={value.startDate.toDateString() + ' > ' + value.endDate.toDateString()}
+              value={
+                value.startDate.toDateString() +
+                " > " +
+                value.endDate.toDateString()
+              }
               inputProps={{
-                disabled: true
+                disabled: true,
               }}
               InputProps={{
-                endAdornment: <CalendarToogleIcon onClick={onIconClick}/>
+                endAdornment: <CalendarToogleIcon onClick={onIconClick} />,
               }}
             />
             {Boolean(props.error) && (
               <FormHelperText>{props.error?.message}</FormHelperText>
             )}
           </Grid>
-          <Popover
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-          >
+          <Popover open={Boolean(anchorEl)} anchorEl={anchorEl}>
             <DateRangePicker
               open={Boolean(anchorEl)}
               toggle={toggle}
@@ -72,12 +85,10 @@ const ETKDateRangePicker: React.FC<drprops> = props => {
             />
           </Popover>
         </React.Fragment>
-      )
-      }
-    >
-    </Controller>
-  )
-}
+      )}
+    ></Controller>
+  );
+};
 
 interface Fields {
   [key: string]: TextFieldProps;
@@ -92,7 +103,7 @@ export default function useDateRangeField(props): Fields {
       name,
       label: field.label,
       error: Boolean(props.errors[name]),
-      control: props.control
+      control: props.control,
     };
 
     const fieldProps = Object.assign({}, defaultFieldProps, field);

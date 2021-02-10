@@ -14,6 +14,8 @@ import ETKFormWorkingArea, {
 } from "@/components/Organization/WorkingArea/Form";
 import { useTranslation } from "react-i18next";
 import bbox from "@turf/bbox";
+import { useSnackbar } from "notistack";
+import Can from "@/components/Can";
 
 const useStyles = makeStyles((theme) => ({
   map: {
@@ -25,59 +27,84 @@ interface IGeneralInfoTab {
   organization: IOrganization;
 }
 
-const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
+const GeneralInfoTab: FC<IGeneralInfoTab> = ({
+  organization: initialOrganization,
+}) => {
   const classes = useStyles();
   const { dialog, snackbar } = useAppLayout();
+  const { t } = useTranslation(["components", "common"]);
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
-  const { t } = useTranslation(["components", "common"]);
   const mapRef = createRef<ETKMap>();
   const [workingArea, setWorkingArea] = useState({
     geometry: { coordinates: [] },
   });
   const [isMapReady, setIsMapReady] = useState(false);
   const { apiETK } = useApi().api;
+  const [organization, setOrganization] = useState<IOrganization>(
+    initialOrganization
+  );
+  const { enqueueSnackbar } = useSnackbar();
 
-  const queryName = `working_area_${organization.id}`;
-
-  const getWorkingArea = async () => {
+  const getWorkingArea = async (organization) => {
     try {
-      const { status, data } = await apiETK.get(
+      const { data, status } = await apiETK.get(
         `/organization/${organization.id}/working_area`
       );
-
-      if (status === 200) {
+      if (status == 200) {
+        enqueueSnackbar(
+          `${t("components.Organization.WorkingArea.getSuccess")}`,
+          {
+            variant: "success",
+          }
+        );
         setWorkingArea(data);
       }
-    } catch (error) {}
+    } catch (error) {
+      enqueueSnackbar(
+        `${t("components.Organization.WorkingArea.getFailure")}`,
+        {
+          variant: "error",
+        }
+      );
+      setWorkingArea(null);
+    }
   };
 
   useEffect(() => {
-    getWorkingArea();
-  }, []);
+    setOrganization(initialOrganization);
+    getWorkingArea(initialOrganization);
+  }, [initialOrganization]);
 
   useEffect(() => {
     if (mapRef.current && isMapReady && workingArea) {
       if (workingArea.geometry?.coordinates.length) {
         const map = mapRef.current.map;
         map.fitBounds(bbox(workingArea.geometry));
-        if (map.getSource(queryName)) {
-          map.removeLayer(queryName);
-          map.removeSource(queryName);
+        if (map.getSource("waSource")) {
+          map.removeLayer("waSource");
+          map.removeSource("waSource");
         }
-        map.addSource(queryName, {
+        map.addSource("waSource", {
           type: "geojson",
           data: workingArea,
         });
         map.addLayer({
-          id: queryName,
-          source: queryName,
+          id: "waSource",
+          source: "waSource",
           type: "fill",
           paint: {
             "fill-color": "#00C6B8",
             "fill-opacity": 0.5,
           },
         });
+      }
+    }
+    if (mapRef.current && isMapReady && !workingArea) {
+      const map = mapRef.current.map;
+      if (map.getSource("waSource")) {
+        map.removeLayer("waSource");
+        map.removeSource("waSource");
       }
     }
   }, [mapRef, workingArea]);
@@ -106,13 +133,21 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   }
 
   const addItem = async () => {
-    const response = await formEditRef.current.submit();
-    const data = await response.json();
-
-    //TODO handle errors
-
-    dialog.current.close();
-    //TODO display new data
+    try {
+      const { status, data } = await formEditRef.current.submit();
+      if (status === 200) {
+        enqueueSnackbar(`${t("components.Organization.crud.success")}`, {
+          variant: "success",
+        });
+        setOrganization(data);
+      }
+    } catch (error) {
+      enqueueSnackbar(`${t("components.Organization.crud.failure")}`, {
+        variant: "error",
+      });
+    } finally {
+      dialog.current.close();
+    }
   };
 
   function openArea() {
@@ -125,7 +160,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
         variant: "contained",
         color: "secondary",
         noClose: true,
-        onClick: editWorkingArea,
+        onClick: addItem,
       },
     ];
 
@@ -139,31 +174,39 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   }
 
   const editWorkingArea = async () => {
-    const isOk = await formAreaRef.current.submit();
-    if (isOk) {
-      dialog.current.close();
-      await getWorkingArea();
-      snackbar.current.open({
-        message: "Succès de l'envoi.",
-        severity: "success",
+    try {
+      const isOk = await formAreaRef.current.submit();
+      if (isOk) {
+        getWorkingArea(organization);
+        enqueueSnackbar(`${t("components.Organization.crud.success")}`, {
+          variant: "success",
+        });
+      }
+    } catch (error) {
+      enqueueSnackbar(`${t("components.Organization.crud.failure")}`, {
+        variant: "error",
       });
+    } finally {
+      dialog.current.close();
     }
   };
 
   return (
     <Grid container alignItems="stretch">
       <Grid item xs={6}>
-        {organization?.name}
+        {organization.name}
         <div>
-          <Button
-            color="secondary"
-            variant="contained"
-            onClick={() => {
-              openForm();
-            }}
-          >
-            Edit
-          </Button>
+          <Can do="update" on="Organization">
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={() => {
+                openForm();
+              }}
+            >
+              Edit
+            </Button>
+          </Can>
         </div>
       </Grid>
       <Grid item xs={6} className={classes.map}>
@@ -174,15 +217,17 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
             setIsMapReady(true);
           }}
         />
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => {
-            openArea();
-          }}
-        >
-          Edit map
-        </Button>
+        <Can do="update" on="Organization">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              openArea();
+            }}
+          >
+            Edit map
+          </Button>
+        </Can>
       </Grid>
     </Grid>
   );

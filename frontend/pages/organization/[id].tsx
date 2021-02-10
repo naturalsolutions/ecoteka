@@ -3,7 +3,10 @@ import { useRouter } from "next/router";
 import { Container } from "@material-ui/core";
 import { Header, Breadcrumb, Tabs } from "@/components/Organization";
 import useAPI from "@/lib/useApi";
+import { AbilityContext } from "@/components/Can";
+import { buildAbilityFor } from "@/abilities/genericOrganizationAbility";
 import AppLayoutGeneral from "@/components/AppLayout/General";
+import { subject } from "@casl/ability";
 
 interface OrganizationProps {}
 
@@ -26,7 +29,7 @@ const Organization: FC<OrganizationProps> = (props) => {
       } = await apiETK.get(`/organization/${id}/path`);
 
       if (organizationResponseStatus === 200) {
-        setOrganization(organizationData);
+        setOrganization(subject("Organization", organizationData));
       }
 
       if (parentsResponseStatus === 200 && parentsData.length > 0) {
@@ -44,11 +47,15 @@ const Organization: FC<OrganizationProps> = (props) => {
   return (
     organization && (
       <AppLayoutGeneral>
-        <Container>
-          {parents && parents.length > 0 && <Breadcrumb path={parents} />}
-          <Header />
-          <Tabs organization={organization} activeTab={router.query.t} />
-        </Container>
+        <AbilityContext.Provider
+          value={buildAbilityFor(organization?.current_user_role)}
+        >
+          <Container>
+            {parents && parents.length > 0 && <Breadcrumb path={parents} />}
+            <Header />
+            <Tabs organization={organization} activeTab={router.query.t} />
+          </Container>
+        </AbilityContext.Provider>
       </AppLayoutGeneral>
     )
   );

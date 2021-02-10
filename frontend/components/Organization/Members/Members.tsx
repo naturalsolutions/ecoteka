@@ -14,6 +14,7 @@ import AddMembers, {
 } from "@/components/Organization/Members/AddMembers";
 import MembersTable from "@/components/Organization/Members/MembersTable";
 import { IMember } from "@/index";
+import Can from "@/components/Can";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,7 +66,7 @@ const Members: FC<MembersProps> = ({ organization }) => {
   const classes = useStyles();
   const { theme } = useThemeContext();
   const { dialog, snackbar } = useAppLayout();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const { api } = useAPI();
   const { apiETK } = api;
   const matches = useMediaQuery(theme.breakpoints.down("md"));
@@ -215,27 +216,31 @@ const Members: FC<MembersProps> = ({ organization }) => {
     <Fragment>
       <Toolbar className={classes.toolbar}>
         <Box className={classes.root} />
-        <Button
-          variant="contained"
-          size="small"
-          disabled={disableActions}
-          color="secondary"
-          className={classes.button}
-          startIcon={<BlockIcon />}
-          onClick={detachMembers}
-        >
-          {t("components.Organization.Members.detachMembers")}
-        </Button>
-        <Button
-          variant="contained"
-          size="small"
-          color="primary"
-          className={classes.button}
-          startIcon={<AddIcon />}
-          onClick={addMember}
-        >
-          {t("components.Organization.Members.addMembers")}
-        </Button>
+        <Can do="delete" on="Members">
+          <Button
+            variant="contained"
+            size="small"
+            disabled={disableActions}
+            color="secondary"
+            className={classes.button}
+            startIcon={<BlockIcon />}
+            onClick={detachMembers}
+          >
+            {t("components.Organization.Members.detachMembers")}
+          </Button>
+        </Can>
+        <Can do="create" on="Members">
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            className={classes.button}
+            startIcon={<AddIcon />}
+            onClick={addMember}
+          >
+            {t("components.Organization.Members.addMembers")}
+          </Button>
+        </Can>
       </Toolbar>
       {data && (
         <MembersTable
