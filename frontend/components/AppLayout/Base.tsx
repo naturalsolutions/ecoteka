@@ -5,6 +5,7 @@ import ThemeProvider from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutHeader from "@/components/AppLayout/Header";
 import Dialog, { ETKDialogActions } from "@/components/Dialog";
 import Snackbars from "@/components/Snackbars";
+import { NoSsr } from "@material-ui/core";
 
 const AppLayout = createContext(null);
 
@@ -19,10 +20,12 @@ const AppLayoutBase: FC = ({ children }) => {
     <ThemeProvider>
       <SnackbarProvider maxSnack={4}>
         <AppLayout.Provider value={{ dialog, snackbar, t }}>
-          <AppLayoutHeader />
-          {children}
-          <Dialog ref={dialog} />
-          <Snackbars ref={snackbar} />
+          <NoSsr>
+            <AppLayoutHeader />
+            {children}
+            <Dialog ref={dialog} />
+            <Snackbars ref={snackbar} />
+          </NoSsr>
         </AppLayout.Provider>
       </SnackbarProvider>
     </ThemeProvider>

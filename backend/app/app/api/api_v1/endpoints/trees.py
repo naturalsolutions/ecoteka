@@ -14,7 +14,7 @@ from app.models.ws import WSManager
 from fastapi.responses import StreamingResponse
 import geopandas as gpd
 import imghdr
-import aiofiles
+from app.tasks.create_mbtiles import update_mbtiles, create_mbtiles
 
 router = APIRouter()
 policies = {
@@ -136,8 +136,8 @@ def get(
 @router.post("", response_model=schemas.tree.Tree_xy)
 async def add(
     organization_id: int,
-    request: Request,
     *,
+    request: Request,
     auth=Depends(authorization("trees:add")),
     db: Session = Depends(get_db),
     tree: schemas.TreePost,
@@ -152,9 +152,9 @@ async def add(
             organization_id=organization_id,
         )
 
-
         tree_in_db = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info)
-        create_mbtiles_task.delay(organization_id)
+        update_mbtiles(db, organization_id)
+        
         
         channel: Optional[WSManager] = request.scope.get("ws_manager")
 
@@ -191,7 +191,6 @@ def update(
     properties = {k: v for (k, v) in payload.properties.items() if v is not ""}
     tree_in_db.properties = properties
     db.commit()
-    create_mbtiles_task.delay(tree_in_db.organization_id)
     return tree_in_db.to_xy()
 
 
@@ -207,6 +206,11 @@ async def bulk_delete(
     for tree_id in trees:
         crud.crud_tree.tree.remove(db, id=tree_id)
 
+    organization_in_db = crud.crud_organization.organization.get(db, id=organization_id)
+
+    if organization_in_db:
+        create_mbtiles(db, organization_in_db)
+
     channel = request.scope.get("ws_manager")
 
     if channel is not None:
@@ -217,8 +221,6 @@ async def bulk_delete(
                 "trees": trees
             }
         )
-
-    create_mbtiles_task.delay(organization_id)
 
     return trees
 
@@ -232,8 +234,7 @@ def delete(
 ) -> Any:
     """Deletes a tree"""
     response = crud.crud_tree.tree.remove(db, id=tree_id).to_xy()
-    create_mbtiles_task.delay(organization_id)
-
+    
     return response
 
 @router.post("/{tree_id}/images")

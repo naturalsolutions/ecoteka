@@ -43,6 +43,7 @@ def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
         organization_id=geofile.organization_id,
         geom=f"POINT({x} {y})",
         properties=properties_tree,
+        status="import"
     )  # type: ignore
 
     return tree

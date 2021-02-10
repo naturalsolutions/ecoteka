@@ -1,12 +1,17 @@
-from enum import Enum
-import json
-from typing import Optional, Any, List
+from typing import Optional, Any
+import enum
 
-from pydantic import BaseModel, Json
-from sqlalchemy import inspect
+from pydantic import BaseModel
+
+class TreeStatus(enum.Enum):
+    NEW = "new"
+    EDIT = "edit"
+    DELETE = "delete"
+    IMPORT = "import"
+    FROZEN = "frozen"
 
 
-class TreeJsonBProperties(BaseModel):
+class TreeProperties(BaseModel):
     family: Optional[str]
     gender: Optional[str]
     specie: Optional[str]
@@ -39,22 +44,21 @@ class TreeDBMeta(BaseModel):
     organization_id: int
 
 
-class TreePost(TreeJsonBProperties):
+class TreePost(TreeProperties):
     """ Schema for tree creation post request data"""
-
     x: float
     y: float
     properties: Any
 
 
-class TreePatch(TreePost):
+class TreePatch(TreeProperties):
     x: Optional[float]
     y: Optional[float]
+    properties: Any
 
 
 class Tree_xy(TreeDBMeta):
     """Representation of Tree with (x,y) coords instead of geoalchemy.geom-point"""
-
     id: int
     x: float
     y: float

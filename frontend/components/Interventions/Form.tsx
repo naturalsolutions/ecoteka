@@ -54,7 +54,6 @@ type ETKInterventionFormProps = {
   interventionType: TInterventionType;
   step: TInterventionStep;
   data: any;
-  map: any;
   organization: any;
 };
 
@@ -88,13 +87,6 @@ const ETKInterventionForm = forwardRef<
       const { data: tree } = await apiETK.get(
         `/organization/${organizationId}/trees/${treeId}`
       );
-
-      if (tree && tree.x && tree.y) {
-        props.map.flyTo({
-          zoom: 20,
-          center: [tree.x, tree.y],
-        });
-      }
     } catch (e) {}
   };
 
@@ -157,7 +149,7 @@ const initialData = steps.reduce(
   {}
 );
 
-const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
+const ETKInterventionFormStepper: React.FC<{}> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { user } = useAppContext();
@@ -260,7 +252,7 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
   };
 
   const handleBackToTree = () => {
-    router.push(`/edition/?panel=info&tree=${router.query.tree}`);
+    router.push(`/map/?panel=info&tree=${router.query.tree}`);
   };
 
   return (
@@ -310,7 +302,6 @@ const ETKInterventionFormStepper: React.FC<{ map: any }> = (props) => {
                     data={data[step]}
                     interventionType={interventionType}
                     step={step}
-                    map={props.map}
                     organization={user.currentOrganization}
                   />
                   <Grid container direction="row" justify="flex-end">

@@ -61,6 +61,12 @@
     "SateliteToggle": {
       "map": "Mapa",
       "satellite": "Satélite"
+    },
+    "Filter": {
+      "title": "Filtros"
+    },
+    "Layers": {
+      "title": "Capas"
     }
   },
   "Sidebar": {
@@ -410,7 +416,7 @@
       "notes": "Remarques"
     },
     "summary": {
-      "moreDetails": "Mas detalles"
+      "moreDetails": "Editar árbol"
     },
     "latitude": "Latitud",
     "longitude": "Longitud",
@@ -422,13 +428,14 @@
     "dialogDeleteActionYes": "Si",
     "dialogDeleteActionCancel": "No",
     "title": "Edición",
-    "treeIdentity": "Tree identity",
-    "characteristics": "Caracteristicas",
+    "treeIdentity": "Identidad del árbol",
+    "characteristics": "Características",
     "outdoorEnvironment": "Outdoor Environment",
     "other": "Otro",
     "imagesUpload": {
       "select": "Arrasta y suelta las imágenes aquí o haz click (max.{{max}})"
-    }
+    },
+    "backToInfo": "Volver al árbol"
   },
   "Teams": {
     "buttonAdd": "Añadir un equipo",
@@ -575,11 +582,13 @@
   },
   "MapModeSwitch": {
     "analysis": "Análisis",
-    "edition": "Edición"
+    "edition": "Edición",
+    "import": "Importar"
   },
   "MapDrawToolbar": {
     "selection": "Selección",
     "draw_point": "+ Árbol",
-    "draw_polygon": "+ Estación"
+    "draw_polygon": "+ Estación",
+    "delete": "Eliminar"
   }
 }

@@ -21,11 +21,11 @@ export interface IUser {
 
 export interface ITree {
   id: number;
-  x: number;
-  y: number;
-  properties: object;
-  user_id: number;
-  organization_id: number;
+  x?: number;
+  y?: number;
+  properties?: object;
+  user_id?: number;
+  organization_id?: number;
 }
 
 export interface IMember {

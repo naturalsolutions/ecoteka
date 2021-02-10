@@ -10,6 +10,9 @@ const excludeEnvVars = ["ASSET_PREFIX"];
 
 let config = {
   trailingSlash: true,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 config.env = {};
@@ -39,7 +42,10 @@ config.webpack = (config, { isServer }) => {
     };
   }
 
-  config.resolve.alias["mapbox-gl"] = "maplibre-gl";
+  config.resolve.alias = {
+    ...config.resolve.alias,
+    "mapbox-gl": "maplibre-gl",
+  };
 
   return config;
 };

@@ -108,7 +108,7 @@ const CalendarInterventionForm = (props) => {
               size="small"
               onClick={() => {
                 props.dialog.current.close();
-                router.push(`/edition/?tree=${props.intervention.tree_id}`);
+                router.push(`/map/?tree=${props.intervention.tree_id}`);
               }}
             >
               Vue arbre
