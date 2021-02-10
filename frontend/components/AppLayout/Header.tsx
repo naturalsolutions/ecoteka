@@ -143,13 +143,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
           </Grid>
         </Grid>
         <Grid item xs={6}>
-          <Grid
-            container
-            justify="flex-end"
-            direction="row"
-            alignItems="center"
-            spacing={1}
-          >
+          <Grid container justify="flex-end" direction="row" spacing={1}>
             <NoSsr>
               <Grid item>
                 <ToggleButton
@@ -172,14 +166,23 @@ const AppLayoutHeader = ({}): JSX.Element => {
                 <LanguageSelector />
               </Grid>
             </Hidden>
-            <Grid item>{!user && <ContactButton />}</Grid>
-            <Grid item>{user && <UserMainMenuButton />}</Grid>
             {!user && (
+              <Hidden smDown>
+                <Grid item>
+                  {" "}
+                  <ContactButton />
+                </Grid>
+              </Hidden>
+            )}
+            {user && (
               <Grid item>
-                <Button onClick={handleSignInClick}>
-                  {t("SignIn.buttonConnexion")}
-                </Button>
+                <UserMainMenuButton />
               </Grid>
+            )}
+            {!user && (
+              <Button size="small" onClick={handleSignInClick}>
+                {t("components.SignIn.buttonConnexion")}
+              </Button>
             )}
           </Grid>
         </Grid>

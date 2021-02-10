@@ -33,7 +33,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const { t } = useTranslation(["components", "common"]);
   const mapRef = createRef<ETKMap>();
   const [workingArea, setWorkingArea] = useState({
-    geometry: [],
+    geometry: { coordinates: [] },
   });
   const [isMapReady, setIsMapReady] = useState(false);
   const { apiETK } = useApi().api;
@@ -58,7 +58,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
 
   useEffect(() => {
     if (mapRef.current && isMapReady && workingArea) {
-      if (workingArea.geometry) {
+      if (workingArea.geometry?.coordinates.length) {
         const map = mapRef.current.map;
         map.fitBounds(bbox(workingArea.geometry));
         if (map.getSource(queryName)) {

@@ -1,21 +1,19 @@
 import { FC, createContext, useContext, ReactNode } from "react";
 import { makeStyles, Drawer } from "@material-ui/core";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
-
-const toolbarHeight = 48;
-const toolbarHeightCalc = `calc(100vh - ${toolbarHeight}px)`;
+import { use100vh } from "react-div-100vh";
 
 const useStyles = makeStyles((theme) => ({
   content: {
     position: "relative",
     backgroundColor: theme.palette.background.default,
-    height: toolbarHeightCalc,
+    height: (props) => props.appHeight,
     flexGrow: 1,
   },
   drawerLeft: {
     // @ts-ignore
     width: (props) => props.drawerLeftWidth,
-    height: toolbarHeightCalc,
+    height: (props) => props.appHeight,
     flexShrink: 0,
     [theme.breakpoints.down("sm")]: {
       maxWidth: 300,
@@ -26,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
     // @ts-ignore
     width: (props) => props.drawerLeftWidth,
     padding: "1rem",
-    height: toolbarHeightCalc,
-    marginTop: toolbarHeight,
+    height: (props) => props.appHeight,
+    marginTop: 48,
     [theme.breakpoints.down("sm")]: {
       maxWidth: 300,
     },
@@ -49,8 +47,12 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
   drawerLeftWidth = 400,
   drawerLeftComponent,
 }) => {
+  const toolbarHeight = 48;
+  const vh = use100vh();
+  const appHeight = vh - toolbarHeight;
   const classes = useStyles({
     drawerLeftWidth,
+    appHeight,
   });
 
   return (
