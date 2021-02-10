@@ -1,20 +1,15 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { makeStyles, Card, CardContent } from "@material-ui/core";
-import ETKMap from "@/components/Map/Map";
 import { useAppContext } from "@/providers/AppContext";
-
-export type PanelContext = {
-  map: React.RefObject<ETKMap> | undefined;
-};
 
 export interface PanelProps {
   panel: string | undefined;
+  info?: object;
 }
 
 const defaultProps: PanelProps = {
   panel: undefined,
-  context: undefined,
 };
 
 const useStyles = makeStyles(() => ({
@@ -31,10 +26,9 @@ const PanelPanels = {
   newIntervention: dynamic(() => import("@/components/Interventions/Form")),
 };
 
-const Panel: React.FC<PanelProps> = (props) => {
+const Panel: React.FC<PanelProps> = ({ panel, info }) => {
   const classes = useStyles();
   const { isLoading } = useAppContext();
-  let panel = props.panel;
 
   if (!panel) {
     panel = "start";
@@ -47,7 +41,7 @@ const Panel: React.FC<PanelProps> = (props) => {
   ) : (
     <Card elevation={0} square className={classes.paper}>
       <CardContent>
-        <Panel context={props.context} />
+        <Panel info={info} />
       </CardContent>
     </Card>
   );

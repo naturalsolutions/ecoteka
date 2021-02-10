@@ -1,7 +1,6 @@
 import { useState, createRef, useEffect } from "react";
 import { Grid, makeStyles, Hidden } from "@material-ui/core";
 import { useRouter } from "next/router";
-import Map from "@/components/Map/Map";
 import MapSearchCity from "@/components/Map/SearchCity";
 import MapGeolocateFab from "@/components/Map/GeolocateFab";
 import Panel from "@/components/Panel";
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function IndexPage() {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
-  const mapRef = createRef<Map>();
+  const [info, setInfo] = useState();
   const classes = useStyles();
   const { user } = useAppContext();
   const [landing, setLanding] = useState(true);
@@ -70,8 +69,8 @@ export default function IndexPage() {
     pointRadiusMinPixels: 1,
     pointRadiusMaxPixels: 10,
     pointRadiusScale: 2,
-    getLineColor: [192, 192, 192],
-    getFillColor: [140, 170, 180],
+    getLineColor: [34, 169, 54, 100],
+    getFillColor: [34, 139, 34, 100],
     pickable: true,
   });
 
@@ -106,7 +105,7 @@ export default function IndexPage() {
       >
         <Hidden smDown>
           <Grid item className={classes.sidebar}>
-            <Panel panel={router.query.panel as string} />
+            <Panel panel={router.query.panel as string} info={info} />
           </Grid>
         </Hidden>
         <Grid item xs className={classes.main}>
@@ -118,7 +117,11 @@ export default function IndexPage() {
             onViewStateChange={(e) => {
               setViewState(e.viewState);
             }}
-            onClick={(info) => {}}
+            onClick={(e) => {
+              if (e.object) {
+                setInfo(e.object.properties);
+              }
+            }}
           >
             <StaticMap
               mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}

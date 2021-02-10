@@ -88,7 +88,7 @@ const Landing: React.FC<LandingProps> = ({ onChange }) => {
           </Grid>
           <Grid item>
             <Typography>
-              <Trans>{t("compoenents.PanelWelcome.text")}</Trans>
+              <Trans>{t("components.PanelWelcome.text")}</Trans>
             </Typography>
           </Grid>
           <Grid item className={classes.searchBox}>

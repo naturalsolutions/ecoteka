@@ -13,16 +13,15 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import Wikipedia from "@/components/Panel/Start/Wikipedia";
+import { useRouter } from "next/router";
 
-export interface ETKPanelStartTreeInfoProps {
+export interface PanelStartTreeInfoProps {
   tree: any;
-  coordinates: [number, number];
   onClose?(): void;
 }
 
-const defaultProps: ETKPanelStartTreeInfoProps = {
+const defaultProps: PanelStartTreeInfoProps = {
   tree: {},
-  coordinates: [0, 0],
 };
 
 const useStyles = makeStyles(() => ({
@@ -36,23 +35,13 @@ interface Tree {
   gender: string;
 }
 
-const ETKPanelStartTreeInfo: React.FC<ETKPanelStartTreeInfoProps> = (props) => {
+const PanelStartTreeInfo: React.FC<PanelStartTreeInfoProps> = (props) => {
   const classes = useStyles();
-  const [properties, setProperties] = useState({} as any);
+  const [properties, setProperties] = useState({});
+  const router = useRouter();
 
   useEffect(() => {
-    if (props.tree.properties) {
-      try {
-        let newProperties = JSON.parse(props.tree.properties);
-
-        setProperties({
-          id: props.tree.id,
-          lng: props.coordinates[0],
-          lat: props.coordinates[1],
-          ...newProperties,
-        });
-      } catch (e) {}
-    } else if (props.tree.other_tags) {
+    if (props.tree.other_tags) {
       try {
         let newProperties = JSON.parse(
           `{${props.tree.other_tags.replaceAll("=>", ":")}}`
@@ -60,8 +49,6 @@ const ETKPanelStartTreeInfo: React.FC<ETKPanelStartTreeInfoProps> = (props) => {
 
         setProperties({
           osm_id: props.tree.osm_id,
-          lng: props.coordinates[0],
-          lat: props.coordinates[1],
           ...newProperties,
         });
       } catch (e) {}
@@ -78,7 +65,11 @@ const ETKPanelStartTreeInfo: React.FC<ETKPanelStartTreeInfoProps> = (props) => {
             <Typography variant="h6">Info</Typography>
           </Grid>
           <Grid item>
-            <IconButton onClick={props.onClose}>
+            <IconButton
+              onClick={() => {
+                router.push("/?panel=start");
+              }}
+            >
               <CloseIcon />
             </IconButton>
           </Grid>
@@ -112,6 +103,6 @@ const ETKPanelStartTreeInfo: React.FC<ETKPanelStartTreeInfoProps> = (props) => {
   );
 };
 
-ETKPanelStartTreeInfo.defaultProps = defaultProps;
+PanelStartTreeInfo.defaultProps = defaultProps;
 
-export default ETKPanelStartTreeInfo;
+export default PanelStartTreeInfo;
