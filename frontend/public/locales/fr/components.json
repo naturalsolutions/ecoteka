@@ -207,7 +207,7 @@
     "intervention_type": "Type d'intervention",
     "intervenant": "Intervenant",
     "intervention_period": "Période d'intervention",
-    "estimated_cost": "Coût estimatif",
+    "estimated_cost": "Coût estimatif (en € HT)",
     "tree_id": "Arbre",
     "back": "Retour à l'arbre",
     "steps": {
@@ -486,7 +486,13 @@
     "exportSuccess": "Vos données sont prêtes! Téléchargement en cours...",
     "WorkingArea": {
       "dialogTitle": "Editer l'emprise",
-      "dialogContentText": "Extension acceptés : geojson"
+      "dialogContentText": "Extension acceptés : geojson",
+      "getSuccess": "Zone de travail de l'organisation récupérée avec succès.",
+      "getFailure": "Impossible de récupérer la zone de travail de l'organization."
+    },
+    "crud": {
+      "success": "Organisation mise à jour avec succès",
+      "failure": "Èchec lors de la mise à jour de l'organisation"
     },
     "Tabs": {
       "general": "Informations générales",

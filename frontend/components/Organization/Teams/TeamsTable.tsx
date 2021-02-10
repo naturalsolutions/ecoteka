@@ -26,6 +26,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { IOrganization } from "@/index";
 import useAPI from "@/lib/useApi";
+import Can from "@/components/Can";
 
 export interface ETKOrganizationTeamsTableProps {
   organizationId: number;
@@ -124,50 +125,54 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = ({
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  indeterminate={
-                    selectedTeams.length > 0 &&
-                    selectedTeams.length < rows.length
-                  }
-                  checked={
-                    rows.length > 0 && selectedTeams.length === rows.length
-                  }
-                  onChange={onSelectAllClick}
-                  color="primary"
-                />
-              </TableCell>
-              <TableCell padding="checkbox">
-                <IconButton
-                  disabled={!selectedTeams.length}
-                  size="small"
-                  aria-owns={actionsMenuAnchorEl ? "membersActionsMenu" : null}
-                  aria-haspopup="true"
-                  onClick={handleClick}
-                >
-                  <MoreHorizIcon />
-                </IconButton>
-                <Menu
-                  elevation={0}
-                  id="membersActionsMenu"
-                  anchorEl={actionsMenuAnchorEl}
-                  open={Boolean(actionsMenuAnchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={() => triggerDiscard()}>
-                    <ListItemIcon>
-                      <ArchiveIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={t(`common.buttons.archive`)} />
-                  </MenuItem>
-                  <MenuItem onClick={() => triggerDelete()}>
-                    <ListItemIcon>
-                      <DeleteIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={t(`common.buttons.delete`)} />
-                  </MenuItem>
-                </Menu>
-              </TableCell>
+              <Can do="manage" on="Teams">
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    indeterminate={
+                      selectedTeams.length > 0 &&
+                      selectedTeams.length < rows.length
+                    }
+                    checked={
+                      rows.length > 0 && selectedTeams.length === rows.length
+                    }
+                    onChange={onSelectAllClick}
+                    color="primary"
+                  />
+                </TableCell>
+                <TableCell padding="checkbox">
+                  <IconButton
+                    disabled={!selectedTeams.length}
+                    size="small"
+                    aria-owns={
+                      actionsMenuAnchorEl ? "membersActionsMenu" : null
+                    }
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <MoreHorizIcon />
+                  </IconButton>
+                  <Menu
+                    elevation={0}
+                    id="membersActionsMenu"
+                    anchorEl={actionsMenuAnchorEl}
+                    open={Boolean(actionsMenuAnchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={() => triggerDiscard()}>
+                      <ListItemIcon>
+                        <ArchiveIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={t(`common.buttons.archive`)} />
+                    </MenuItem>
+                    <MenuItem onClick={() => triggerDelete()}>
+                      <ListItemIcon>
+                        <DeleteIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={t(`common.buttons.delete`)} />
+                    </MenuItem>
+                  </Menu>
+                </TableCell>
+              </Can>
               {headers.map((header, index) => (
                 <TableCell key={`header-${index}`}>
                   <strong>{t(header)}</strong>
@@ -187,14 +192,16 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = ({
                     role="checkbox"
                     aria-checked={isItemSelected}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        color="primary"
-                        onClick={(e) => onRowClick(e, row.id)}
-                      />
-                    </TableCell>
-                    <TableCell padding="checkbox"></TableCell>
+                    <Can do="manage" on="Teams">
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          color="primary"
+                          onClick={(e) => onRowClick(e, row.id)}
+                        />
+                      </TableCell>
+                      <TableCell padding="checkbox"></TableCell>
+                    </Can>
                     <TableCell scope="row">
                       <Button
                         style={{ justifyContent: "flex-start" }}
@@ -211,28 +218,30 @@ const ETKTeamsTable: React.FC<ETKOrganizationTeamsTableProps> = ({
                       {row.total_trees || "-"}
                     </TableCell>
                     <TableCell style={{ width: 120 }}>
-                      <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={() => {
-                            openArea(row);
-                          }}
-                        >
-                          <PhotoSizeSelectSmall fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title={t("Teams.tooltipInfoEdit")}>
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={() => {
-                            openForm(row);
-                          }}
-                        >
-                          <Edit fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
+                      <Can do="manage" on="Teams">
+                        <Tooltip title={t("Teams.tooltipWorkingAreaEdit")}>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => {
+                              openArea(row);
+                            }}
+                          >
+                            <PhotoSizeSelectSmall fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title={t("Teams.tooltipInfoEdit")}>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => {
+                              openForm(row);
+                            }}
+                          >
+                            <Edit fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Can>
                       <Tooltip title={t("Teams.tooltipLink")}>
                         <IconButton
                           size="small"

@@ -487,7 +487,13 @@
     "exportSuccess": "Your export request is ready! Download in progress...",
     "WorkingArea": {
       "dialogTitle": "Edit working area",
-      "dialogContentText": "Accept: geojson"
+      "dialogContentText": "Accept : geojson",
+      "getSuccess": "Working area loaded with success",
+      "getFailure": "Failed to retrieve working arera for this organization"
+    },
+    "crud": {
+      "success": "Organization updated with success",
+      "failure": "Organization modification failed."
     },
     "Tabs": {
       "general": "General informations",
