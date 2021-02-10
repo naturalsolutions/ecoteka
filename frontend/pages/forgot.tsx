@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  CardMedia,
   CircularProgress,
   Grid,
   makeStyles,
@@ -33,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  image: {
+    height: "250px",
+    backgroundSize: "contain",
+  },
 }));
 
 const BaseCard = ({ children }) => {
@@ -41,6 +46,11 @@ const BaseCard = ({ children }) => {
 
   return (
     <Card elevation={0} className={classes.baseCard}>
+      <CardMedia
+          image="/assets/password.svg"
+          title="Password"
+          className={classes.image}
+        />
       <CardHeader
         title={t("pages.Forgot.EmailCard.title")}
         className={classes.baseCardTitle}
@@ -55,10 +65,16 @@ const BaseCard = ({ children }) => {
 };
 
 const SentCard = ({ email, onLogin }) => {
+  const classes = useStyles();
   const { t } = useTranslation(["pages", "common"]);
 
   return (
     <BaseCard>
+        <CardMedia
+          image="/assets/password.svg"
+          title="Password"
+          className={classes.image}
+        />
       <Grid item>
         <Box mt={2} mb={3}>
           <Typography align="center">

@@ -146,8 +146,7 @@ In dev mode, in order to launch Cypress Interactive Tests Runner, here are the s
 
 1.  Launch project in dev mode: `./scripts/start_dev.sh`
 2.  Go to frontend folder: `cd frontend`
-3.  If needed, install Cypress on your local machine: `npx cypress install`
-4.  Open Test Runner: `npx cypress open`
+3.  Open Test Runner: `npx cypress open`
 
 ## Links
 
