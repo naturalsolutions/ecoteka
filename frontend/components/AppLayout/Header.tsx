@@ -105,7 +105,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
           <Grid container alignItems="center">
             <Grid item>
               <LogoWrapperButton
-                onClick={() => router.push("/")}
+                onClick={() => router.push(user ? "/map" : "/")}
                 disableFocusRipple
               >
                 <img src={logo} className={classes.logo} />
