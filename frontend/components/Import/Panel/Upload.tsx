@@ -168,6 +168,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
         setError(data.detail);
       }
 
+      setInProgress(false);
       props.onUploaded(data);
     } catch (error) {
       if (error.response.status === 400) {
@@ -176,8 +177,6 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
       } else {
         setError(error.response.data.detail);
       }
-      setInProgress(false);
-    } finally {
       setInProgress(false);
     }
   };

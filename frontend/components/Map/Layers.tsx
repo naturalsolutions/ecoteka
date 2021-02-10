@@ -9,124 +9,45 @@ import {
   Grid,
   Radio,
   RadioGroup,
+  Typography,
 } from "@material-ui/core";
-import MapGL from "@urbica/react-map-gl";
 
 export interface IMapLayers {
-  map: MapGL;
+  mapBackground: string;
+  onChangeBackground?(background: string): void;
 }
 
-const excludeLayers = [
-  "background",
-  "landuse_residential",
-  "landcover_grass",
-  "landcover_wood",
-  "water",
-  "water_intermittent",
-  "landcover_ice-shelf",
-  "landcover_glacier",
-  "landcover_sand",
-  "waterway_tunnel",
-  "waterway",
-  "waterway_intermittent",
-  "tunnel_railway_transit",
-  "building",
-  "road_area_pier",
-  "road_pier",
-  "road_bridge_area",
-  "road_path",
-  "road_minor",
-  "tunnel_minor",
-  "tunnel_major",
-  "aeroway_area",
-  "aeroway_taxiway",
-  "aeroway_runway",
-  "road_trunk_primary",
-  "road_secondary_tertiary",
-  "road_major_motorway",
-  "railway_transit",
-  "railway",
-  "waterway-bridge-case",
-  "waterway-bridge",
-  "bridge_minor case",
-  "bridge_major case",
-  "bridge_minor",
-  "bridge_major",
-  "satellite",
-  "admin_sub",
-  "admin_country_z0-4",
-  "admin_country_z5-",
-  "airport_label",
-  "road_major_label",
-  "place_label_other",
-  "place_label_city",
-  "country_label-other",
-  "country_label",
-];
-
-const MapLayers: FC<IMapLayers> = ({ map }) => {
+const MapLayers: FC<IMapLayers> = ({ mapBackground, onChangeBackground }) => {
   const { t } = useTranslation("components");
 
-  const initialLayers = map
-    ? map
-        .getStyle()
-        .layers.filter((l) => !l.id.startsWith("gl-draw"))
-        .filter((l) => !excludeLayers.includes(l.id))
-        .reduce(
-          (a, l) => ({ ...a, [l.id]: l.layout?.visibility !== "none" }),
-          {}
-        )
-    : [];
-
-  const [backgroundLayer, setBackgroundLayer] = useState("map");
-  const [layers, setLayers] = useState(initialLayers);
-
-  useEffect(() => {
-    if (map && typeof map.getStyle === "function") {
-      const satelliteLayer = map
-        .getStyle()
-        .layers.find((l) => l.id === "satellite");
-
-      if (satelliteLayer) {
-        setBackgroundLayer(
-          satelliteLayer.layout.visibility === "none" ? "map" : "satellite"
-        );
-      }
-    }
-  }, [map]);
-
-  useEffect(() => {
-    if (map) {
-      map.setLayoutProperty(
-        "satellite",
-        "visibility",
-        backgroundLayer === "map" ? "none" : "visible"
-      );
-    }
-  }, [backgroundLayer, map]);
+  const [background, setBackground] = useState(mapBackground);
+  const [layers, setLayers] = useState({
+    cadastre: true,
+    osm: true,
+    trees: true,
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBackgroundLayer((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    setBackground(value);
+    onChangeBackground(value);
   };
 
-  const handleLayerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    map.setLayoutProperty(
-      event.target.name,
-      "visibility",
-      event.target.checked ? "visible" : "none"
-    );
-
-    setLayers({ ...layers, [event.target.name]: event.target.checked });
-  };
+  const handleLayerChange = (event: React.ChangeEvent<HTMLInputElement>) => {};
 
   return (
     <Grid container direction="column" spacing={3}>
       <Grid item>
+        <Typography variant="h6">{t("components.Map.Layers.title")}</Typography>
+      </Grid>
+      <Grid item>
         <FormControl component="fieldset">
-          <FormLabel component="legend">{t("MapLayers.backgrounds")}</FormLabel>
+          <FormLabel component="legend">
+            {t("components.MapLayers.backgrounds")}
+          </FormLabel>
           <RadioGroup
             name="background"
-            value={backgroundLayer}
+            value={background}
             onChange={handleChange}
           >
             <FormControlLabel
@@ -145,7 +66,9 @@ const MapLayers: FC<IMapLayers> = ({ map }) => {
       <Divider />
       <Grid item>
         <FormControl component="fieldset">
-          <FormLabel component="legend">{t("MapLayers.layers")}</FormLabel>
+          <FormLabel component="legend">
+            {t("components.MapLayers.layers")}
+          </FormLabel>
           {Object.keys(layers).map((layer) => (
             <FormControlLabel
               key={layer}
@@ -167,4 +90,4 @@ const MapLayers: FC<IMapLayers> = ({ map }) => {
   );
 };
 
-export default memo(MapLayers);
+export default MapLayers;

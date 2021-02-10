@@ -1,5 +1,12 @@
 FROM node:alpine
 
+RUN \
+  apk add --no-cache python make g++ && \
+  apk add vips-dev fftw-dev --update-cache \
+  --repository http://dl-3.alpinelinux.org/alpine/edge/community \
+  --repository http://dl-3.alpinelinux.org/alpine/edge/main \
+  && rm -fR /var/cache/apk/*
+
 RUN mkdir -p /usr/src/app
 
 ENV PORT 3000
@@ -9,7 +16,7 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app
 COPY package-lock.json /usr/src/app
 
-RUN npm install --production
+RUN npm install --production --legacy-peer-deps
 
 COPY . /usr/src/app
 

@@ -2,18 +2,14 @@ import { TextField, CircularProgress, makeStyles } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { useState, useEffect, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import MapGL from "@urbica/react-map-gl";
-import Map from "@/components/Map/Map";
 
-export interface ETKMapSearchCityProps {
-  map: React.RefObject<MapGL | Map>;
+export interface MapSearchCityProps {
   className?: string;
   style?: React.CSSProperties;
   onChange?(item: {}): void;
 }
 
-const defaultProps: ETKMapSearchCityProps = {
-  map: undefined,
+const defaultProps: MapSearchCityProps = {
   style: {},
   className: "",
   onChange: () => {},
@@ -25,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
+const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   const { t } = useTranslation("components");
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -75,36 +71,9 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
     if (newValue) {
       setValue(newValue);
 
-      if (
-        props.map &&
-        props.map.current.getMap &&
-        newValue.centre &&
-        newValue.centre.coordinates
-      ) {
-        props.map.current.getMap().setZoom(12);
-        props.map.current.getMap().flyTo({
-          center: newValue.centre.coordinates,
-        });
-      }
-
-      if (
-        props.map &&
-        props.map.current.map &&
-        newValue.centre &&
-        newValue.centre.coordinates
-      ) {
-        props.map.current.map.setZoom(12);
-        props.map.current.map.flyTo({
-          center: newValue.centre.coordinates,
-        });
-      }
-
       if (props.onChange) {
-        props.onChange(newValue);
+        props.onChange(newValue?.centre?.coordinates);
       }
-    } else {
-      setValue(null);
-      setOptions([]);
     }
   };
 
@@ -126,7 +95,7 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
         <TextField
           {...params}
           value={value}
-          label={t("Map.SearchCity.label")}
+          label={t("components.Map.SearchCity.label")}
           variant="outlined"
           InputProps={{
             ...params.InputProps,
@@ -146,6 +115,6 @@ const ETKMapSearchCity: React.FC<ETKMapSearchCityProps> = (props) => {
   );
 };
 
-ETKMapSearchCity.defaultProps = defaultProps;
+MapSearchCity.defaultProps = defaultProps;
 
-export default ETKMapSearchCity;
+export default MapSearchCity;

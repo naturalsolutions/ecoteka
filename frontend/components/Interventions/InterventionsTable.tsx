@@ -42,10 +42,12 @@ const InterventionsTable: FC<{
             variant="outlined"
             onClick={() => {
               onNewIntervention();
-              router.push(`/edition/?panel=intervention&tree=${tree.id}`);
+              router.push(`/map/?panel=intervention&tree=${tree.id}`);
             }}
           >
-            {t("Intervention.interventionsTable.requestAnItervention")}
+            {t(
+              "components.Intervention.interventionsTable.requestAnItervention"
+            )}
           </Button>
         </caption>
         <TableHead>

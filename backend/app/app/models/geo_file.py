@@ -1,4 +1,3 @@
-import os
 import datetime
 import hashlib
 from json import dumps, loads

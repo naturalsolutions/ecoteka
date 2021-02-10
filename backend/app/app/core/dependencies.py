@@ -16,4 +16,4 @@ def get_password_hash(password: str) -> str:
 
 source_file = "/app/app/core/authorization-model.conf"
 adapter = casbin_sqlalchemy_adapter.Adapter(engine)
-enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, True)
+enforcer: casbin.Enforcer = casbin.Enforcer(source_file, adapter, False)

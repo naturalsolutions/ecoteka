@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["*"],
+      "mapbox-gl": ["maplibre-gl"]
     }
   },
   "exclude": ["node_modules"],

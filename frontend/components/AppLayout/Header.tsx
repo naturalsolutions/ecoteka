@@ -119,8 +119,8 @@ const AppLayoutHeader = ({}): JSX.Element => {
                   />
                   <ToggleButtonGroup value={menu} size="small">
                     <ToggleButton
-                      value="/edition/"
-                      onClick={() => router.push("/edition/")}
+                      value="/map/"
+                      onClick={() => router.push("/map/")}
                     >
                       <MapIcon fontSize="small" />
                     </ToggleButton>
