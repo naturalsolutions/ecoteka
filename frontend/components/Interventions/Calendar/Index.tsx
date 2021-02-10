@@ -78,7 +78,7 @@ const Calendar: React.FC<CalendarProps> = (props) => {
           : [];
 
       months.push(
-        <Grid key={`month-${i}`} item xs={3}>
+        <Grid key={`month-${i}`} item xs={12} md={3}>
           <Month
             month={i}
             year={props.year}
