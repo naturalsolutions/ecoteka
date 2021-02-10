@@ -38,6 +38,7 @@ import TeamsTable from "@/components/Organization/Teams/TeamsTable";
 import { useTranslation } from "react-i18next";
 import useAPI from "@/lib/useApi";
 import Can from "@/components/Can";
+import { useAppContext } from "@/providers/AppContext";
 
 interface TeamsProps {
   organization: IOrganization;
@@ -81,6 +82,7 @@ const actionOptions = [
 
 const Teams: FC<TeamsProps> = (props) => {
   const classes = useStyles();
+  const { refetchUserData } = useAppContext();
   const { dialog } = useAppLayout();
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
@@ -277,6 +279,7 @@ const Teams: FC<TeamsProps> = (props) => {
         });
         removeSelectedRows();
         setSelectedTeams([]);
+        refetchUserData();
       }
     } catch (e) {
       triggerAlert({
@@ -306,6 +309,7 @@ const Teams: FC<TeamsProps> = (props) => {
         });
         removeSelectedRows();
         setSelectedTeams([]);
+        refetchUserData();
       }
     } catch (e) {
       triggerAlert({
