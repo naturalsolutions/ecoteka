@@ -484,7 +484,9 @@
     "exportSuccess": "Su solicitud para exportar ha sido procesada. Descarga en progreso...",
     "WorkingArea": {
       "dialogTitle": "Editar área de trabajo",
-      "dialogContentText": "Formatos aceptados : zip, geojson"
+      "dialogContentText": "Formatos aceptados : zip, geojson",
+      "getSuccess": "Zone de travail de l'organisation récupérée avec succès.",
+      "getFailure": "Impossible de récupérer la zone de travail de l'organization."
     },
     "crud": {
       "success": "Organisation mise à jour avec succès",

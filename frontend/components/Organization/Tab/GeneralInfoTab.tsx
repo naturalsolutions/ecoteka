@@ -42,49 +42,68 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
   const [organization, setOrganization] = useState<IOrganization>(
     initialOrganization
   );
+  const [workingArea, setWorkingArea] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
 
-  // TODO: deprecate useQuery usage
-  const queryName = `working_area_${organization.id}`;
-  const cache = useQueryCache();
-  const { status, data: workingArea, error, isFetching } = useQuery(
-    queryName,
-    async () => {
-      try {
-        const { data } = await apiETK.get(
-          `/organization/${organization.id}/working_area`
+  const getWorkingArea = async (organization) => {
+    try {
+      const { data, status } = await apiETK.get(
+        `/organization/${organization.id}/working_area`
+      );
+      if (status == 200) {
+        enqueueSnackbar(
+          `${t("components.Organization.WorkingArea.getSuccess")}`,
+          {
+            variant: "success",
+          }
         );
-
-        return data;
-      } catch (error) {}
-    },
-    {
-      enabled: Boolean(organization),
+        setWorkingArea(data);
+      }
+    } catch (error) {
+      enqueueSnackbar(
+        `${t("components.Organization.WorkingArea.getFailure")}`,
+        {
+          variant: "error",
+        }
+      );
+      setWorkingArea(null);
     }
-  );
+  };
+
+  useEffect(() => {
+    setOrganization(initialOrganization);
+    getWorkingArea(initialOrganization);
+  }, [initialOrganization]);
 
   useEffect(() => {
     if (mapRef.current && isMapReady && workingArea) {
       if (workingArea.geometry) {
         const map = mapRef.current.map;
         map.fitBounds(bbox(workingArea.geometry));
-        if (map.getSource(queryName)) {
-          map.removeLayer(queryName);
-          map.removeSource(queryName);
+        if (map.getSource("waSource")) {
+          map.removeLayer("waSource");
+          map.removeSource("waSource");
         }
-        map.addSource(queryName, {
+        map.addSource("waSource", {
           type: "geojson",
           data: workingArea,
         });
         map.addLayer({
-          id: queryName,
-          source: queryName,
+          id: "waSource",
+          source: "waSource",
           type: "fill",
           paint: {
             "fill-color": "#00C6B8",
             "fill-opacity": 0.5,
           },
         });
+      }
+    }
+    if (mapRef.current && isMapReady && !workingArea) {
+      const map = mapRef.current.map;
+      if (map.getSource("waSource")) {
+        map.removeLayer("waSource");
+        map.removeSource("waSource");
       }
     }
   }, [mapRef, workingArea]);
@@ -140,7 +159,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
         variant: "contained",
         color: "secondary",
         noClose: true,
-        onClick: editWorkingArea,
+        onClick: addItem,
       },
     ];
 
@@ -154,14 +173,20 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
   }
 
   const editWorkingArea = async () => {
-    const isOk = await formAreaRef.current.submit();
-    if (isOk) {
-      dialog.current.close();
-      snackbar.current.open({
-        message: "Succès de l'envoi.",
-        severity: "success",
+    try {
+      const isOk = await formAreaRef.current.submit();
+      if (isOk) {
+        getWorkingArea(organization);
+        enqueueSnackbar(`${t("components.Organization.crud.success")}`, {
+          variant: "success",
+        });
+      }
+    } catch (error) {
+      enqueueSnackbar(`${t("components.Organization.crud.failure")}`, {
+        variant: "error",
       });
-      cache.invalidateQueries(queryName);
+    } finally {
+      dialog.current.close();
     }
   };
 
