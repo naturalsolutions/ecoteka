@@ -24,12 +24,20 @@ set_policies(policies)
 def generate_style(
     db: Session = Depends(get_db),
     theme: Optional[str] = "dark",
+    background: Optional[str] = "map"
 ) -> Dict:
     """
     Generate style
     """
     with open(f"/app/app/assets/styles/{theme}.json") as style_json:
         style = json.load(style_json)
+
+        if background == "satellite":
+            satellite = [index for index, layer in enumerate(style["layers"]) if layer["id"] == "satellite"]
+            
+            if len(satellite) > 0:
+                style["layers"][satellite[0]]["layout"]["visibility"] = "visible"
+
 
         style["sources"]["cadastre-france"] = {
             "type": "vector",

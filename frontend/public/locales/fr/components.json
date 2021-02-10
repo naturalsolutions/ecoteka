@@ -64,6 +64,9 @@
     },
     "Filter": {
       "title": "Filtres"
+    },
+    "Layers": {
+      "title": "Couches"
     }
   },
   "Sidebar": {

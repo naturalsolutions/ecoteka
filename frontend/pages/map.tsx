@@ -88,6 +88,10 @@ const EditionPage = ({}) => {
   });
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
+  const [mapBackground, setMapbackground] = useLocalStorage(
+    "etk:map:mapBackground",
+    "map"
+  );
   const [layers, setLayers] = useState([]);
   const [activeTree, setActiveTree] = useState<number | undefined>(
     router.query?.tree ? Number(router.query.tree) : undefined
@@ -319,6 +323,15 @@ const EditionPage = ({}) => {
         return setDrawerLeftComponent(
           <TreeForm treeId={activeTree} onSave={() => {}} />
         );
+      case "layers":
+        return setDrawerLeftComponent(
+          <MapLayers
+            mapBackground={mapBackground}
+            onChangeBackground={(newMapBackground) =>
+              setMapbackground(newMapBackground)
+            }
+          />
+        );
       case "import":
         return setDrawerLeftComponent(
           <ImportPanel onFileImported={handleOnFileImported} />
@@ -477,7 +490,9 @@ const EditionPage = ({}) => {
         }}
       >
         <StaticMap
-          mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
+          mapStyle={`/api/v1/maps/style/?theme=${
+            dark ? "dark" : "light"
+          }&background=${mapBackground}`}
         ></StaticMap>
         {navigator?.geolocation && (
           <MapGeolocateFab

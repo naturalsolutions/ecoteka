@@ -64,6 +64,9 @@
     },
     "Filter": {
       "title": "Filtros"
+    },
+    "Layers": {
+      "title": "Capas"
     }
   },
   "Sidebar": {
