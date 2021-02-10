@@ -24,8 +24,8 @@ policies = {
         "reader",
     ],
     "geofiles:upload_geo_file": ["owner", "manager", "contributor"],
-    "geofiles:update_geo_file": ["owner", "manager", "contributor"],
-    "geofiles:delete_geo_file": ["owner", "manager", "contributor"],
+    "geofiles:update_geo_file": ["owner", "manager"],
+    "geofiles:delete_geo_file": ["owner", "manager"],
 }
 set_policies(policies)
 

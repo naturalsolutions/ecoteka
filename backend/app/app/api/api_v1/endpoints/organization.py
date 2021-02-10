@@ -43,7 +43,7 @@ policies = {
     "organizations:get_members": ["owner", "manager", "contributor", "reader"],
     "organizations:add_members": ["owner", "manager"],
     "organizations:remove_member": ["owner", "manager"],
-    "organizations:update": ["owner"],
+    "organizations:update": ["owner", "manager"],
     "organizations:edit_member": ["owner", "manager"],
     "organizations:get_geojson": ["owner", "manager", "contributor", "reader"],
     "organizations:get_path": ["owner", "manager", "contributor", "reader"],
@@ -53,7 +53,7 @@ policies = {
         "contributor",
         "reader",
     ],
-    "organizations:upload_working_area": ["owner"],
+    "organizations:upload_working_area": ["owner", "manager"],
     "organizations:get_working_area": [
         "owner",
         "manager",
@@ -64,6 +64,7 @@ policies = {
         "owner",
         "manager",
         "contributor",
+        "reader"
     ],
 }
 set_policies(policies)
