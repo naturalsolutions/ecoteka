@@ -241,7 +241,7 @@ def delete(
 def upload_images(
     tree_id: int,
     organization_id: int,
-    auth=Depends(authorization("tree:upload_images")),
+    auth=Depends(authorization("trees:upload_images")),
     images: List[UploadFile] = File(...)
 ):
     """
@@ -266,7 +266,7 @@ def upload_images(
 def get_images(
     tree_id: int,
     organization_id: int,
-    auth=Depends(authorization("tree:get_images")),
+    auth=Depends(authorization("trees:get_images")),
 ):
     """
     get all images from a tree
@@ -297,7 +297,7 @@ def get_image(
 def delete_images(
     tree_id: int,
     organization_id: int,
-    auth=Depends(authorization("tree:delete_images")),
+    auth=Depends(authorization("trees:delete_images")),
 ):
     """
     delete all images
@@ -318,7 +318,7 @@ def delete_image(
     image: str,
     tree_id: int,
     organization_id: int,
-    auth=Depends(authorization("tree:delete_image")),
+    auth=Depends(authorization("trees:delete_image")),
 ):
     """
     delete one image
