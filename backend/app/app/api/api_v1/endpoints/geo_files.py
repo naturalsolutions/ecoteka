@@ -10,7 +10,7 @@ from app.core import (
     settings,
     set_policies,
     authorization,
-    get_current_active_user,
+    get_current_user,
 )
 from app.worker import create_mbtiles_task
 
@@ -37,7 +37,7 @@ def read_geo_files(
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_user),
 ) -> Any:
     """
     Retrieve geo files.
@@ -60,7 +60,7 @@ def read_geofile_by_name(
     *,
     db: Session = Depends(get_db),
     name: str,
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_user),
 ) -> Any:
     """
     Retrieve geo files.
@@ -82,7 +82,7 @@ async def upload_geo_file(
     auth=Depends(authorization("geofiles:upload_geo_file")),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_user),
 ):
     """
     Upload a geo file
@@ -137,7 +137,7 @@ def update_geo_file(
     *,
     db: Session = Depends(get_db),
     geofile_in: schemas.GeoFileUpdate,
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_user),
 ) -> Any:
     """
     Update geo file.

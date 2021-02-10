@@ -14,7 +14,7 @@ class UserBase(BaseModel):
     status: str = "pending"
     is_superuser: bool = False
     full_name: Optional[str] = None
-    is_verified: Optional[bool] = False
+    is_verified: Optional[bool] = True
 
 
 # Properties to receive via API on creation

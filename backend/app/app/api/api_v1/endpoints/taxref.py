@@ -4,7 +4,7 @@ from app.models import User
 from app.schemas import TaxrefForTreesOut, TaxrefOut
 from sqlalchemy.orm import Session
 from app.api import get_db
-from app.core import get_current_active_user
+from app.core import get_current_user
 from app.crud import taxref
 
 router = APIRouter()
@@ -15,7 +15,7 @@ async def read_taxrefs(
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user),
 ) -> Any:
 
     return taxref.get_multi(db=db, skip=skip, limit=limit)
@@ -23,7 +23,7 @@ async def read_taxrefs(
 
 @router.get("/trees", response_model=List[TaxrefForTreesOut])
 async def read_taxrefs_trees(
-    db: Session = Depends(get_db), current_user: User = Depends(get_current_active_user)
+    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
 ) -> Any:
 
     return taxref.get_trees(db=db)
@@ -33,7 +33,7 @@ async def read_taxrefs_trees(
 async def read_taxref(
     CD_NOM: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_user),
 ) -> TaxrefOut:
     taxref_in_db = taxref.get(db=db, id=CD_NOM)
     if not taxref_in_db:

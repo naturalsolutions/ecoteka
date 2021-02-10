@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import set_policies, authorization, get_current_active_user, settings
+from app.core import set_policies, authorization, get_current_user, settings
 from app.worker import import_geofile_task, create_mbtiles_task
 from app.models.ws import WSManager
 from fastapi.responses import StreamingResponse
@@ -141,7 +141,7 @@ async def add(
     auth=Depends(authorization("trees:add")),
     db: Session = Depends(get_db),
     tree: schemas.TreePost,
-    current_user: models.User = Depends(get_current_active_user),
+    current_user: models.User = Depends(get_current_user),
 ) -> Any:
     """Add one tree"""
     try:

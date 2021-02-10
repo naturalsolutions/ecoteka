@@ -9,4 +9,4 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     status = Column(String, default="Pending", nullable=False)
     is_superuser = Column(Boolean(), default=False, nullable=False)
-    is_verified = Column(Boolean(), default=False, nullable=False)
+    is_verified = Column(Boolean(), default=True, nullable=False)

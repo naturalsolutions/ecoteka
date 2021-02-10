@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   delete: {
     background: theme.palette.error.main,
-    color: theme.palette.text.primary,
+    color: theme.palette.error.contrastText,
   },
 }));
 
