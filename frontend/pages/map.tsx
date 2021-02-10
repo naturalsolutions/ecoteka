@@ -457,10 +457,10 @@ const EditionPage = ({}) => {
     setDrawerLeftComponent();
     setFilter(defaultFilter);
     setFilterOpts(defaultFilter);
-    getFilters(user.currentOrganization.id);
+    getFilters(user?.currentOrganization?.id);
     setTime(Date.now());
     renderLayers();
-    fitToBounds(user.currentOrganization.id);
+    fitToBounds(user?.currentOrganization?.id);
   }, [user]);
 
   useEffect(() => {

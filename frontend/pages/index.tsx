@@ -75,12 +75,6 @@ export default function IndexPage() {
     pickable: true,
   });
 
-  useEffect(() => {
-    if (user) {
-      router.push("/map/");
-    }
-  }, [user]);
-
   const handleCityChange = (coordinates) => {
     if (coordinates) {
       setViewState({
