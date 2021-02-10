@@ -93,4 +93,4 @@ const MapFilter: FC<IMapFilter> = ({ initialValue, options, onChange }) => {
   );
 };
 
-export default memo(MapFilter);
+export default MapFilter;

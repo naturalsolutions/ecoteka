@@ -58,6 +58,11 @@ const defaultViewState = {
   zoom: 5,
 };
 
+const defaultFilter = {
+  canonicalName: [],
+  vernacularName: [],
+};
+
 const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
@@ -78,14 +83,8 @@ const EditionPage = ({}) => {
   );
   const [viewState, setViewState] = useState();
   const [mode, setMode] = useState("selection");
-  const [filter, setFilter] = useState({
-    canonicalName: [],
-    vernacularName: [],
-  });
-  const [filterOpts, setFilterOpts] = useState({
-    canonicalName: [],
-    vernacularName: [],
-  });
+  const [filter, setFilter] = useState(defaultFilter);
+  const [filterOpts, setFilterOpts] = useState(defaultFilter);
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
   const [mapBackground, setMapbackground] = useLocalStorage(
@@ -305,7 +304,6 @@ const EditionPage = ({}) => {
   useEffect(() => {
     setViewState({ ...initialViewState });
     renderLayers();
-    getFilters(user.currentOrganization.id);
   }, []);
 
   const switchPanel = (panel) => {
@@ -437,7 +435,6 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
-    console.log(mode);
     if (mode !== "selection") {
       setSelection([]);
     }
@@ -446,6 +443,17 @@ const EditionPage = ({}) => {
       return setLayers([treesLayer, selectionLayer]);
     }
   }, [mode]);
+
+  useEffect(() => {
+    router.push("/map");
+    setDrawerLeftComponent();
+    setFilter(defaultFilter);
+    setFilterOpts(defaultFilter);
+    getFilters(user.currentOrganization.id);
+    setTime(Date.now());
+    renderLayers();
+    fitToBounds(user.currentOrganization.id);
+  }, [user]);
 
   useEffect(() => {
     renderLayers();
