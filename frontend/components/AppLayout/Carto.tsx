@@ -1,7 +1,6 @@
 import { FC, createContext, useContext, ReactNode } from "react";
 import { makeStyles, Drawer } from "@material-ui/core";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import MapToolbar, { TMapToolbarAction } from "@/components/Map/Toolbar";
+import { TMapToolbarAction } from "@/components/Map/Toolbar";
 
 const toolbarHeight = 48;
 const toolbarHeightCalc = `calc(100vh - ${toolbarHeight}px)`;

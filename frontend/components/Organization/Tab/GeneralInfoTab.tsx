@@ -32,7 +32,9 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const { t } = useTranslation(["components", "common"]);
   const mapRef = createRef<ETKMap>();
-  const [workingArea, setWorkingArea] = useState();
+  const [workingArea, setWorkingArea] = useState({
+    geometry: [],
+  });
   const [isMapReady, setIsMapReady] = useState(false);
   const { apiETK } = useApi().api;
 
