@@ -74,9 +74,9 @@ const InterventionsTable: FC<{
                   </TableCell>
                   <TableCell>
                     <Checkbox
+                      disabled
                       checked={intervention.done}
                       color="primary"
-                      readOnly
                     />
                   </TableCell>
                 </TableRow>
