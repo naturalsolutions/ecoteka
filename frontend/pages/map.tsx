@@ -35,13 +35,20 @@ import { StaticMap } from "react-map-gl";
 const useStyles = makeStyles({
   toolbar: {
     position: "absolute",
-    top: 10,
-    left: 0,
-    width: "calc(100% - 8px)",
+    top: 16,
+    left: 60,
+    width: "calc(100% - 68px)",
     pointerEvents: "none",
   },
-  actionsBar: {
+  toolbarAction: {
     pointerEvents: "fill",
+  },
+  actionsBar: {
+    position: "absolute",
+    top: 8,
+    left: 8,
+    display: "flex",
+    flexDirection: "column",
   },
 });
 
@@ -365,7 +372,7 @@ const EditionPage = ({}) => {
 
   const handleOnMapModeSwitch = (newMode) => {
     if (newMode) {
-      if (newMode === "edtion") {
+      if (newMode === "edition") {
         setMode("selection");
       } else {
         setMode("");
@@ -417,14 +424,19 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
+    console.log(mode);
     if (mode !== "selection") {
       setSelection([]);
+    }
+
+    if (mode === "selection") {
+      return setLayers([treesLayer, selectionLayer]);
     }
   }, [mode]);
 
   useEffect(() => {
     renderLayers();
-  }, [activeTree, editionMode, selection, filter, mode]);
+  }, [activeTree, editionMode, selection, filter]);
 
   return (
     <AppLayoutCarto
@@ -484,85 +496,73 @@ const EditionPage = ({}) => {
           />
         )}
       </DeckGL>
-      <Box className={classes.toolbar} mt={1}>
-        <Grid container justify="center">
-          <Grid item>
-            <Grid container direction="column" className={classes.actionsBar}>
-              <IconButton
-                onClick={() => {
-                  !drawerLeftComponent
-                    ? switchPanel(router.query.panel)
-                    : setDrawerLeftComponent();
-                }}
-              >
-                {drawerLeftComponent ? <CloseIcon /> : <MenuOpenIcon />}
-              </IconButton>
-              <IconButton onClick={() => router.push("/map?panel=filter")}>
-                <SearchIcon />
-              </IconButton>
-              <IconButton onClick={() => router.push("/map?panel=layers")}>
-                <LayersIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => router.push("/map?panel=interventions")}
-              >
-                <PlaylistAddCheckIcon />
-              </IconButton>
-              <IconButton onClick={() => switchPanel("import")}>
-                <BackupIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Box ml={2} className={classes.actionsBar}>
-              <MapModeSwitch
-                initValue={editionMode ? "edition" : "analysis"}
-                onChange={handleOnMapModeSwitch}
-              />
-            </Box>
-          </Grid>
-
-          <Grid item xs></Grid>
-          {editionMode && (
-            <Grid item className={classes.actionsBar}>
-              <MapDrawToolbar
-                activeDelete={Boolean(selection.length)}
-                onDelete={handleOnDeleteTrees}
-                onChange={(newMode) => {
-                  if (newMode) {
-                    setMode(newMode);
-                  }
-                }}
-              />
-            </Grid>
-          )}
-          <Grid item xs></Grid>
-          <Grid item className={classes.actionsBar}>
-            <MapSearchCity
-              onChange={(coordinates) => {
-                setViewState({
-                  ...viewState,
-                  longitude: coordinates[0],
-                  latitude: coordinates[1],
-                  zoom: 15,
-                  transitionDuration: 1500,
-                  transitionInterpolator: new FlyToInterpolator(),
-                });
+      <Box className={classes.actionsBar}>
+        <IconButton
+          onClick={() => {
+            !drawerLeftComponent
+              ? switchPanel(router.query.panel)
+              : setDrawerLeftComponent();
+          }}
+        >
+          {drawerLeftComponent ? <CloseIcon /> : <MenuOpenIcon />}
+        </IconButton>
+        <IconButton onClick={() => router.push("/map?panel=filter")}>
+          <SearchIcon />
+        </IconButton>
+        <IconButton onClick={() => router.push("/map?panel=layers")}>
+          <LayersIcon />
+        </IconButton>
+        <IconButton onClick={() => switchPanel("import")}>
+          <BackupIcon />
+        </IconButton>
+      </Box>
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+        className={classes.toolbar}
+      >
+        <Grid item className={classes.toolbarAction}>
+          <MapModeSwitch
+            initValue={editionMode ? "edition" : "analysis"}
+            onChange={handleOnMapModeSwitch}
+          />
+        </Grid>
+        <Grid item xs></Grid>
+        {editionMode && (
+          <Grid item className={classes.toolbarAction}>
+            <MapDrawToolbar
+              activeDelete={Boolean(selection.length)}
+              onDelete={handleOnDeleteTrees}
+              onChange={(newMode) => {
+                if (newMode) {
+                  setMode(newMode);
+                }
               }}
             />
           </Grid>
-          <Grid item className={classes.actionsBar}>
-            <Box mt={1} ml={1}>
-              <IconButton
-                size="small"
-                onClick={() => fitToBounds(user.currentOrganization.id)}
-              >
-                <CenterFocusStrongIcon />
-              </IconButton>
-            </Box>
-          </Grid>
+        )}
+        <Grid item xs></Grid>
+        <Grid item className={classes.toolbarAction}>
+          <MapSearchCity
+            onChange={(coordinates) => {
+              setViewState({
+                ...viewState,
+                longitude: coordinates[0],
+                latitude: coordinates[1],
+                zoom: 15,
+                transitionDuration: 1500,
+                transitionInterpolator: new FlyToInterpolator(),
+              });
+            }}
+          />
         </Grid>
-      </Box>
+        <Grid item className={classes.toolbarAction}>
+          <IconButton onClick={() => fitToBounds(user.currentOrganization.id)}>
+            <CenterFocusStrongIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
     </AppLayoutCarto>
   );
 };

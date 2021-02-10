@@ -67,7 +67,7 @@ def update_mbtiles(db: Session, organization_id: int, filter: List[int] = []):
             os.system(
                 f"rm {geojson} /app/tiles/private/{organization.id}_tmp.mbtiles"
             )
-            db.execute(f"update tree set status = 'frozen' where organization_id = {organization.id}")
+            db.execute(f"update tree set status = 'frozen' where organization_id = {organization.id} and status not in ('frozen', 'import')")
             db.commit()
     except:
         logging.error(sys.exc_info()[0])
