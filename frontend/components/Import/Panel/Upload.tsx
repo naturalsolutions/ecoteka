@@ -58,9 +58,7 @@ const useStyle = makeStyles(() =>
       color: "red",
       margin: "1rem",
     },
-    etkDropzoneText: {
-      whiteSpace: "pre",
-    },
+    etkDropzoneText: {},
     etkDropzone: {},
     submitbtn: {
       alignSelf: "flex-end",

@@ -277,7 +277,7 @@ const EditionPage = ({}) => {
         },
       });
 
-      if (status === 200) {
+      if (status === 200 && bbox.xmin && bbox.ymin && bbox.xmax && bbox.ymax) {
         const newViewState = layers[0].context.viewport.fitBounds([
           [bbox.xmin, bbox.ymin],
           [bbox.xmax, bbox.ymax],
@@ -291,6 +291,13 @@ const EditionPage = ({}) => {
 
         setViewState({
           ...newViewState,
+          transitionDuration: 1000,
+          transitionInterpolator: new FlyToInterpolator(),
+        });
+      } else {
+        setInitialViewState(defaultViewState);
+        setViewState({
+          ...defaultViewState,
           transitionDuration: 1000,
           transitionInterpolator: new FlyToInterpolator(),
         });
