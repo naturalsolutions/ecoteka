@@ -13,7 +13,7 @@ import ETKFormWorkingArea, {
   ETKFormWorkingAreaActions,
 } from "@/components/Organization/WorkingArea/Form";
 import { useTranslation } from "react-i18next";
-import { useQuery, useQueryCache } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import bbox from "@turf/bbox";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +34,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const { t } = useTranslation(["components", "common"]);
   const mapRef = createRef<ETKMap>();
   const [isMapReady, setIsMapReady] = useState(false);
-  const cache = useQueryCache();
+  const cache = useQueryClient();
   const { apiETK } = useApi().api;
 
   const queryName = `working_area_${organization.id}`;

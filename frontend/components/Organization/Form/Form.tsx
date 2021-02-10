@@ -50,6 +50,7 @@ const ETKFormOrganization = forwardRef<
             ...data,
           };
           if (isNew) {
+            // @ts-ignore
             data.parent_id = organization.parent_id;
           }
           try {

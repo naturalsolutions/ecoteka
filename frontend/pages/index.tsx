@@ -1,4 +1,5 @@
-import { useState, createRef, useEffect } from "react";
+// @ts-nocheck
+import { useState, useEffect } from "react";
 import { Grid, makeStyles, Hidden } from "@material-ui/core";
 import { useRouter } from "next/router";
 import MapSearchCity from "@/components/Map/SearchCity";

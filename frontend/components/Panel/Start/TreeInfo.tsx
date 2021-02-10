@@ -92,6 +92,7 @@ const PanelStartTreeInfo: React.FC<PanelStartTreeInfoProps> = (props) => {
       <Grid item>
         <Wikipedia
           genre={
+            // @ts-ignore
             properties.gender ||
             properties["genus:fr"] ||
             properties["taxon:species"] ||

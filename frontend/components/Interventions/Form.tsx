@@ -108,6 +108,7 @@ const ETKInterventionForm = forwardRef<
 
   useEffect(() => {
     if (router.query.tree) {
+      // @ts-ignore
       form.setValue("tree_id", router.query.tree);
 
       flyToTree(Number(router.query.tree));
