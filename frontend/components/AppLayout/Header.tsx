@@ -18,6 +18,7 @@ import { IOrganization } from "@/index";
 import UserMainMenuButton from "@/components/User/MainMenuButton";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
+import SettingsSystemDaydreamIcon from "@material-ui/icons/SettingsSystemDaydream";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import MapIcon from "@material-ui/icons/Map";
 import TodayIcon from "@material-ui/icons/CalendarToday";
@@ -136,6 +137,12 @@ const AppLayoutHeader = ({}): JSX.Element => {
                     >
                       <DashboardIcon fontSize="small" />
                     </ToggleButton>
+                    <ToggleButton
+                      value="/imports/"
+                      onClick={() => router.push("/imports/")}
+                    >
+                      <SettingsSystemDaydreamIcon fontSize="small" />
+                    </ToggleButton>
                   </ToggleButtonGroup>
                 </>
               </Hidden>
@@ -143,7 +150,13 @@ const AppLayoutHeader = ({}): JSX.Element => {
           </Grid>
         </Grid>
         <Grid item xs={6}>
-          <Grid container justify="flex-end" direction="row" spacing={1}>
+          <Grid
+            container
+            alignItems="center"
+            justify="flex-end"
+            direction="row"
+            spacing={1}
+          >
             <NoSsr>
               <Grid item>
                 <ToggleButton
