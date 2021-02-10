@@ -164,7 +164,7 @@ const Header: FC<HeaderProps> = (props) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => router.push("/edition/?panel=import")}
+              onClick={() => router.push("/map/?panel=import")}
             >
               {t("common.buttons.import")}
             </Button>

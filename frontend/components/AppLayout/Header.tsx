@@ -18,6 +18,7 @@ import { IOrganization } from "@/index";
 import UserMainMenuButton from "@/components/User/MainMenuButton";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
+import SettingsSystemDaydreamIcon from "@material-ui/icons/SettingsSystemDaydream";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import MapIcon from "@material-ui/icons/Map";
 import TodayIcon from "@material-ui/icons/CalendarToday";
@@ -119,8 +120,8 @@ const AppLayoutHeader = ({}): JSX.Element => {
                   />
                   <ToggleButtonGroup value={menu} size="small">
                     <ToggleButton
-                      value="/edition/"
-                      onClick={() => router.push("/edition/")}
+                      value="/map/"
+                      onClick={() => router.push("/map/")}
                     >
                       <MapIcon fontSize="small" />
                     </ToggleButton>
@@ -136,6 +137,12 @@ const AppLayoutHeader = ({}): JSX.Element => {
                     >
                       <DashboardIcon fontSize="small" />
                     </ToggleButton>
+                    <ToggleButton
+                      value="/imports/"
+                      onClick={() => router.push("/imports/")}
+                    >
+                      <SettingsSystemDaydreamIcon fontSize="small" />
+                    </ToggleButton>
                   </ToggleButtonGroup>
                 </>
               </Hidden>
@@ -145,9 +152,9 @@ const AppLayoutHeader = ({}): JSX.Element => {
         <Grid item xs={6}>
           <Grid
             container
+            alignItems="center"
             justify="flex-end"
             direction="row"
-            alignItems="center"
             spacing={1}
           >
             <NoSsr>
@@ -167,17 +174,28 @@ const AppLayoutHeader = ({}): JSX.Element => {
                 </ToggleButton>
               </Grid>
             </NoSsr>
-            <Grid item>
-              <LanguageSelector />
-            </Grid>
-            <Grid item>{!user && <ContactButton />}</Grid>
-            <Grid item>{user && <UserMainMenuButton />}</Grid>
-            {!user && (
+            <Hidden smDown>
               <Grid item>
-                <Button onClick={handleSignInClick}>
-                  {t("SignIn.buttonConnexion")}
-                </Button>
+                <LanguageSelector />
               </Grid>
+            </Hidden>
+            {!user && (
+              <Hidden smDown>
+                <Grid item>
+                  {" "}
+                  <ContactButton />
+                </Grid>
+              </Hidden>
+            )}
+            {user && (
+              <Grid item>
+                <UserMainMenuButton />
+              </Grid>
+            )}
+            {!user && (
+              <Button size="small" onClick={handleSignInClick}>
+                {t("components.SignIn.buttonConnexion")}
+              </Button>
             )}
           </Grid>
         </Grid>

@@ -75,7 +75,7 @@ const ETKPanelStartGeneralInfo: FC = () => {
                     size="large"
                     variant="outlined"
                     onClick={() => {
-                      router.push("/edition/?panel=import");
+                      router.push("/map/?panel=import");
                     }}
                   >
                     {t("components.PanelStart.card.button")}

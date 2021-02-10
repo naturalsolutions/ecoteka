@@ -7,11 +7,12 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import useETKForm from "@/components/Form/useForm";
-import useETKTreeSchema from "@/components/Tree/Schema";
+import useForm from "@/components/Form/useForm";
+import useTreeSchema from "@/components/Tree/Schema";
 import { useSnackbar } from "notistack";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   grid: {},
@@ -24,16 +25,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ETKTreeForm: React.FC<{
-  selection: {
-    id: number;
-    properties: { id: number; properties: {} };
-  }[];
+const TreeForm: React.FC<{
+  treeId: number;
   onSave?(record: object): void;
-}> = ({ selection, onSave }) => {
+}> = ({ treeId, onSave }) => {
   const { t } = useTranslation(["common", "components"]);
+  const router = useRouter();
   const classes = useStyles();
-  const schema = useETKTreeSchema();
+  const schema = useTreeSchema();
   const { api } = useApi();
   const { apiETK } = api;
   const { enqueueSnackbar } = useSnackbar();
@@ -44,28 +43,37 @@ const ETKTreeForm: React.FC<{
     isProtected: false,
     isTreeOfInterest: false,
   };
-  const { fields, setValue, getValues, control } = useETKForm({
+  const { fields, setValue, getValues } = useForm({
     schema,
     defaultValues,
   });
 
-  useEffect(() => {
-    if (selection.length === 1) {
-      for (let key in selection[0].properties.properties) {
-        setValue(key, selection[0].properties.properties[key]);
+  async function getTree(organizationId, treeId) {
+    try {
+      const url = `/organization/${organizationId}/trees/${treeId}`;
+
+      const { status, data } = await apiETK.get(url);
+
+      if (status === 200) {
+        for (let key in data.properties) {
+          setValue(key, data.properties[key]);
+        }
       }
+    } catch (e) {}
+  }
+
+  useEffect(() => {
+    if (typeof treeId === "number") {
+      getTree(user.currentOrganization.id, treeId);
     }
-  }, [selection]);
+  }, [treeId]);
 
   const handlerOnSave = async () => {
     try {
       setSaving(true);
 
-      if (!selection.length) return;
-
       const properties = getValues();
       const organizationId = user.currentOrganization.id;
-      const treeId = selection[0].properties.id;
 
       const { data, status } = await apiETK.put(
         `/organization/${organizationId}/trees/${treeId}`,
@@ -73,6 +81,7 @@ const ETKTreeForm: React.FC<{
           properties,
         }
       );
+
       if (status === 200) {
         onSave(data);
         enqueueSnackbar("Arbre mis à jour avec succès", {
@@ -84,10 +93,13 @@ const ETKTreeForm: React.FC<{
         });
       }
     } catch (e) {
-      //
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleToBack = () => {
+    router.push(`/map?panel=info&tree=${treeId}`);
   };
 
   return (
@@ -97,6 +109,33 @@ const ETKTreeForm: React.FC<{
           <Typography variant="h6" className={classes.title}>
             {t("components.TreeForm.title")}
           </Typography>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleToBack}
+              >
+                {t("components.TreeForm.backToInfo")}
+              </Button>
+            </Grid>
+            <Grid item xs />
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handlerOnSave}
+              >
+                {saving ? (
+                  <CircularProgress size={30} />
+                ) : (
+                  t("common.buttons.save")
+                )}
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item>
           <Typography className={classes.heading}>
@@ -155,27 +194,9 @@ const ETKTreeForm: React.FC<{
               ))}
           </Grid>
         </Grid>
-        <Grid item>
-          <Grid container>
-            <Grid item xs></Grid>
-            <Grid item>
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={handlerOnSave}
-              >
-                {saving ? (
-                  <CircularProgress size={30} />
-                ) : (
-                  t("common.buttons.save")
-                )}
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
       </Grid>
     </>
   );
 };
 
-export default ETKTreeForm;
+export default TreeForm;

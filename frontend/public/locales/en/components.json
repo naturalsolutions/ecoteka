@@ -61,6 +61,12 @@
     "SateliteToggle": {
       "map": "Map",
       "satellite": "Satellite"
+    },
+    "Filter": {
+      "title": "Filtres"
+    },
+    "Layers": {
+      "title": "Layers"
     }
   },
   "Sidebar": {
@@ -408,7 +414,7 @@
       "remarks": "Remarques"
     },
     "summary": {
-      "moreDetails": "More details"
+      "moreDetails": "Edit tree"
     },
     "latitude": "Latitude",
     "longitude": "Longitude",
@@ -426,7 +432,8 @@
     "other": "Other",
     "imagesUpload": {
       "select": "Drop files here or click (max.{{max}})"
-    }
+    },
+    "backToInfo": "Back to tree"
   },
   "Teams": {
     "buttonAdd": "Add a team",
@@ -576,11 +583,16 @@
   },
   "MapModeSwitch": {
     "analysis": "Analysis",
-    "edition": "Edition"
+    "edition": "Edition",
+    "import": "Import"
   },
   "MapDrawToolbar": {
     "selection": "Selection",
     "draw_point": "+ Tree",
-    "draw_polygon": "+ Station"
+    "draw_polygon": "+ Station",
+    "delete": "Delete"
+  },
+  "ch": {
+    "import": "Import"
   }
 }

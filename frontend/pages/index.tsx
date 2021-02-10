@@ -1,7 +1,7 @@
-import { useState, createRef, useEffect } from "react";
+// @ts-nocheck
+import { useState, useEffect } from "react";
 import { Grid, makeStyles, Hidden } from "@material-ui/core";
 import { useRouter } from "next/router";
-import Map from "@/components/Map/Map";
 import MapSearchCity from "@/components/Map/SearchCity";
 import MapGeolocateFab from "@/components/Map/GeolocateFab";
 import Panel from "@/components/Panel";
@@ -9,7 +9,11 @@ import Landing from "@/components/Landing";
 import { useAppContext } from "@/providers/AppContext";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutCarto from "@/components/AppLayout/Carto";
-import { TMapToolbarAction } from "@/components/Map/Toolbar";
+import DeckGL from "@deck.gl/react";
+import { FlyToInterpolator } from "@deck.gl/core";
+import { MVTLayer } from "@deck.gl/geo-layers";
+import { StaticMap } from "react-map-gl";
+import getConfig from "next/config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,56 +40,64 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function IndexPage() {
-  const mapRef = createRef<Map>();
+  const { publicRuntimeConfig } = getConfig();
+  const { apiUrl } = publicRuntimeConfig;
+  const [info, setInfo] = useState();
   const classes = useStyles();
   const { user } = useAppContext();
   const [landing, setLanding] = useState(true);
+  const [viewState, setViewState] = useState({
+    longitude: 2.54,
+    latitude: 46.7,
+    zoom: 5,
+  });
+
   const router = useRouter();
   const { dark } = useThemeContext();
 
+  const osmLayer = new MVTLayer({
+    id: "osm",
+    data: `${apiUrl.replace(
+      "/api/v1",
+      ""
+    )}/tiles/osm/{z}/{x}/{y}.pbf?scope=public`,
+    minZoom: 0,
+    maxZoom: 13,
+    getRadius: 1,
+    radiusScale: 10,
+    radiusMinPixels: 0.25,
+    lineWidthMinPixels: 1,
+    pointRadiusMinPixels: 1,
+    pointRadiusMaxPixels: 10,
+    pointRadiusScale: 2,
+    getLineColor: [34, 169, 54, 100],
+    getFillColor: [34, 139, 34, 100],
+    pickable: true,
+  });
+
   useEffect(() => {
-    const mapTheme = `${dark ? "dark" : "light"}`;
-
     if (user) {
-      router.push("/edition/");
-    } else {
-      const map = mapRef.current.map;
+      router.push("/map/");
+    }
+  }, [user]);
 
-      map.setStyle(`/api/v1/maps/style/?theme=${mapTheme}`);
-      map.on("click", "osm", (e) => {
-        if (e.features.length > 0) {
-          map.removeFeatureState({
-            source: "osm",
-            sourceLayer: "ecoteka-data",
-          });
-          map.setFeatureState(
-            {
-              source: "osm",
-              sourceLayer: "ecoteka-data",
-              id: e.features[0].id,
-            },
-            {
-              click: true,
-            }
-          );
-        }
+  const handleCityChange = (coordinates) => {
+    if (coordinates) {
+      setViewState({
+        ...viewState,
+        longitude: coordinates[0],
+        latitude: coordinates[1],
+        zoom: 15,
+        transitionDuration: 1500,
+        transitionInterpolator: new FlyToInterpolator(),
       });
     }
-  }, [user, mapRef]);
 
-  const handleOnMapToolbarChange = (action: TMapToolbarAction) => {
-    const map = mapRef.current.map;
-
-    switch (action) {
-      case "zoom_in":
-        return map.setZoom(map.getZoom() + 1);
-      case "zoom_out":
-        return map.setZoom(map.getZoom() - 1);
-    }
+    setLanding(false);
   };
 
   return !user ? (
-    <AppLayoutCarto onMapToolbarChange={handleOnMapToolbarChange}>
+    <AppLayoutCarto>
       <Grid
         container
         justify="flex-start"
@@ -94,19 +106,50 @@ export default function IndexPage() {
       >
         <Hidden smDown>
           <Grid item className={classes.sidebar}>
-            <Panel
-              context={{ map: mapRef }}
-              panel={router.query.panel as string}
-            />
+            <Panel panel={router.query.panel as string} info={info} />
           </Grid>
         </Hidden>
         <Grid item xs className={classes.main}>
-          {!user && landing && <Landing map={mapRef} setLanding={setLanding} />}
-          <Map ref={mapRef} styleSource="/api/v1/maps/style/"></Map>
+          {!user && landing && <Landing onChange={handleCityChange} />}
+          <DeckGL
+            viewState={viewState}
+            controller={true}
+            layers={[osmLayer]}
+            onViewStateChange={(e) => {
+              setViewState(e.viewState);
+            }}
+            onClick={(e) => {
+              if (e.object) {
+                setInfo(e.object.properties);
+              }
+            }}
+          >
+            <StaticMap
+              mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
+            />
+            {navigator?.geolocation && (
+              <MapGeolocateFab
+                onGeolocate={() => {
+                  navigator.geolocation.getCurrentPosition((position) => {
+                    setViewState({
+                      ...viewState,
+                      longitude: position.coords.longitude,
+                      latitude: position.coords.latitude,
+                      zoom: 18,
+                      transitionDuration: 1500,
+                      transitionInterpolator: new FlyToInterpolator(),
+                    });
+                  });
+                }}
+              />
+            )}
+          </DeckGL>
           {!landing && (
-            <MapSearchCity map={mapRef} className={classes.mapSearchCity} />
+            <MapSearchCity
+              className={classes.mapSearchCity}
+              onChange={handleCityChange}
+            />
           )}
-          <MapGeolocateFab map={mapRef} />
         </Grid>
       </Grid>
     </AppLayoutCarto>

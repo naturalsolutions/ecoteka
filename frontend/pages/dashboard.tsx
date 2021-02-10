@@ -341,7 +341,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                   color="inherit"
                   size="small"
                   variant="outlined"
-                  onClick={() => router.push("/edition/?panel=import")}
+                  onClick={() => router.push("/map/?panel=import")}
                 >
                   {t("components.Dashboard.importDataButton")}
                 </Button>
@@ -404,9 +404,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                       size="small"
                       variant="outlined"
                       disabled={Boolean(metrics.total_tree_count == 0)}
-                      onClick={() =>
-                        router.push("/edition/?panel=intervention")
-                      }
+                      onClick={() => router.push("/map/?panel=intervention")}
                     >
                       {t("components.Dashboard.addInterventionButton")}
                     </Button>

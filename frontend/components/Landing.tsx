@@ -5,23 +5,16 @@ import {
   CardContent,
   Grid,
   Typography,
-  Box,
   IconButton,
 } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
-import ETKAboutCard from "@/components/Card/About";
-import ETKMapSearchCity from "@/components/Map/SearchCity";
-import ETKMap from "@/components/Map/Map";
+import AboutCard from "@/components/Card/About";
+import MapSearchCity from "@/components/Map/SearchCity";
 
-export interface ETKLandingProps {
-  map: React.RefObject<ETKMap>;
-  setLanding?(boolean): void;
+export interface LandingProps {
+  onChange?(item?: {}): void;
 }
-
-const defaultProps: ETKLandingProps = {
-  map: undefined,
-};
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -74,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ETKLanding: React.FC<ETKLandingProps> = (props) => {
+const Landing: React.FC<LandingProps> = ({ onChange }) => {
   const classes = useStyles();
   const { t } = useTranslation("components");
 
@@ -90,31 +83,25 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
         >
           <Grid item>
             <Typography variant="h3" paragraph>
-              {t("PanelWelcome.title")}
+              {t("components.PanelWelcome.title")}
             </Typography>
           </Grid>
           <Grid item>
             <Typography>
-              <Trans>{t("PanelWelcome.text")}</Trans>
+              <Trans>{t("components.PanelWelcome.text")}</Trans>
             </Typography>
           </Grid>
           <Grid item className={classes.searchBox}>
-            <ETKMapSearchCity
-              map={props.map}
+            <MapSearchCity
               className={classes.mapSearchCity}
-              onChange={(city) => {
-                props.setLanding(false);
-              }}
+              onChange={onChange}
             />
           </Grid>
           <Grid item>
-            <ETKAboutCard background="#fff" buttonVariant="contained" />
+            <AboutCard background="#fff" buttonVariant="contained" />
           </Grid>
         </Grid>
-        <IconButton
-          className={classes.closeIcon}
-          onClick={() => props.setLanding(false)}
-        >
+        <IconButton className={classes.closeIcon} onClick={() => onChange()}>
           <CloseIcon />
         </IconButton>
       </CardContent>
@@ -122,6 +109,4 @@ const ETKLanding: React.FC<ETKLandingProps> = (props) => {
   );
 };
 
-ETKLanding.defaultProps = defaultProps;
-
-export default ETKLanding;
+export default Landing;

@@ -13,11 +13,15 @@ const CalendarPage: FC = ({}) => {
   const { apiETK } = useApi().api;
 
   const getData = async (organizationId: number, year: number) => {
-    const { data } = await apiETK.get(
-      `/organization/${organizationId}/interventions/year/${year}`
-    );
+    try {
+      const { data } = await apiETK.get(
+        `/organization/${organizationId}/interventions/year/${year}`
+      );
 
-    setInterventions(data);
+      setInterventions(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleYearChange = (newYear: number) => {

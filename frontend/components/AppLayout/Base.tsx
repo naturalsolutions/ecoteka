@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import AppLayoutHeader from "@/components/AppLayout/Header";
 import Dialog, { ETKDialogActions } from "@/components/Dialog";
 import Snackbars from "@/components/Snackbars";
+import { NoSsr } from "@material-ui/core";
 import { AbilityContext } from "@/components/Can";
 import { buildAbilityFor } from "@/abilities/genericOrganizationAbility";
 import { useAppContext } from "@/providers/AppContext";
@@ -22,12 +23,16 @@ const AppLayoutBase: FC = ({ children }) => {
   return (
     <AbilityContext.Provider value={ability}>
       <AppLayout.Provider value={{ dialog, snackbar, t }}>
-        <AppLayoutHeader />
-        {children}
-        <Dialog ref={dialog} />
-        <Snackbars ref={snackbar} />
+        <NoSsr>
+            <AppLayoutHeader />
+            {children}
+            <Dialog ref={dialog} />
+            <Snackbars ref={snackbar} />
+        </NoSsr>
       </AppLayout.Provider>
     </AbilityContext.Provider>
+          
+          
   );
 };
 

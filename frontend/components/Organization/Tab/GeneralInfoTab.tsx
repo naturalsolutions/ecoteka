@@ -13,7 +13,6 @@ import ETKFormWorkingArea, {
   ETKFormWorkingAreaActions,
 } from "@/components/Organization/WorkingArea/Form";
 import { useTranslation } from "react-i18next";
-import { useQuery, useQueryCache } from "react-query";
 import bbox from "@turf/bbox";
 import { useSnackbar } from "notistack";
 import Can from "@/components/Can";
@@ -37,6 +36,9 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
   const formEditRef = useRef<ETKFormOrganizationActions>();
   const formAreaRef = useRef<ETKFormWorkingAreaActions>();
   const mapRef = createRef<ETKMap>();
+  const [workingArea, setWorkingArea] = useState({
+    geometry: { coordinates: [] },
+  });
   const [isMapReady, setIsMapReady] = useState(false);
   const { apiETK } = useApi().api;
   const [organization, setOrganization] = useState<IOrganization>(
@@ -70,6 +72,12 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
     }
   };
 
+      if (status === 200) {
+        setWorkingArea(data);
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
     setOrganization(initialOrganization);
     getWorkingArea(initialOrganization);
@@ -77,7 +85,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
 
   useEffect(() => {
     if (mapRef.current && isMapReady && workingArea) {
-      if (workingArea.geometry) {
+      if (workingArea.geometry?.coordinates.length) {
         const map = mapRef.current.map;
         map.fitBounds(bbox(workingArea.geometry));
         if (map.getSource("waSource")) {

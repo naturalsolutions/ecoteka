@@ -32,7 +32,7 @@ from .taxref import (
     TaxrefOut,
     TaxrefUpdate,
 )
-from .tree import Tree, TreePost, TreeCreate, TreeUpdate, TreeImportFromGeofile
+from .tree import Tree, TreePost, TreeCreate, TreeUpdate, TreeImportFromGeofile, TreeStatus
 from .organization import (
     Organization,
     OrganizationCreate,
@@ -84,6 +84,7 @@ __all__ = [
     "TreeImportFromGeofile",
     "TreePost",
     "TreeUpdate",
+    "TreeStatus",
     "UserCreate",
     "UserDB",
     "UserInvite",

@@ -1,4 +1,3 @@
-import os
 import datetime
 import hashlib
 from json import dumps, loads
@@ -122,6 +121,7 @@ class GeoFile(Base):
     def get_checksum(self):
         with open(self.get_filepath(extended=False), "rb") as f:
             file_hash = hashlib.md5()
+            file_hash.update(str(self.organization_id).encode('ASCII'))
             while chunk := f.read(8192):
                 file_hash.update(chunk)
 

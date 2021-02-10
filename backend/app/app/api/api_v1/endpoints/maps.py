@@ -1,60 +1,43 @@
-import logging
-from typing import Optional
-from pydantic import Json
-from fastapi_jwt_auth import AuthJWT
+from typing import Dict, Optional, List
 import json
-import sqlite3
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app import crud
+from bokeh import palettes
+
 from app.api import get_db
 from app.core import (
-    settings,
+    authorization,
+    set_policies
 )
 
 router = APIRouter()
 
+policies = {
+    "maps:get_filters": ["owner", "manager", "contributor", "reader"],
+    "maps:get_bbox": ["owner", "manager", "contributor", "reader"]
+}
+
+set_policies(policies)
+
 
 @router.get("/style/")
 def generate_style(
-    *,
     db: Session = Depends(get_db),
-    token: Optional[str] = "",
     theme: Optional[str] = "dark",
-    organization_id: Optional[int] = -1,
-) -> Json:
+    background: Optional[str] = "map"
+) -> Dict:
     """
     Generate style
     """
     with open(f"/app/app/assets/styles/{theme}.json") as style_json:
         style = json.load(style_json)
 
-        style["sources"]["osm"] = {
-            "type": "vector",
-            "tiles": [
-                f"{settings.TILES_SERVER}/osm/{{z}}/{{x}}/{{y}}.pbf?scope=public"
-            ],
-            "minzoom": 0,
-            "maxzoom": 13,
-        }
+        if background == "satellite":
+            satellite = [index for index, layer in enumerate(style["layers"]) if layer["id"] == "satellite"]
+            
+            if len(satellite) > 0:
+                style["layers"][satellite[0]]["layout"]["visibility"] = "visible"
 
-        style["layers"].insert(
-            len(style["layers"]),
-            {
-                "id": "osm",
-                "type": "circle",
-                "source": "osm",
-                "source-layer": "ecoteka-data",
-                "paint": {
-                    "circle-radius": {"base": 1.75, "stops": [[12, 2], [22, 180]]},
-                    "circle-color": [
-                        'case', ['boolean', ['feature-state', 'click'], False], 
-                        '#f44336', 
-                        "#6F8F72"
-                    ],
-                },
-            },
-        )
 
         style["sources"]["cadastre-france"] = {
             "type": "vector",
@@ -110,75 +93,53 @@ def generate_style(
             }
         )
 
-        user_in_db = None
+        return style
 
-        if token:
-            try:
-                Authorize = AuthJWT()
-                Authorize._token = token
-                current_user_id = Authorize.get_jwt_subject()
-                user_in_db = crud.user.get(db, id=current_user_id)
-            except Exception as e:
-                pass
+def hex_to_rgb(hex):
+        hex = hex.lstrip('#')
+        hlen = len(hex)
+        return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
 
-        if user_in_db is None:
-            return style
+@router.get("/filter", dependencies=[Depends(authorization("maps:get_filters"))])
+def get_filters(
+    organization_id: int,
+    db: Session = Depends(get_db)
+) -> Dict:
+    """
+    Get filters 
+    """
+    fields = ["canonicalName", "vernacularName"]
+    filter: Dict = {}
 
-        conn = None
+    for field in fields:
+        rows = db.execute(f"""
+            select distinct properties ->> '{field}' as value
+            from tree
+            where organization_id = {organization_id}
+            order by value;""")
+        colors = palettes.viridis(rows.rowcount)
+        filter[field] = [{ 'value': row.value, 'color': hex_to_rgb(colors[i]) } for i, row in enumerate(rows) if row[0] not in ["", None]]
+    
+    return filter
 
-        try:
-            organization_in_db = crud.organization.get(db, organization_id)
+@router.get("/bbox", dependencies=[Depends(authorization("maps:get_bbox"))])
+def get_bbox(
+    organization_id: int,
+    db: Session = Depends(get_db)
+) -> List:
+    """
+    Get the bounding box of all active trees within a organization
+    """
 
-            if organization_in_db is None:
-                return style
+    rows = db.execute(f"""
+        SELECT 
+            ST_XMIN(ST_EXTENT(geom)) as xmin, 
+            ST_YMIN(ST_EXTENT(geom)) as ymin, 
+            ST_XMAX(ST_EXTENT(geom)) as xmax, 
+            ST_YMAX(ST_EXTENT(geom)) as ymax
+        FROM tree 
+        WHERE organization_id = {organization_id}
+        AND status NOT IN ('delete', 'import');
+    """)
 
-            target = f"/app/tiles/private/{organization_in_db.slug}.mbtiles"
-
-            conn = sqlite3.connect(target)
-            sql = """
-                SELECT * FROM metadata
-                WHERE name IN ('minzoom', 'maxzoom')
-                ORDER BY name DESC
-            """
-            cur = conn.cursor()
-            cur.execute(sql)
-            minzoom, maxzoom = cur.fetchall()
-
-            style["sources"][f"{organization_in_db.slug}"] = {
-                "type": "vector",
-                "tiles": [
-                    f"{settings.TILES_SERVER}/{organization_in_db.slug}/{{z}}/{{x}}/{{y}}.pbf?scope=private&token={token}"
-                ],
-                "minzoom": int(minzoom[1]),
-                "maxzoom": int(maxzoom[1]),
-            }
-
-            style["layers"].insert(
-                len(style["layers"]),
-                {
-                    "id": f"ecoteka-{organization_in_db.slug}",
-                    "type": "circle",
-                    "source": organization_in_db.slug,
-                    "source-layer": organization_in_db.slug,
-                    "paint": {
-                        "circle-stroke-width": 1,
-                        "circle-stroke-color": "#fff",
-                        "circle-radius": {
-                            "base": 1.75,
-                            "stops": [[12, 2], [22, 180]],
-                        },
-                        "circle-color": [
-                            "case",
-                            ["boolean", ["feature-state", "active"], False],
-                            "red",
-                            "#2597e4",
-                        ],
-                    },
-                },
-            )
-        except Exception as e:
-            logging.error(e)
-        finally:
-            if conn is not None:
-                conn.close()
-            return style
+    return rows.first()
