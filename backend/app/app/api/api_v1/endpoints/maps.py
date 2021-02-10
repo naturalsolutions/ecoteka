@@ -113,12 +113,17 @@ def get_filters(
 
     for field in fields:
         rows = db.execute(f"""
-            select distinct properties ->> '{field}' as value
+            select distinct properties ->> '{field}' as value, count(properties) as total
             from tree
             where organization_id = {organization_id}
-            order by value;""")
+            group by properties ->> '{field}'
+            order by total desc;""")
         colors = palettes.viridis(rows.rowcount)
-        filter[field] = [{ 'value': row.value, 'color': hex_to_rgb(colors[i]) } for i, row in enumerate(rows) if row[0] not in ["", None]]
+        filter[field] = [{ 
+            'value': row.value, 
+            'total': row.total, 
+            'color': hex_to_rgb(colors[i]) 
+        } for i, row in enumerate(rows) if row[0] not in ["", None]]
     
     return filter
 

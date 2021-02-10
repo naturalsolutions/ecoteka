@@ -491,7 +491,7 @@
     "exportSuccess": "Su solicitud para exportar ha sido procesada. Descarga en progreso...",
     "WorkingArea": {
       "dialogTitle": "Editar área de trabajo",
-      "dialogContentText": "Formatos aceptados : zip, geojson"
+      "dialogContentText": "Formatos aceptados:  geojson"
     },
     "Tabs": {
       "general": "Información general",

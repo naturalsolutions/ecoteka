@@ -57,29 +57,31 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   }, []);
 
   useEffect(() => {
-    if (mapRef.current && isMapReady && workingArea) {
-      if (workingArea.geometry?.coordinates.length) {
-        const map = mapRef.current.map;
-        map.fitBounds(bbox(workingArea.geometry));
-        if (map.getSource(queryName)) {
-          map.removeLayer(queryName);
-          map.removeSource(queryName);
+    try {
+      if (mapRef.current && isMapReady && workingArea) {
+        if (workingArea.geometry?.coordinates.length) {
+          const map = mapRef.current.map;
+          map.fitBounds(bbox(workingArea.geometry));
+          if (map.getSource(queryName)) {
+            map.removeLayer(queryName);
+            map.removeSource(queryName);
+          }
+          map.addSource(queryName, {
+            type: "geojson",
+            data: workingArea,
+          });
+          map.addLayer({
+            id: queryName,
+            source: queryName,
+            type: "fill",
+            paint: {
+              "fill-color": "#00C6B8",
+              "fill-opacity": 0.5,
+            },
+          });
         }
-        map.addSource(queryName, {
-          type: "geojson",
-          data: workingArea,
-        });
-        map.addLayer({
-          id: queryName,
-          source: queryName,
-          type: "fill",
-          paint: {
-            "fill-color": "#00C6B8",
-            "fill-opacity": 0.5,
-          },
-        });
       }
-    }
+    } catch (error) {}
   }, [mapRef, workingArea]);
 
   function openForm() {

@@ -162,7 +162,7 @@ const ETKFormWorkingArea = forwardRef<
       </Grid>
       <Grid item>
         <DropzoneArea
-          acceptedFiles={[".geojson", ".zip"]}
+          acceptedFiles={[".geojson"]}
           Icon={GetAppIcon as any}
           dropzoneText={t("components.Import.Upload.dropzoneText")}
           dropzoneProps={{

@@ -498,7 +498,7 @@ async def upload_working_area(
         filename_parts = os.path.splitext(file.filename)
         extension = filename_parts[1][1:]
 
-        if extension not in ["zip", "geojson"]:
+        if extension not in ["geojson"]:
             raise HTTPException(status_code=415, detail="File format unsupported")
 
         unique_name = uuid.uuid4()

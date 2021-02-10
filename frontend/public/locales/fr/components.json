@@ -486,7 +486,7 @@
     "exportSuccess": "Vos données sont prêtes! Téléchargement en cours...",
     "WorkingArea": {
       "dialogTitle": "Editer l'emprise",
-      "dialogContentText": "Extension acceptés : zip, geojson"
+      "dialogContentText": "Extension acceptés : geojson"
     },
     "Tabs": {
       "general": "Informations générales",
