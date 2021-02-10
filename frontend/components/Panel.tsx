@@ -4,16 +4,15 @@ import { makeStyles, Card, CardContent } from "@material-ui/core";
 import ETKMap from "@/components/Map/Map";
 import { useAppContext } from "@/providers/AppContext";
 
-export type ETKPanelContext = {
+export type PanelContext = {
   map: React.RefObject<ETKMap> | undefined;
 };
 
-export interface ETKPanelProps {
+export interface PanelProps {
   panel: string | undefined;
-  context: ETKPanelContext;
 }
 
-const defaultProps: ETKPanelProps = {
+const defaultProps: PanelProps = {
   panel: undefined,
   context: undefined,
 };
@@ -25,14 +24,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ETKPanelPanels = {
+const PanelPanels = {
   start: dynamic(() => import("@/components/Panel/Start/Index")),
   import: dynamic(() => import("@/components/Import/Panel/Index")),
   newTree: dynamic(() => import("@/components/Tree/Form")),
   newIntervention: dynamic(() => import("@/components/Interventions/Form")),
 };
 
-const ETKPanel: React.FC<ETKPanelProps> = (props) => {
+const Panel: React.FC<PanelProps> = (props) => {
   const classes = useStyles();
   const { isLoading } = useAppContext();
   let panel = props.panel;
@@ -41,7 +40,7 @@ const ETKPanel: React.FC<ETKPanelProps> = (props) => {
     panel = "start";
   }
 
-  const Panel = ETKPanelPanels[panel];
+  const Panel = PanelPanels[panel];
 
   return isLoading ? (
     <Panel />
@@ -54,6 +53,6 @@ const ETKPanel: React.FC<ETKPanelProps> = (props) => {
   );
 };
 
-ETKPanel.defaultProps = defaultProps;
+Panel.defaultProps = defaultProps;
 
-export default ETKPanel;
+export default Panel;
