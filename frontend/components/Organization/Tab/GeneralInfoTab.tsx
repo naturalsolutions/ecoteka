@@ -52,21 +52,9 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
         `/organization/${organization.id}/working_area`
       );
       if (status == 200) {
-        enqueueSnackbar(
-          `${t("components.Organization.WorkingArea.getSuccess")}`,
-          {
-            variant: "success",
-          }
-        );
         setWorkingArea(data);
       }
     } catch (error) {
-      enqueueSnackbar(
-        `${t("components.Organization.WorkingArea.getFailure")}`,
-        {
-          variant: "error",
-        }
-      );
       setWorkingArea(null);
     }
   };
