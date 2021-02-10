@@ -27,7 +27,9 @@ interface IGeneralInfoTab {
   organization: IOrganization;
 }
 
-const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
+const GeneralInfoTab: FC<IGeneralInfoTab> = ({
+  organization: initialOrganization,
+}) => {
   const classes = useStyles();
   const { dialog, snackbar } = useAppLayout();
   const formEditRef = useRef<ETKFormOrganizationActions>();
@@ -37,6 +39,9 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   const [isMapReady, setIsMapReady] = useState(false);
   const cache = useQueryCache();
   const { apiETK } = useApi().api;
+  const [organization, setOrganization] = useState<IOrganization>(
+    initialOrganization
+  );
 
   const queryName = `working_area_${organization.id}`;
   const { status, data: workingArea, error, isFetching } = useQuery(
@@ -105,13 +110,15 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   }
 
   const addItem = async () => {
-    const response = await formEditRef.current.submit();
-    const data = await response.json();
-
-    //TODO handle errors
-
-    dialog.current.close();
-    //TODO display new data
+    try {
+      const { status, data } = await formEditRef.current.submit();
+      if (status === 200) {
+        setOrganization(data);
+      }
+    } catch (error) {
+    } finally {
+      dialog.current.close();
+    }
   };
 
   function openArea() {
@@ -152,7 +159,7 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({ organization }) => {
   return (
     <Grid container alignItems="stretch">
       <Grid item xs={6}>
-        {organization?.name}
+        {organization.name}
         <div>
           <Can do="update" on="Organization">
             <Button
