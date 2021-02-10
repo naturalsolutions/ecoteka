@@ -44,7 +44,6 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
   const [organization, setOrganization] = useState<IOrganization>(
     initialOrganization
   );
-  const [workingArea, setWorkingArea] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
 
   const getWorkingArea = async (organization) => {
@@ -70,12 +69,6 @@ const GeneralInfoTab: FC<IGeneralInfoTab> = ({
       );
       setWorkingArea(null);
     }
-  };
-
-      if (status === 200) {
-        setWorkingArea(data);
-      }
-    } catch (error) {}
   };
 
   useEffect(() => {
