@@ -37,6 +37,7 @@ import ETKFormWorkingArea, {
 import TeamsTable from "@/components/Organization/Teams/TeamsTable";
 import { useTranslation } from "react-i18next";
 import useAPI from "@/lib/useApi";
+import Can from "@/components/Can";
 
 interface TeamsProps {
   organization: IOrganization;
@@ -327,82 +328,86 @@ const Teams: FC<TeamsProps> = (props) => {
       />
       <Toolbar className={classes.toolbar}>
         <Box className={classes.root} />
-        <ButtonGroup
-          variant="contained"
-          disabled={disableActions}
-          size="small"
-          color="secondary"
-          ref={anchorRef}
-          aria-label="split button"
-        >
-          <Button size="small" color="secondary" onClick={handleClick}>
-            {t(`common.buttons.${actionOptions[selectedAction].format}`)}
-          </Button>
-          <Button
+        <Can do="delete" on="Teams">
+          <ButtonGroup
+            variant="contained"
+            disabled={disableActions}
             size="small"
             color="secondary"
-            aria-controls={open ? "split-button-menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            aria-label="select export format"
-            aria-haspopup="menu"
-            onClick={handleToggle}
+            ref={anchorRef}
+            aria-label="split button"
           >
-            <ArrowDropDownIcon />
-          </Button>
-        </ButtonGroup>
-        <Popper
-          open={open}
-          anchorEl={anchorRef.current}
-          role={undefined}
-          transition
-          modifiers={{
-            flip: {
-              enabled: true,
-            },
-            preventOverflow: {
-              enabled: true,
-              boundariesElement: "window",
-            },
-          }}
-        >
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin:
-                  placement === "bottom" ? "center top" : "center bottom",
-              }}
+            <Button size="small" color="secondary" onClick={handleClick}>
+              {t(`common.buttons.${actionOptions[selectedAction].format}`)}
+            </Button>
+            <Button
+              size="small"
+              color="secondary"
+              aria-controls={open ? "split-button-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-label="select export format"
+              aria-haspopup="menu"
+              onClick={handleToggle}
             >
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList id="split-button-menu">
-                    {actionOptions.map((option, index) => (
-                      <MenuItem
-                        key={option.label}
-                        selected={index === selectedAction}
-                        onClick={(event) => handleMenuItemClick(event, index)}
-                      >
-                        {t(`common.buttons.${option.format}`)}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-        <Button
-          variant="contained"
-          size="small"
-          color="primary"
-          className={classes.button}
-          startIcon={<AddIcon />}
-          onClick={() => {
-            openForm();
-          }}
-        >
-          {t("Teams.buttonAdd")}
-        </Button>
+              <ArrowDropDownIcon />
+            </Button>
+          </ButtonGroup>
+          <Popper
+            open={open}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            transition
+            modifiers={{
+              flip: {
+                enabled: true,
+              },
+              preventOverflow: {
+                enabled: true,
+                boundariesElement: "window",
+              },
+            }}
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === "bottom" ? "center top" : "center bottom",
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList id="split-button-menu">
+                      {actionOptions.map((option, index) => (
+                        <MenuItem
+                          key={option.label}
+                          selected={index === selectedAction}
+                          onClick={(event) => handleMenuItemClick(event, index)}
+                        >
+                          {t(`common.buttons.${option.format}`)}
+                        </MenuItem>
+                      ))}
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </Can>
+        <Can do="create" on="Teams">
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            className={classes.button}
+            startIcon={<AddIcon />}
+            onClick={() => {
+              openForm();
+            }}
+          >
+            {t("Teams.buttonAdd")}
+          </Button>
+        </Can>
       </Toolbar>
       <TeamsTable
         organizationId={props.organization.id}

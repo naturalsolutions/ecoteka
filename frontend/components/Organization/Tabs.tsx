@@ -46,11 +46,11 @@ const ETKTabs: FC<TabsProps> = ({ organization, activeTab }) => {
             label={t("components.Organization.Tabs.general")}
             value="general"
           />
-          <Tab label={t("components.Organization.Tabs.teams")} value="teams" />
           <Tab
             label={t("components.Organization.Tabs.members")}
             value="members"
           />
+          <Tab label={t("components.Organization.Tabs.teams")} value="teams" />
         </Tabs>
       </Paper>
       <TabPanel value={value} index="general">

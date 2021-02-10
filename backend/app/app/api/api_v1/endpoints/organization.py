@@ -106,22 +106,27 @@ def update_organization(
     )
 
 
-@router.get("/{organization_id}")
+@router.get("/{organization_id}", response_model=Organization)
 def get_one(
     organization_id: int,
     *,
     auth=Depends(authorization("organizations:get_one")),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> Optional[Organization]:
     """
     get one organization by id
     """
     organization_in_db = organization.get(db, id=organization_id)
+    current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_id))
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
+    
+    organization_as_dict = organization_in_db.to_schema().__dict__
+    organization_as_dict["current_user_role"] = current_roles[0]
 
-    return organization_in_db.to_schema()
+    return organization_as_dict
 
 
 @router.get("/{organization_id}/teams", response_model=List[Organization])

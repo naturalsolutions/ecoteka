@@ -27,6 +27,7 @@ import {
 import { useTranslation } from "react-i18next";
 import useApi from "@/lib/useApi";
 import { IMember } from "@/index";
+import Can from "@/components/Can";
 
 export interface ETKOrganizationMemberTableProps {
   organizationId: number;
@@ -281,42 +282,46 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  indeterminate={
-                    selectedMembers.length > 0 &&
-                    selectedMembers.length < rows.length
-                  }
-                  checked={
-                    rows.length > 0 && selectedMembers.length === rows.length
-                  }
-                  onChange={onSelectAllClick}
-                  color="primary"
-                />
-              </TableCell>
-              <TableCell padding="checkbox">
-                <IconButton
-                  disabled={!selectedMembers.length}
-                  aria-owns={actionsMenuAnchorEl ? "membersActionsMenu" : null}
-                  aria-haspopup="true"
-                  onClick={handleClick}
-                >
-                  <MoreHorizIcon />
-                </IconButton>
-                <Menu
-                  id="membersActionsMenu"
-                  anchorEl={actionsMenuAnchorEl}
-                  open={Boolean(actionsMenuAnchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={onDetachMembers}>
-                    <ListItemIcon>
-                      <BlockIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Retirer du groupe" />
-                  </MenuItem>
-                </Menu>
-              </TableCell>
+              <Can do="delete" on="Members">
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    indeterminate={
+                      selectedMembers.length > 0 &&
+                      selectedMembers.length < rows.length
+                    }
+                    checked={
+                      rows.length > 0 && selectedMembers.length === rows.length
+                    }
+                    onChange={onSelectAllClick}
+                    color="primary"
+                  />
+                </TableCell>
+                <TableCell padding="checkbox">
+                  <IconButton
+                    disabled={!selectedMembers.length}
+                    aria-owns={
+                      actionsMenuAnchorEl ? "membersActionsMenu" : null
+                    }
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <MoreHorizIcon />
+                  </IconButton>
+                  <Menu
+                    id="membersActionsMenu"
+                    anchorEl={actionsMenuAnchorEl}
+                    open={Boolean(actionsMenuAnchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={onDetachMembers}>
+                      <ListItemIcon>
+                        <BlockIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Retirer du groupe" />
+                    </MenuItem>
+                  </Menu>
+                </TableCell>
+              </Can>
               {headers.map((header, index) => (
                 <TableCell key={`header-${index}`}>
                   <strong>{t(header)}</strong>
@@ -336,54 +341,68 @@ const ETKMembersTable: React.FC<ETKOrganizationMemberTableProps> = ({
                   role="checkbox"
                   aria-checked={isItemSelected}
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      disabled={Boolean(
-                        row.role === "admin" || row.role === "owner"
-                      )}
-                      checked={isItemSelected}
-                      color="primary"
-                      onClick={(e) => onRowClick(e, row)}
-                    />
-                  </TableCell>
-                  <TableCell padding="checkbox" />
+                  <Can do="delete" on="Members">
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        disabled={Boolean(
+                          row.role === "admin" || row.role === "owner"
+                        )}
+                        checked={isItemSelected}
+                        color="primary"
+                        onClick={(e) => onRowClick(e, row)}
+                      />
+                    </TableCell>
+                    <TableCell padding="checkbox" />
+                  </Can>
                   <TableCell scope="row">{row.email}</TableCell>
                   <TableCell>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      variant="outlined"
-                      value={privateRows[index].full_name}
-                      onChange={(e) => {
-                        if (privateRows[index].full_name !== e.target.value) {
-                          const newRows = [...privateRows];
+                    <Can do="manage" on="Members">
+                      <TextField
+                        fullWidth
+                        size="small"
+                        variant="outlined"
+                        value={privateRows[index].full_name}
+                        onChange={(e) => {
+                          if (privateRows[index].full_name !== e.target.value) {
+                            const newRows = [...privateRows];
 
-                          newRows[index].full_name = e.target.value;
-                          setPrivateRows(newRows);
-                        }
-                      }}
-                      onBlur={() => {
-                        handleUserUpdate(row);
-                      }}
-                    />
+                            newRows[index].full_name = e.target.value;
+                            setPrivateRows(newRows);
+                          }
+                        }}
+                        onBlur={() => {
+                          handleUserUpdate(row);
+                        }}
+                      />
+                    </Can>
+                    <Can not do="manage" on="Members">
+                      {row.full_name}
+                    </Can>
                   </TableCell>
                   <TableCell>
-                    {(() => {
-                      switch (row.role) {
-                        case "admin":
-                        case "owner":
-                          return t(
-                            `components.Organization.Members.Table.roles.${row.role}`
-                          );
-                        default:
-                          return (
-                            <SelectRenderer
-                              value={row.role}
-                              handleChange={(e) => handleUserRoleChange(row, e)}
-                            />
-                          );
-                      }
-                    })()}
+                    <Can do="manage" on="Members">
+                      {(() => {
+                        switch (row.role) {
+                          case "admin":
+                          case "owner":
+                            return t(
+                              `components.Organization.Members.Table.roles.${row.role}`
+                            );
+                          default:
+                            return (
+                              <SelectRenderer
+                                value={row.role}
+                                handleChange={(e) =>
+                                  handleUserRoleChange(row, e)
+                                }
+                              />
+                            );
+                        }
+                      })()}
+                    </Can>
+                    <Can not do="manage" on="Members">
+                      {row.role}
+                    </Can>
                   </TableCell>
                 </TableRow>
               );

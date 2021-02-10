@@ -3,6 +3,8 @@ import Head from "next/head";
 import { I18nextProvider } from "react-i18next";
 import i18n from "@/i18n";
 import "maplibre-gl/dist/mapbox-gl.css";
+import { SnackbarProvider } from "notistack";
+import ThemeProvider from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutBase from "@/components/AppLayout/Base";
 import "@/styles/global.css";
 
@@ -27,11 +29,15 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <I18nextProvider i18n={i18n}>
-        <AppContextProvider>
-          <AppLayoutBase>
-            <Component {...pageProps} />
-          </AppLayoutBase>
-        </AppContextProvider>
+        <ThemeProvider>
+          <SnackbarProvider maxSnack={4}>
+            <AppContextProvider>
+              <AppLayoutBase>
+                <Component {...pageProps} />
+              </AppLayoutBase>
+            </AppContextProvider>
+          </SnackbarProvider>
+        </ThemeProvider>
       </I18nextProvider>
     </React.Fragment>
   );
