@@ -167,9 +167,11 @@ const AppLayoutHeader = ({}): JSX.Element => {
                 </ToggleButton>
               </Grid>
             </NoSsr>
-            <Grid item>
-              <LanguageSelector />
-            </Grid>
+            <Hidden smDown>
+              <Grid item>
+                <LanguageSelector />
+              </Grid>
+            </Hidden>
             <Grid item>{!user && <ContactButton />}</Grid>
             <Grid item>{user && <UserMainMenuButton />}</Grid>
             {!user && (

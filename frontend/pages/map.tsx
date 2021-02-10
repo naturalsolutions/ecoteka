@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Grid, makeStyles, Box, Button, IconButton } from "@material-ui/core";
+import {
+  Grid,
+  makeStyles,
+  Box,
+  Button,
+  IconButton,
+  Hidden,
+} from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import CloseIcon from "@material-ui/icons/Close";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
@@ -539,53 +546,57 @@ const EditionPage = ({}) => {
           <BackupIcon />
         </IconButton>
       </Box>
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        className={classes.toolbar}
-      >
-        <Grid item className={classes.toolbarAction}>
-          <MapModeSwitch
-            initValue={editionMode ? "edition" : "analysis"}
-            onChange={handleOnMapModeSwitch}
-          />
-        </Grid>
-        <Grid item xs></Grid>
-        {editionMode && (
+      <Hidden smDown>
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          className={classes.toolbar}
+        >
           <Grid item className={classes.toolbarAction}>
-            <MapDrawToolbar
-              activeDelete={Boolean(selection.length)}
-              onDelete={handleOnDeleteTrees}
-              onChange={(newMode) => {
-                if (newMode) {
-                  setMode(newMode);
-                }
+            <MapModeSwitch
+              initValue={editionMode ? "edition" : "analysis"}
+              onChange={handleOnMapModeSwitch}
+            />
+          </Grid>
+          <Grid item xs></Grid>
+          {editionMode && (
+            <Grid item className={classes.toolbarAction}>
+              <MapDrawToolbar
+                activeDelete={Boolean(selection.length)}
+                onDelete={handleOnDeleteTrees}
+                onChange={(newMode) => {
+                  if (newMode) {
+                    setMode(newMode);
+                  }
+                }}
+              />
+            </Grid>
+          )}
+          <Grid item xs></Grid>
+          <Grid item className={classes.toolbarAction}>
+            <MapSearchCity
+              onChange={(coordinates) => {
+                setViewState({
+                  ...viewState,
+                  longitude: coordinates[0],
+                  latitude: coordinates[1],
+                  zoom: 15,
+                  transitionDuration: 1500,
+                  transitionInterpolator: new FlyToInterpolator(),
+                });
               }}
             />
           </Grid>
-        )}
-        <Grid item xs></Grid>
-        <Grid item className={classes.toolbarAction}>
-          <MapSearchCity
-            onChange={(coordinates) => {
-              setViewState({
-                ...viewState,
-                longitude: coordinates[0],
-                latitude: coordinates[1],
-                zoom: 15,
-                transitionDuration: 1500,
-                transitionInterpolator: new FlyToInterpolator(),
-              });
-            }}
-          />
+          <Grid item className={classes.toolbarAction}>
+            <IconButton
+              onClick={() => fitToBounds(user.currentOrganization.id)}
+            >
+              <CenterFocusStrongIcon />
+            </IconButton>
+          </Grid>
         </Grid>
-        <Grid item className={classes.toolbarAction}>
-          <IconButton onClick={() => fitToBounds(user.currentOrganization.id)}>
-            <CenterFocusStrongIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
+      </Hidden>
     </AppLayoutCarto>
   );
 };

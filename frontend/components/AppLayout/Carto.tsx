@@ -18,13 +18,20 @@ const useStyles = makeStyles((theme) => ({
     width: (props) => props.drawerLeftWidth,
     height: toolbarHeightCalc,
     flexShrink: 0,
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 300,
+    },
   },
+
   drawerLeftPaper: {
     // @ts-ignore
     width: (props) => props.drawerLeftWidth,
     padding: "1rem",
     height: toolbarHeightCalc,
     marginTop: toolbarHeight,
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 300,
+    },
   },
 }));
 
