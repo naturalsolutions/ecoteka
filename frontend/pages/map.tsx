@@ -500,12 +500,20 @@ const EditionPage = ({}) => {
           {drawerLeftComponent ? <CloseIcon /> : <MenuOpenIcon />}
         </IconButton>
         <IconButton onClick={() => router.push("/map?panel=filter")}>
-          <SearchIcon />
+          <SearchIcon
+            color={router.query?.panel === "filter" ? "primary" : "default"}
+          />
         </IconButton>
-        <IconButton onClick={() => router.push("/map?panel=layers")}>
+        <IconButton
+          color={router.query?.panel === "layers" ? "primary" : "default"}
+          onClick={() => router.push("/map?panel=layers")}
+        >
           <LayersIcon />
         </IconButton>
-        <IconButton onClick={() => switchPanel("import")}>
+        <IconButton
+          color={router.query?.panel === "import" ? "primary" : "default"}
+          onClick={() => router.push("/map?panel=import")}
+        >
           <BackupIcon />
         </IconButton>
       </Box>
