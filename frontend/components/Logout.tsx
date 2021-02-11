@@ -5,12 +5,12 @@ import { useAppContext } from "@/providers/AppContext";
 import { useTranslation } from "react-i18next";
 import { useAppLayout } from "@/components/AppLayout/Base";
 
-export interface ETKLogoutProps {
+export interface LogoutProps {
   buttonProps?: any;
   onClick?: () => void;
 }
 
-const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
+const Logout: React.FC<LogoutProps> = (props) => {
   const { t } = useTranslation();
   const { dialog } = useAppLayout();
   const { setUser } = useAppContext();
@@ -49,12 +49,12 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
       variant: "contained",
       size: "large",
       onClick: () => {
+        localStorage.clear();
+        setUser(null);
+
         if (props.onClick) {
           props.onClick();
         }
-
-        localStorage.clear();
-        setUser(null);
       },
     },
   ];
@@ -75,4 +75,4 @@ const ETKLogout: React.FC<ETKLogoutProps> = (props) => {
   );
 };
 
-export default ETKLogout;
+export default Logout;

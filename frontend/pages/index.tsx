@@ -55,6 +55,12 @@ export default function IndexPage() {
   const router = useRouter();
   const { dark } = useThemeContext();
 
+  useEffect(() => {
+    if (user) {
+      router.push("/map");
+    }
+  }, [user]);
+
   const osmLayer = new MVTLayer({
     id: "osm",
     data: `${apiUrl.replace(
@@ -103,6 +109,7 @@ export default function IndexPage() {
             <Panel panel={router.query.panel as string} info={info} />
           </Grid>
         </Hidden>
+
         <Grid item xs className={classes.main}>
           {!user && landing && <Landing onChange={handleCityChange} />}
           <DeckGL
@@ -118,6 +125,13 @@ export default function IndexPage() {
               }
             }}
           >
+            {!landing && (
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <MapSearchCity onChange={handleCityChange} />
+                </Grid>
+              </Grid>
+            )}
             <StaticMap
               mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
             />
@@ -138,12 +152,6 @@ export default function IndexPage() {
               />
             )}
           </DeckGL>
-          {!landing && (
-            <MapSearchCity
-              className={classes.mapSearchCity}
-              onChange={handleCityChange}
-            />
-          )}
         </Grid>
       </Grid>
     </AppLayoutCarto>
