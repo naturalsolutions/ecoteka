@@ -7,15 +7,15 @@ import useAPI from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import getConfig from "next/config";
 
-export type ETKFormSignInActions = {
+export type FormSignInActions = {
   submit: () => Promise<boolean>;
 };
 
-export interface ETKFormSignInProps {}
+export interface FormSignInProps {}
 
-const defaultProps: ETKFormSignInProps = {};
+const defaultProps: FormSignInProps = {};
 
-const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
+const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
   (props, ref) => {
     const { t } = useTranslation("components");
     const schema = useETKSignInSchema();
@@ -97,6 +97,6 @@ const ETKFormSignIn = forwardRef<ETKFormSignInActions, ETKFormSignInProps>(
   }
 );
 
-ETKFormSignIn.defaultProps = defaultProps;
+FormSignIn.defaultProps = defaultProps;
 
-export default ETKFormSignIn;
+export default FormSignIn;

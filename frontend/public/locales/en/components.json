@@ -12,7 +12,7 @@
     "buttonCancel": "Cancel",
     "buttonConnexion": "Login",
     "labelPassword": "Password",
-    "forgotPassword": "Forgot your password ?",
+    "forgotPassword": "Forgot your password?",
     "labelUsername": "Email",
     "errorMessageServer": "Incorrect email or password",
     "errorMessageEmail": "Email address is invalid",

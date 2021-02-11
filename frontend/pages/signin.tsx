@@ -9,7 +9,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
+import FormSignIn, { FormSignInActions } from "@/components/SignIn/Form";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInPage() {
   const classes = useStyles();
-  const formRef = useRef<ETKFormSignInActions>();
+  const formRef = useRef<FormSignInActions>();
   const { t } = useTranslation("components");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -66,11 +66,11 @@ export default function SignInPage() {
             color="textPrimary"
             className={classes.h5}
           >
-            {t("SignIn.title")}
+            {t("components.SignIn.title")}
           </Typography>
         </Box>
         <Box className={classes.formWidth}>
-          <ETKFormSignIn ref={formRef}></ETKFormSignIn>
+          <FormSignIn ref={formRef} />
         </Box>
         <Box mb={3}>
           <Link
@@ -78,7 +78,7 @@ export default function SignInPage() {
             color="textPrimary"
             style={{ textAlign: "right" }}
           >
-            {t("SignIn.forgotPassword")}
+            {t("components.SignIn.forgotPassword")}
           </Link>
         </Box>
         <Button
@@ -92,7 +92,7 @@ export default function SignInPage() {
         </Button>
         <Box my={2}>
           <Typography variant="h6" align="center" color="textPrimary">
-            {t("SignIn.noAccount")}
+            {t("components.SignIn.noAccount")}
           </Typography>
         </Box>
         <Button
@@ -102,7 +102,7 @@ export default function SignInPage() {
           target="_blank"
           className={classes.formWidth}
         >
-          {t("SignIn.accountRequest")}
+          {t("components.SignIn.accountRequest")}
         </Button>
         <Box flexGrow={1} />
       </Grid>

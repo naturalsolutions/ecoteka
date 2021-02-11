@@ -28,13 +28,15 @@ const useStyles = makeStyles((theme) => ({
   },
   mapSearchCity: {
     position: "absolute",
-    top: "2rem",
-    right: "5rem",
+    top: 8,
+    right: 8,
     width: "300px",
   },
   [theme.breakpoints.down("sm")]: {
     mapSearchCity: {
-      width: "92vw",
+      width: "calc(100% - 16px)",
+      top: 16,
+      left: 8,
     },
   },
 }));
@@ -126,11 +128,10 @@ export default function IndexPage() {
             }}
           >
             {!landing && (
-              <Grid container justify="flex-end">
-                <Grid item>
-                  <MapSearchCity onChange={handleCityChange} />
-                </Grid>
-              </Grid>
+              <MapSearchCity
+                className={classes.mapSearchCity}
+                onChange={handleCityChange}
+              />
             )}
             <StaticMap
               mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}

@@ -12,13 +12,13 @@
     "buttonCancel": "Cancelar",
     "buttonConnexion": "Iniciar sesión",
     "labelPassword": "Contraseña",
-    "forgotPassword": "Forgot your password ?",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
     "labelUsername": "Correo electrónico",
     "errorMessageServer": "Correo electrónico o contraseña incorrectos",
     "errorMessageEmail": "Correo electrónico no válido",
     "errorMessageRequiredField": "Campo obligatorio",
-    "noAccount": "Don't have an account yet?",
-    "accountRequest": "Request the creation of an account !"
+    "noAccount": "¿Aún no tienes una cuenta?",
+    "accountRequest": "¡Solicita la creación de una cuenta!"
   },
   "LanguageSelector": {
     "en": "Inglés",
