@@ -1,0 +1,10 @@
+{
+  "python.linting.pylintEnabled": false,
+  "python.linting.mypyEnabled": true,
+  "python.linting.enabled": true,
+  "python.analysis.extraPaths": ["${workspaceFolder}/backend/app"],
+  "python.autoComplete.extraPaths": ["${workspaceFolder}/backend/app"],
+  "python.formatting.provider": "black",
+  "i18n-ally.localesPaths": "${workspaceFolder}/frontend/public/locales",
+  "i18n-ally.sourceLanguage": "en"
+}

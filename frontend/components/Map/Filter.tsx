@@ -16,13 +16,6 @@ for (let filter of FILTERS) {
   defaultOptions[filter.key] = [];
 }
 
-type TMapFilter = {
-  value: string;
-  color: string;
-  background: string;
-  total: number;
-};
-
 export interface IMapFilter {
   organizationId: number;
   initialValue: {};

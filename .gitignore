@@ -9,5 +9,7 @@ tiles
 redis
 .vscode/*
 !.vscode/ecoteka.code-snippets
+!.vscode/settings.json
+!.vscode/i18n-ally-custom-framework.json
 .expo
 data.ms
