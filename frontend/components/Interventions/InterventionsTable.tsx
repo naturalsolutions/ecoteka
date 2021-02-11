@@ -7,9 +7,10 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Grid,
   Button,
+  IconButton,
 } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { TIntervention } from "@/components/Interventions/Schema";
@@ -29,6 +30,30 @@ const InterventionsTable: FC<{
       month: "numeric",
       day: "numeric",
     });
+  };
+
+  const renderInterventionDate = (intervention) => {
+    const {
+      date,
+      intervention_start_date,
+      intervention_end_date,
+    } = intervention;
+
+    if (date) {
+      return formatDate(date);
+    }
+
+    if (intervention_start_date === intervention_end_date) {
+      return formatDate(intervention_start_date);
+    }
+
+    return `${formatDate(intervention_start_date)} - ${formatDate(
+      intervention_end_date
+    )}`;
+  };
+
+  const handleOnEditIntervention = (intervention) => {
+    router.push(`/map?panel=intervention-edit&intervention=${intervention.id}`);
   };
 
   return (
@@ -52,9 +77,16 @@ const InterventionsTable: FC<{
         </caption>
         <TableHead>
           <TableRow>
-            <TableCell>{t("Intervention.interventionsTable.date")}</TableCell>
-            <TableCell>{t("Intervention.interventionsTable.type")}</TableCell>
-            <TableCell>{t("Intervention.interventionsTable.state")}</TableCell>
+            <TableCell>
+              {t("components.Intervention.interventionsTable.date")}
+            </TableCell>
+            <TableCell>
+              {t("components.Intervention.interventionsTable.type")}
+            </TableCell>
+            <TableCell>
+              {t("components.Intervention.interventionsTable.state")}
+            </TableCell>
+            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -62,13 +94,7 @@ const InterventionsTable: FC<{
             interventions.map((intervention, i) => {
               return (
                 <TableRow key={i}>
-                  <TableCell>
-                    {intervention.date && formatDate(intervention.date)}
-                    {!intervention.date &&
-                      `${formatDate(
-                        intervention.intervention_start_date
-                      )} - ${formatDate(intervention.intervention_end_date)}`}
-                  </TableCell>
+                  <TableCell>{renderInterventionDate(intervention)}</TableCell>
                   <TableCell>
                     {t(`Intervention.types.${intervention.intervention_type}`)}
                   </TableCell>
@@ -78,6 +104,14 @@ const InterventionsTable: FC<{
                       checked={intervention.done}
                       color="primary"
                     />
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleOnEditIntervention(intervention)}
+                    >
+                      <EditIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               );

@@ -3,7 +3,6 @@ import useApi from "@/lib/useApi";
 import { Button, Grid, makeStyles } from "@material-ui/core";
 import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { useAppContext } from "@/providers/AppContext";
-import TreeExpanded from "@/components/Tree/Infos/Expanded";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { TIntervention } from "@/components/Interventions/Schema";
 import TreeInfosProperties from "@/components/Tree/Infos/Properties";
@@ -27,44 +26,44 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
   const classes = useStyles();
   const router = useRouter();
 
-  const getTree = async (itreeIdd) => {
+  const getTree = async (id: number) => {
     if (user?.currentOrganization) {
       try {
         const { data, status } = await apiETK.get(
-          `/organization/${user.currentOrganization.id}/trees/${treeId}`
+          `/organization/${user.currentOrganization.id}/trees/${id}`
         );
+
         if (status === 200) {
           setTree(data);
         }
-      } catch (error) {
-        //
-      }
+      } catch (error) {}
     }
   };
-  const getInterventions = async (treeId: number) => {
+
+  const getInterventions = async (id: number) => {
     if (user?.currentOrganization) {
       try {
         const { data, status } = await apiETK.get(
-          `/organization/${user.currentOrganization.id}/trees/${treeId}/interventions`
+          `/organization/${user.currentOrganization.id}/trees/${id}/interventions`
         );
+
         if (status === 200) {
           setInterventions(data);
         }
-      } catch (error) {
-        //
-      }
+      } catch (error) {}
     }
   };
 
   useEffect(() => {
-    if (treeId) {
-      getTree(treeId);
-      getInterventions(treeId);
+    if (router?.query?.tree) {
+      const id = Number(router.query.tree);
+      getTree(id);
+      getInterventions(id);
     }
-  }, [treeId, user]);
+  }, [router]);
 
   const handleOnEdit = () => {
-    router.push(`/map?panel=edit&tree=${treeId}`);
+    router.push(`/map?panel=edit&tree=${tree.id}`);
   };
 
   return (

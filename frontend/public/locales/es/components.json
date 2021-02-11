@@ -300,9 +300,9 @@
       "globalcheck": "Comprobación global del árbol"
     },
     "interventionsTable": {
-      "requestAnItervention": "Request an intervention",
-      "date": "Fetcha",
-      "type": "Typo",
+      "requestAnItervention": "Solicita una intervención",
+      "date": "Fecha",
+      "type": "Tipo",
       "state": "Estado"
     }
   },
