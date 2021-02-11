@@ -2,31 +2,31 @@ import React, { useRef, useEffect } from "react";
 import { Button, ButtonProps } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useAppLayout } from "@/components/AppLayout/Base";
-import ETKFormSignIn, { ETKFormSignInActions } from "@/components/SignIn/Form";
+import FormSignIn, { FormSignInActions } from "@/components/SignIn/Form";
 
-interface ETKFormSignInProps extends ButtonProps {
+interface FormSignInProps extends ButtonProps {
   open?: boolean;
   dialogTitle?: string;
 }
 
-const defaultProps: ETKFormSignInProps = {
+const defaultProps: FormSignInProps = {
   open: false,
 };
 
-const ETKSignInButton: React.FC<ETKFormSignInProps> = (props) => {
+const ETKSignInButton: React.FC<FormSignInProps> = (props) => {
   const { t } = useTranslation("components");
   const { dialog } = useAppLayout();
-  const formRef = useRef<ETKFormSignInActions>();
+  const formRef = useRef<FormSignInActions>();
 
   const { dialogTitle, open, ...buttonProps } = props;
 
   const onButtonClick = () => {
     const dialogActions = [
       {
-        label: t("SignIn.buttonCancel"),
+        label: t("components.SignIn.buttonCancel"),
       },
       {
-        label: t("SignIn.buttonConnexion"),
+        label: t("components.SignIn.buttonConnexion"),
         variant: "contained",
         color: "secondary",
         noClose: true,
@@ -41,8 +41,8 @@ const ETKSignInButton: React.FC<ETKFormSignInProps> = (props) => {
     ];
 
     dialog.current.open({
-      title: dialogTitle || t("SignIn.title"),
-      content: <ETKFormSignIn ref={formRef} />,
+      title: dialogTitle || t("components.SignIn.title"),
+      content: <FormSignIn ref={formRef} />,
       actions: dialogActions,
       dialogProps: {
         maxWidth: "sm",
@@ -64,7 +64,7 @@ const ETKSignInButton: React.FC<ETKFormSignInProps> = (props) => {
       style={{ display: open ? "none" : "block" }}
       {...buttonProps}
     >
-      {t("SignIn.buttonConnexion")}
+      {t("components.SignIn.buttonConnexion")}
     </Button>
   );
 };
