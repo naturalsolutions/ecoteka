@@ -237,10 +237,15 @@ const EditionPage = ({}) => {
       });
 
       if (status === 200 && bbox.xmin && bbox.ymin && bbox.xmax && bbox.ymax) {
-        const newViewState = layers[0].context.viewport.fitBounds([
-          [bbox.xmin, bbox.ymin],
-          [bbox.xmax, bbox.ymax],
-        ]);
+        const newViewState = layers[0].context.viewport.fitBounds(
+          [
+            [bbox.xmin, bbox.ymin],
+            [bbox.xmax, bbox.ymax],
+          ],
+          {
+            padding: 100,
+          }
+        );
 
         setInitialViewState({
           longitude: newViewState.longitude,
