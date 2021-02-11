@@ -435,6 +435,9 @@ const EditionPage = ({}) => {
       <DeckGL
         viewState={viewState}
         controller={true}
+        getCursor={({ isDragging }) =>
+          mode === "drawPoint" ? "crosshair" : "pointer"
+        }
         layers={layers}
         onViewStateChange={(e) => {
           setInitialViewState({
