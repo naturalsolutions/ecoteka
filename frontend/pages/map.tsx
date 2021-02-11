@@ -31,6 +31,7 @@ import DeckGL from "@deck.gl/react";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
+import Head from "next/head";
 
 const useStyles = makeStyles({
   toolbar: {
@@ -432,6 +433,9 @@ const EditionPage = ({}) => {
       drawerLeftWidth={drawerLeftWidth}
       onMapToolbarChange={handleOnMapToolbarChange}
     >
+      <Head>
+        <title>ecoTeka - Map</title>
+      </Head>
       <DeckGL
         viewState={viewState}
         controller={true}

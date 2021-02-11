@@ -5,6 +5,15 @@
   "python.analysis.extraPaths": ["${workspaceFolder}/backend/app"],
   "python.autoComplete.extraPaths": ["${workspaceFolder}/backend/app"],
   "python.formatting.provider": "black",
-  "i18n-ally.localesPaths": "${workspaceFolder}/frontend/public/locales",
-  "i18n-ally.sourceLanguage": "en"
+  "i18n-ally.localesPaths": "frontend/public/locales",
+  "i18n-ally.sourceLanguage": "en",
+  "i18n-ally.editor.preferEditor": true,
+  "i18n-ally.displayLanguage": "fr",
+  "i18n-ally.extract.keyMaxLength": 10000,
+  "i18n-ally.fullReloadOnChanged": true,
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.localeCountryMap": {},
+  "i18n-ally.enabledFrameworks": ["react"],
+  "i18n-ally.enabledParsers": ["json"],
+  "i18n-ally.namespace": true
 }
