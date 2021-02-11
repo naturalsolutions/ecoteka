@@ -1,29 +1,63 @@
-import React, { FC, useState, memo } from "react";
+import React, { FC, useState, memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  TextField,
-  Grid,
-  Typography,
-  Chip,
-  Box,
-  Paper,
-} from "@material-ui/core";
+import { TextField, Grid, Typography, Chip, Box } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
+import useApi from "@/lib/useApi";
 
 const FILTERS = [
   { key: "canonicalName", label: "Canonical Name" },
   { key: "vernacularName", label: "Vernacular Name" },
 ];
 
-export interface IMapFilter {
-  initialValue: object;
-  options?: object;
-  onChange?(values: object): void;
+let defaultOptions = {};
+
+for (let filter of FILTERS) {
+  defaultOptions[filter.key] = [];
 }
 
-const MapFilter: FC<IMapFilter> = ({ initialValue, options, onChange }) => {
+type TMapFilter = {
+  value: string;
+  color: string;
+  background: string;
+  total: number;
+};
+
+export interface IMapFilter {
+  organizationId: number;
+  initialValue: {};
+  onChange?(values: {}, filters: {}, options: {}): void;
+}
+
+const MapFilter: FC<IMapFilter> = ({
+  initialValue,
+  organizationId,
+  onChange,
+}) => {
   const { t } = useTranslation("components");
   const [value, setValue] = useState(initialValue);
+  const { dark } = useThemeContext();
+  const [options, setOptions] = useState(defaultOptions);
+  const [loading, setLoading] = useState(false);
+  const { apiETK } = useApi().api;
+
+  const getFilters = async (organizationId: number) => {
+    try {
+      setLoading(true);
+      const { status, data } = await apiETK.get("/maps/filter", {
+        params: {
+          organization_id: organizationId,
+        },
+      });
+
+      if (status === 200) {
+        setOptions(data);
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleValue = (key, newValue) => {
     const data = {
@@ -34,15 +68,21 @@ const MapFilter: FC<IMapFilter> = ({ initialValue, options, onChange }) => {
     setValue(data);
 
     if (onChange) {
-      const newData = { ...data };
+      const filters = { ...data };
 
-      for (let key in newData) {
-        newData[key] = newData[key].map((v) => v.value);
+      for (let key in filters) {
+        filters[key] = filters[key].map((v) => v.value);
       }
 
-      onChange(newData);
+      onChange(data, filters, options);
     }
   };
+
+  useEffect(() => {
+    if (organizationId) {
+      getFilters(organizationId);
+    }
+  }, [organizationId]);
 
   return (
     <Grid container direction="column" spacing={3}>
@@ -54,6 +94,7 @@ const MapFilter: FC<IMapFilter> = ({ initialValue, options, onChange }) => {
           <Autocomplete
             freeSolo
             multiple
+            loading={loading}
             selectOnFocus
             clearOnBlur
             options={options[filter.key]}
@@ -66,21 +107,31 @@ const MapFilter: FC<IMapFilter> = ({ initialValue, options, onChange }) => {
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
                 <Chip
-                  label={option.value}
-                  style={{ backgroundColor: `rgb(${option.color?.join(",")})` }}
+                  label={`${option.total} - ${option.value}`}
+                  style={{
+                    backgroundColor: `rgb(${option[
+                      dark ? "color" : "background"
+                    ]?.join(",")})`,
+                    color: `rgb(${option[dark ? "background" : "color"]?.join(
+                      ","
+                    )})`,
+                  }}
                   {...getTagProps({ index })}
                 ></Chip>
               ))
             }
             renderOption={(option, { selected }) => (
               <React.Fragment>
-                <Paper
+                <Chip
                   style={{
-                    backgroundColor: `rgb(${option.color?.join(",")})`,
-                    width: 20,
-                    height: 20,
-                    margin: "0 3",
+                    backgroundColor: `rgb(${option[
+                      dark ? "color" : "background"
+                    ]?.join(",")})`,
+                    color: `rgb(${option[dark ? "background" : "color"]?.join(
+                      ","
+                    )})`,
                   }}
+                  label={option.total}
                 />
                 <Box ml={2}>{option.value}</Box>
               </React.Fragment>
@@ -93,4 +144,4 @@ const MapFilter: FC<IMapFilter> = ({ initialValue, options, onChange }) => {
   );
 };
 
-export default MapFilter;
+export default memo(MapFilter);

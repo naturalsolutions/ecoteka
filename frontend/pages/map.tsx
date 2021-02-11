@@ -1,19 +1,11 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  makeStyles,
-  Box,
-  Button,
-  IconButton,
-  Hidden,
-} from "@material-ui/core";
+import { Grid, makeStyles, Box, IconButton, Hidden } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import CloseIcon from "@material-ui/icons/Close";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import SearchIcon from "@material-ui/icons/Search";
-import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
@@ -71,6 +63,12 @@ const defaultFilter = {
   vernacularName: [],
 };
 
+const defaultFilters = {
+  filters: defaultFilter,
+  options: defaultFilter,
+  values: defaultFilter,
+};
+
 const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
@@ -91,8 +89,7 @@ const EditionPage = ({}) => {
   );
   const [viewState, setViewState] = useState();
   const [mode, setMode] = useState("selection");
-  const [filter, setFilter] = useState(defaultFilter);
-  const [filterOpts, setFilterOpts] = useState(defaultFilter);
+  const [filters, setFilters] = useState(defaultFilters);
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
   const [mapBackground, setMapbackground] = useLocalStorage(
@@ -103,20 +100,6 @@ const EditionPage = ({}) => {
   const [activeTree, setActiveTree] = useState<number | undefined>(
     router.query?.tree ? Number(router.query.tree) : undefined
   );
-
-  const getFilters = async (organizationId) => {
-    try {
-      const { status, data } = await apiETK.get("/maps/filter", {
-        params: {
-          organization_id: organizationId,
-        },
-      });
-
-      if (status === 200) {
-        setFilterOpts(data);
-      }
-    } catch (error) {}
-  };
 
   const createTree = async (x, y) => {
     try {
@@ -131,9 +114,7 @@ const EditionPage = ({}) => {
         router.push(`/map/?panel=edit&tree=${tree.id}`);
         setActiveTree(tree.id);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const osmLayer = new MVTLayer({
@@ -173,29 +154,18 @@ const EditionPage = ({}) => {
         return [255, 100, 0];
       }
 
-      if (
-        filter.canonicalName?.includes(d.properties.properties_canonicalName)
-      ) {
-        const index = filterOpts.canonicalName.findIndex(
-          (f) => f.value === d.properties.properties_canonicalName
-        );
-        const color = filterOpts.canonicalName[index].color;
+      for (const key of Object.keys(filters.filters).reverse()) {
+        if (filters.filters[key].includes(d.properties[`properties_${key}`])) {
+          const index = filters.options[key].findIndex(
+            (f) => f.value === d.properties[`properties_${key}`]
+          );
 
-        return color;
+          return filters.options[key][index][dark ? "color" : "background"];
+        }
       }
 
-      if (
-        filter.vernacularName?.includes(d.properties.properties_vernacularName)
-      ) {
-        return filterOpts.vernacularName[
-          filterOpts.vernacularName.findIndex(
-            (f) => f.value === d.properties.properties_vernacularName
-          )
-        ].color;
-      }
-
-      for (let key in filter) {
-        if (filter[key].length > 0) {
+      for (let key in filters.filters) {
+        if (filters.filters[key].length > 0) {
           return [120, 120, 120, 128];
         }
       }
@@ -211,30 +181,18 @@ const EditionPage = ({}) => {
         return [255, 100, 0];
       }
 
-      if (
-        filter.canonicalName?.includes(d.properties.properties_canonicalName)
-      ) {
-        const index = filterOpts.canonicalName.findIndex(
-          (f) => f.value === d.properties.properties_canonicalName
-        );
-        const color = filterOpts.canonicalName[index].color;
+      for (const key of Object.keys(filters.filters).reverse()) {
+        if (filters.filters[key].includes(d.properties[`properties_${key}`])) {
+          const index = filters.options[key].findIndex(
+            (f) => f.value === d.properties[`properties_${key}`]
+          );
 
-        return color;
+          return filters.options[key][index][dark ? "color" : "background"];
+        }
       }
 
-      if (
-        filter.vernacularName?.includes(d.properties.properties_vernacularName)
-      ) {
-        const index = filterOpts.vernacularName.findIndex(
-          (f) => f.value === d.properties.properties_vernacularName
-        );
-        const color = filterOpts.vernacularName[index].color;
-
-        return color;
-      }
-
-      for (let key in filter) {
-        if (filter[key].length > 0) {
+      for (let key in filters.filters) {
+        if (filters.filters[key].length > 0) {
           return [120, 120, 120, 128];
         }
       }
@@ -242,8 +200,8 @@ const EditionPage = ({}) => {
       return [34, 139, 34, 100];
     },
     updateTriggers: {
-      getFillColor: [activeTree, selection, editionMode, filter],
-      getLineColor: [activeTree, selection, editionMode, filter],
+      getFillColor: [activeTree, selection, editionMode, filters, dark],
+      getLineColor: [activeTree, selection, editionMode, filters, dark],
     },
     pickable: true,
     autoHighlight: true,
@@ -352,18 +310,10 @@ const EditionPage = ({}) => {
       case "intervention":
         return setDrawerLeftComponent(<InterventionForm />);
       case "filter":
-        const initialValue = Object.keys(filter).reduce((a, v) => {
-          a[v] = filter[v].map((f) => {
-            return { value: f };
-          });
-
-          return a;
-        }, {});
-
         return setDrawerLeftComponent(
           <MapFilter
-            initialValue={initialValue}
-            options={filterOpts}
+            initialValue={filters.values}
+            organizationId={user.currentOrganization.id}
             onChange={handleOnFilter}
           />
         );
@@ -382,8 +332,12 @@ const EditionPage = ({}) => {
     switchPanel(router.query.panel);
   }, [router.query]);
 
-  const handleOnFilter = (newFilter) => {
-    setFilter(newFilter);
+  const handleOnFilter = (values, filters, options) => {
+    setFilters({
+      options,
+      filters,
+      values,
+    });
   };
 
   const handleOnMapToolbarChange = (action: TMapToolbarAction) => {
@@ -462,9 +416,7 @@ const EditionPage = ({}) => {
   useEffect(() => {
     router.push("/map");
     setDrawerLeftComponent();
-    setFilter(defaultFilter);
-    setFilterOpts(defaultFilter);
-    getFilters(user?.currentOrganization?.id);
+    setFilters(defaultFilters);
     setTime(Date.now());
     renderLayers();
     fitToBounds(user?.currentOrganization?.id);
@@ -472,7 +424,7 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     renderLayers();
-  }, [activeTree, editionMode, selection, filter]);
+  }, [activeTree, editionMode, selection, filters, dark]);
 
   return (
     <AppLayoutCarto

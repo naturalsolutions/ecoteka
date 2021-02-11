@@ -96,9 +96,17 @@ def generate_style(
         return style
 
 def hex_to_rgb(hex):
-        hex = hex.lstrip('#')
-        hlen = len(hex)
-        return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
+    hex = hex.lstrip('#')
+    hlen = len(hex)
+    return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
+
+def complementaryColor(my_hex):
+    if my_hex[0] == '#':
+        my_hex = my_hex[1:]
+    rgb = (my_hex[0:2], my_hex[2:4], my_hex[4:6])
+    comp = ['%02X' % (255 - int(a, 16)) for a in rgb]
+    
+    return ''.join(comp)
 
 @router.get("/filter", dependencies=[Depends(authorization("maps:get_filters"))])
 def get_filters(
@@ -122,7 +130,8 @@ def get_filters(
         filter[field] = [{ 
             'value': row.value, 
             'total': row.total, 
-            'color': hex_to_rgb(colors[i]) 
+            'background': hex_to_rgb(colors[i]),
+            'color': hex_to_rgb(complementaryColor(colors[i]))
         } for i, row in enumerate(rows) if row[0] not in ["", None]]
     
     return filter
