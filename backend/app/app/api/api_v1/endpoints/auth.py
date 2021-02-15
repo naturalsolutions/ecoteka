@@ -18,16 +18,13 @@ from app.schemas import (
 from app.api import get_db
 from app.core import (
     get_current_user,
-    get_current_active_user,
     get_password_hash,
     generate_access_token_and_refresh_token_response,
     get_current_user_if_is_superuser,
     get_current_user_with_refresh_token,
 )
 from app.utils import (
-    generate_password_reset_token,
-    send_reset_password_email,
-    verify_password_reset_token,
+    send_reset_password_email
 )
 from app.worker import (
     send_new_registration_email_task,
@@ -98,25 +95,26 @@ def recover_password(email: str, db: Session = Depends(get_db)) -> Any:
     """
     Password Recovery
     """
+
     user_in_db = user.get_by_email(db, email=email)
 
-    if not user_in_db:
+    if user_in_db:
+        tokens = generate_access_token_and_refresh_token_response(
+            user_id=user_in_db.id, is_superuser=user_in_db.is_superuser
+        )
+
+        send_reset_password_email(
+            email_to=user_in_db.email, 
+            username=user_in_db.full_name, 
+            token=tokens["access_token"]
+        )
+
+        return {"msg": "Password recovery email sent"}
+    else:
         raise HTTPException(
             status_code=404,
             detail="The user with this username does not exist in the system.",
-        )
-
-    tokens = generate_access_token_and_refresh_token_response(
-        user_id=user_in_db.id, is_superuser=user_in_db.is_superuser
-    )
-
-    send_reset_password_email(
-        email_to=user_in_db.email, 
-        username=user_in_db.full_name, 
-        token=tokens["access_token"]
-    )
-
-    return {"msg": "Password recovery email sent"}
+        )    
 
 
 @router.post("/reset-password/", response_model=Msg)
@@ -127,8 +125,7 @@ def reset_password(
 ) -> Any:
     """
     Reset Password
-    """
-    
+    """   
     hashed_password = get_password_hash(new_password)
     current_user.hashed_password = hashed_password
     db.add(current_user)
