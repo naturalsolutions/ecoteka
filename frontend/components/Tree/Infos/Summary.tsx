@@ -10,9 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 
 const useStyles = makeStyles(() => ({
-  root: {
-    width: "24rem",
-  },
+  root: {},
 }));
 
 const Summary: FC<{ treeId: number }> = ({ treeId }) => {
