@@ -14,7 +14,6 @@ from pyproj import Transformer
 
 from app import crud
 from app.models import GeoFile, GeoFileStatus, Tree
-from .create_mbtiles import create_mbtiles
 
 
 def create_tree(geofile: GeoFile, x: float, y: float, properties: Any) -> Tree:
@@ -143,7 +142,6 @@ def import_geofile(db: Session, geofile: GeoFile):
             import_from_dataframe(db, df, geofile.get_filepath(), geofile)
 
         organization = crud.organization.get(db=db, id=geofile.organization_id)
-        create_mbtiles(db=db, organization=organization)
 
         geofile.imported_date = datetime.datetime.utcnow()
         geofile.status = GeoFileStatus.IMPORTED.value

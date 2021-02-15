@@ -182,6 +182,5 @@ def delete_geo_file(
         pass
 
     crud.geo_file.remove(db, id=geofile.id)
-    create_mbtiles_task.delay(organization_id)
 
     return name
