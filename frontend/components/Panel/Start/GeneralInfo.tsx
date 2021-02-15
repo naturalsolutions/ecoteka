@@ -25,7 +25,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ETKPanelStartGeneralInfo: FC = () => {
+const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
+  numberOfTrees = 0,
+}) => {
   const router = useRouter();
   const classes = useStyles();
   const { user } = useAppContext();
@@ -48,7 +50,7 @@ const ETKPanelStartGeneralInfo: FC = () => {
       <Grid item>
         <CardInfoPanel
           title={t("components.PanelStart.numberOfTreesLayer.title")}
-          content={`${user?.currentOrganization?.total_trees || 0} ${t(
+          content={`${numberOfTrees} ${t(
             "components.PanelStart.numberOfTreesLayer.content"
           )}`}
         />
@@ -90,4 +92,4 @@ const ETKPanelStartGeneralInfo: FC = () => {
   );
 };
 
-export default ETKPanelStartGeneralInfo;
+export default PanelStartGeneralInfo;

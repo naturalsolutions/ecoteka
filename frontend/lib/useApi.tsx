@@ -3,6 +3,7 @@ import getConfig from "next/config";
 import { useRouter } from "next/router";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
+import { useEffect } from "react";
 
 export default function useApi() {
   const { publicRuntimeConfig } = getConfig();
@@ -19,13 +20,15 @@ export default function useApi() {
 
   const allowedRoutes = ["/", "/signin", "/forgot", "/users/set_password"];
 
-  if (
-    (!accessToken || !refreshToken) &&
-    typeof window !== "undefined" &&
-    !allowedRoutes.includes(router.route)
-  ) {
-    router.push("/signin");
-  }
+  useEffect(() => {
+    if (
+      (!accessToken || !refreshToken) &&
+      !allowedRoutes.includes(router.route)
+    ) {
+      localStorage.clear();
+      router.push("/signin");
+    }
+  }, [accessToken, refreshToken]);
 
   let ecotekaV1 = axios.create({
     baseURL: apiUrl,

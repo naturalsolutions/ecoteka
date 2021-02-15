@@ -95,10 +95,10 @@ export default function IndexPage() {
   };
 
   useEffect(() => {
-    if (token) {
-      router.push("/map");
+    if (token && user) {
+      router.push("/map?panel=start");
     }
-  }, [token]);
+  }, [token, user]);
 
   return !user ? (
     <AppLayoutCarto>

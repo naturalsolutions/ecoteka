@@ -204,11 +204,14 @@ const EditionPage = ({}) => {
       }
 
       for (const key of Object.keys(filters.filters).reverse()) {
-        if (filters.filters[key].includes(d.properties.properties[key])) {
+        if (
+          filters.filters[key] &&
+          d.properties.properties &&
+          filters.filters[key].includes(d.properties?.properties[key])
+        ) {
           const index = filters.options[key].findIndex(
             (f) => f.value === d.properties.properties[key]
           );
-
           return filters.options[key][index][dark ? "color" : "background"];
         }
       }
@@ -231,7 +234,11 @@ const EditionPage = ({}) => {
       }
 
       for (const key of Object.keys(filters.filters).reverse()) {
-        if (filters.filters[key].includes(d.properties.properties[key])) {
+        if (
+          filters.filters[key] &&
+          d.properties.properties &&
+          filters.filters[key].includes(d.properties?.properties[key])
+        ) {
           const index = filters.options[key].findIndex(
             (f) => f.value === d.properties.properties[key]
           );
@@ -331,7 +338,7 @@ const EditionPage = ({}) => {
   useEffect(() => {
     setViewState({ ...initialViewState });
     renderLayers();
-    getData(user.currentOrganization.id);
+    getData(user?.currentOrganization.id);
   }, []);
 
   const switchPanel = (panel) => {
@@ -341,7 +348,9 @@ const EditionPage = ({}) => {
 
     switch (panel) {
       case "start":
-        return setDrawerLeftComponent(<PanelStartGeneralInfo />);
+        return setDrawerLeftComponent(
+          <PanelStartGeneralInfo numberOfTrees={data.features.length} />
+        );
       case "info":
         return setDrawerLeftComponent(<TreeSummary treeId={activeTree} />);
       case "edit":
@@ -479,7 +488,6 @@ const EditionPage = ({}) => {
     renderLayers();
 
     if (user) {
-      router.push("/map");
       fitToBounds(user?.currentOrganization?.id);
       getData(user?.currentOrganization.id);
     }

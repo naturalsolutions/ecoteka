@@ -38,7 +38,7 @@ export default function SignInPage() {
     setIsLoading(false);
 
     if (isOk) {
-      router.push("/");
+      router.push("/map");
     }
   };
 
