@@ -24,10 +24,10 @@ type drprops = {
   label?: string;
 };
 
-type tdaterange = {
+export interface DateRangePeriod {
   startDate?: Date;
   endDate?: Date;
-};
+}
 
 const CalendarToogleIcon = withStyles({
   root: {
@@ -36,7 +36,7 @@ const CalendarToogleIcon = withStyles({
 })(CalendarTodayIcon);
 
 const ETKDateRangePicker: React.FC<drprops> = (props) => {
-  const defaultValue = {
+  const defaultValue: DateRangePeriod = {
     startDate: new Date(),
     endDate: new Date(),
   };

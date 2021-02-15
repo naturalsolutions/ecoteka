@@ -303,7 +303,9 @@
       "date": "Date",
       "type": "Type",
       "state": "Etat"
-    }
+    },
+    "saveSuccess": "L'intervention a été enregistrée avec succès.",
+    "saveError": "Une erreur s'est produite lors de l'enregistrement de l'intervention"
   },
   "Tree": {
     "properties": {
@@ -590,5 +592,10 @@
     "draw_point": "+ Arbre",
     "draw_polygon": "+ Station",
     "delete": "Effacer"
+  },
+  "Interventions": {
+    "Edit": {
+      "title": "Modifier l'intervention"
+    }
   }
 }

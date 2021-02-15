@@ -304,7 +304,9 @@
       "date": "Fecha",
       "type": "Tipo",
       "state": "Estado"
-    }
+    },
+    "saveSuccess": "La intervención se ha guardado con éxito.",
+    "saveError": "Ocurrió un error al guardar la intervención"
   },
   "Tree": {
     "properties": {
@@ -596,5 +598,10 @@
     "draw_point": "+ Árbol",
     "draw_polygon": "+ Estación",
     "delete": "Eliminar"
+  },
+  "Interventions": {
+    "Edit": {
+      "title": "Editar intervención"
+    }
   }
 }
