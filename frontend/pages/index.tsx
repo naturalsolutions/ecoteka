@@ -14,6 +14,7 @@ import { FlyToInterpolator } from "@deck.gl/core";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import { StaticMap } from "react-map-gl";
 import getConfig from "next/config";
+import useLocalStorage from "@/lib/hooks/useLocalStorage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +49,7 @@ export default function IndexPage() {
   const classes = useStyles();
   const { user } = useAppContext();
   const [landing, setLanding] = useState(true);
+  const [token] = useLocalStorage("ecoteka_access_token");
   const [viewState, setViewState] = useState({
     longitude: 2.54,
     latitude: 46.7,
@@ -91,6 +93,12 @@ export default function IndexPage() {
 
     setLanding(false);
   };
+
+  useEffect(() => {
+    if (token) {
+      router.push("/map");
+    }
+  }, [token]);
 
   return !user ? (
     <AppLayoutCarto>

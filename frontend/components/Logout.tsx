@@ -50,7 +50,7 @@ const Logout: React.FC<LogoutProps> = (props) => {
       size: "large",
       onClick: () => {
         localStorage.clear();
-        setUser(null);
+        setUser();
 
         if (props.onClick) {
           props.onClick();
