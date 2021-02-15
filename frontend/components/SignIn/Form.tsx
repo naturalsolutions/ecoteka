@@ -41,9 +41,6 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
         const { data, status } = response;
 
         if (status === 200) {
-          localStorage.setItem(tokenStorage, data.access_token);
-          localStorage.setItem(refreshTokenStorage, data.refresh_token);
-
           try {
             const { data: newUser } = await apiETK.get("/users/me", {
               headers: {
@@ -57,6 +54,8 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
                 ...newUser,
                 currentOrganization: newUser.organizations[0],
               });
+              localStorage.setItem(tokenStorage, data.access_token);
+              localStorage.setItem(refreshTokenStorage, data.refresh_token);
               logged = true;
             }
           } catch (error) {}
