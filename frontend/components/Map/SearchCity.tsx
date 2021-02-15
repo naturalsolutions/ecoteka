@@ -32,7 +32,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   useEffect(() => {
     let active = true;
 
-    if (inputValue === "" || inputValue.length < 3) {
+    if (inputValue === "" || inputValue.length < 2) {
       setOptions([]);
       return undefined;
     }
@@ -44,19 +44,13 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       const json = await response.json();
 
       if (active) {
-        const newOptions = json.filter(
-          (item) => item.centre && item.centre.coordinates
-        );
+        const newOptions = json
+          .filter((item) => item.centre && item.centre.coordinates)
+          .sort((a, b) => {
+            return b.population - a.population;
+          });
 
-        const sort = (a, b) => {
-          if (a.nom.toLowerCase() < b.nom.toLowerCase()) {
-            return -1;
-          }
-
-          return 1;
-        };
-
-        setOptions(newOptions.sort(sort));
+        setOptions(newOptions);
       }
 
       setLoading(false);
