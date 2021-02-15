@@ -386,6 +386,26 @@ export function usePlanningSchema(it: TInterventionType) {
   };
 }
 
+export function useDateSchema() {
+  const { t } = useTranslation();
+
+  return {
+    date: {
+      type: "date",
+      component: {
+        label: t("components.Intervention.date"),
+      },
+      schema: yup.string(),
+    },
+    done: {
+      type: "switch",
+      component: {
+        label: t("components.Intervention.done"),
+      },
+    },
+  };
+}
+
 export type TInterventionStep =
   | "interventionselection"
   | "intervention"

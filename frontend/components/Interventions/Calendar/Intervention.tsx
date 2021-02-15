@@ -3,7 +3,7 @@ import {
   TIntervention,
   useInterventionSchema,
 } from "@/components/Interventions/Schema";
-import { INTERVENTION_COLORS } from "@/components/Interventions/Calendar/index.d";
+import { INTERVENTION_COLORS } from "@/components/Interventions/constants";
 import { makeStyles, Grid, Button, CircularProgress } from "@material-ui/core";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,8 @@ const useStyles = makeStyles(() => ({
 
 const CalendarInterventionForm = (props) => {
   const router = useRouter();
-  const schema = useInterventionSchema(props.intervention.intervention_type);
+  const { t } = useTranslation();
+  const schema = useInterventionSchema(t, props.intervention.intervention_type);
 
   // hotfix : ideally defaultValues should be define from schema
   const defaultValues = {

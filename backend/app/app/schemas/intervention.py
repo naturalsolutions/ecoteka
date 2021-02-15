@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, Json
-from typing import Any, Set
+from typing import Any, List
 from datetime import datetime
 from enum import Enum
 
@@ -18,14 +18,14 @@ class InterventionBase(BaseModel):
     tree_id: int
     organization_id: Optional[int]
     intervention_type: EnumInterventionType
-    intervenant: str
+    intervenant: Optional[str]
     intervention_start_date: Optional[datetime]
     intervention_end_date: Optional[datetime]
     date: Optional[datetime]
-    done: bool = False
-    estimated_cost: int
-    required_documents: Set[str] = []
-    required_material: Set[str] = []
+    done: Optional[bool] = False
+    estimated_cost: Optional[int]
+    required_documents: Optional[List[str]] = []
+    required_material: Optional[List[str]] = []
     properties: Any
 
 
@@ -34,17 +34,7 @@ class InterventionCreate(InterventionBase):
 
 
 class InterventionUpdate(InterventionBase):
-    intervention_type: Optional[EnumInterventionType]
-    tree_id: Optional[int]
-    intervenant: Optional[str]
-    intervention_start_date: Optional[datetime]
-    intervention_end_date: Optional[datetime]
-    date: Optional[datetime]
-    done: Optional[bool]
-    estimated_cost: Optional[int]
-    required_documents: Optional[Set[str]]
-    required_material: Optional[Set[str]]
-    properties: Optional[Any]
+    pass
 
 
 class Intervention(InterventionBase):

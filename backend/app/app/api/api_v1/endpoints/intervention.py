@@ -52,11 +52,13 @@ def get_year(
     return crud.intervention.get_by_year(db, organization_id, year)
 
 
-@router.patch("/{intervention_id}", response_model=Intervention)
+@router.patch(
+    "/{intervention_id}", 
+    response_model=Intervention,
+    dependencies=[Depends(authorization("interventions:update"))])
 def update(
     intervention_id: int,
     *,
-    auth=Depends(authorization("interventions:update")),
     request_intervention: InterventionUpdate,
     db: Session = Depends(get_db),
 ):
@@ -64,6 +66,9 @@ def update(
 
     if not intervention_in_db:
         raise HTTPException(status_code=404, detail="Intervention not found")
+
+    print(request_intervention.dict())
+
 
     return crud.intervention.update(
         db, db_obj=intervention_in_db, obj_in=request_intervention

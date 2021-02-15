@@ -1,21 +1,15 @@
 import {
-  FormControl,
   FormHelperText,
   Grid,
-  Icon,
-  Input,
-  InputLabel,
   Popover,
   TextField,
   TextFieldProps,
-  Typography,
   withStyles,
 } from "@material-ui/core";
-import { DateRangePicker } from "materialui-daterange-picker";
-import React, { useEffect } from "react";
+import { DateRangePicker as DateRangePickerMUI } from "materialui-daterange-picker";
+import React from "react";
 import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { Controller } from "react-hook-form";
-import { TextFieldsOutlined } from "@material-ui/icons";
 
 type drprops = {
   name?: string;
@@ -24,10 +18,10 @@ type drprops = {
   label?: string;
 };
 
-type tdaterange = {
+export interface DateRangePeriod {
   startDate?: Date;
   endDate?: Date;
-};
+}
 
 const CalendarToogleIcon = withStyles({
   root: {
@@ -35,8 +29,8 @@ const CalendarToogleIcon = withStyles({
   },
 })(CalendarTodayIcon);
 
-const ETKDateRangePicker: React.FC<drprops> = (props) => {
-  const defaultValue = {
+const DateRangePicker: React.FC<drprops> = (props) => {
+  const defaultValue: DateRangePeriod = {
     startDate: new Date(),
     endDate: new Date(),
   };
@@ -51,7 +45,7 @@ const ETKDateRangePicker: React.FC<drprops> = (props) => {
       control={props.control}
       name={props.name}
       defaultValue={defaultValue}
-      render={({ onChange, onBlur, value, name }) => (
+      render={({ onChange, value }) => (
         <React.Fragment>
           <Grid container direction="column">
             <TextField
@@ -74,7 +68,7 @@ const ETKDateRangePicker: React.FC<drprops> = (props) => {
             )}
           </Grid>
           <Popover open={Boolean(anchorEl)} anchorEl={anchorEl}>
-            <DateRangePicker
+            <DateRangePickerMUI
               open={Boolean(anchorEl)}
               toggle={toggle}
               closeOnClickOutside={true}
@@ -108,7 +102,7 @@ export default function useDateRangeField(props): Fields {
 
     const fieldProps = Object.assign({}, defaultFieldProps, field);
 
-    rangefields[name] = <ETKDateRangePicker {...fieldProps} />;
+    rangefields[name] = <DateRangePicker {...fieldProps} />;
   }
 
   return rangefields;

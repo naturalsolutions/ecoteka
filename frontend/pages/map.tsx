@@ -34,6 +34,7 @@ import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
 import Head from "next/head";
 import { ITree } from "..";
+import InterventionsEdit from "@/components/Interventions/Panel";
 
 const useStyles = makeStyles({
   toolbar: {
@@ -364,6 +365,8 @@ const EditionPage = ({}) => {
         );
       case "intervention":
         return setDrawerLeftComponent(<InterventionForm />);
+      case "intervention-edit":
+        return setDrawerLeftComponent(<InterventionsEdit />);
       case "filter":
         return setDrawerLeftComponent(
           <MapFilter
@@ -472,7 +475,6 @@ const EditionPage = ({}) => {
   }, [mode]);
 
   useEffect(() => {
-    router.push("/map");
     setDrawerLeftComponent();
     setFilters(defaultFilters);
     renderLayers();

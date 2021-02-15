@@ -303,7 +303,11 @@
       "date": "Date",
       "type": "Type",
       "state": "State"
-    }
+    },
+    "saveSuccess": "The intervention has been successfully saved.",
+    "saveError": "An error occurred while saving the intervention",
+    "date": "Date",
+    "done": "Done"
   },
   "Tree": {
     "properties": {
@@ -594,5 +598,10 @@
   },
   "ch": {
     "import": "Import"
+  },
+  "Interventions": {
+    "Edit": {
+      "title": "Edit intervention"
+    }
   }
 }
