@@ -31,8 +31,7 @@ const useStyles = makeStyles(() => ({
 
 const CalendarInterventionForm = (props) => {
   const router = useRouter();
-  const { t } = useTranslation();
-  const schema = useInterventionSchema(t, props.intervention.intervention_type);
+  const schema = useInterventionSchema(props.intervention.intervention_type);
 
   // hotfix : ideally defaultValues should be define from schema
   const defaultValues = {
