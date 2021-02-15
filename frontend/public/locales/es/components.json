@@ -306,7 +306,9 @@
       "state": "Estado"
     },
     "saveSuccess": "La intervención se ha guardado con éxito.",
-    "saveError": "Ocurrió un error al guardar la intervención"
+    "saveError": "Ocurrió un error al guardar la intervención",
+    "date": "Fecha",
+    "done": "Hecha"
   },
   "Tree": {
     "properties": {

@@ -305,7 +305,9 @@
       "state": "State"
     },
     "saveSuccess": "The intervention has been successfully saved.",
-    "saveError": "An error occurred while saving the intervention"
+    "saveError": "An error occurred while saving the intervention",
+    "date": "Date",
+    "done": "Done"
   },
   "Tree": {
     "properties": {

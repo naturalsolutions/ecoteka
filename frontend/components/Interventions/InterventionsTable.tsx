@@ -53,7 +53,9 @@ const InterventionsTable: FC<{
   };
 
   const handleOnEditIntervention = (intervention) => {
-    router.push(`/map?panel=intervention-edit&intervention=${intervention.id}`);
+    router.push(
+      `/map?panel=intervention-edit&intervention=${intervention.id}&tree=${intervention.tree_id}`
+    );
   };
 
   return (

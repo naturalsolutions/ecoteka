@@ -10,6 +10,7 @@ import {
   TIntervention,
   useInterventionSchema,
   usePlanningSchema,
+  useDateSchema,
 } from "./Schema";
 import useETKForm from "@/components/Form/useForm";
 interface IInterventionEditProps {}
@@ -37,7 +38,8 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   const { intervention_type, id } = intervention;
   const interventionSchema = useInterventionSchema(intervention_type);
   const planningSchema = usePlanningSchema(intervention_type);
-  const schema = { ...interventionSchema, ...planningSchema };
+  const doneSchema = useDateSchema();
+  const schema = { ...interventionSchema, ...planningSchema, ...doneSchema };
   const { apiETK } = useApi().api;
   const { user } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -120,6 +122,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
       setValue(i, intervention.properties[i]);
     });
 
+    // @ts-ignore
     setValue("intervention_period", {
       startDate: new Date(intervention.intervention_start_date),
       endDate: new Date(intervention.intervention_end_date),

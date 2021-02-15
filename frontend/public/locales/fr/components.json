@@ -305,7 +305,9 @@
       "state": "Etat"
     },
     "saveSuccess": "L'intervention a été enregistrée avec succès.",
-    "saveError": "Une erreur s'est produite lors de l'enregistrement de l'intervention"
+    "saveError": "Une erreur s'est produite lors de l'enregistrement de l'intervention",
+    "date": "Date",
+    "done": "Fait"
   },
   "Tree": {
     "properties": {
