@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useEffect,
+} from "react";
 import { Box, Grid } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
@@ -11,22 +16,41 @@ export type FormSignInActions = {
   submit: () => Promise<boolean>;
 };
 
-export interface FormSignInProps {}
+export interface FormSignInProps {
+  onSubmit?(): void;
+}
 
 const defaultProps: FormSignInProps = {};
 
 const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
-  (props, ref) => {
+  ({ onSubmit }, ref) => {
     const { t } = useTranslation("components");
     const schema = useETKSignInSchema();
-    const { fields, handleSubmit, setError } = useETKForm({ schema: schema });
+    const [login, setLogin] = useState(false);
+
+    schema.password.component.onKeyDown = async (e) => {
+      if (e.keyCode == 13) {
+        setLogin(true);
+      }
+    };
+
+    const { fields, handleSubmit, setError, errors, trigger } = useETKForm({
+      schema: schema,
+    });
     const { setUser } = useAppContext();
     const { apiETK } = useAPI().api;
     let logged = false;
     const { publicRuntimeConfig } = getConfig();
     const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
 
-    const onSubmit = async ({ username, password }) => {
+    useEffect(() => {
+      if (login) {
+        onSubmit();
+        setLogin(false);
+      }
+    }, [login]);
+
+    const handleOnSubmit = async ({ username, password }) => {
       const params = new URLSearchParams();
       params.append("username", username);
       params.append("password", password);
@@ -74,7 +98,7 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
       }
     };
 
-    const submit = handleSubmit(onSubmit);
+    const submit = handleSubmit(handleOnSubmit);
 
     useImperativeHandle(ref, () => ({
       submit: async () => {

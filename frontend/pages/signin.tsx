@@ -69,7 +69,7 @@ export default function SignInPage() {
           </Typography>
         </Box>
         <Box className={classes.formWidth}>
-          <FormSignIn ref={formRef} />
+          <FormSignIn ref={formRef} onSubmit={onSubmit} />
         </Box>
         <Box mb={3}>
           <Link

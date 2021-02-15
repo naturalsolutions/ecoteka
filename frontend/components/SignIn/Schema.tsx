@@ -23,6 +23,7 @@ export default function useSignInSchema() {
         type: "password",
         label: t("SignIn.labelPassword"),
         autoComplete: "current-password",
+        onKeyDown: undefined,
       },
       schema: yup.string().required(t("SignIn.errorMessageRequiredField")),
     },
