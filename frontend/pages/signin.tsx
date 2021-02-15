@@ -38,7 +38,7 @@ export default function SignInPage() {
     setIsLoading(false);
 
     if (isOk) {
-      router.push("/map/");
+      router.push("/");
     }
   };
 
@@ -53,7 +53,6 @@ export default function SignInPage() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ minHeight: "calc(100vh - 48px)" }}
       >
         <Box flexGrow={1} />
         <Box>

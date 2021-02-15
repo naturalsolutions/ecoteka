@@ -6,6 +6,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import SearchIcon from "@material-ui/icons/Search";
+import InfoIcon from "@material-ui/icons/Info";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
@@ -81,17 +82,15 @@ const defaultData = {
 const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
-  const [time, setTime] = useState(Date.now());
   const classes = useStyles();
   const router = useRouter();
   const { user } = useAppContext();
-  const { dark } = useThemeContext();
+  const { dark, theme } = useThemeContext();
   const { apiETK } = useApi().api;
   const [drawerLeftComponent, setDrawerLeftComponent] = useState(
     <PanelStartGeneralInfo />
   );
   const [drawerLeftWidth, setDrawerLeftWidth] = useState(400);
-  const [token] = useLocalStorage("ecoteka_access_token");
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
     defaultViewState
@@ -478,8 +477,12 @@ const EditionPage = ({}) => {
     setDrawerLeftComponent();
     setFilters(defaultFilters);
     renderLayers();
-    fitToBounds(user?.currentOrganization?.id);
-    getData(user?.currentOrganization.id);
+
+    if (user) {
+      router.push("/map");
+      fitToBounds(user?.currentOrganization?.id);
+      getData(user?.currentOrganization.id);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -554,6 +557,9 @@ const EditionPage = ({}) => {
       </DeckGL>
       <Box className={classes.actionsBar}>
         <IconButton
+          style={{
+            color: mapBackground !== "map" ? "#fff" : "",
+          }}
           onClick={() => {
             !drawerLeftComponent
               ? switchPanel(router.query.panel)
@@ -562,18 +568,37 @@ const EditionPage = ({}) => {
         >
           {drawerLeftComponent ? <CloseIcon /> : <MenuOpenIcon />}
         </IconButton>
-        <IconButton onClick={() => router.push("/map?panel=filter")}>
-          <SearchIcon
-            color={router.query?.panel === "filter" ? "primary" : "default"}
-          />
+        <IconButton
+          style={{
+            color: mapBackground !== "map" ? "#fff" : "",
+          }}
+          color={router.query?.panel === "start" ? "primary" : "default"}
+          onClick={() => router.push("/map?panel=start")}
+        >
+          <InfoIcon />
         </IconButton>
         <IconButton
+          style={{
+            color: mapBackground !== "map" ? "#fff" : "",
+          }}
+          color={router.query?.panel === "filter" ? "primary" : "default"}
+          onClick={() => router.push("/map?panel=filter")}
+        >
+          <SearchIcon />
+        </IconButton>
+        <IconButton
+          style={{
+            color: mapBackground !== "map" ? "#fff" : "",
+          }}
           color={router.query?.panel === "layers" ? "primary" : "default"}
           onClick={() => router.push("/map?panel=layers")}
         >
           <LayersIcon />
         </IconButton>
         <IconButton
+          style={{
+            color: mapBackground !== "map" ? "#fff" : "",
+          }}
           color={router.query?.panel === "import" ? "primary" : "default"}
           onClick={() => router.push("/map?panel=import")}
         >
