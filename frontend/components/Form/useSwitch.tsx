@@ -29,11 +29,13 @@ export default function useTextField(props: ETKSwitchProps): Fields {
           <Controller
             name={name}
             control={props.control}
-            render={(props) => (
+            defaultValue={false}
+            render={({ value, onChange }) => (
               <Switch
                 {...fieldProps}
-                onChange={(e) => props.onChange(e.target.checked)}
-                checked={props.value}
+                onChange={(e) => onChange(e.target.checked)}
+                checked={value}
+                value={value}
               />
             )}
           />

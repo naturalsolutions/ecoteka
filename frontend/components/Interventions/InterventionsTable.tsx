@@ -7,14 +7,14 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Box,
   Button,
-  IconButton,
 } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { TIntervention } from "@/components/Interventions/Schema";
 import { useRouter } from "next/router";
+import { INTERVENTION_COLORS } from "@/components/Interventions/constants";
 
 const InterventionsTable: FC<{
   tree: any;
@@ -53,12 +53,71 @@ const InterventionsTable: FC<{
   };
 
   const handleOnEditIntervention = (intervention) => {
-    router.push(`/map?panel=intervention-edit&intervention=${intervention.id}`);
+    router.push(
+      `/map?panel=intervention-edit&intervention=${intervention.id}&tree=${intervention.tree_id}`
+    );
   };
 
   return (
     <TableContainer component={Paper}>
       <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell padding="none" align="center" />
+            <TableCell padding="none">
+              {t("components.Intervention.interventionsTable.date")}
+            </TableCell>
+            <TableCell padding="none">
+              {t("components.Intervention.interventionsTable.type")}
+            </TableCell>
+            <TableCell padding="none">
+              {t("components.Intervention.interventionsTable.state")}
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {interventions.length > 0 &&
+            interventions.map((intervention, i) => {
+              return (
+                <TableRow key={i}>
+                  <TableCell padding="none">
+                    <Box
+                      m={1}
+                      style={{
+                        width: 15,
+                        height: 15,
+                        background:
+                          INTERVENTION_COLORS[intervention.intervention_type],
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell padding="none">
+                    {renderInterventionDate(intervention)}
+                  </TableCell>
+                  <TableCell padding="none">
+                    <Button
+                      size="small"
+                      style={{
+                        textAlign: "left",
+                      }}
+                      onClick={() => handleOnEditIntervention(intervention)}
+                    >
+                      {t(
+                        `Intervention.types.${intervention.intervention_type}`
+                      )}
+                    </Button>
+                  </TableCell>
+                  <TableCell padding="none">
+                    <Checkbox
+                      disabled
+                      checked={intervention.done}
+                      color="primary"
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+        </TableBody>
         <caption>
           <Button
             fullWidth
@@ -75,48 +134,6 @@ const InterventionsTable: FC<{
             )}
           </Button>
         </caption>
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              {t("components.Intervention.interventionsTable.date")}
-            </TableCell>
-            <TableCell>
-              {t("components.Intervention.interventionsTable.type")}
-            </TableCell>
-            <TableCell>
-              {t("components.Intervention.interventionsTable.state")}
-            </TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {interventions.length > 0 &&
-            interventions.map((intervention, i) => {
-              return (
-                <TableRow key={i}>
-                  <TableCell>{renderInterventionDate(intervention)}</TableCell>
-                  <TableCell>
-                    {t(`Intervention.types.${intervention.intervention_type}`)}
-                  </TableCell>
-                  <TableCell>
-                    <Checkbox
-                      disabled
-                      checked={intervention.done}
-                      color="primary"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleOnEditIntervention(intervention)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </TableBody>
       </Table>
     </TableContainer>
   );
