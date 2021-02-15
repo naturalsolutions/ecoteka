@@ -442,7 +442,7 @@ def get_geojson(
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
 
-    sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_in_db.id} AND status NOT IN ('frozen', 'import')"
+    sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_in_db.id}"
     df = gpd.read_postgis(sql, db.bind)
     data = df.to_json()
     response = json.loads(data)

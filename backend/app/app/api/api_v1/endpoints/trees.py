@@ -2,19 +2,18 @@ import io
 import logging
 import os
 import shutil
-from typing import Any, List, Union, Optional
+from typing import Any, List, Union
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Request, Body
 from sqlalchemy.orm import Session
 from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
 from app.api import get_db
 from app.core import set_policies, authorization, get_current_user, settings
-from app.worker import import_geofile_task, create_mbtiles_task
-from app.models.ws import WSManager
+from app.worker import import_geofile_task
+
 from fastapi.responses import StreamingResponse
 import geopandas as gpd
 import imghdr
-from app.tasks.create_mbtiles import update_mbtiles, create_mbtiles
 
 router = APIRouter()
 policies = {
@@ -153,19 +152,6 @@ async def add(
         )
 
         tree_in_db = crud.crud_tree.tree.create(db, obj_in=tree_with_user_info)
-        update_mbtiles(db, organization_id)
-        
-        
-        channel: Optional[WSManager] = request.scope.get("ws_manager")
-
-        if channel is not None:
-            await channel.broadcast_message(
-                organization_id=organization_id, 
-                data={
-                    "action": "trees:add",
-                    "tree": tree_in_db.to_xy()
-                }
-            )
         
         return tree_in_db.to_xy()
     except Exception as error:
@@ -205,22 +191,6 @@ async def bulk_delete(
     """Bulk delete"""
     for tree_id in trees:
         crud.crud_tree.tree.remove(db, id=tree_id)
-
-    organization_in_db = crud.crud_organization.organization.get(db, id=organization_id)
-
-    if organization_in_db:
-        create_mbtiles(db, organization_in_db)
-
-    channel = request.scope.get("ws_manager")
-
-    if channel is not None:
-        await channel.broadcast_message(
-            organization_id=organization_id, 
-            data={
-                "action": "trees:bulk_delete",
-                "trees": trees
-            }
-        )
 
     return trees
 

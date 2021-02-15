@@ -28,10 +28,12 @@ import BackupIcon from "@material-ui/icons/Backup";
 import getConfig from "next/config";
 import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
+import { GeoJsonLayer } from "@deck.gl/layers";
 import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
 import Head from "next/head";
+import { ITree } from "..";
 
 const useStyles = makeStyles({
   toolbar: {
@@ -70,6 +72,11 @@ const defaultFilters = {
   values: defaultFilter,
 };
 
+const defaultData = {
+  type: "FeatureCollection",
+  features: [],
+};
+
 const EditionPage = ({}) => {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
@@ -101,6 +108,8 @@ const EditionPage = ({}) => {
   const [activeTree, setActiveTree] = useState<number | undefined>(
     router.query?.tree ? Number(router.query.tree) : undefined
   );
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(defaultData);
 
   const createTree = async (x, y) => {
     try {
@@ -108,14 +117,58 @@ const EditionPage = ({}) => {
       const payload = { x, y };
       const url = `/organization/${organizationId}/trees`;
 
-      setTime(Date.now());
       const { status, data: tree } = await apiETK.post(url, payload);
 
       if (status === 200) {
+        const newData = { ...data };
+        const feature = {
+          id: String(newData.features.length),
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [x, y],
+          },
+          properties: tree,
+        };
+
+        newData.features.push(feature);
+
+        setData(newData);
+
         router.push(`/map/?panel=edit&tree=${tree.id}`);
         setActiveTree(tree.id);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getData = async (id: number) => {
+    try {
+      setLoading(true);
+      const { status, data: newData } = await apiETK.get(
+        `/organization/${id}/geojson`
+      );
+
+      if (status === 200) {
+        setData(newData);
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOnTreeSave = (tree: ITree) => {
+    const newData = { ...data };
+    const index = newData.features.findIndex(
+      (f) => f.properties.id === tree.id
+    );
+
+    if (index) {
+      newData.features[index].properties = tree;
+      setData(newData);
+    }
   };
 
   const osmLayer = new MVTLayer({
@@ -138,14 +191,9 @@ const EditionPage = ({}) => {
     pickable: true,
   });
 
-  const treesLayer = new MVTLayer({
+  const treesLayer = new GeoJsonLayer({
     id: "trees",
-    data: `${apiUrl.replace("/api/v1", "")}/tiles/${
-      user?.currentOrganization.slug
-    }/{z}/{x}/{y}.pbf?scope=private&token=${token}&dt=${time}`,
-    minZoom: 0,
-    maxZoom: 12,
-    uniqueIdProperty: "id",
+    data,
     getLineColor: (d) => {
       if (selection.includes(d.properties.id)) {
         return [255, 0, 0, 100];
@@ -156,9 +204,9 @@ const EditionPage = ({}) => {
       }
 
       for (const key of Object.keys(filters.filters).reverse()) {
-        if (filters.filters[key].includes(d.properties[`properties_${key}`])) {
+        if (filters.filters[key].includes(d.properties.properties[key])) {
           const index = filters.options[key].findIndex(
-            (f) => f.value === d.properties[`properties_${key}`]
+            (f) => f.value === d.properties.properties[key]
           );
 
           return filters.options[key][index][dark ? "color" : "background"];
@@ -183,9 +231,9 @@ const EditionPage = ({}) => {
       }
 
       for (const key of Object.keys(filters.filters).reverse()) {
-        if (filters.filters[key].includes(d.properties[`properties_${key}`])) {
+        if (filters.filters[key].includes(d.properties.properties[key])) {
           const index = filters.options[key].findIndex(
-            (f) => f.value === d.properties[`properties_${key}`]
+            (f) => f.value === d.properties.properties[key]
           );
 
           return filters.options[key][index][dark ? "color" : "background"];
@@ -201,8 +249,8 @@ const EditionPage = ({}) => {
       return [34, 139, 34, 100];
     },
     updateTriggers: {
-      getFillColor: [activeTree, selection, editionMode, filters, dark],
-      getLineColor: [activeTree, selection, editionMode, filters, dark],
+      getFillColor: [activeTree, selection, editionMode, filters, dark, data],
+      getLineColor: [activeTree, selection, editionMode, filters, dark, data],
     },
     pickable: true,
     autoHighlight: true,
@@ -269,7 +317,8 @@ const EditionPage = ({}) => {
     } catch (e) {}
   };
 
-  const handleOnFileImported = (coordinates) => {
+  const handleOnFileImported = async (coordinates) => {
+    await getData(user.currentOrganization.id);
     setViewState({
       longitude: coordinates[0],
       latitude: coordinates[1],
@@ -277,12 +326,12 @@ const EditionPage = ({}) => {
       transitionDuration: 1200,
       transitionInterpolator: new FlyToInterpolator(),
     });
-    setTime(Date.now());
   };
 
   useEffect(() => {
     setViewState({ ...initialViewState });
     renderLayers();
+    getData(user.currentOrganization.id);
   }, []);
 
   const switchPanel = (panel) => {
@@ -298,7 +347,7 @@ const EditionPage = ({}) => {
       case "edit":
         setDrawerLeftWidth(500);
         return setDrawerLeftComponent(
-          <TreeForm treeId={activeTree} onSave={() => {}} />
+          <TreeForm treeId={activeTree} onSave={handleOnTreeSave} />
         );
       case "layers":
         return setDrawerLeftComponent(
@@ -375,14 +424,19 @@ const EditionPage = ({}) => {
 
     try {
       const url = `/organization/${user.currentOrganization.id}/trees/bulk_delete`;
-      const { status, data } = await apiETK.delete(url, {
+      const { status, data: tree } = await apiETK.delete(url, {
         data: {
           trees: selection,
         },
       });
 
       if (status === 200) {
-        setTime(Date.now());
+        const newData = { ...data };
+        newData.features = newData.features.filter(
+          (t) => !selection.includes(t.properties.id)
+        );
+
+        setData(newData);
 
         if (selection.includes(activeTree)) {
           setActiveTree();
@@ -396,8 +450,6 @@ const EditionPage = ({}) => {
   };
 
   const renderLayers = () => {
-    setTime(Date.now());
-
     if (editionMode && mode === "selection") {
       return setLayers([treesLayer, selectionLayer]);
     }
@@ -423,14 +475,14 @@ const EditionPage = ({}) => {
     router.push("/map");
     setDrawerLeftComponent();
     setFilters(defaultFilters);
-    setTime(Date.now());
     renderLayers();
     fitToBounds(user?.currentOrganization?.id);
+    getData(user?.currentOrganization.id);
   }, [user]);
 
   useEffect(() => {
     renderLayers();
-  }, [activeTree, editionMode, selection, filters, dark]);
+  }, [activeTree, editionMode, selection, filters, dark, data]);
 
   return (
     <AppLayoutCarto

@@ -57,12 +57,6 @@ export default function IndexPage() {
   const router = useRouter();
   const { dark } = useThemeContext();
 
-  useEffect(() => {
-    if (user) {
-      router.push("/map");
-    }
-  }, [user]);
-
   const osmLayer = new MVTLayer({
     id: "osm",
     data: `${apiUrl.replace(
