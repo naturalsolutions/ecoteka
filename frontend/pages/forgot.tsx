@@ -47,10 +47,10 @@ const BaseCard = ({ children }) => {
   return (
     <Card elevation={0} className={classes.baseCard}>
       <CardMedia
-          image="/assets/password.svg"
-          title="Password"
-          className={classes.image}
-        />
+        image="/assets/password.svg"
+        title="Password"
+        className={classes.image}
+      />
       <CardHeader
         title={t("pages.Forgot.EmailCard.title")}
         className={classes.baseCardTitle}
@@ -70,11 +70,6 @@ const SentCard = ({ email, onLogin }) => {
 
   return (
     <BaseCard>
-        <CardMedia
-          image="/assets/password.svg"
-          title="Password"
-          className={classes.image}
-        />
       <Grid item>
         <Box mt={2} mb={3}>
           <Typography align="center">
