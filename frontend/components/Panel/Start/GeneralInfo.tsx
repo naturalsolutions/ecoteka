@@ -9,7 +9,6 @@ import {
   Button,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { useAppContext } from "@/providers/AppContext";
 import CardInfoPanel from "@/components/Card/InfoPanel";
 import { useRouter } from "next/router";
 
@@ -30,7 +29,6 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
 }) => {
   const router = useRouter();
   const classes = useStyles();
-  const { user } = useAppContext();
   const { t } = useTranslation("components");
 
   return (

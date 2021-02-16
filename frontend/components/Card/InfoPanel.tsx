@@ -9,13 +9,13 @@ import {
   Avatar,
 } from "@material-ui/core";
 
-export interface ETKCardInfoPanelProps {
+export interface CardInfoPanelProps {
   title: string;
   content: string;
   icon?: any;
 }
 
-const defaultProps: ETKCardInfoPanelProps = {
+const defaultProps: CardInfoPanelProps = {
   title: "",
   content: "",
 };
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ETKCardInfoPanel: React.FC<ETKCardInfoPanelProps> = (props) => {
+const CardInfoPanel: React.FC<CardInfoPanelProps> = (props) => {
   const classes = useStyles();
 
   return (
@@ -51,6 +51,6 @@ const ETKCardInfoPanel: React.FC<ETKCardInfoPanelProps> = (props) => {
   );
 };
 
-ETKCardInfoPanel.defaultProps = defaultProps;
+CardInfoPanel.defaultProps = defaultProps;
 
-export default ETKCardInfoPanel;
+export default CardInfoPanel;
