@@ -36,6 +36,7 @@ import { StaticMap } from "react-map-gl";
 import Head from "next/head";
 import { ITree } from "..";
 import InterventionsEdit from "@/components/Interventions/Panel";
+import Can from "@/components/Can";
 
 const useStyles = makeStyles({
   toolbar: {
@@ -87,7 +88,6 @@ const EditionPage = ({}) => {
   const { user } = useAppContext();
   const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
-  const [numberOfTrees, setNumberOfTrees] = useState(0);
   const [drawerLeftComponent, setDrawerLeftComponent] = useState(
     <PanelStartGeneralInfo />
   );
@@ -111,6 +111,7 @@ const EditionPage = ({}) => {
   );
   const [loading, setLoading] = useState(false);
   const [data, setData] = useLocalStorage("etk:map:data", defaultData);
+  const [numberOfTrees, setNumberOfTrees] = useState(data.features.length);
 
   const createTree = async (x, y) => {
     try {
@@ -604,15 +605,17 @@ const EditionPage = ({}) => {
         >
           <LayersIcon />
         </IconButton>
-        <IconButton
-          style={{
-            color: mapBackground !== "map" ? "#fff" : "",
-          }}
-          color={router.query?.panel === "import" ? "primary" : "default"}
-          onClick={() => router.push("/map?panel=import")}
-        >
-          <BackupIcon />
-        </IconButton>
+        <Can do="create" on="Trees">
+          <IconButton
+            style={{
+              color: mapBackground !== "map" ? "#fff" : "",
+            }}
+            color={router.query?.panel === "import" ? "primary" : "default"}
+            onClick={() => router.push("/map?panel=import")}
+          >
+            <BackupIcon />
+          </IconButton>
+        </Can>
       </Box>
       <Hidden smDown>
         <Grid

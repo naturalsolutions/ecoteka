@@ -12,7 +12,7 @@ import {
   Popper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { green, blue } from "@material-ui/core/colors";
+import { blue } from "@material-ui/core/colors";
 import { ArrowDropDown as ArrowDropDownIcon } from "@material-ui/icons";
 import useAPI from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
@@ -159,17 +159,6 @@ const Header: FC<HeaderProps> = (props) => {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       />
       <Box display="flex" flexDirection="row-reverse">
-        <Can do="create" on="Trees">
-          <Box m={1}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => router.push("/map/?panel=import")}
-            >
-              {t("common.buttons.import")}
-            </Button>
-          </Box>
-        </Can>
         <Can do="read" on="Trees">
           <Box m={1}>
             <ButtonGroup
