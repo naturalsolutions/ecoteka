@@ -8,6 +8,7 @@ import {
   Divider,
   Card,
   CardContent,
+  makeStyles,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import Logout from "@/components/Logout";
@@ -23,11 +24,19 @@ const getDisplayNameFromUser = (user: IUser) => {
   return user.full_name || user.email.substr(0, user.email.indexOf("@"));
 };
 
+const useStyles = makeStyles({
+  button: {
+    justifyContent: "right",
+    textTransform: "inherit",
+  },
+});
+
 const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { user } = useAppContext();
   const { t } = useTranslation("components");
   const router = useRouter();
+  const classes = useStyles();
 
   const handlerMyOrganizationClick = () => {
     setAnchorEl(null);
@@ -85,13 +94,12 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
                         .map((s) => s[0].toUpperCase())}
                     </Avatar>
                   </Grid>
-                  <Grid item xs>
+                  <Grid item>
                     <Grid
                       container
                       direction="column"
                       justify="flex-start"
                       alignItems="flex-start"
-                      spacing={2}
                     >
                       <Grid item xs>
                         {getDisplayNameFromUser(user)}
@@ -107,13 +115,23 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
                 <Divider />
               </Box>
               <Grid item>
-                <Button fullWidth onClick={handlerMyOrganizationClick}>
-                  {t("Toolbar.myOrganizations")}
+                <Button
+                  className={classes.button}
+                  fullWidth
+                  size="small"
+                  onClick={handlerMyOrganizationClick}
+                >
+                  {t("components.Toolbar.myOrganizations")}
                 </Button>
               </Grid>
               <Grid item>
-                <Button fullWidth onClick={handlerMyDashboardClick}>
-                  {t("Toolbar.myDashboard")}
+                <Button
+                  size="small"
+                  className={classes.button}
+                  fullWidth
+                  onClick={handlerMyDashboardClick}
+                >
+                  {t("components.Toolbar.myDashboard")}
                 </Button>
               </Grid>
               <Box mt={2} mb={1}>
@@ -121,7 +139,11 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
               </Box>
               <Grid item>
                 <Logout
-                  buttonProps={{ fullWidth: true }}
+                  buttonProps={{
+                    fullWidth: true,
+                    size: "small",
+                    className: classes.button,
+                  }}
                   onClick={handlerLogoutClick}
                 />
               </Grid>

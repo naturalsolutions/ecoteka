@@ -1,9 +1,9 @@
 {
   "Logout": {
-    "logout": "Logout",
+    "logout": "Sign Out",
     "dialog": {
       "backHome": "Back to home page",
-      "logout": "Log out",
+      "logout": "Sign Out",
       "content": "Are you sure you want to log out?"
     }
   },
