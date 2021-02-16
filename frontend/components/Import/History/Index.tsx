@@ -7,6 +7,8 @@ import ETKImportHistoryTable from "@/components/Import/History/Table";
 import ETKImportHistoryEmpty from "@/components/Import/History/Empty";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import Geofile from "@/components/Geofile";
+import router, { useRouter } from "next/router";
+import Head from "next/head";
 
 export interface ETKImportHistoryIndexProps {
   rows?: Geofile[];
@@ -37,6 +39,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
   const { t } = useTranslation("components");
   const { dialog } = useAppLayout();
   const [selected, setSelected] = useState([]);
+  const router = useRouter();
 
   const onSelected = (newSelected) => {
     setSelected(newSelected);
@@ -67,6 +70,9 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
 
   return (
     <Paper className={classes.paper} square>
+      <Head>
+        <title>ecoTeka - {t("components.ImportHistoryIndex.title")}</title>
+      </Head>
       <Grid
         container
         direction="column"
@@ -85,6 +91,16 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
               {props.rows.length > 0 && (
                 <Grid item xs={6}>
                   <Grid container spacing={1} direction="row-reverse">
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="large"
+                        onClick={() => router.push("/map?panel=import")}
+                      >
+                        {t("components.ImportHistoryIndex.importText")}
+                      </Button>
+                    </Grid>
                     <Grid item>
                       <Button
                         disabled={!selected.length || !props.rows.length}

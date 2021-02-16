@@ -85,8 +85,9 @@ const EditionPage = ({}) => {
   const classes = useStyles();
   const router = useRouter();
   const { user } = useAppContext();
-  const { dark, theme } = useThemeContext();
+  const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
+  const [numberOfTrees, setNumberOfTrees] = useState(0);
   const [drawerLeftComponent, setDrawerLeftComponent] = useState(
     <PanelStartGeneralInfo />
   );
@@ -109,7 +110,7 @@ const EditionPage = ({}) => {
     router.query?.tree ? Number(router.query.tree) : undefined
   );
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(defaultData);
+  const [data, setData] = useLocalStorage("etk:map:data", defaultData);
 
   const createTree = async (x, y) => {
     try {
@@ -138,9 +139,7 @@ const EditionPage = ({}) => {
         router.push(`/map/?panel=edit&tree=${tree.id}`);
         setActiveTree(tree.id);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const getData = async (id: number) => {
@@ -338,7 +337,10 @@ const EditionPage = ({}) => {
   useEffect(() => {
     setViewState({ ...initialViewState });
     renderLayers();
-    getData(user?.currentOrganization.id);
+
+    if (!data) {
+      getData(user?.currentOrganization.id);
+    }
   }, []);
 
   const switchPanel = (panel) => {
@@ -349,7 +351,7 @@ const EditionPage = ({}) => {
     switch (panel) {
       case "start":
         return setDrawerLeftComponent(
-          <PanelStartGeneralInfo numberOfTrees={data.features.length} />
+          <PanelStartGeneralInfo numberOfTrees={numberOfTrees} />
         );
       case "info":
         return setDrawerLeftComponent(<TreeSummary treeId={activeTree} />);
@@ -483,13 +485,14 @@ const EditionPage = ({}) => {
   }, [mode]);
 
   useEffect(() => {
-    setDrawerLeftComponent();
-    setFilters(defaultFilters);
-    renderLayers();
-
     if (user) {
+      setFilters(defaultFilters);
+      renderLayers();
       fitToBounds(user?.currentOrganization?.id);
-      getData(user?.currentOrganization.id);
+      getData(user?.currentOrganization.id).then(() => {
+        setNumberOfTrees(data.features.length);
+        switchPanel(router.query.panel);
+      });
     }
   }, [user]);
 
@@ -509,9 +512,7 @@ const EditionPage = ({}) => {
       <DeckGL
         viewState={viewState}
         controller={true}
-        getCursor={({ isDragging }) =>
-          mode === "drawPoint" ? "crosshair" : "pointer"
-        }
+        getCursor={({}) => (mode === "drawPoint" ? "crosshair" : "pointer")}
         layers={layers}
         onViewStateChange={(e) => {
           setInitialViewState({
