@@ -68,11 +68,10 @@ def trees_import(
     return geofile
 
 
-@router.get("/export/")
+@router.get("/export", dependencies=[Depends(authorization("trees:export"))])
 def trees_export(
     organization_id: int,
     format: str = "geojson",
-    auth=Depends(authorization("trees:export")),
     db: Session = Depends(get_db),
 ) -> Any:
     sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_id}"
@@ -98,7 +97,7 @@ def trees_export(
     if format in ["csv", "xlsx"]:
         df["lat"] = df.geom.y
         df["lng"] = df.geom.x
-        df_properties = gpd.pd.DataFrame(df["properties"].values.tolist())
+        df_properties = gpd.pd.DataFrame(df["properties"].dropna().values.tolist())
         col = df.columns.difference(["properties"])
         df = gpd.pd.concat([df[col], df_properties], axis=1)
         df = df.drop(columns=["geom"])
