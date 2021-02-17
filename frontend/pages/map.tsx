@@ -215,7 +215,7 @@ const EditionPage = ({}) => {
         `/maps/geobuf?organization_id=${id}`
       );
 
-      if (status === 200) {
+      if (status === 200 && newData.pbf) {
         const arrayBuffer = Base64Binary.decodeArrayBuffer(newData.pbf);
         const pbf = new Pbf(arrayBuffer);
         const geojson = geobuf.decode(pbf);
@@ -230,11 +230,15 @@ const EditionPage = ({}) => {
             return newFeature;
           }
         });
-        setData(geojson);
-        setDataOrganizationId(id);
+
+        return setData(geojson);
       }
+
+      setData(defaultData);
     } catch (error) {
+      setData(defaultData);
     } finally {
+      setDataOrganizationId(id);
       setLoading(false);
     }
   };
@@ -417,9 +421,9 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     setViewState({ ...initialViewState });
+    renderLayers();
 
     if (!data) {
-      renderLayers();
       getData(user?.currentOrganization.id);
     }
   }, []);
