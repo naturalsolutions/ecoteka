@@ -215,6 +215,8 @@ const EditionPage = ({}) => {
         `/maps/geobuf?organization_id=${id}`
       );
 
+      setData(defaultData);
+
       if (status === 200 && newData.pbf) {
         const arrayBuffer = Base64Binary.decodeArrayBuffer(newData.pbf);
         const pbf = new Pbf(arrayBuffer);
@@ -233,8 +235,6 @@ const EditionPage = ({}) => {
 
         return setData(geojson);
       }
-
-      setData(defaultData);
     } catch (error) {
       setData(defaultData);
     } finally {

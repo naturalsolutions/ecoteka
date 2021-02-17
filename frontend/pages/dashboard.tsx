@@ -384,7 +384,8 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
               <Widget
                 gridProps={{
                   item: true,
-                  xs: widget.size?.xs ? widget.size?.xs : 4,
+                  xs: 12,
+                  sm: 4,
                 }}
                 paperProps={{
                   elevation: 2,
@@ -407,32 +408,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                 {t("components.Dashboard.heritageManagment.title")}
               </Typography>
             </Box>
-            {interventions.length == 0 && (
-              <Box pb={2}>
-                <Alert
-                  severity="info"
-                  action={
-                    <Button
-                      color="inherit"
-                      size="small"
-                      variant="outlined"
-                      disabled={Boolean(metrics.total_tree_count == 0)}
-                      onClick={() => router.push("/map/?panel=intervention")}
-                    >
-                      {t("components.Dashboard.addInterventionButton")}
-                    </Button>
-                  }
-                >
-                  <AlertTitle>
-                    {t("components.Dashboard.heritageManagment.alertTitle")}
-                  </AlertTitle>
-                  {t("components.Dashboard.heritageManagment.alertText")} —{" "}
-                  <strong>
-                    {t("components.Dashboard.heritageManagment.boldText")}
-                  </strong>
-                </Alert>
-              </Box>
-            )}
+
             <Grid container spacing={3}>
               <SpringTail
                 items={interventionsWidgets}
@@ -449,7 +425,8 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                   <Widget
                     gridProps={{
                       item: true,
-                      xs: widget.size?.xs ? widget.size?.xs : 4,
+                      xs: 12,
+                      sm: 4,
                     }}
                     paperProps={{
                       elevation: 2,
