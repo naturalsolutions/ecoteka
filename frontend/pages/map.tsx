@@ -113,7 +113,11 @@ const EditionPage = ({}) => {
     router.query?.tree ? Number(router.query.tree) : undefined
   );
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useLocalStorage("etk:map:data", defaultData);
+  const [data, setData] = useLocalStorage("etk:map:data");
+  const [dataOrganizations, setDataOrganizations] = useLocalStorage(
+    "etk:map:dataOrganizations",
+    {}
+  );
   const [dataOrganizationId, setDataOrganizationId] = useLocalStorage(
     "etk:map:dataOrganizationId",
     user?.currentOrganization.id
@@ -216,6 +220,7 @@ const EditionPage = ({}) => {
       );
 
       setData(defaultData);
+      setDataOrganizations({ ...dataOrganizations, [id]: defaultData });
 
       if (status === 200 && newData.pbf) {
         const arrayBuffer = Base64Binary.decodeArrayBuffer(newData.pbf);
@@ -233,6 +238,7 @@ const EditionPage = ({}) => {
           }
         });
 
+        setDataOrganizations({ ...dataOrganizations, [id]: geojson });
         return setData(geojson);
       }
     } catch (error) {
@@ -480,9 +486,9 @@ const EditionPage = ({}) => {
       setActiveTree(Number(router.query.tree));
     }
 
-    if (!router.query.panel) return;
-
-    switchPanel(router.query.panel);
+    if (router.query?.panel) {
+      switchPanel(router.query?.panel);
+    }
   }, [router.query]);
 
   const handleOnFilter = (values, filters, options) => {
@@ -565,7 +571,7 @@ const EditionPage = ({}) => {
     }
 
     if (mode === "selection") {
-      return setLayers([treesLayer, selectionLayer]);
+      setLayers([treesLayer, selectionLayer]);
     }
   }, [mode]);
 
@@ -576,10 +582,15 @@ const EditionPage = ({}) => {
       fitToBounds(user?.currentOrganization?.id);
 
       if (dataOrganizationId !== user.currentOrganization.id) {
-        getData(user?.currentOrganization.id).then(() => {
-          setNumberOfTrees(data.features.length);
-          switchPanel(router.query.panel);
-        });
+        if (dataOrganizations[user.currentOrganization.id]) {
+          setDataOrganizationId(user.currentOrganization.id);
+          setData(dataOrganizations[user.currentOrganization.id]);
+        } else {
+          getData(user?.currentOrganization.id).then(() => {
+            setNumberOfTrees(data.features.length);
+            switchPanel(router.query.panel);
+          });
+        }
       }
     }
   }, [user]);
@@ -602,6 +613,9 @@ const EditionPage = ({}) => {
         controller={true}
         getCursor={({}) => (mode === "drawPoint" ? "crosshair" : "pointer")}
         layers={layers}
+        onLoad={() => {
+          fitToBounds(user?.currentOrganization.id);
+        }}
         onViewStateChange={(e) => {
           setInitialViewState({
             longitude: e.viewState.longitude,
