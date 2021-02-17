@@ -6,8 +6,7 @@ import {
   Hidden,
   makeStyles,
   Toolbar,
-  withStyles,
-  NoSsr,
+  useMediaQuery,
 } from "@material-ui/core";
 import ContactButton from "@/components/Contact/Button";
 import LanguageSelector from "@/components/LanguageSelector";
@@ -30,6 +29,7 @@ const useStyles = makeStyles((theme) => {
     logo: {
       height: 35,
       paddingTop: ".3rem",
+      cursor: "pointer",
     },
     toolbar: {
       backgroundColor:
@@ -40,41 +40,15 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const LogoWrapperButton = withStyles({
-  root: {
-    boxShadow: "none",
-    textTransform: "none",
-    fontSize: 16,
-    border: "none",
-    borderRadius: "0px",
-    backgroundColor: "none",
-    borderColor: "none",
-    "&:hover": {
-      backgroundColor: "none",
-      borderColor: "none",
-      boxShadow: "none",
-    },
-    "&:active": {
-      boxShadow: "none",
-      backgroundColor: "none",
-      borderColor: "none",
-    },
-    "&:focus": {
-      boxShadow: "none",
-      backgroundColor: "rgba(0,0,0,.1)",
-    },
-  },
-})(Button);
-
 const AppLayoutHeader = ({}): JSX.Element => {
   const { t } = useTranslation("components");
   const classes = useStyles();
   const router = useRouter();
   const { user, setUser } = useAppContext();
-  const { dark, setDark } = useThemeContext();
-  const [logo, setLogo] = useState("/assets/light/logo.svg");
+  const { dark, setDark, theme } = useThemeContext();
+  const [logo, setLogo] = useState("/assets/light/logo-mobile.svg");
   const [menu, setMenu] = useState<string | null>(router.asPath);
-  const [toggleIcon, setToggleIcon] = useState<ReactNode>(<Brightness7Icon />);
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleOrganizationSelectChange = (organization: IOrganization) => {
     if (!organization || !organization.id) {
@@ -87,8 +61,10 @@ const AppLayoutHeader = ({}): JSX.Element => {
   };
 
   useEffect(() => {
-    setLogo(`/assets/${dark ? "dark" : "light"}/logo.svg`);
-  }, [dark]);
+    setLogo(
+      `/assets/${dark ? "dark" : "light"}/logo${matches ? "-mobile" : ""}.svg`
+    );
+  }, [dark, matches]);
 
   useEffect(() => {
     setMenu(router.asPath);
@@ -101,15 +77,14 @@ const AppLayoutHeader = ({}): JSX.Element => {
   return (
     <Toolbar className={classes.toolbar} variant="dense">
       <Grid container alignItems="center">
-        <Grid item xs={6}>
+        <Grid item>
           <Grid container alignItems="center">
             <Grid item>
-              <LogoWrapperButton
+              <img
                 onClick={() => router.push(user ? "/map" : "/")}
-                disableFocusRipple
-              >
-                <img src={logo} className={classes.logo} />
-              </LogoWrapperButton>
+                src={logo}
+                className={classes.logo}
+              />
             </Grid>
             {user && (
               <Hidden smDown>
@@ -149,7 +124,8 @@ const AppLayoutHeader = ({}): JSX.Element => {
             )}
           </Grid>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs />
+        <Grid item>
           <Grid
             container
             alignItems="center"
@@ -157,32 +133,27 @@ const AppLayoutHeader = ({}): JSX.Element => {
             direction="row"
             spacing={1}
           >
-            <NoSsr>
-              <Grid item>
-                <ToggleButton
-                  size="small"
-                  value={dark}
-                  selected={dark}
-                  color="primary"
-                  onClick={() => setDark(!dark)}
-                >
-                  {dark || false ? (
-                    <Brightness7Icon fontSize="small" />
-                  ) : (
-                    <Brightness4Icon fontSize="small" />
-                  )}
-                </ToggleButton>
-              </Grid>
-            </NoSsr>
-            <Hidden smDown>
-              <Grid item>
-                <LanguageSelector />
-              </Grid>
-            </Hidden>
+            <Grid item>
+              <ToggleButton
+                size="small"
+                value={dark}
+                selected={dark}
+                color="primary"
+                onClick={() => setDark(!dark)}
+              >
+                {dark ? (
+                  <Brightness7Icon fontSize="small" />
+                ) : (
+                  <Brightness4Icon fontSize="small" />
+                )}
+              </ToggleButton>
+            </Grid>
+            <Grid item>
+              <LanguageSelector />
+            </Grid>
             {!user && (
               <Hidden smDown>
                 <Grid item>
-                  {" "}
                   <ContactButton />
                 </Grid>
               </Hidden>

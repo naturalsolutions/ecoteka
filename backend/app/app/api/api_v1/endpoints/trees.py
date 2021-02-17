@@ -174,7 +174,7 @@ def update(
     if tree_in_db is None:
         return HTTPException(status_code=404, detail=f"Tree {tree_id} not found")
 
-    properties = {k: v for (k, v) in payload.properties.items() if v is not ""}
+    properties = {k: v for (k, v) in payload.properties.items() if v != ""}
     tree_in_db.properties = properties
     db.commit()
     return tree_in_db.to_xy()

@@ -57,7 +57,13 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
       <Grid item>
         <Card className={classes.card}>
           <CardContent>
-            <Grid container direction="column" alignItems="center" spacing={2}>
+            <Grid
+              container
+              wrap="nowrap"
+              direction="column"
+              alignItems="center"
+              spacing={2}
+            >
               <Grid item>
                 <Typography className={classes.cardTitle} variant="h6">
                   {t("components.PanelStart.card.title")}
@@ -75,7 +81,7 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
                     size="large"
                     variant="outlined"
                     onClick={() => {
-                      router.push("/map/?panel=import");
+                      router.push("/map?panel=import");
                     }}
                   >
                     {t("components.PanelStart.card.button")}

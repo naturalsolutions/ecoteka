@@ -60,10 +60,11 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
         }}
       >
         <Avatar style={{ height: 35, width: 35 }}>
-          {user.full_name
-            .split(" ")
-            .slice(0, 2)
-            .map((s) => s[0].toUpperCase())}
+          {user.full_name &&
+            user.full_name
+              .split(" ")
+              .slice(0, 2)
+              .map((s) => s[0].toUpperCase())}
         </Avatar>
       </Button>
       <Popover

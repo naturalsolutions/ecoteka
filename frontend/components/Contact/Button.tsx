@@ -1,30 +1,17 @@
 import React from "react";
-import {
-  Button,
-  ButtonProps,
-  BottomNavigationAction,
-  useMediaQuery,
-} from "@material-ui/core";
+import { Button, ButtonProps } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 
 const ContactButton: React.FC<ButtonProps> = (props) => {
-  const { t } = useTranslation(["components", "common"]);
-  const { theme } = useThemeContext();
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const { t } = useTranslation([]);
 
-  return matches ? (
-    <BottomNavigationAction
-      label={t("Toolbar.about")}
-      href="https://www.natural-solutions.eu/creation-de-compte-ecoteka"
-      {...props}
-    />
-  ) : (
+  return (
     <Button
+      size="small"
       href="https://www.natural-solutions.eu/creation-de-compte-ecoteka"
       {...props}
     >
-      {t("Toolbar.about")}
+      {t("components.Toolbar.about")}
     </Button>
   );
 };
