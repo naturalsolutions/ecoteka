@@ -23,6 +23,7 @@ import MapIcon from "@material-ui/icons/Map";
 import TodayIcon from "@material-ui/icons/CalendarToday";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import Can from "@/components/Can";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -112,12 +113,14 @@ const AppLayoutHeader = ({}): JSX.Element => {
                     >
                       <DashboardIcon fontSize="small" />
                     </ToggleButton>
-                    <ToggleButton
-                      value="/imports/"
-                      onClick={() => router.push("/imports/")}
-                    >
-                      <SettingsSystemDaydreamIcon fontSize="small" />
-                    </ToggleButton>
+                    <Can do="create" on="Trees">
+                      <ToggleButton
+                        value="/imports/"
+                        onClick={() => router.push("/imports/")}
+                      >
+                        <SettingsSystemDaydreamIcon fontSize="small" />
+                      </ToggleButton>
+                    </Can>
                   </ToggleButtonGroup>
                 </>
               </Hidden>

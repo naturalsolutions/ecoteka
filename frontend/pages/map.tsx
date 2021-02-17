@@ -34,8 +34,9 @@ import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
 import Head from "next/head";
-import { ITree } from "..";
+import { ITree } from "@/components";
 import InterventionsEdit from "@/components/Interventions/Panel";
+import Can from "@/components/Can";
 
 const useStyles = makeStyles({
   toolbar: {
@@ -604,15 +605,17 @@ const EditionPage = ({}) => {
         >
           <LayersIcon />
         </IconButton>
-        <IconButton
-          style={{
-            color: mapBackground !== "map" ? "#fff" : "",
-          }}
-          color={router.query?.panel === "import" ? "primary" : "default"}
-          onClick={() => router.push("/map?panel=import")}
-        >
-          <BackupIcon />
-        </IconButton>
+        <Can do="create" on="Trees">
+          <IconButton
+            style={{
+              color: mapBackground !== "map" ? "#fff" : "",
+            }}
+            color={router.query?.panel === "import" ? "primary" : "default"}
+            onClick={() => router.push("/map?panel=import")}
+          >
+            <BackupIcon />
+          </IconButton>
+        </Can>
       </Box>
       <Hidden smDown>
         <Grid

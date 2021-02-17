@@ -11,6 +11,7 @@ import {
 import { useTranslation } from "react-i18next";
 import CardInfoPanel from "@/components/Card/InfoPanel";
 import { useRouter } from "next/router";
+import Can from "@/components/Can";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,44 +55,47 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
         />
       </Grid>
       <Grid item xs />
-      <Grid item>
-        <Card className={classes.card}>
-          <CardContent>
-            <Grid
-              container
-              wrap="nowrap"
-              direction="column"
-              alignItems="center"
-              spacing={2}
-            >
-              <Grid item>
-                <Typography className={classes.cardTitle} variant="h6">
-                  {t("components.PanelStart.card.title")}
-                </Typography>
+      <Can do="create" on="Trees">
+        <Grid item>
+          <Card className={classes.card}>
+            <CardContent>
+              <Grid
+                container
+                wrap="nowrap"
+                direction="column"
+                alignItems="center"
+                spacing={2}
+              >
+                <Grid item>
+                  <Typography className={classes.cardTitle} variant="h6">
+                    {t("components.PanelStart.card.title")}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography>
+                    {t("components.PanelStart.card.content")}
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <Box mt={2}>
+                    <Button
+                      color="primary"
+                      size="large"
+                      variant="outlined"
+                      onClick={() => {
+                        router.push("/map?panel=import");
+                      }}
+                    >
+                      {t("components.PanelStart.card.button")}
+                    </Button>
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Typography>
-                  {t("components.PanelStart.card.content")}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Box mt={2}>
-                  <Button
-                    color="primary"
-                    size="large"
-                    variant="outlined"
-                    onClick={() => {
-                      router.push("/map?panel=import");
-                    }}
-                  >
-                    {t("components.PanelStart.card.button")}
-                  </Button>
-                </Box>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Can>
     </Grid>
   );
 };
