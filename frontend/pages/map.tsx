@@ -111,6 +111,10 @@ const EditionPage = ({}) => {
   );
   const [loading, setLoading] = useState(false);
   const [data, setData] = useLocalStorage("etk:map:data", defaultData);
+  const [dataOrganizationId, setDataOrganizationId] = useLocalStorage(
+    "etk:map:dataOrganizationId",
+    user.currentOrganization.id
+  );
 
   const createTree = async (x, y) => {
     try {
@@ -151,6 +155,7 @@ const EditionPage = ({}) => {
 
       if (status === 200) {
         setData(newData);
+        setDataOrganizationId(id);
       }
     } catch (error) {
     } finally {
@@ -336,9 +341,9 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     setViewState({ ...initialViewState });
-    renderLayers();
 
     if (!data) {
+      renderLayers();
       getData(user?.currentOrganization.id);
     }
   }, []);
@@ -489,10 +494,13 @@ const EditionPage = ({}) => {
       setFilters(defaultFilters);
       renderLayers();
       fitToBounds(user?.currentOrganization?.id);
-      getData(user?.currentOrganization.id).then(() => {
-        setNumberOfTrees(data.features.length);
-        switchPanel(router.query.panel);
-      });
+
+      if (dataOrganizationId !== user.currentOrganization.id) {
+        getData(user?.currentOrganization.id).then(() => {
+          setNumberOfTrees(data.features.length);
+          switchPanel(router.query.panel);
+        });
+      }
     }
   }, [user]);
 
