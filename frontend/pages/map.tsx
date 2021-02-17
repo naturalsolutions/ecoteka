@@ -114,7 +114,7 @@ const EditionPage = ({}) => {
   const [data, setData] = useLocalStorage("etk:map:data", defaultData);
   const [dataOrganizationId, setDataOrganizationId] = useLocalStorage(
     "etk:map:dataOrganizationId",
-    user.currentOrganization.id
+    user?.currentOrganization.id
   );
 
   const createTree = async (x, y) => {
