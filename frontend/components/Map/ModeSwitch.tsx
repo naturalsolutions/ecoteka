@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core";
 import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab";
 import MultilineChartIcon from "@material-ui/icons/MultilineChart";
 import EditLocationIcon from "@material-ui/icons/EditLocation";
+import Can from "@/components/Can";
 
 export type TMapMode = "analysis" | "edition";
 
@@ -37,22 +38,24 @@ const MapModeSwitch: React.FC<IMapModeSwitchProps> = ({
   };
 
   return (
-    <ToggleButtonGroup
-      className={classes.root}
-      value={mode}
-      size="small"
-      exclusive
-      onChange={handleOnChange}
-    >
-      <ToggleButton value="analysis">
-        <MultilineChartIcon />
-        {t("MapModeSwitch.analysis")}
-      </ToggleButton>
-      <ToggleButton value="edition">
-        <EditLocationIcon />
-        {t("MapModeSwitch.edition")}
-      </ToggleButton>
-    </ToggleButtonGroup>
+    <Can do="create" on="Trees">
+      <ToggleButtonGroup
+        className={classes.root}
+        value={mode}
+        size="small"
+        exclusive
+        onChange={handleOnChange}
+      >
+        <ToggleButton value="analysis">
+          <MultilineChartIcon />
+          {t("components.MapModeSwitch.analysis")}
+        </ToggleButton>
+        <ToggleButton value="edition">
+          <EditLocationIcon />
+          {t("components.MapModeSwitch.edition")}
+        </ToggleButton>
+      </ToggleButtonGroup>
+    </Can>
   );
 };
 
