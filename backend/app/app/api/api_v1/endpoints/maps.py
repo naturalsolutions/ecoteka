@@ -1,6 +1,7 @@
 from typing import Dict, Optional, List
 import json
 from fastapi import APIRouter, Depends, Response
+from starlette.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from bokeh import palettes
 import geopandas as gpd
@@ -18,7 +19,7 @@ router = APIRouter()
 
 policies = {
     "maps:get_geojson": ["owner", "manager", "contributor", "reader"],
-    "maps:get_geojson": ["owner", "manager", "contributor", "reader"],
+    "maps:get_geobuf": ["owner", "manager", "contributor", "reader"],
     "maps:get_bbox": ["owner", "manager", "contributor", "reader"]
 }
 
@@ -186,11 +187,11 @@ def get_geojson(
         response = dict(row.jsonb_build_object)
     return response
 
-@router.get("/geobuf", dependencies=[Depends(authorization("maps:get_geojson"))])
+@router.get("/geobuf", dependencies=[Depends(authorization("maps:get_geobuf"))])
 def get_geobuff(
     organization_id: int,
     db: Session = Depends(get_db)
-)-> Dict:
+):
     """
     Generate a compressed Feature Collection for Organization trees
     """
@@ -221,14 +222,17 @@ def get_geobuff(
                     WHERE t.organization_id = {organization_in_db.id}
                     GROUP BY t.id, i.id
         )
-        SELECT encode(ST_AsGeobuf(selection.*), 'base64') AS pbf
+        SELECT ST_AsGeobuf(selection.*) AS pbf
         FROM  selection;
     """
 
     res = db.execute(sql)
     row = res.first()
-    # return Response(content=row, media_type="application/vnd.google.protobuf")
-    return row
+
+    if row['pbf']:
+        return Response(bytes(row['pbf']))
+    
+    return row['pbf']
 
 
 @router.get("/{organization_id}/tree_tiles/{z}/{x}/{y}/.pbf", dependencies=[Depends(authorization("maps:get_geojson"))])
@@ -309,8 +313,7 @@ def get_bbox(
             ST_XMAX(ST_EXTENT(geom)) as xmax, 
             ST_YMAX(ST_EXTENT(geom)) as ymax
         FROM tree 
-        WHERE organization_id = {organization_id}
-        AND status NOT IN ('delete', 'import');
+        WHERE organization_id = {organization_id};
     """)
 
     return rows.first()
