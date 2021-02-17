@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from "react";
 import useApi from "@/lib/useApi";
-import { Button, Grid, makeStyles } from "@material-ui/core";
+import { Box, Grid, makeStyles } from "@material-ui/core";
 import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { useAppContext } from "@/providers/AppContext";
 import { useAppLayout } from "@/components/AppLayout/Base";
@@ -61,12 +61,12 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
   }, [router]);
 
   return (
-    <Grid className={classes.root} container direction="column" spacing={2}>
+    <Grid className={classes.root} container direction="column">
       <Grid item>
         <TreeInfosProperties tree={tree} />
       </Grid>
       <Grid item>
-        {interventions && (
+        <Box mt={5}>
           <InterventionsTable
             interventions={interventions}
             tree={tree}
@@ -74,7 +74,7 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
               dialog.current.close();
             }}
           />
-        )}
+        </Box>
       </Grid>
     </Grid>
   );

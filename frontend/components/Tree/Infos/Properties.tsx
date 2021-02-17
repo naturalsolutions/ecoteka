@@ -272,43 +272,6 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
         <Table size="small">
           <TableBody>
             <TableRow>
-              {nbImagesMax > 0 && (
-                <TableCell colSpan={2}>
-                  <DropzoneArea
-                    key={imagesDropzoneKey}
-                    acceptedFiles={["image/*"]}
-                    filesLimit={nbImagesMax}
-                    dropzoneText={t("components.TreeForm.imagesUpload.select", {
-                      max: nbImagesMax,
-                    })}
-                    showAlerts={["error"]}
-                    onChange={(files) => {
-                      setUploadImages(files);
-                    }}
-                    previewGridProps={{
-                      container: {
-                        spacing: 1,
-                      },
-                    }}
-                    dropzoneClass={classes.etkDropzone}
-                    dropzoneParagraphClass={classes.etkDropzoneText}
-                  />
-                  {uploadImages.length > 0 && (
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        sendImages();
-                      }}
-                    >
-                      Envoyer les photos
-                    </Button>
-                  )}
-                </TableCell>
-              )}
-            </TableRow>
-            <TableRow>
               <TableCell>Lat</TableCell>
               <TableCell>{props.tree.x?.toFixed(6)} </TableCell>
             </TableRow>
@@ -375,6 +338,43 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                     );
                   }
                 })}
+            <TableRow>
+              {nbImagesMax > 0 && (
+                <TableCell colSpan={2}>
+                  <DropzoneArea
+                    key={imagesDropzoneKey}
+                    acceptedFiles={["image/*"]}
+                    filesLimit={nbImagesMax}
+                    dropzoneText={t("components.TreeForm.imagesUpload.select", {
+                      max: nbImagesMax,
+                    })}
+                    showAlerts={["error"]}
+                    onChange={(files) => {
+                      setUploadImages(files);
+                    }}
+                    previewGridProps={{
+                      container: {
+                        spacing: 1,
+                      },
+                    }}
+                    dropzoneClass={classes.etkDropzone}
+                    dropzoneParagraphClass={classes.etkDropzoneText}
+                  />
+                  {uploadImages.length > 0 && (
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        sendImages();
+                      }}
+                    >
+                      Envoyer les photos
+                    </Button>
+                  )}
+                </TableCell>
+              )}
+            </TableRow>
           </TableBody>
           <caption>
             <Button
