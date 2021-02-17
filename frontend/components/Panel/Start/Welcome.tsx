@@ -6,8 +6,9 @@ import {
   Typography,
   makeStyles,
   Button,
+  SvgIcon,
 } from "@material-ui/core";
-import { AcUnit } from "@material-ui/icons";
+import PlatHeritage from "@/public/assets/plant-heritage.svg";
 import CardAbout from "@/components/Card/About";
 import CardInfoPanel from "@/components/Card/InfoPanel";
 import { useTranslation } from "react-i18next";
@@ -82,9 +83,9 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
           label={
             <Grid container spacing={1}>
               <Grid item>
-                <AcUnit />
+                <SvgIcon component={PlatHeritage} viewBox="0 0 207.11 212.89" />
               </Grid>
-              <Grid item>{t("PanelWelcome.tabLabel")}</Grid>
+              <Grid item>{t("components.PanelWelcome.tabLabel")}</Grid>
             </Grid>
           }
           onClick={() => setCollapsed(!collapsed)}
@@ -94,18 +95,20 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
         <Grid container direction="column" spacing={2}>
           <Grid item>
             <Typography color="primary" className={classes.title}>
-              {t("PanelWelcome.title")}
+              {t("components.PanelWelcome.title")}
             </Typography>
           </Grid>
           <Grid item>
             <Typography paragraph={true}>
-              <Trans>{t("PanelWelcome.text")}</Trans>
+              <Trans>{t("components.PanelWelcome.text")}</Trans>
             </Typography>
           </Grid>
           <Grid item>
             <CardInfoPanel
-              icon={<AcUnit />}
-              title={t("PanelWelcome.CardInfoPanel.title")}
+              icon={
+                <SvgIcon component={PlatHeritage} viewBox="0 0 207.11 212.89" />
+              }
+              title={t("components.PanelWelcome.CardInfoPanel.title")}
               content="14.5 million d'arbres"
             />
           </Grid>
@@ -123,11 +126,11 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
     >
       <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
-          <AcUnit />
+          <SvgIcon component={PlatHeritage} viewBox="0 0 207.11 212.89" />
         </Grid>
         <Grid item>
           <Typography variant="caption">
-            {t("PanelWelcome.tabLabel")}
+            {t("components.PanelWelcome.tabLabel")}
           </Typography>
         </Grid>
       </Grid>
