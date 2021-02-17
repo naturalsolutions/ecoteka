@@ -67,6 +67,7 @@ interface MetricsProps {
   planned_interventions_cost: number;
   scheduled_interventions_cost: number;
 }
+
 interface WidgetSizeProps {
   xs?: GridSpacing;
   sm?: GridSpacing;
@@ -74,6 +75,12 @@ interface WidgetSizeProps {
   lg?: GridSpacing;
   xl?: GridSpacing;
 }
+
+const range = (start, end) => {
+  return Array.from({ length: end - start + 1 }, (_, i) => i);
+};
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   const classes = useStyles();
@@ -294,16 +301,22 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             size="small"
             className={classes.formControl}
           >
-            <InputLabel id="dashboard-select-year-label">Année</InputLabel>
+            <InputLabel id="dashboard-select-year-label">
+              {t("common.year")}
+            </InputLabel>
             <Select
               labelId="dashboard-select-year-label"
               id="dashboard-select-year"
               value={year}
               onChange={handleYearChange}
             >
-              <MenuItem value={2020}>2020</MenuItem>
-              <MenuItem value={2021}>2021</MenuItem>
-              <MenuItem value={2021}>2022</MenuItem>
+              {range(0, 2).map((index) => {
+                return (
+                  <MenuItem value={CURRENT_YEAR - index}>
+                    {CURRENT_YEAR - index}
+                  </MenuItem>
+                );
+              })}
             </Select>
           </FormControl>
           <Typography

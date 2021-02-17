@@ -47,5 +47,6 @@
   ],
   "sersSetPassword": {
     "orGoToLogin": "Or Sign In"
-  }
+  },
+  "year": "Year"
 }
