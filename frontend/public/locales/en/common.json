@@ -48,5 +48,6 @@
   "sersSetPassword": {
     "orGoToLogin": "Or Sign In"
   },
-  "year": "Year"
+  "year": "Year",
+  "loading": "Loading trees..."
 }

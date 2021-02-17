@@ -45,5 +45,6 @@
     "Novembre",
     "Décembre"
   ],
-  "year": "Année"
+  "year": "Année",
+  "loading": "Chargement des arbres ..."
 }

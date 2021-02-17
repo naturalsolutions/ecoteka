@@ -7,8 +7,8 @@ import {
   IconButton,
   Hidden,
   CircularProgress,
+  Typography,
 } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
 import LayersIcon from "@material-ui/icons/Layers";
 import CloseIcon from "@material-ui/icons/Close";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
@@ -47,6 +47,7 @@ import InterventionsEdit from "@/components/Interventions/Panel";
 import Can from "@/components/Can";
 import geobuf from "geobuf";
 import Pbf from "pbf";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -97,6 +98,7 @@ const defaultData = {
 };
 
 const EditionPage = ({}) => {
+  const { t } = useTranslation();
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
   const classes = useStyles();
@@ -118,6 +120,7 @@ const EditionPage = ({}) => {
     "etk:map:viewstate",
     defaultViewState
   );
+  const [loadDataProgress, setLoadDataProgress] = useState(0);
   const [viewState, setViewState] = useState();
   const [mode, setMode] = useState("selection");
   const [filters, setFilters] = useState(defaultFilters);
@@ -174,6 +177,11 @@ const EditionPage = ({}) => {
       const { status, data: newData } = await apiETK.get(
         `/maps/geobuf?organization_id=${id}`,
         {
+          onDownloadProgress: ({ loaded, total }) => {
+            const progress = Math.floor((loaded / total) * 100);
+
+            setLoadDataProgress(progress);
+          },
           responseType: "arraybuffer",
         }
       );
@@ -199,6 +207,7 @@ const EditionPage = ({}) => {
 
         setDataOrganizations({ ...dataOrganizations, [id]: geojson });
         setData(geojson);
+        setLoadDataProgress(0);
       }
     } catch (error) {
       setData(defaultData);
@@ -631,7 +640,24 @@ const EditionPage = ({}) => {
           />
         )}
         {loading && (
-          <CircularProgress size={42} className={classes.fabProgress} />
+          <div className={classes.fabProgress}>
+            <Grid container justify="center" alignItems="center" spacing={2}>
+              <Grid item>
+                <Typography color="textPrimary">
+                  {t("common.loading")}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <CircularProgress
+                  color="primary"
+                  variant="determinate"
+                  size={30}
+                  thickness={10}
+                  value={loadDataProgress}
+                />
+              </Grid>
+            </Grid>
+          </div>
         )}
       </DeckGL>
       <Box className={classes.actionsBar}>
