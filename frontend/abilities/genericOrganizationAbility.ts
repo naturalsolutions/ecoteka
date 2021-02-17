@@ -1,7 +1,7 @@
 import { AbilityBuilder, Ability, AbilityClass } from "@casl/ability";
 
-type Actions = "manage" | "create" | "read" | "update" | "delete";
-type Subjects =
+export type Actions = "manage" | "create" | "read" | "update" | "delete";
+export type Subjects =
   | "Members"
   | "Teams"
   | "Interventions"

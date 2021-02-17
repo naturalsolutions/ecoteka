@@ -25,6 +25,7 @@ import TodayIcon from "@material-ui/icons/CalendarToday";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { AbilityContext } from "@/components/Can";
+import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -126,7 +127,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
                   <ToggleButtonGroup value={menu} size="small">
                     {menuItems.map(
                       (i, k) =>
-                        ability.can(i.do, i.on) && (
+                        ability.can(i.do as Actions, i.on as Subjects) && (
                           <ToggleButton
                             key={k}
                             value={i.link}

@@ -23,6 +23,7 @@ import {
 } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import useTreeSchema from "@/components/Tree/Schema";
+import { useRouter } from "next/router";
 
 export interface TreeInfosPropertiesProps {
   tree: {
@@ -87,6 +88,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
   const [imagesDropzoneKey, setImagesDropzoneKey] = useState(0);
   const [nbImagesMax, setNbImagesMax] = useState(0);
   const { t } = useTranslation(["common", "components"]);
+  const router = useRouter();
 
   const [imagesActiveIndex, setImagesActiveIndex] = React.useState(0);
 
@@ -202,6 +204,10 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
     });
   };
 
+  const handleOnEdit = () => {
+    router.push(`/map?panel=edit&tree=${props.tree.id}`);
+  };
+
   return props.tree ? (
     <Fragment>
       {images?.length > 0 && (
@@ -304,11 +310,11 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
             </TableRow>
             <TableRow>
               <TableCell>Lat</TableCell>
-              <TableCell>{props.tree.x}</TableCell>
+              <TableCell>{props.tree.x?.toFixed(6)} </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Lng</TableCell>
-              <TableCell>{props.tree.y}</TableCell>
+              <TableCell>{props.tree.y?.toFixed(6)}</TableCell>
             </TableRow>
             {props.tree.properties &&
               Object.keys(props.tree.properties)
@@ -370,6 +376,17 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
                   }
                 })}
           </TableBody>
+          <caption>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={handleOnEdit}
+            >
+              {t("components.Tree.summary.moreDetails")}
+            </Button>
+          </caption>
         </Table>
       </TableContainer>
     </Fragment>

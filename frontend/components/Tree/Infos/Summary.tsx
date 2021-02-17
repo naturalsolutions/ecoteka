@@ -60,24 +60,10 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
     }
   }, [router]);
 
-  const handleOnEdit = () => {
-    router.push(`/map?panel=edit&tree=${tree.id}`);
-  };
-
   return (
     <Grid className={classes.root} container direction="column" spacing={2}>
       <Grid item>
         <TreeInfosProperties tree={tree} />
-      </Grid>
-      <Grid item>
-        <Button
-          fullWidth
-          variant="outlined"
-          color="primary"
-          onClick={handleOnEdit}
-        >
-          {t("components.Tree.summary.moreDetails")}
-        </Button>
       </Grid>
       <Grid item>
         {interventions && (
