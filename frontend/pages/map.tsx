@@ -91,8 +91,13 @@ const EditionPage = ({}) => {
   const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
   const [numberOfTrees, setNumberOfTrees] = useState(0);
+  const [data, setData] = useLocalStorage("etk:map:data");
+  const [dataOrganizations, setDataOrganizations] = useLocalStorage(
+    "etk:map:dataOrganizations",
+    {}
+  );
   const [drawerLeftComponent, setDrawerLeftComponent] = useState(
-    <PanelStartGeneralInfo />
+    <PanelStartGeneralInfo numberOfTrees={data?.features?.length} />
   );
   const [drawerLeftWidth, setDrawerLeftWidth] = useState(400);
   const [initialViewState, setInitialViewState] = useLocalStorage(
@@ -113,11 +118,7 @@ const EditionPage = ({}) => {
     router.query?.tree ? Number(router.query.tree) : undefined
   );
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useLocalStorage("etk:map:data");
-  const [dataOrganizations, setDataOrganizations] = useLocalStorage(
-    "etk:map:dataOrganizations",
-    {}
-  );
+
   const [dataOrganizationId, setDataOrganizationId] = useLocalStorage(
     "etk:map:dataOrganizationId",
     user?.currentOrganization.id
@@ -429,6 +430,10 @@ const EditionPage = ({}) => {
     setViewState({ ...initialViewState });
     renderLayers();
 
+    if (!router.query.panel) {
+      router.push("/map?panel=start");
+    }
+
     if (!data) {
       getData(user?.currentOrganization.id);
     }
@@ -442,7 +447,7 @@ const EditionPage = ({}) => {
     switch (panel) {
       case "start":
         return setDrawerLeftComponent(
-          <PanelStartGeneralInfo numberOfTrees={numberOfTrees} />
+          <PanelStartGeneralInfo numberOfTrees={data?.features.length} />
         );
       case "info":
         return setDrawerLeftComponent(<TreeSummary treeId={activeTree} />);
@@ -489,7 +494,7 @@ const EditionPage = ({}) => {
     if (router.query?.panel) {
       switchPanel(router.query?.panel);
     }
-  }, [router.query]);
+  }, [router.query, numberOfTrees, filters]);
 
   const handleOnFilter = (values, filters, options) => {
     setFilters({
@@ -554,6 +559,8 @@ const EditionPage = ({}) => {
   };
 
   const renderLayers = () => {
+    switchPanel(router.query.panel);
+
     if (editionMode && mode === "selection") {
       return setLayers([treesLayer, selectionLayer]);
     }
@@ -568,9 +575,8 @@ const EditionPage = ({}) => {
   useEffect(() => {
     if (mode !== "selection") {
       setSelection([]);
-    }
-
-    if (mode === "selection") {
+      setLayers([osmLayer, treesLayer]);
+    } else {
       setLayers([treesLayer, selectionLayer]);
     }
   }, [mode]);
@@ -586,10 +592,7 @@ const EditionPage = ({}) => {
           setDataOrganizationId(user.currentOrganization.id);
           setData(dataOrganizations[user.currentOrganization.id]);
         } else {
-          getData(user?.currentOrganization.id).then(() => {
-            setNumberOfTrees(data.features.length);
-            switchPanel(router.query.panel);
-          });
+          getData(user?.currentOrganization.id);
         }
       }
     }
