@@ -1,6 +1,14 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
-import { Grid, makeStyles, Box, IconButton, Hidden } from "@material-ui/core";
+import {
+  Grid,
+  makeStyles,
+  Box,
+  IconButton,
+  Hidden,
+  CircularProgress,
+} from "@material-ui/core";
+import { green } from "@material-ui/core/colors";
 import LayersIcon from "@material-ui/icons/Layers";
 import CloseIcon from "@material-ui/icons/Close";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
@@ -40,7 +48,7 @@ import Can from "@/components/Can";
 import geobuf from "geobuf";
 import Pbf from "pbf";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   toolbar: {
     position: "absolute",
     top: 16,
@@ -58,7 +66,13 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
   },
-});
+  fabProgress: {
+    position: "absolute",
+    bottom: theme.spacing(1),
+    right: theme.spacing(1),
+    zIndex: 1,
+  },
+}));
 
 const defaultViewState = {
   longitude: 2.54,
@@ -664,6 +678,9 @@ const EditionPage = ({}) => {
               });
             }}
           />
+        )}
+        {loading && (
+          <CircularProgress size={56} className={classes.fabProgress} />
         )}
       </DeckGL>
       <Box className={classes.actionsBar}>
