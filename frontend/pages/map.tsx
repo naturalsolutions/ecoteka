@@ -401,7 +401,7 @@ const EditionPage = ({}) => {
       router.push("/map?panel=start");
     }
 
-    if (!data) {
+    if (!data?.features.length) {
       getData(user?.currentOrganization.id);
     }
   }, []);

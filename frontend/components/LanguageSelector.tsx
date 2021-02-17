@@ -1,8 +1,14 @@
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormControl, Button, Menu, MenuItem } from "@material-ui/core";
+import {
+  FormControl,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@material-ui/core";
 
-const ETKLanguageSelector: FC = () => {
+const LanguageSelector: FC = () => {
   const { t, i18n } = useTranslation("components");
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -13,15 +19,9 @@ const ETKLanguageSelector: FC = () => {
 
   return (
     <FormControl>
-      <Button
-        variant="outlined"
-        size="small"
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        onClick={(e) => setAnchorEl(e.currentTarget)}
-      >
-        {i18n.language}
-      </Button>
+      <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+        <Typography>{i18n.language}</Typography>
+      </IconButton>
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}
@@ -29,17 +29,17 @@ const ETKLanguageSelector: FC = () => {
         open={Boolean(anchorEl)}
       >
         <MenuItem onClick={() => handlerLanguage("en")}>
-          {t("LanguageSelector.en")}
+          {t("components.LanguageSelector.en")}
         </MenuItem>
         <MenuItem onClick={() => handlerLanguage("fr")}>
-          {t("LanguageSelector.fr")}
+          {t("components.LanguageSelector.fr")}
         </MenuItem>
         <MenuItem onClick={() => handlerLanguage("es")}>
-          {t("LanguageSelector.es")}
+          {t("components.LanguageSelector.es")}
         </MenuItem>
       </Menu>
     </FormControl>
   );
 };
 
-export default ETKLanguageSelector;
+export default LanguageSelector;

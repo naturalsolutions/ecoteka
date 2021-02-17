@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -6,6 +6,7 @@ import {
   Hidden,
   makeStyles,
   Toolbar,
+  IconButton,
   useMediaQuery,
 } from "@material-ui/core";
 import ContactButton from "@/components/Contact/Button";
@@ -23,7 +24,7 @@ import MapIcon from "@material-ui/icons/Map";
 import TodayIcon from "@material-ui/icons/CalendarToday";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
-import Can from "@/components/Can";
+import { AbilityContext } from "@/components/Can";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -50,6 +51,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
   const [logo, setLogo] = useState("/assets/light/logo-mobile.svg");
   const [menu, setMenu] = useState<string | null>(router.asPath);
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
+  const ability = useContext(AbilityContext);
 
   const handleOrganizationSelectChange = (organization: IOrganization) => {
     if (!organization || !organization.id) {
@@ -75,6 +77,33 @@ const AppLayoutHeader = ({}): JSX.Element => {
     router.push("/signin/");
   };
 
+  const menuItems = [
+    {
+      link: "/map?panel=start",
+      icon: <MapIcon fontSize="small" />,
+      do: "read",
+      on: "Trees",
+    },
+    {
+      link: "/scheduler",
+      icon: <TodayIcon fontSize="small" />,
+      do: "read",
+      on: "Trees",
+    },
+    {
+      link: "/dashboard",
+      icon: <DashboardIcon fontSize="small" />,
+      do: "read",
+      on: "Trees",
+    },
+    {
+      link: "/imports",
+      icon: <SettingsSystemDaydreamIcon fontSize="small" />,
+      do: "create",
+      on: "Trees",
+    },
+  ];
+
   return (
     <Toolbar className={classes.toolbar} variant="dense">
       <Grid container alignItems="center">
@@ -88,42 +117,28 @@ const AppLayoutHeader = ({}): JSX.Element => {
               />
             </Grid>
             {user && (
-              <Hidden smDown>
-                <>
-                  <OrganizationSelect
-                    user={user}
-                    onChange={handleOrganizationSelectChange}
-                  />
+              <>
+                <OrganizationSelect
+                  user={user}
+                  onChange={handleOrganizationSelectChange}
+                />
+                <Hidden smDown>
                   <ToggleButtonGroup value={menu} size="small">
-                    <ToggleButton
-                      value="/map/"
-                      onClick={() => router.push("/map/")}
-                    >
-                      <MapIcon fontSize="small" />
-                    </ToggleButton>
-                    <ToggleButton
-                      value="/scheduler/"
-                      onClick={() => router.push("/scheduler/")}
-                    >
-                      <TodayIcon fontSize="small" />
-                    </ToggleButton>
-                    <ToggleButton
-                      value="/dashboard/"
-                      onClick={() => router.push("/dashboard/")}
-                    >
-                      <DashboardIcon fontSize="small" />
-                    </ToggleButton>
-                    <Can do="create" on="Trees">
-                      <ToggleButton
-                        value="/imports/"
-                        onClick={() => router.push("/imports/")}
-                      >
-                        <SettingsSystemDaydreamIcon fontSize="small" />
-                      </ToggleButton>
-                    </Can>
+                    {menuItems.map(
+                      (i, k) =>
+                        ability.can(i.do, i.on) && (
+                          <ToggleButton
+                            key={k}
+                            value={i.link}
+                            onClick={() => router.push(i.link)}
+                          >
+                            {i.icon}
+                          </ToggleButton>
+                        )
+                    )}
                   </ToggleButtonGroup>
-                </>
-              </Hidden>
+                </Hidden>
+              </>
             )}
           </Grid>
         </Grid>
@@ -134,25 +149,18 @@ const AppLayoutHeader = ({}): JSX.Element => {
             alignItems="center"
             justify="flex-end"
             direction="row"
-            spacing={1}
           >
             <Grid item>
-              <ToggleButton
-                size="small"
-                value={dark}
-                selected={dark}
-                color="primary"
-                onClick={() => setDark(!dark)}
-              >
+              <LanguageSelector />
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => setDark(!dark)}>
                 {dark ? (
                   <Brightness7Icon fontSize="small" />
                 ) : (
                   <Brightness4Icon fontSize="small" />
                 )}
-              </ToggleButton>
-            </Grid>
-            <Grid item>
-              <LanguageSelector />
+              </IconButton>
             </Grid>
             {!user && (
               <Hidden smDown>

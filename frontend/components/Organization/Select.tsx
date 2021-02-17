@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
-import { Button, MenuItem, Menu, Box } from "@material-ui/core";
+import {
+  Button,
+  MenuItem,
+  Menu,
+  Box,
+  IconButton,
+  Hidden,
+} from "@material-ui/core";
 import { IOrganization, IUser } from "@/index";
 import { useRouter } from "next/router";
+import LocationCityIcon from "@material-ui/icons/LocationCity";
 
 export interface OrganizationSelectProps {
   user?: IUser;
@@ -39,15 +47,22 @@ const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
 
   return (
     <Box ml={2} mr={3}>
-      <Button
-        size="small"
-        variant="outlined"
-        color="primary"
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-        {organization?.name}
-      </Button>
+      <Hidden smDown>
+        <Button
+          size="small"
+          variant="outlined"
+          color="primary"
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          {organization?.name}
+        </Button>
+      </Hidden>
+      <Hidden mdUp>
+        <IconButton onClick={handleClick}>
+          <LocationCityIcon />
+        </IconButton>
+      </Hidden>
       <Menu
         anchorEl={anchorEl}
         keepMounted
