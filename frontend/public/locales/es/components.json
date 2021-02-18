@@ -605,5 +605,12 @@
     "Edit": {
       "title": "Editar intervención"
     }
+  },
+  "MapActionBar": {
+    "menu": "Menú",
+    "start": "Información",
+    "filter": "Filtros",
+    "layers": "Capas",
+    "import": "Importar"
   }
 }

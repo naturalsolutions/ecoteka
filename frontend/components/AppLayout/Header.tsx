@@ -75,7 +75,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
   }, [router.asPath]);
 
   const handleSignInClick = () => {
-    router.push("/signin/");
+    router.push("/signin");
   };
 
   const menuItems = [

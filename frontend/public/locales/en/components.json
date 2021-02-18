@@ -603,5 +603,12 @@
     "Edit": {
       "title": "Edit intervention"
     }
+  },
+  "MapActionBar": {
+    "menu": "Menu",
+    "start": "Information",
+    "filter": "Filters",
+    "layers": "Layers",
+    "import": "Import"
   }
 }

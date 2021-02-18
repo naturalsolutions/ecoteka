@@ -599,5 +599,12 @@
     "Edit": {
       "title": "Modifier l'intervention"
     }
+  },
+  "MapActionBar": {
+    "menu": "Menu",
+    "start": "Informations",
+    "filter": "Filtres",
+    "layers": "Couches",
+    "import": "Importer"
   }
 }

@@ -3,18 +3,12 @@ import { useEffect, useState } from "react";
 import {
   Grid,
   makeStyles,
-  Box,
   IconButton,
   Hidden,
   CircularProgress,
   Typography,
 } from "@material-ui/core";
-import LayersIcon from "@material-ui/icons/Layers";
-import CloseIcon from "@material-ui/icons/Close";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
-import MenuOpenIcon from "@material-ui/icons/MenuOpen";
-import SearchIcon from "@material-ui/icons/Search";
-import InfoIcon from "@material-ui/icons/Info";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
@@ -33,7 +27,6 @@ import MapDrawToolbar from "@/components/Map/DrawToolbar";
 import MapSearchCity from "@/components/Map/SearchCity";
 import ImportPanel from "@/components/Import/Panel/Index";
 import InterventionForm from "@/components/Interventions/Form";
-import BackupIcon from "@material-ui/icons/Backup";
 import getConfig from "next/config";
 import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
@@ -44,10 +37,12 @@ import { StaticMap } from "react-map-gl";
 import Head from "next/head";
 import { ITree } from "@/components";
 import InterventionsEdit from "@/components/Interventions/Panel";
-import Can from "@/components/Can";
 import geobuf from "geobuf";
 import Pbf from "pbf";
 import { useTranslation } from "react-i18next";
+import MapActionsBar, {
+  MapActionsBarActionType,
+} from "@/components/Map/ActionsBar";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -393,19 +388,6 @@ const EditionPage = ({}) => {
     });
   };
 
-  useEffect(() => {
-    setViewState({ ...initialViewState });
-    renderLayers();
-
-    if (!router.query.panel) {
-      router.push("/map?panel=start");
-    }
-
-    if (!data?.features.length) {
-      getData(user?.currentOrganization.id);
-    }
-  }, []);
-
   const switchPanel = (panel) => {
     if (panel !== "edit") {
       setDrawerLeftWidth(400);
@@ -452,6 +434,20 @@ const EditionPage = ({}) => {
         return setDrawerLeftComponent(<PanelStartGeneralInfo />);
     }
   };
+
+  useEffect(() => {
+    setViewState({ ...initialViewState });
+    renderLayers();
+
+    if (!router.query.panel) {
+      router.push("/map?panel=start");
+      fitToBounds(user?.currentOrganization.id);
+    }
+
+    if (!data?.features.length) {
+      getData(user?.currentOrganization.id);
+    }
+  }, []);
 
   useEffect(() => {
     if (router.query?.tree) {
@@ -537,6 +533,23 @@ const EditionPage = ({}) => {
     }
 
     return setLayers([osmLayer, treesLayer]);
+  };
+
+  const handleOnMapActionsBarClick = (action: MapActionsBarActionType) => {
+    if (action === "menu") {
+      !drawerLeftComponent
+        ? switchPanel(router.query.panel)
+        : setDrawerLeftComponent();
+
+      return;
+    }
+
+    router.push({
+      query: {
+        ...router.query,
+        panel: action,
+      },
+    });
   };
 
   useEffect(() => {
@@ -660,58 +673,11 @@ const EditionPage = ({}) => {
           </div>
         )}
       </DeckGL>
-      <Box className={classes.actionsBar}>
-        <IconButton
-          style={{
-            color: mapBackground !== "map" ? "#fff" : "",
-          }}
-          onClick={() => {
-            !drawerLeftComponent
-              ? switchPanel(router.query.panel)
-              : setDrawerLeftComponent();
-          }}
-        >
-          {drawerLeftComponent ? <CloseIcon /> : <MenuOpenIcon />}
-        </IconButton>
-        <IconButton
-          style={{
-            color: mapBackground !== "map" ? "#fff" : "",
-          }}
-          color={router.query?.panel === "start" ? "primary" : "default"}
-          onClick={() => router.push("/map?panel=start")}
-        >
-          <InfoIcon />
-        </IconButton>
-        <IconButton
-          style={{
-            color: mapBackground !== "map" ? "#fff" : "",
-          }}
-          color={router.query?.panel === "filter" ? "primary" : "default"}
-          onClick={() => router.push("/map?panel=filter")}
-        >
-          <SearchIcon />
-        </IconButton>
-        <IconButton
-          style={{
-            color: mapBackground !== "map" ? "#fff" : "",
-          }}
-          color={router.query?.panel === "layers" ? "primary" : "default"}
-          onClick={() => router.push("/map?panel=layers")}
-        >
-          <LayersIcon />
-        </IconButton>
-        <Can do="create" on="Trees">
-          <IconButton
-            style={{
-              color: mapBackground !== "map" ? "#fff" : "",
-            }}
-            color={router.query?.panel === "import" ? "primary" : "default"}
-            onClick={() => router.push("/map?panel=import")}
-          >
-            <BackupIcon />
-          </IconButton>
-        </Can>
-      </Box>
+      <MapActionsBar
+        isMenuOpen={drawerLeftComponent !== undefined}
+        darkBackground={mapBackground !== "map"}
+        onClick={handleOnMapActionsBarClick}
+      />
       <Hidden smDown>
         <Grid
           container
