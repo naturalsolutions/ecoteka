@@ -1,18 +1,7 @@
-import React, { useEffect, useState } from "react";
-import {
-  TIntervention,
-  useInterventionSchema,
-} from "@/components/Interventions/Schema";
+import React from "react";
+import { TIntervention } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/constants";
-import { makeStyles, Grid, Button, CircularProgress } from "@material-ui/core";
-import { useAppLayout } from "@/components/AppLayout/Base";
-import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
-import useForm from "@/components/Form/useForm";
-import useApi from "@/lib/useApi";
-import { useAppContext } from "@/providers/AppContext";
-import * as yup from "yup";
-import GpsFixedIcon from "@material-ui/icons/GpsFixed";
 
 export interface CalendarInterventionProps {
   intervention: TIntervention;
@@ -23,156 +12,26 @@ const defaultProps: CalendarInterventionProps = {
   intervention: undefined,
 };
 
-const useStyles = makeStyles(() => ({
-  root: {
-    minWidth: "25rem",
-  },
-}));
-
-const CalendarInterventionForm = (props) => {
+const CalendarIntervention: React.FC<CalendarInterventionProps> = ({
+  intervention,
+}) => {
   const router = useRouter();
-  const schema = useInterventionSchema(props.intervention.intervention_type);
+  const backgroundColor = INTERVENTION_COLORS[intervention.intervention_type];
 
-  // hotfix : ideally defaultValues should be define from schema
-  const defaultValues = {
-    comment: "",
-    method: "",
-    done: false,
-  };
-
-  schema.done = {
-    type: "switch",
-    component: {
-      label: "done",
-      color: "primary",
-    },
-    schema: yup.boolean(),
-  };
-
-  const form = useForm({ schema, defaultValues });
-  const { apiETK } = useApi().api;
-  const { user } = useAppContext();
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    Object.keys(form.fields)
-      .filter((field) => field !== "done")
-      .map((field) => {
-        form.setValue(field, props.intervention.properties[field]);
-      });
-
-    form.setValue("done", props.intervention.done);
-  }, []);
-
-  const handleOnSave = async () => {
-    try {
-      const organizationId = user.currentOrganization.id;
-      const { done, ...properties } = form.getValues();
-
-      const payload = {
-        done,
-        properties,
-      };
-
-      setSaving(true);
-      const { status, data: intervention } = await apiETK.patch(
-        `/organization/${organizationId}/interventions/${props.intervention.id}`,
-        payload
-      );
-
-      if (status === 200) {
-        props.onSave(intervention);
-      }
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <Grid container direction="column">
-      {Object.keys(form.fields)
-        .filter((key) => key !== "done")
-        .map((field) => (
-          <Grid item key={`field-${field}`}>
-            {form.fields[field]}
-          </Grid>
-        ))}
-      <Grid item>
-        <Grid container>
-          <Grid item>{form.fields.done}</Grid>
-          <Grid item xs />
-          <Grid item>
-            <Button
-              startIcon={<GpsFixedIcon />}
-              variant="outlined"
-              size="small"
-              onClick={() => {
-                props.dialog.current.close();
-                router.push(`/map/?tree=${props.intervention.tree_id}`);
-              }}
-            >
-              Vue arbre
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item>
-        <Grid container>
-          <Grid item>
-            <Button onClick={handleOnSave}>
-              {saving ? <CircularProgress /> : "Save"}
-            </Button>
-          </Grid>
-          <Grid item xs />
-          <Grid item>
-            <Button onClick={() => props.dialog.current.close()}>Close</Button>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-};
-
-const CalendarIntervention: React.FC<CalendarInterventionProps> = (props) => {
-  const classes = useStyles();
-  const { dialog } = useAppLayout();
-  const { t } = useTranslation(["common", "components"]);
-  const backgroundColor =
-    INTERVENTION_COLORS[props.intervention.intervention_type];
-
-  const handleInterventionDialog = () => {
-    dialog.current.open({
-      title: (
-        <Grid container className={classes.root} spacing={2}>
-          <Grid item xs>
-            <Button
-              disabled
-              fullWidth
-              style={{
-                color: "#fff",
-                backgroundColor: backgroundColor,
-              }}
-            >
-              {t(
-                `components.Intervention.types.${props.intervention.intervention_type}`
-              )}
-            </Button>
-          </Grid>
-        </Grid>
-      ),
-      content: (
-        <CalendarInterventionForm
-          dialog={dialog}
-          intervention={props.intervention}
-          onSave={props.onSave}
-        />
-      ),
+  const handleOnClick = () => {
+    router.push({
+      pathname: "/map",
+      query: {
+        panel: "intervention-edit",
+        intervention: intervention.id,
+        tree: intervention.tree_id,
+      },
     });
   };
 
   return (
     <div
-      onClick={handleInterventionDialog}
+      onClick={handleOnClick}
       style={{
         borderRadius: "50%",
         backgroundColor: backgroundColor,

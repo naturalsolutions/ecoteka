@@ -107,9 +107,7 @@ const EditionPage = ({}) => {
     "etk:map:dataOrganizations",
     {}
   );
-  const [drawerLeftComponent, setDrawerLeftComponent] = useState(
-    <PanelStartGeneralInfo numberOfTrees={data?.features?.length} />
-  );
+  const [drawerLeftComponent, setDrawerLeftComponent] = useState();
   const [drawerLeftWidth, setDrawerLeftWidth] = useState(400);
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
@@ -430,8 +428,6 @@ const EditionPage = ({}) => {
             onChange={handleOnFilter}
           />
         );
-      default:
-        return setDrawerLeftComponent(<PanelStartGeneralInfo />);
     }
   };
 
@@ -439,10 +435,7 @@ const EditionPage = ({}) => {
     setViewState({ ...initialViewState });
     renderLayers();
 
-    if (!router.query.panel) {
-      router.push("/map?panel=start");
-      fitToBounds(user?.currentOrganization.id);
-    }
+    fitToBounds(user?.currentOrganization.id);
 
     if (!data?.features.length) {
       getData(user?.currentOrganization.id);
@@ -578,7 +571,7 @@ const EditionPage = ({}) => {
       }
 
       fitToBounds(user.currentOrganization.id);
-      router.push("/map?panel=start");
+      setDrawerLeftComponent();
     }
   }, [user]);
 

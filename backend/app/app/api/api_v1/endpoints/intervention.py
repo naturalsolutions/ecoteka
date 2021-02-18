@@ -41,12 +41,14 @@ def get(
     return crud.intervention.get(db, id=intervention_id)
 
 
-@router.get("/year/{year}", response_model=List[Intervention])
+@router.get(
+    "/year/{year}", 
+    dependencies=[Depends(authorization("interventions:get_year"))], 
+    response_model=List[Intervention])
 def get_year(
     organization_id: int,
     year: int,
     *,
-    auth=Depends(authorization("interventions:get_year")),
     db: Session = Depends(get_db),
 ):
     return crud.intervention.get_by_year(db, organization_id, year)

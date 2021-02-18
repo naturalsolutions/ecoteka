@@ -9,6 +9,7 @@ class CRUDIntervention(CRUDBase[Intervention, InterventionCreate, InterventionUp
     def get_by_year(self, db: Session, organization_id: int, year: int):
         return (
             db.query(self.model)
+            .filter(self.model.tree_id != None)
             .filter(self.model.organization_id == organization_id)
             .filter(
                 sa.or_(
