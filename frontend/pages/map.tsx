@@ -637,7 +637,7 @@ const EditionPage = ({}) => {
                   ...viewState,
                   longitude: position.coords.longitude,
                   latitude: position.coords.latitude,
-                  zoom: 18,
+                  zoom: 16,
                   transitionDuration: 1500,
                   transitionInterpolator: new FlyToInterpolator(),
                 });

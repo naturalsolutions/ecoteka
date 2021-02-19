@@ -63,8 +63,7 @@ def generate_style(
                 "paint": {
                     "fill-color": "#5a3fc0",
                     "fill-opacity": 0.3
-                },
-                "layout": {"visibility": "none"}
+                }
             }
         )
 
@@ -78,8 +77,7 @@ def generate_style(
                 "paint": {
                     "fill-color": "#5a3fc0",
                     "fill-opacity": 0.3
-                },
-                "layout": {"visibility": "none"}
+                }
             }
         )
 
@@ -93,8 +91,7 @@ def generate_style(
                 "paint": {
                     "fill-color": "#5a3fc0",
                     "fill-opacity": 0.3
-                },
-                "layout": {"visibility": "none"}
+                }
             }
         )
 

@@ -33,7 +33,13 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
   const { t } = useTranslation("components");
 
   return (
-    <Grid container direction="column" spacing={2} className={classes.root}>
+    <Grid
+      container
+      direction="column"
+      spacing={2}
+      className={classes.root}
+      wrap="nowrap"
+    >
       <Grid item>
         <Typography variant="h5">{t("components.PanelStart.title")}</Typography>
       </Grid>
