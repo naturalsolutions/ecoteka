@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import Head from "next/head";
 import { I18nextProvider } from "react-i18next";
 import i18n from "@/i18n";
@@ -7,11 +7,14 @@ import { SnackbarProvider } from "notistack";
 import ThemeProvider from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutBase from "@/components/AppLayout/Base";
 import "@/styles/global.css";
+import { useRouter } from "next/router";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";
 
 function MyApp({ Component, pageProps }) {
-  React.useEffect(() => {
+  const router = useRouter();
+
+  useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
 
     if (jssStyles) {
@@ -19,8 +22,12 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
+  useEffect(() => {
+    i18n.changeLanguage(router.locale);
+  }, [router.locale]);
+
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>EcoTeka</title>
         <meta
@@ -39,7 +46,7 @@ function MyApp({ Component, pageProps }) {
           </SnackbarProvider>
         </ThemeProvider>
       </I18nextProvider>
-    </React.Fragment>
+    </>
   );
 }
 
