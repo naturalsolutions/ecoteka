@@ -55,4 +55,10 @@ config.webpack = (config, { isServer }) => {
 };
 
 config.envVars = envVars;
+
+config.i18n = {
+  locales: ["en", "fr", "es"],
+  defaultLocale: "fr",
+};
+
 module.exports = config;

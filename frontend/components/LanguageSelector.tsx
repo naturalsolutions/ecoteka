@@ -7,13 +7,21 @@ import {
   MenuItem,
   Typography,
 } from "@material-ui/core";
+import { useRouter } from "next/router";
 
 const LanguageSelector: FC = () => {
   const { t, i18n } = useTranslation("components");
   const [anchorEl, setAnchorEl] = useState(null);
+  const router = useRouter();
 
   const handlerLanguage = (value) => {
-    i18n.changeLanguage(value);
+    router.push(
+      {
+        ...router,
+      },
+      {},
+      { locale: value }
+    );
     setAnchorEl(null);
   };
 
