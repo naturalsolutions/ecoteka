@@ -280,10 +280,6 @@ const EditionPage = ({}) => {
         return [255, 0, 0, 100];
       }
 
-      if (activeTree === d.properties.id) {
-        return [255, 100, 0];
-      }
-
       for (const key of Object.keys(filters.filters).reverse()) {
         if (
           filters.filters[key] &&
@@ -306,19 +302,34 @@ const EditionPage = ({}) => {
 
       return [34, 139, 34, 100];
     },
+    getRadius: (d) => {
+      if (d.properties?.properties?.diameter) {
+        const diameter = Number(d.properties.properties.diameter);
+
+        if (diameter >= 0 && diameter < 40) {
+          return 1.25;
+        } else if (diameter >= 40 && diameter < 100) {
+          return 1.5;
+        } else {
+          return 1.75;
+        }
+      }
+
+      return 1;
+    },
     updateTriggers: {
       getFillColor: [activeTree, selection, editionMode, filters, dark, data],
       getLineColor: [activeTree, selection, editionMode, filters, dark, data],
+      getRadius: [activeTree, selection, editionMode, filters, dark, data],
     },
     pickable: true,
     autoHighlight: true,
-    getRadius: (d) => (activeTree === d.properties.id ? 15 : 3),
-    pointRadiusMinPixels: 2,
-    pointRadiusMaxPixels: 15,
-    pointRadiusScale: 2,
-    minRadius: 10,
+    pointRadiusMinPixels: 5,
+    pointRadiusScale: 1,
+    minRadius: 2,
     radiusMinPixels: 0.5,
     lineWidthMinPixels: 1,
+    lineWidthMaxPixels: 3,
   });
 
   const selectionLayer = new SelectionLayer({
