@@ -252,7 +252,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             />
           ),
         },
-        {
+        /*{
           name: "Budget mensuel des interventions planifiées en 2020",
           size: {
             xs: 12 as GridSpacing,
@@ -273,7 +273,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
               yScaleUnit="€ HT"
             />
           ),
-        },
+        },*/
       ]);
       setActiveStep(3);
     }
