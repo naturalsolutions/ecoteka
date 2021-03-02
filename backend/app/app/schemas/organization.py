@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 # Shared properties
 class OrganizationBase(BaseModel):
@@ -11,6 +11,10 @@ class OrganizationBase(BaseModel):
 
 class OrganizationCreate(OrganizationBase):
     parent_id: Optional[int]
+
+class OrganizationCreateRoot(OrganizationBase):
+    owner_email: Optional[EmailStr]
+    pass
 
 
 class OrganizationUpdate(OrganizationBase):

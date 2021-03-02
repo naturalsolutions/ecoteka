@@ -36,6 +36,7 @@ from .tree import Tree, TreePost, TreeCreate, TreeUpdate, TreeImportFromGeofile,
 from .organization import (
     Organization,
     OrganizationCreate,
+    OrganizationCreateRoot,
     OrganizationUpdate,
     OrganizationCurrentUser,
     OrganizationMetrics,

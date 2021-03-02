@@ -8,7 +8,7 @@ from app.crud.base import CRUDBase
 from app.models.organization import Organization
 from app.models.tree import Tree
 from app import crud
-from app.schemas.organization import OrganizationCreate, OrganizationUpdate
+from app.schemas.organization import OrganizationCreate, OrganizationCreateRoot, OrganizationUpdate
 from sqlalchemy.sql import text
 
 from fastapi.encoders import jsonable_encoder
@@ -24,6 +24,14 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
         obj_in_data = jsonable_encoder(obj_in, exclude=["parent_id"])
         org = Organization(**obj_in_data, parent=parent)
 
+        db.add(org)
+        db.commit()
+        db.refresh(org)
+        return org
+
+    def create_root(self, db: Session, *, obj_in: OrganizationCreateRoot) -> Organization:
+        obj_in_data = jsonable_encoder(obj_in, exclude=["owner_email"])
+        org = Organization(**obj_in_data, parent=None)
         db.add(org)
         db.commit()
         db.refresh(org)
@@ -59,6 +67,9 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
 
     def get_by_path(self, db: Session, *, path: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.path == Ltree(path)).one()
+
+    def get_root_nodes(self, db: Session) -> Optional[Organization]:
+        return db.query(Organization).filter(func.nlevel(Organization.path) == 1).all()
 
     def get_teams(self, db: Session, *, parent_id: int) -> List[Organization]:
         """returns active sub-organizations (teams) given the parent"""

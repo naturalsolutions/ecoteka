@@ -65,7 +65,7 @@ policies = {
         "manager",
         "contributor",
         "reader"
-    ],
+    ]
 }
 set_policies(policies)
 
