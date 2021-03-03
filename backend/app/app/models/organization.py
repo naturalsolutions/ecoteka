@@ -6,8 +6,8 @@ from app.db.session import engine
 from geoalchemy2 import Geometry
 from sqlalchemy_utils import LtreeType, Ltree
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import relationship, foreign, remote, column_property
-from sqlalchemy import Sequence, select, func
+from sqlalchemy.orm import relationship, foreign, remote, column_property, Session
+from sqlalchemy import Sequence, select, func, event
 from sqlalchemy.sql import expression
 from sqlalchemy import Column, Integer, Index, String, Boolean, DateTime, func, inspect
 import slug as slugmodule
@@ -17,6 +17,8 @@ from app import schemas
 from app.models.tree import Tree
 from app.core import enforcer
 from functools import reduce
+from slugify import slugify
+from nanoid import generate
 
 
 id_seq = Sequence("organization_id_seq")
@@ -68,7 +70,6 @@ class Organization(Base):
         _id = engine.execute(id_seq)
         self.id = _id
         self.name = name
-        self.slug = slugmodule.slug(name)
         self.config = config
         self.working_area = working_area
         self.archived = archived
@@ -87,6 +88,7 @@ class Organization(Base):
 
     def to_current_user_schema(self):
         return self.to_schema()
+    
 
     def to_schema(self):
         return schemas.Organization(
@@ -99,3 +101,56 @@ class Organization(Base):
             has_working_area=bool(self.working_area),
             path=str(self.path)
         )
+
+    @staticmethod
+
+    def is_slug_available(value):
+        # Avoid collusions with frontend routes
+        restricted_domains = ['home' , 'about', 'admin'] #should be set dynamically, not harcoded
+
+        result = engine.execute(f"select * from public.organization where slug = '{value}';")
+        return True if result.rowcount == 0 and value not in restricted_domains else False
+
+    def get_root_slug(target):
+        if len(target.path) > 1:
+            path_ids = target.path.path.split('.')
+            root_id = path_ids[0]
+            result = engine.execute(f"select * from public.organization where id = '{root_id}';")
+            root_organization = result.first()
+            return root_organization.slug if root_organization else None
+        else:
+            return None
+    
+    def generate_unique_slug(target, value, oldvalue, initiator):
+        print("generate_unique_slug")
+        if value and (not target.slug or value != oldvalue):
+            root_slug = Organization.get_root_slug(target)
+            if root_slug:
+                slug = slugify(f"{root_slug} {value}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
+            else:
+                slug = slugify(f"{value}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{value} {target.id}")
+
+    def rehydrate_slug(target, value, oldvalue, initiator):
+        print("rehydrate_slug")
+        if value and (not target.slug or value != oldvalue):
+            root_slug = Organization.get_root_slug(target)
+            if root_slug:
+                slug = slugify(f"{root_slug} {target.name}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
+            else:
+                slug = slugify(f"{target.name}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{value} {target.id}")
+
+    def randomize_slug(target, value, oldvalue, initiator):
+        print("randomize_slug")
+        if value and (not target.slug or value != oldvalue):
+            target.slug = generate('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-', 21)
+        else:
+            print("Archived set to False")
+            Organization.generate_unique_slug(target, target.name, oldvalue, initiator)
+
+event.listen(Organization.name, 'set', Organization.generate_unique_slug, retval=False)
+event.listen(Organization.path, 'set', Organization.rehydrate_slug, retval=False)
+event.listen(Organization.archived, 'set', Organization.randomize_slug, retval=False)

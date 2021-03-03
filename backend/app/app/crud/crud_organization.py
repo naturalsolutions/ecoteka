@@ -53,14 +53,11 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
 
-        db_obj.slug = slugmodule.slug(db_obj.name)
+        # db_obj.slug = slugmodule.slug(db_obj.name)
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
-
-    def get_by_name(self, db: Session, *, name: str) -> Optional[Organization]:
-        return db.query(Organization).filter(Organization.name == name).first()
 
     def get_by_name(self, db: Session, *, name: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.name == name).first()

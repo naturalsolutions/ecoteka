@@ -30,7 +30,7 @@ from app.schemas import (
     UserInvite,
     UserCreate,
 )
-from app.models import User
+from app.models import User, Organization as OrganizationModel
 from app.worker import send_new_invitation_email_task
 
 
@@ -94,17 +94,21 @@ def update_organization(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
     organization_in: OrganizationUpdate,
-):
+) -> Optional[OrganizationModel]:
     org = organization.get(db, id=organization_id)
 
     if not org:
         raise HTTPException(status_code=404, detail="Organization not found")
 
-    return organization.update(
+
+
+    organization_in_db =  organization.update(
         db,
         db_obj=org,
         obj_in=jsonable_encoder(organization_in, exclude_unset=True),
     )
+
+    return organization_in_db.to_schema()
 
 
 @router.get("/{organization_id}", response_model=Organization)
