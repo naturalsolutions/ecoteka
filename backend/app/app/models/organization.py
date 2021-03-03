@@ -79,6 +79,12 @@ class Organization(Base):
             if parent is None
             else (parent.path or Ltree("_")) + Ltree(str(_id))
         )
+        self.slug = Organization.initiate_unique_slug(name, _id, 
+            (Ltree(str(_id))
+            if parent is None
+            else (parent.path or Ltree("_")) + Ltree(str(_id))
+            )
+        )
 
     @property
     def total_members(self):
@@ -104,6 +110,15 @@ class Organization(Base):
 
     @staticmethod
 
+    def initiate_unique_slug(name, id, path):
+        root_slug = Organization.get_root_slug(path)
+        if root_slug:
+            slug = slugify(f"{root_slug} {name}")
+            return slug if Organization.is_slug_available(slug) else slugify(f"{slug} {id}")
+        else:
+            slug = slugify(f"{name}")
+            return slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
+
     def is_slug_available(value):
         # Avoid collusions with frontend routes
         restricted_domains = ['home' , 'about', 'admin'] #should be set dynamically, not harcoded
@@ -111,37 +126,40 @@ class Organization(Base):
         result = engine.execute(f"select * from public.organization where slug = '{value}';")
         return True if result.rowcount == 0 and value not in restricted_domains else False
 
-    def get_root_slug(target):
-        if len(target.path) > 1:
-            path_ids = target.path.path.split('.')
-            root_id = path_ids[0]
-            result = engine.execute(f"select * from public.organization where id = '{root_id}';")
-            root_organization = result.first()
-            return root_organization.slug if root_organization else None
+    def get_root_slug(path):
+        if path: 
+            if len(path) > 1:
+                path_ids = path.path.split('.')
+                root_id = path_ids[0]
+                result = engine.execute(f"select * from public.organization where id = '{root_id}';")
+                root_organization = result.first()
+                return root_organization.slug if root_organization else None
+            else:
+                return None
         else:
             return None
     
-    def generate_unique_slug(target, value, oldvalue, initiator):
+    def on_name_change_rehydrate_slug(target, value, oldvalue, initiator):
         print("generate_unique_slug")
         if value and (not target.slug or value != oldvalue):
-            root_slug = Organization.get_root_slug(target)
+            root_slug = Organization.get_root_slug(target.path)
             if root_slug:
                 slug = slugify(f"{root_slug} {value}")
                 target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
             else:
                 slug = slugify(f"{value}")
-                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{value} {target.id}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
 
-    def rehydrate_slug(target, value, oldvalue, initiator):
+    def on_path_change_rehydrate_slug(target, value, oldvalue, initiator):
         print("rehydrate_slug")
         if value and (not target.slug or value != oldvalue):
-            root_slug = Organization.get_root_slug(target)
+            root_slug = Organization.get_root_slug(target.path)
             if root_slug:
                 slug = slugify(f"{root_slug} {target.name}")
                 target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
             else:
                 slug = slugify(f"{target.name}")
-                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{value} {target.id}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
 
     def randomize_slug(target, value, oldvalue, initiator):
         print("randomize_slug")
@@ -149,8 +167,8 @@ class Organization(Base):
             target.slug = generate('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-', 21)
         else:
             print("Archived set to False")
-            Organization.generate_unique_slug(target, target.name, oldvalue, initiator)
+            Organization.on_name_change_rehydrate_slug(target, target.name, oldvalue, initiator)
 
-event.listen(Organization.name, 'set', Organization.generate_unique_slug, retval=False)
-event.listen(Organization.path, 'set', Organization.rehydrate_slug, retval=False)
+event.listen(Organization.name, 'set', Organization.on_name_change_rehydrate_slug, retval=False)
+event.listen(Organization.path, 'set', Organization.on_path_change_rehydrate_slug, retval=False)
 event.listen(Organization.archived, 'set', Organization.randomize_slug, retval=False)
