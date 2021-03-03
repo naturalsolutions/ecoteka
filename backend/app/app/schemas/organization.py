@@ -1,6 +1,11 @@
 from datetime import datetime
 from typing import Optional, Any
 from pydantic import BaseModel, EmailStr
+from enum import Enum
+
+class FindModeEnum(str, Enum):
+    by_id = 'by_id'
+    by_slug = 'by_slug'
 
 # Shared properties
 class OrganizationBase(BaseModel):

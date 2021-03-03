@@ -58,9 +58,6 @@ def get_organization_root_nodes(
     return root_nodes_in_db
 
 
-
-
-
 @router.post("/organization/root_nodes", response_model=Organization)
 def create_organization_root_node(
     *,

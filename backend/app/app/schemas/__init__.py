@@ -34,6 +34,7 @@ from .taxref import (
 )
 from .tree import Tree, TreePost, TreeCreate, TreeUpdate, TreeImportFromGeofile, TreeStatus
 from .organization import (
+    FindModeEnum,
     Organization,
     OrganizationCreate,
     OrganizationCreateRoot,
@@ -62,6 +63,7 @@ __all__ = [
     "InterventionCreate",
     "InterventionUpdate",
     "Msg",
+    "FindModeEnum",
     "Organization",
     "OrganizationCreate",
     "OrganizationCurrentUser",

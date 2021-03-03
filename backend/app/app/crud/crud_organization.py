@@ -62,6 +62,9 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
     def get_by_name(self, db: Session, *, name: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.name == name).first()
 
+    def get_by_slug(self, db: Session, *, slug: Union[str,int]) -> Optional[Organization]:
+        return db.query(Organization).filter(Organization.slug == slug).first()
+
     def get_by_path(self, db: Session, *, path: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.path == Ltree(path)).one()
 

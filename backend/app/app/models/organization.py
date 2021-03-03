@@ -19,6 +19,7 @@ from app.core import enforcer
 from functools import reduce
 from slugify import slugify
 from nanoid import generate
+from datetime import datetime
 
 
 id_seq = Sequence("organization_id_seq")
@@ -66,6 +67,7 @@ class Organization(Base):
         config=None,
         working_area=None,
         parent=None,
+        current_user_role=None
     ):
         _id = engine.execute(id_seq)
         self.id = _id
@@ -79,12 +81,7 @@ class Organization(Base):
             if parent is None
             else (parent.path or Ltree("_")) + Ltree(str(_id))
         )
-        self.slug = Organization.initiate_unique_slug(name, _id, 
-            (Ltree(str(_id))
-            if parent is None
-            else (parent.path or Ltree("_")) + Ltree(str(_id))
-            )
-        )
+        self.slug = Organization.initiate_unique_slug(name, _id, self.path)
 
     @property
     def total_members(self):
@@ -165,8 +162,9 @@ class Organization(Base):
         print("randomize_slug")
         if value and (not target.slug or value != oldvalue):
             target.slug = generate('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-', 21)
+            target.archived_at = datetime.now()
         else:
-            print("Archived set to False")
+            target.archived_at = None
             Organization.on_name_change_rehydrate_slug(target, target.name, oldvalue, initiator)
 
 event.listen(Organization.name, 'set', Organization.on_name_change_rehydrate_slug, retval=False)

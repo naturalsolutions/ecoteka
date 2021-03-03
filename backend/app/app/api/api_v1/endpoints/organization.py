@@ -5,7 +5,7 @@ import uuid
 import fiona
 from datetime import datetime
 import numpy as np
-from typing import Any, List, Optional, Dict
+from typing import Any, List, Optional, Dict, Union
 import geopandas as gpd
 from shapely.geometry import shape
 from shapely.geometry.geo import mapping
@@ -21,6 +21,7 @@ from app.core import settings, enforcer, set_policies, authorization, get_curren
 
 from app.crud import organization, user, tree
 from app.schemas import (
+    FindModeEnum,
     Organization,
     OrganizationCreate,
     OrganizationUpdate,
@@ -70,6 +71,7 @@ policies = {
 set_policies(policies)
 
 
+
 @router.post("", response_model=Organization)
 def create_organization(
     *,
@@ -110,10 +112,10 @@ def update_organization(
 
     return organization_in_db.to_schema()
 
-
 @router.get("/{organization_id}", response_model=Organization)
 def get_one(
-    organization_id: int,
+    organization_id: Union[str, int],
+    mode: FindModeEnum = FindModeEnum.by_id,
     *,
     auth=Depends(authorization("organizations:get_one")),
     current_user: User = Depends(get_current_user),
@@ -122,16 +124,25 @@ def get_one(
     """
     get one organization by id
     """
-    organization_in_db = organization.get(db, id=organization_id)
-    current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_id))
-
+    
+    if mode == 'by_slug':
+        organization_in_db = crud.organization.get_by_slug(db, slug=organization_id)
+        if organization_in_db:
+            current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_in_db.id))
+    if mode == 'by_id':
+        if not isinstance(organization_id, int):
+            raise HTTPException(status_code=400, detail="Organization ID should be of type Int with mode by_id.")
+        organization_in_db = crud.organization.get(db, id=organization_id)
+        current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_id))
+    
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
     
-    organization_as_dict = organization_in_db.to_schema().__dict__
-    organization_as_dict["current_user_role"] = current_roles[0]
+    organization = organization_in_db.to_schema()
+    organization.current_user_role = current_roles[0]
 
-    return organization_as_dict
+    return organization
+
 
 
 @router.get("/{organization_id}/teams", response_model=List[Organization])
