@@ -48,14 +48,16 @@ def get_organization_root_nodes(
         )
     
     root_nodes_in_db = crud.organization.get_root_nodes(db)
-    for org in root_nodes_in_db:
-        current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(org.id))
+    root_nodes = []
+    for org_in_db in root_nodes_in_db:
+        current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(org_in_db.id))
+        org = org_in_db.to_schema()
         if len(current_roles) > 0:
             org.current_user_role = current_roles[0]
-        org.path = org.path.path ##???
-        org.to_schema()
-
-    return root_nodes_in_db
+            root_nodes.append(org)
+        else:
+            root_nodes.append(org)
+    return root_nodes
 
 
 @router.post("/organization/root_nodes", response_model=Organization)
