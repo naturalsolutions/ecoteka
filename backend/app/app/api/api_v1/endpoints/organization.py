@@ -139,7 +139,8 @@ def get_one(
         raise HTTPException(status_code=404, detail="Organization not found")
     
     organization = organization_in_db.to_schema()
-    organization.current_user_role = current_roles[0]
+    if len(current_roles) > 0:
+        organization.current_user_role = current_roles[0]
 
     return organization
 
