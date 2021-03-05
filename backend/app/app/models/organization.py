@@ -5,11 +5,11 @@ from app.db.base_class import Base
 from app.db.session import engine
 from geoalchemy2 import Geometry
 from sqlalchemy_utils import LtreeType, Ltree
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 from sqlalchemy.orm import relationship, foreign, remote, column_property, Session
 from sqlalchemy import Sequence, select, func, event
 from sqlalchemy.sql import expression
-from sqlalchemy import Column, Integer, Index, String, Boolean, DateTime, func, inspect
+from sqlalchemy import Column, Integer, Index, String, Boolean, DateTime, Float, Enum, func, inspect
 import slug as slugmodule
 from app.db.base_class import Base
 from app.db.session import engine
@@ -38,11 +38,24 @@ class Organization(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False, index=True)
     slug = Column(String, nullable=False, index=True)
-    working_area = Column("working_area", Geometry("MULTIPOLYGON"), nullable=True)
+    mode = Column(
+        Enum(schemas.OrganizationMode, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False,
+        default=schemas.OrganizationMode.PRIVATE.value,
+    )
+    working_area = Column(Geometry("MULTIPOLYGON"), nullable=True)
+    boundary = Column(Geometry(geometry_type='MULTIPOLYGON', srid=4326), nullable=True)
+    coords = Column(Geometry(geometry_type='POINT', srid=4326), nullable=True)
+    osm_id = Column(Integer, nullable=True)
+    osm_place_id = Column(Integer, nullable=True)
+    osm_type = Column(String, nullable=True)
+    boundary_bbox_coords = Column(ARRAY(Float), nullable=True)
     path = Column(LtreeType, nullable=False)
     config = Column(JSONB, nullable=True)
     archived = Column(Boolean, nullable=False, server_default=expression.false())
     archived_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, nullable=True)
+    updated_at = Column(DateTime, nullable=True)
     total_trees = column_property(
         select([func.count(Tree.id)])
         .where(Tree.organization_id == id)

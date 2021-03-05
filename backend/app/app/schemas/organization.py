@@ -2,15 +2,29 @@ from datetime import datetime
 from typing import Optional, Any
 from pydantic import BaseModel, EmailStr
 from enum import Enum
+from .utils import BBox
+from .features import FeatureCollection, Feature
+
+class OrganizationMode(str, Enum):
+    PRIVATE = "private"
+    OPEN = "open"
+    PARTICIPATORY = "participatory"
 
 class FindModeEnum(str, Enum):
-    by_id = 'by_id'
-    by_slug = 'by_slug'
+    by_id = "by_id"
+    by_slug = "by_slug"
 
 # Shared properties
 class OrganizationBase(BaseModel):
     name: str = ""
     archived: bool = False
+    mode: OrganizationMode
+    osm_id: Optional[int]
+    osm_place_id: Optional[int]
+    osm_type: Optional[str]
+    boundary_bbox_coords: Optional[BBox]
+    boundary: Optional[FeatureCollection]
+    coords: Optional[Feature]
     config: Optional[Any]
 
 
@@ -37,6 +51,8 @@ class Organization(OrganizationBase):
     total_trees: Optional[int] = 0
     total_members: Optional[int] = 0
     archived: bool = False
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
     archived_at: Optional[datetime]
     current_user_role: Optional[str]
 
