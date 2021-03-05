@@ -17,6 +17,9 @@ from app.api import get_db
 from app.core import settings, enforcer, set_policies, authorization, get_current_user
 from app.crud import organization, user
 
+from fastapi_pagination import Page, pagination_params
+from fastapi_pagination.paginator import paginate
+
 from app.schemas import (
     Organization,
     OrganizationCreate,
@@ -33,7 +36,7 @@ from app.worker import send_new_invitation_email_task
 
 router = APIRouter()
 
-@router.get("/organization/root_nodes", response_model=List[Organization])
+@router.get("/organization/root_nodes", response_model=Page[Organization], dependencies=[Depends(pagination_params)])
 def get_organization_root_nodes(
     *,
     db: Session = Depends(get_db),
@@ -57,7 +60,7 @@ def get_organization_root_nodes(
             root_nodes.append(org)
         else:
             root_nodes.append(org)
-    return root_nodes
+    return paginate(root_nodes)
 
 
 @router.post("/organization/root_nodes", response_model=Organization)
