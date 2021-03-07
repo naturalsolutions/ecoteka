@@ -130,7 +130,7 @@ def get_one(
         if organization_in_db:
             current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_in_db.id))
     if mode == 'by_id':
-        if not isinstance(organization_id, int):
+        if not isinstance(int(organization_id), int):
             raise HTTPException(status_code=400, detail="Organization ID should be of type Int with mode by_id.")
         organization_in_db = crud.organization.get(db, id=organization_id)
         current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_id))

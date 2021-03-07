@@ -8,8 +8,12 @@ import ThemeProvider from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutBase from "@/components/AppLayout/Base";
 import "@/styles/global.css";
 import { useRouter } from "next/router";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";
+
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -38,11 +42,14 @@ function MyApp({ Component, pageProps }) {
       <I18nextProvider i18n={i18n}>
         <ThemeProvider>
           <SnackbarProvider maxSnack={4}>
-            <AppContextProvider>
-              <AppLayoutBase>
-                <Component {...pageProps} />
-              </AppLayoutBase>
-            </AppContextProvider>
+            <QueryClientProvider client={queryClient}>
+              <ReactQueryDevtools initialIsOpen={false} />
+              <AppContextProvider>
+                <AppLayoutBase>
+                  <Component {...pageProps} />
+                </AppLayoutBase>
+              </AppContextProvider>
+            </QueryClientProvider>
           </SnackbarProvider>
         </ThemeProvider>
       </I18nextProvider>

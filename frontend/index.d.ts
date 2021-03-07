@@ -7,6 +7,9 @@ export interface IOrganization {
   total_trees: number;
   total_members: number;
   archived: boolean;
+  mode: string;
+  osm_id: number;
+  updated_at: string;
 }
 
 export interface IUser {
