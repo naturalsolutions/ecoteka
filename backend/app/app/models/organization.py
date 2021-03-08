@@ -75,20 +75,38 @@ class Organization(Base):
     def __init__(
         self,
         name: str,
+        mode: str,
         archived: bool,
-        archived_at=None,
+        created_at=None,
+        updated_at=None,
         config=None,
         working_area=None,
+        boundary=None,
+        coords=None,
+        osm_id=None,
+        osm_place_id=None,
+        osm_type=None,
+        boundary_bbox_coords=None,
         parent=None,
+        archived_at=None,
         current_user_role=None
     ):
         _id = engine.execute(id_seq)
         self.id = _id
         self.name = name
+        self.mode = mode
         self.config = config
         self.working_area = working_area
+        self.boundary = boundary
+        self.coords = coords
+        self.osm_id = osm_id
+        self.osm_place_id = osm_place_id
+        self.osm_type = osm_type
+        self.boundary_bbox_coords = boundary_bbox_coords
         self.archived = archived
         self.archived_at = archived_at
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
         self.path = (
             Ltree(str(_id))
             if parent is None

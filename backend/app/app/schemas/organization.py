@@ -30,6 +30,9 @@ class OrganizationBase(BaseModel):
 
 class OrganizationCreate(OrganizationBase):
     parent_id: Optional[int]
+    created_at: datetime = datetime.now()
+    updated_at: datetime = datetime.now()
+
 
 class OrganizationCreateRoot(OrganizationBase):
     owner_email: Optional[EmailStr]

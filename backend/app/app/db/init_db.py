@@ -23,7 +23,7 @@ def init_db(db: Session) -> None:
 
     if not organization_in_db:
         organization_in = OrganizationCreate(
-            name=settings.ORGANIZATION, slug=slug.slug(settings.ORGANIZATION)
+            name=settings.ORGANIZATION, slug=slug.slug(settings.ORGANIZATION), mode="private"
         )
         organization_in_db = organization.create(db, obj_in=organization_in)
 
