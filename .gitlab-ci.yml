@@ -9,7 +9,7 @@ version:
   image: node:current-buster-slim
   stage: version
   script:
-    - apt-get update && apt-get install -y --no-install-recommends git-core ca-certificates
+    - source /home/gitlab-runner/.bashrc
     - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/exec @semantic-release/changelog
     - semantic-release --generate-notes false --dry-run
   artifacts:
@@ -74,8 +74,6 @@ release:
   image: node:current-buster-slim
   stage: release
   script:
-    - apt-get update && apt-get install -y --no-install-recommends git-core ca-certificates
-    - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/changelog
     - semantic-release
   only:
     - dev
