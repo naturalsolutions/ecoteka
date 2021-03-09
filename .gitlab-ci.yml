@@ -1,16 +1,20 @@
 stages:
-  - release
+  - version
   - build
   - clean
   - deploy
+  - release
 
-release:
-  image: node:12-buster-slim
-  stage: release
+version:
+  image: node:current-buster-slim
+  stage: version
   script:
     - apt-get update && apt-get install -y --no-install-recommends git-core ca-certificates
-    - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/changelog
-    - semantic-release
+    - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/exec @semantic-release/changelog
+    - semantic-release --generate-notes false --dry-run
+  artifacts:
+    paths:
+      - VERSION
   only:
     - master
   tags:
@@ -20,8 +24,9 @@ build_frontend:
   stage: build
   image: docker
   script:
+    - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-latest -f ./frontend/.docker/Dockerfile ./frontend
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}-latest -f ./frontend/.docker/Dockerfile ./frontend
     - docker push ${CI_REGISTRY_IMAGE}:frontend-latest
   only:
     - master
@@ -32,8 +37,9 @@ build_backend:
   stage: build
   image: docker
   script:
+    - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:backend-latest ./backend
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*}-latest ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-latest
   only:
     - master
@@ -63,3 +69,15 @@ deploy_dev:
     - ns01
   variables:
     ANSIBLE_INVENTORY_UNPARSED_FAILED: "true"
+
+release:
+  image: node:current-buster-slim
+  stage: release
+  script:
+    - apt-get update && apt-get install -y --no-install-recommends git-core ca-certificates
+    - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/changelog
+    - semantic-release
+  only:
+    - master
+  tags:
+    - ns01
