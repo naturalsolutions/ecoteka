@@ -16,7 +16,7 @@ version:
     paths:
       - VERSION
   only:
-    - master
+    - dev
   tags:
     - ns01
 
@@ -26,10 +26,10 @@ build_frontend:
   script:
     - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}-latest -f ./frontend/.docker/Dockerfile ./frontend
-    - docker push ${CI_REGISTRY_IMAGE}:frontend-latest
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*} -f ./frontend/.docker/Dockerfile ./frontend
+    - docker push ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}
   only:
-    - master
+    - dev
   tags:
     - ns01
 
@@ -39,10 +39,10 @@ build_backend:
   script:
     - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*}-latest ./backend
-    - docker push ${CI_REGISTRY_IMAGE}:backend-latest
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*} ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*}
   only:
-    - master
+    - dev
   tags:
     - ns01
 
@@ -52,7 +52,7 @@ clean:
   script:
     - docker system prune -a -f
   only:
-    - master
+    - dev
   tags:
     - ns01
 
@@ -64,7 +64,7 @@ deploy_dev:
     - ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
     - rm password-file
   only:
-    - master
+    - dev
   tags:
     - ns01
   variables:
@@ -78,6 +78,6 @@ release:
     - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/changelog
     - semantic-release
   only:
-    - master
+    - dev
   tags:
     - ns01
