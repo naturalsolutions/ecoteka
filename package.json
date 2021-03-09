@@ -1,0 +1,23 @@
+{
+  "name": "ecoteka",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\">Ecoteka</h1>",
+  "main": "commitlint.config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.ns:natural-solutions/ecoteka.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
+    "husky": "^5.1.3"
+  }
+}

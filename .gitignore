@@ -13,3 +13,4 @@ redis
 !.vscode/i18n-ally-custom-framework.json
 .expo
 data.ms
+node_modules
