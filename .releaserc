@@ -12,5 +12,5 @@
     }],
     "@semantic-release/gitlab"
   ],
-  "branches": ["master", "418-semantic-versioning"],
+  "branches": ["master"],
 }

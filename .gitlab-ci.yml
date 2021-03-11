@@ -17,7 +17,7 @@ version:
     paths:
       - VERSION
   only:
-    - 418-semantic-versioning
+    - master
   tags:
     - ns01
 
@@ -29,7 +29,7 @@ build_frontend:
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*} -f ./frontend/.docker/Dockerfile ./frontend
     - docker push ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}
   only:
-    - 418-semantic-versioning
+    - master
   tags:
     - ns01
 
@@ -41,7 +41,7 @@ build_backend:
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*} ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*}
   only:
-    - 418-semantic-versioning
+    - master
   tags:
     - ns01
 
@@ -50,7 +50,7 @@ clean:
   script:
     - docker system prune -a -f
   only:
-    - 418-semantic-versioning
+    - master
   tags:
     - ns01
 
@@ -63,7 +63,7 @@ deploy_dev:
     - ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
     - rm password-file
   only:
-    - 418-semantic-versioning
+    - master
   tags:
     - ns01
   variables:
@@ -74,6 +74,6 @@ release:
   script:
     - semantic-release
   only:
-    - 418-semantic-versioning
+    - master
   tags:
     - ns01
