@@ -156,20 +156,24 @@ In dev mode, in order to launch Cypress Interactive Tests Runner, here are the s
 2.  Go to frontend folder: `cd frontend`
 3.  Open Test Runner: `npx cypress open`
 
-## Links
+---
 
-- [docker](https://docs.docker.com/get-docker)
-- [docker-compose](https://docs.docker.com/compose/install)
-- [traefik](https://docs.traefik.io)
-- [postgresql](https://www.postgresql.org/docs/12/index.html)
-- [sql-alchemy](https://www.sqlalchemy.org)
-- [alembic](https://alembic.sqlalchemy.org/en/latest)
-- [fastapi](https://fastapi.tiangolo.com)
-- [next.js](https://nextjs.org)
-- [material-ui](https://material-ui.com)
-- [mapbox-gl-js](https://docs.mapbox.com/mapbox-gl-js/api)
-- [tippecanoe](https://github.com/mapbox/tippecanoe)
-- [uvicorn](https://www.uvicorn.org/settings)
-- [cypress](https://docs.cypress.io/)
-- [backend](https://gitlab.com/natural-solutions/ecoteka/-/tree/dev/backend)
-- [frontend](https://gitlab.com/natural-solutions/ecoteka/-/tree/dev/frontend)
+[![logo-natural-solutions][logo-ns]][ns]
+
+[logo-ns]: docs/logos/natural-solutions-logo-horizontal.png
+[ns]: https://www.natural-solutions.eu/
+[docker]: https://docs.docker.com/get-docker
+[docker-compose]: https://docs.docker.com/compose/install
+[traefik]: https://docs.traefik.io
+[postgresql]: https://www.postgresql.org/docs/12/index.html
+[sql-alchemy]: https://www.sqlalchemy.org
+[alembic]: https://alembic.sqlalchemy.org/en/latest
+[fastapi]: https://fastapi.tiangolo.com
+[next.js]: https://nextjs.org
+[material-ui]: https://material-ui.com
+[mapbox-gl-js]: https://docs.mapbox.com/mapbox-gl-js/api
+[tippecanoe]: https://github.com/mapbox/tippecanoe
+[uvicorn]: https://www.uvicorn.org/settings
+[cypress]: https://docs.cypress.io/
+[backend]: https://gitlab.com/natural-solutions/ecoteka/-/tree/dev/backend
+[frontend]: https://gitlab.com/natural-solutions/ecoteka/-/tree/dev/frontend
