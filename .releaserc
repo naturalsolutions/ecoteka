@@ -11,5 +11,6 @@
       "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
     }],
     "@semantic-release/gitlab"
-  ]
+  ],
+  "branches": ["master", "418-semantic-versioning"],
 }

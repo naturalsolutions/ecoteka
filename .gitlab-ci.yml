@@ -5,77 +5,75 @@ stages:
   - deploy
   - release
 
+before_script:
+  - export PATH=$PATH:/home/gitlab-runner/.nvm/versions/node/v14.16.0/bin
+
 version:
-  image: node:current-buster-slim
   stage: version
   script:
-    - source /home/gitlab-runner/.bashrc
     - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/exec @semantic-release/changelog
     - semantic-release --generate-notes false --dry-run
   artifacts:
     paths:
       - VERSION
   only:
-    - dev
+    - 418-semantic-versioning
   tags:
     - ns01
 
 build_frontend:
   stage: build
-  image: docker
   script:
     - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*} -f ./frontend/.docker/Dockerfile ./frontend
     - docker push ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}
   only:
-    - dev
+    - 418-semantic-versioning
   tags:
     - ns01
 
 build_backend:
   stage: build
-  image: docker
   script:
     - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*} ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*}
   only:
-    - dev
+    - 418-semantic-versioning
   tags:
     - ns01
 
 clean:
   stage: clean
-  image: docker
   script:
     - docker system prune -a -f
   only:
-    - dev
+    - 418-semantic-versioning
   tags:
     - ns01
 
 deploy_dev:
   stage: deploy
   script:
-    - cd /opt/ns-ansible-infrastructure
+    - git clone git@gitlab.com:natural-solutions/ns-ansible-infrastructure.git
+    - cd ns-ansible-infrastructure
     - echo ${VAULT_PASSWORD_KEY} > password-file
     - ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
     - rm password-file
   only:
-    - dev
+    - 418-semantic-versioning
   tags:
     - ns01
   variables:
     ANSIBLE_INVENTORY_UNPARSED_FAILED: "true"
 
 release:
-  image: node:current-buster-slim
   stage: release
   script:
     - semantic-release
   only:
-    - dev
+    - 418-semantic-versioning
   tags:
     - ns01
