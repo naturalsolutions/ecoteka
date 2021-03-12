@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Grid,
   Popover,
@@ -46,6 +46,11 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
   const handlerMyDashboardClick = () => {
     setAnchorEl(null);
     router.push(`/dashboard`);
+  };
+
+  const handleAdminOrganizationClick = () => {
+    setAnchorEl(null);
+    router.push(`/admin/organizations`);
   };
 
   const handlerLogoutClick = () => {
@@ -103,10 +108,10 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
                       alignItems="flex-start"
                     >
                       <Grid item xs>
-                        {getDisplayNameFromUser(user)}
+                        <span>{getDisplayNameFromUser(user)}</span>
                       </Grid>
                       <Grid item xs>
-                        {user.email}
+                        <span>{user.email}</span>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -135,6 +140,23 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
                   {t("components.Toolbar.myDashboard")}
                 </Button>
               </Grid>
+              {user.is_superuser && (
+                <Fragment>
+                  <Box mt={2} mb={1}>
+                    <Divider />
+                  </Box>
+                  <Grid item>
+                    <Button
+                      size="small"
+                      className={classes.button}
+                      fullWidth
+                      onClick={handleAdminOrganizationClick}
+                    >
+                      {t("components.Toolbar.adminOrganizations")}
+                    </Button>
+                  </Grid>
+                </Fragment>
+              )}
               <Box mt={2} mb={1}>
                 <Divider />
               </Box>

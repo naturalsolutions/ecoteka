@@ -52,7 +52,8 @@
     "register": "Registrar",
     "myOrganizations": "Mis organizaciones",
     "myDashboard": "Panel de control",
-    "addUser": "Registrarse"
+    "addUser": "Registrarse",
+    "adminOrganizations": "Organizaciones administrativas"
   },
   "Map": {
     "SearchCity": {
@@ -486,7 +487,6 @@
     "buttonCancelContent": "Cancelar"
   },
   "Organization": {
-    "name": "Nombre",
     "dialogTitleCreate": "Añadir una organización",
     "dialogTitleEdit": "Actualizar una organización",
     "dialogContentTextCreate": "Utiliza este formalario para crear una organización.",
@@ -562,7 +562,15 @@
         "alertContent1": "Añadir el correo del destinatario en el campo de arriba - ",
         "alertContent2": "entonces hacer click o añadir una coma."
       }
-    }
+    },
+    "applicationMode": "Modo de aplicación",
+    "name": "Nombre",
+    "modes": {
+      "private": "Private",
+      "open": "Open",
+      "participatory": "Participatory"
+    },
+    "ownerEmail": "Correo electrónico del propietario"
   },
   "Dashboard": {
     "title": "Panel de control",

@@ -52,7 +52,8 @@
     "register": "Inscription",
     "myOrganizations": "Mes organisations",
     "myDashboard": "Mon tableau de bord",
-    "addUser": "Ajouter un utilisateur"
+    "addUser": "Ajouter un utilisateur",
+    "adminOrganizations": "Administration des organisations"
   },
   "Map": {
     "SearchCity": {
@@ -481,7 +482,6 @@
     "dialogContentTextEdit": "Utilisez ce formulaire pour modifier les informations de l'équipe."
   },
   "Organization": {
-    "name": "Nom",
     "dialogTitleCreate": "Ajouter une organisation",
     "dialogTitleEdit": "Modifier l'organisation",
     "dialogContentTextCreate": "Utilisez ce formulaire pour créer une organisation.",
@@ -556,7 +556,15 @@
         "alertContent1": "Ajouter l'email du destinataire dans le champ ci-dessus - ",
         "alertContent2": "puis cliquer sur Entrée ou ajouter une virgule."
       }
-    }
+    },
+    "applicationMode": "Mode applicatif",
+    "name": "Nom",
+    "modes": {
+      "private": "Privé",
+      "open": "Ouvert",
+      "participatory": "Participatif"
+    },
+    "ownerEmail": "Email du propriétaire"
   },
   "Dashboard": {
     "title": "Tableau de bord",

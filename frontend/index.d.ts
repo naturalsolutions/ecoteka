@@ -1,3 +1,4 @@
+export type TOrganizationMode = "private" | "open" | "participatory";
 export interface IOrganization {
   id: number;
   name: string;
@@ -7,9 +8,11 @@ export interface IOrganization {
   total_trees: number;
   total_members: number;
   archived: boolean;
-  mode: string;
+  mode: TOrganizationMode;
   osm_id: number;
   updated_at: string;
+  created_at: string;
+  current_user_role?: string;
 }
 
 export interface IUser {

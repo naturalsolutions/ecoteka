@@ -38,7 +38,9 @@ export default function SignInPage() {
     setIsLoading(false);
 
     if (isOk) {
-      router.push("/home");
+      // TODO if user doesn't belong to an existing organization, one's should be redirected to account page (wip)
+      // router.push("/account")
+      router.push("/");
     }
   };
 

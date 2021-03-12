@@ -17,8 +17,8 @@ from app.api import get_db
 from app.core import settings, enforcer, set_policies, authorization, get_current_user
 from app.crud import organization, user
 
-from fastapi_pagination import Page, pagination_params
-from fastapi_pagination.paginator import paginate
+# from fastapi_pagination import LimitOffsetPage, Page, Params, add_pagination
+# from fastapi_pagination.ext.sqlalchemy import paginate
 
 from app.schemas import (
     Organization,
@@ -36,7 +36,7 @@ from app.worker import send_new_invitation_email_task
 
 router = APIRouter()
 
-@router.get("/organization/root_nodes", response_model=Page[Organization], dependencies=[Depends(pagination_params)])
+@router.get("/organization/root_nodes", response_model=List[Organization])
 def get_organization_root_nodes(
     *,
     db: Session = Depends(get_db),
@@ -60,7 +60,7 @@ def get_organization_root_nodes(
             root_nodes.append(org)
         else:
             root_nodes.append(org)
-    return paginate(root_nodes)
+    return root_nodes
 
 
 @router.post("/organization/root_nodes", response_model=Organization)
@@ -109,6 +109,4 @@ def create_organization_root_node(
         enforcer.load_policy()
     current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(new_organization_root_node.id))
     new_organization_root_node.current_user_role = current_roles[0]
-    ##??? could not find why root node path are nested.... fix needed!
-    new_organization_root_node.path = new_organization_root_node.path.path 
     return new_organization_root_node

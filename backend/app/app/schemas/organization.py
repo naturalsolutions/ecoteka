@@ -30,6 +30,7 @@ class OrganizationBase(BaseModel):
 
 class OrganizationCreate(OrganizationBase):
     parent_id: Optional[int]
+    mode: OrganizationMode = OrganizationMode.PRIVATE
     created_at: datetime = datetime.now()
     updated_at: datetime = datetime.now()
 

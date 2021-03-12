@@ -49,5 +49,17 @@
     "orGoToLogin": "Or Sign In"
   },
   "year": "Year",
-  "loading": "Loading trees..."
+  "loading": "Loading trees...",
+  "owner": "Owner",
+  "seeDetails": "See details",
+  "pages": {
+    "Admin": {
+      "Organizations": {
+        "title": "Organization Root Nodes"
+      },
+      "Organization": {
+        "addRootOrganization": "Add Root Organization"
+      }
+    }
+  }
 }

@@ -10,6 +10,10 @@ import "@/styles/global.css";
 import { useRouter } from "next/router";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import "@fontsource/chivo";
+import "@fontsource/inter";
+import "@fontsource/archivo";
+import "@fontsource/quando";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";
 
