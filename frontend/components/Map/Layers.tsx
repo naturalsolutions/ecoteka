@@ -1,7 +1,6 @@
-import { FC, useEffect, useState, memo } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
@@ -10,30 +9,62 @@ import {
   Radio,
   RadioGroup,
   Typography,
+  Checkbox,
 } from "@material-ui/core";
 
-export interface IMapLayers {
-  mapBackground: string;
-  onChangeBackground?(background: string): void;
+export const defaultLayers = {
+  cadastre: {
+    name: "Cadastre",
+    value: false,
+  },
+  osm: {
+    name: "Open Street Map (OSM)",
+    value: true,
+  },
+  trees: {
+    name: "Trees",
+    value: true,
+  },
+};
+
+export interface IMapLayer {
+  name: string;
+  value: boolean;
 }
 
-const MapLayers: FC<IMapLayers> = ({ mapBackground, onChangeBackground }) => {
-  const { t } = useTranslation("components");
+export interface IMapLayers {
+  [key: string]: IMapLayer;
+}
 
+export interface IMapLayersProps {
+  mapBackground: string;
+  layers: IMapLayers;
+  onChangeBackground?(background: string): void;
+  onChangeLayers?(layers): void;
+}
+
+const MapLayers: FC<IMapLayersProps> = ({
+  mapBackground,
+  layers,
+  onChangeBackground,
+  onChangeLayers,
+}) => {
+  const { t } = useTranslation("components");
   const [background, setBackground] = useState(mapBackground);
-  const [layers, setLayers] = useState({
-    cadastre: true,
-    osm: true,
-    trees: true,
-  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
+
     setBackground(value);
     onChangeBackground(value);
   };
 
-  const handleLayerChange = (event: React.ChangeEvent<HTMLInputElement>) => {};
+  const handleLayerChange = (key: string, layer: IMapLayer) => {
+    const newLayers = { ...layers } as IMapLayers;
+
+    newLayers[key].value = !layer.value;
+    onChangeLayers(newLayers);
+  };
 
   return (
     <Grid container direction="column" spacing={3}>
@@ -69,21 +100,26 @@ const MapLayers: FC<IMapLayers> = ({ mapBackground, onChangeBackground }) => {
           <FormLabel component="legend">
             {t("components.MapLayers.layers")}
           </FormLabel>
-          {Object.keys(layers).map((layer) => (
-            <FormControlLabel
-              key={layer}
-              value={layers[layer]}
-              onChange={handleLayerChange}
-              control={
-                <Checkbox
-                  checked={layers[layer]}
-                  color="primary"
-                  name={layer}
-                />
-              }
-              label={layer}
-            />
-          ))}
+          {Object.keys(layers)
+            .sort()
+            .map((key: string) => (
+              <FormControlLabel
+                key={key}
+                label={
+                  t("components.Map.Layers.defaultLayers", {
+                    returnObjects: true,
+                  })[key]
+                }
+                control={
+                  <Checkbox
+                    color="primary"
+                    checked={layers[key].value}
+                    onChange={() => handleLayerChange(key, layers[key])}
+                    name={key}
+                  />
+                }
+              />
+            ))}
         </FormControl>
       </Grid>
     </Grid>

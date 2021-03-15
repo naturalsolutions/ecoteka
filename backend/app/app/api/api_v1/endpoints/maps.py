@@ -42,59 +42,7 @@ def generate_style(
             
             if len(satellite) > 0:
                 style["layers"][satellite[0]]["layout"]["visibility"] = "visible"
-
-
-        style["sources"]["cadastre-france"] = {
-            "type": "vector",
-            "tiles": [
-                "https://openmaptiles.geo.data.gouv.fr/data/cadastre/{z}/{x}/{y}.pbf"
-            ],
-            "minzoom": 11,
-            "maxzoom": 16,
-        }
-
-        style["layers"].insert(
-            len(style["layers"]),
-            {
-                "id": "cadastre-france-parcelles",
-                "type": "fill",
-                "source": "cadastre-france",
-                "source-layer": "parcelles",
-                "paint": {
-                    "fill-color": "#5a3fc0",
-                    "fill-opacity": 0.3
-                }
-            }
-        )
-
-        style["layers"].insert(
-            len(style["layers"]),
-            {
-                "id": "cadastre-france-batiments",
-                "type": "fill",
-                "source": "cadastre-france",
-                "source-layer": "batiments",
-                "paint": {
-                    "fill-color": "#5a3fc0",
-                    "fill-opacity": 0.3
-                }
-            }
-        )
-
-        style["layers"].insert(
-            len(style["layers"]),
-            {
-                "id": "cadastre-france-sections",
-                "type": "fill",
-                "source": "cadastre-france",
-                "source-layer": "sections",
-                "paint": {
-                    "fill-color": "#5a3fc0",
-                    "fill-opacity": 0.3
-                }
-            }
-        )
-
+        
         return style
 
 def hex_to_rgb(hex):
