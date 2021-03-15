@@ -16,7 +16,11 @@ import TreeSummary from "@/components/Tree/Infos/Summary";
 import TreeForm from "@/components/Tree/Form";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
 import MapGeolocateFab from "@/components/Map/GeolocateFab";
-import MapLayers from "@/components/Map/Layers";
+import MapLayers, {
+  ILayers,
+  defaultLayers,
+  IMapLayers,
+} from "@/components/Map/Layers";
 import MapFilter from "@/components/Map/Filter";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
@@ -101,7 +105,6 @@ const EditionPage = ({}) => {
   const { user } = useAppContext();
   const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
-  const [numberOfTrees, setNumberOfTrees] = useState(0);
   const [data, setData] = useLocalStorage("etk:map:data");
   const [dataOrganizations, setDataOrganizations] = useLocalStorage(
     "etk:map:dataOrganizations",
@@ -124,6 +127,10 @@ const EditionPage = ({}) => {
     "map"
   );
   const [layers, setLayers] = useState([]);
+  const [activeLayers, setActiveLayers] = useLocalStorage<IMapLayers>(
+    "etk:map:activeLayers",
+    defaultLayers
+  );
   const [activeTree, setActiveTree] = useState<number | undefined>(
     router.query?.tree ? Number(router.query.tree) : undefined
   );
@@ -222,6 +229,22 @@ const EditionPage = ({}) => {
     }
   };
 
+  const handleOnChangeLayers = (newActiveLayers: ILayers) => {
+    setActiveLayers(newActiveLayers);
+    renderLayers();
+  };
+
+  const cadastreLayer = new MVTLayer({
+    id: "cadastre",
+    data: "https://openmaptiles.geo.data.gouv.fr/data/cadastre/{z}/{x}/{y}.pbf",
+    minZoom: 11,
+    maxZoom: 16,
+    getLineColor: [192, 192, 192, 100],
+    getFillColor: [140, 170, 180, 100],
+    pickable: true,
+    visible: activeLayers.cadastre.value,
+  });
+
   const osmLayer = new MVTLayer({
     id: "osm",
     data: `${apiUrl.replace(
@@ -240,6 +263,7 @@ const EditionPage = ({}) => {
     getLineColor: [192, 192, 192],
     getFillColor: [140, 170, 180],
     pickable: true,
+    visible: activeLayers.osm.value,
   });
 
   const treesLayer = new GeoJsonLayer({
@@ -330,6 +354,7 @@ const EditionPage = ({}) => {
     radiusMinPixels: 0.5,
     lineWidthMinPixels: 1,
     lineWidthMaxPixels: 3,
+    visible: activeLayers.trees.value,
   });
 
   const selectionLayer = new SelectionLayer({
@@ -417,10 +442,12 @@ const EditionPage = ({}) => {
       case "layers":
         return setDrawerLeftComponent(
           <MapLayers
+            layers={activeLayers}
             mapBackground={mapBackground}
             onChangeBackground={(newMapBackground) =>
               setMapbackground(newMapBackground)
             }
+            onChangeLayers={handleOnChangeLayers}
           />
         );
       case "import":
@@ -444,8 +471,6 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     setViewState({ ...initialViewState });
-    renderLayers();
-
     fitToBounds(user?.currentOrganization.id);
 
     if (!data?.features.length) {
@@ -461,7 +486,7 @@ const EditionPage = ({}) => {
     if (router.query?.panel) {
       switchPanel(router.query?.panel);
     }
-  }, [router.query, numberOfTrees, filters]);
+  }, [router.query, filters]);
 
   const handleOnFilter = (values, filters, options) => {
     setFilters({
@@ -529,14 +554,22 @@ const EditionPage = ({}) => {
     switchPanel(router.query.panel);
 
     if (editionMode && mode === "selection") {
-      return setLayers([treesLayer, selectionLayer]);
+      return setLayers([
+        cadastreLayer.clone({ visible: activeLayers.cadastre.value }),
+        treesLayer.clone({ visible: true }),
+        selectionLayer,
+      ]);
     }
 
     if (editionMode) {
-      return setLayers([treesLayer]);
+      return setLayers([treesLayer.clone({ visible: true })]);
     }
 
-    return setLayers([osmLayer, treesLayer]);
+    return setLayers([
+      cadastreLayer.clone({ visible: activeLayers.cadastre.value }),
+      osmLayer.clone({ visible: activeLayers.osm.value }),
+      treesLayer.clone({ visible: activeLayers.trees.value }),
+    ]);
   };
 
   const handleOnMapActionsBarClick = (action: MapActionsBarActionType) => {
