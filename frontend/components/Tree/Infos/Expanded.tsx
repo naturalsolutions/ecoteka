@@ -31,12 +31,9 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
   const [scroll, setScroll] = React.useState("paper");
   const treeAccordionRef = createRef<TTreeAccordion>();
   const { user } = useAppContext();
-<<<<<<< HEAD
   const { t } = useTranslation("common");
 
-=======
   const { apiETK } = useApi().api;
->>>>>>> dev
 
   const handlerOnSave = async () => {
     try {
