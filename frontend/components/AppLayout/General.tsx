@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     backgroundColor: theme.palette.background.default,
     minHeight: "calc(100vh - 48px)",
-    padding: "1rem",
+    paddingTop: "2rem",
   },
 }));
 

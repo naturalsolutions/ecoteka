@@ -1,18 +1,11 @@
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
-import {
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import useApi from "@/lib/useApi";
 import { IOrganization } from "@/index";
 import { AxiosError } from "axios";
 import { useQuery } from "react-query";
-import Link from "next/link";
 import FullPageSpinner from "@/components/Core/Feedback/FullPageSpinner";
 import FormOrganizationRoot, {
   FormOrganizationRootActions,
@@ -63,7 +56,6 @@ const AdminOrganizations = () => {
   };
 
   function openForm(organization?) {
-    console.log("open form");
     const isNew = !Boolean(organization);
     const dialogActions = [
       {
