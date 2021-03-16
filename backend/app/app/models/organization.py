@@ -17,12 +17,12 @@ from app.models.tree import Tree
 from app.core import enforcer
 from functools import reduce
 
-import slug as slugmodule
-# from slugify import slugify
+# import slug as slugmodule
+from slugify import slugify
 
-import string
-import random
-# from nanoid import generate
+# import string
+# import random
+from nanoid import generate
 
 from datetime import datetime
 
@@ -146,11 +146,11 @@ class Organization(Base):
     def initiate_unique_slug(name, id, path):
         root_slug = Organization.get_root_slug(path)
         if root_slug:
-            slug = slugmodule.slug(f"{root_slug} {name}")
-            return slug if Organization.is_slug_available(slug) else slugmodule.slug(f"{slug} {id}")
+            slug = slugify(f"{root_slug} {name}")
+            return slug if Organization.is_slug_available(slug) else slugify(f"{slug} {id}")
         else:
-            slug = slugmodule.slug(f"{name}")
-            return slug if Organization.is_slug_available(slug) else slugmodule.slug(f"{slug} {target.id}")
+            slug = slugify(f"{name}")
+            return slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
 
     def is_slug_available(value):
         # Avoid collusions with frontend routes
@@ -177,29 +177,29 @@ class Organization(Base):
         if value and (not target.slug or value != oldvalue):
             root_slug = Organization.get_root_slug(target.path)
             if root_slug:
-                slug = slugmodule.slug(f"{root_slug} {value}")
-                target.slug = slug if Organization.is_slug_available(slug) else slugmodule.slug(f"{slug} {target.id}")
+                slug = slugify(f"{root_slug} {value}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
             else:
-                slug = slugmodule.slug(f"{value}")
-                target.slug = slug if Organization.is_slug_available(slug) else slugmodule.slug(f"{slug} {target.id}")
+                slug = slugify(f"{value}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
 
     def on_path_change_rehydrate_slug(target, value, oldvalue, initiator):
         print("rehydrate_slug")
         if value and (not target.slug or value != oldvalue):
             root_slug = Organization.get_root_slug(target.path)
             if root_slug:
-                slug = slugmodule.slug(f"{root_slug} {target.name}")
-                target.slug = slug if Organization.is_slug_available(slug) else slugmodule.slug(f"{slug} {target.id}")
+                slug = slugify(f"{root_slug} {target.name}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
             else:
-                slug = slugmodule.slug(f"{target.name}")
-                target.slug = slug if Organization.is_slug_available(slug) else slugmodule.slug(f"{slug} {target.id}")
+                slug = slugify(f"{target.name}")
+                target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
 
     def randomize_slug(target, value, oldvalue, initiator):
         print("randomize_slug")
         if value and (not target.slug or value != oldvalue):
-            # target.slug = generate('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-', 21)
-            letters = string.ascii_letters
-            target.slug = ''.join(random.choice(letters) for i in range(21))
+            target.slug = generate('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-', 21)
+            # letters = string.ascii_letters
+            # target.slug = ''.join(random.choice(letters) for i in range(21))
             target.archived_at = datetime.now()
         else:
             target.archived_at = None
