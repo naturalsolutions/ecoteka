@@ -85,8 +85,7 @@ export default function useApi() {
         return Promise.resolve();
       })
       .catch((error) => {
-        // router.push("/signin");
-        return Promise.reject(error);
+        router.push("/signin");
       });
 
   createAuthRefreshInterceptor(ecotekaV1, refreshAuthLogic, {
