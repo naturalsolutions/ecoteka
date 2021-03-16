@@ -204,7 +204,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("components.Dashboard.heritageManagment.totalCost")}
+              caption={t("components.Dashboard.heritageManagment.totalCostPlaned")}
               metric={metrics.planned_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -217,7 +217,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("components.Dashboard.heritageManagment.totalCost")}
+              caption={t("components.Dashboard.heritageManagment.totalCostRealized")}
               metric={metrics.scheduled_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -233,7 +233,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("components.Dashboard.heritageManagment.totalCost")}
+              caption={t("components.Dashboard.heritageManagment.totalCostPlaned")}
               metric={metrics.planned_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -246,7 +246,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("components.Dashboard.heritageManagment.totalCost")}
+              caption={t("components.Dashboard.heritageManagment.totalCostRealized")}
               metric={metrics.scheduled_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
