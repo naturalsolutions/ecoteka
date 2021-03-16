@@ -31,13 +31,13 @@ import MapDrawToolbar from "@/components/Map/DrawToolbar";
 import MapSearchCity from "@/components/Map/SearchCity";
 import ImportPanel from "@/components/Import/Panel/Index";
 import InterventionForm from "@/components/Interventions/Form";
-import getConfig from "next/config";
 import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
-import { GeoJsonLayer } from "@deck.gl/layers";
-import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
+import OSMLayer from "@/components/Map/Layers/OSM";
+import CadastreLayer from "@/components/Map/Layers/Cadastre";
+import InventoryLayer from "@/components/Map/Layers/InventoryLayer";
 import Head from "next/head";
 import { ITree } from "@/components";
 import InterventionsEdit from "@/components/Interventions/Panel";
@@ -98,8 +98,7 @@ const defaultData = {
 
 const EditionPage = ({}) => {
   const { t } = useTranslation();
-  const { publicRuntimeConfig } = getConfig();
-  const { apiUrl } = publicRuntimeConfig;
+
   const classes = useStyles();
   const router = useRouter();
   const { user } = useAppContext();
@@ -234,127 +233,16 @@ const EditionPage = ({}) => {
     renderLayers();
   };
 
-  const cadastreLayer = new MVTLayer({
-    id: "cadastre",
-    data: "https://openmaptiles.geo.data.gouv.fr/data/cadastre/{z}/{x}/{y}.pbf",
-    minZoom: 11,
-    maxZoom: 16,
-    getLineColor: [192, 192, 192, 100],
-    getFillColor: [140, 170, 180, 100],
-    pickable: true,
-    visible: activeLayers.cadastre.value,
-  });
-
-  const osmLayer = new MVTLayer({
-    id: "osm",
-    data: `${apiUrl.replace(
-      "/api/v1",
-      ""
-    )}/tiles/osm/{z}/{x}/{y}.pbf?scope=public`,
-    minZoom: 0,
-    maxZoom: 13,
-    getRadius: 1,
-    radiusScale: 10,
-    radiusMinPixels: 0.25,
-    lineWidthMinPixels: 1,
-    pointRadiusMinPixels: 1,
-    pointRadiusMaxPixels: 10,
-    pointRadiusScale: 2,
-    getLineColor: [192, 192, 192],
-    getFillColor: [140, 170, 180],
-    pickable: true,
-    visible: activeLayers.osm.value,
-  });
-
-  const treesLayer = new GeoJsonLayer({
-    id: "trees",
-    data,
-    getLineColor: (d) => {
-      if (selection.includes(d.properties.id)) {
-        return [255, 0, 0, 100];
-      }
-
-      if (activeTree === d.properties.id) {
-        return [255, 100, 0];
-      }
-
-      for (const key of Object.keys(filters.filters).reverse()) {
-        if (
-          filters.filters[key] &&
-          d.properties.properties &&
-          filters.filters[key].includes(d.properties?.properties[key])
-        ) {
-          const index = filters.options[key].findIndex(
-            (f) => f.value === d.properties.properties[key]
-          );
-          return filters.options[key][index][dark ? "color" : "background"];
-        }
-      }
-
-      for (let key in filters.filters) {
-        if (filters.filters[key].length > 0) {
-          return [120, 120, 120, 128];
-        }
-      }
-
-      return [34, 169, 54, 100];
-    },
-    getFillColor: (d) => {
-      if (selection.includes(d.properties.id)) {
-        return [255, 0, 0, 100];
-      }
-
-      for (const key of Object.keys(filters.filters).reverse()) {
-        if (
-          filters.filters[key] &&
-          d.properties.properties &&
-          filters.filters[key].includes(d.properties?.properties[key])
-        ) {
-          const index = filters.options[key].findIndex(
-            (f) => f.value === d.properties.properties[key]
-          );
-
-          return filters.options[key][index][dark ? "color" : "background"];
-        }
-      }
-
-      for (let key in filters.filters) {
-        if (filters.filters[key].length > 0) {
-          return [120, 120, 120, 128];
-        }
-      }
-
-      return [34, 139, 34, 100];
-    },
-    getRadius: (d) => {
-      if (d.properties?.properties?.diameter) {
-        const diameter = Number(d.properties.properties.diameter);
-
-        if (diameter >= 0 && diameter < 40) {
-          return 1.25;
-        } else if (diameter >= 40 && diameter < 100) {
-          return 1.5;
-        } else {
-          return 1.75;
-        }
-      }
-
-      return 1;
-    },
-    updateTriggers: {
-      getFillColor: [activeTree, selection, editionMode, filters, dark, data],
-      getLineColor: [activeTree, selection, editionMode, filters, dark, data],
-      getRadius: [activeTree, selection, editionMode, filters, dark, data],
-    },
-    pickable: true,
-    autoHighlight: true,
-    pointRadiusMinPixels: 5,
-    pointRadiusScale: 1,
-    minRadius: 2,
-    radiusMinPixels: 0.5,
-    lineWidthMinPixels: 1,
-    lineWidthMaxPixels: 3,
+  const cadastreLayer = CadastreLayer(activeLayers.osm.value);
+  const osmLayer = OSMLayer(activeLayers.osm.value);
+  const treesLayer = InventoryLayer({
     visible: activeLayers.trees.value,
+    data,
+    filters,
+    dark,
+    selection,
+    activeTree,
+    editionMode,
   });
 
   const selectionLayer = new SelectionLayer({
