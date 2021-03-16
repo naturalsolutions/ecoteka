@@ -1,55 +1,53 @@
 stages:
-  - build_dev
-  - deploy_dev
-  - build_master
-  - deploy_master
+  - version
+  - build
+  - clean
+  - deploy
+  - release
 
-build_frontend_dev:
-  stage: build_dev
-  image: docker
-  script:
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-dev-latest -f ./frontend/.docker/Dockerfile ./frontend
-    - docker push ${CI_REGISTRY_IMAGE}:frontend-dev-latest
-    - docker system prune -a -f
-  only:
-    - dev
-  tags:
-    - ns01
+before_script:
+  - export PATH=$PATH:/home/gitlab-runner/.nvm/versions/node/v14.16.0/bin
 
-build_backend_dev:
-  stage: build_dev
-  image: docker
+version:
+  stage: version
   script:
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:backend-dev-latest ./backend
-    - docker push ${CI_REGISTRY_IMAGE}:backend-dev-latest
-    - docker system prune -a -f
-  only:
-    - dev
-  tags:
-    - ns01
-
-build_frontend_master:
-  stage: build_master
-  image: docker
-  script:
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-latest -f ./frontend/.docker/Dockerfile ./frontend
-    - docker push ${CI_REGISTRY_IMAGE}:frontend-latest
-    - docker system prune -a -f
+    - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/exec @semantic-release/changelog
+    - semantic-release --generate-notes false --dry-run
+  artifacts:
+    paths:
+      - VERSION
   only:
     - master
   tags:
     - ns01
 
-build_backend_master:
-  stage: build_master
-  image: docker
+build_frontend:
+  stage: build
   script:
+    - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:backend-latest ./backend
-    - docker push ${CI_REGISTRY_IMAGE}:backend-latest
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*} -f ./frontend/.docker/Dockerfile ./frontend
+    - docker push ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}
+  only:
+    - master
+  tags:
+    - ns01
+
+build_backend:
+  stage: build
+  script:
+    - export VERSION=$(<VERSION)
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*} ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*}
+  only:
+    - master
+  tags:
+    - ns01
+
+clean:
+  stage: clean
+  script:
     - docker system prune -a -f
   only:
     - master
@@ -57,25 +55,12 @@ build_backend_master:
     - ns01
 
 deploy_dev:
-  stage: deploy_dev
+  stage: deploy
   script:
-    - cd /opt/ns-ansible-infrastructure 
+    - git clone git@gitlab.com:natural-solutions/ns-ansible-infrastructure.git
+    - cd ns-ansible-infrastructure
     - echo ${VAULT_PASSWORD_KEY} > password-file
     - ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
-    - rm password-file
-  only:
-    - dev
-  tags:
-    - ns01
-  variables:
-    ANSIBLE_INVENTORY_UNPARSED_FAILED: "true"
-
-deploy_master:
-  stage: deploy_master
-  script:
-    - cd /opt/ns-ansible-infrastructure 
-    - echo ${VAULT_PASSWORD_KEY} > password-file
-    - ansible-playbook -i hosts -l ecoteka_master --vault-password-file password-file deploy.yml
     - rm password-file
   only:
     - master
@@ -83,3 +68,12 @@ deploy_master:
     - ns01
   variables:
     ANSIBLE_INVENTORY_UNPARSED_FAILED: "true"
+
+release:
+  stage: release
+  script:
+    - semantic-release
+  only:
+    - master
+  tags:
+    - ns01

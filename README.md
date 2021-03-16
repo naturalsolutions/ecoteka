@@ -19,6 +19,14 @@ All work environments need at least the following requirements:
 - [Mapbox GL JS][mapbox-gl-js] as library to render interactive maps.
 - [Tippecanoe][tippecanoe] to build vector tilesets.
 
+## Install environment for development
+
+```shell
+npm install # Install husky and commitlint
+npm run prepare # Install pre-commit hooks with husky
+./scripts/start_dev.sh
+```
+
 ## Quick Start With Docker Compose
 
 To start with docker-compose we just need to copy `.env.example` to `.env`. You
