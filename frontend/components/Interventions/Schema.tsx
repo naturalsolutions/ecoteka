@@ -10,17 +10,19 @@ export type TInterventionType =
   | "surveillance";
 
 export interface TIntervention {
+  date?: Date | null;
+  done: boolean;
+  estimated_cost: number;
   id?: number;
+  intervenant: string;
+  intervention_end_date?: Date;
+  intervention_start_date?: Date;
   intervention_type: TInterventionType;
   organization_id?: number;
-  tree_id: number;
-  intervention_start_date?: Date;
-  intervention_end_date?: Date;
-  date?: Date;
-  done: boolean;
+  properties: any;
   required_documents: string[];
   required_material: string[];
-  properties: any;
+  tree_id: number;
 }
 
 export const interventionTypes: TInterventionType[] = [
