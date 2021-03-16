@@ -67,7 +67,12 @@
       "title": "Filtres"
     },
     "Layers": {
-      "title": "Couches"
+      "title": "Couches",
+      "defaultLayers": {
+        "trees": "Inventaire",
+        "cadastre": "Cadastre",
+        "osm": "Open Street Map (OSM)"
+      }
     }
   },
   "Sidebar": {
@@ -76,7 +81,7 @@
   },
   "PanelStart": {
     "title": "Vous êtes connecté.e à votre compte",
-    "content": "Vous pouvez voir le nombre d'arbres en OpenData mais aussi le nombre d'arbre présent sur votre couche privée de données.",
+    "content": "Vous pouvez voir le nombre d'arbres en OpenData mais aussi le nombre d'arbres présent sur votre couche privée de données.",
     "numberOfTrees": {
       "title": "Nombre d'arbres sur la carte",
       "content": "millions d'arbres"
@@ -190,6 +195,7 @@
     "organization": "Organisation",
     "password": "Mot de passe",
     "passwordConfirm": "Confirmer mot de passe",
+    "validationButton" : "Créer le compte",
     "registrationCompleted": "Inscription réussie",
     "registrationFailed": "Une erreur s'est produite lors de l'inscription"
   },
@@ -204,7 +210,7 @@
     "success": "Demande enregistrée",
     "whatnow": "Que souhaitez vous faire ?",
     "required_documents": "Documents requis",
-    "required_material": "Materiel requis",
+    "required_material": "Matériel requis",
     "intervention_type": "Type d'intervention",
     "intervenant": "Intervenant",
     "intervention_period": "Période d'intervention",
@@ -257,6 +263,7 @@
       "comment": "Commentaire",
       "pruning": "Elagage",
       "carpenterremoval": "Suppression de charpentière",
+      "lightning": "Eclaircissage",
       "isLit": "Eclaircissage",
       "maintenance": "Entretien",
       "crownraising": "Remontée de couronne"
@@ -288,7 +295,7 @@
       "method": "Méthode",
       "disease": "Maladie",
       "comment": "Commentaire",
-      "auxilaryrelease": "Lâché d'auxilière",
+      "auxilaryrelease": "Lâché d'auxiliaire",
       "biologictreatment": "Traitement biologique"
     },
     "surveillance": {
@@ -304,6 +311,10 @@
       "date": "Date",
       "type": "Type",
       "state": "Etat"
+    },
+    "interventionSchedule": {
+      "title": "Calendrier d'interventions",
+      "headerButton": "Aujourd'hui"
     },
     "saveSuccess": "L'intervention a été enregistrée avec succès.",
     "saveError": "Une erreur s'est produite lors de l'enregistrement de l'intervention",
@@ -354,11 +365,11 @@
         "ball": "Boule",
         "cone": "Cône"
       },
-      "isProtected": "Arbre protégé?",
-      "isTreeOfInterest": "Arbre remarquable?",
+      "isProtected": "Arbre protégé",
+      "isTreeOfInterest": "Arbre remarquable",
       "soilConstraints": "Contraintes au sol",
       "airConstraints": "Contraintes aériennes",
-      "isLit": "Présence d'éclairage?",
+      "isLit": "Présence d'éclairage",
       "watering": "Arrosage",
       "allergenicRiskScore": "Potentiel allergisant",
       "notes": "Remarques"
@@ -440,6 +451,12 @@
       "select": "Déposer ici les photos ou cliquer (max.{{max}})"
     },
     "backToInfo": "Retour à l'arbre"
+  },
+  "TreeAccordion" : {
+    "treeIdentity": "Identité de l'arbre",
+    "characteristics": "Caractéristiques",
+    "outdoorEnvironment": "Environnement extérieur",
+    "other": "Autre"
   },
   "Teams": {
     "buttonAdd": "Ajouter une équipe",
@@ -568,25 +585,29 @@
   },
   "Dashboard": {
     "title": "Tableau de bord",
+    "year" : "Année",
     "for": "pour",
     "treeHeritage": {
       "title": "Votre patrimoine arboré",
       "totalTrees": "Total des arbres",
-      "plantedTrees": "Arbres plantés en 2020",
-      "felledTrees": "Arbres abattus en 2020",
+      "plantedTrees": "Arbres plantés",
+      "felledTrees": "Arbres abattus",
       "alertTitle": "Ajouter les premiers arbres à votre patrimoine",
       "alertText": "Votre espace de travail ne contient aucun arbre pour l'instant",
       "boldText": "Commencer maintenant!"
     },
     "heritageManagment": {
-      "totalCost": "Coût total des interventions planifiées en 2020",
+      "totalCostPlaned": "Coût total des interventions planifiées",
+      "totalCostRealized": "Coût total des interventions réalisées",
       "title": "État de gestion de votre patrimoine",
       "alertTitle": "Ajouter, programmer et suivre le budget des interventions sur votre patrimoine",
       "alertText": "Dès que votre espace de travail contiendra des arbres, vous pourrez débuter la gestion de votre patrimoine végétal",
       "boldText": "En savoir plus!"
     },
     "addInterventionButton": "Ajouter des interventions",
-    "importDataButton": "Importer des données"
+    "importDataButton": "Importer des données",
+    "interventionState" : "Fait",
+    "treeViewButton" : "Vue arbre"
   },
   "MapLayers": {
     "backgrounds": "Fonds",

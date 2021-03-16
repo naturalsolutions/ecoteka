@@ -7,6 +7,7 @@ backups
 acme.json
 tiles
 redis
+frontend/~/chromeTemp
 .vscode/*
 !.vscode/ecoteka.code-snippets
 !.vscode/settings.json

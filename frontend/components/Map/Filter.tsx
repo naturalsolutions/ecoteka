@@ -1,6 +1,13 @@
 import React, { FC, useState, memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { TextField, Grid, Typography, Chip, Box } from "@material-ui/core";
+import {
+  TextField,
+  Grid,
+  Typography,
+  Chip,
+  Box,
+  Avatar,
+} from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import useApi from "@/lib/useApi";
@@ -77,6 +84,27 @@ const MapFilter: FC<IMapFilter> = ({
     }
   }, [organizationId]);
 
+  const renderChip = (option, tagProps?) => {
+    const { inputValue, ...rest } = tagProps;
+
+    return (
+      <Chip
+        key={`key-${option.value}`}
+        label={`${option.value} (${option.total})`}
+        avatar={
+          <Avatar
+            style={{
+              backgroundColor: `rgb(${option["background"]})`,
+            }}
+          >
+            &nbsp;
+          </Avatar>
+        }
+        {...rest}
+      />
+    );
+  };
+
   return (
     <Grid container direction="column" spacing={3}>
       <Grid item>
@@ -98,37 +126,11 @@ const MapFilter: FC<IMapFilter> = ({
               <TextField {...params} label={filter.label} variant="outlined" />
             )}
             renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip
-                  label={`${option.total} - ${option.value}`}
-                  style={{
-                    backgroundColor: `rgb(${option[
-                      dark ? "color" : "background"
-                    ]?.join(",")})`,
-                    color: `rgb(${option[dark ? "background" : "color"]?.join(
-                      ","
-                    )})`,
-                  }}
-                  {...getTagProps({ index })}
-                ></Chip>
-              ))
+              value.map((option, index) =>
+                renderChip(option, getTagProps({ index }))
+              )
             }
-            renderOption={(option, { selected }) => (
-              <React.Fragment>
-                <Chip
-                  style={{
-                    backgroundColor: `rgb(${option[
-                      dark ? "color" : "background"
-                    ]?.join(",")})`,
-                    color: `rgb(${option[dark ? "background" : "color"]?.join(
-                      ","
-                    )})`,
-                  }}
-                  label={option.total}
-                />
-                <Box ml={2}>{option.value}</Box>
-              </React.Fragment>
-            )}
+            renderOption={renderChip}
             onChange={(e, v) => handleValue(filter.key, v)}
           />
         </Grid>

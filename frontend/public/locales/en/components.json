@@ -64,10 +64,15 @@
       "satellite": "Satellite"
     },
     "Filter": {
-      "title": "Filtres"
+      "title": "Filters"
     },
     "Layers": {
-      "title": "Layers"
+      "title": "Layers",
+      "defaultLayers": {
+        "trees": "Inventory",
+        "cadastre": "Cadastre",
+        "osm": "Open Street Map (OSM)"
+      }
     }
   },
   "Sidebar": {
@@ -190,6 +195,7 @@
     "organization": "Organization",
     "password": "Password",
     "passwordConfirm": "Password confirm",
+    "validationButton": "Create account",
     "registrationCompleted": "Registration completed",
     "registrationFailed": "The registration has failed"
   },
@@ -202,7 +208,7 @@
     "title": "Request for intervention",
     "plannew": "New request",
     "success": "Registered request",
-    "whatnow": "What do you want to do now?",
+    "whatnow": "What do you want to do now ?",
     "required_documents": "Required documents",
     "required_material": "Required material",
     "intervention_type": "Intervention type",
@@ -305,6 +311,10 @@
       "type": "Type",
       "state": "State"
     },
+    "interventionSchedule": {
+      "title": "Intervention schedule",
+      "headerButton": "Today"
+    },
     "saveSuccess": "The intervention has been successfully saved.",
     "saveError": "An error occurred while saving the intervention",
     "date": "Date",
@@ -354,75 +364,78 @@
         "ball": "Ball",
         "cone": "Cone"
       },
-      "procted": "Protected tree",
+      "isProtected": "Protected tree",
+      "isTreeOfInterest": "Remarkable tree",
       "soilConstraints": "Soil constraints",
       "aerianConstraint": "Aerian contraints",
+      "isLit": "Presence of lighting",
       "watering": "Watering",
       "lightning": "Lighting",
       "allergens": "Allergenic tree",
-      "remarks": "Remarks"
+      "notes": "Remarks"
     },
     "helperText": {
       "taxon": "Select a species from our checklist; following fiels will be auto filled.",
-      "family": "Famille",
-      "genus": "Genre",
-      "species": "Espèce",
+      "family": "Family",
+      "genus": "Genus",
+      "species": "Species",
       "cultivar": "Cultivar",
-      "canonicalName": "Nom scientifique",
-      "vernacularName": "Nom vernaculaire",
-      "townshipCode": "Code commune",
-      "zipCode": "Code postal",
-      "address": "Adresse",
-      "zone": "Découpage en zone",
-      "code": "Matricule Ecoteka",
-      "plantationDate": "Date de plantation",
-      "height": "Hauteur de l'arbre",
-      "diameter": "Diamètre de l'arbre",
-      "soilTexture": "Type de sol",
-      "rootType": "Type d'enracinement",
-      "shape": "Port de l'arbre",
-      "procted": "Arbre protégé",
-      "remarkableTree": "Arbre remarquable",
-      "soilConstraints": "Contraintes au sol",
-      "aerianConstraint": "Contraintes aériennes",
-      "lightning": "Présence d'éclairage",
-      "watering": "Arrosage",
-      "allergens": "Arbre allergène",
-      "remarks": "Remarques"
+      "canonicalName": "Canonical name",
+      "vernacularName": "Vernacular name",
+      "townshipCode": "Township code",
+      "zipCode": "Zip code",
+      "address": "Adress",
+      "zone": "Zone cutting",
+      "code": "Registration number",
+      "plantationDate": "Plantation date",
+      "height": "Tree height",
+      "diameter": "Tree diameter",
+      "soilTexture": "Soil texture",
+      "rootType": "Root type",
+      "shape": "Tree shape",
+      "isProtected": "Protected tree",
+      "isTreeOfInterest": "Remarkable tree",
+      "soilConstraints": "Soil constraints",
+      "airConstraints": "Aerian constraint",
+      "lightning": "Presence of lighting",
+      "watering": "Watering",
+      "allergenicRiskScore": "Indicates the allergenic potential of the tree (0 = zero -> 5 = very strong)",
+      "notes": "Remarks"
     },
     "placeholder": {
       "taxon": "",
       "family": "ex: Platanaceae",
       "genus": "ex: Platanus",
       "species": "ex: occidentalis",
-      "cultivar": "Cultivar",
-      "canonicalName": "Nom scientifique",
-      "vernacularName": "Nom vernaculaire",
-      "townshipCode": "Code commune",
-      "zipCode": "Code postal",
-      "address": "Adresse",
-      "zone": "Découpage en zone",
-      "code": "Matricule Ecoteka",
-      "plantationDate": "Date de plantation",
-      "height": "Hauteur de l'arbre",
-      "diameter": "Diamètre de l'arbre",
-      "soilTexture": "Type de sol",
-      "rootType": "Type d'enracinement",
-      "shape": "Port de l'arbre",
-      "procted": "Arbre protégé",
-      "remarkableTree": "Arbre remarquable",
-      "soilConstraints": "Contraintes au sol",
-      "aerianConstraint": "Contraintes aériennes",
-      "lightning": "Présence d'éclairage",
-      "watering": "Arrosage",
-      "allergens": "Arbre allergène",
-      "remarks": "Remarques"
+      "cultivar": "ex: 'Cripps Pink'",
+      "canonicalName": "ex: Platanus occidentalis 'Cripps Pink'",
+      "vernacularName": "ex: Platane commun 'Cripps Pink'",
+      "townshipCode": "ex: 59599",
+      "zipCode": "ex: 13010",
+      "address": "ex: 61 rue de la Poste",
+      "zone": "ex: Zone A, Post office district...",
+      "code": "Registration number",
+      "plantationDate": "ex: 20/08/2019",
+      "height": "Tree height",
+      "diameter": "Tree diameter",
+      "soilTexture": "Soil texture",
+      "rootType": "Root type",
+      "shape": "Tree shape",
+      "isProtected": "Protected tree",
+      "isTreeOfInterest": "Remarkable tree",
+      "soilConstraints": "Soil constraints",
+      "airConstraints": "Air constraints",
+      "lightning": "Presence of lighting",
+      "isLit": "Presence of lighting",
+      "watering": "ex: Drip",
+      "allergens": "Allergenic tree",
+      "notes": "Remarks"
     },
     "summary": {
       "moreDetails": "Edit tree"
     },
-    "latitude": "Latitude",
-    "longitude": "Longitude",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
     "registrationNumber": "Tree registration number"
   },
   "TreeForm": {
@@ -439,6 +452,12 @@
       "select": "Drop files here or click (max.{{max}})"
     },
     "backToInfo": "Back to tree"
+  },
+  "TreeAccordion": {
+    "treeIdentity": "Tree identity",
+    "characteristics": "Characteristics",
+    "outdoorEnvironment": "Outdoor environment",
+    "other": "Other"
   },
   "Teams": {
     "buttonAdd": "Add a team",
@@ -569,25 +588,29 @@
   },
   "Dashboard": {
     "title": "Dashboard",
+    "year" : "Year",
     "for": "for",
     "treeHeritage": {
       "title": "Your tree heritage",
       "totalTrees": "Total trees",
-      "plantedTrees": "Planted trees in 2020",
-      "felledTrees": "Felled trees in 2020",
+      "plantedTrees": "Planted trees",
+      "felledTrees": "Felled trees",
       "alertTitle": "Add your first trees to your heritage",
       "alertText": "Your workspace does not contain any trees yet",
       "boldText": "Start now !"
     },
     "heritageManagment": {
-      "totalCost": "Total cost interventions planned in 2020",
+      "totalCostPlaned": "Total cost interventions planned",
+      "totalCostRealized": "Total cost of interventions realized",
       "title": "State of management of your assets",
       "alertTitle": "Add, program and monitor the budget for interventions on your assets",
       "alertText": "As soon as your workspace contains trees, you can start managing your plant heritage",
       "boldText": "Learn more !"
     },
     "addInterventionButton": "Add interventions",
-    "importDataButton": "Import datas"
+    "importDataButton": "Import data",
+    "interventionState" : "Done",
+    "treeViewButton" : "Tree view"
   },
   "MapLayers": {
     "backgrounds": "Backgrounds",

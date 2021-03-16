@@ -23,6 +23,7 @@ const DatePicker: React.FC<DatePickerProps> = (props) => {
     startDate: new Date(),
     endDate: new Date(),
   };
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Controller

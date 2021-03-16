@@ -2,9 +2,8 @@ from typing import Dict, Optional, List
 import json
 from fastapi import APIRouter, Depends, Response, HTTPException
 from sqlalchemy.orm import Session
-from bokeh import palettes
 import geopandas as gpd
-from shapely.geometry import box
+from app import crud
 
 from app.api import get_db
 from app.core import (
@@ -42,73 +41,8 @@ def generate_style(
             
             if len(satellite) > 0:
                 style["layers"][satellite[0]]["layout"]["visibility"] = "visible"
-
-
-        style["sources"]["cadastre-france"] = {
-            "type": "vector",
-            "tiles": [
-                "https://openmaptiles.geo.data.gouv.fr/data/cadastre/{z}/{x}/{y}.pbf"
-            ],
-            "minzoom": 11,
-            "maxzoom": 16,
-        }
-
-        style["layers"].insert(
-            len(style["layers"]),
-            {
-                "id": "cadastre-france-parcelles",
-                "type": "fill",
-                "source": "cadastre-france",
-                "source-layer": "parcelles",
-                "paint": {
-                    "fill-color": "#5a3fc0",
-                    "fill-opacity": 0.3
-                }
-            }
-        )
-
-        style["layers"].insert(
-            len(style["layers"]),
-            {
-                "id": "cadastre-france-batiments",
-                "type": "fill",
-                "source": "cadastre-france",
-                "source-layer": "batiments",
-                "paint": {
-                    "fill-color": "#5a3fc0",
-                    "fill-opacity": 0.3
-                }
-            }
-        )
-
-        style["layers"].insert(
-            len(style["layers"]),
-            {
-                "id": "cadastre-france-sections",
-                "type": "fill",
-                "source": "cadastre-france",
-                "source-layer": "sections",
-                "paint": {
-                    "fill-color": "#5a3fc0",
-                    "fill-opacity": 0.3
-                }
-            }
-        )
-
+        
         return style
-
-def hex_to_rgb(hex):
-    hex = hex.lstrip('#')
-    hlen = len(hex)
-    return tuple(int(hex[i:i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
-
-def complementaryColor(my_hex):
-    if my_hex[0] == '#':
-        my_hex = my_hex[1:]
-    rgb = (my_hex[0:2], my_hex[2:4], my_hex[4:6])
-    comp = ['%02X' % (255 - int(a, 16)) for a in rgb]
-    
-    return ''.join(comp)
 
 @router.get("/geojson", dependencies=[Depends(authorization("maps:get_geojson"))])
 def get_geojson(
@@ -273,25 +207,18 @@ def get_filters(
     """
     Get filters 
     """
-    fields = ["canonicalName", "vernacularName"]
-    filter: Dict = {}
+    palettes = [200, 400, 600, 800, 1000]
+    filters = crud.tree.get_filters(db, organization_id)
 
-    for field in fields:
-        rows = db.execute(f"""
-            select distinct properties ->> '{field}' as value, count(properties) as total
-            from tree
-            where organization_id = {organization_id}
-            group by properties ->> '{field}'
-            order by total desc;""")
-        colors = palettes.viridis(rows.rowcount)
-        filter[field] = [{ 
-            'value': row.value, 
-            'total': row.total, 
-            'background': hex_to_rgb(colors[i]),
-            'color': hex_to_rgb(complementaryColor(colors[i]))
-        } for i, row in enumerate(rows) if row[0] not in ["", None]]
-    
-    return filter
+    for filter in filters:
+        total_rows = len(filters[filter])
+        selected_palette = [palette for palette in palettes if palette > total_rows][0]
+        palette = open(f'/app/app/data/palettes/{selected_palette}.txt').read().splitlines()
+
+        for i in enumerate(filters[filter]):
+            filters[filter][i[0]]["background"] = palette[i[0]]
+        
+    return filters
 
 @router.get("/bbox", dependencies=[Depends(authorization("maps:get_bbox"))])
 def get_bbox(
