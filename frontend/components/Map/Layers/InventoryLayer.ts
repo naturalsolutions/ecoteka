@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { GeoJsonLayer } from "@deck.gl/layers";
 
 export interface InventoryLayerProps {

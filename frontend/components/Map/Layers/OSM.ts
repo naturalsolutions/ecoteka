@@ -1,10 +1,11 @@
+// @ts-nocheck
 import { MVTLayer } from "@deck.gl/geo-layers";
 import getConfig from "next/config";
 
 const { publicRuntimeConfig } = getConfig();
 const { apiUrl } = publicRuntimeConfig;
 
-function OSMLayer(visible: boolean): MVTLayer {
+function OSMLayer(visible: boolean): MVTLayer<string, TileLayerProps<string>> {
   return new MVTLayer({
     id: "osm",
     data: `${apiUrl.replace(
