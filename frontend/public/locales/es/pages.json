@@ -14,10 +14,10 @@
   },
   "Dashboard": {
     "steps": [
-      "Configuration de votre espace de travail",
-      "Inventaire patrimoine arboré",
-      "Pilotage de la gestion",
-      "Surveillance de l'état sanitaire"
+      "Configura tu espacio de trabajo",
+      "Inventario del patrimonio arbóreo",
+      "Pilotaje de gestión",
+      "Monitoreo del estado de salud"
     ]
   },
   "UsersSetPassword": {
