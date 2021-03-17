@@ -26,6 +26,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { AbilityContext } from "@/components/Can";
 import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -55,13 +56,15 @@ const AppLayoutHeader = ({}): JSX.Element => {
   const ability = useContext(AbilityContext);
 
   const handleOrganizationSelectChange = (organization: IOrganization) => {
-    if (!organization || !organization.id) {
-      return;
-    }
-
     const newUser = { ...user };
     newUser.currentOrganization = organization;
     setUser(newUser);
+
+    router.push({
+      query: {
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   useEffect(() => {
@@ -80,25 +83,25 @@ const AppLayoutHeader = ({}): JSX.Element => {
 
   const menuItems = [
     {
-      link: "/map?panel=start",
-      icon: <MapIcon fontSize="small" />,
-      do: "read",
-      on: "Trees",
-    },
-    {
-      link: "/scheduler",
-      icon: <TodayIcon fontSize="small" />,
-      do: "read",
-      on: "Trees",
-    },
-    {
-      link: "/dashboard",
+      link: "/[organizationSlug]",
       icon: <DashboardIcon fontSize="small" />,
       do: "read",
       on: "Trees",
     },
     {
-      link: "/imports",
+      link: "/[organizationSlug]/map",
+      icon: <MapIcon fontSize="small" />,
+      do: "read",
+      on: "Trees",
+    },
+    {
+      link: "/[organizationSlug]/scheduler",
+      icon: <TodayIcon fontSize="small" />,
+      do: "read",
+      on: "Trees",
+    },
+    {
+      link: "/[organizationSlug]/imports",
       icon: <SettingsSystemDaydreamIcon fontSize="small" />,
       do: "create",
       on: "Trees",
@@ -111,11 +114,9 @@ const AppLayoutHeader = ({}): JSX.Element => {
         <Grid item>
           <Grid container alignItems="center">
             <Grid item>
-              <img
-                onClick={() => router.push(user ? "/map" : "/")}
-                src={logo}
-                className={classes.logo}
-              />
+              <Link href="/">
+                <img src={logo} className={classes.logo} />
+              </Link>
             </Grid>
             {user && (
               <>
@@ -126,14 +127,25 @@ const AppLayoutHeader = ({}): JSX.Element => {
                 <Hidden smDown>
                   <ToggleButtonGroup value={menu} size="small">
                     {menuItems.map(
-                      (i, k) =>
-                        ability.can(i.do as Actions, i.on as Subjects) && (
+                      (menuItem, key) =>
+                        ability.can(
+                          menuItem.do as Actions,
+                          menuItem.on as Subjects
+                        ) && (
                           <ToggleButton
-                            key={k}
-                            value={i.link}
-                            onClick={() => router.push(i.link)}
+                            key={key}
+                            value={menuItem.link}
+                            onClick={() =>
+                              router.push({
+                                pathname: menuItem.link,
+                                query: {
+                                  organizationSlug:
+                                    user.currentOrganization.slug,
+                                },
+                              })
+                            }
                           >
-                            {i.icon}
+                            {menuItem.icon}
                           </ToggleButton>
                         )
                     )}

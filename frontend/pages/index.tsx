@@ -94,12 +94,6 @@ export default function IndexPage() {
     setLanding(false);
   };
 
-  useEffect(() => {
-    if (token && user) {
-      router.push("/map?panel=start");
-    }
-  }, [token, user]);
-
   return !user ? (
     <AppLayoutCarto>
       <Grid
