@@ -1,11 +1,15 @@
 import React from "react";
 import cx from "clsx";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
-import { Column, Row, Item } from "@/components/Core/Flex";
+import {
+  Box,
+  Grid,
+  Typography,
+  Avatar,
+  Divider,
+  Button,
+  Link,
+} from "@material-ui/core";
 import { useDynamicAvatarStyles } from "@mui-treasury/styles/avatar/dynamic";
 
 const usePersonStyles = makeStyles(() => ({
@@ -37,21 +41,23 @@ const PersonItem = ({ src, name, friendCount, role }) => {
   const avatarStyles = useDynamicAvatarStyles({ size: 56 });
   const styles = usePersonStyles();
   return (
-    <Row gap={2} p={2.5}>
-      <Item>
-        <Avatar classes={avatarStyles} src={src} />
-      </Item>
-      <Row wrap grow gap={0.5} minWidth={0}>
-        <Item grow minWidth={0}>
-          <div className={cx(styles.name, styles.text)}>{name}</div>
-        </Item>
-        <Item position={"middle"}>
+    <Grid item container spacing={2}>
+      <Grid item xs={1} md={3}>
+        <Avatar src={src} />
+      </Grid>
+      <Grid item container xs={11} md={9}>
+        <Grid item xs zeroMinWidth>
+          <Typography noWrap className={cx(styles.name, styles.text)}>
+            {name}
+          </Typography>
+        </Grid>
+        <Grid item>
           <Button className={styles.btn} variant={"outlined"}>
             {role}
           </Button>
-        </Item>
-      </Row>
-    </Row>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -88,16 +94,24 @@ const useStyles = makeStyles(() => ({
 export const MembersCard: React.FC = (props) => {
   const styles = useStyles();
   return (
-    <Column p={0} gap={0} my={2} className={styles.card} grow>
-      <Row wrap p={2} alignItems={"baseline"} className={styles.header}>
-        <Item stretched className={styles.headline}>
-          Membres (N)
-        </Item>
-        <Item className={styles.actions}>
-          <Link className={styles.link}>En savoir plus</Link> •{" "}
-          <Link className={styles.link}>Gérer les membres</Link>
-        </Item>
-      </Row>
+    <Grid
+      container
+      direction="column"
+      className={styles.card}
+      xs={12}
+      spacing={2}
+    >
+      <Grid item container className={styles.header}>
+        <Grid item xs className={styles.headline}>
+          <Box p={1}> Membres (N)</Box>
+        </Grid>
+        <Grid item xs className={styles.actions}>
+          <Box p={1}>
+            <Link className={styles.link}>En savoir plus</Link> •{" "}
+            <Link className={styles.link}>Gérer les membres</Link>
+          </Box>
+        </Grid>
+      </Grid>
       <PersonItem
         name={"Vous"}
         friendCount={6}
@@ -106,7 +120,7 @@ export const MembersCard: React.FC = (props) => {
       />
       <Divider variant={"middle"} className={styles.divider} />
       <PersonItem
-        name={"Camellia Sinensis"}
+        name={"Camellia Sinensis Machin Truc"}
         friendCount={6}
         src={"https://source.unsplash.com/300x300/?tree"}
         role={"manager"}
@@ -125,7 +139,7 @@ export const MembersCard: React.FC = (props) => {
         src={"https://source.unsplash.com/300x300/?tree"}
         role={"reader"}
       />
-    </Column>
+    </Grid>
   );
 };
 

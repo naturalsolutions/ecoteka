@@ -14,7 +14,6 @@ import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import ShowcaseCard from "@/components/Core/Card/ShowcaseCard";
-import { Column, Row, Item } from "@mui-treasury/components/flex";
 
 const AdminOrganizations = () => {
   const { user } = useAppContext();
@@ -101,43 +100,46 @@ const AdminOrganizations = () => {
       return (
         <AppLayoutGeneral>
           <Container>
-            <Column gap={1.5}>
-              <Item>
-                <Row gap={"inherit"}>
-                  <Item>
-                    <Typography variant="h5">
-                      {t("common.pages.Admin.Organizations.title")}
-                    </Typography>
-                  </Item>
-                  <Item position={"right"}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        openForm();
-                      }}
-                      size="small"
-                    >
-                      {t("common.pages.Admin.Organization.addRootOrganization")}
-                    </Button>
-                  </Item>
-                </Row>
-              </Item>
-              <Item mt={3} px={3}>
-                <Grid container spacing={4} justify={"center"}>
-                  {organizations.map((organization) => {
-                    return (
-                      <ShowcaseCard
-                        key={`organization.id`}
-                        ownerEmail={organization.current_user_role}
-                        slug={organization.slug}
-                        name={organization.name}
-                      />
-                    );
-                  })}
+            <Grid container justify="center" direction="column" spacing={2}>
+              <Grid
+                item
+                xs
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="flex-start"
+              >
+                <Grid item>
+                  <Typography variant="h5">
+                    {t("common.pages.Admin.Organizations.title")}
+                  </Typography>
                 </Grid>
-              </Item>
-            </Column>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      openForm();
+                    }}
+                    size="small"
+                  >
+                    {t("common.pages.Admin.Organization.addRootOrganization")}
+                  </Button>
+                </Grid>
+              </Grid>
+              <Grid xs item container spacing={2}>
+                {organizations.map((organization) => {
+                  return (
+                    <ShowcaseCard
+                      key={`${organization.id}`}
+                      ownerEmail={organization.current_user_role}
+                      slug={organization.slug}
+                      name={organization.name}
+                    />
+                  );
+                })}
+              </Grid>
+            </Grid>
           </Container>
         </AppLayoutGeneral>
       );

@@ -9,8 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CallMade from "@material-ui/icons/CallMade";
 import Person from "@material-ui/icons/Person";
 
-import { Row, Column, Item } from "@mui-treasury/components/flex";
-import { useSizedIconButtonStyles } from "@mui-treasury/styles/iconButton/sized";
+import { useSizedIconButtonStyles } from "@/styles/IconButton/sized";
 
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
@@ -49,17 +48,17 @@ const BasicProfile: React.FC<BasicProfileProps> = ({ ownerEmail }) => {
   const styles = useBasicProfileStyles();
   const { t } = useTranslation(["common"]);
   return (
-    <Row>
-      <Item>
+    <Grid item container spacing={2}>
+      <Grid item>
         <Avatar className={styles.avatar}>
           <Person />
         </Avatar>
-      </Item>
-      <Item position={"middle"} pl={{ sm: 0.5, lg: 0.5 }}>
+      </Grid>
+      <Grid item>
         <Typography className={styles.overline}>{t("common.owner")}</Typography>
         <Typography className={styles.name}>{ownerEmail}</Typography>
-      </Item>
-    </Row>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -86,14 +85,23 @@ const CardHeader: React.FC<CardHeaderProps> = ({ slug, name }) => {
   const { t } = useTranslation(["common"]);
   const router = useRouter();
   return (
-    <Row>
-      <Item position={"middle"}>
-        <Typography className={styles.title}>
-          <b>@{slug}</b>
-        </Typography>
-        <Typography className={styles.subheader}>{name}</Typography>
-      </Item>
-      <Item position={"right"} mr={-0.5}>
+    <Grid
+      item
+      xs
+      container
+      direction="row"
+      justify="space-between"
+      alignItems="flex-start"
+    >
+      <Grid item>
+        <Box pl={1}>
+          <Typography className={styles.title}>
+            <b>@{slug}</b>
+          </Typography>
+          <Typography className={styles.subheader}>{name}</Typography>
+        </Box>
+      </Grid>
+      <Grid item>
         <StyledTooltip title={t("common.seeDetails")}>
           <IconButton
             classes={iconBtnStyles}
@@ -102,14 +110,15 @@ const CardHeader: React.FC<CardHeaderProps> = ({ slug, name }) => {
             <CallMade />
           </IconButton>
         </StyledTooltip>
-      </Item>
-    </Row>
+      </Grid>
+    </Grid>
   );
 };
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(({ spacing }) => ({
   card: {
     border: "2px solid",
+    padding: spacing(2),
     borderColor: "#E7EDF3",
     borderRadius: 16,
     transition: "0.4s",
@@ -131,20 +140,17 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   name,
 }) => {
   const styles = useStyles();
-  const gap = { xs: 1, sm: 1.5, lg: 2 };
   return (
-    <Grid item xs={12} sm={4} md={3}>
-      <Column
-        className={styles.card}
-        p={{ xs: 0.5, sm: 0.75, lg: 1 }}
-        gap={gap}
-      >
-        <CardHeader slug={slug} name={name} />
-        <Item>
-          <Box minHeight={200} bgcolor={"#dfdfdf"} borderRadius={8} />
-        </Item>
-        <BasicProfile ownerEmail={ownerEmail} />
-      </Column>
+    <Grid item xs={12} sm={6} md={3}>
+      <Box className={styles.card}>
+        <Grid container direction="column" spacing={2}>
+          <CardHeader slug={slug} name={name} />
+          <Grid item>
+            <Box minHeight={200} bgcolor={"#dfdfdf"} borderRadius={8} />
+          </Grid>
+          <BasicProfile ownerEmail={ownerEmail} />
+        </Grid>
+      </Box>
     </Grid>
   );
 };

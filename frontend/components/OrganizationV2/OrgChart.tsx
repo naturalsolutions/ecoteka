@@ -1,10 +1,6 @@
+import { Grid, Box, Avatar, Typography, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import OrgChart from "@mui-treasury/components/chart/org";
-import Box from "@material-ui/core/Box";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
-import { Column, Row, Item } from "@/components/Core/Flex";
-import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles(() => ({
   avatar: {
@@ -52,17 +48,33 @@ const useStyles = makeStyles(() => ({
 const OrgHierarchyChart: React.FC = (props) => {
   const styles = useStyles();
   return (
-    <Column p={0} my={2} gap={0} grow className={styles.card}>
-      <Row wrap p={2} alignItems={"baseline"} className={styles.header}>
-        <Item stretched className={styles.headline}>
-          Secteurs et stations associés(N)
-        </Item>
-        <Item className={styles.actions}>
-          <Link className={styles.link}>En savoir plus</Link> •{" "}
-          <Link className={styles.link}>Gérer les secteurs</Link>
-        </Item>
-      </Row>
-      <Item p={3}>
+    <Grid
+      container
+      direction="column"
+      className={styles.card}
+      xs={12}
+      spacing={2}
+    >
+      <Grid
+        item
+        container
+        xs
+        className={styles.header}
+        spacing={2}
+        justify="flex-start"
+        alignItems="center"
+      >
+        <Grid item xs className={styles.headline}>
+          <Box p={1}>Secteurs et stations associés(N)</Box>
+        </Grid>
+        <Grid item xs={4} className={styles.actions}>
+          <Box p={1}>
+            <Link className={styles.link}>En savoir plus</Link> •{" "}
+            <Link className={styles.link}>Gérer les secteurs</Link>
+          </Box>
+        </Grid>
+      </Grid>
+      <Grid item spacing={4}>
         <OrgChart
           spacingX={24}
           treeData={getData()}
@@ -86,8 +98,8 @@ const OrgHierarchyChart: React.FC = (props) => {
             </Box>
           )}
         />
-      </Item>
-    </Column>
+      </Grid>
+    </Grid>
   );
 };
 
