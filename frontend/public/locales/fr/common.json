@@ -46,5 +46,18 @@
     "Décembre"
   ],
   "year": "Année",
-  "loading": "Chargement des arbres ..."
+  "loading": "Chargement des arbres ...",
+  "owner": "Propriétaire",
+  "seeDetails": "Voir le détail",
+  "pages": {
+    "Admin": {
+      "Organizations": {
+        "title": "Liste des organisations racine"
+      },
+      "Organization": {
+        "addRootOrganization": "Ajouter une organisation racine"
+      }
+    }
+  },
+  "back": "Retour"
 }

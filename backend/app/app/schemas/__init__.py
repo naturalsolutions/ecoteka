@@ -34,8 +34,11 @@ from .taxref import (
 )
 from .tree import Tree, TreePost, TreeCreate, TreeUpdate, TreeImportFromGeofile, TreeStatus
 from .organization import (
+    OrganizationMode,
+    FindModeEnum,
     Organization,
     OrganizationCreate,
+    OrganizationCreateRoot,
     OrganizationUpdate,
     OrganizationCurrentUser,
     OrganizationMetrics,
@@ -43,29 +46,56 @@ from .organization import (
 from .coordinate import Coordinate
 from .intervention import Intervention, InterventionCreate, InterventionUpdate
 from .health_assessment import HealthAssessment, HealthAssessmentCreate, HealthAssessmentUpdate, HealthAssessmentOrgan
+from .utils import NumType, BBox
+from .geometries import (
+    Point,
+    MultiPoint,
+    LineString,
+    MultiLineString,
+    Polygon,
+    MultiPolygon,
+    GeometryCollection
+)
+from .features import (
+    Feature,
+    FeatureCollection
+)
 
 __all__ = [
     "AccessAndRefreshToken",
     "AccessToken",
+    "BBox",
     "Coordinate",
     "CurrentUser",
+    "Feature",
+    "FeatureCollection"
+    "FindModeEnum",
     "GeoFile",
     "GeoFileCreate",
     "GeoFileStatus",
     "GeoFileUpdate",
+    "GeometryCollection"
     "HealthAssessment",
     "HealthAssessmentCreate",
-    "HealthAssessmentUpdate",
     "HealthAssessmentOrgan",
+    "HealthAssessmentUpdate",
     "Intervention",
     "InterventionCreate",
     "InterventionUpdate",
+    "LineString",
     "Msg",
+    "MultiLineString",
+    "MultiPoint",
+    "MultiPolygon",
+    "NumType",
     "Organization",
     "OrganizationCreate",
     "OrganizationCurrentUser",
-    "OrganizationUpdate",
     "OrganizationMetrics",
+    "OrganizationMode",
+    "OrganizationUpdate",
+    "Point",
+    "Polygon",
     "RefreshToken",
     "RefreshTokenIn",
     "RegistrationLinkCreate",
@@ -83,8 +113,8 @@ __all__ = [
     "TreeCreate",
     "TreeImportFromGeofile",
     "TreePost",
-    "TreeUpdate",
     "TreeStatus",
+    "TreeUpdate",
     "UserCreate",
     "UserDB",
     "UserInvite",

@@ -52,7 +52,8 @@
     "register": "Register",
     "myOrganizations": "Workspace",
     "myDashboard": "Dashboard",
-    "addUser": "Add a user"
+    "addUser": "Add a user",
+    "adminOrganizations": "Admin Organizations"
   },
   "Map": {
     "SearchCity": {
@@ -501,7 +502,6 @@
     "dialogContentTextEdit": "Use this form to update a team."
   },
   "Organization": {
-    "name": "Name",
     "dialogTitleCreate": "Add an organisation",
     "dialogTitleEdit": "Update the organisation",
     "dialogContentTextCreate": "Use this form to create an organisation.",
@@ -576,7 +576,15 @@
         "alertContent1": "Add recipient email in the input field above - ",
         "alertContent2": "then click Enter or add a coma."
       }
-    }
+    },
+    "applicationMode": "Application mode",
+    "name": "Name",
+    "modes": {
+      "private": "Private",
+      "open": "Open",
+      "participatory": "Participatory"
+    },
+    "ownerEmail": "Owner email"
   },
   "Dashboard": {
     "title": "Dashboard",
