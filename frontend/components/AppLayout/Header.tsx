@@ -83,25 +83,25 @@ const AppLayoutHeader = ({}): JSX.Element => {
 
   const menuItems = [
     {
-      link: "/map?panel=start",
-      icon: <MapIcon fontSize="small" />,
-      do: "read",
-      on: "Trees",
-    },
-    {
-      link: "/scheduler",
-      icon: <TodayIcon fontSize="small" />,
-      do: "read",
-      on: "Trees",
-    },
-    {
-      link: "/dashboard",
+      link: "/[organizationSlug]",
       icon: <DashboardIcon fontSize="small" />,
       do: "read",
       on: "Trees",
     },
     {
-      link: "/imports",
+      link: "/[organizationSlug]/map",
+      icon: <MapIcon fontSize="small" />,
+      do: "read",
+      on: "Trees",
+    },
+    {
+      link: "/[organizationSlug]/scheduler",
+      icon: <TodayIcon fontSize="small" />,
+      do: "read",
+      on: "Trees",
+    },
+    {
+      link: "/[organizationSlug]/imports",
       icon: <SettingsSystemDaydreamIcon fontSize="small" />,
       do: "create",
       on: "Trees",
@@ -127,14 +127,25 @@ const AppLayoutHeader = ({}): JSX.Element => {
                 <Hidden smDown>
                   <ToggleButtonGroup value={menu} size="small">
                     {menuItems.map(
-                      (i, k) =>
-                        ability.can(i.do as Actions, i.on as Subjects) && (
+                      (menuItem, key) =>
+                        ability.can(
+                          menuItem.do as Actions,
+                          menuItem.on as Subjects
+                        ) && (
                           <ToggleButton
-                            key={k}
-                            value={i.link}
-                            onClick={() => router.push(i.link)}
+                            key={key}
+                            value={menuItem.link}
+                            onClick={() =>
+                              router.push({
+                                pathname: menuItem.link,
+                                query: {
+                                  organizationSlug:
+                                    user.currentOrganization.slug,
+                                },
+                              })
+                            }
                           >
-                            {i.icon}
+                            {menuItem.icon}
                           </ToggleButton>
                         )
                     )}
