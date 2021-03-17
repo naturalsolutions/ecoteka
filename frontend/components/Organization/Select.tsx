@@ -27,15 +27,15 @@ const OrganizationSelect: React.FC<OrganizationSelectProps> = (props) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (o) => {
+  const handleClose = (organization: IOrganization) => {
     setAnchorEl(null);
 
-    if (o) {
-      props.onChange(o);
+    if (organization) {
+      props.onChange(organization);
     }
 
     if (router.route === "/organization/[id]") {
-      router.push(`/organization/${o.id}`);
+      router.push(`/organization/${organization.id}`);
     }
   };
 

@@ -56,13 +56,15 @@ const AppLayoutHeader = ({}): JSX.Element => {
   const ability = useContext(AbilityContext);
 
   const handleOrganizationSelectChange = (organization: IOrganization) => {
-    if (!organization || !organization.id) {
-      return;
-    }
-
     const newUser = { ...user };
     newUser.currentOrganization = organization;
     setUser(newUser);
+
+    router.push({
+      query: {
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   useEffect(() => {
