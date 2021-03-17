@@ -44,7 +44,7 @@ build_backend_base:
     refs:
       - master
     changes:
-      - ./backend/Dockerfile.base
+      - backend/Dockerfile.base
   tags:
     - ns01
 
