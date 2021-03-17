@@ -46,6 +46,15 @@ export default function useApi() {
     },
   });
 
+  if (accessToken) {
+    ecotekaV1.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${accessToken}`;
+  }
+  if (!accessToken) {
+    delete ecotekaV1.defaults.headers.common["Authorization"];
+  }
+
   // This Axios instance is private;
   // Use it only to get (or hope to get) a "/auth/refresh_token" successfull response
   let _ecotekaV1ForRefresh = axios.create({
