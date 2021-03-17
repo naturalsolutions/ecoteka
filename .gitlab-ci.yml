@@ -30,7 +30,10 @@ build_frontend:
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*} -f ./frontend/.docker/Dockerfile ./frontend
     - docker push ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}
   only:
-    - master
+    refs:
+      - master
+    changes:
+      - frontend/**/*
   tags:
     - ns01
 
@@ -41,6 +44,8 @@ build_backend_base:
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-base -f ./backend/Dockerfile.base ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-base
   only:
+    refs:
+      - master
     changes:
       - backend/Dockerfile.base
   tags:
@@ -54,7 +59,10 @@ build_backend:
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*} ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*}
   only:
-    - master
+    refs:
+      - master
+    changes:
+      - backend/**/*
   tags:
     - ns01
 
