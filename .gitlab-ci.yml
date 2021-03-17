@@ -1,5 +1,6 @@
 stages:
   - version
+  - build_base
   - build
   - clean
   - deploy
@@ -30,6 +31,20 @@ build_frontend:
     - docker push ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}
   only:
     - master
+  tags:
+    - ns01
+
+build_backend_base:
+  stage: build_base
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-base -f ./backend/Dockerfile.base ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-base
+  only:
+    refs:
+      - master
+    changes:
+      - ./backend/Dockerfile.base
   tags:
     - ns01
 
