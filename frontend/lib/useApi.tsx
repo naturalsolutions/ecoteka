@@ -28,7 +28,6 @@ export default function useApi() {
     //   localStorage.clear();
     //   router.push("/signin");
     // }
-    console.log(accessToken);
     if (accessToken) {
       ecotekaV1.defaults.headers.common[
         "Authorization"

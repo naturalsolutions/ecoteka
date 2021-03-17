@@ -34,7 +34,6 @@ const OrganizationHome = () => {
     const { data } = await apiETK.get(
       `/organization/${organizationSlug}?mode=by_slug`
     );
-    console.log(data);
     return data;
   };
 
