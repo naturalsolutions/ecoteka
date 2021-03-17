@@ -26,6 +26,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { AbilityContext } from "@/components/Can";
 import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -111,11 +112,9 @@ const AppLayoutHeader = ({}): JSX.Element => {
         <Grid item>
           <Grid container alignItems="center">
             <Grid item>
-              <img
-                onClick={() => router.push(user ? "/map" : "/")}
-                src={logo}
-                className={classes.logo}
-              />
+              <Link href="/">
+                <img src={logo} className={classes.logo} />
+              </Link>
             </Grid>
             {user && (
               <>
