@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 import FullPageSpinner from "@/components/Core/Feedback/FullPageSpinner";
 import { formatDistance, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
-import React from "react";
+import React, { useEffect } from "react";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
 import { Row, Column, Item } from "@mui-treasury/components/flex";
@@ -34,28 +34,21 @@ const OrganizationHome = () => {
     const { data } = await apiETK.get(
       `/organization/${organizationSlug}?mode=by_slug`
     );
+    console.log(data);
     return data;
   };
 
-  const {
-    isLoading,
-    isSuccess,
-    error,
-    isError,
-    data: organizationData,
-  } = useQuery<IOrganization, AxiosError>(
-    [`orga`, organizationSlug],
-    fetchOrga,
-    {
-      enabled: !!organizationSlug,
-      onError: (data) => {
-        if (data?.response?.status == 404) {
-          console.log(data);
-          router.push("/404");
-        }
-      },
-    }
-  );
+  const { isLoading, isSuccess, isError, data: organizationData } = useQuery<
+    IOrganization,
+    AxiosError
+  >([`orga`, organizationSlug], fetchOrga, {
+    enabled: !!organizationSlug,
+    onError: (data) => {
+      if (data?.response?.status == 404) {
+        router.push("/404");
+      }
+    },
+  });
 
   return (
     <AppLayoutGeneral>
@@ -81,9 +74,9 @@ const OrganizationHome = () => {
                 <MembersCard />
               </Grid>
             </Grid>
+            <Tutorials />
           </Column>
         )}
-        <Tutorials />
       </Container>
     </AppLayoutGeneral>
   );

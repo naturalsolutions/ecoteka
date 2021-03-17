@@ -3,7 +3,7 @@ import getConfig from "next/config";
 import { useRouter } from "next/router";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function useApi() {
   const { publicRuntimeConfig } = getConfig();
@@ -18,15 +18,24 @@ export default function useApi() {
   const [accessToken, setAccessToken] = useLocalStorage(tokenStorage);
   const [refreshToken, setRefreshToken] = useLocalStorage(refreshTokenStorage);
 
-  const allowedRoutes = ["/", "/signin", "/forgot", "/users/set_password"];
+  // const allowedRoutes = ["/", "/signin", "/forgot", "/users/set_password"];
 
   useEffect(() => {
-    if (
-      (!accessToken || !refreshToken) &&
-      !allowedRoutes.includes(router.route)
-    ) {
-      localStorage.clear();
-      router.push("/signin");
+    // if (
+    //   (!accessToken || !refreshToken) &&
+    //   !allowedRoutes.includes(router.route)
+    // ) {
+    //   localStorage.clear();
+    //   router.push("/signin");
+    // }
+    console.log(accessToken);
+    if (accessToken) {
+      ecotekaV1.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
+    }
+    if (!accessToken) {
+      delete ecotekaV1.defaults.headers.common["Authorization"];
     }
   }, [accessToken, refreshToken]);
 
@@ -34,7 +43,6 @@ export default function useApi() {
     baseURL: apiUrl,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
     },
   });
 
@@ -85,11 +93,12 @@ export default function useApi() {
         return Promise.resolve();
       })
       .catch((error) => {
+        console.log("RefreshToken request error");
         router.push("/signin");
       });
 
   createAuthRefreshInterceptor(ecotekaV1, refreshAuthLogic, {
-    statusCodes: [401, 422],
+    statusCodes: [422],
   });
 
   const api = {
