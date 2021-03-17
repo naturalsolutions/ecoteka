@@ -42,7 +42,7 @@ build_backend_base:
     - docker push ${CI_REGISTRY_IMAGE}:backend-base
   only:
     refs:
-      - master
+      - branches
     changes:
       - backend/Dockerfile.base
   tags:
