@@ -9,7 +9,7 @@ const initialYear = new Date().getFullYear();
 const CalendarPage: FC = ({}) => {
   const [interventions, setInterventions] = useState([]);
   const [year, setYear] = useState(initialYear);
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const { apiETK } = useApi().api;
 
   const getData = async (organizationId: number, year: number) => {
@@ -29,10 +29,10 @@ const CalendarPage: FC = ({}) => {
   };
 
   useEffect(() => {
-    if (user && user.currentOrganization.id) {
-      getData(user.currentOrganization.id, year);
+    if (organization && organization.id) {
+      getData(organization.id, year);
     }
-  }, [user, year]);
+  }, [organization, year]);
 
   return (
     <AppLayoutGeneral>
@@ -40,8 +40,8 @@ const CalendarPage: FC = ({}) => {
         interventions={interventions}
         year={year}
         onYearChange={handleYearChange}
-        onInterventionPlan={() => getData(user.currentOrganization.id, year)}
-        onSave={() => getData(user.currentOrganization.id, year)}
+        onInterventionPlan={() => getData(organization.id, year)}
+        onSave={() => getData(organization.id, year)}
       />
     </AppLayoutGeneral>
   );
