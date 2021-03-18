@@ -79,7 +79,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
       }
 
       const { status } = await apiETK.patch(
-        `/organization/${organizationId}/interventions/${id}`,
+        `/organization/${organization.id}/interventions/${id}`,
         payload
       );
 
