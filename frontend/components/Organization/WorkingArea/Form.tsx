@@ -63,7 +63,7 @@ const ETKFormWorkingArea = forwardRef<
 >((props, ref) => {
   const classes = useStyle();
   const [file, setFile] = useState<File>();
-  const { user, setUser } = useAppContext();
+  const { organization, setOrganization } = useAppContext();
   const { snackbar } = useAppLayout();
   const { apiETK } = useApi().api;
 
@@ -103,9 +103,7 @@ const ETKFormWorkingArea = forwardRef<
 
         isOk = true;
         resolve(data);
-        const newUser = { ...user };
-        newUser.currentOrganization.has_working_area = true;
-        setUser(newUser);
+        setOrganization({ has_working_area: true, ...organization });
       } catch (error) {
         openError(error?.response?.detail);
         reject(error?.response?.detail);

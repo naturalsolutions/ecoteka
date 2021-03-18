@@ -44,9 +44,8 @@ interface InterventionType extends DragObjectWithType {
 }
 
 const CalendarDay: React.FC<CalendarDayProps> = (props) => {
-  const classes = useStyles();
   const { theme } = useThemeContext();
-  const { user } = useAppContext();
+  const { user, organization } = useAppContext();
   const { apiETK } = useApi().api;
 
   async function interventionPlan(
@@ -76,7 +75,7 @@ const CalendarDay: React.FC<CalendarDayProps> = (props) => {
     accept: ItemTypes.BOX,
     drop: async function (newIntervention: InterventionType) {
       const intervention = await interventionPlan(
-        user.currentOrganization.id,
+        organization.id,
         newIntervention.id,
         props
       );

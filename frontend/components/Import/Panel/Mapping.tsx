@@ -32,7 +32,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
   const [properties, setProperties] = useState({});
   const [values, setValues] = useState({});
   const fields = Object.keys(treeSchema).filter((f) => !["x", "y"].includes(f));
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const { apiETK } = useApi().api;
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const ETKImportPanelMapping: React.FC<ETKImportPanelMappingProps> = (props) => {
 
       try {
         const { data } = await apiETK.put(
-          `/organization/${user.currentOrganization.id}/geo_files/`,
+          `/organization/${organization.id}/geo_files/`,
           newGeofile
         );
         props.onSend(data);

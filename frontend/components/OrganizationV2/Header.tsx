@@ -10,6 +10,8 @@ import TextInfoContent from "@/components/Core/Content/TextInfo";
 import { useTextInfoContentStyles } from "@/styles/TextInfo";
 import { useFloatShadowStyles } from "@/styles/Shadow/float";
 import { useGraphicBtnStyles } from "@/styles/Button/graphic";
+import { useAppContext } from "@/providers/AppContext";
+import router from "next/router";
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
@@ -73,6 +75,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 const OrganizationHeader: React.FC = (props) => {
   const styles = useStyles();
+  const { organization } = useAppContext();
   const { button: buttonStyles, ...contentStyles } = useTextInfoContentStyles();
   const shadowStyles = useFloatShadowStyles();
   const graphicStyles = useGraphicBtnStyles();
@@ -96,7 +99,19 @@ const OrganizationHeader: React.FC = (props) => {
           alignItems="center"
         >
           <Grid item xs={12} md={6}>
-            <Button className={buttonStyles}>ÉDITEUR CARTOGRAPHIQUE</Button>
+            <Button
+              className={buttonStyles}
+              onClick={() => {
+                router.push({
+                  pathname: "/[organizationSlug]/map",
+                  query: {
+                    organizationSlug: organization.slug,
+                  },
+                });
+              }}
+            >
+              ÉDITEUR CARTOGRAPHIQUE
+            </Button>
           </Grid>
           <Grid item xs={12} md={6}>
             <Button

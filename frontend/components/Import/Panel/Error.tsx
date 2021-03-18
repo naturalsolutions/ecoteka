@@ -4,21 +4,28 @@ import ErrorIcon from "@material-ui/icons/Error";
 import { useTranslation } from "react-i18next";
 
 import { useRouter } from "next/router";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportErrorProps {
   onReset?(): void;
 }
 
 const defaultProps: ETKImportErrorProps = {
-  onReset: () => { },
+  onReset: () => {},
 };
 
 const ETKImportError: React.FC<ETKImportErrorProps> = (props) => {
   const router = useRouter();
   const { t } = useTranslation("components");
+  const { organization } = useAppContext();
 
   const onHistoryClick = () => {
-    router.push("/imports");
+    router.push({
+      pathname: "/[organizationSlug]/imports",
+      query: {
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   return (

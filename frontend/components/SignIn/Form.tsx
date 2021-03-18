@@ -76,7 +76,6 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
             if (newUser) {
               setUser({
                 ...newUser,
-                currentOrganization: newUser.organizations[0],
               });
               localStorage.setItem(tokenStorage, data.access_token);
               localStorage.setItem(refreshTokenStorage, data.refresh_token);

@@ -2,6 +2,7 @@ import React from "react";
 import { TIntervention } from "@/components/Interventions/Schema";
 import { INTERVENTION_COLORS } from "@/components/Interventions/constants";
 import { useRouter } from "next/router";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface CalendarInterventionProps {
   intervention: TIntervention;
@@ -17,12 +18,14 @@ const CalendarIntervention: React.FC<CalendarInterventionProps> = ({
 }) => {
   const router = useRouter();
   const backgroundColor = INTERVENTION_COLORS[intervention.intervention_type];
+  const { organization } = useAppContext();
 
   const handleOnClick = () => {
     router.push({
-      pathname: "/map",
+      pathname: "/[organizationSlug]/map",
       query: {
         panel: "intervention-edit",
+        organizationSlug: organization.id,
         intervention: intervention.id,
         tree: intervention.tree_id,
       },

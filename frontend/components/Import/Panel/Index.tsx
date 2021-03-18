@@ -27,7 +27,7 @@ const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
   const { t } = useTranslation("components");
   const [geofile, setGeofile] = useState<ETKGeofile>();
   const [missingInfo, setMissingInfo] = useState<[string?]>([]);
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const router = useRouter();
   const { apiETK } = useApi().api;
 
@@ -103,7 +103,7 @@ const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
   const importGeofile = async () => {
     try {
       await apiETK.post(
-        `/organization/${user.currentOrganization.id}/trees/import?name=${geofile.name}`
+        `/organization/${organization.id}/trees/import?name=${geofile.name}`
       );
     } catch (error) {}
     setStep("importing");
@@ -158,7 +158,12 @@ const ETKImport: React.FC<IImportPanel> = ({ onFileImported }) => {
               variant="outlined"
               fullWidth
               onClick={() => {
-                router.push("/imports/");
+                router.push({
+                  pathname: "/[organizationSlug]/imports",
+                  query: {
+                    organizationSlug: organization.slug,
+                  },
+                });
               }}
             >
               {t("components.Import.Upload.importHistory")}

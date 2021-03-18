@@ -24,12 +24,10 @@ import { useAppContext } from "@/providers/AppContext";
 import Widget from "@/components/Dashboard/Widget";
 import { Trail as SpringTail } from "react-spring/renderprops.cjs";
 import SimpleMetric from "@/components/DataViz/SimpleMetric";
-import StackedBars from "@/components/DataViz/StackedBars";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import useAPI from "@/lib/useApi";
 import useDimensions from "@/lib/hooks/useDimensions";
-import { setMonthSeriesWithSum } from "@/lib/utils/d3-utils";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 export interface ETKDashboardProps {}
@@ -85,7 +83,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["components", "pages"]);
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const router = useRouter();
   const { theme } = useThemeContext();
   const { api } = useAPI();
@@ -108,12 +106,12 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   const steps = t("pages.Dashboard.steps", { returnObjects: true }) as [];
 
   const getOrganizationMetrics = async (year: number) => {
-    if (user) {
+    if (organization) {
       try {
         const { data, status } = await apiETK.get(
-          `organization/${user.currentOrganization.id}/metrics_by_year/${year}`
+          `organization/${organization.id}/metrics_by_year/${year}`
         );
-        if (status === 200 && user) {
+        if (status === 200 && organization) {
           setMetrics(data);
         }
       } catch (e) {}
@@ -121,12 +119,12 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   };
 
   const getInterventions = async (year: number) => {
-    if (user) {
+    if (organization) {
       try {
         const { data, status } = await apiETK.get(
-          `/organization/${user.currentOrganization.id}/interventions/year/${year}`
+          `/organization/${organization.id}/interventions/year/${year}`
         );
-        if (status === 200 && user) {
+        if (status === 200 && organization) {
           setIterventions(data);
         }
       } catch (e) {}
@@ -140,7 +138,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   useEffect(() => {
     getOrganizationMetrics(year);
     getInterventions(year);
-  }, [user, year]);
+  }, [organization, year]);
 
   useEffect(() => {
     setTreeWidgets([
@@ -204,7 +202,9 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("components.Dashboard.heritageManagment.totalCostPlaned")}
+              caption={t(
+                "components.Dashboard.heritageManagment.totalCostPlaned"
+              )}
               metric={metrics.planned_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -217,7 +217,9 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("components.Dashboard.heritageManagment.totalCostRealized")}
+              caption={t(
+                "components.Dashboard.heritageManagment.totalCostRealized"
+              )}
               metric={metrics.scheduled_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -233,7 +235,9 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("components.Dashboard.heritageManagment.totalCostPlaned")}
+              caption={t(
+                "components.Dashboard.heritageManagment.totalCostPlaned"
+              )}
               metric={metrics.planned_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -246,7 +250,9 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
           },
           component: (
             <SimpleMetric
-              caption={t("components.Dashboard.heritageManagment.totalCostRealized")}
+              caption={t(
+                "components.Dashboard.heritageManagment.totalCostRealized"
+              )}
               metric={metrics.scheduled_interventions_cost}
               icon={<EuroIcon style={{ fontSize: "3rem" }} />}
             />
@@ -324,7 +330,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             variant="h5"
             component="div"
           >
-            {t("components.Dashboard.for")} {user?.currentOrganization?.name}
+            {t("components.Dashboard.for")} {organization.name}
           </Typography>
         </Box>
         <Box>
@@ -354,7 +360,15 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                   color="inherit"
                   size="small"
                   variant="outlined"
-                  onClick={() => router.push("/map/?panel=import")}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/[organizationSlug]/map",
+                      query: {
+                        panel: "import",
+                        organizationSlug: organization.id,
+                      },
+                    });
+                  }}
                 >
                   {t("components.Dashboard.importDataButton")}
                 </Button>

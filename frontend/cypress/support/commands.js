@@ -56,7 +56,6 @@ Cypress.Commands.add("login", () =>
       }).then((resp) => {
         const user = {
           ...resp.body,
-          currentOrganization: resp.body.organizations[0],
         };
         cy.setLocalStorage("user", JSON.stringify(user));
       });

@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header: FC<HeaderProps> = (props) => {
   const anchorRef = useRef(null);
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const router = useRouter();
   const { api } = useAPI();
   const { t } = useTranslation(["components", "common"]);
@@ -101,18 +101,10 @@ const Header: FC<HeaderProps> = (props) => {
         severity: "info",
       });
       let response = await apiETK.get(
-        `/organization/${user.currentOrganization.id}/trees/export/?format=${exportFormats[index].format}`,
+        `/organization/${organization.id}/trees/export/?format=${exportFormats[index].format}`,
         {
           responseType: "blob",
-          onDownloadProgress: (progressEvent) => {
-            // console.log(progressEvent);
-            // // Unfortunately request response length is not computable
-            // console.log(progressEvent.lengthComputable);
-            // // But we could access response Blob size
-            // console.log(progressEvent.target);
-            // // and track with EventTarget loaded
-            // console.log(progressEvent.loaded);
-          },
+          onDownloadProgress: (progressEvent) => {},
         }
       );
       if (response.status === 200) {
@@ -124,7 +116,7 @@ const Header: FC<HeaderProps> = (props) => {
         });
         try {
           const blob = await response.data;
-          const filename = `export-trees-${user.currentOrganization.slug}.${exportFormats[index].format}`;
+          const filename = `export-trees-${organization.slug}.${exportFormats[index].format}`;
           downloadFile(blob, filename);
         } catch (e) {
         } finally {
@@ -164,7 +156,15 @@ const Header: FC<HeaderProps> = (props) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => router.push("/map/?panel=import")}
+              onClick={() => {
+                router.push({
+                  pathname: "/[organizationSlug]/map",
+                  query: {
+                    panel: "import",
+                    organizationSlug: organization.id,
+                  },
+                });
+              }}
             >
               {t("common.buttons.import")}
             </Button>

@@ -48,18 +48,15 @@ const AppLayoutHeader = ({}): JSX.Element => {
   const { t } = useTranslation("components");
   const classes = useStyles();
   const router = useRouter();
-  const { user, setUser } = useAppContext();
+  const { user, organization } = useAppContext();
   const { dark, setDark, theme } = useThemeContext();
   const [logo, setLogo] = useState("/assets/light/logo-mobile.svg");
   const [menu, setMenu] = useState<string | null>(router.asPath);
+  const [showMenuItems, setShowMenuItems] = useState<boolean>(false);
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   const ability = useContext(AbilityContext);
 
   const handleOrganizationSelectChange = (organization: IOrganization) => {
-    const newUser = { ...user };
-    newUser.currentOrganization = organization;
-    setUser(newUser);
-
     router.push({
       query: {
         organizationSlug: organization.slug,
@@ -76,6 +73,20 @@ const AppLayoutHeader = ({}): JSX.Element => {
   useEffect(() => {
     setMenu(router.asPath);
   }, [router.asPath]);
+
+  useEffect(() => {
+    if (
+      [
+        "/[organizationSlug]/map",
+        "/[organizationSlug]/scheduler",
+        "/[organizationSlug]/imports",
+      ].includes(router.route)
+    ) {
+      setShowMenuItems(true);
+    } else {
+      setShowMenuItems(false);
+    }
+  }, [router.route]);
 
   const handleSignInClick = () => {
     router.push("/signin");
@@ -118,10 +129,11 @@ const AppLayoutHeader = ({}): JSX.Element => {
                 <img src={logo} className={classes.logo} />
               </Link>
             </Grid>
-            {user && (
+            {showMenuItems && (
               <>
                 <OrganizationSelect
                   user={user}
+                  organization={organization}
                   onChange={handleOrganizationSelectChange}
                 />
                 <Hidden smDown>
@@ -139,8 +151,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
                               router.push({
                                 pathname: menuItem.link,
                                 query: {
-                                  organizationSlug:
-                                    user.currentOrganization.slug,
+                                  organizationSlug: organization.slug,
                                 },
                               })
                             }

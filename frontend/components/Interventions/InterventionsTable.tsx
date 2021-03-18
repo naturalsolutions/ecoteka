@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { TIntervention } from "@/components/Interventions/Schema";
 import { useRouter } from "next/router";
 import { INTERVENTION_COLORS } from "@/components/Interventions/constants";
+import { useAppContext } from "@/providers/AppContext";
 
 const InterventionsTable: FC<{
   tree: any;
@@ -23,6 +24,7 @@ const InterventionsTable: FC<{
 }> = ({ interventions, tree, onNewIntervention }) => {
   const { t } = useTranslation("components");
   const router = useRouter();
+  const { organization } = useAppContext();
   //TODO generic
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString("fr-FR", {
@@ -53,9 +55,15 @@ const InterventionsTable: FC<{
   };
 
   const handleOnEditIntervention = (intervention) => {
-    router.push(
-      `/map?panel=intervention-edit&intervention=${intervention.id}&tree=${intervention.tree_id}`
-    );
+    router.push({
+      pathname: "/[organizationSlug]/map",
+      query: {
+        panel: "intervention-edit",
+        intervention: intervention.id,
+        tree: intervention.tree_id,
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   return (
@@ -126,7 +134,14 @@ const InterventionsTable: FC<{
             variant="outlined"
             onClick={() => {
               onNewIntervention();
-              router.push(`/map/?panel=intervention&tree=${tree.id}`);
+              router.push({
+                pathname: "/[organizationSlug]/map",
+                query: {
+                  panel: "intervention",
+                  tree: tree.id,
+                  organizationSlug: organization.slug,
+                },
+              });
             }}
           >
             {t(

@@ -33,14 +33,14 @@ const useStyles = makeStyles({
 
 const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { user } = useAppContext();
+  const { user, organization } = useAppContext();
   const { t } = useTranslation("components");
   const router = useRouter();
   const classes = useStyles();
 
   const handlerMyOrganizationClick = () => {
     setAnchorEl(null);
-    router.push(`/organization/${user.currentOrganization?.id}`);
+    router.push(`/organization/${organization.id}`);
   };
 
   const handlerMyDashboardClick = () => {
