@@ -5,7 +5,7 @@ import useAPI from "@/lib/useApi";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 
 export default function ImportsPage() {
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const [rows, setRows] = useState([]);
   const { apiETK } = useAPI().api;
 
@@ -13,9 +13,7 @@ export default function ImportsPage() {
     try {
       for (let name of selected) {
         try {
-          apiETK.delete(
-            `/organization/${user.currentOrganization.id}/geo_files/${name}`
-          );
+          apiETK.delete(`/organization/${organization.id}/geo_files/${name}`);
         } catch (error) {}
       }
 
@@ -34,10 +32,10 @@ export default function ImportsPage() {
   }
 
   useEffect(() => {
-    if (user) {
-      fetchData(user.currentOrganization.id);
+    if (organization) {
+      fetchData(organization.id);
     }
-  }, [user]);
+  }, [organization]);
 
   return (
     <AppLayoutGeneral>

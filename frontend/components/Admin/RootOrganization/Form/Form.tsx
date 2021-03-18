@@ -34,7 +34,6 @@ const FormOrganizationRoot = forwardRef<
 
   // Why a useEffect to make setValue works ?
   useEffect(() => {
-    console.log(schema);
     if (!isNew) {
       for (let key in organization) {
         if (schema.hasOwnProperty(key)) {

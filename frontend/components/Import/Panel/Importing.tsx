@@ -20,13 +20,13 @@ const defaultProps: ETKImportImportingProps = {
 const ETKImportImporting: React.FC<ETKImportImportingProps> = (props) => {
   const [isImporting, setIsImporting] = useState(true);
   const { t } = useTranslation("components");
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const { apiETK } = useApi().api;
 
   const check = async () => {
     try {
       const { data } = await apiETK.get(
-        `/organization/${user.currentOrganization.id}/geo_files/${props.geofile.name}`
+        `/organization/${organization.id}/geo_files/${props.geofile.name}`
       );
 
       if (data.status === "imported" || !isImporting) {

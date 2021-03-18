@@ -24,6 +24,7 @@ import {
 import { useTranslation } from "react-i18next";
 import useTreeSchema from "@/components/Tree/Schema";
 import { useRouter } from "next/router";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface TreeInfosPropertiesProps {
   tree: {
@@ -89,6 +90,7 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
   const [nbImagesMax, setNbImagesMax] = useState(0);
   const { t } = useTranslation(["common", "components"]);
   const router = useRouter();
+  const { organization } = useAppContext();
 
   const [imagesActiveIndex, setImagesActiveIndex] = React.useState(0);
 
@@ -205,7 +207,14 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
   };
 
   const handleOnEdit = () => {
-    router.push(`/map?panel=edit&tree=${props.tree.id}`);
+    router.push({
+      pathname: "/[organizationSlug]/map",
+      query: {
+        panel: "edit",
+        organizationSlug: organization.slug,
+        tree: props.tree.id,
+      },
+    });
   };
 
   return props.tree ? (

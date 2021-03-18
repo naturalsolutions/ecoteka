@@ -14,10 +14,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Summary: FC<{ treeId: number }> = ({ treeId }) => {
-  const { user } = useAppContext();
+  const { user, organization } = useAppContext();
   const { api } = useApi();
   const { apiETK } = api;
-  const { t } = useTranslation("components");
   const [tree, setTree] = useState<any>({});
   const [interventions, setInterventions] = useState<TIntervention[]>();
   const { dialog } = useAppLayout();
@@ -25,10 +24,10 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
   const router = useRouter();
 
   const getTree = async (id: number) => {
-    if (user?.currentOrganization) {
+    if (organization) {
       try {
         const { data, status } = await apiETK.get(
-          `/organization/${user.currentOrganization.id}/trees/${id}`
+          `/organization/${organization.id}/trees/${id}`
         );
 
         if (status === 200) {
@@ -39,10 +38,10 @@ const Summary: FC<{ treeId: number }> = ({ treeId }) => {
   };
 
   const getInterventions = async (id: number) => {
-    if (user?.currentOrganization) {
+    if (organization) {
       try {
         const { data, status } = await apiETK.get(
-          `/organization/${user.currentOrganization.id}/trees/${id}/interventions`
+          `/organization/${organization.id}/trees/${id}/interventions`
         );
 
         if (status === 200) {

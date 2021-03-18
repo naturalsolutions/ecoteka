@@ -16,23 +16,21 @@ const AppLayoutBase: FC = ({ children }) => {
   const { t } = useTranslation(["common", "components"]);
   const snackbar = useRef();
   const dialog = useRef<ETKDialogActions>(null);
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
 
-  const ability = buildAbilityFor(user?.currentOrganization?.current_user_role); //Just for test
+  const ability = buildAbilityFor(organization?.current_user_role); //Just for test
 
   return (
     <AbilityContext.Provider value={ability}>
       <AppLayout.Provider value={{ dialog, snackbar, t }}>
         <NoSsr>
-            <AppLayoutHeader />
-            {children}
-            <Dialog ref={dialog} />
-            <Snackbars ref={snackbar} />
+          <AppLayoutHeader />
+          {children}
+          <Dialog ref={dialog} />
+          <Snackbars ref={snackbar} />
         </NoSsr>
       </AppLayout.Provider>
     </AbilityContext.Provider>
-          
-          
   );
 };
 

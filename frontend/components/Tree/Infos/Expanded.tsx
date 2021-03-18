@@ -30,7 +30,7 @@ const defaultProps: ETKTreeInfosExpandedProps = {
 const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
   const [scroll, setScroll] = React.useState("paper");
   const treeAccordionRef = createRef<TTreeAccordion>();
-  const { user } = useAppContext();
+  const { user, organization } = useAppContext();
   const { t } = useTranslation("common");
 
   const { apiETK } = useApi().api;
@@ -43,7 +43,7 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
         status,
         data,
       } = await apiETK.put(
-        `/organization/${user.currentOrganization.id}/trees/${props.tree.id}`,
+        `/organization/${organization.id}/trees/${props.tree.id}`,
         { properties }
       );
 
