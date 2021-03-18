@@ -1,6 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Typography } from "@material-ui/core";
-import { Item } from "@/components/Core/Flex";
+import { Box, Grid, Typography } from "@material-ui/core";
 import VideoCard from "@/components/Core/Card/VideoCard";
 
 const useStyles = makeStyles(({ palette, spacing }) => {
@@ -29,7 +28,7 @@ const tutorialsDemoData = [
 const Tutorials = (props) => {
   const styles = useStyles();
   return (
-    <Item grow className={styles.root} pb={8}>
+    <Box className={styles.root} pb={8}>
       <Typography variant="h4" component="h2" className={styles.section}>
         Tutoriels
       </Typography>
@@ -40,7 +39,7 @@ const Tutorials = (props) => {
           </Grid>
         ))}
       </Grid>
-    </Item>
+    </Box>
   );
 };
 

@@ -1,20 +1,11 @@
 import { useRef, useState } from "react";
-import { findDOMNode } from "react-dom";
+import { Box, Button, Card, CardMedia, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
 import PlayIcon from "@material-ui/icons/PlayArrow";
-import { Row, Item } from "@/components/Core/Flex";
 import { useCoverCardMediaStyles } from "@/styles/CardMedia/cover";
 import { useArrowWhiteButtonStyles } from "@/styles/Button/arrowWhite";
 import screenfull from "screenfull";
 import ReactPlayer from "react-player/youtube";
-
-import {} from "@material-ui/core";
 
 const useStyles = makeStyles(({ palette }) => ({
   card: {
@@ -132,7 +123,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
       <Card className={styles.card}>
         <Box className={styles.main} minHeight={300} position={"relative"}>
           <CardMedia classes={mediaStyles} image={videoCapture} />
-          <Item className={styles.content} position="center">
+          <Box className={styles.content} position="center">
             {!play && (
               <Button classes={playButtonStyles} onClick={() => handlePlay()}>
                 <PlayIcon />
@@ -149,11 +140,11 @@ const VideoCard: React.FC<VideoCardProps> = ({
                 onPause={() => setPlay(false)}
               />
             )}
-          </Item>
+          </Box>
         </Box>
-        <Row className={styles.caption} m={0} p={3} pt={2} gap={2}>
+        <Box className={styles.caption} m={0} p={3} pt={2}>
           <Typography variant="h6">{title}</Typography>
-        </Row>
+        </Box>
         <div className={styles.shadow} />
         <div className={`${styles.shadow} ${styles.shadow2}`} />
       </Card>

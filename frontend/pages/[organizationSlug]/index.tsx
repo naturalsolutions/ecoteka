@@ -54,18 +54,24 @@ const OrganizationHome = () => {
       <Container>
         {isLoading && <FullPageSpinner />}
         {isError && (
-          <Column>
-            <Item grow mb={4}>
+          <Grid container direction="column">
+            <Grid item xs={12}>
               <OrganizationHeader />
-            </Item>
-          </Column>
+            </Grid>
+          </Grid>
         )}
         {isSuccess && (
-          <Column>
-            <Item grow mb={4}>
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="stretch"
+            spacing={4}
+          >
+            <Grid item xs={12}>
               <OrganizationHeader />
-            </Item>
-            <Grid container spacing={4}>
+            </Grid>
+            <Grid container item spacing={4}>
               <Grid item xs={12} md={9}>
                 <OrgChart />
               </Grid>
@@ -74,7 +80,7 @@ const OrganizationHome = () => {
               </Grid>
             </Grid>
             <Tutorials />
-          </Column>
+          </Grid>
         )}
       </Container>
     </AppLayoutGeneral>
