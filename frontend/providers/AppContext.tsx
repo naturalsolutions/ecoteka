@@ -73,7 +73,10 @@ export const Provider = ({ children }) => {
   useEffect(() => {
     const { organizationSlug } = router.query;
 
-    if (organizationSlug) {
+    if (
+      (organizationSlug && organization?.slug !== organizationSlug) ||
+      !organization
+    ) {
       fetchOrganization(organizationSlug as string);
     }
   }, [router.query?.organizationSlug]);

@@ -365,7 +365,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                       pathname: "/[organizationSlug]/map",
                       query: {
                         panel: "import",
-                        organizationSlug: organization.id,
+                        organizationSlug: organization.slug,
                       },
                     });
                   }}

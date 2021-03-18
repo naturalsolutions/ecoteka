@@ -359,7 +359,7 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
                       pathname: "/[organizationSlug]/map",
                       query: {
                         panel: "import",
-                        organizationSlug: organization.id,
+                        organizationSlug: organization.slug,
                       },
                     });
                   }}

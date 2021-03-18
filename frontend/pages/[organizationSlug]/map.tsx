@@ -169,7 +169,7 @@ const EditionPage = ({}) => {
           query: {
             panel: "edit",
             tree: tree.id,
-            organizationSlug: organization.id,
+            organizationSlug: organization.slug,
           },
         });
         setActiveTree(tree.id);
@@ -439,7 +439,7 @@ const EditionPage = ({}) => {
             pathname: "/[organizationSlug]/map",
             query: {
               panel: "start",
-              organizationSlug: organization.id,
+              organizationSlug: organization.slug,
             },
           });
           setActiveTree();
@@ -487,7 +487,7 @@ const EditionPage = ({}) => {
       query: {
         ...router.query,
         panel: action,
-        organizationSlug: organization.id,
+        organizationSlug: organization.slug,
       },
     });
   };
@@ -563,7 +563,7 @@ const EditionPage = ({}) => {
             router.push({
               pathname: "/[organizationSlug]/map",
               query: {
-                organizationSlug: organization.id,
+                organizationSlug: organization.slug,
               },
             });
           } else {
@@ -573,7 +573,7 @@ const EditionPage = ({}) => {
               query: {
                 panel: "info",
                 tree: info.object?.properties.id,
-                organizationSlug: organization.id,
+                organizationSlug: organization.slug,
               },
             });
           }
