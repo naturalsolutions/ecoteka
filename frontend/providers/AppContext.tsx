@@ -15,6 +15,7 @@ export const Provider = ({ children }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const validRoutes = [
     "/",
+    "/index-legacy",
     "/home",
     "/signin",
     "/forgot",

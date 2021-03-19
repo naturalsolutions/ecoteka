@@ -1,156 +1,64 @@
-// @ts-nocheck
-import { useState, useEffect } from "react";
-import { Grid, makeStyles, Hidden } from "@material-ui/core";
+import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useRouter } from "next/router";
-import MapSearchCity from "@/components/Map/SearchCity";
-import MapGeolocateFab from "@/components/Map/GeolocateFab";
-import Panel from "@/components/Panel";
-import Landing from "@/components/Landing";
+import { useTranslation } from "react-i18next";
+import { Typography, Container, Box, Grid } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { useAppContext } from "@/providers/AppContext";
-import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
-import AppLayoutCarto from "@/components/AppLayout/Carto";
-import DeckGL from "@deck.gl/react";
-import { FlyToInterpolator } from "@deck.gl/core";
-import { MVTLayer } from "@deck.gl/geo-layers";
-import { StaticMap } from "react-map-gl";
-import getConfig from "next/config";
-import useLocalStorage from "@/lib/hooks/useLocalStorage";
+import TutorialsGallery from "@/components/OrganizationV2/Tutorials";
+import DatasetsGallery from "@/components/Home/DatasetsGallery";
+import UserOrganizationGallery from "@/components/Home/UserOrganizationGallery";
+import CallToLogin from "@/components/Core/CallToActions/CallToLogin";
+import AddOrganization from "@/components/Core/CallToActions/AddOrganization";
+import Card, { ShowcaseCard } from "@/components/Core/Card/ShowcaseCard";
+import React from "react";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: "relative",
-    height: "100%",
+const useStyles = makeStyles(({ spacing }) => ({
+  subtitle: {
+    marginTop: spacing(8),
+    marginBottom: spacing(3),
   },
-  sidebar: {
-    height: "100%",
-  },
-  main: {
-    position: "relative",
-  },
-  mapSearchCity: {
-    position: "absolute",
-    top: 8,
-    right: 8,
-    width: "300px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    mapSearchCity: {
-      width: "calc(100% - 16px)",
-      top: 16,
-      left: 8,
-    },
+  tutorialsSection: {
+    minHeight: "300px",
   },
 }));
 
-export default function IndexPage() {
-  const { publicRuntimeConfig } = getConfig();
-  const { apiUrl } = publicRuntimeConfig;
-  const [info, setInfo] = useState();
-  const classes = useStyles();
+const Home: React.FC = () => {
+  const styles = useStyles();
   const { user } = useAppContext();
-  const [landing, setLanding] = useState(true);
-  const [token] = useLocalStorage("ecoteka_access_token");
-  const [viewState, setViewState] = useState({
-    longitude: 2.54,
-    latitude: 46.7,
-    zoom: 5,
-  });
-
-  const router = useRouter();
-  const { dark } = useThemeContext();
-
-  const osmLayer = new MVTLayer({
-    id: "osm",
-    data: `${apiUrl.replace(
-      "/api/v1",
-      ""
-    )}/tiles/osm/{z}/{x}/{y}.pbf?scope=public`,
-    minZoom: 0,
-    maxZoom: 13,
-    getRadius: 1,
-    radiusScale: 10,
-    radiusMinPixels: 0.25,
-    lineWidthMinPixels: 1,
-    pointRadiusMinPixels: 1,
-    pointRadiusMaxPixels: 10,
-    pointRadiusScale: 2,
-    getLineColor: [34, 169, 54, 100],
-    getFillColor: [34, 139, 34, 100],
-    pickable: true,
-  });
-
-  const handleCityChange = (coordinates) => {
-    if (coordinates) {
-      setViewState({
-        ...viewState,
-        longitude: coordinates[0],
-        latitude: coordinates[1],
-        zoom: 15,
-        transitionDuration: 1500,
-        transitionInterpolator: new FlyToInterpolator(),
-      });
-    }
-
-    setLanding(false);
-  };
-
-  return !user ? (
-    <AppLayoutCarto>
-      <Grid
-        container
-        justify="flex-start"
-        alignItems="stretch"
-        className={classes.root}
-      >
-        <Hidden smDown>
-          <Grid item className={classes.sidebar}>
-            <Panel panel={router.query.panel as string} info={info} />
+  const { t } = useTranslation(["common", "components"]);
+  return (
+    <AppLayoutGeneral>
+      <Container>
+        <Typography variant="h4" component="h1">
+          {t("components.Home.title")}
+        </Typography>
+        <Typography variant="h6" component="h2" className={styles.subtitle}>
+          {t("components.Home.myOrganizations")}
+        </Typography>
+        {!user && <CallToLogin variant="wide" />}
+        {user && (
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={3}>
+              <AddOrganization />
+            </Grid>
+            <UserOrganizationGallery variant="insideGrid" />
           </Grid>
-        </Hidden>
+        )}
+        <Box className={styles.tutorialsSection}>
+          <Typography variant="h6" component="h2" className={styles.subtitle}>
+            {t("components.Home.exploreSampleDatasets")}
+          </Typography>
+          <DatasetsGallery />
+        </Box>
+        <Box className={styles.tutorialsSection} pb={8}>
+          <Typography variant="h6" component="h2" className={styles.subtitle}>
+            {t("common.tutorials")}
+          </Typography>
+          <TutorialsGallery />
+        </Box>
+      </Container>
+    </AppLayoutGeneral>
+  );
+};
 
-        <Grid item xs className={classes.main}>
-          {!user && landing && <Landing onChange={handleCityChange} />}
-          <DeckGL
-            viewState={viewState}
-            controller={true}
-            layers={[osmLayer]}
-            onViewStateChange={(e) => {
-              setViewState(e.viewState);
-            }}
-            onClick={(e) => {
-              if (e.object) {
-                setInfo(e.object.properties);
-              }
-            }}
-          >
-            {!landing && (
-              <MapSearchCity
-                className={classes.mapSearchCity}
-                onChange={handleCityChange}
-              />
-            )}
-            <StaticMap
-              mapStyle={`/api/v1/maps/style/?theme=${dark ? "dark" : "light"}`}
-            />
-            {navigator?.geolocation && (
-              <MapGeolocateFab
-                onGeolocate={() => {
-                  navigator.geolocation.getCurrentPosition((position) => {
-                    setViewState({
-                      ...viewState,
-                      longitude: position.coords.longitude,
-                      latitude: position.coords.latitude,
-                      zoom: 18,
-                      transitionDuration: 1500,
-                      transitionInterpolator: new FlyToInterpolator(),
-                    });
-                  });
-                }}
-              />
-            )}
-          </DeckGL>
-        </Grid>
-      </Grid>
-    </AppLayoutCarto>
-  ) : null;
-}
+export default Home;
