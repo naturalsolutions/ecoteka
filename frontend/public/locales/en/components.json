@@ -588,7 +588,7 @@
   },
   "Dashboard": {
     "title": "Dashboard",
-    "year" : "Year",
+    "year": "Year",
     "for": "for",
     "treeHeritage": {
       "title": "Your tree heritage",
@@ -609,8 +609,8 @@
     },
     "addInterventionButton": "Add interventions",
     "importDataButton": "Import data",
-    "interventionState" : "Done",
-    "treeViewButton" : "Tree view"
+    "interventionState": "Done",
+    "treeViewButton": "Tree view"
   },
   "MapLayers": {
     "backgrounds": "Backgrounds",
@@ -641,5 +641,20 @@
     "filter": "Filters",
     "layers": "Layers",
     "import": "Import"
+  },
+  "Home": {
+    "title": "Home",
+    "myOrganizations": "Organizations you belongs to",
+    "exploreSampleDatasets": "Explore sample datasets"
+  },
+  "CallToLogin": {
+    "headline": "Let's try Ecoteka! ",
+    "defaultLabel": "Login",
+    "defaultCaption": "Login to your account and start mapping your urban forest."
+  },
+  "CallToActions": {
+    "AddOrganization": {
+      "title": "Add an organization"
+    }
   }
 }

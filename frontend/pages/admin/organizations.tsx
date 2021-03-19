@@ -126,12 +126,13 @@ const AdminOrganizations = () => {
               <Grid xs item container spacing={2}>
                 {organizations.map((organization) => {
                   return (
-                    <ShowcaseCard
-                      key={`${organization.id}`}
-                      ownerEmail={organization.current_user_role}
-                      slug={organization.slug}
-                      name={organization.name}
-                    />
+                    <Grid key={`${organization.id}`} item xs={12} sm={6} md={3}>
+                      <ShowcaseCard
+                        ownerEmail={organization.current_user_role}
+                        slug={organization.slug}
+                        name={organization.name}
+                      />
+                    </Grid>
                   );
                 })}
               </Grid>

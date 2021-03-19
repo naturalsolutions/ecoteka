@@ -195,7 +195,7 @@
     "organization": "Organisation",
     "password": "Mot de passe",
     "passwordConfirm": "Confirmer mot de passe",
-    "validationButton" : "Créer le compte",
+    "validationButton": "Créer le compte",
     "registrationCompleted": "Inscription réussie",
     "registrationFailed": "Une erreur s'est produite lors de l'inscription"
   },
@@ -452,7 +452,7 @@
     },
     "backToInfo": "Retour à l'arbre"
   },
-  "TreeAccordion" : {
+  "TreeAccordion": {
     "treeIdentity": "Identité de l'arbre",
     "characteristics": "Caractéristiques",
     "outdoorEnvironment": "Environnement extérieur",
@@ -585,7 +585,7 @@
   },
   "Dashboard": {
     "title": "Tableau de bord",
-    "year" : "Année",
+    "year": "Année",
     "for": "pour",
     "treeHeritage": {
       "title": "Votre patrimoine arboré",
@@ -606,8 +606,8 @@
     },
     "addInterventionButton": "Ajouter des interventions",
     "importDataButton": "Importer des données",
-    "interventionState" : "Fait",
-    "treeViewButton" : "Vue arbre"
+    "interventionState": "Fait",
+    "treeViewButton": "Vue arbre"
   },
   "MapLayers": {
     "backgrounds": "Fonds",
@@ -635,5 +635,20 @@
     "filter": "Filtres",
     "layers": "Couches",
     "import": "Importer"
+  },
+  "Home": {
+    "title": "Accueil",
+    "myOrganizations": "Organisations dont vous êtes membre",
+    "exploreSampleDatasets": "Explorer les jeux de données publiques"
+  },
+  "CallToLogin": {
+    "headline": "Essayez Ecoteka maintenant!",
+    "defaultLabel": "Se connecter",
+    "defaultCaption": "Créer un compte Ecoteka pour commencer à cartographier et gérer votre patrimoine arboré."
+  },
+  "CallToActions": {
+    "AddOrganization": {
+      "title": "Ajouter une organisation"
+    }
   }
 }

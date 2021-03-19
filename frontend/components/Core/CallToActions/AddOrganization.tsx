@@ -1,13 +1,11 @@
-import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Box, Button, Card, CardMedia, Typography } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
-import PlayIcon from "@material-ui/icons/PlayArrow";
 import { useCoverCardMediaStyles } from "@/styles/CardMedia/cover";
 import { useArrowWhiteButtonStyles } from "@/styles/Button/arrowWhite";
-import screenfull from "screenfull";
-import ReactPlayer from "react-player/youtube";
 
-const useStyles = makeStyles(({ palette }) => ({
+const useStyles = makeStyles(({ palette, spacing }) => ({
   card: {
     width: "100%",
     position: "relative",
@@ -38,7 +36,7 @@ const useStyles = makeStyles(({ palette }) => ({
   },
   main: {
     width: "100%",
-    paddingTop: "56.25%",
+    paddingTop: "80%",
     overflow: "hidden",
     borderTopLeftRadius: "0.5rem",
     borderTopRightRadius: "0.5rem",
@@ -75,80 +73,47 @@ const useStyles = makeStyles(({ palette }) => ({
     borderBottomLeftRadius: "0.5rem",
     borderBottomRightRadius: "0.5rem",
     backgroundColor: palette.background.paper,
-  },
-  shadow: {
-    transition: "0.2s",
-    position: "absolute",
-    zIndex: 0,
-    width: "88%",
-    height: "100%",
-    bottom: 0,
-    borderRadius: "0.5rem",
-    backgroundColor: "rgba(0,0,0,0.06)",
-    left: "50%",
-    transform: "translateX(-50%)",
-  },
-  shadow2: {
-    bottom: 0,
-    width: "72%",
-    backgroundColor: "rgba(0,0,0,0.04)",
+    color: palette.grey[600],
+    fontWeight: 600,
+    fontSize: "1.25rem",
   },
 }));
 
-export interface VideoCardProps {
-  title: string;
-  videoUrl: string;
-  videoCapture: string;
+export interface AddOrganizationProps {
+  title?: string;
+  videoUrl?: string;
+  videoCapture?: string;
 }
 
 // TODO: Add fullscreen video player
-const VideoCard: React.FC<VideoCardProps> = ({
+const AddOrganization: React.FC<AddOrganizationProps> = ({
   title,
   videoUrl,
   videoCapture,
 }) => {
   const styles = useStyles();
+  const { t } = useTranslation(["components"]);
   const mediaStyles = useCoverCardMediaStyles({ bgPosition: "center" });
-  const playButtonStyles = useArrowWhiteButtonStyles();
-  const [play, setPlay] = useState(false);
-  const player = useRef(null);
+  const addButtonStyles = useArrowWhiteButtonStyles();
 
-  const handlePlay = () => {
-    if (screenfull.isEnabled) {
-      screenfull.request(player.current);
-    }
-    setPlay(true);
+  const handleAddOrganization = () => {
+    console.log("wip");
   };
 
   return (
     <Card className={styles.card}>
-      <Box className={styles.main} position={"relative"}>
-        <CardMedia classes={mediaStyles} image={videoCapture} />
+      <Box className={styles.main} height={290} position={"relative"}>
+        <CardMedia classes={mediaStyles} image={""} />
         <Box className={styles.content} position="center">
-          {!play && (
-            <Button classes={playButtonStyles} onClick={() => handlePlay()}>
-              <PlayIcon />
-            </Button>
-          )}
-          {play && (
-            <ReactPlayer
-              ref={player}
-              url={videoUrl}
-              playing={play}
-              width="100%"
-              height="100%"
-              onEnded={() => setPlay(false)}
-              onPause={() => setPlay(false)}
-            />
-          )}
+          <Button classes={addButtonStyles} onClick={handleAddOrganization}>
+            <AddIcon />
+          </Button>
         </Box>
       </Box>
       <Box className={styles.caption} m={0} p={3} pt={2}>
-        <Typography variant="h6">{title}</Typography>
+        {t("components.CallToActions.AddOrganization.title")}
       </Box>
-      <div className={styles.shadow} />
-      <div className={`${styles.shadow} ${styles.shadow2}`} />
     </Card>
   );
 };
-export default VideoCard;
+export default AddOrganization;

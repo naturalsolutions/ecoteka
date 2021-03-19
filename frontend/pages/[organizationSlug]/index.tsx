@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import useApi from "@/lib/useApi";
 import { IOrganization } from "@/index";
-import { Button, Container, Grid } from "@material-ui/core";
+import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { AxiosError } from "axios";
 import FullPageSpinner from "@/components/Core/Feedback/FullPageSpinner";
@@ -15,12 +15,19 @@ import { Row, Column, Item } from "@mui-treasury/components/flex";
 import OrgChart from "@/components/OrganizationV2/OrgChart";
 import MembersCard from "@/components/OrganizationV2/MembersCard";
 import OrganizationHeader from "@/components/OrganizationV2/Header";
-import Tutorials from "@/components/OrganizationV2/Tutorials";
+import TutorialsGallery from "@/components/OrganizationV2/Tutorials";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(({ spacing }) => ({
   avatar: {
     width: 64,
     height: 64,
+  },
+  tutorialsSection: {
+    minHeight: "300px",
+  },
+  subtitle: {
+    marginTop: spacing(3),
+    marginBottom: spacing(1),
   },
 }));
 
@@ -79,7 +86,16 @@ const OrganizationHome = () => {
                 <MembersCard />
               </Grid>
             </Grid>
-            <Tutorials />
+            <Box className={styles.tutorialsSection} pb={8}>
+              <Typography
+                variant="h4"
+                component="h2"
+                className={styles.subtitle}
+              >
+                {t("common.tutorials")}
+              </Typography>
+              <TutorialsGallery />
+            </Box>
           </Grid>
         )}
       </Container>

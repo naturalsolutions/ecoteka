@@ -585,7 +585,7 @@
   },
   "Dashboard": {
     "title": "Panel de control",
-    "year" : "Año",
+    "year": "Año",
     "for": "para",
     "treeHeritage": {
       "title": "Tu herencia arbórea",
@@ -606,8 +606,8 @@
     },
     "addInterventionButton": "Agregar intervenciones",
     "importDataButton": "Datos de importacion",
-    "interventionState" : "Hecho",
-    "treeViewButton" : "Vista de árbol"
+    "interventionState": "Hecho",
+    "treeViewButton": "Vista de árbol"
   },
   "MapLayers": {
     "backgrounds": "Fondos",
@@ -635,5 +635,20 @@
     "filter": "Filtros",
     "layers": "Capas",
     "import": "Importar"
+  },
+  "Home": {
+    "title": "Hogar",
+    "myOrganizations": "Organizaciones a las que pertenece",
+    "exploreSampleDatasets": "Explore conjuntos de datos de muestra"
+  },
+  "CallToLogin": {
+    "headline": "¡Probemos Ecoteka!",
+    "defaultLabel": "Acceso",
+    "defaultCaption": "Inicie sesión en su cuenta y comience a mapear su bosque urbano."
+  },
+  "CallToActions": {
+    "AddOrganization": {
+      "title": "Agregar una organización"
+    }
   }
 }

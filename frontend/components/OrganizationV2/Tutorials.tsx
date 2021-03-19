@@ -1,4 +1,3 @@
-import { makeStyles } from "@material-ui/core/styles";
 import { Box, Grid, Typography } from "@material-ui/core";
 import VideoCard from "@/components/Core/Card/VideoCard";
 
@@ -18,27 +17,27 @@ const useStyles = makeStyles(({ palette, spacing }) => {
 const tutorialsDemoData = [
   {
     id: 1,
-    title: "Premier tutoriel",
+    title: "Gérer vos organisations",
     videoUrl: "https://www.youtube.com/watch?v=2pkvW3aF024",
     videoCapture: "https://source.unsplash.com/c_o2lRzWI08/500x500",
   },
+  {
+    id: 2,
+    title: "Importer votre premier jeu de données",
+    videoUrl: "https://www.youtube.com/watch?v=2pkvW3aF024",
+    videoCapture: "https://source.unsplash.com/SEFaaIjrjZA/500x500",
+  },
 ];
 
-const Tutorials = (props) => {
-  const styles = useStyles();
+const Tutorials = () => {
   return (
-    <Box className={styles.root} pb={8}>
-      <Typography variant="h4" component="h2" className={styles.section}>
-        Tutoriels
-      </Typography>
-      <Grid container>
-        {tutorialsDemoData.map((tutorial, index) => (
-          <Grid key={index} item xs={12} md={4} lg={3}>
-            <VideoCard {...tutorial} />
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    <Grid container spacing={2}>
+      {tutorialsDemoData.map((tutorial, index) => (
+        <Grid key={index} item xs={12} md={4} lg={3}>
+          <VideoCard {...tutorial} />
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
