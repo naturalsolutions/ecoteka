@@ -141,17 +141,15 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
 }) => {
   const styles = useStyles();
   return (
-    <Grid item xs={12} sm={6} md={3}>
-      <Box className={styles.card}>
-        <Grid container direction="column" spacing={2}>
-          <CardHeader slug={slug} name={name} />
-          <Grid item>
-            <Box minHeight={200} bgcolor={"#dfdfdf"} borderRadius={8} />
-          </Grid>
-          <BasicProfile ownerEmail={ownerEmail} />
+    <Box className={styles.card}>
+      <Grid container direction="column" spacing={2}>
+        <CardHeader slug={slug} name={name} />
+        <Grid item>
+          <Box minHeight={200} bgcolor={"#dfdfdf"} borderRadius={8} />
         </Grid>
-      </Box>
-    </Grid>
+        <BasicProfile ownerEmail={ownerEmail} />
+      </Grid>
+    </Box>
   );
 };
 
