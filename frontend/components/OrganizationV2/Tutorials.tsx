@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography, makeStyles } from "@material-ui/core";
 import VideoCard from "@/components/Core/Card/VideoCard";
 
 const useStyles = makeStyles(({ palette, spacing }) => {
