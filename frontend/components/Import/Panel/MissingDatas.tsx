@@ -23,7 +23,7 @@ const defaultProps: ETKMissingDatasProps = {
 
 const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
   const { t } = useTranslation("components");
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const { apiETK } = useApi().api;
   const crsColumnChoices = [
     { value: "epsg:4326", label: "EPSG:4326" },
@@ -107,7 +107,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
 
     try {
       const { data } = await apiETK.put(
-        `/organization/${user.currentOrganization.id}/geo_files/`,
+        `/organization/${organization.id}/geo_files/`,
         newGeofile
       );
 

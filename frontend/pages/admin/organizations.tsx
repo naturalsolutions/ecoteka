@@ -82,10 +82,6 @@ const AdminOrganizations = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    console.log(isSuccess);
-  }, [isSuccess]);
-
   if (!user) {
     return <FullPageSpinner />;
   }

@@ -4,6 +4,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useTranslation } from "react-i18next";
 
 import { useRouter } from "next/router";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportImportedProps {
   onReset?(): void;
@@ -16,9 +17,15 @@ const defaultProps: ETKImportImportedProps = {
 const ETKImportImported: React.FC<ETKImportImportedProps> = (props) => {
   const router = useRouter();
   const { t } = useTranslation("components");
+  const { organization } = useAppContext();
 
   const onHistoryClick = () => {
-    router.push("/imports");
+    router.push({
+      pathname: "/[organizationSlug]/imports",
+      query: {
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   return (

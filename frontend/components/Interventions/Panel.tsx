@@ -41,7 +41,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   const doneSchema = useDateSchema();
   const schema = { ...interventionSchema, ...planningSchema, ...doneSchema };
   const { apiETK } = useApi().api;
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
 
   const { fields, getValues, setValue } = useETKForm({ schema });
@@ -49,10 +49,9 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   const handleOnSave = async () => {
     try {
       const values = getValues();
-      const organizationId = user.currentOrganization.id;
       const payload = {
         id: intervention.id,
-        organization_id: intervention.organization_id,
+        organization_id: organization.id,
         intervention_type: intervention.intervention_type,
         tree_id: intervention.tree_id,
         properties: {},
@@ -80,7 +79,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
       }
 
       const { status } = await apiETK.patch(
-        `/organization/${organizationId}/interventions/${id}`,
+        `/organization/${organization.id}/interventions/${id}`,
         payload
       );
 
@@ -148,7 +147,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
 
 const InterventionsEdit: FC<IInterventionEditProps> = () => {
   const { t } = useTranslation("components");
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const router = useRouter();
   const { apiETK } = useApi().api;
   const [intervention, setIntervention] = useState<TIntervention>();
@@ -156,8 +155,7 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
 
   const getIntervention = async (intervertionId: number) => {
     try {
-      const organizationId = user.currentOrganization.id;
-      const url = `/organization/${organizationId}/interventions/${intervertionId}`;
+      const url = `/organization/${organization.id}/interventions/${intervertionId}`;
       const { status, data }: IInterventionResponse = await apiETK.get(url);
 
       if (status === 200) {
@@ -168,7 +166,14 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
 
   const handleOnBackToTree = () => {
     if (intervention?.tree_id) {
-      router.push(`/map?panel=info&tree=${intervention.tree_id}`);
+      router.push({
+        pathname: "/[organizationSlug]/map",
+        query: {
+          panel: "info",
+          tree: intervention.tree_id,
+          organizationSlug: organization.slug,
+        },
+      });
     }
   };
 

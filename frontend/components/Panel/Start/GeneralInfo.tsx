@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import CardInfoPanel from "@/components/Card/InfoPanel";
 import { useRouter } from "next/router";
 import Can from "@/components/Can";
+import { useAppContext } from "@/providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +32,7 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
   const router = useRouter();
   const classes = useStyles();
   const { t } = useTranslation("components");
+  const { organization } = useAppContext();
 
   return (
     <Grid
@@ -90,7 +92,13 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
                       size="large"
                       variant="outlined"
                       onClick={() => {
-                        router.push("/map?panel=import");
+                        router.push({
+                          pathname: "/[organizationSlug]/map",
+                          query: {
+                            panel: "import",
+                            organizationSlug: organization.slug,
+                          },
+                        });
                       }}
                     >
                       {t("components.PanelStart.card.button")}

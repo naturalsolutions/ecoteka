@@ -32,9 +32,9 @@ import useDimensions from "@/lib/hooks/useDimensions";
 import { setMonthSeriesWithSum } from "@/lib/utils/d3-utils";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
-export interface ETKDashboardProps {}
+export interface DashboardProps {}
 
-const defaultProps: ETKDashboardProps = {};
+const defaultProps: DashboardProps = {};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,10 +82,10 @@ const range = (start, end) => {
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
+const Dashboard: React.FC<DashboardProps> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["components", "pages"]);
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const router = useRouter();
   const { theme } = useThemeContext();
   const { api } = useAPI();
@@ -108,12 +108,12 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   const steps = t("pages.Dashboard.steps", { returnObjects: true }) as [];
 
   const getOrganizationMetrics = async (year: number) => {
-    if (user) {
+    if (organization) {
       try {
         const { data, status } = await apiETK.get(
-          `organization/${user.currentOrganization.id}/metrics_by_year/${year}`
+          `organization/${organization.id}/metrics_by_year/${year}`
         );
-        if (status === 200 && user) {
+        if (status === 200 && organization) {
           setMetrics(data);
         }
       } catch (e) {}
@@ -121,12 +121,12 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   };
 
   const getInterventions = async (year: number) => {
-    if (user) {
+    if (organization) {
       try {
         const { data, status } = await apiETK.get(
-          `/organization/${user.currentOrganization.id}/interventions/year/${year}`
+          `/organization/${organization.id}/interventions/year/${year}`
         );
-        if (status === 200 && user) {
+        if (status === 200 && organization) {
           setIterventions(data);
         }
       } catch (e) {}
@@ -140,7 +140,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   useEffect(() => {
     getOrganizationMetrics(year);
     getInterventions(year);
-  }, [user, year]);
+  }, [organization, year]);
 
   useEffect(() => {
     setTreeWidgets([
@@ -324,7 +324,7 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
             variant="h5"
             component="div"
           >
-            {t("components.Dashboard.for")} {user?.currentOrganization?.name}
+            {t("components.Dashboard.for")} {organization.name}
           </Typography>
         </Box>
         <Box>
@@ -354,7 +354,15 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
                   color="inherit"
                   size="small"
                   variant="outlined"
-                  onClick={() => router.push("/map/?panel=import")}
+                  onClick={() => {
+                    router.push({
+                      pathname: "/[organizationSlug]/map",
+                      query: {
+                        panel: "import",
+                        organizationSlug: organization.slug,
+                      },
+                    });
+                  }}
                 >
                   {t("components.Dashboard.importDataButton")}
                 </Button>
@@ -444,6 +452,6 @@ const ETKDashboard: React.FC<ETKDashboardProps> = (props) => {
   );
 };
 
-ETKDashboard.defaultProps = defaultProps;
+Dashboard.defaultProps = defaultProps;
 
-export default ETKDashboard;
+export default Dashboard;

@@ -9,6 +9,7 @@ import { useAppLayout } from "@/components/AppLayout/Base";
 import Geofile from "@/components/Geofile";
 import router, { useRouter } from "next/router";
 import Head from "next/head";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportHistoryIndexProps {
   rows?: Geofile[];
@@ -40,6 +41,7 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
   const { dialog } = useAppLayout();
   const [selected, setSelected] = useState([]);
   const router = useRouter();
+  const { organization } = useAppContext();
 
   const onSelected = (newSelected) => {
     setSelected(newSelected);
@@ -96,7 +98,14 @@ const ETKImportHistoryIndex: React.FC<ETKImportHistoryIndexProps> = (props) => {
                         variant="outlined"
                         color="primary"
                         size="large"
-                        onClick={() => router.push("/map?panel=import")}
+                        onClick={() => {
+                          router.push({
+                            pathname: "/[organizationSlug]/map",
+                            query: {
+                              organizationSlug: organization.slug,
+                            },
+                          });
+                        }}
                       >
                         {t("components.ImportHistoryIndex.importText")}
                       </Button>

@@ -77,15 +77,13 @@ const ETKInterventionForm = forwardRef<
   const schema = schemaMap[props.step](props.interventionType);
   const form = useETKForm({ schema });
   const router = useRouter();
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const { apiETK } = useApi().api;
 
   const flyToTree = async (treeId: number) => {
     try {
-      const organizationId = user.currentOrganization.id;
-
       const { data: tree } = await apiETK.get(
-        `/organization/${organizationId}/trees/${treeId}`
+        `/organization/${organization.id}/trees/${treeId}`
       );
     } catch (e) {}
   };
@@ -153,7 +151,7 @@ const initialData = steps.reduce(
 const ETKInterventionFormStepper: React.FC<{}> = (props) => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const { apiETK } = useApi().api;
   const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
@@ -215,8 +213,10 @@ const ETKInterventionFormStepper: React.FC<{}> = (props) => {
     payload.tree_id = router.query.tree;
     payload.estimated_cost = estimatedCost;
 
-    const organizationId = user.currentOrganization.id;
-    await apiETK.post(`/organization/${organizationId}/interventions`, payload);
+    await apiETK.post(
+      `/organization/${organization.id}/interventions`,
+      payload
+    );
   };
 
   const handleNext = async (step: TInterventionStep) => {
@@ -253,7 +253,14 @@ const ETKInterventionFormStepper: React.FC<{}> = (props) => {
   };
 
   const handleBackToTree = () => {
-    router.push(`/map/?panel=info&tree=${router.query.tree}`);
+    router.push({
+      pathname: "/[organizationSlug]/map",
+      query: {
+        panel: "info",
+        tree: router.query.tree,
+        organizationSlug: organization.id,
+      },
+    });
   };
 
   return (
@@ -303,7 +310,7 @@ const ETKInterventionFormStepper: React.FC<{}> = (props) => {
                     data={data[step]}
                     interventionType={interventionType}
                     step={step}
-                    organization={user.currentOrganization}
+                    organization={organization.id}
                   />
                   <Grid container direction="row" justify="flex-end">
                     {activeStep !== 0 && (

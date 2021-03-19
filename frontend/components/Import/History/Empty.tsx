@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles, Grid, Typography, Button, Box } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
 import { useRouter } from "next/router";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface ETKImportHistoryEmptyProps {}
 
@@ -28,6 +29,7 @@ const ETKImportHistoryEmpty: React.FC<ETKImportHistoryEmptyProps> = (props) => {
   const classes = useStyles();
   const router = useRouter();
   const { t } = useTranslation("components");
+  const { organization } = useAppContext();
 
   return (
     <Grid
@@ -51,7 +53,13 @@ const ETKImportHistoryEmpty: React.FC<ETKImportHistoryEmptyProps> = (props) => {
           color="primary"
           size="large"
           onClick={() => {
-            router.push("/map/?panel=import");
+            router.push({
+              pathname: "/[organizationSlug]/map",
+              query: {
+                panel: "import",
+                organizationSlug: organization.id,
+              },
+            });
           }}
         >
           {t("ImportHistoryEmpty.button")}

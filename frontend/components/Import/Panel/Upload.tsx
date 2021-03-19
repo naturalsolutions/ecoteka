@@ -85,7 +85,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   const [linearProgressValue, setLinearProgressValue] = useState(0);
   const [error, setError] = useState(null);
   const [inProgress, setInProgress] = useState(false);
-  const { user } = useAppContext();
+  const { user, organization } = useAppContext();
   const { apiETK } = useApi().api;
 
   const ETKFiles = (
@@ -155,7 +155,7 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
       const formData = new FormData();
       formData.append("file", file);
       const { status, data } = await apiETK.post(
-        `/organization/${user.currentOrganization.id}/geo_files/upload`,
+        `/organization/${organization.id}/geo_files/upload`,
         formData,
         {
           onUploadProgress: onUploadProgress,

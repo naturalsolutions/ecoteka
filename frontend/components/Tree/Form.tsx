@@ -37,7 +37,7 @@ const TreeForm: React.FC<{
   const { apiETK } = api;
   const { enqueueSnackbar } = useSnackbar();
   const [saving, setSaving] = useState(false);
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const defaultValues = {
     isLit: false,
     isProtected: false,
@@ -64,7 +64,7 @@ const TreeForm: React.FC<{
 
   useEffect(() => {
     if (typeof treeId === "number") {
-      getTree(user.currentOrganization.id, treeId);
+      getTree(organization.id, treeId);
     }
   }, [treeId]);
 
@@ -73,7 +73,7 @@ const TreeForm: React.FC<{
       setSaving(true);
 
       const properties = getValues();
-      const organizationId = user.currentOrganization.id;
+      const organizationId = organization.id;
 
       const { data, status } = await apiETK.put(
         `/organization/${organizationId}/trees/${treeId}`,
@@ -99,7 +99,14 @@ const TreeForm: React.FC<{
   };
 
   const handleToBack = () => {
-    router.push(`/map?panel=info&tree=${treeId}`);
+    router.push({
+      pathname: "/[organizationSlug]/map",
+      query: {
+        panel: "info",
+        tree: treeId,
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   return (

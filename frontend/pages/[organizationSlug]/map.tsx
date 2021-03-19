@@ -16,7 +16,11 @@ import TreeSummary from "@/components/Tree/Infos/Summary";
 import TreeForm from "@/components/Tree/Form";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
 import MapGeolocateFab from "@/components/Map/GeolocateFab";
-import MapLayers from "@/components/Map/Layers";
+import MapLayers, {
+  ILayers,
+  defaultLayers,
+  IMapLayers,
+} from "@/components/Map/Layers";
 import MapFilter from "@/components/Map/Filter";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
@@ -27,13 +31,13 @@ import MapDrawToolbar from "@/components/Map/DrawToolbar";
 import MapSearchCity from "@/components/Map/SearchCity";
 import ImportPanel from "@/components/Import/Panel/Index";
 import InterventionForm from "@/components/Interventions/Form";
-import getConfig from "next/config";
 import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
-import { GeoJsonLayer } from "@deck.gl/layers";
-import { MVTLayer } from "@deck.gl/geo-layers";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
+import OSMLayer from "@/components/Map/Layers/OSM.ts";
+import CadastreLayer from "@/components/Map/Layers/Cadastre.ts";
+import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import Head from "next/head";
 import { ITree } from "@/components";
 import InterventionsEdit from "@/components/Interventions/Panel";
@@ -94,14 +98,12 @@ const defaultData = {
 
 const EditionPage = ({}) => {
   const { t } = useTranslation();
-  const { publicRuntimeConfig } = getConfig();
-  const { apiUrl } = publicRuntimeConfig;
+
   const classes = useStyles();
   const router = useRouter();
-  const { user } = useAppContext();
+  const { organization } = useAppContext();
   const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
-  const [numberOfTrees, setNumberOfTrees] = useState(0);
   const [data, setData] = useLocalStorage("etk:map:data");
   const [dataOrganizations, setDataOrganizations] = useLocalStorage(
     "etk:map:dataOrganizations",
@@ -124,6 +126,10 @@ const EditionPage = ({}) => {
     "map"
   );
   const [layers, setLayers] = useState([]);
+  const [activeLayers, setActiveLayers] = useLocalStorage<IMapLayers>(
+    "etk:map:activeLayers",
+    defaultLayers
+  );
   const [activeTree, setActiveTree] = useState<number | undefined>(
     router.query?.tree ? Number(router.query.tree) : undefined
   );
@@ -131,12 +137,12 @@ const EditionPage = ({}) => {
 
   const [dataOrganizationId, setDataOrganizationId] = useLocalStorage(
     "etk:map:dataOrganizationId",
-    user?.currentOrganization.id
+    organization.id
   );
 
   const createTree = async (x, y) => {
     try {
-      const organizationId = user.currentOrganization.id;
+      const organizationId = organization.id;
       const payload = { x, y };
       const url = `/organization/${organizationId}/trees`;
 
@@ -158,7 +164,14 @@ const EditionPage = ({}) => {
 
         setData(newData);
 
-        router.push(`/map/?panel=edit&tree=${tree.id}`);
+        router.push({
+          pathname: "/[organizationSlug]/map",
+          query: {
+            panel: "edit",
+            tree: tree.id,
+            organizationSlug: organization.slug,
+          },
+        });
         setActiveTree(tree.id);
       }
     } catch (error) {}
@@ -222,114 +235,21 @@ const EditionPage = ({}) => {
     }
   };
 
-  const osmLayer = new MVTLayer({
-    id: "osm",
-    data: `${apiUrl.replace(
-      "/api/v1",
-      ""
-    )}/tiles/osm/{z}/{x}/{y}.pbf?scope=public`,
-    minZoom: 0,
-    maxZoom: 13,
-    getRadius: 1,
-    radiusScale: 10,
-    radiusMinPixels: 0.25,
-    lineWidthMinPixels: 1,
-    pointRadiusMinPixels: 1,
-    pointRadiusMaxPixels: 10,
-    pointRadiusScale: 2,
-    getLineColor: [192, 192, 192],
-    getFillColor: [140, 170, 180],
-    pickable: true,
-  });
+  const handleOnChangeLayers = (newActiveLayers: ILayers) => {
+    setActiveLayers(newActiveLayers);
+    renderLayers();
+  };
 
-  const treesLayer = new GeoJsonLayer({
-    id: "trees",
+  const cadastreLayer = CadastreLayer(activeLayers.osm.value);
+  const osmLayer = OSMLayer(activeLayers.osm.value);
+  const treesLayer = InventoryLayer({
+    visible: activeLayers.trees.value,
     data,
-    getLineColor: (d) => {
-      if (selection.includes(d.properties.id)) {
-        return [255, 0, 0, 100];
-      }
-
-      if (activeTree === d.properties.id) {
-        return [255, 100, 0];
-      }
-
-      for (const key of Object.keys(filters.filters).reverse()) {
-        if (
-          filters.filters[key] &&
-          d.properties.properties &&
-          filters.filters[key].includes(d.properties?.properties[key])
-        ) {
-          const index = filters.options[key].findIndex(
-            (f) => f.value === d.properties.properties[key]
-          );
-          return filters.options[key][index][dark ? "color" : "background"];
-        }
-      }
-
-      for (let key in filters.filters) {
-        if (filters.filters[key].length > 0) {
-          return [120, 120, 120, 128];
-        }
-      }
-
-      return [34, 169, 54, 100];
-    },
-    getFillColor: (d) => {
-      if (selection.includes(d.properties.id)) {
-        return [255, 0, 0, 100];
-      }
-
-      for (const key of Object.keys(filters.filters).reverse()) {
-        if (
-          filters.filters[key] &&
-          d.properties.properties &&
-          filters.filters[key].includes(d.properties?.properties[key])
-        ) {
-          const index = filters.options[key].findIndex(
-            (f) => f.value === d.properties.properties[key]
-          );
-
-          return filters.options[key][index][dark ? "color" : "background"];
-        }
-      }
-
-      for (let key in filters.filters) {
-        if (filters.filters[key].length > 0) {
-          return [120, 120, 120, 128];
-        }
-      }
-
-      return [34, 139, 34, 100];
-    },
-    getRadius: (d) => {
-      if (d.properties?.properties?.diameter) {
-        const diameter = Number(d.properties.properties.diameter);
-
-        if (diameter >= 0 && diameter < 40) {
-          return 1.25;
-        } else if (diameter >= 40 && diameter < 100) {
-          return 1.5;
-        } else {
-          return 1.75;
-        }
-      }
-
-      return 1;
-    },
-    updateTriggers: {
-      getFillColor: [activeTree, selection, editionMode, filters, dark, data],
-      getLineColor: [activeTree, selection, editionMode, filters, dark, data],
-      getRadius: [activeTree, selection, editionMode, filters, dark, data],
-    },
-    pickable: true,
-    autoHighlight: true,
-    pointRadiusMinPixels: 5,
-    pointRadiusScale: 1,
-    minRadius: 2,
-    radiusMinPixels: 0.5,
-    lineWidthMinPixels: 1,
-    lineWidthMaxPixels: 3,
+    filters,
+    dark,
+    selection,
+    activeTree,
+    editionMode,
   });
 
   const selectionLayer = new SelectionLayer({
@@ -387,7 +307,7 @@ const EditionPage = ({}) => {
   };
 
   const handleOnFileImported = async (coordinates) => {
-    await getData(user.currentOrganization.id);
+    await getData(organization.id);
     setViewState({
       longitude: coordinates[0],
       latitude: coordinates[1],
@@ -417,10 +337,12 @@ const EditionPage = ({}) => {
       case "layers":
         return setDrawerLeftComponent(
           <MapLayers
+            layers={activeLayers}
             mapBackground={mapBackground}
             onChangeBackground={(newMapBackground) =>
               setMapbackground(newMapBackground)
             }
+            onChangeLayers={handleOnChangeLayers}
           />
         );
       case "import":
@@ -435,7 +357,7 @@ const EditionPage = ({}) => {
         return setDrawerLeftComponent(
           <MapFilter
             initialValue={filters.values}
-            organizationId={user.currentOrganization.id}
+            organizationId={organization.id}
             onChange={handleOnFilter}
           />
         );
@@ -444,12 +366,10 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     setViewState({ ...initialViewState });
-    renderLayers();
-
-    fitToBounds(user?.currentOrganization.id);
+    fitToBounds(organization.id);
 
     if (!data?.features.length) {
-      getData(user?.currentOrganization.id);
+      getData(organization.id);
     }
   }, []);
 
@@ -461,7 +381,7 @@ const EditionPage = ({}) => {
     if (router.query?.panel) {
       switchPanel(router.query?.panel);
     }
-  }, [router.query, numberOfTrees, filters]);
+  }, [router.query, filters]);
 
   const handleOnFilter = (values, filters, options) => {
     setFilters({
@@ -476,7 +396,7 @@ const EditionPage = ({}) => {
       case "geolocate":
         break;
       case "fit_to_bounds":
-        fitToBounds(user.currentOrganization.id);
+        fitToBounds(organization.id);
         break;
     }
   };
@@ -499,7 +419,7 @@ const EditionPage = ({}) => {
     }
 
     try {
-      const url = `/organization/${user.currentOrganization.id}/trees/bulk_delete`;
+      const url = `/organization/${organization.id}/trees/bulk_delete`;
       const { status, data: tree } = await apiETK.delete(url, {
         data: {
           trees: selection,
@@ -515,9 +435,15 @@ const EditionPage = ({}) => {
         setData(newData);
 
         if (selection.includes(activeTree)) {
+          router.push({
+            pathname: "/[organizationSlug]/map",
+            query: {
+              panel: "start",
+              organizationSlug: organization.slug,
+            },
+          });
           setActiveTree();
           setDrawerLeftComponent();
-          router.push("/map");
         }
 
         setSelection([]);
@@ -529,14 +455,22 @@ const EditionPage = ({}) => {
     switchPanel(router.query.panel);
 
     if (editionMode && mode === "selection") {
-      return setLayers([treesLayer, selectionLayer]);
+      return setLayers([
+        cadastreLayer.clone({ visible: activeLayers.cadastre.value }),
+        treesLayer.clone({ visible: true }),
+        selectionLayer,
+      ]);
     }
 
     if (editionMode) {
-      return setLayers([treesLayer]);
+      return setLayers([treesLayer.clone({ visible: true })]);
     }
 
-    return setLayers([osmLayer, treesLayer]);
+    return setLayers([
+      cadastreLayer.clone({ visible: activeLayers.cadastre.value }),
+      osmLayer.clone({ visible: activeLayers.osm.value }),
+      treesLayer.clone({ visible: activeLayers.trees.value }),
+    ]);
   };
 
   const handleOnMapActionsBarClick = (action: MapActionsBarActionType) => {
@@ -549,9 +483,11 @@ const EditionPage = ({}) => {
     }
 
     router.push({
+      pathname: "/[organizationSlug]/map",
       query: {
         ...router.query,
         panel: action,
+        organizationSlug: organization.slug,
       },
     });
   };
@@ -566,25 +502,22 @@ const EditionPage = ({}) => {
   }, [mode]);
 
   useEffect(() => {
-    if (user) {
+    if (organization) {
       setFilters(defaultFilters);
       renderLayers();
 
-      if (dataOrganizationId !== user.currentOrganization.id) {
-        if (
-          dataOrganizations[user.currentOrganization.id]?.features.length > 0
-        ) {
-          setDataOrganizationId(user.currentOrganization.id);
-          setData(dataOrganizations[user.currentOrganization.id]);
+      if (dataOrganizationId !== organization.id) {
+        if (dataOrganizations[organization.id]?.features.length > 0) {
+          setDataOrganizationId(organization.id);
+          setData(dataOrganizations[organization.id]);
         } else {
-          getData(user?.currentOrganization.id);
+          getData(organization.id);
         }
       }
 
-      fitToBounds(user.currentOrganization.id);
-      setDrawerLeftComponent();
+      fitToBounds(organization.id);
     }
-  }, [user]);
+  }, [organization]);
 
   useEffect(() => {
     renderLayers();
@@ -605,7 +538,7 @@ const EditionPage = ({}) => {
         getCursor={({}) => (mode === "drawPoint" ? "crosshair" : "pointer")}
         layers={layers}
         onLoad={() => {
-          fitToBounds(user?.currentOrganization.id);
+          fitToBounds(organization.id);
         }}
         onViewStateChange={(e) => {
           setInitialViewState({
@@ -627,11 +560,22 @@ const EditionPage = ({}) => {
             !info.object?.properties?.id
           ) {
             setActiveTree();
-            router.push("/map");
-            setDrawerLeftComponent();
+            router.push({
+              pathname: "/[organizationSlug]/map",
+              query: {
+                organizationSlug: organization.slug,
+              },
+            });
           } else {
             setActiveTree(info.object?.properties?.id);
-            router.push(`/map/?panel=info&tree=${info.object?.properties.id}`);
+            router.push({
+              pathname: "/[organizationSlug]/map",
+              query: {
+                panel: "info",
+                tree: info.object?.properties.id,
+                organizationSlug: organization.slug,
+              },
+            });
           }
         }}
       >
@@ -725,9 +669,7 @@ const EditionPage = ({}) => {
             />
           </Grid>
           <Grid item className={classes.toolbarAction}>
-            <IconButton
-              onClick={() => fitToBounds(user.currentOrganization.id)}
-            >
+            <IconButton onClick={() => fitToBounds(organization.id)}>
               <CenterFocusStrongIcon />
             </IconButton>
           </Grid>
