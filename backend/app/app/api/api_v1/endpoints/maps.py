@@ -8,7 +8,17 @@ from app import crud
 from app.api import get_db
 from app.core import (
     authorization,
+    authorize,
+    get_optional_current_active_user,
     set_policies
+)
+
+from app.schemas import (
+    FeatureCollection
+)
+
+from app.models import (
+    User
 )
 
 from app.crud import organization
@@ -44,12 +54,13 @@ def generate_style(
         
         return style
 
-@router.get("/geojson", dependencies=[Depends(authorization("maps:get_geojson"))])
+@router.get("/geojson", response_model=FeatureCollection)
 def get_geojson(
     organization_id: int,
     mode: Optional[str] = "geopandas",
+    current_user: User = Depends(get_optional_current_active_user),
     db: Session = Depends(get_db)
-) -> Dict: 
+) -> Optional[FeatureCollection]: 
     """
     Get Organization GeoJSON
     """
@@ -57,6 +68,8 @@ def get_geojson(
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
+    
+    authorize(organization_in_db, current_user, "maps:get_geojson")
 
     response = None
     if mode == 'geopandas':
@@ -117,9 +130,10 @@ def get_geojson(
         response = dict(row.jsonb_build_object)
     return response
 
-@router.get("/geobuf", dependencies=[Depends(authorization("maps:get_geobuf"))])
+@router.get("/geobuf")
 def get_geobuff(
     organization_id: int,
+    current_user: User = Depends(get_optional_current_active_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -130,6 +144,8 @@ def get_geobuff(
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
+    
+    authorize(organization_in_db, current_user, "maps:get_geobuf")
 
     sql = f"""
 
