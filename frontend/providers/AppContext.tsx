@@ -27,6 +27,7 @@ export const Provider = ({ children }) => {
     "/404",
     "/500",
   ];
+  const restrictedRoutes = ["/admin/organizations", "account"];
 
   // #HOTFIX: In the long terThis could be replace by useReducer hook to programatically interacts with current user state
   // (e.g: update user organizations lists) based on query results
@@ -84,7 +85,7 @@ export const Provider = ({ children }) => {
   }, [router.query?.organizationSlug]);
 
   useEffect(() => {
-    if (!validRoutes.includes(router.route) && !user) {
+    if (restrictedRoutes.includes(router.route) && !user) {
       router.push("/");
     }
   }, [user]);
