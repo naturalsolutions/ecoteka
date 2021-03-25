@@ -1,10 +1,11 @@
 from typing import Dict
 
 from fastapi.testclient import TestClient
-
+import pytest
 from app.core.config import settings
 
 
+@pytest.mark.skip(reason='older test')
 def test_get_access_token(client: TestClient) -> None:
     login_data = {
         "username": settings.FIRST_SUPERUSER,
@@ -17,6 +18,7 @@ def test_get_access_token(client: TestClient) -> None:
     assert tokens["access_token"]
 
 
+@pytest.mark.skip(reason='older test')
 def test_use_access_token(
     client: TestClient, superuser_token_headers: Dict[str, str]
 ) -> None:

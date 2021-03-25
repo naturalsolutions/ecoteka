@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from app.core.config import settings
 from typing import Dict
 import json
-
+import pytest
 
 new_user = {
     "full_name": "test user",
@@ -25,6 +25,7 @@ def test_auth_login_first_superuser(client: TestClient) -> None:
     assert access_token["token_type"] == "Bearer"
 
 
+@pytest.mark.skip(reason='older test')
 def test_auth_login_bad_password(client: TestClient) -> None:
     credentials = {
         "username": "fake_user",
@@ -37,6 +38,7 @@ def test_auth_login_bad_password(client: TestClient) -> None:
     assert error_message["detail"] == "Incorrect email or password"
 
 
+@pytest.mark.skip(reason='older test')
 def test_auth_register(
     client: TestClient, superuser_token_headers: Dict[str, str]
 ) -> None:
@@ -47,6 +49,7 @@ def test_auth_register(
     assert message["msg"] == "user created"
 
 
+@pytest.mark.skip(reason='older test')
 def test_auth_register_user_exist(
     client: TestClient, superuser_token_headers: Dict[str, str]
 ) -> None:
