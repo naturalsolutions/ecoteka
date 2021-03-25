@@ -78,8 +78,6 @@ export default function Provider({ children }) {
     return dark ? themeDark : themeLight;
   }, [dark]);
 
-  console.log(theme);
-
   return (
     <ThemeContext.Provider
       value={{ theme: theme || themeLight, dark, setDark }}

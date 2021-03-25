@@ -134,6 +134,25 @@ def authorization(action: str):
 
     return decorated
 
+def authorize(object: Organization, subject: Optional[User], action: str):
+        if not subject:
+            if object.mode == "public":
+                pass
+            if object.mode == "private":
+                raise HTTPException(
+                    status_code=403,
+                    detail="Only authenticated members will be granted access to private organization. Please login first.",
+                )
+                
+        if subject:
+            if object.mode == "public":
+                pass
+            if object.mode == "private":
+                if not enforcer.enforce(str(subject.id), str(object.id), action):
+                    raise HTTPException(
+                        status_code=403,
+                        detail="The user doesn't have enough privileges",
+                    )
 
 def set_policies(policies):
     for key in policies:
