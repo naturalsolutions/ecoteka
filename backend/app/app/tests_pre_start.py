@@ -1,7 +1,7 @@
 import logging
 
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
-
+from app.main import app
 from app.db.session import SessionLocal
 
 logging.basicConfig(level=logging.INFO)
