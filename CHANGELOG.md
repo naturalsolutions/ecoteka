@@ -1,3 +1,10 @@
+# [0.5.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.4.0...v0.5.0) (2021-03-29)
+
+
+### Features
+
+* add tree responsive ([2196d29](https://gitlab.com/natural-solutions/ecoteka/commit/2196d29ae10974b2c52fc31147235e535fce8dba))
+
 # [0.4.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.3.0...v0.4.0) (2021-03-25)
 
 
