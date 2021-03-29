@@ -19,7 +19,7 @@ import { useAppContext } from "@/providers/AppContext";
 import Geofile from "@/components/Geofile";
 import useApi from "@/lib/useApi";
 
-export interface ETKUploadProps {
+export interface ImportUploadProps {
   geofile?: Geofile;
   missingInfo?: [string?];
   step?: string;
@@ -27,7 +27,7 @@ export interface ETKUploadProps {
   onUploaded?(geofile: Geofile): void;
 }
 
-const defaultProps: ETKUploadProps = {
+const defaultProps: ImportUploadProps = {
   geofile: undefined,
   missingInfo: [""],
   step: "start",
@@ -78,14 +78,14 @@ const HtmlTooltip = withStyles((theme) => ({
 
 const ALLOWED_EXTENSIONS = [".xls", ".xlsx", ".csv", ".geojson", ".zip"];
 
-const ETKUpload: React.FC<ETKUploadProps> = (props) => {
+const ImportUpload: React.FC<ImportUploadProps> = (props) => {
   const classes = useStyle();
   const { t } = useTranslation("components");
   const [file, setFile] = useState<File>();
   const [linearProgressValue, setLinearProgressValue] = useState(0);
   const [error, setError] = useState(null);
   const [inProgress, setInProgress] = useState(false);
-  const { user, organization } = useAppContext();
+  const { organization } = useAppContext();
   const { apiETK } = useApi().api;
 
   const ETKFiles = (
@@ -262,6 +262,6 @@ const ETKUpload: React.FC<ETKUploadProps> = (props) => {
   );
 };
 
-ETKUpload.defaultProps = defaultProps;
+ImportUpload.defaultProps = defaultProps;
 
-export default ETKUpload;
+export default ImportUpload;

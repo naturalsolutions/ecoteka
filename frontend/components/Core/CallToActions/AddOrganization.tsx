@@ -97,7 +97,7 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
   const addButtonStyles = useArrowWhiteButtonStyles();
 
   const handleAddOrganization = () => {
-    console.log("wip");
+    //
   };
 
   return (

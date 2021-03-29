@@ -1,14 +1,15 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { makeStyles, Button, Box, Grid } from "@material-ui/core";
 import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab";
 import { useTranslation } from "react-i18next";
 
-export type TMapDrawToolbarMode = "selection" | "drawPoint" | "drawPolygon";
+export type MapDrawToolbarMode = "selection" | "drawPoint" | "drawPolygon";
 
-export interface IMapDrawToolbarProps {
+export interface MapDrawToolbarProps {
+  mode: MapDrawToolbarMode;
   activeDelete?: boolean;
   onDelete?(): void;
-  onChange?(mode: TMapDrawToolbarMode): void;
+  onChange?(mode: MapDrawToolbarMode): void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -21,20 +22,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MapDrawToolbar: FC<IMapDrawToolbarProps> = ({
+const MapDrawToolbar: FC<MapDrawToolbarProps> = ({
+  mode,
   onChange,
   onDelete,
   activeDelete = false,
 }) => {
   const classes = useStyles();
-  const [mode, setMode] = useState<TMapDrawToolbarMode>("selection");
   const { t } = useTranslation("components");
 
-  const handleOnChange = (e, value: TMapDrawToolbarMode) => {
-    if (value !== null) {
-      setMode(value);
-    }
-
+  const handleOnChange = (e, value: MapDrawToolbarMode) => {
     if (typeof onChange === "function") {
       onChange(value);
     }
