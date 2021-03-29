@@ -28,6 +28,7 @@ import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import HomeIcon from "@material-ui/icons/Home";
 import { useRouter } from "next/router";
+import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -148,12 +149,13 @@ const initialData = steps.reduce(
   {}
 );
 
-const ETKInterventionFormStepper: React.FC<{}> = (props) => {
+const InterventionFormStepper: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
   const { organization } = useAppContext();
   const { apiETK } = useApi().api;
   const router = useRouter();
+  const [active, setActive] = useState<boolean>(false);
   const [activeStep, setActiveStep] = useState(0);
   const [interventionType, setInterventionType] = useState<TInterventionType>(
     "pruning"
@@ -263,122 +265,137 @@ const ETKInterventionFormStepper: React.FC<{}> = (props) => {
     });
   };
 
+  useEffect(() => {
+    const { query, route } = router;
+
+    if (
+      route === "/[organizationSlug]/map" &&
+      query.panel === "intervention" &&
+      query.tree
+    ) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, [router.query]);
+
   return (
-    <Grid container spacing={2}>
-      <Grid item>
-        <Grid container>
+    active && (
+      <AppLayoutCartoDialog
+        title={t("components.Intervention.title")}
+        actions={
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            fullWidth
+            onClick={handleBackToTree}
+          >
+            {t("components.Intervention.back")}
+          </Button>
+        }
+      >
+        <Grid container spacing={2}>
           <Grid item>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              onClick={handleBackToTree}
+            <Stepper
+              orientation="vertical"
+              activeStep={activeStep}
+              className={classes.root}
             >
-              {t("components.Intervention.back")}
-            </Button>
+              {steps.map((step, stepidx) => (
+                <Step key={step} className={classes.label}>
+                  <StepLabel
+                    StepIconProps={{
+                      classes: {
+                        root: classes.icon,
+                        active: classes.icon,
+                        completed: classes.completedIcon,
+                      },
+                    }}
+                    onClick={(e) =>
+                      stepidx < activeStep && setActiveStep(stepidx)
+                    }
+                  >
+                    {t(`components.Intervention.steps.${step}`)}
+                  </StepLabel>
+                  <StepContent>
+                    <Grid container direction="column">
+                      <ETKInterventionForm
+                        ref={formRefs[step]}
+                        data={data[step]}
+                        interventionType={interventionType}
+                        step={step}
+                        organization={organization.id}
+                      />
+                      <Grid container direction="row" justify="flex-end">
+                        {activeStep !== 0 && (
+                          <Button onClick={() => handlePrevious(step)}>
+                            {activeStep === steps.length - 1
+                              ? t("common.buttons.previous")
+                              : t("common.buttons.previous")}
+                          </Button>
+                        )}
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          onClick={() => handleNext(step)}
+                        >
+                          {activeStep === steps.length - 1
+                            ? t("common.buttons.finish")
+                            : t("common.buttons.next")}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </StepContent>
+                </Step>
+              ))}
+              <Step key="finish" className={classes.label}>
+                <StepLabel
+                  StepIconProps={{
+                    classes: {
+                      root: classes.icon,
+                      active: classes.icon,
+                      completed: classes.completedIcon,
+                    },
+                  }}
+                >
+                  {t(`components.Intervention.steps.finish`)}
+                </StepLabel>
+                <StepContent>
+                  <Grid container direction="column">
+                    <Grid>
+                      <Typography variant="h6">
+                        {t(`components.Intervention.success`)}
+                      </Typography>
+                    </Grid>
+                    <Grid>
+                      <Typography>
+                        {t("components.Intervention.whatnow")}
+                      </Typography>
+                      <Grid container direction="row" justify="flex-end">
+                        <Button onClick={handleBackToTree}>
+                          <HomeIcon />
+                        </Button>
+                        <Button
+                          onClick={(e) => reset()}
+                          variant="contained"
+                          color="primary"
+                        >
+                          <Typography variant="caption">
+                            {t("components.Intervention.plannew")}
+                          </Typography>
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </StepContent>
+              </Step>
+            </Stepper>
           </Grid>
         </Grid>
-      </Grid>
-
-      <Grid item>
-        <Typography variant="h6">
-          {t("components.Intervention.title")}
-        </Typography>
-        <Stepper
-          orientation="vertical"
-          activeStep={activeStep}
-          className={classes.root}
-        >
-          {steps.map((step, stepidx) => (
-            <Step key={step} className={classes.label}>
-              <StepLabel
-                StepIconProps={{
-                  classes: {
-                    root: classes.icon,
-                    active: classes.icon,
-                    completed: classes.completedIcon,
-                  },
-                }}
-                onClick={(e) => stepidx < activeStep && setActiveStep(stepidx)}
-              >
-                {t(`components.Intervention.steps.${step}`)}
-              </StepLabel>
-              <StepContent>
-                <Grid container direction="column">
-                  <ETKInterventionForm
-                    ref={formRefs[step]}
-                    data={data[step]}
-                    interventionType={interventionType}
-                    step={step}
-                    organization={organization.id}
-                  />
-                  <Grid container direction="row" justify="flex-end">
-                    {activeStep !== 0 && (
-                      <Button onClick={() => handlePrevious(step)}>
-                        {activeStep === steps.length - 1
-                          ? t("common.buttons.previous")
-                          : t("common.buttons.previous")}
-                      </Button>
-                    )}
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={() => handleNext(step)}
-                    >
-                      {activeStep === steps.length - 1
-                        ? t("common.buttons.finish")
-                        : t("common.buttons.next")}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </StepContent>
-            </Step>
-          ))}
-          <Step key="finish" className={classes.label}>
-            <StepLabel
-              StepIconProps={{
-                classes: {
-                  root: classes.icon,
-                  active: classes.icon,
-                  completed: classes.completedIcon,
-                },
-              }}
-            >
-              {t(`components.Intervention.steps.finish`)}
-            </StepLabel>
-            <StepContent>
-              <Grid container direction="column">
-                <Grid>
-                  <Typography variant="h6">
-                    {t(`components.Intervention.success`)}
-                  </Typography>
-                </Grid>
-                <Grid>
-                  <Typography>
-                    {t("components.Intervention.whatnow")}
-                  </Typography>
-                  <Grid container direction="row" justify="flex-end">
-                    <Button onClick={handleBackToTree}>
-                      <HomeIcon />
-                    </Button>
-                    <Button
-                      onClick={(e) => reset()}
-                      variant="contained"
-                      color="primary"
-                    >
-                      <Typography variant="caption">
-                        {t("components.Intervention.plannew")}
-                      </Typography>
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </StepContent>
-          </Step>
-        </Stepper>
-      </Grid>
-    </Grid>
+      </AppLayoutCartoDialog>
+    )
   );
 };
 
-export default ETKInterventionFormStepper;
+export default InterventionFormStepper;

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   makeStyles,
   Grid,
@@ -13,6 +13,8 @@ import CardInfoPanel from "@/components/Card/InfoPanel";
 import { useRouter } from "next/router";
 import Can from "@/components/Can";
 import { useAppContext } from "@/providers/AppContext";
+import { AppLayoutCartoDialog } from "@/components/AppLayout/Carto";
+import BackToMap from "@/components/Map/BackToMap";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,84 +35,101 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
   const classes = useStyles();
   const { t } = useTranslation("components");
   const { organization } = useAppContext();
+  const [active, setActive] = useState<boolean>(false);
+
+  useEffect(() => {
+    const { query, route } = router;
+
+    if (route === "/[organizationSlug]/map" && query.panel === "start") {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, [router.query]);
 
   return (
-    <Grid
-      container
-      direction="column"
-      spacing={2}
-      className={classes.root}
-      wrap="nowrap"
-    >
-      <Grid item>
-        <Typography variant="h5">{t("components.PanelStart.title")}</Typography>
-      </Grid>
-      <Grid item>
-        <Typography>{t("components.PanelStart.content")}</Typography>
-      </Grid>
-      <Grid item>
-        <CardInfoPanel
-          title={t("components.PanelStart.numberOfTrees.title")}
-          content={`14.5 ${t("components.PanelStart.numberOfTrees.content")}`}
-        />
-      </Grid>
-      <Grid item>
-        <CardInfoPanel
-          title={t("components.PanelStart.numberOfTreesLayer.title")}
-          content={`${numberOfTrees} ${t(
-            "components.PanelStart.numberOfTreesLayer.content"
-          )}`}
-        />
-      </Grid>
-      <Grid item xs />
-      <Can do="create" on="Trees">
-        <Grid item>
-          <Card className={classes.card}>
-            <CardContent>
-              <Grid
-                container
-                wrap="nowrap"
-                direction="column"
-                alignItems="center"
-                spacing={2}
-              >
-                <Grid item>
-                  <Typography className={classes.cardTitle} variant="h6">
-                    {t("components.PanelStart.card.title")}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography>
-                    {t("components.PanelStart.card.content")}
-                  </Typography>
-                </Grid>
+    active && (
+      <AppLayoutCartoDialog
+        title={t("components.PanelStart.title")}
+        actions={<BackToMap />}
+      >
+        <Grid
+          container
+          direction="column"
+          spacing={2}
+          className={classes.root}
+          wrap="nowrap"
+        >
+          <Grid item>
+            <Typography>{t("components.PanelStart.content")}</Typography>
+          </Grid>
+          <Grid item>
+            <CardInfoPanel
+              title={t("components.PanelStart.numberOfTrees.title")}
+              content={`14.5 ${t(
+                "components.PanelStart.numberOfTrees.content"
+              )}`}
+            />
+          </Grid>
+          <Grid item>
+            <CardInfoPanel
+              title={t("components.PanelStart.numberOfTreesLayer.title")}
+              content={`${numberOfTrees} ${t(
+                "components.PanelStart.numberOfTreesLayer.content"
+              )}`}
+            />
+          </Grid>
+          <Grid item xs />
+          <Can do="create" on="Trees">
+            <Grid item>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Grid
+                    container
+                    wrap="nowrap"
+                    direction="column"
+                    alignItems="center"
+                    spacing={2}
+                  >
+                    <Grid item>
+                      <Typography className={classes.cardTitle} variant="h6">
+                        {t("components.PanelStart.card.title")}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography>
+                        {t("components.PanelStart.card.content")}
+                      </Typography>
+                    </Grid>
 
-                <Grid item>
-                  <Box mt={2}>
-                    <Button
-                      color="primary"
-                      size="large"
-                      variant="outlined"
-                      onClick={() => {
-                        router.push({
-                          pathname: "/[organizationSlug]/map",
-                          query: {
-                            panel: "import",
-                            organizationSlug: organization.slug,
-                          },
-                        });
-                      }}
-                    >
-                      {t("components.PanelStart.card.button")}
-                    </Button>
-                  </Box>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+                    <Grid item>
+                      <Box mt={2}>
+                        <Button
+                          color="primary"
+                          size="large"
+                          variant="outlined"
+                          onClick={() => {
+                            router.push({
+                              pathname: "/[organizationSlug]/map",
+                              query: {
+                                panel: "import",
+                                organizationSlug: organization.slug,
+                              },
+                            });
+                          }}
+                        >
+                          {t("components.PanelStart.card.button")}
+                        </Button>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Can>
         </Grid>
-      </Can>
-    </Grid>
+      </AppLayoutCartoDialog>
+    )
   );
 };
 

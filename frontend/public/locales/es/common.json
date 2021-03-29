@@ -21,7 +21,8 @@
     "archive": "Archivar",
     "delete": "Eliminar",
     "export": "Export",
-    "import": "Importer vos données"
+    "import": "Importer vos données",
+    "backToMap": "Volver al mapa"
   },
   "errors": {
     "email": "Correo electrónico no válido",
@@ -60,5 +61,6 @@
     }
   },
   "back": "Atrás",
-  "tutorials": "Tutoriales"
+  "tutorials": "Tutoriales",
+  "addTree": "Añadir árbol"
 }

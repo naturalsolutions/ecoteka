@@ -7,6 +7,8 @@ import {
   Hidden,
   CircularProgress,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import useApi from "@/lib/useApi";
@@ -47,6 +49,7 @@ import { useTranslation } from "react-i18next";
 import MapActionsBar, {
   MapActionsBarActionType,
 } from "@/components/Map/ActionsBar";
+import MapAddActions from "@/components/Map/AddActions";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -98,7 +101,8 @@ const defaultData = {
 
 const EditionPage = ({}) => {
   const { t } = useTranslation();
-
+  const theme = useTheme();
+  const matchesDraw = useMediaQuery(theme.breakpoints.down("lg"));
   const classes = useStyles();
   const router = useRouter();
   const { organization } = useAppContext();
@@ -172,9 +176,15 @@ const EditionPage = ({}) => {
             organizationSlug: organization.slug,
           },
         });
+
         setActiveTree(tree.id);
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      if (matchesDraw) {
+        setEditionMode(false);
+      }
+    }
   };
 
   const getData = async (id: number) => {
@@ -317,53 +327,6 @@ const EditionPage = ({}) => {
     });
   };
 
-  const switchPanel = (panel) => {
-    if (panel !== "edit") {
-      setDrawerLeftWidth(400);
-    }
-
-    switch (panel) {
-      case "start":
-        return setDrawerLeftComponent(
-          <PanelStartGeneralInfo numberOfTrees={data?.features.length} />
-        );
-      case "info":
-        return setDrawerLeftComponent(<TreeSummary treeId={activeTree} />);
-      case "edit":
-        setDrawerLeftWidth(500);
-        return setDrawerLeftComponent(
-          <TreeForm treeId={activeTree} onSave={handleOnTreeSave} />
-        );
-      case "layers":
-        return setDrawerLeftComponent(
-          <MapLayers
-            layers={activeLayers}
-            mapBackground={mapBackground}
-            onChangeBackground={(newMapBackground) =>
-              setMapbackground(newMapBackground)
-            }
-            onChangeLayers={handleOnChangeLayers}
-          />
-        );
-      case "import":
-        return setDrawerLeftComponent(
-          <ImportPanel onFileImported={handleOnFileImported} />
-        );
-      case "intervention":
-        return setDrawerLeftComponent(<InterventionForm />);
-      case "intervention-edit":
-        return setDrawerLeftComponent(<InterventionsEdit />);
-      case "filter":
-        return setDrawerLeftComponent(
-          <MapFilter
-            initialValue={filters.values}
-            organizationId={organization.id}
-            onChange={handleOnFilter}
-          />
-        );
-    }
-  };
-
   useEffect(() => {
     setViewState({ ...initialViewState });
     fitToBounds(organization.id);
@@ -377,11 +340,7 @@ const EditionPage = ({}) => {
     if (router.query?.tree) {
       setActiveTree(Number(router.query.tree));
     }
-
-    if (router.query?.panel) {
-      switchPanel(router.query?.panel);
-    }
-  }, [router.query, filters]);
+  }, [router.query.tree]);
 
   const handleOnFilter = (values, filters, options) => {
     setFilters({
@@ -452,8 +411,6 @@ const EditionPage = ({}) => {
   };
 
   const renderLayers = () => {
-    switchPanel(router.query.panel);
-
     if (editionMode && mode === "selection") {
       return setLayers([
         cadastreLayer.clone({ visible: activeLayers.cadastre.value }),
@@ -474,14 +431,6 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapActionsBarClick = (action: MapActionsBarActionType) => {
-    if (action === "menu") {
-      !drawerLeftComponent
-        ? switchPanel(router.query.panel)
-        : setDrawerLeftComponent();
-
-      return;
-    }
-
     router.push({
       pathname: "/[organizationSlug]/map",
       query: {
@@ -490,6 +439,46 @@ const EditionPage = ({}) => {
         organizationSlug: organization.slug,
       },
     });
+  };
+
+  const handleOnMapActionsChange = (action: string) => {
+    setEditionMode(true);
+    setMode(action);
+  };
+
+  const handleOnMapLoad = () => {
+    fitToBounds(organization.id);
+  };
+
+  const handleOnViewStateChange = (e) => {
+    const { longitude, latitude, zoom } = e.viewState;
+
+    setInitialViewState({
+      longitude,
+      latitude,
+      zoom,
+    });
+    setViewState(e.viewState);
+  };
+
+  const handleOnMapClick = (info) => {
+    if (editionMode && mode === "drawPoint") {
+      setMode("selection");
+      const [x, y] = info.coordinate;
+
+      return createTree(x, y);
+    }
+
+    if (info.object?.properties?.id) {
+      router.push({
+        pathname: "/[organizationSlug]/map",
+        query: {
+          panel: router.query.panel === "edit" ? "edit" : "info",
+          tree: info.object?.properties.id,
+          organizationSlug: organization.slug,
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -537,47 +526,9 @@ const EditionPage = ({}) => {
         controller={true}
         getCursor={({}) => (mode === "drawPoint" ? "crosshair" : "pointer")}
         layers={layers}
-        onLoad={() => {
-          fitToBounds(organization.id);
-        }}
-        onViewStateChange={(e) => {
-          setInitialViewState({
-            longitude: e.viewState.longitude,
-            latitude: e.viewState.latitude,
-            zoom: e.viewState.zoom,
-          });
-          setViewState(e.viewState);
-        }}
-        onClick={(info) => {
-          if (editionMode && mode === "drawPoint") {
-            const [x, y] = info.coordinate;
-
-            return createTree(x, y);
-          }
-
-          if (
-            info.object?.properties?.id === activeTree ||
-            !info.object?.properties?.id
-          ) {
-            setActiveTree();
-            router.push({
-              pathname: "/[organizationSlug]/map",
-              query: {
-                organizationSlug: organization.slug,
-              },
-            });
-          } else {
-            setActiveTree(info.object?.properties?.id);
-            router.push({
-              pathname: "/[organizationSlug]/map",
-              query: {
-                panel: "info",
-                tree: info.object?.properties.id,
-                organizationSlug: organization.slug,
-              },
-            });
-          }
-        }}
+        onLoad={handleOnMapLoad}
+        onViewStateChange={handleOnViewStateChange}
+        onClick={handleOnMapClick}
       >
         <StaticMap
           mapStyle={`/api/v1/maps/style/?theme=${
@@ -621,60 +572,80 @@ const EditionPage = ({}) => {
           </div>
         )}
       </DeckGL>
-      <MapActionsBar
-        isMenuOpen={drawerLeftComponent !== undefined}
-        darkBackground={mapBackground !== "map"}
-        onClick={handleOnMapActionsBarClick}
-      />
-      <Hidden smDown>
-        <Grid
-          container
-          justify="center"
-          alignItems="center"
-          className={classes.toolbar}
-        >
+
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+        className={classes.toolbar}
+      >
+        <Hidden lgDown>
           <Grid item className={classes.toolbarAction}>
             <MapModeSwitch
               initValue={editionMode ? "edition" : "analysis"}
               onChange={handleOnMapModeSwitch}
             />
           </Grid>
-          <Grid item xs></Grid>
-          {editionMode && (
-            <Grid item className={classes.toolbarAction}>
-              <MapDrawToolbar
-                activeDelete={Boolean(selection.length)}
-                onDelete={handleOnDeleteTrees}
-                onChange={(newMode) => {
-                  if (newMode) {
-                    setMode(newMode);
-                  }
-                }}
-              />
-            </Grid>
-          )}
-          <Grid item xs></Grid>
+        </Hidden>
+        <Grid item xs></Grid>
+        {editionMode && (
           <Grid item className={classes.toolbarAction}>
-            <MapSearchCity
-              onChange={(coordinates) => {
-                setViewState({
-                  ...viewState,
-                  longitude: coordinates[0],
-                  latitude: coordinates[1],
-                  zoom: 15,
-                  transitionDuration: 1500,
-                  transitionInterpolator: new FlyToInterpolator(),
-                });
-              }}
+            <MapDrawToolbar
+              mode={mode}
+              activeDelete={Boolean(selection.length)}
+              onDelete={handleOnDeleteTrees}
+              onChange={setMode}
             />
           </Grid>
-          <Grid item className={classes.toolbarAction}>
-            <IconButton onClick={() => fitToBounds(organization.id)}>
-              <CenterFocusStrongIcon />
-            </IconButton>
-          </Grid>
+        )}
+        <Grid item xs></Grid>
+        <Grid item className={classes.toolbarAction}>
+          <MapSearchCity
+            onChange={(coordinates) => {
+              setViewState({
+                ...viewState,
+                longitude: coordinates[0],
+                latitude: coordinates[1],
+                zoom: 15,
+                transitionDuration: 1500,
+                transitionInterpolator: new FlyToInterpolator(),
+              });
+            }}
+          />
         </Grid>
+        <Grid item className={classes.toolbarAction}>
+          <IconButton onClick={() => fitToBounds(organization.id)}>
+            <CenterFocusStrongIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+      <Hidden lgUp>
+        <MapAddActions onChange={handleOnMapActionsChange} />
       </Hidden>
+      <TreeSummary />
+      <TreeForm />
+      <ImportPanel onFileImported={handleOnFileImported} />
+      <InterventionForm />
+      <InterventionsEdit />
+      <MapFilter
+        initialValue={filters.values}
+        organizationId={organization.id}
+        onChange={handleOnFilter}
+      />
+      <MapLayers
+        layers={activeLayers}
+        mapBackground={mapBackground}
+        onChangeBackground={(newMapBackground) =>
+          setMapbackground(newMapBackground)
+        }
+        onChangeLayers={handleOnChangeLayers}
+      />
+      <PanelStartGeneralInfo numberOfTrees={data?.features.length} />
+      <MapActionsBar
+        isMenuOpen={drawerLeftComponent !== undefined}
+        darkBackground={mapBackground !== "map"}
+        onClick={handleOnMapActionsBarClick}
+      />
     </AppLayoutCarto>
   );
 };

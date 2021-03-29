@@ -19,6 +19,11 @@ test_backend:
     - docker network rm traefik
     - cd ..
     - sudo rm -rf ecoteka*
+  only:
+    refs:
+      - branches
+    changes:
+      - backend/**/*
   tags:
     - ns01
 
