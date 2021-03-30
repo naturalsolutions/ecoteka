@@ -7,6 +7,8 @@ import {
   Hidden,
   CircularProgress,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import useApi from "@/lib/useApi";
@@ -47,6 +49,7 @@ import { useTranslation } from "react-i18next";
 import MapActionsBar, {
   MapActionsBarActionType,
 } from "@/components/Map/ActionsBar";
+import MapAddActions from "@/components/Map/AddActions";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -115,6 +118,8 @@ const EditionPage = ({}) => {
     "etk:map:viewstate",
     defaultViewState
   );
+  const theme = useTheme();
+  const matchesDraw = useMediaQuery(theme.breakpoints.down("lg"));
   const [loadDataProgress, setLoadDataProgress] = useState(0);
   const [viewState, setViewState] = useState();
   const [mode, setMode] = useState("selection");
@@ -296,7 +301,12 @@ const EditionPage = ({}) => {
           transitionInterpolator: new FlyToInterpolator(),
         });
       }
-    } catch (e) {}
+    } catch (e) {
+    } finally {
+      if (matchesDraw) {
+        setEditionMode(false);
+      }
+    }
   };
 
   const handleOnFileImported = async (coordinates) => {
@@ -477,6 +487,11 @@ const EditionPage = ({}) => {
     });
   };
 
+  const handleOnMapActionsChange = (action: string) => {
+    setEditionMode(true);
+    setMode(action);
+  };
+
   useEffect(() => {
     if (mode !== "selection") {
       setSelection([]);
@@ -653,6 +668,9 @@ const EditionPage = ({}) => {
             </IconButton>
           </Grid>
         </Grid>
+      </Hidden>
+      <Hidden lgUp>
+        <MapAddActions onChange={handleOnMapActionsChange} />
       </Hidden>
     </AppLayoutCarto>
   );

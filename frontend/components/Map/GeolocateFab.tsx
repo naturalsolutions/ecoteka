@@ -13,8 +13,12 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "absolute",
       bottom: theme.spacing(2),
       right: theme.spacing(2),
+      display: "none",
       "&:hover": {
         background: theme.palette.secondary.main,
+      },
+      [theme.breakpoints.up("lg")]: {
+        display: "flex",
       },
     },
   })
