@@ -553,6 +553,8 @@ const EditionPage = ({}) => {
         }}
         onClick={(info) => {
           if (editionMode && mode === "drawPoint") {
+            setMode("selection");
+            setEditionMode(false);
             const [x, y] = info.coordinate;
 
             return createTree(x, y);
