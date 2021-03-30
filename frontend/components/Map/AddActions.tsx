@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from "@material-ui/lab";
 import IconTree from "@/public/assets/icons/icon_tree.svg";
-import { MapDrawToolbarMode } from "@/components/Map/DrawToolbar";
+import { TMapDrawToolbarMode } from "@/components/Map/DrawToolbar";
 import { useTranslation } from "react-i18next";
 
 export interface MapAddActionsProps {
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface MapAddAction {
   icon: ReactElement<SvgIconProps>;
   name: string;
-  action: MapDrawToolbarMode;
+  action: TMapDrawToolbarMode;
 }
 
 const actions: MapAddAction[] = [
