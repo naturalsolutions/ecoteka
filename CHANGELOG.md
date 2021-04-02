@@ -1,3 +1,10 @@
+## [0.5.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.5.0...v0.5.1) (2021-04-02)
+
+
+### Bug Fixes
+
+* add OSO deps to backend ([1fe02d8](https://gitlab.com/natural-solutions/ecoteka/commit/1fe02d8c1741127088b4f1fd42e442a03f674e98))
+
 # [0.5.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.4.0...v0.5.0) (2021-03-29)
 
 
