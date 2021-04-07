@@ -6,11 +6,13 @@ from .taxref import Taxref
 from .tree import Tree
 from .intervention import Intervention
 from .health_assessment import HealthAssessment
+from .organization_role import OrganizationRole
 __all__ = [
     "GeoFile",
     "GeoFileStatus",
     "User",
     "Organization",
+    "OrganizationRole",
     "Registration_Link",
     "Taxref",
     "Tree",

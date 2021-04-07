@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import set_policies, authorization, get_current_user, settings
+from app.core import set_policies, authorization, get_current_user, settings, init_oso
 from app.worker import import_geofile_task
 
 from fastapi.responses import StreamingResponse
@@ -120,14 +120,20 @@ def trees_export(
 @router.get("/{tree_id}", response_model=schemas.tree.Tree_xy)
 def get(
     tree_id: int,
-    auth=Depends(authorization("trees:get")),
+    *,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> Any:
     """Gets a tree"""
+
+    oso = init_oso()
     tree = crud.tree.get(db, tree_id)
 
     if not tree:
         raise HTTPException(status_code=404, detail=f"{tree_id} not found")
+
+    if not oso.is_allowed(current_user, "get", tree):
+        raise HTTPException(403)
 
     return tree.to_xy()
 

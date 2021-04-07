@@ -17,8 +17,9 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from app.api import get_db
 from app import crud
-from app.core import settings, enforcer, set_policies, authorization, authorize, get_current_user, get_optional_current_active_user
+from app.core import settings, enforcer, set_policies, authorization, authorize, get_current_user, get_optional_current_active_user, init_oso
 from fastapi_jwt_auth import AuthJWT
+from sqlalchemy_oso.roles import add_user_role, reassign_user_role
 
 from app.crud import organization, user, tree
 from app.schemas import (
@@ -138,12 +139,28 @@ def get_one(
 
     organization = organization_in_db.to_schema()
 
-    authorize(organization_in_db, current_user, "organizations:get_one")
+    # try:
+    #     if current_user:
+    #         add_user_role(db, current_user, organization_in_db, "owner", commit=True)
+    # # If the user already has a role, reassign their role
+    # except Exception as e:
+    #     print(e)
+    #     # reassign_user_role(db, current_user, organization_in_db, "owner", commit=True)
+        
+    if not init_oso().is_allowed(current_user, "get_one", organization_in_db):
+        raise HTTPException(403)
 
-    if current_user:
-        current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_in_db.id))
-        if len(current_roles) > 0:
-            organization.current_user_role = current_roles[0]
+
+    # authorize(organization_in_db, current_user, "organizations:get_one")
+
+    # if current_user:
+    #     current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_in_db.id))
+    #     if len(current_roles) > 0:
+    #         organization.current_user_role = current_roles[0]
+
+    # Try adding the user role
+
+
 
     return organization
 

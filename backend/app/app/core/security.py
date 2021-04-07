@@ -1,6 +1,3 @@
-from app.api import get_db
-from app.core import settings
-from app.schemas import CurrentUser
 from datetime import timedelta
 from fastapi import Depends, HTTPException, status, Request
 from fastapi_jwt_auth import AuthJWT
@@ -9,13 +6,34 @@ from pydantic import BaseModel
 from pydantic.typing import Optional
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+
+from app.db.session import engine
+from app.api import get_db
+from app.core import settings
+from app.schemas import CurrentUser
 from app.models import Organization, User
 from app.crud import user, organization as crud_organization
 from app.core.dependencies import enforcer
+from app.db.base import Base 
+
+from oso import Oso
+from sqlalchemy_oso import register_models, authorized_sessionmaker
+
+from app.schemas import Tree
 
 
 token_url = f"{settings.ROOT_PATH}/auth/login"
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=token_url)
+
+# Init OSO
+oso = Oso()
+
+# Register Models or classes in OSO and load policies
+
+register_models(oso, Base)
+# oso.register_class(User)
+
+oso.load_file(settings.POLICIES_FOLDER / "main.polar")
 
 
 class Settings(BaseModel):
@@ -68,6 +86,7 @@ def get_current_user_with_refresh_token(
 
 
 def get_current_user(
+    request: Request,
     db: Session = Depends(get_db),
     Authorize: AuthJWT = Depends(),
     token: str = Depends(reusable_oauth2),
@@ -80,7 +99,7 @@ def get_current_user(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
-
+    request.state.user = user_in_db
     return user_in_db
 
 
@@ -110,6 +129,7 @@ reusable_oauth2_optional = OAuth2PasswordBearer(tokenUrl=token_url, auto_error=F
 
 
 def get_optional_current_active_user(
+    request: Request,
     db: Session = Depends(get_db),
     Authorize: AuthJWT = Depends(),
     token: Optional[str] = Depends(reusable_oauth2_optional),
@@ -119,8 +139,10 @@ def get_optional_current_active_user(
         current_user_id = Authorize.get_jwt_subject()
         user_in_db = user.get(db, id=current_user_id)
         if user_in_db is not None:
+            request.state.user = user_in_db
             return user_in_db
 
+    request.state.user = None
     return None
 
 
@@ -185,3 +207,15 @@ def get_current_user_with_organizations(
     )
 
     return result
+
+def get_oso_authorized_db(request: Request, current_user: User = Depends(get_optional_current_active_user)):
+    get_oso = lambda: oso
+    get_user = lambda: request.state.user
+    get_action = lambda: request.scope["endpoint"].__name__
+    print(request.scope["endpoint"].__name__)
+    db = authorized_sessionmaker(get_oso, get_user, get_action, bind=engine)()
+    try:
+        yield db
+    finally:
+        db.close()
+

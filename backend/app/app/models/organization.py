@@ -74,6 +74,7 @@ class Organization(Base):
         viewonly=True,
     )
     health_assessments = relationship("HealthAssessment", back_populates="organization")
+    trees = relationship("Tree", back_populates="organization")
 
     __table_args__ = (Index("ix_organization_path", path, postgresql_using="gist"),)
 

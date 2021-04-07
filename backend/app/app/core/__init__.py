@@ -11,6 +11,10 @@ from .security import (
     get_optional_current_active_user,
     set_policies,
     get_current_user_with_refresh_token,
+    get_oso_authorized_db
+)
+from .authorize import (
+    init_oso
 )
 
 __all__ = [
@@ -29,4 +33,6 @@ __all__ = [
     "enforcer",
     "set_policies",
     "get_current_user_with_refresh_token",
+    "get_oso_authorized_db",
+    "init_oso"
 ]

@@ -22,6 +22,7 @@ class Tree(Base):
     )
     interventions = relationship("Intervention", back_populates="tree")
     health_assessments = relationship("HealthAssessment", back_populates="tree")
+    organization = relationship("Organization", back_populates="trees")
 
     def to_xy(self):
         coords = to_shape(self.geom)

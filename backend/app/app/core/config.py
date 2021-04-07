@@ -90,6 +90,7 @@ class Settings(BaseSettings):
     GEO_FILES_ALLOWED: str = "geojson,zip,csv,xls,xlsx"
     CELERY_BROKER_URL: str
     CELERY_BACKEND: str
+    POLICIES_FOLDER: Path = Path("/app/app/policies")
 
     class Config:
         case_sensitive = True

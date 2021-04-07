@@ -1,17 +1,21 @@
-from fastapi import FastAPI
+from pathlib import Path
+from fastapi import FastAPI, Depends
 from starlette.middleware.cors import CORSMiddleware
 from fastapi_jwt_auth.exceptions import AuthJWTException
 
-from app.core import authjwt_exception_handler, settings
+from app.core import authjwt_exception_handler, settings, get_current_user
 from app.core.middleware.channel_event_middleware import ChannelEventMiddleware
 from app.api.api_v1.api import api_router
 
+from app.db.base import Base 
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     root_path=settings.ROOT_PATH,
     exception_handlers={AuthJWTException: authjwt_exception_handler},
+    dependencies=[Depends(get_current_user)]
 )
+ 
 
 
 # Set all CORS enabled origins
