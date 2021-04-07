@@ -150,7 +150,7 @@ class Organization(Base):
             return slug if Organization.is_slug_available(slug) else slugify(f"{slug} {id}")
         else:
             slug = slugify(f"{name}")
-            return slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
+            return slug if Organization.is_slug_available(slug) else slugify(f"{slug} {id}")
 
     def is_slug_available(value):
         # Avoid collusions with frontend routes

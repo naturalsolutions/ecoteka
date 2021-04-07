@@ -31,12 +31,8 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    user = os.getenv("DB_USER", "postgres")
-    password = os.getenv("DB_PASSWORD", "")
-    server = os.getenv("DB_SERVER", "db")
-    port = os.getenv("DB_PORT", "5432")
-    db = os.getenv("DB_NAME", "app")
-    return f"postgresql://{user}:{password}@{server}:{port}/{db}"
+    # connection string is no defined only in settings
+    return f"{settings.SQLALCHEMY_DATABASE_URI}"
 
 
 def run_migrations_offline():

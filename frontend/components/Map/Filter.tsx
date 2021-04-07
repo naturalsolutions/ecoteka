@@ -11,6 +11,9 @@ import {
 import { Autocomplete } from "@material-ui/lab";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import useApi from "@/lib/useApi";
+import { AppLayoutCartoDialog } from "../AppLayout/Carto";
+import { useRouter } from "next/router";
+import BackToMap from "./BackToMap";
 
 const FILTERS = [
   { key: "canonicalName", label: "Canonical Name" },
@@ -36,10 +39,11 @@ const MapFilter: FC<IMapFilter> = ({
 }) => {
   const { t } = useTranslation("components");
   const [value, setValue] = useState(initialValue);
-  const { dark } = useThemeContext();
+  const [active, setActive] = useState<boolean>(false);
   const [options, setOptions] = useState(defaultOptions);
   const [loading, setLoading] = useState(false);
   const { apiETK } = useApi().api;
+  const router = useRouter();
 
   const getFilters = async (organizationId: number) => {
     try {
@@ -105,37 +109,55 @@ const MapFilter: FC<IMapFilter> = ({
     );
   };
 
+  useEffect(() => {
+    const { query, route } = router;
+
+    if (route === "/[organizationSlug]/map" && query.panel === "filter") {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, [router.query]);
+
   return (
-    <Grid container direction="column" spacing={3}>
-      <Grid item>
-        <Typography variant="h6">{t("components.Map.Filter.title")}</Typography>
-      </Grid>
-      {FILTERS.map((filter) => (
-        <Grid key={filter.key} item>
-          <Autocomplete
-            freeSolo
-            multiple
-            loading={loading}
-            selectOnFocus
-            clearOnBlur
-            options={options[filter.key]}
-            getOptionLabel={(option) => option.value}
-            fullWidth
-            value={value[filter.key]}
-            renderInput={(params) => (
-              <TextField {...params} label={filter.label} variant="outlined" />
-            )}
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) =>
-                renderChip(option, getTagProps({ index }))
-              )
-            }
-            renderOption={renderChip}
-            onChange={(e, v) => handleValue(filter.key, v)}
-          />
+    active && (
+      <AppLayoutCartoDialog
+        title={t("components.Map.Filter.title")}
+        actions={<BackToMap />}
+      >
+        <Grid container direction="column" spacing={3}>
+          {FILTERS.map((filter) => (
+            <Grid key={filter.key} item>
+              <Autocomplete
+                freeSolo
+                multiple
+                loading={loading}
+                selectOnFocus
+                clearOnBlur
+                options={options[filter.key]}
+                getOptionLabel={(option) => option.value}
+                fullWidth
+                value={value[filter.key]}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label={filter.label}
+                    variant="outlined"
+                  />
+                )}
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) =>
+                    renderChip(option, getTagProps({ index }))
+                  )
+                }
+                renderOption={renderChip}
+                onChange={(e, v) => handleValue(filter.key, v)}
+              />
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
+      </AppLayoutCartoDialog>
+    )
   );
 };
 

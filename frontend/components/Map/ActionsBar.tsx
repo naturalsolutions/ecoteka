@@ -15,19 +15,20 @@ import { useTranslation } from "react-i18next";
 const useStyles = makeStyles((theme) => ({
   actionsBar: {
     position: "absolute",
-    top: 8,
-    left: 8,
+    top: 60,
+    right: 8,
     display: "flex",
     flexDirection: "column",
+    height: "auto",
+    [theme.breakpoints.up("lg")]: {
+      top: 8,
+      left: 8,
+      right: "unset",
+    },
   },
 }));
 
-export type MapActionsBarActionType =
-  | "menu"
-  | "info"
-  | "filter"
-  | "layers"
-  | "import";
+export type MapActionsBarActionType = "info" | "filter" | "layers" | "import";
 
 export interface MapActionBarAction {
   action: MapActionsBarActionType;
@@ -45,7 +46,6 @@ export interface MapActionsBarProps {
 }
 
 const actions = [
-  { action: "menu", icon: <MenuOpenIcon />, do: "read", on: "Trees" },
   { action: "start", icon: <InfoIcon />, do: "read", on: "Trees" },
   { action: "filter", icon: <SearchIcon />, do: "read", on: "Trees" },
   { action: "layers", icon: <LayersIcon />, do: "read", on: "Trees" },
@@ -64,10 +64,7 @@ const MapActionsBar: FC<MapActionsBarProps> = ({
   );
 
   const handleOnActionClick = (action: MapActionsBarActionType) => {
-    if (action !== "menu") {
-      setActiveAction(action);
-    }
-
+    setActiveAction(action);
     onClick(action);
   };
 
@@ -91,9 +88,7 @@ const MapActionsBar: FC<MapActionsBarProps> = ({
                 color={activeAction === action.action ? "primary" : "default"}
                 onClick={() => handleOnActionClick(action.action)}
               >
-                {action.action === "menu" &&
-                  (isMenuOpen ? <CloseIcon /> : <MenuOpenIcon />)}
-                {action.action !== "menu" && action.icon}
+                {action.icon}
               </IconButton>
             </Tooltip>
           </Can>

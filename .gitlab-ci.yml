@@ -1,34 +1,38 @@
 stages:
-  - version
+  - test
   - build_base
   - build
   - clean
   - deploy
   - release
 
-before_script:
-  - export PATH=$PATH:/home/gitlab-runner/.nvm/versions/node/v14.16.0/bin
-
-version:
-  stage: version
+test_backend:
+  stage: test
+  before_script:
+    - docker network create traefik
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker run --rm -v $(pwd):/data vikingco/jinja2cli .env.example > .env
   script:
-    - npm install -g semantic-release @semantic-release/gitlab @semantic-release/git @semantic-release/exec @semantic-release/changelog
-    - semantic-release --generate-notes false --dry-run
-  artifacts:
-    paths:
-      - VERSION
+    - ./scripts/test-local.sh
+  after_script:
+    - docker-compose down -v --remove-orphans
+    - docker network rm traefik
+    - cd ..
+    - sudo rm -rf ecoteka*
   only:
-    - master
+    refs:
+      - branches
+    changes:
+      - backend/**/*
   tags:
     - ns01
 
 build_frontend:
   stage: build
   script:
-    - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*} -f ./frontend/.docker/Dockerfile ./frontend
-    - docker push ${CI_REGISTRY_IMAGE}:frontend-${VERSION%.*.*}
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-0 -f ./frontend/.docker/Dockerfile ./frontend
+    - docker push ${CI_REGISTRY_IMAGE}:frontend-0
   only:
     refs:
       - master
@@ -54,10 +58,9 @@ build_backend_base:
 build_backend:
   stage: build
   script:
-    - export VERSION=$(<VERSION)
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*} ./backend
-    - docker push ${CI_REGISTRY_IMAGE}:backend-${VERSION%.*.*}
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-0 ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-0
   only:
     refs:
       - master
@@ -93,6 +96,7 @@ deploy_dev:
 release:
   stage: release
   script:
+    - export PATH=$PATH:/home/gitlab-runner/.nvm/versions/node/v14.16.0/bin
     - semantic-release
   only:
     - master

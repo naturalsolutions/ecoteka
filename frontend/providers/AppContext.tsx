@@ -68,7 +68,7 @@ export const Provider = ({ children }) => {
       }
     } catch ({ response }) {
       if (response) {
-        enqueueSnackbar(`${response.statusText}`, { variant: "error" });
+        // enqueueSnackbar(`${response.statusText}`, { variant: "error" });
       }
     }
   };

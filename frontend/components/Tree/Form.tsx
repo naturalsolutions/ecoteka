@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
+import { AppLayoutCartoDialog } from "@/components/AppLayout/Carto";
 
 const useStyles = makeStyles((theme) => ({
   grid: {},
@@ -26,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TreeForm: React.FC<{
-  treeId: number;
   onSave?(record: object): void;
-}> = ({ treeId, onSave }) => {
+}> = ({ onSave }) => {
+  const [active, setActive] = useState<boolean>(false);
   const { t } = useTranslation(["common", "components"]);
   const router = useRouter();
   const classes = useStyles();
@@ -63,10 +64,19 @@ const TreeForm: React.FC<{
   }
 
   useEffect(() => {
-    if (typeof treeId === "number") {
-      getTree(organization.id, treeId);
+    const { query, route } = router;
+
+    if (
+      route === "/[organizationSlug]/map" &&
+      query.panel === "edit" &&
+      query.tree
+    ) {
+      setActive(true);
+      getTree(organization.id, Number(query.tree));
+    } else {
+      setActive(false);
     }
-  }, [treeId]);
+  }, [router.query]);
 
   const handlerOnSave = async () => {
     try {
@@ -74,9 +84,8 @@ const TreeForm: React.FC<{
 
       const properties = getValues();
       const organizationId = organization.id;
-
       const { data, status } = await apiETK.put(
-        `/organization/${organizationId}/trees/${treeId}`,
+        `/organization/${organizationId}/trees/${router.query.tree}`,
         {
           properties,
         }
@@ -103,24 +112,21 @@ const TreeForm: React.FC<{
       pathname: "/[organizationSlug]/map",
       query: {
         panel: "info",
-        tree: treeId,
+        tree: router.query.tree,
         organizationSlug: organization.slug,
       },
     });
   };
 
-  return (
-    <>
-      <Grid container direction="column" spacing={2} className={classes.grid}>
-        <Grid item>
-          <Typography variant="h6" className={classes.title}>
-            {t("components.TreeForm.title")}
-          </Typography>
-        </Grid>
-        <Grid item>
+  if (active) {
+    return (
+      <AppLayoutCartoDialog
+        title={t("components.TreeForm.title")}
+        actions={
           <Grid container>
             <Grid item>
               <Button
+                size="small"
                 variant="contained"
                 color="secondary"
                 onClick={handleToBack}
@@ -131,6 +137,7 @@ const TreeForm: React.FC<{
             <Grid item xs />
             <Grid item>
               <Button
+                size="small"
                 color="primary"
                 variant="contained"
                 onClick={handlerOnSave}
@@ -143,67 +150,72 @@ const TreeForm: React.FC<{
               </Button>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item>
-          <Typography className={classes.heading}>
-            {t("components.TreeForm.treeIdentity")}
-          </Typography>
-          <Grid container direction="column">
-            {Object.keys(schema)
-              .filter((f) => schema[f].category === "Identité de l'arbre")
-              .map((f) => (
-                <Grid key={`${schema[f].category}-${f}`} item>
-                  {fields[f]}
-                </Grid>
-              ))}
+        }
+      >
+        <Grid container direction="column" spacing={2} className={classes.grid}>
+          <Grid item>
+            <Typography className={classes.heading}>
+              {t("components.TreeForm.treeIdentity")}
+            </Typography>
+            <Grid container direction="column">
+              {Object.keys(schema)
+                .filter((f) => schema[f].category === "Identité de l'arbre")
+                .map((f) => (
+                  <Grid key={`${schema[f].category}-${f}`} item>
+                    {fields[f]}
+                  </Grid>
+                ))}
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item>
-          <Typography className={classes.heading}>
-            {t("components.TreeForm.characteristics")}
-          </Typography>
-          <Grid container direction="column">
-            {Object.keys(schema)
-              .filter((f) => schema[f].category === "Caractéristiques")
-              .map((f) => (
-                <Grid key={`${schema[f].category}-${f}`} item>
-                  {fields[f]}
-                </Grid>
-              ))}
+          <Grid item>
+            <Typography className={classes.heading}>
+              {t("components.TreeForm.characteristics")}
+            </Typography>
+            <Grid container direction="column">
+              {Object.keys(schema)
+                .filter((f) => schema[f].category === "Caractéristiques")
+                .map((f) => (
+                  <Grid key={`${schema[f].category}-${f}`} item>
+                    {fields[f]}
+                  </Grid>
+                ))}
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item>
-          <Typography className={classes.heading}>
-            {t("components.TreeForm.outdoorEnvironment")}
-          </Typography>
-          <Grid container direction="column">
-            {Object.keys(schema)
-              .filter((f) => schema[f].category === "Environnement extérieur")
-              .map((f) => (
-                <Grid key={`${schema[f].category}-${f}`} item>
-                  {fields[f]}
-                </Grid>
-              ))}
+          <Grid item>
+            <Typography className={classes.heading}>
+              {t("components.TreeForm.outdoorEnvironment")}
+            </Typography>
+            <Grid container direction="column">
+              {Object.keys(schema)
+                .filter((f) => schema[f].category === "Environnement extérieur")
+                .map((f) => (
+                  <Grid key={`${schema[f].category}-${f}`} item>
+                    {fields[f]}
+                  </Grid>
+                ))}
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item>
-          <Typography className={classes.heading}>
-            {t("components.TreeForm.other")}
-          </Typography>
+          <Grid item>
+            <Typography className={classes.heading}>
+              {t("components.TreeForm.other")}
+            </Typography>
 
-          <Grid container direction="column">
-            {Object.keys(schema)
-              .filter((f) => schema[f].category === "Autres")
-              .map((f) => (
-                <Grid key={`${schema[f].category}-${f}`} item>
-                  {fields[f]}
-                </Grid>
-              ))}
+            <Grid container direction="column">
+              {Object.keys(schema)
+                .filter((f) => schema[f].category === "Autres")
+                .map((f) => (
+                  <Grid key={`${schema[f].category}-${f}`} item>
+                    {fields[f]}
+                  </Grid>
+                ))}
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </>
-  );
+      </AppLayoutCartoDialog>
+    );
+  }
+
+  return null;
 };
 
 export default TreeForm;

@@ -4,6 +4,8 @@ from pathlib import Path
 from pydantic import AnyHttpUrl, BaseSettings, EmailStr, PostgresDsn, validator
 from datetime import timedelta
 
+from pydantic.networks import HttpUrl
+
 
 class Settings(BaseSettings):
     ROOT_PATH: str = "/api/v1"
@@ -90,6 +92,9 @@ class Settings(BaseSettings):
     GEO_FILES_ALLOWED: str = "geojson,zip,csv,xls,xlsx"
     CELERY_BROKER_URL: str
     CELERY_BACKEND: str
+
+    MEILI_API_URL: AnyHttpUrl
+    MEILI_MASTER_KEY: str
 
     class Config:
         case_sensitive = True

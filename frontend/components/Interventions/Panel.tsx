@@ -13,6 +13,7 @@ import {
   useDateSchema,
 } from "./Schema";
 import useETKForm from "@/components/Form/useForm";
+import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 interface IInterventionEditProps {}
 
 interface IInterventionResponse {
@@ -152,6 +153,7 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
   const { apiETK } = useApi().api;
   const [intervention, setIntervention] = useState<TIntervention>();
   const [saving, setSaving] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(false);
 
   const getIntervention = async (intervertionId: number) => {
     try {
@@ -182,47 +184,69 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
   };
 
   useEffect(() => {
-    if (!intervention?.tree_id) {
+    const { query, route } = router;
+
+    if (
+      route === "/[organizationSlug]/map" &&
+      query.panel === "intervention-edit" &&
+      query.tree &&
+      query.intervention
+    ) {
       const interventionId = Number(router.query?.intervention);
+
       getIntervention(interventionId);
+      setActive(true);
+    } else {
+      setActive(false);
     }
-  }, [router?.query?.tree]);
+  }, [router.query]);
 
   return (
-    <Grid container spacing={2} direction="column">
-      <Grid item>
-        <Typography variant="h6">
-          {t("components.Interventions.Edit.title")}:{" "}
-          {
-            t("components.Intervention.types", { returnObjects: true })[
-              intervention?.intervention_type
-            ]
-          }
-        </Typography>
-      </Grid>
-      <Grid item>
-        <Grid container>
-          <Button color="primary" onClick={handleOnBackToTree}>
-            {t("components.TreeForm.backToInfo")}
-          </Button>
-          <Grid item xs />
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => handleOnSave()}
-          >
-            {t("common.buttons.save")}
-          </Button>
+    active && (
+      <AppLayoutCartoDialog
+        title={
+          <>
+            {t("components.Interventions.Edit.title")}:{" "}
+            {
+              t("components.Intervention.types", { returnObjects: true })[
+                intervention?.intervention_type
+              ]
+            }
+          </>
+        }
+        actions={
+          <Grid container>
+            <Button
+              color="secondary"
+              variant="contained"
+              size="small"
+              onClick={handleOnBackToTree}
+            >
+              {t("components.TreeForm.backToInfo")}
+            </Button>
+            <Grid item xs />
+            <Button
+              color="primary"
+              variant="contained"
+              size="small"
+              onClick={() => handleOnSave()}
+            >
+              {t("common.buttons.save")}
+            </Button>
+          </Grid>
+        }
+      >
+        <Grid container spacing={2} direction="column">
+          <Grid item>
+            <InterventionEditForm
+              intervention={intervention}
+              saving={saving}
+              onSave={() => setSaving(false)}
+            />
+          </Grid>
         </Grid>
-        <Grid item>
-          <InterventionEditForm
-            intervention={intervention}
-            saving={saving}
-            onSave={() => setSaving(false)}
-          />
-        </Grid>
-      </Grid>
-    </Grid>
+      </AppLayoutCartoDialog>
+    )
   );
 };
 
