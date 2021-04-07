@@ -1,3 +1,10 @@
+# [0.6.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.5.2...v0.6.0) (2021-04-07)
+
+
+### Features
+
+* **backend:** add indices automatically on init app ([fa9d466](https://gitlab.com/natural-solutions/ecoteka/commit/fa9d466e334d2e9862f0e43a39437c30efae6170))
+
 ## [0.5.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.5.1...v0.5.2) (2021-04-07)
 
 
