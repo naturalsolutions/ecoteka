@@ -1,3 +1,10 @@
+## [0.5.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.5.1...v0.5.2) (2021-04-07)
+
+
+### Bug Fixes
+
+* **backend:** add meilisearch deps ([08f8cd6](https://gitlab.com/natural-solutions/ecoteka/commit/08f8cd6dd8f7f0ea49d2dc4d0740e72f9fb48011))
+
 ## [0.5.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.5.0...v0.5.1) (2021-04-02)
 
 
