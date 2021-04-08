@@ -581,7 +581,12 @@
       "open": "Ouvert",
       "participatory": "Participatif"
     },
-    "ownerEmail": "Email du propriétaire"
+    "ownerEmail": "Email du propriétaire",
+    "insights": "en quelques chiffres...",
+    "members": "membres",
+    "zones": "Secteurs et unités de paysage",
+    "mapEditor": "Éditeur cartographique",
+    "mapExplorer": "Explorateur cartographique"
   },
   "Dashboard": {
     "title": "Tableau de bord",
@@ -650,5 +655,8 @@
     "AddOrganization": {
       "title": "Ajouter une organisation"
     }
+  },
+  "organization": {
+    "updated": "modifiée"
   }
 }
