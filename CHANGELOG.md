@@ -1,3 +1,11 @@
+## [0.6.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.6.0...v0.6.1) (2021-04-08)
+
+
+### Bug Fixes
+
+* **backend:** Fix Superuser Organization access grants ([1f9e5e5](https://gitlab.com/natural-solutions/ecoteka/commit/1f9e5e5dd71f099be27ae39c5865b484a3719ab7))
+* **frontend:** Display data in Organization Header ([de90ee4](https://gitlab.com/natural-solutions/ecoteka/commit/de90ee4870f98f3295cee74fbeeafcb7b6f60ace))
+
 # [0.6.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.5.2...v0.6.0) (2021-04-07)
 
 
