@@ -19,7 +19,7 @@ export default function defineRulesFor(role: string) {
   switch (role) {
     case "admin":
     case "owner":
-      can("manage", "all");
+      can(["manage", "create", "read", "update"], "all");
       break;
     case "manager":
       can("manage", ["Trees", "Interventions", "Teams"]);
@@ -39,10 +39,10 @@ export default function defineRulesFor(role: string) {
       can("read", "all");
       break;
     case "guest":
-      cannot("manage", "all");
+      cannot(["manage", "create", "read", "update"], "all");
       break;
     default:
-      cannot("manage", "all");
+      cannot(["manage", "create", "read", "update"], "all");
       break;
   }
   return rules;

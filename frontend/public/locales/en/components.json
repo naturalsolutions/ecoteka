@@ -584,7 +584,12 @@
       "open": "Open",
       "participatory": "Participatory"
     },
-    "ownerEmail": "Owner email"
+    "ownerEmail": "Owner email",
+    "insights": "insights...",
+    "members": "members",
+    "zones": "Districts and landscape units",
+    "mapEditor": "Map editor",
+    "mapExplorer": "Map explorer"
   },
   "Dashboard": {
     "title": "Dashboard",
@@ -656,5 +661,8 @@
     "AddOrganization": {
       "title": "Add an organization"
     }
+  },
+  "organization": {
+    "updated": "updated"
   }
 }

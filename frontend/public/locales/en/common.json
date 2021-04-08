@@ -64,5 +64,11 @@
   },
   "back": "Back",
   "tutorials": "Tutorials",
-  "addTree": "Add Tree"
+  "addTree": "Add Tree",
+  "Organization": "Organization",
+  "private": "private",
+  "open": "open",
+  "participatory": "participatory",
+  "trees": "trees",
+  "members": "members"
 }

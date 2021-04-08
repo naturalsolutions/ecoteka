@@ -62,5 +62,11 @@
   },
   "back": "Retour",
   "tutorials": "Tutoriels",
-  "addTree": "Ajouter un arbre"
+  "addTree": "Ajouter un arbre",
+  "Organization": "Organisation",
+  "private": "privée",
+  "open": "ouverte",
+  "participatory": "participative",
+  "trees": "arbres",
+  "members": "membres"
 }
