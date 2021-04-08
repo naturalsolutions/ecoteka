@@ -135,6 +135,7 @@ def authorization(action: str):
     return decorated
 
 def authorize(object: Organization, subject: Optional[User], action: str):
+
         if not subject:
             if object.mode == "public":
                 pass
@@ -148,6 +149,8 @@ def authorize(object: Organization, subject: Optional[User], action: str):
             if object.mode == "public":
                 pass
             if object.mode == "private":
+                if subject.is_superuser:
+                    pass
                 if not enforcer.enforce(str(subject.id), str(object.id), action):
                     raise HTTPException(
                         status_code=403,

@@ -144,6 +144,8 @@ def get_one(
         current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_in_db.id))
         if len(current_roles) > 0:
             organization.current_user_role = current_roles[0]
+        if current_user.is_superuser:
+            organization.current_user_role = 'admin'
 
     return organization
 
