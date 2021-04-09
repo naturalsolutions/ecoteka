@@ -436,7 +436,8 @@
     },
     "latitude": "Latitud",
     "longitude": "Longitud",
-    "registrationNumber": "Tree registration number"
+    "registrationNumber": "Tree registration number",
+    "code": "Tree identifier"
   },
   "TreeForm": {
     "dialogDeleteTitle": "Remove selected trees",
@@ -662,7 +663,13 @@
       "title": "Add an organization"
     }
   },
+  "TreeHealthAssessment": {
+    "title": "Health Assessment"
+  },
   "organization": {
     "updated": "updated"
+  },
+  "TreeInterventions": {
+    "title": "Interventions"
   }
 }

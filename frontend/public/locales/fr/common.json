@@ -22,7 +22,9 @@
     "delete": "Supprimer",
     "export": "Export",
     "import": "Importer vos données",
-    "backToMap": "Retour à la carte"
+    "backToMap": "Retour à la carte",
+    "moreDetails": "Plus de details",
+    "viewAll": "Voir tout"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",
@@ -62,7 +64,13 @@
   },
   "back": "Retour",
   "tutorials": "Tutoriels",
+  "map": "Carte",
+  "edit": "Éditer",
+  "save": "Enregistrer\n",
   "addTree": "Ajouter un arbre",
+  "legend": "Légende",
+  "risk": "Risque",
+  "low": "Faible",
   "Organization": "Organisation",
   "private": "privée",
   "open": "ouverte",

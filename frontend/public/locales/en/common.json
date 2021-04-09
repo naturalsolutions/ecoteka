@@ -21,7 +21,9 @@
     "archive": "Archive",
     "delete": "Delete",
     "export": "Export",
-    "import": "Import data"
+    "import": "Import data",
+    "moreDetails": "More info",
+    "viewAll": "View All"
   },
   "errors": {
     "email": "Email address is invalid",
@@ -64,7 +66,13 @@
   },
   "back": "Back",
   "tutorials": "Tutorials",
+  "map": "Map",
+  "edit": "Edit",
+  "save": "Save",
   "addTree": "Add Tree",
+  "legend": "Legend",
+  "risk": "Risk",
+  "low": "Low",
   "Organization": "Organization",
   "private": "private",
   "open": "open",

@@ -67,12 +67,14 @@ const Transition = forwardRef(function Transition(
 export interface AppLayoutCartoDialogProps {
   title?: string | React.ReactElement;
   actions?: React.ReactElement;
+  withoutContent?: boolean;
 }
 
 export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
   title,
   children,
   actions,
+  withoutContent = false,
 }) => {
   const { theme } = useThemeContext();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
@@ -81,8 +83,14 @@ export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
 
   return !isDesktop ? (
     <Dialog fullScreen open={true} TransitionComponent={Transition}>
-      {title && <DialogTitle>{title}</DialogTitle>}
-      <DialogContent>{children}</DialogContent>
+      {withoutContent ? (
+        children
+      ) : (
+        <>
+          {title && <DialogTitle>{title}</DialogTitle>}
+          <DialogContent>{children}</DialogContent>
+        </>
+      )}
       {actions && <DialogActions>{actions}</DialogActions>}
     </Dialog>
   ) : (
@@ -97,9 +105,15 @@ export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
           className: classes.drawerLeftPaper,
         }}
       >
-        {title && <DialogTitle>{title}</DialogTitle>}
-        <DialogContent>{children}</DialogContent>
-        {actions && <DialogActions>{actions}</DialogActions>}
+        {withoutContent ? (
+          children
+        ) : (
+          <>
+            {title && <DialogTitle>{title}</DialogTitle>}
+            <DialogContent>{children}</DialogContent>
+            {actions && <DialogActions>{actions}</DialogActions>}
+          </>
+        )}
       </Drawer>
     </Portal>
   );

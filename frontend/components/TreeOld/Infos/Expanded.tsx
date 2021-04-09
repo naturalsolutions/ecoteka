@@ -7,19 +7,21 @@ import {
   DialogContent,
   DialogActions,
 } from "@material-ui/core";
-import TreeAccordion, { TTreeAccordion } from "@/components/Tree/TreeAccordion";
+import TreeAccordion, {
+  TTreeAccordion,
+} from "@/components/TreeOld/TreeAccordion";
 import { TIntervention } from "@/components/Interventions/Schema";
 import InterventionsTable from "@/components/Interventions/InterventionsTable";
-import { ITree } from "@/index";
+import { Tree } from "@/index";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useTranslation } from "react-i18next";
 
 export interface ETKTreeInfosExpandedProps {
   open: boolean;
-  tree?: ITree;
+  tree?: Tree;
   interventions?: TIntervention[];
-  onChange?: (newTree: ITree) => void;
+  onChange?: (newTree: Tree) => void;
   onClose?: () => void;
 }
 
@@ -48,7 +50,7 @@ const ETKTreeInfosExpanded: React.FC<ETKTreeInfosExpandedProps> = (props) => {
       );
 
       if (status === 200) {
-        const newTree = data as ITree;
+        const newTree = data as Tree;
 
         if (props.onChange) {
           props.onChange(newTree);

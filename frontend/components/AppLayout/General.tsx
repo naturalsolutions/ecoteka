@@ -3,9 +3,9 @@ import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   content: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.paper,
     minHeight: "calc(100vh - 48px)",
-    paddingTop: "2rem",
+    paddingTop: theme.spacing(1),
   },
 }));
 

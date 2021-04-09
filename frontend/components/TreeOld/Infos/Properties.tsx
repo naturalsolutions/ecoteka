@@ -22,7 +22,7 @@ import {
   KeyboardArrowRight,
 } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
-import useTreeSchema from "@/components/Tree/Schema";
+import useTreeSchema from "@/components/TreeOld/Schema";
 import { useRouter } from "next/router";
 import { useAppContext } from "@/providers/AppContext";
 
@@ -208,11 +208,10 @@ const TreeInfosProperties: React.FC<TreeInfosPropertiesProps> = (props) => {
 
   const handleOnEdit = () => {
     router.push({
-      pathname: "/[organizationSlug]/map",
+      pathname: "/[organizationSlug]/tree/[id]",
       query: {
-        panel: "edit",
         organizationSlug: organization.slug,
-        tree: props.tree.id,
+        id: props.tree.id,
       },
     });
   };

@@ -84,6 +84,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ slug, name }) => {
   const iconBtnStyles = useSizedIconButtonStyles({ padding: 8, childSize: 20 });
   const { t } = useTranslation(["common"]);
   const router = useRouter();
+
   return (
     <Grid
       item
@@ -92,6 +93,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ slug, name }) => {
       direction="row"
       justify="space-between"
       alignItems="flex-start"
+      onClick={() => router.push(`/${slug}`)}
     >
       <Grid item>
         <Box pl={1}>
@@ -115,9 +117,10 @@ const CardHeader: React.FC<CardHeaderProps> = ({ slug, name }) => {
   );
 };
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ palette, spacing }) => ({
   card: {
     border: "2px solid",
+    backgroundColor: palette.background.paper,
     padding: spacing(2),
     borderColor: "#E7EDF3",
     borderRadius: 16,
@@ -140,8 +143,10 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   name,
 }) => {
   const styles = useStyles();
+  const router = useRouter();
+
   return (
-    <Box className={styles.card}>
+    <Box className={styles.card} onClick={() => router.push(`/${slug}`)}>
       <Grid container direction="column" spacing={2}>
         <CardHeader slug={slug} name={name} />
         <Grid item>

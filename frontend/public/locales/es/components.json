@@ -436,7 +436,8 @@
     },
     "latitude": "Latitud",
     "longitude": "Longitud",
-    "registrationNumber": "Identificador del árbol"
+    "registrationNumber": "Identificador del árbol",
+    "code": "Identificador del árbol"
   },
   "TreeForm": {
     "dialogDeleteTitle": "Eliminar los árboles seleccionados",
@@ -656,7 +657,13 @@
       "title": "Agregar una organización"
     }
   },
+  "TreeHealthAssessment": {
+    "title": "Valoración de Salud"
+  },
   "organization": {
     "updated": "actualizado"
+  },
+  "TreeInterventions": {
+    "title": "Intervenciones"
   }
 }

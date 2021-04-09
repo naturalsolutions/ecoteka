@@ -2,13 +2,13 @@
   "ETK Frontend Component": {
     "prefix": "etkfc",
     "body": [
-      "import React from \"react\";",
-      "$3import { makeStyles } from \"@material-ui/core\";\n",
-      "export interface I$1Props {}\n",
-      "$3const useStyles = makeStyles(() => ({",
+      "import { FC } from \"react\";",
+      "$3import { makeStyles, Theme } from \"@material-ui/core\";\n",
+      "export interface $1Props {}\n",
+      "$3const useStyles = makeStyles((theme: Theme) => ({",
       "$3\troot: {},",
       "$3}));\n",
-      "const $1: React.FC<I$1Props> = ({}) => {",
+      "const $1: FC<$1Props> = ({}) => {",
       "$3\tconst classes = useStyles();\n",
       "\treturn ($2);",
       "};\n",
