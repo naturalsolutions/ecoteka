@@ -1,3 +1,10 @@
+## [0.7.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.7.0...v0.7.1) (2021-04-09)
+
+
+### Performance Improvements
+
+* optimize mapillary component ([d78b189](https://gitlab.com/natural-solutions/ecoteka/commit/d78b189fc98faea0caff70aec937f9e8ec019bbd))
+
 # [0.7.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.6.1...v0.7.0) (2021-04-09)
 
 
