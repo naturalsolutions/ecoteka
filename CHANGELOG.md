@@ -1,3 +1,10 @@
+# [0.7.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.6.1...v0.7.0) (2021-04-09)
+
+
+### Features
+
+* add tree page ([45d2bb6](https://gitlab.com/natural-solutions/ecoteka/commit/45d2bb6f721d4c79cf25c69acf938241be4130fb))
+
 ## [0.6.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.6.0...v0.6.1) (2021-04-08)
 
 
