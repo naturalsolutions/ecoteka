@@ -60,7 +60,7 @@ const TreeImagesContainer: FC<TreeImagesContainerProps> = ({
     tree,
     variant,
   });
-  const [viewer, setViewer] = useState<Viewer>("images");
+  const [viewer, setViewer] = useState<Viewer>("mapillary");
 
   return (
     <div className={classes.root}>

@@ -1,8 +1,15 @@
 import { FC, useEffect, useState } from "react";
-import { makeStyles, Theme } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  Grid,
+  CircularProgress,
+  Box,
+} from "@material-ui/core";
 import { Viewer } from "mapillary-js";
 import axios from "axios";
 import { Skeleton } from "@material-ui/lab";
+import { useTranslation } from "react-i18next";
 
 export type coords = [number, number];
 
@@ -24,7 +31,8 @@ const MapillaryImage: FC<IMapillaryImageProps> = (props) => {
   const { apiClient, coords } = props;
   const classes = useStyles(props);
   const [viewer, setViewer] = useState(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const fetchImages = async () => {
     setLoading(true);
@@ -45,16 +53,15 @@ const MapillaryImage: FC<IMapillaryImageProps> = (props) => {
           container: "mapillary-image",
           imageKey: data.features[0].properties.key,
           per_page: 1,
+          component: {
+            cover: false,
+          },
         });
 
         setLoading(false);
         setViewer(newViewer);
       }
     } catch (e) {
-      if (viewer?.remove) {
-        // viewer.remove();
-      }
-
       setViewer(null);
       setLoading(false);
     } finally {
@@ -63,12 +70,31 @@ const MapillaryImage: FC<IMapillaryImageProps> = (props) => {
   };
 
   useEffect(() => {
-    if (coords[0]) {
+    if (coords && coords[0]) {
       fetchImages();
     }
   }, [coords]);
 
-  return <div id="mapillary-image" style={{ width: "100%", height: "100%" }} />;
+  return (
+    <div id="mapillary-image" style={{ width: "100%", height: "100%" }}>
+      {loading && (
+        <Grid
+          style={{ width: "100%", height: "100%" }}
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+        >
+          <Grid item>
+            <CircularProgress />
+          </Grid>
+          <Grid item>
+            <Box>{t("common.loadingMapillary")}...</Box>
+          </Grid>
+        </Grid>
+      )}
+    </div>
+  );
 };
 
 export default MapillaryImage;

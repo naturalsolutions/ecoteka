@@ -101,7 +101,7 @@ const defaultData = {
 const EditionPage = ({}) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const matchesDraw = useMediaQuery(theme.breakpoints.down("lg"));
+  const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
   const classes = useStyles();
   const router = useRouter();
   const { organization } = useAppContext();
