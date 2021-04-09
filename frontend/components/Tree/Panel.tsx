@@ -74,34 +74,36 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
     }
   }, [tree]);
 
-  return (
-    active && (
-      <AppLayoutCartoDialog withoutContent={true}>
-        <TreeImagesContainer tree={tree} />
-        <Grid container direction="column" className={classes.grid}>
-          <Grid item>
-            <TreeBasicForm readOnly={true} form={form} />
+  return useMemo(
+    () =>
+      active && (
+        <AppLayoutCartoDialog withoutContent={true}>
+          <TreeImagesContainer tree={tree} />
+          <Grid container direction="column" className={classes.grid}>
+            <Grid item>
+              <TreeBasicForm readOnly={true} form={form} />
+            </Grid>
+            <Grid item>
+              <TreeInterventions treeId={tree?.id} />
+            </Grid>
+            <Grid item>
+              <TreeHealthAssessment treeId={tree?.id} />
+            </Grid>
+            <Grid item>
+              <Button
+                size="large"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleGoToTreePage}
+              >
+                {t("common.buttons.moreDetails")}
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <TreeInterventions treeId={tree?.id} />
-          </Grid>
-          <Grid item>
-            <TreeHealthAssessment treeId={tree?.id} />
-          </Grid>
-          <Grid item>
-            <Button
-              size="large"
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={handleGoToTreePage}
-            >
-              {t("common.buttons.moreDetails")}
-            </Button>
-          </Grid>
-        </Grid>
-      </AppLayoutCartoDialog>
-    )
+        </AppLayoutCartoDialog>
+      ),
+    [tree]
   );
 };
 
