@@ -10,8 +10,8 @@ import {
 import { useTranslation } from "react-i18next";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import useETKForm from "@/components/Form/useForm";
-import useTreeSchema from "@/components/Tree//Schema";
-import { ITree } from "@/index";
+import useTreeSchema from "@/components/TreeOld/Schema";
+import { Tree } from "@/index";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -27,8 +27,8 @@ export type TTreeAccordion = {
 export const TreeAccordion = forwardRef<
   TTreeAccordion,
   {
-    tree: ITree;
-    onChange?(tree: ITree, properties: object): void;
+    tree: Tree;
+    onChange?(tree: Tree, properties: object): void;
   }
 >((props, ref) => {
   const classes = useStyles();
@@ -58,7 +58,9 @@ export const TreeAccordion = forwardRef<
     <Fragment>
       <Accordion expanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>{t("TreeAccordion.treeIdentity")}</Typography>
+          <Typography className={classes.heading}>
+            {t("TreeAccordion.treeIdentity")}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container direction="column">
@@ -74,7 +76,9 @@ export const TreeAccordion = forwardRef<
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>{t("TreeAccordion.characteristics")}</Typography>
+          <Typography className={classes.heading}>
+            {t("TreeAccordion.characteristics")}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container direction="column">
@@ -90,7 +94,9 @@ export const TreeAccordion = forwardRef<
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>{t("TreeAccordion.outdoorEnvironment")}</Typography>
+          <Typography className={classes.heading}>
+            {t("TreeAccordion.outdoorEnvironment")}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container direction="column">
@@ -106,7 +112,9 @@ export const TreeAccordion = forwardRef<
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>{t("TreeAccordion.other")}</Typography>
+          <Typography className={classes.heading}>
+            {t("TreeAccordion.other")}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container direction="column">

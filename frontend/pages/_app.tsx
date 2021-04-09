@@ -7,6 +7,7 @@ import { SnackbarProvider } from "notistack";
 import ThemeProvider from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutBase from "@/components/AppLayout/Base";
 import "@/styles/global.css";
+import "mapillary-js/dist/mapillary.min.css";
 import { useRouter } from "next/router";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";

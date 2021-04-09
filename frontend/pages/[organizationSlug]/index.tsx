@@ -12,7 +12,6 @@ import { subject } from "@casl/ability";
 import React, { useEffect } from "react";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
-import { Row, Column, Item } from "@mui-treasury/components/flex";
 import OrgChart from "@/components/OrganizationV2/OrgChart";
 import MembersCard from "@/components/OrganizationV2/MembersCard";
 import OrganizationHeader from "@/components/OrganizationV2/Header";

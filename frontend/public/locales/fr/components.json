@@ -656,7 +656,13 @@
       "title": "Ajouter une organisation"
     }
   },
+  "TreeHealthAssessment": {
+    "title": "État Sanitaire"
+  },
   "organization": {
     "updated": "modifiée"
+  },
+  "TreeInterventions": {
+    "title": "Interventions"
   }
 }

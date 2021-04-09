@@ -19,7 +19,7 @@ const themes = {
     palette: {
       type: "dark",
       background: {
-        default: "#222",
+        default: "#2c2c2c",
       },
       text: {
         primary: "#fff",

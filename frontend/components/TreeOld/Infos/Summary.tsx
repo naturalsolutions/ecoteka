@@ -5,7 +5,7 @@ import InterventionsTable from "@/components/Interventions/InterventionsTable";
 import { useAppContext } from "@/providers/AppContext";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { TIntervention } from "@/components/Interventions/Schema";
-import TreeInfosProperties from "@/components/Tree/Infos/Properties";
+import TreeInfosProperties from "@/components/TreeOld/Infos/Properties";
 import { useRouter } from "next/router";
 import { AppLayoutCartoDialog } from "@/components/AppLayout/Carto";
 import BackToMap from "@/components/Map/BackToMap";

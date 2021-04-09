@@ -68,7 +68,7 @@ def trees_import(
     return geofile
 
 
-@router.get("/export/")
+@router.get("/export")
 def trees_export(
     organization_id: int,
     format: str = "geojson",
@@ -160,11 +160,14 @@ async def add(
 
 
 
-@router.put("/{tree_id}", response_model=schemas.tree.Tree_xy)
+@router.put(
+    "/{tree_id}", 
+    response_model=schemas.tree.Tree_xy, 
+    dependencies=[Depends(authorization("trees:update"))]
+)
 def update(
     tree_id: int,
     *,
-    auth=Depends(authorization("trees:update")),
     db: Session = Depends(get_db),
     payload: schemas.tree.TreeUpdate,
 ) -> Any:

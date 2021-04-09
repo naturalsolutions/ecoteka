@@ -24,7 +24,9 @@ export interface IUser {
   organizations: IOrganization[];
 }
 
-export interface ITree {
+export type FormMode = "edit" | "read";
+
+export interface Tree {
   id: number;
   x?: number;
   y?: number;

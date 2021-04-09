@@ -255,14 +255,18 @@ const InterventionFormStepper: React.FC = () => {
   };
 
   const handleBackToTree = () => {
-    router.push({
-      pathname: "/[organizationSlug]/map",
-      query: {
-        panel: "info",
-        tree: router.query.tree,
-        organizationSlug: organization.id,
-      },
-    });
+    if (window.history.length > 0) {
+      router.back();
+    } else {
+      router.push({
+        pathname: "/[organizationSlug]/map",
+        query: {
+          panel: "info",
+          tree: router.query.tree,
+          organizationSlug: organization.id,
+        },
+      });
+    }
   };
 
   useEffect(() => {

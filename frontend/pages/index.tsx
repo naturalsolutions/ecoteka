@@ -9,7 +9,6 @@ import DatasetsGallery from "@/components/Home/DatasetsGallery";
 import UserOrganizationGallery from "@/components/Home/UserOrganizationGallery";
 import CallToLogin from "@/components/Core/CallToActions/CallToLogin";
 import AddOrganization from "@/components/Core/CallToActions/AddOrganization";
-import Card, { ShowcaseCard } from "@/components/Core/Card/ShowcaseCard";
 import React from "react";
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -29,10 +28,15 @@ const Home: React.FC = () => {
   return (
     <AppLayoutGeneral>
       <Container>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h4" component="h1" color="textPrimary">
           {t("components.Home.title")}
         </Typography>
-        <Typography variant="h6" component="h2" className={styles.subtitle}>
+        <Typography
+          variant="h6"
+          component="h2"
+          className={styles.subtitle}
+          color="textPrimary"
+        >
           {t("components.Home.myOrganizations")}
         </Typography>
         {!user && <CallToLogin variant="wide" />}
@@ -45,7 +49,12 @@ const Home: React.FC = () => {
           </Grid>
         )}
         <Box className={styles.tutorialsSection}>
-          <Typography variant="h6" component="h2" className={styles.subtitle}>
+          <Typography
+            variant="h6"
+            component="h2"
+            className={styles.subtitle}
+            color="textPrimary"
+          >
             {t("components.Home.exploreSampleDatasets")}
           </Typography>
           <DatasetsGallery />

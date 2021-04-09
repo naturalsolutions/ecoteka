@@ -1,221 +1,164 @@
-import React, { useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import {
   Grid,
-  Typography,
-  Button,
   makeStyles,
-  CircularProgress,
+  Theme,
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails,
+  Box,
+  Paper,
 } from "@material-ui/core";
-import { useTranslation } from "react-i18next";
-import useForm from "@/components/Form/useForm";
 import useTreeSchema from "@/components/Tree/Schema";
-import { useSnackbar } from "notistack";
-import useApi from "@/lib/useApi";
-import { useAppContext } from "@/providers/AppContext";
-import { useRouter } from "next/router";
-import { AppLayoutCartoDialog } from "@/components/AppLayout/Carto";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import CoreTextField from "../Core/Field/TextField";
+import CoreSwitch from "@/components/Core/Field/Switch";
+import CoreSelect from "@/components/Core/Field/Select";
+import { Controller, UseFormMethods } from "react-hook-form";
+import TreeCanonicalField from "./Field/Canonical";
+import { useState } from "react";
+import { fields as excludeFields } from "@/components/Tree/BasicForm";
 
-const useStyles = makeStyles((theme) => ({
-  grid: {},
-  title: {
-    fontWeight: "bold",
+export interface TreeFormProps {
+  readOnly: boolean;
+  form: UseFormMethods;
+}
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    [theme.breakpoints.up("sm")]: {
+      "& .MuiGrid-item:nth-child(odd) > .MuiBox-root": {
+        paddingRight: theme.spacing(3),
+      },
+      "& .MuiGrid-item:nth-child(even) > .MuiBox-root": {
+        paddingLeft: theme.spacing(3),
+      },
+    },
   },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: "bold",
+  accordion: {
+    background: theme.palette.background.default,
+  },
+  accordionSummaryTitle: {
+    textTransform: "uppercase",
+    fontWeight: 700,
+    fontSize: "15px",
   },
 }));
 
-const TreeForm: React.FC<{
-  onSave?(record: object): void;
-}> = ({ onSave }) => {
-  const [active, setActive] = useState<boolean>(false);
-  const { t } = useTranslation(["common", "components"]);
-  const router = useRouter();
+interface TreeFormAccordionProps {
+  title: string;
+}
+
+const TreeFormAccordion: FC<TreeFormAccordionProps> = ({ title, children }) => {
+  const classes = useStyles();
+
+  return (
+    <Accordion elevation={0} className={classes.accordion}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography className={classes.accordionSummaryTitle}>
+          {title}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>{children}</AccordionDetails>
+    </Accordion>
+  );
+};
+
+const fieldTypes = {
+  treecanonicalfield: TreeCanonicalField,
+  textfield: CoreTextField,
+  switch: CoreSwitch,
+  select: CoreSelect,
+};
+
+const TreeForm: FC<TreeFormProps> = ({ readOnly = true, form }) => {
   const classes = useStyles();
   const schema = useTreeSchema();
-  const { api } = useApi();
-  const { apiETK } = api;
-  const { enqueueSnackbar } = useSnackbar();
-  const [saving, setSaving] = useState(false);
-  const { organization } = useAppContext();
-  const defaultValues = {
-    isLit: false,
-    isProtected: false,
-    isTreeOfInterest: false,
-  };
-  const { fields, setValue, getValues } = useForm({
-    schema,
-    defaultValues,
-  });
-
-  async function getTree(organizationId, treeId) {
-    try {
-      const url = `/organization/${organizationId}/trees/${treeId}`;
-
-      const { status, data } = await apiETK.get(url);
-
-      if (status === 200) {
-        for (let key in data.properties) {
-          setValue(key, data.properties[key]);
-        }
-      }
-    } catch (e) {}
-  }
+  const [categories, setCategories] = useState({});
 
   useEffect(() => {
-    const { query, route } = router;
-
-    if (
-      route === "/[organizationSlug]/map" &&
-      query.panel === "edit" &&
-      query.tree
-    ) {
-      setActive(true);
-      getTree(organization.id, Number(query.tree));
-    } else {
-      setActive(false);
-    }
-  }, [router.query]);
-
-  const handlerOnSave = async () => {
-    try {
-      setSaving(true);
-
-      const properties = getValues();
-      const organizationId = organization.id;
-      const { data, status } = await apiETK.put(
-        `/organization/${organizationId}/trees/${router.query.tree}`,
-        {
-          properties,
+    const newCategories = Object.keys(schema).reduce(
+      (accumulator, fieldName) => {
+        if (excludeFields.includes(fieldName)) {
+          return accumulator;
         }
-      );
 
-      if (status === 200) {
-        onSave(data);
-        enqueueSnackbar("Arbre mis à jour avec succès", {
-          variant: "success",
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "center",
-          },
-        });
-      }
-    } catch (e) {
-    } finally {
-      setSaving(false);
-    }
-  };
+        const field = schema[fieldName];
 
-  const handleToBack = () => {
-    router.push({
-      pathname: "/[organizationSlug]/map",
-      query: {
-        panel: "info",
-        tree: router.query.tree,
-        organizationSlug: organization.slug,
+        if (!accumulator[field.category]) {
+          accumulator[field.category] = {};
+        }
+
+        const type = schema[fieldName].type;
+
+        let fieldProps = null;
+
+        if (["textfield", "select", "switch"].includes(type)) {
+          fieldProps = {
+            ...schema[fieldName].component,
+            error: Boolean(form.errors?.fieldName),
+            defaultValue: "",
+            InputProps: {
+              readOnly,
+            },
+          };
+        }
+
+        if (type === "treecanonicalfield") {
+          fieldProps = {
+            defaultValue: "",
+            inputProps: {
+              ...schema[fieldName].component,
+              error: Boolean(form.errors?.fieldName),
+
+              InputProps: {
+                readOnly,
+              },
+            },
+          };
+        }
+
+        if (type === "switch") {
+          fieldProps = {
+            ...schema[fieldName].component,
+            defaultValue: false,
+            error: Boolean(form.errors?.fieldName),
+          };
+        }
+
+        accumulator[field.category][fieldName] = (
+          <Controller
+            {...fieldProps}
+            as={fieldTypes[type]}
+            name={fieldName}
+            control={form.control}
+          />
+        );
+
+        return accumulator;
       },
-    });
-  };
-
-  if (active) {
-    return (
-      <AppLayoutCartoDialog
-        title={t("components.TreeForm.title")}
-        actions={
-          <Grid container>
-            <Grid item>
-              <Button
-                size="small"
-                variant="contained"
-                color="secondary"
-                onClick={handleToBack}
-              >
-                {t("components.TreeForm.backToInfo")}
-              </Button>
-            </Grid>
-            <Grid item xs />
-            <Grid item>
-              <Button
-                size="small"
-                color="primary"
-                variant="contained"
-                onClick={handlerOnSave}
-              >
-                {saving ? (
-                  <CircularProgress size={30} />
-                ) : (
-                  t("common.buttons.save")
-                )}
-              </Button>
-            </Grid>
-          </Grid>
-        }
-      >
-        <Grid container direction="column" spacing={2} className={classes.grid}>
-          <Grid item>
-            <Typography className={classes.heading}>
-              {t("components.TreeForm.treeIdentity")}
-            </Typography>
-            <Grid container direction="column">
-              {Object.keys(schema)
-                .filter((f) => schema[f].category === "Identité de l'arbre")
-                .map((f) => (
-                  <Grid key={`${schema[f].category}-${f}`} item>
-                    {fields[f]}
-                  </Grid>
-                ))}
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.heading}>
-              {t("components.TreeForm.characteristics")}
-            </Typography>
-            <Grid container direction="column">
-              {Object.keys(schema)
-                .filter((f) => schema[f].category === "Caractéristiques")
-                .map((f) => (
-                  <Grid key={`${schema[f].category}-${f}`} item>
-                    {fields[f]}
-                  </Grid>
-                ))}
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.heading}>
-              {t("components.TreeForm.outdoorEnvironment")}
-            </Typography>
-            <Grid container direction="column">
-              {Object.keys(schema)
-                .filter((f) => schema[f].category === "Environnement extérieur")
-                .map((f) => (
-                  <Grid key={`${schema[f].category}-${f}`} item>
-                    {fields[f]}
-                  </Grid>
-                ))}
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.heading}>
-              {t("components.TreeForm.other")}
-            </Typography>
-
-            <Grid container direction="column">
-              {Object.keys(schema)
-                .filter((f) => schema[f].category === "Autres")
-                .map((f) => (
-                  <Grid key={`${schema[f].category}-${f}`} item>
-                    {fields[f]}
-                  </Grid>
-                ))}
-            </Grid>
-          </Grid>
-        </Grid>
-      </AppLayoutCartoDialog>
+      {} as Record<string, Record<string, JSX.Element>>
     );
-  }
 
-  return null;
+    setCategories(newCategories);
+  }, [form]);
+
+  return (
+    <Paper elevation={0} className={classes.root}>
+      {Object.keys(categories).map((category) => (
+        <TreeFormAccordion key={category} title={category}>
+          <Grid container>
+            {Object.keys(categories[category]).map((field) => (
+              <Grid key={field} item xs={12} sm={6}>
+                <Box>{categories[category][field]}</Box>
+              </Grid>
+            ))}
+          </Grid>
+        </TreeFormAccordion>
+      ))}
+    </Paper>
+  );
 };
 
 export default TreeForm;

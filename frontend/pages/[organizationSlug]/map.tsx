@@ -14,8 +14,6 @@ import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
-import TreeSummary from "@/components/Tree/Infos/Summary";
-import TreeForm from "@/components/Tree/Form";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
 import MapGeolocateFab from "@/components/Map/GeolocateFab";
 import MapLayers, {
@@ -50,6 +48,7 @@ import MapActionsBar, {
   MapActionsBarActionType,
 } from "@/components/Map/ActionsBar";
 import MapAddActions from "@/components/Map/AddActions";
+import TreePanel from "@/components/Tree/Panel";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -168,14 +167,24 @@ const EditionPage = ({}) => {
 
         setData(newData);
 
-        router.push({
-          pathname: "/[organizationSlug]/map",
-          query: {
-            panel: "edit",
-            tree: tree.id,
-            organizationSlug: organization.slug,
-          },
-        });
+        if (!matchesDraw) {
+          router.push({
+            pathname: "/[organizationSlug]/map",
+            query: {
+              panel: "info",
+              tree: tree.id,
+              organizationSlug: organization.slug,
+            },
+          });
+        } else {
+          router.push({
+            pathname: "/[organizationSlug]/tree/[id]",
+            query: {
+              id: tree.id,
+              organizationSlug: organization.slug,
+            },
+          });
+        }
 
         setActiveTree(tree.id);
       }
@@ -470,14 +479,24 @@ const EditionPage = ({}) => {
     }
 
     if (info.object?.properties?.id) {
-      router.push({
-        pathname: "/[organizationSlug]/map",
-        query: {
-          panel: router.query.panel === "edit" ? "edit" : "info",
-          tree: info.object?.properties.id,
-          organizationSlug: organization.slug,
-        },
-      });
+      if (!matchesDraw) {
+        router.push({
+          pathname: "/[organizationSlug]/map",
+          query: {
+            panel: "info",
+            tree: info.object?.properties.id,
+            organizationSlug: organization.slug,
+          },
+        });
+      } else {
+        router.push({
+          pathname: "/[organizationSlug]/tree/[id]",
+          query: {
+            id: info.object?.properties.id,
+            organizationSlug: organization.slug,
+          },
+        });
+      }
     }
   };
 
@@ -622,8 +641,6 @@ const EditionPage = ({}) => {
       <Hidden lgUp>
         <MapAddActions onChange={handleOnMapActionsChange} />
       </Hidden>
-      <TreeSummary />
-      <TreeForm />
       <ImportPanel onFileImported={handleOnFileImported} />
       <InterventionForm />
       <InterventionsEdit />
@@ -646,6 +663,7 @@ const EditionPage = ({}) => {
         darkBackground={mapBackground !== "map"}
         onClick={handleOnMapActionsBarClick}
       />
+      <TreePanel />
     </AppLayoutCarto>
   );
 };
