@@ -12,7 +12,6 @@ import useTree from "@/lib/hooks/useTree";
 import useApi from "@/lib/useApi";
 import TreeImagesContainer from "@/components/Tree/Images/Container";
 import { Tree } from "@/index";
-import { useMemo } from "react";
 import TreeInterventions from "@/components/Tree/Interventions";
 import TreeHealthAssessment from "./HealthAssessment";
 
@@ -71,39 +70,39 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
       Object.keys(tree.properties).forEach((property) =>
         form.setValue(property, tree.properties[property])
       );
+    } else {
+      form.reset();
     }
   }, [tree]);
 
-  return useMemo(
-    () =>
-      active && (
-        <AppLayoutCartoDialog withoutContent={true}>
-          <TreeImagesContainer tree={tree} />
-          <Grid container direction="column" className={classes.grid}>
-            <Grid item>
-              <TreeBasicForm readOnly={true} form={form} />
-            </Grid>
-            <Grid item>
-              <TreeInterventions treeId={tree?.id} />
-            </Grid>
-            <Grid item>
-              <TreeHealthAssessment treeId={tree?.id} />
-            </Grid>
-            <Grid item>
-              <Button
-                size="large"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={handleGoToTreePage}
-              >
-                {t("common.buttons.moreDetails")}
-              </Button>
-            </Grid>
+  return (
+    active && (
+      <AppLayoutCartoDialog withoutContent={true}>
+        <TreeImagesContainer tree={tree} />
+        <Grid container direction="column" className={classes.grid}>
+          <Grid item>
+            <TreeBasicForm readOnly={true} form={form} />
           </Grid>
-        </AppLayoutCartoDialog>
-      ),
-    [tree]
+          <Grid item>
+            <TreeInterventions treeId={tree?.id} />
+          </Grid>
+          <Grid item>
+            <TreeHealthAssessment treeId={tree?.id} />
+          </Grid>
+          <Grid item>
+            <Button
+              size="large"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={handleGoToTreePage}
+            >
+              {t("common.buttons.moreDetails")}
+            </Button>
+          </Grid>
+        </Grid>
+      </AppLayoutCartoDialog>
+    )
   );
 };
 

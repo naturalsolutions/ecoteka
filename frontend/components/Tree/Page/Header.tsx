@@ -38,7 +38,7 @@ const TreePageHeader: React.FC<ITreePageHeaderProps> = ({
   const { organization } = useAppContext();
   const [mode, setMode] = useState<Mode>("read");
   const theme = useTheme();
-  const matchesDraw = useMediaQuery(theme.breakpoints.down("lg"));
+  const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleGoMap = () => {
     router.push({
