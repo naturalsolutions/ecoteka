@@ -17,12 +17,11 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from app.api import get_db
 from app import crud
-from app.core import settings, enforcer, set_policies, authorization, authorize, get_current_user, get_optional_current_active_user
+from app.core import settings, enforcer, set_policies, authorization, permissive_authorization, authorize, get_current_user, get_optional_current_active_user
 from fastapi_jwt_auth import AuthJWT
 
 from app.crud import organization, user, tree
 from app.schemas import (
-    FindModeEnum,
     Organization,
     OrganizationCreate,
     OrganizationUpdate,
@@ -116,8 +115,8 @@ def update_organization(
 @router.get("/{organization_id}", response_model=Organization)
 def get_one(
     organization_id: Union[str, int],
-    mode: FindModeEnum = FindModeEnum.by_id,
     *,
+    auth=Depends(permissive_authorization("organizations:get_one")),
     current_user: User = Depends(get_optional_current_active_user),
     db: Session = Depends(get_db)
 ) -> Optional[Organization]:
@@ -125,20 +124,12 @@ def get_one(
     get one organization by id
     """
     
-    if mode == 'by_slug':
-        organization_in_db = crud.organization.get_by_slug(db, slug=organization_id)
-
-    if mode == 'by_id':
-        if not isinstance(int(organization_id), int):
-            raise HTTPException(status_code=400, detail="Organization ID should be of type Int with mode by_id.")
-        organization_in_db = crud.organization.get(db, id=organization_id)
+    organization_in_db = crud.organization.get_by_id_or_slug(db, id=organization_id)
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
 
     organization = organization_in_db.to_schema()
-
-    authorize(organization_in_db, current_user, "organizations:get_one")
 
     if current_user:
         current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_in_db.id))
