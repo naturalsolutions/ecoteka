@@ -19,10 +19,10 @@ import { Controller, UseFormMethods } from "react-hook-form";
 import TreeCanonicalField from "./Field/Canonical";
 import { useState } from "react";
 import { fields as excludeFields } from "@/components/Tree/BasicForm";
+import { useTreeContext } from "@/components/Tree/Provider";
 
 export interface TreeFormProps {
   readOnly: boolean;
-  form: UseFormMethods;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -72,9 +72,10 @@ const fieldTypes = {
   select: CoreSelect,
 };
 
-const TreeForm: FC<TreeFormProps> = ({ readOnly = true, form }) => {
+const TreeForm: FC<TreeFormProps> = ({ readOnly = true }) => {
   const classes = useStyles();
   const schema = useTreeSchema();
+  const { form } = useTreeContext();
   const [categories, setCategories] = useState({});
 
   useEffect(() => {

@@ -4,9 +4,9 @@ import { DropzoneArea } from "material-ui-dropzone";
 import { useTranslation } from "react-i18next";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
+import { useTreeContext } from "@/components/Tree/Provider";
 
 export interface TreeImagesUploadProps {
-  treeId: number;
   onChange?(images: []): void;
 }
 
@@ -19,13 +19,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const TreeImagesUpload: FC<TreeImagesUploadProps> = ({ treeId, onChange }) => {
+const TreeImagesUpload: FC<TreeImagesUploadProps> = ({ onChange }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const [filesLimit, setFilesLimit] = useState<number>(6);
   const [files, setFiles] = useState([]);
   const { apiETK } = useApi().api;
   const { organization } = useAppContext();
+  const { tree } = useTreeContext();
 
   const handleOnChange = (loadedFiles) => {
     setFiles(loadedFiles);
@@ -40,7 +41,7 @@ const TreeImagesUpload: FC<TreeImagesUploadProps> = ({ treeId, onChange }) => {
       });
 
       const { status, data } = await apiETK.post(
-        `/organization/${organization.id}/trees/${treeId}/images`,
+        `/organization/${organization.id}/trees/${tree?.id}/images`,
         formData
       );
 

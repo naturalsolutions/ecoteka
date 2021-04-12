@@ -12,11 +12,8 @@ import CoreOptionsPanel from "../Core/OptionsPanel";
 import { useTranslation } from "react-i18next";
 import TreeImage from "@/public/assets/health_assessment/tree.svg";
 import CoreTextField from "../Core/Field/TextField";
-import { useAppContext } from "@/providers/AppContext";
 
-export interface TreeHealthAssessmentProps {
-  treeId: number;
-}
+export interface TreeHealthAssessmentProps {}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -43,7 +40,7 @@ const legend = [
   { color: "#000", title: "Très mauvais" },
 ];
 
-const TreeHealthAssessment: FC<TreeHealthAssessmentProps> = ({ treeId }) => {
+const TreeHealthAssessment: FC<TreeHealthAssessmentProps> = () => {
   const classes = useStyles();
   const { t } = useTranslation();
 

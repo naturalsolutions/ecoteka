@@ -2,18 +2,15 @@ import { FC } from "react";
 import { Grid, makeStyles, Theme, Button } from "@material-ui/core";
 import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 import TreeBasicForm from "./BasicForm";
-import useTreeForm from "./useForm";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
-import useTree from "@/lib/hooks/useTree";
-import useApi from "@/lib/useApi";
 import TreeImagesContainer from "@/components/Tree/Images/Container";
-import { Tree } from "@/index";
 import TreeInterventions from "@/components/Tree/Interventions";
 import TreeHealthAssessment from "./HealthAssessment";
+import TreeProvider from "@/components/Tree/Provider";
 
 export interface TreePanelProps {}
 
@@ -32,24 +29,12 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
   const { t } = useTranslation();
   const { organization } = useAppContext();
   const [active, setActive] = useState<boolean>(false);
-  const { apiETK } = useApi().api;
-  const fetchTree = useTree(apiETK);
-  const form = useTreeForm();
-  const [tree, setTree] = useState<Tree>(null);
 
   useEffect(() => {
     const { query, route } = router;
 
     if (route === "/[organizationSlug]/map" && query.panel === "info") {
       setActive(true);
-
-      if (query.tree && query.tree !== String(tree?.id)) {
-        (async () => {
-          const newTree = await fetchTree(organization.id, String(query.tree));
-
-          setTree(newTree);
-        })();
-      }
     } else {
       setActive(false);
     }
@@ -65,43 +50,38 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
     });
   };
 
-  useEffect(() => {
-    if (tree?.properties) {
-      Object.keys(tree.properties).forEach((property) =>
-        form.setValue(property, tree.properties[property])
-      );
-    } else {
-      form.reset();
-    }
-  }, [tree]);
-
   return (
     active && (
-      <AppLayoutCartoDialog withoutContent={true}>
-        <TreeImagesContainer tree={tree} />
-        <Grid container direction="column" className={classes.grid}>
-          <Grid item>
-            <TreeBasicForm readOnly={true} form={form} />
+      <TreeProvider
+        organizationId={organization.id}
+        treeId={Number(router.query.tree)}
+      >
+        <AppLayoutCartoDialog withoutContent={true}>
+          <TreeImagesContainer />
+          <Grid container direction="column" className={classes.grid}>
+            <Grid item>
+              <TreeBasicForm readOnly={true} />
+            </Grid>
+            <Grid item>
+              <TreeInterventions />
+            </Grid>
+            <Grid item>
+              <TreeHealthAssessment />
+            </Grid>
+            <Grid item>
+              <Button
+                size="large"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleGoToTreePage}
+              >
+                {t("common.buttons.moreDetails")}
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <TreeInterventions treeId={tree?.id} />
-          </Grid>
-          <Grid item>
-            <TreeHealthAssessment treeId={tree?.id} />
-          </Grid>
-          <Grid item>
-            <Button
-              size="large"
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={handleGoToTreePage}
-            >
-              {t("common.buttons.moreDetails")}
-            </Button>
-          </Grid>
-        </Grid>
-      </AppLayoutCartoDialog>
+        </AppLayoutCartoDialog>
+      </TreeProvider>
     )
   );
 };
