@@ -5,6 +5,7 @@ from .meilisearch import init_indices
 from .security import (
     authorization,
     authorize,
+    permissive_authorization,
     generate_access_token_and_refresh_token_response,
     get_current_user,
     get_current_active_user,
@@ -17,7 +18,7 @@ from .security import (
 __all__ = [
     "authjwt_exception_handler",
     "authorization",
-    "authorization",
+    "permissive_authorization",
     "authorize",
     "enforcer",
     "generate_access_token_and_refresh_token_response",

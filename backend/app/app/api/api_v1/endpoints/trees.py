@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import set_policies, authorization, get_current_user, settings
+from app.core import set_policies, authorization, permissive_authorization, get_current_user, settings
 from app.worker import import_geofile_task
 
 from fastapi.responses import StreamingResponse
@@ -117,10 +117,9 @@ def trees_export(
     return response
 
 
-@router.get("/{tree_id}", response_model=schemas.tree.Tree_xy)
+@router.get("/{tree_id}", dependencies=[Depends(permissive_authorization("trees:get"))], response_model=schemas.tree.Tree_xy)
 def get(
     tree_id: int,
-    auth=Depends(authorization("trees:get")),
     db: Session = Depends(get_db),
 ) -> Any:
     """Gets a tree"""
@@ -235,11 +234,10 @@ def upload_images(
 
     return HTMLResponse(status_code=200, content=f"{total} images uploaded")
 
-@router.get("/{tree_id}/images")
+@router.get("/{tree_id}/images", dependencies=[Depends(permissive_authorization("trees:get_images"))])
 def get_images(
     tree_id: int,
     organization_id: int,
-    auth=Depends(authorization("trees:get_images")),
 ):
     """
     get all images from a tree

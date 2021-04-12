@@ -1,4 +1,4 @@
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 import json
 from fastapi import APIRouter, Depends, Response, HTTPException
 from sqlalchemy.orm import Session
@@ -8,6 +8,7 @@ from app import crud
 from app.api import get_db
 from app.core import (
     authorization,
+    permissive_authorization,
     authorize,
     get_optional_current_active_user,
     set_policies
@@ -54,7 +55,7 @@ def generate_style(
         
         return style
 
-@router.get("/geojson", response_model=FeatureCollection)
+@router.get("/geojson", dependencies=[Depends(authorization("maps:get_geojson"))], response_model=FeatureCollection)
 def get_geojson(
     organization_id: int,
     mode: Optional[str] = "geopandas",
@@ -69,8 +70,6 @@ def get_geojson(
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
     
-    authorize(organization_in_db, current_user, "maps:get_geojson")
-
     response = None
     if mode == 'geopandas':
         sql = f"""SELECT t.id as id, t.properties, geom, 
@@ -130,23 +129,19 @@ def get_geojson(
         response = dict(row.jsonb_build_object)
     return response
 
-@router.get("/geobuf")
+@router.get("/geobuf", dependencies=[Depends(permissive_authorization("maps:get_geobuf"))])
 def get_geobuff(
     organization_id: int,
-    current_user: User = Depends(get_optional_current_active_user),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """
     Generate a compressed Feature Collection for Organization trees
     """
-
-    organization_in_db = organization.get(db, id=organization_id)
+    organization_in_db = organization.get_by_id_or_slug(db, id=organization_id)
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Organization not found")
     
-    authorize(organization_in_db, current_user, "maps:get_geobuf")
-
     sql = f"""
 
         WITH selection AS (
@@ -215,7 +210,7 @@ def get_tree_tiles(
 
 
 
-@router.get("/filter", dependencies=[Depends(authorization("maps:get_filters"))])
+@router.get("/filter", dependencies=[Depends(permissive_authorization("maps:get_filters"))])
 def get_filters(
     organization_id: int,
     db: Session = Depends(get_db)
@@ -236,7 +231,7 @@ def get_filters(
         
     return filters
 
-@router.get("/bbox", dependencies=[Depends(authorization("maps:get_bbox"))])
+@router.get("/bbox", dependencies=[Depends(permissive_authorization("maps:get_bbox"))])
 def get_bbox(
     organization_id: int,
     db: Session = Depends(get_db)

@@ -1,6 +1,8 @@
 from typing import Any, Dict, Optional, Union, List
 from uuid import UUID
 
+from fastapi import HTTPException
+
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
 
@@ -18,6 +20,24 @@ import slug as slugmodule
 
 
 class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUpdate]):
+    def get_by_id_or_slug(self, db: Session, id: Any):
+        # Query string params are passed as str, 
+        # we need to try to convert it as int 
+        # to differentiate slugs (str) from ids (int)
+        try:
+            organization_id = int(id)
+        except:
+            organization_id = id 
+        if isinstance(organization_id, int):
+            return db.query(self.model).filter(self.model.id == organization_id).first()
+        if isinstance(organization_id, str):
+            return db.query(self.model).filter(self.model.slug == organization_id).first()
+        if not isinstance(organization_id, (str, int)):
+            raise HTTPException(
+                    status_code=422,
+                    detail="ID should be either of type integer or string",
+                )
+
     def create(self, db: Session, *, obj_in: OrganizationCreate) -> Organization:
         parent = self.get(db, id=obj_in.parent_id) if obj_in.parent_id else None
 
