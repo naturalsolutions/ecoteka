@@ -1,3 +1,11 @@
+## [0.7.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.7.1...v0.7.2) (2021-04-12)
+
+
+### Performance Improvements
+
+* avoid unnecessary image reloading in mapillary ([4563564](https://gitlab.com/natural-solutions/ecoteka/commit/4563564dcf1709af365b0c634914b5779636ab94))
+* create TreeProvider to share tree context ([0914bf6](https://gitlab.com/natural-solutions/ecoteka/commit/0914bf6e408eb0705047b598e2e456b1fff181c8))
+
 ## [0.7.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.7.0...v0.7.1) (2021-04-09)
 
 
