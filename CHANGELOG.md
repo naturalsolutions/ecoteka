@@ -1,3 +1,10 @@
+## [0.7.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.7.2...v0.7.3) (2021-04-12)
+
+
+### Bug Fixes
+
+* **backend:** add more permissive authorization ([7b710a1](https://gitlab.com/natural-solutions/ecoteka/commit/7b710a1ee76b355f5669360b9a04625908b14828))
+
 ## [0.7.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.7.1...v0.7.2) (2021-04-12)
 
 
