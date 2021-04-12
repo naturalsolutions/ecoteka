@@ -19,11 +19,11 @@ import {
 } from "@material-ui/icons";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
+import { useTreeContext } from "@/components/Tree/Provider";
 
 export type TreeImagesGalleryVariant = "panel" | "page";
 
 export interface TreeImagesGalleryProps {
-  tree: Tree;
   variant?: TreeImagesGalleryVariant;
 }
 
@@ -47,22 +47,22 @@ const useStyles = makeStyles<Theme, { variant: TreeImagesGalleryVariant }>(
 );
 
 const TreeImagesGallery: FC<TreeImagesGalleryProps> = ({
-  tree,
   variant = "panel",
 }) => {
   const classes = useStyles({ variant });
   const { apiETK } = useApi().api;
   const { organization } = useAppContext();
   const [images, setImages] = useState([]);
-  const { snackbar, dialog } = useAppLayout();
+  const { dialog } = useAppLayout();
   const { t } = useTranslation();
+  const { tree } = useTreeContext();
 
   const [index, setIndex] = useState<number>(0);
 
   const fetchImages = async () => {
     try {
       const { status, data } = await apiETK.get(
-        `/organization/${organization.id}/trees/${tree.id}/images`
+        `/organization/${organization.id}/trees/${tree?.id}/images`
       );
 
       if (status === 200) {
@@ -102,7 +102,7 @@ const TreeImagesGallery: FC<TreeImagesGalleryProps> = ({
               setImages(newImages);
 
               const filename = (image.match(/[^\\/]+\.[^\\/]+$/) || []).pop();
-              const url = `/organization/${organization.id}/trees/${tree.id}/images/${filename}`;
+              const url = `/organization/${organization.id}/trees/${tree?.id}/images/${filename}`;
               await apiETK.delete(url);
             } catch (e) {}
           },
@@ -175,7 +175,7 @@ const TreeImagesGallery: FC<TreeImagesGalleryProps> = ({
           />
         </Grid>
       ) : (
-        <TreeImagesUpload treeId={tree?.id} onChange={() => fetchImages()} />
+        <TreeImagesUpload onChange={() => fetchImages()} />
       )}
     </Grid>
   );

@@ -11,11 +11,11 @@ import { useRouter } from "next/router";
 import { useAppContext } from "@/providers/AppContext";
 import { useTranslation } from "react-i18next";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { useTreeContext } from "@/components/Tree/Provider";
 
 export type Mode = "read" | "write";
 
 export interface ITreePageHeaderProps {
-  saving: boolean;
   onChange?(mode: Mode): void;
 }
 
@@ -28,17 +28,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TreePageHeader: React.FC<ITreePageHeaderProps> = ({
-  saving,
-  onChange,
-}) => {
+const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ onChange }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const router = useRouter();
   const { organization } = useAppContext();
   const [mode, setMode] = useState<Mode>("read");
   const theme = useTheme();
-  const matchesDraw = useMediaQuery(theme.breakpoints.down("lg"));
+  const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
+  const [saving, setSaving] = useState<boolean>(false);
+  const { onSave } = useTreeContext();
 
   const handleGoMap = () => {
     router.push({
@@ -51,8 +50,18 @@ const TreePageHeader: React.FC<ITreePageHeaderProps> = ({
     });
   };
 
-  const handleOnAction = () => {
+  const handleOnAction = async () => {
     const newMode = mode === "read" ? "write" : "read";
+
+    if (newMode === "read") {
+      try {
+        setSaving(true);
+        await onSave();
+      } catch (e) {
+      } finally {
+        setSaving(false);
+      }
+    }
 
     setMode(newMode);
     onChange(newMode);

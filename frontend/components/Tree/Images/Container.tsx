@@ -6,9 +6,9 @@ import { useState } from "react";
 import MapillaryImage from "@/components/Core/Mapillary/Image";
 import { Tree } from "@/index";
 import TreeImagesGallery from "./Gallery";
+import { useTreeContext } from "@/components/Tree/Provider";
 
 export interface TreeImagesContainerProps {
-  tree: Tree;
   variant?: "panel" | "page";
 }
 
@@ -53,14 +53,13 @@ const useStyles = makeStyles<Theme, TreeImagesContainerProps>(
 export type Viewer = "images" | "mapillary";
 
 const TreeImagesContainer: FC<TreeImagesContainerProps> = ({
-  tree,
   variant = "panel",
 }) => {
   const classes = useStyles({
-    tree,
     variant,
   });
   const [viewer, setViewer] = useState<Viewer>("mapillary");
+  const { tree } = useTreeContext();
 
   return (
     <div className={classes.root}>
@@ -71,7 +70,7 @@ const TreeImagesContainer: FC<TreeImagesContainerProps> = ({
             coords={[tree?.x, tree?.y]}
           />
         ) : (
-          <TreeImagesGallery tree={tree} variant={variant} />
+          <TreeImagesGallery variant={variant} />
         )}
       </div>
       <div className={classes.buttons}>

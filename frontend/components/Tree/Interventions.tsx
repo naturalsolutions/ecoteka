@@ -23,10 +23,9 @@ import InterventionIcon13 from "@/public/assets/interventions/intervention-13.sv
 import InterventionIcon14 from "@/public/assets/interventions/intervention-14.svg";
 import { TIntervention, TInterventionType } from "../Interventions/Schema";
 import { useRouter } from "next/router";
+import { useTreeContext } from "@/components/Tree/Provider";
 
-export interface TreeInterventionsProps {
-  treeId: number;
-}
+export interface TreeInterventionsProps {}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -82,12 +81,14 @@ const icons = {
   surveillance: InterventionIcon06,
 };
 
-const TreeInterventions: FC<TreeInterventionsProps> = ({ treeId }) => {
+const TreeInterventions: FC<TreeInterventionsProps> = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { organization } = useAppContext();
   const { apiETK } = useApi().api;
   const fetchInterventions = useInterventions(apiETK);
+  const { tree } = useTreeContext();
+
   const [interventions, setInterventions] = useState<
     Record<TInterventionType, TIntervention[]>
   >(null);
@@ -97,7 +98,7 @@ const TreeInterventions: FC<TreeInterventionsProps> = ({ treeId }) => {
     { title: "Liste des interventions", href: "" },
     {
       title: "Planifier une intervention",
-      href: `/${organization.slug}/map?panel=intervention&tree=${treeId}`,
+      href: `/${organization.slug}/map?panel=intervention&tree=${tree?.id}`,
     },
   ];
 
@@ -107,7 +108,7 @@ const TreeInterventions: FC<TreeInterventionsProps> = ({ treeId }) => {
         pathname: `/${organization.slug}/map`,
         query: {
           panel: "intervention-edit",
-          tree: treeId,
+          tree: tree?.id,
           intervention: interventions[interventionType][0].id,
         },
       });
@@ -119,11 +120,11 @@ const TreeInterventions: FC<TreeInterventionsProps> = ({ treeId }) => {
   };
 
   useEffect(() => {
-    if (treeId) {
+    if (tree?.id) {
       (async () => {
         const newInterventions = await fetchInterventions(
           organization.id,
-          String(treeId)
+          String(tree.id)
         );
 
         setInterventions(
@@ -141,7 +142,7 @@ const TreeInterventions: FC<TreeInterventionsProps> = ({ treeId }) => {
         );
       })();
     }
-  }, [treeId]);
+  }, [tree?.id]);
 
   return (
     <CoreOptionsPanel
