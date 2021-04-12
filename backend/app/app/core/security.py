@@ -141,9 +141,16 @@ def permissive_authorization(action: str):
         user=Depends(get_optional_current_active_user),
         db: Session = Depends(get_db), 
     ):
+        
         organization = crud_organization.get_by_id_or_slug(db, id=organization_id)
+
+        if not organization:
+            raise HTTPException(
+                status_code=404,
+                detail="Organization not found!",
+            )
         if not user:
-            if organization.mode == "public":
+            if organization.mode == "open":
                 pass
             if organization.mode == "private":
                 raise HTTPException(
@@ -151,7 +158,7 @@ def permissive_authorization(action: str):
                     detail="Only authenticated members will be granted access to private organization. Please login first.",
                 )
         if user:
-            if organization.mode == "public":
+            if organization.mode == "open":
                 pass
             if organization.mode == "private":
                 if user.is_superuser:
