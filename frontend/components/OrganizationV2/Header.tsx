@@ -1,15 +1,16 @@
 // @ts-nocheck
+import { useState, useEffect } from "react";
 import cx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ShareIcon from "@material-ui/icons/Share";
 import VpnLockIcon from "@material-ui/icons/VpnLock";
 import PublicIcon from "@material-ui/icons/Public";
-import TreeIcon from "@material-ui/icons/Nature";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import TextInfoContent from "@/components/Core/Content/TextInfo";
 import { formatDistance } from "date-fns";
@@ -18,6 +19,7 @@ import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
 import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
+import useApi from "@/lib/useApi";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useTranslation } from "react-i18next";
 import { useTextInfoContentStyles } from "@/styles/TextInfo";
@@ -27,6 +29,11 @@ import { useAppContext } from "@/providers/AppContext";
 import router from "next/router";
 import FullPageSpinner from "@/components/Core/Feedback/FullPageSpinner";
 import Can from "@/components/Can";
+import getConfig from "next/config";
+import { MVTLayer } from "@deck.gl/geo-layers";
+import { FlyToInterpolator } from "@deck.gl/core";
+import SvgIcon, { SvgIconProps } from "@material-ui/core/SvgIcon";
+import TreePath from "@/public/assets/icons/tree_detailled.svg";
 
 const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   root: {
@@ -90,6 +97,9 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     marginTop: 24,
     textTransform: "initial",
   },
+  treeCount: {
+    color: palette.primary.dark,
+  },
 }));
 
 const useCardMapStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -105,6 +115,14 @@ const useCardMapStyles = makeStyles(({ breakpoints, spacing }) => ({
     },
   },
 }));
+
+const TreeIcon = (props: SvgIconProps) => {
+  return (
+    <SvgIcon {...props}>
+      <TreePath />
+    </SvgIcon>
+  );
+};
 
 const OrganizationMode: React.FC = ({ mode }) => {
   const { t } = useTranslation(["common", "components"]);
@@ -142,28 +160,93 @@ const CardMap: React.FC = ({ children }) => {
 };
 
 const OrganizationHeader: React.FC = (props) => {
+  const { publicRuntimeConfig } = getConfig();
+  const { apiUrl } = publicRuntimeConfig;
   const styles = useStyles();
   const { button: buttonStyles, ...contentStyles } = useTextInfoContentStyles();
   const shadowStyles = useFloatShadowStyles();
   const graphicStyles = useGraphicBtnStyles();
-
   const { organization, user } = useAppContext();
+  const { apiETK } = useApi().api;
   const { t } = useTranslation(["common", "components"]);
   const { dark } = useThemeContext();
+  const [time, setTime] = useState(Date.now());
   const [mapBackground, setMapbackground] = useLocalStorage(
     "etk:map:mapBackground",
     "map"
   );
+  const [token] = useLocalStorage("ecoteka_access_token");
+  const [scope, setScope] = useState("public");
 
-  const defaultViewState = {
-    longitude: 2.54,
-    latitude: 46.7,
-    zoom: 5,
-  };
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
     defaultViewState
   );
+  const [viewState, setViewState] = useState();
+
+  const defaultViewState = {
+    longitude: 2.54,
+    latitude: 46.7,
+    zoom: 4,
+  };
+  const fitToBounds = async (organizationId: number) => {
+    try {
+      const { status, data: bbox } = await apiETK.get(`/maps/bbox`, {
+        params: {
+          organization_id: organizationId,
+        },
+      });
+
+      if (status === 200) {
+        const newViewState = treesLayer.context.viewport.fitBounds([
+          [bbox.xmin, bbox.ymin],
+          [bbox.xmax, bbox.ymax],
+        ]);
+
+        setInitialViewState({
+          longitude: newViewState.longitude,
+          latitude: newViewState.latitude,
+          zoom: newViewState.zoom,
+        });
+
+        setViewState({
+          ...newViewState,
+          transitionDuration: 1000,
+          transitionInterpolator: new FlyToInterpolator(),
+        });
+      }
+    } catch (e) {}
+  };
+
+  const treesLayer = new MVTLayer({
+    id: "trees",
+    data: `${apiUrl.replace("/api/v1", "")}/tiles/${
+      organization.slug
+    }/{z}/{x}/{y}.pbf?scope=${scope}&dt=${time}`,
+    minZoom: 0,
+    maxZoom: 12,
+    getLineColor: [68, 132, 134, 128],
+    getFillColor: [68, 132, 134, 128],
+    lineWidthMinPixels: 1,
+    pointRadiusMinPixels: 2,
+    pointRadiusMaxPixels: 15,
+    pointRadiusScale: 2,
+    minRadius: 10,
+    radiusMinPixels: 0.5,
+    uniqueIdProperty: "id",
+  });
+
+  useEffect(() => {
+    setViewState({ ...initialViewState });
+  }, []);
+
+  useEffect(() => {
+    setTime(Date.now());
+    fitToBounds(organization.id);
+    if (organization.mode == "private") {
+      setScope(`private&token=${token}`);
+    }
+  }, [organization]);
 
   if (!organization) {
     return <FullPageSpinner />;
@@ -173,7 +256,19 @@ const OrganizationHeader: React.FC = (props) => {
     return (
       <Card className={cx(styles.root, shadowStyles.root)}>
         <CardMap>
-          <DeckGL viewState={defaultViewState} controller={true}>
+          <DeckGL
+            viewState={viewState}
+            controller={true}
+            layers={[treesLayer]}
+            onViewStateChange={(e) => {
+              setInitialViewState({
+                longitude: e.viewState.longitude,
+                latitude: e.viewState.latitude,
+                zoom: e.viewState.zoom,
+              });
+              setViewState(e.viewState);
+            }}
+          >
             <StaticMap
               mapStyle={`/api/v1/maps/style/?theme=${
                 dark ? "dark" : "light"
@@ -208,45 +303,6 @@ const OrganizationHeader: React.FC = (props) => {
             container
             spacing={2}
             direction="row"
-            justify="start"
-            alignItems="center"
-            className={styles.cta}
-          >
-            <Grid
-              item
-              xs={6}
-              md={3}
-              container
-              spacing={2}
-              direction="row"
-              justify="start"
-              alignItems="center"
-            >
-              <TreeIcon color="primary" />
-              <Box>
-                {organization.total_trees} {t("common.trees")}
-              </Box>
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              md={3}
-              container
-              spacing={2}
-              direction="row"
-              justify="start"
-              alignItems="center"
-            >
-              <SupervisedUserCircleIcon color="primary" />
-              <Box>
-                {organization.total_members} {t("common.members")}
-              </Box>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={2}
-            direction="row"
             justify="flex-end"
             alignItems="center"
           >
@@ -261,6 +317,20 @@ const OrganizationHeader: React.FC = (props) => {
                 xs={12}
                 md={8}
               >
+                <Grid
+                  item
+                  xs={6}
+                  container
+                  spacing={2}
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-end"
+                >
+                  <TreeIcon color="primary" style={{ fontSize: 36 }} />
+                  <Typography variant="h6" className={styles.treeCount}>
+                    {organization.total_trees} {t("common.trees")}
+                  </Typography>
+                </Grid>
                 <Grid item>
                   <Button
                     classes={graphicStyles}
@@ -283,7 +353,21 @@ const OrganizationHeader: React.FC = (props) => {
             </Can>
             {!user && (
               <Can not do="read" on="Trees">
-                <Grid item xs={12} md={6}>
+                <Grid
+                  item
+                  xs={6}
+                  container
+                  spacing={2}
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-end"
+                >
+                  <TreeIcon color="primary" style={{ fontSize: 36 }} />
+                  <Typography variant="h6" className={styles.treeCount}>
+                    {organization.total_trees} {t("common.trees")}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
                   <Button
                     classes={graphicStyles}
                     variant={"contained"}
