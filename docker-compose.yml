@@ -5,8 +5,8 @@ services:
     depends_on:
       - backend
       - celery_worker
-      - frontend
       - tile_server
+      - landing_page
     image: ${NS_ECOTEKA_PROXY_IMAGE}
     networks:
       - traefik
@@ -144,6 +144,18 @@ services:
       - MEILI_API_URL=${NS_ECOTEKA_MEILISEARCH_API_URL}
       - MEILI_MASTER_KEY=${NS_ECOTEKA_MEILISEARCH_MASTER_KEY}
       - MAPILLARY_API_CLIENT=${NS_ECOTEKA_FRONTEND_MAPILLARY_API_CLIENT}
+
+  landing_page:
+    image: ${NS_ECOTEKA_LANDING_PAGE_IMAGE}
+    restart: always
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.landing_page.rule=PathPrefix(`/lp`)
+      - traefik.http.services.landing_page.loadbalancer.server.port=3000
+      - traefik.http.routers.landing_page.middlewares=landing_page-stripprefix
+      - traefik.http.middlewares.landing_page-stripprefix.stripprefix.prefixes=/lp
 
   tile_server:
     restart: always
