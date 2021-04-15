@@ -50,6 +50,7 @@ services:
       - traefik.http.routers.wwwsecure.tls.domains[0].main=${NS_ECOTEKA_DOMAIN_NAME}
       - traefik.http.routers.wwwsecure.tls.domains[0].sans=www.${NS_ECOTEKA_DOMAIN_NAME}
       - traefik.http.routers.wwwsecure.tls.domains[1].main=ecoteka.natural-solutions.eu
+      - traefik.http.routers.wwwsecure.tls.domains[2].main=${NS_ECOTEKA_STUDIO_DOMAIN_NAME}
       - traefik.http.routers.wwwsecure.tls.certresolver=le
 
   db_backups:
@@ -88,6 +89,7 @@ services:
     labels:
       - traefik.http.routers.backend.entrypoints=websecure
       - traefik.http.routers.backend.tls=true
+      - traefik.http.routers.backend.rule=Host(`${NS_ECOTEKA_STUDIO_DOMAIN_NAME}`) && PathPrefix(`${NS_ECOTEKA_BACKEND_BASE_PATH}`)
 
   celery_worker:
     image: ${NS_ECOTEKA_BACKEND_IMAGE}
@@ -97,18 +99,20 @@ services:
     labels:
       - traefik.http.routers.frontend.entrypoints=websecure
       - traefik.http.routers.frontend.tls=true
+      - traefik.http.routers.frontend.rule=Host(`${NS_ECOTEKA_STUDIO_DOMAIN_NAME}`) && PathPrefix(`/`)
       - traefik.http.services.frontend.loadbalancer.server.port=3000
 
   tile_server:
     labels:
       - traefik.http.routers.tile_server.entrypoints=websecure
       - traefik.http.routers.tile_server.tls=true
-      - traefik.http.services.tile_server.loadbalancer.server.port=80
+      - traefik.http.routers.tile_server.rule=Host(`${NS_ECOTEKA_STUDIO_DOMAIN_NAME}`) && PathPrefix(`/tiles`)
 
   meilisearch:
     labels:
       - traefik.http.routers.meilisearch.entrypoints=websecure
       - traefik.http.routers.meilisearch.tls=true
+      - traefik.http.routers.meilisearch.rule=Host(`${NS_ECOTEKA_STUDIO_DOMAIN_NAME}`) && PathPrefix(`/meilisearch`)
     environment:
       - MEILI_ENV=production
       - MEILI_MASTER_KEY=${NS_ECOTEKA_MEILISEARCH_MASTER_KEY}
@@ -117,3 +121,10 @@ services:
     image: ${NS_ECOTEKA_OSM_IMAGE}
     volumes:
       - ${NS_ECOTEKA_TILE_SERVER_PUBLIC_FOLDER}:/data
+
+  landing_page:
+    labels:
+      - traefik.http.routers.landing_page.entrypoints=websecure
+      - traefik.http.routers.landing_page.tls=true
+      - traefik.http.services.landing_page.loadbalancer.server.port=3000
+      - traefik.http.routers.landing_page.rule=Host(`${NS_ECOTEKA_DOMAIN_NAME}`) &&  PathPrefix(`/`)
