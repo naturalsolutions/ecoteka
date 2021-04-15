@@ -1,3 +1,10 @@
+## [0.8.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.8.0...v0.8.1) (2021-04-15)
+
+
+### Bug Fixes
+
+* typo on .env.example ns_ecoteka_studio_domain_name value ([6d2fe84](https://gitlab.com/natural-solutions/ecoteka/commit/6d2fe84bccb7ef0e0b02dfb8a1da4aefb4d3f79e))
+
 # [0.8.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.7.3...v0.8.0) (2021-04-15)
 
 
