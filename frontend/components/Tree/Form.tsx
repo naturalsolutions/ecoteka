@@ -15,7 +15,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CoreTextField from "../Core/Field/TextField";
 import CoreSwitch from "@/components/Core/Field/Switch";
 import CoreSelect from "@/components/Core/Field/Select";
-import { Controller, UseFormMethods } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import TreeCanonicalField from "./Field/Canonical";
 import { useState } from "react";
 import { fields as excludeFields } from "@/components/Tree/BasicForm";
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   accordion: {
-    background: theme.palette.background.default,
+    background: theme.palette.background.paper,
   },
   accordionSummaryTitle: {
     textTransform: "uppercase",

@@ -1,4 +1,13 @@
-import { red } from "@material-ui/core/colors";
+import { Theme, Color, ThemeOptions } from "@material-ui/core";
+import { Palette } from "@material-ui/core/styles/createPalette";
+
+export interface EcotekaPalette extends Palette {
+  toolbar: string;
+}
+
+export interface EcotekaTheme extends Theme {
+  palette: EcotekaPalette;
+}
 
 const themes = {
   light: {
@@ -6,25 +15,31 @@ const themes = {
       type: "light",
       background: {
         default: "#fbfdfe",
+        paper: "#fff",
       },
       text: {
         primary: "#000",
+        secondary: "rgba(0, 0, 0, 0.54)",
         hint: "#131313",
+        disabled: "rgba(255, 255, 255, 0.5)",
       },
       primary: {
         light: "#00C6B8",
         main: "#47B9B2",
         dark: "#00675B",
+        contrastText: "#fff",
       },
       secondary: {
         light: "#C9A095",
         main: "#A2786D",
         dark: "#734C42",
+        contrastText: "#fff",
       },
+      toolbar: "#fbfdfe",
     },
     typography: {
-      fontFamily : "Inter",
-      fontSize : "14px",
+      fontFamily: "Inter",
+      fontSize: 14,
       fontWeightLight: 300,
       fontWeightRegular: 400,
       fontWeightMedium: 500,
@@ -41,7 +56,7 @@ const themes = {
         fontWeight: 300,
         fontSize: "3.75rem",
         lineHeight: 1.2,
-        letterSpacing: "-0.00833em"
+        letterSpacing: "-0.00833em",
       },
       h3: {
         fontFamily: "Merriweather",
@@ -122,9 +137,6 @@ const themes = {
         letterSpacing: "0.08333em",
         textTransform: "uppercase",
       },
-    },
-    toolbar: {
-      main: "#fbfdfe",
     },
   },
   dark: {
@@ -132,25 +144,31 @@ const themes = {
       type: "dark",
       background: {
         default: "#384145",
+        paper: "#424242",
       },
       text: {
         primary: "#fff",
+        secondary: "rgba(255, 255, 255, 0.7)",
         hint: "#131313",
+        disabled: "rgba(0, 0, 0, 0.38)",
       },
       primary: {
         light: "#00C6B8",
         main: "#47B9B2",
         dark: "#00675B",
+        contrastText: "#fff",
       },
       secondary: {
         light: "#C9A095",
         main: "#A2786D",
         dark: "#734C42",
+        contrastText: "#fff",
       },
+      toolbar: "#384145",
     },
     typography: {
-      fontFamily : "Inter",
-      fontSize : "14px",
+      fontFamily: "Inter",
+      fontSize: 14,
       fontWeightLight: 300,
       fontWeightRegular: 400,
       fontWeightMedium: 500,
@@ -167,7 +185,7 @@ const themes = {
         fontWeight: 300,
         fontSize: "3.75rem",
         lineHeight: 1.2,
-        letterSpacing: "-0.00833em"
+        letterSpacing: "-0.00833em",
       },
       h3: {
         fontFamily: "Merriweather",
@@ -248,9 +266,6 @@ const themes = {
         letterSpacing: "0.08333em",
         textTransform: "uppercase",
       },
-    },
-    toolbar: {
-      main: "#384145",
     },
   },
 };

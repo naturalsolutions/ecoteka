@@ -9,6 +9,7 @@ import {
   IconButton,
   useMediaQuery,
 } from "@material-ui/core";
+import { EcotekaTheme } from "@/theme/config";
 import ContactButton from "@/components/Contact/Button";
 import LanguageSelector from "@/components/LanguageSelector";
 import { useAppContext } from "@/providers/AppContext";
@@ -28,21 +29,16 @@ import { AbilityContext } from "@/components/Can";
 import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
 import Link from "next/link";
 
-const useStyles = makeStyles((theme) => {
-  return {
-    logo: {
-      height: 35,
-      paddingTop: ".3rem",
-      cursor: "pointer",
-    },
-    toolbar: {
-      backgroundColor:
-        theme.palette.type === "dark"
-          ? theme.palette.secondary.main
-          : theme.palette.background.default,
-    },
-  };
-});
+const useStyles = makeStyles((theme: EcotekaTheme) => ({
+  logo: {
+    height: 35,
+    paddingTop: ".3rem",
+    cursor: "pointer",
+  },
+  toolbar: {
+    backgroundColor: theme.palette.toolbar,
+  },
+}));
 
 const AppLayoutHeader = ({}): JSX.Element => {
   const { t } = useTranslation("components");
