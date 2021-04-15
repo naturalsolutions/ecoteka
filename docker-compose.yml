@@ -150,6 +150,8 @@ services:
     restart: always
     networks:
       - traefik
+    environment:
+      - STUDIO_URL=https://${NS_ECOTEKA_STUDIO_DOMAIN_NAME}
     labels:
       - traefik.enable=true
       - traefik.http.routers.landing_page.rule=PathPrefix(`/lp`)
