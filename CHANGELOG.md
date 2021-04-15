@@ -1,3 +1,10 @@
+# [0.8.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.7.3...v0.8.0) (2021-04-15)
+
+
+### Features
+
+* add landing page to the project ([b7e1a78](https://gitlab.com/natural-solutions/ecoteka/commit/b7e1a783699a2766f6aee62a8af084b090da530d))
+
 ## [0.7.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.7.2...v0.7.3) (2021-04-12)
 
 
