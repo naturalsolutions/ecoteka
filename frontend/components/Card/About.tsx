@@ -53,7 +53,7 @@ const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
             </Typography>
           </Grid>
           <Grid item>
-            <Typography align="center" paragraph={true}>
+            <Typography align="center" paragraph={true} color="textPrimary">
               {t("CardAbout.content")}
             </Typography>
           </Grid>

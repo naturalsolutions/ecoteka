@@ -21,7 +21,7 @@ const useStyles = makeStyles<Theme, TreeImagesContainerProps>(
           return variant === "panel" ? 250 : 340;
         },
       },
-      background: theme.palette.background.default,
+      background: theme.palette.background.paper,
       position: "relative",
     },
     buttons: {

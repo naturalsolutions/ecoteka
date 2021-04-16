@@ -26,7 +26,6 @@ export interface CoreOptionsPanelProps {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(2),
-    background: theme.palette.background.default,
   },
   title: {
     textTransform: "uppercase",
