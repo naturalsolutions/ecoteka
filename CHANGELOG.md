@@ -1,3 +1,15 @@
+## [0.8.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.8.1...v0.8.2) (2021-04-16)
+
+
+### Bug Fixes
+
+* re-add theme config to project ([0014add](https://gitlab.com/natural-solutions/ecoteka/commit/0014addacd6898165be6c91adb25a4abe0e9921d))
+
+
+### Performance Improvements
+
+* **frontend:** add theme config ([e8038cb](https://gitlab.com/natural-solutions/ecoteka/commit/e8038cb66ec42042d9f06f004aaf835abd3c3539))
+
 ## [0.8.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.8.0...v0.8.1) (2021-04-15)
 
 
