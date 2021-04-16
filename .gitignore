@@ -15,3 +15,5 @@ frontend/~/chromeTemp
 .expo
 data.ms
 node_modules
+
+.DS_Store

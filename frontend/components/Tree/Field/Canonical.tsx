@@ -56,7 +56,7 @@ const TreeCanonicalField = forwardRef<void, TreeCanonicalFieldProps>(
 
     const handleOnChange = async (newValue) => {
       const newOptions = await fetchOptions(value);
-
+      console.log(newOptions);
       if (newOptions.length) {
         setOptions(newOptions);
       } else {
@@ -79,7 +79,7 @@ const TreeCanonicalField = forwardRef<void, TreeCanonicalFieldProps>(
           {...autocompleteProps}
           disableClearable
           freeSolo
-          value={value}
+          value={value ? value : ""}
           loading={loading}
           options={options}
           open={open}

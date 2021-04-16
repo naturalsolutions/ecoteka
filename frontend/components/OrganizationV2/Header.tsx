@@ -221,7 +221,7 @@ const OrganizationHeader: React.FC = (props) => {
   const treesLayer = new MVTLayer({
     id: "trees",
     data: `${apiUrl.replace("/api/v1", "")}/tiles/${
-      organization.slug
+      organization?.slug
     }/{z}/{x}/{y}.pbf?scope=${scope}&dt=${time}`,
     minZoom: 0,
     maxZoom: 12,
