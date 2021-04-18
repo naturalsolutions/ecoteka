@@ -3,30 +3,21 @@ import { IOrganization, IUser } from "@/index";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useRouter } from "next/router";
 import useApi from "@/lib/useApi";
-import { withSnackbar, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 
 const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
-  const [isLoading] = useState(false);
+  const [isOrganizationLoading, setIsOrganizationLoading] = useState(false);
+  const [isOrganizationSuccess, setIsOrganizationSuccess] = useState(true);
   const [user, setUser] = useLocalStorage<IUser>("user");
   const [organization, setOrganization] = useLocalStorage<IOrganization>(
     "etk:appContext:organization"
   );
   const router = useRouter();
   const { apiETK } = useApi().api;
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const validRoutes = [
-    "/",
-    "/index-legacy",
-    "/home",
-    "/signin",
-    "/forgot",
-    "/verify/[token]",
-    "/users/set_password",
-    "/404",
-    "/500",
-  ];
+  const { enqueueSnackbar } = useSnackbar();
+
   const restrictedRoutes = ["/admin/organizations", "account"];
 
   // #HOTFIX: In the long terThis could be replace by useReducer hook to programatically interacts with current user state
@@ -54,6 +45,9 @@ export const Provider = ({ children }) => {
 
   const fetchOrganization = async (organizationSlug: string) => {
     try {
+      setIsOrganizationLoading(true);
+      setIsOrganizationSuccess(true);
+      setOrganization(undefined);
       const { data, status } = await apiETK.get(
         `/organization/${organizationSlug}`,
         {
@@ -65,8 +59,13 @@ export const Provider = ({ children }) => {
 
       if (status === 200) {
         setOrganization(data);
+        setIsOrganizationLoading(false);
+        setIsOrganizationSuccess(true);
       }
     } catch ({ response }) {
+      setOrganization(undefined);
+      setIsOrganizationLoading(false);
+      setIsOrganizationSuccess(false);
       if (response) {
         // enqueueSnackbar(`${response.statusText}`, { variant: "error" });
       }
@@ -97,7 +96,8 @@ export const Provider = ({ children }) => {
         setUser,
         organization,
         setOrganization,
-        isLoading,
+        isOrganizationLoading,
+        isOrganizationSuccess,
         refetchUserData,
       }}
     >

@@ -13,14 +13,25 @@ const AppLayoutGeneralContext = createContext(null);
 
 export const useAppLayoutGeneral = () => useContext(AppLayoutGeneralContext);
 
-export interface IAppLayoutGeneral {}
+export interface AppLayoutGeneral {
+  isLoading?: boolean;
+  skeleton?: JSX.Element;
+}
 
-const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({ children }) => {
+const AppLayoutGeneral: FC<AppLayoutGeneral> = ({
+  isLoading = false,
+  skeleton,
+  children,
+}) => {
   const classes = useStyles();
 
   return (
     <AppLayoutGeneralContext.Provider value={{}}>
-      <main className={classes.content}>{children}</main>
+      {isLoading ? (
+        skeleton
+      ) : (
+        <main className={classes.content}>{children}</main>
+      )}
     </AppLayoutGeneralContext.Provider>
   );
 };

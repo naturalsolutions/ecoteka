@@ -1,7 +1,8 @@
+import { FC } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import useApi from "@/lib/useApi";
-import { IOrganization } from "@/index";
+import { IOrganization, IUser } from "@/index";
 import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { AxiosError } from "axios";
@@ -18,6 +19,8 @@ import OrganizationHeader from "@/components/OrganizationV2/Header";
 import TutorialsGallery from "@/components/OrganizationV2/Tutorials";
 import Can from "@/components/Can";
 import { Alert } from "@material-ui/lab";
+import { useAppContext } from "@/providers/AppContext";
+import CoreError from "@/components/Core/Error";
 
 const useStyles = makeStyles(({ spacing }) => ({
   avatar: {
@@ -33,108 +36,192 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-const OrganizationHome = () => {
+const OrganizationAuthorizedPage = () => {
   const styles = useStyles();
-  const router = useRouter();
-  const { organizationSlug } = router.query;
-  const { apiETK } = useApi().api;
+  const { organization, isOrganizationLoading } = useAppContext();
   const { t } = useTranslation(["common"]);
-  const fetchOrga = async () => {
-    const { data } = await apiETK.get(
-      `/organization/${organizationSlug}?mode=by_slug`
-    );
-    return data;
-  };
+  return (
+    <AbilityContext.Provider
+      value={buildAbilityFor(organization?.current_user_role)}
+    >
+      <Container>
+        <Grid
+          container
+          direction="column"
+          justify="flex-start"
+          alignItems="stretch"
+          spacing={4}
+        >
+          <Grid item xs={12}>
+            <OrganizationHeader
+              organization={organization}
+              isOrganizationLoading={isOrganizationLoading}
+            />
+          </Grid>
+          <Grid container item spacing={4}>
+            <Can do="read" on="Teams">
+              <Grid item xs={12} md={6}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  className={styles.subtitle}
+                >
+                  {t("components.Organization.zones").toUpperCase()}
+                </Typography>
+                <Alert severity="warning">Work in progress</Alert>
+              </Grid>
+            </Can>
+            <Can do="read" on="Members">
+              <Grid item xs={12} md={6}>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  className={styles.subtitle}
+                >
+                  {t("components.Organization.members").toUpperCase()}
+                </Typography>
+                <Alert severity="warning">Work in progress</Alert>
+              </Grid>
+            </Can>
+          </Grid>
+          <Box className={styles.tutorialsSection} pb={8}>
+            <Typography variant="h4" component="h2" className={styles.subtitle}>
+              {organization.name} {t("components.Organization.insights")}
+            </Typography>
+          </Box>
+          <Box className={styles.tutorialsSection} pb={8}>
+            <Typography variant="h4" component="h2" className={styles.subtitle}>
+              {t("common.tutorials")}
+            </Typography>
+            <TutorialsGallery />
+          </Box>
+        </Grid>
+      </Container>
+    </AbilityContext.Provider>
+  );
+};
 
-  const { isLoading, isSuccess, isError, data: organizationData } = useQuery<
-    IOrganization,
-    AxiosError
-  >([`orga`, organizationSlug], fetchOrga, {
-    enabled: !!organizationSlug,
-    onSuccess: (data) => {
-      subject("Organization", data);
-    },
-    onError: (data) => {
-      if (data?.response?.status == 404) {
-        router.push("/404");
-      }
-      if (data?.response?.status == 403) {
-        router.push("/");
-      }
-    },
-  });
+const OrganizationHome = () => {
+  const router = useRouter();
+  const {
+    organization,
+    isOrganizationLoading,
+    isOrganizationSuccess,
+    user,
+  } = useAppContext();
+  const { t } = useTranslation(["common"]);
 
   return (
-    <AppLayoutGeneral>
-      <AbilityContext.Provider
-        value={buildAbilityFor(organizationData?.current_user_role)}
-      >
-        <Container>
-          {isLoading && <FullPageSpinner />}
-          {isError && <FullPageSpinner />}
-          {isSuccess && (
-            <Grid
-              container
-              direction="column"
-              justify="flex-start"
-              alignItems="stretch"
-              spacing={4}
-            >
-              <Grid item xs={12}>
-                <OrganizationHeader />
-              </Grid>
-              <Grid container item spacing={4}>
-                <Can do="read" on="Teams">
-                  <Grid item xs={12} md={6}>
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      className={styles.subtitle}
-                    >
-                      {t("components.Organization.zones").toUpperCase()}
-                    </Typography>
-                    <Alert severity="warning">Work in progress</Alert>
-                  </Grid>
-                </Can>
-                <Can do="read" on="Members">
-                  <Grid item xs={12} md={6}>
-                    <Typography
-                      variant="h6"
-                      component="h2"
-                      className={styles.subtitle}
-                    >
-                      {t("components.Organization.members").toUpperCase()}
-                    </Typography>
-                    <Alert severity="warning">Work in progress</Alert>
-                  </Grid>
-                </Can>
-              </Grid>
-              <Box className={styles.tutorialsSection} pb={8}>
-                <Typography
-                  variant="h4"
-                  component="h2"
-                  className={styles.subtitle}
-                >
-                  {organizationData.name}{" "}
-                  {t("components.Organization.insights")}
-                </Typography>
-              </Box>
-              <Box className={styles.tutorialsSection} pb={8}>
-                <Typography
-                  variant="h4"
-                  component="h2"
-                  className={styles.subtitle}
-                >
-                  {t("common.tutorials")}
-                </Typography>
-                <TutorialsGallery />
-              </Box>
-            </Grid>
-          )}
-        </Container>
-      </AbilityContext.Provider>
+    <AppLayoutGeneral
+      isLoading={isOrganizationLoading}
+      skeleton={<FullPageSpinner />}
+    >
+      {(() => {
+        switch (true) {
+          // TODO : Error code and message should be send from AppContext
+          // ! On 403 error if visitor is not authenticated, one's shouold be redirected to Signin
+          // ! On 403 error if user is  authenticated, Unauthorized component soould be displayed
+          // @javi.ns : sorry i didn't have to more explicit code; maybe it will be clearer if we write a fn
+          // for each case
+          case organization && !isOrganizationSuccess:
+            return (
+              <CoreError
+                errorCode={404}
+                captionText="Error"
+                buttonText="button"
+              />
+            );
+          case !organization && !isOrganizationSuccess:
+            return (
+              <CoreError
+                errorCode={404}
+                captionText="Error"
+                buttonText="button"
+              />
+            );
+          case organization && isOrganizationSuccess:
+            return <OrganizationAuthorizedPage />;
+          default:
+            return <FullPageSpinner />;
+        }
+      })()}
     </AppLayoutGeneral>
   );
+
+  // return !organization ? (
+  //   <CoreError errorCode={404} captionText="Error" buttonText="button" />
+  // ) : (
+  //   <AppLayoutGeneral
+  //     isLoading={isOrganizationLoading}
+  //     skeleton={<FullPageSpinner />}
+  //   >
+  //     <AbilityContext.Provider
+  //       value={buildAbilityFor(organization?.current_user_role)}
+  //     >
+  //       <Container>
+  //         <Grid
+  //           container
+  //           direction="column"
+  //           justify="flex-start"
+  //           alignItems="stretch"
+  //           spacing={4}
+  //         >
+  //           <Grid item xs={12}>
+  //             <OrganizationHeader
+  //               organization={organization}
+  //               isOrganizationLoading={isOrganizationLoading}
+  //             />
+  //           </Grid>
+  //           <Grid container item spacing={4}>
+  //             <Can do="read" on="Teams">
+  //               <Grid item xs={12} md={6}>
+  //                 <Typography
+  //                   variant="h6"
+  //                   component="h2"
+  //                   className={styles.subtitle}
+  //                 >
+  //                   {t("components.Organization.zones").toUpperCase()}
+  //                 </Typography>
+  //                 <Alert severity="warning">Work in progress</Alert>
+  //               </Grid>
+  //             </Can>
+  //             <Can do="read" on="Members">
+  //               <Grid item xs={12} md={6}>
+  //                 <Typography
+  //                   variant="h6"
+  //                   component="h2"
+  //                   className={styles.subtitle}
+  //                 >
+  //                   {t("components.Organization.members").toUpperCase()}
+  //                 </Typography>
+  //                 <Alert severity="warning">Work in progress</Alert>
+  //               </Grid>
+  //             </Can>
+  //           </Grid>
+  //           <Box className={styles.tutorialsSection} pb={8}>
+  //             <Typography
+  //               variant="h4"
+  //               component="h2"
+  //               className={styles.subtitle}
+  //             >
+  //               {organization.name} {t("components.Organization.insights")}
+  //             </Typography>
+  //           </Box>
+  //           <Box className={styles.tutorialsSection} pb={8}>
+  //             <Typography
+  //               variant="h4"
+  //               component="h2"
+  //               className={styles.subtitle}
+  //             >
+  //               {t("common.tutorials")}
+  //             </Typography>
+  //             <TutorialsGallery />
+  //           </Box>
+  //         </Grid>
+  //       </Container>
+  //     </AbilityContext.Provider>
+  //   </AppLayoutGeneral>
+  // );
 };
 
 export default OrganizationHome;

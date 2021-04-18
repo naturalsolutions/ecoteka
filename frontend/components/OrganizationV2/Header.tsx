@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import cx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
@@ -11,13 +10,11 @@ import Button from "@material-ui/core/Button";
 import ShareIcon from "@material-ui/icons/Share";
 import VpnLockIcon from "@material-ui/icons/VpnLock";
 import PublicIcon from "@material-ui/icons/Public";
-import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import TextInfoContent from "@/components/Core/Content/TextInfo";
 import { formatDistance } from "date-fns";
 import { fr } from "date-fns/locale";
 import { StaticMap } from "react-map-gl";
 import DeckGL from "@deck.gl/react";
-import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import useApi from "@/lib/useApi";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
@@ -34,6 +31,7 @@ import { MVTLayer } from "@deck.gl/geo-layers";
 import { FlyToInterpolator } from "@deck.gl/core";
 import SvgIcon, { SvgIconProps } from "@material-ui/core/SvgIcon";
 import TreePath from "@/public/assets/icons/tree_detailled.svg";
+import { IOrganization } from "@/index";
 
 const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   root: {
@@ -159,14 +157,22 @@ const CardMap: React.FC = ({ children }) => {
   return <div className={styles.root}>{children}</div>;
 };
 
-const OrganizationHeader: React.FC = (props) => {
+export interface OrganizationHeader {
+  organization?: IOrganization;
+  isOrganizationLoading?: boolean;
+}
+
+const OrganizationHeader: React.FC<OrganizationHeader> = ({
+  organization,
+  isOrganizationLoading,
+}) => {
   const { publicRuntimeConfig } = getConfig();
   const { apiUrl } = publicRuntimeConfig;
   const styles = useStyles();
   const { button: buttonStyles, ...contentStyles } = useTextInfoContentStyles();
   const shadowStyles = useFloatShadowStyles();
   const graphicStyles = useGraphicBtnStyles();
-  const { organization, user } = useAppContext();
+  const { user } = useAppContext();
   const { apiETK } = useApi().api;
   const { t } = useTranslation(["common", "components"]);
   const { dark } = useThemeContext();
@@ -190,6 +196,9 @@ const OrganizationHeader: React.FC = (props) => {
     zoom: 4,
   };
   const fitToBounds = async (organizationId: number) => {
+    if (!organizationId) {
+      return;
+    }
     try {
       const { status, data: bbox } = await apiETK.get(`/maps/bbox`, {
         params: {
@@ -221,36 +230,48 @@ const OrganizationHeader: React.FC = (props) => {
   const treesLayer = new MVTLayer({
     id: "trees",
     data: `${apiUrl.replace("/api/v1", "")}/tiles/${
-      organization?.slug
+      organization?.id
     }/{z}/{x}/{y}.pbf?scope=${scope}&dt=${time}`,
     minZoom: 0,
     maxZoom: 12,
     getLineColor: [68, 132, 134, 128],
     getFillColor: [68, 132, 134, 128],
     lineWidthMinPixels: 1,
-    pointRadiusMinPixels: 2,
-    pointRadiusMaxPixels: 15,
+    pointRadiusMinPixels: 1,
+    pointRadiusMaxPixels: 1,
     pointRadiusScale: 2,
     minRadius: 10,
     radiusMinPixels: 0.5,
     uniqueIdProperty: "id",
   });
 
+  const formattedTimestamps = (dateTime) => {
+    try {
+      return `${t("common.Organization")} ${t(
+        "components.organization.updated"
+      )} ${formatDistance(new Date(organization.updated_at), new Date(), {
+        addSuffix: true,
+        locale: fr,
+      })}`;
+    } catch (e) {
+      return "...";
+    }
+  };
+
   useEffect(() => {
+    console.log(organization);
     setViewState({ ...initialViewState });
   }, []);
 
   useEffect(() => {
     setTime(Date.now());
-    fitToBounds(organization.id);
-    if (organization.mode == "private") {
-      setScope(`private&token=${token}`);
+    if (organization) {
+      fitToBounds(organization.id);
+      if (organization?.mode == "private") {
+        setScope(`private&token=${token}`);
+      }
     }
   }, [organization]);
-
-  if (!organization) {
-    return <FullPageSpinner />;
-  }
 
   if (organization) {
     return (
@@ -292,12 +313,7 @@ const OrganizationHeader: React.FC = (props) => {
             classes={contentStyles}
             overline={<OrganizationMode mode={organization.mode} />}
             heading={organization.name}
-            body={`${t("common.Organization")} ${t(
-              "components.organization.updated"
-            )} ${formatDistance(new Date(organization.updated_at), new Date(), {
-              addSuffix: true,
-              locale: fr,
-            })}`}
+            body={formattedTimestamps(organization.updated_at)}
           />
           <Grid
             container
@@ -391,6 +407,8 @@ const OrganizationHeader: React.FC = (props) => {
         </CardContent>
       </Card>
     );
+  } else {
+    return <div>...</div>;
   }
 };
 
