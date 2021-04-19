@@ -54,17 +54,21 @@ export const Provider = ({ children }) => {
 
   const fetchOrganization = async (organizationSlug: string) => {
     try {
-      const { data, status } = await apiETK.get(
-        `/organization/${organizationSlug}`,
-        {
-          params: {
-            mode: "by_slug",
-          },
-        }
-      );
+      if (!organizationSlug) {
+        setOrganization(undefined);
+      } else {
+        const { data, status } = await apiETK.get(
+          `/organization/${organizationSlug}`,
+          {
+            params: {
+              mode: "by_slug",
+            },
+          }
+        );
 
-      if (status === 200) {
-        setOrganization(data);
+        if (status === 200) {
+          setOrganization(data);
+        }
       }
     } catch ({ response }) {
       if (response) {
