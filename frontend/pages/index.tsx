@@ -8,7 +8,7 @@ import TutorialsGallery from "@/components/OrganizationV2/Tutorials";
 import DatasetsGallery from "@/components/Home/DatasetsGallery";
 import UserOrganizationGallery from "@/components/Home/UserOrganizationGallery";
 import CallToLogin from "@/components/Core/CallToActions/CallToLogin";
-import AddOrganization from "@/components/Core/CallToActions/AddOrganization";
+import AddOrganization from "@/components/Organization/Card/Add";
 import MapProvider from "@/components/Map/Provider";
 import OSMLayer from "@/components/Map/Layers/OSM";
 

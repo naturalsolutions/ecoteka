@@ -1,23 +1,17 @@
-import { useRouter } from "next/router";
-import { useQuery } from "react-query";
-import useApi from "@/lib/useApi";
-import { IOrganization } from "@/index";
-import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { AxiosError } from "axios";
 import FullPageSpinner from "@/components/Core/Feedback/FullPageSpinner";
 import { AbilityContext } from "@/components/Can";
 import { buildAbilityFor } from "@/abilities/genericOrganizationAbility";
-import { subject } from "@casl/ability";
-import React, { useEffect } from "react";
+import React from "react";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
-import OrgChart from "@/components/OrganizationV2/OrgChart";
-import MembersCard from "@/components/OrganizationV2/MembersCard";
 import OrganizationHeader from "@/components/OrganizationV2/Header";
 import TutorialsGallery from "@/components/OrganizationV2/Tutorials";
 import Can from "@/components/Can";
 import { Alert } from "@material-ui/lab";
+import { useAppContext } from "@/providers/AppContext";
+import { NextPage } from "next";
 
 const useStyles = makeStyles(({ spacing }) => ({
   avatar: {
@@ -33,46 +27,19 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-const OrganizationHome = () => {
+const OrganizationHomePage: NextPage = () => {
   const styles = useStyles();
-  const router = useRouter();
-  const { organizationSlug } = router.query;
-  const { apiETK } = useApi().api;
-  const { t } = useTranslation(["common"]);
-  const fetchOrga = async () => {
-    const { data } = await apiETK.get(
-      `/organization/${organizationSlug}?mode=by_slug`
-    );
-    return data;
-  };
-
-  const { isLoading, isSuccess, isError, data: organizationData } = useQuery<
-    IOrganization,
-    AxiosError
-  >([`orga`, organizationSlug], fetchOrga, {
-    enabled: !!organizationSlug,
-    onSuccess: (data) => {
-      subject("Organization", data);
-    },
-    onError: (data) => {
-      if (data?.response?.status == 404) {
-        router.push("/404");
-      }
-      if (data?.response?.status == 403) {
-        router.push("/");
-      }
-    },
-  });
+  const { t } = useTranslation();
+  const { organization } = useAppContext();
 
   return (
     <AppLayoutGeneral>
       <AbilityContext.Provider
-        value={buildAbilityFor(organizationData?.current_user_role)}
+        value={buildAbilityFor(organization?.current_user_role)}
       >
         <Container>
-          {isLoading && <FullPageSpinner />}
-          {isError && <FullPageSpinner />}
-          {isSuccess && (
+          {!organization && <FullPageSpinner />}
+          {organization && (
             <Grid
               container
               direction="column"
@@ -115,8 +82,7 @@ const OrganizationHome = () => {
                   component="h2"
                   className={styles.subtitle}
                 >
-                  {organizationData.name}{" "}
-                  {t("components.Organization.insights")}
+                  {organization.name} {t("components.Organization.insights")}
                 </Typography>
               </Box>
               <Box className={styles.tutorialsSection} pb={8}>
@@ -137,4 +103,4 @@ const OrganizationHome = () => {
   );
 };
 
-export default OrganizationHome;
+export default OrganizationHomePage;

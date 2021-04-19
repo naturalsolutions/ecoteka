@@ -14,19 +14,15 @@ import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import TextInfoContent from "@/components/Core/Content/TextInfo";
 import { formatDistance } from "date-fns";
 import { fr } from "date-fns/locale";
-import { StaticMap } from "react-map-gl";
-import DeckGL from "@deck.gl/react";
-import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
-import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
-import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useTranslation } from "react-i18next";
 import { useTextInfoContentStyles } from "@/styles/TextInfo";
 import { useFloatShadowStyles } from "@/styles/Shadow/float";
 import { useGraphicBtnStyles } from "@/styles/Button/graphic";
 import { useAppContext } from "@/providers/AppContext";
 import router from "next/router";
-import FullPageSpinner from "@/components/Core/Feedback/FullPageSpinner";
 import Can from "@/components/Can";
+import MapProvider from "@/components/Map/Provider";
+import OSMLayer from "@/components/Map/Layers/OSM";
 
 const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   root: {
@@ -90,6 +86,12 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     marginTop: 24,
     textTransform: "initial",
   },
+  map: {
+    [breakpoints.up("md")]: {
+      width: "50%",
+      marginLeft: "-20px",
+    },
+  },
 }));
 
 const useCardMapStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -109,6 +111,7 @@ const useCardMapStyles = makeStyles(({ breakpoints, spacing }) => ({
 const OrganizationMode: React.FC = ({ mode }) => {
   const { t } = useTranslation(["common", "components"]);
   let icon;
+
   switch (mode) {
     case "open":
       icon = <PublicIcon color="action" />;
@@ -122,6 +125,7 @@ const OrganizationMode: React.FC = ({ mode }) => {
     default:
       icon = <VpnLockIcon color="action" />;
   }
+
   return (
     <Grid
       container
@@ -136,51 +140,21 @@ const OrganizationMode: React.FC = ({ mode }) => {
   );
 };
 
-const CardMap: React.FC = ({ children }) => {
-  const styles = useCardMapStyles();
-  return <div className={styles.root}>{children}</div>;
-};
-
 const OrganizationHeader: React.FC = (props) => {
   const styles = useStyles();
   const { button: buttonStyles, ...contentStyles } = useTextInfoContentStyles();
   const shadowStyles = useFloatShadowStyles();
   const graphicStyles = useGraphicBtnStyles();
-
+  const osmLayer = OSMLayer(true);
   const { organization, user } = useAppContext();
   const { t } = useTranslation(["common", "components"]);
-  const { dark } = useThemeContext();
-  const [mapBackground, setMapbackground] = useLocalStorage(
-    "etk:map:mapBackground",
-    "map"
-  );
 
-  const defaultViewState = {
-    longitude: 2.54,
-    latitude: 46.7,
-    zoom: 5,
-  };
-  const [initialViewState, setInitialViewState] = useLocalStorage(
-    "etk:map:viewstate",
-    defaultViewState
-  );
-
-  if (!organization) {
-    return <FullPageSpinner />;
-  }
-
-  if (organization) {
-    return (
+  return (
+    organization && (
       <Card className={cx(styles.root, shadowStyles.root)}>
-        <CardMap>
-          <DeckGL viewState={defaultViewState} controller={true}>
-            <StaticMap
-              mapStyle={`/api/v1/maps/style?theme=${
-                dark ? "dark" : "light"
-              }&background=${mapBackground}`}
-            ></StaticMap>
-          </DeckGL>
-        </CardMap>
+        <Box className={styles.map}>
+          <MapProvider layers={[osmLayer]} borderRadius={10} height={300} />
+        </Box>
         <CardContent className={styles.content}>
           <Grid
             container
@@ -208,7 +182,6 @@ const OrganizationHeader: React.FC = (props) => {
             container
             spacing={2}
             direction="row"
-            justify="start"
             alignItems="center"
             className={styles.cta}
           >
@@ -219,7 +192,6 @@ const OrganizationHeader: React.FC = (props) => {
               container
               spacing={2}
               direction="row"
-              justify="start"
               alignItems="center"
             >
               <TreeIcon color="primary" />
@@ -234,7 +206,6 @@ const OrganizationHeader: React.FC = (props) => {
               container
               spacing={2}
               direction="row"
-              justify="start"
               alignItems="center"
             >
               <SupervisedUserCircleIcon color="primary" />
@@ -306,8 +277,8 @@ const OrganizationHeader: React.FC = (props) => {
           </Grid>
         </CardContent>
       </Card>
-    );
-  }
+    )
+  );
 };
 
 export default OrganizationHeader;

@@ -17,12 +17,6 @@ const useStyles = makeStyles(({ palette }) => ({
     transition: "0.4s",
     "&:hover": {
       transform: "translateY(-2px)",
-      "& $shadow": {
-        bottom: "-1.5rem",
-      },
-      "& $shadow2": {
-        bottom: "-2.5rem",
-      },
     },
     "&:before": {
       content: '""',

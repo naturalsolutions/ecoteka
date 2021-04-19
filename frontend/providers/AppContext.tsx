@@ -16,17 +16,6 @@ export const Provider = ({ children }) => {
   const router = useRouter();
   const { apiETK } = useApi().api;
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const validRoutes = [
-    "/",
-    "/index-legacy",
-    "/home",
-    "/signin",
-    "/forgot",
-    "/verify/[token]",
-    "/users/set_password",
-    "/404",
-    "/500",
-  ];
   const restrictedRoutes = ["/admin/organizations", "account"];
 
   // #HOTFIX: In the long terThis could be replace by useReducer hook to programatically interacts with current user state
@@ -54,26 +43,21 @@ export const Provider = ({ children }) => {
 
   const fetchOrganization = async (organizationSlug: string) => {
     try {
-      if (!organizationSlug) {
-        setOrganization(undefined);
-      } else {
-        const { data, status } = await apiETK.get(
-          `/organization/${organizationSlug}`,
-          {
-            params: {
-              mode: "by_slug",
-            },
-          }
-        );
-
-        if (status === 200) {
-          setOrganization(data);
+      setOrganization(undefined);
+      const { data, status } = await apiETK.get(
+        `/organization/${organizationSlug}`,
+        {
+          params: {
+            mode: "by_slug",
+          },
         }
+      );
+
+      if (status === 200) {
+        setOrganization(data);
       }
     } catch ({ response }) {
-      if (response) {
-        // enqueueSnackbar(`${response.statusText}`, { variant: "error" });
-      }
+      setOrganization(undefined);
     }
   };
 
