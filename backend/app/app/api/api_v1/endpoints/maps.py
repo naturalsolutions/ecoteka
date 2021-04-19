@@ -35,9 +35,8 @@ policies = {
 set_policies(policies)
 
 
-@router.get("/style/")
+@router.get("/style")
 def generate_style(
-    db: Session = Depends(get_db),
     theme: Optional[str] = "dark",
     background: Optional[str] = "map"
 ) -> Dict:

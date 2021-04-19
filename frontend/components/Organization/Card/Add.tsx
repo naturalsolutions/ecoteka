@@ -15,12 +15,6 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     transition: "0.4s",
     "&:hover": {
       transform: "translateY(-2px)",
-      "& $shadow": {
-        bottom: "-1.5rem",
-      },
-      "& $shadow2": {
-        bottom: "-2.5rem",
-      },
     },
     "&:before": {
       content: '""',
@@ -86,7 +80,7 @@ export interface AddOrganizationProps {
 }
 
 // TODO: Add fullscreen video player
-const AddOrganization: React.FC<AddOrganizationProps> = ({
+const OrganizationCardAdd: React.FC<AddOrganizationProps> = ({
   title,
   videoUrl,
   videoCapture,
@@ -111,9 +105,11 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
         </Box>
       </Box>
       <Box className={styles.caption} m={0} p={3} pt={2}>
-        {t("components.CallToActions.AddOrganization.title")}
+        <Typography color="textPrimary">
+          {t("components.CallToActions.AddOrganization.title")}
+        </Typography>
       </Box>
     </Card>
   );
 };
-export default AddOrganization;
+export default OrganizationCardAdd;
