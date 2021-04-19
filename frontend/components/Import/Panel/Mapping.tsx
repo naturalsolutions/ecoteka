@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import Geofile from "@/components/Geofile";
-import useTreeSchema from "@/components/TreeOld/Schema";
+import useTreeSchema from "@/components/Tree/Schema";
 import { useAppContext } from "@/providers/AppContext";
 import useApi from "@/lib/useApi";
 

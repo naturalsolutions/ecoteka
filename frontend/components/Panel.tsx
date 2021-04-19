@@ -22,7 +22,6 @@ const useStyles = makeStyles(() => ({
 const PanelPanels = {
   start: dynamic(() => import("@/components/Panel/Start/Index")),
   import: dynamic(() => import("@/components/Import/Panel/Index")),
-  newTree: dynamic(() => import("@/components/TreeOld/Form")),
   newIntervention: dynamic(() => import("@/components/Interventions/Form")),
 };
 
