@@ -175,7 +175,7 @@ const OrganizationHeader: React.FC = (props) => {
         <CardMap>
           <DeckGL viewState={defaultViewState} controller={true}>
             <StaticMap
-              mapStyle={`/api/v1/maps/style/?theme=${
+              mapStyle={`/api/v1/maps/style?theme=${
                 dark ? "dark" : "light"
               }&background=${mapBackground}`}
             ></StaticMap>

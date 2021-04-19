@@ -550,7 +550,7 @@ const EditionPage = ({}) => {
         onClick={handleOnMapClick}
       >
         <StaticMap
-          mapStyle={`/api/v1/maps/style/?theme=${
+          mapStyle={`/api/v1/maps/style?theme=${
             dark ? "dark" : "light"
           }&background=${mapBackground}`}
         ></StaticMap>
