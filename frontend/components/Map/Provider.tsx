@@ -21,7 +21,7 @@ export interface MapProviderProps {
   height?: number | string;
   borderRadius?: number;
   PaperProps?: PaperProps;
-  layers?: [];
+  layers?: any[];
 }
 
 export const useMapContext = () => useContext(MapContext);
@@ -42,7 +42,7 @@ const MapProvider: FC<MapProviderProps> = (props) => {
   const { children, layers: initialLayers = [], PaperProps } = props;
   const { theme } = useThemeContext();
   const classes = useStyles(props);
-  const [layers, setLayers] = useState<[]>(initialLayers);
+  const [layers, setLayers] = useState(initialLayers);
   const [baseLayer, setBaseLayer] = useState<BaseLayer>("map");
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
   const [mapStyle, setMapStyle] = useState<string>();
@@ -50,10 +50,6 @@ const MapProvider: FC<MapProviderProps> = (props) => {
   const handleOnViewStateChange = (e) => {
     setViewState(e.viewState);
   };
-
-  useEffect(() => {
-    setLayers(initialLayers);
-  }, [initialLayers]);
 
   useEffect(() => {
     setMapStyle(

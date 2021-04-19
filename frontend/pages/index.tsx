@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { NextPage } from "next";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
-import { Typography, Container, Box, Grid, Paper } from "@material-ui/core";
+import { Typography, Container, Box, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppContext } from "@/providers/AppContext";
 import TutorialsGallery from "@/components/OrganizationV2/Tutorials";
@@ -9,7 +9,7 @@ import DatasetsGallery from "@/components/Home/DatasetsGallery";
 import UserOrganizationGallery from "@/components/Home/UserOrganizationGallery";
 import CallToLogin from "@/components/Core/CallToActions/CallToLogin";
 import AddOrganization from "@/components/Core/CallToActions/AddOrganization";
-import MapProvider, { useMapContext } from "@/components/Map/Provider";
+import MapProvider from "@/components/Map/Provider";
 import OSMLayer from "@/components/Map/Layers/OSM";
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -22,19 +22,11 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-const Home: FC = () => {
+const HomePage: NextPage = () => {
   const styles = useStyles();
   const { user } = useAppContext();
   const { t } = useTranslation(["common", "components"]);
-  const [layers, setLayers] = useState<[]>();
-
-  useEffect(() => {
-    if (!layers?.length) {
-      const osmLayer = OSMLayer(true);
-
-      setLayers(osmLayer);
-    }
-  }, [layers]);
+  const osmLayer = OSMLayer(true);
 
   return (
     <AppLayoutGeneral>
@@ -43,7 +35,7 @@ const Home: FC = () => {
           {t("components.Home.title")}
         </Typography>
         <Box mt={4}>
-          <MapProvider layers={layers} borderRadius={20} height={300} />
+          <MapProvider layers={[osmLayer]} borderRadius={20} height={300} />
         </Box>
         <Typography
           variant="h6"
@@ -84,4 +76,4 @@ const Home: FC = () => {
   );
 };
 
-export default Home;
+export default HomePage;
