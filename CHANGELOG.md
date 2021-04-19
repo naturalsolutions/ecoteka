@@ -1,3 +1,23 @@
+# [0.9.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.8.2...v0.9.0) (2021-04-19)
+
+
+### Bug Fixes
+
+* check if organizationSlug exists ([ea09a30](https://gitlab.com/natural-solutions/ecoteka/commit/ea09a30ec220bde4aa6704cab82fd85e4b060cfd))
+* minor fix ([31683b8](https://gitlab.com/natural-solutions/ecoteka/commit/31683b83f6c10322326ba3cdac68f8c46025baa6))
+* removed / at the end of maps/style endpoint to standardize with the rest ([16307cc](https://gitlab.com/natural-solutions/ecoteka/commit/16307cc40e39f91eb76e48ea6c96b920bcd0aff4))
+
+
+### Features
+
+* add MapProvider component ([bb9ca7c](https://gitlab.com/natural-solutions/ecoteka/commit/bb9ca7cc2d89713b9cf3fe2172a746da71b136b7))
+* add OSMTrees on home page ([13f53ae](https://gitlab.com/natural-solutions/ecoteka/commit/13f53ae89576d1661a5b84c411f3bdb7a7eda23b))
+
+
+### Performance Improvements
+
+* improved osm layer rendering ([ca3dfa3](https://gitlab.com/natural-solutions/ecoteka/commit/ca3dfa38bb1bf2347f17bba0fc0b70806846dcd3))
+
 ## [0.8.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.8.1...v0.8.2) (2021-04-16)
 
 
