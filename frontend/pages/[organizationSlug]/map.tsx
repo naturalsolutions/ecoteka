@@ -35,7 +35,7 @@ import { FlyToInterpolator } from "@deck.gl/core";
 import DeckGL from "@deck.gl/react";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
-import OSMLayer from "@/components/Map/Layers/OSM.ts";
+import OSMLayer from "@/components/Map/Layers/OSM";
 import CadastreLayer from "@/components/Map/Layers/Cadastre.ts";
 import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import Head from "next/head";
