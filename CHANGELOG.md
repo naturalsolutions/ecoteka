@@ -1,3 +1,10 @@
+## [0.9.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.9.0...v0.9.1) (2021-04-20)
+
+
+### Bug Fixes
+
+* add title on home page ([d1cd168](https://gitlab.com/natural-solutions/ecoteka/commit/d1cd1688e8f40df6e11d49e42375806abe8cc5fc))
+
 # [0.9.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.8.2...v0.9.0) (2021-04-19)
 
 
