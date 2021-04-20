@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import AppLayoutGeneral from "@/components/AppLayout/General";
-import { useTranslation } from "react-i18next";
-import { Typography, Container, Box, Grid } from "@material-ui/core";
+import { Trans, useTranslation } from "react-i18next";
+import { Typography, Container, Box, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useAppContext } from "@/providers/AppContext";
 import TutorialsGallery from "@/components/OrganizationV2/Tutorials";
@@ -9,8 +9,7 @@ import DatasetsGallery from "@/components/Home/DatasetsGallery";
 import UserOrganizationGallery from "@/components/Home/UserOrganizationGallery";
 import CallToLogin from "@/components/Core/CallToActions/CallToLogin";
 import AddOrganization from "@/components/Organization/Card/Add";
-import MapProvider from "@/components/Map/Provider";
-import OSMLayer from "@/components/Map/Layers/OSM";
+import HomeHero from "@/components/Home/Hero";
 
 const useStyles = makeStyles(({ spacing }) => ({
   subtitle: {
@@ -26,17 +25,11 @@ const HomePage: NextPage = () => {
   const styles = useStyles();
   const { user } = useAppContext();
   const { t } = useTranslation(["common", "components"]);
-  const osmLayer = OSMLayer(true);
 
   return (
     <AppLayoutGeneral>
+      <HomeHero />
       <Container>
-        <Typography variant="h4" component="h1" color="textPrimary">
-          {t("components.Home.title")}
-        </Typography>
-        <Box mt={4}>
-          <MapProvider layers={[osmLayer]} borderRadius={20} height={300} />
-        </Box>
         <Typography
           variant="h6"
           component="h2"

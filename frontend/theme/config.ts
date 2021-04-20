@@ -61,7 +61,7 @@ const themes = {
       h3: {
         fontFamily: "Merriweather",
         fontWeight: 400,
-        fontSize: "3rem",
+        fontSize: 32,
         lineHeight: 1.167,
         letterSpacing: "0em",
       },
@@ -190,7 +190,7 @@ const themes = {
       h3: {
         fontFamily: "Merriweather",
         fontWeight: 400,
-        fontSize: "3rem",
+        fontSize: 32,
         lineHeight: 1.167,
         letterSpacing: "0em",
       },

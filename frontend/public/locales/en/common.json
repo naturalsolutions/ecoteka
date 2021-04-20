@@ -23,7 +23,8 @@
     "export": "Export",
     "import": "Import data",
     "moreDetails": "More info",
-    "viewAll": "View All"
+    "viewAll": "View All",
+    "search": "Search"
   },
   "errors": {
     "email": "Email address is invalid",

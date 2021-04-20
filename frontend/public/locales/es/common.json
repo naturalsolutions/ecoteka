@@ -24,7 +24,8 @@
     "import": "Importer vos données",
     "backToMap": "Volver al mapa",
     "moreDetails": "Más información",
-    "viewAll": "Ver todo"
+    "viewAll": "Ver todo",
+    "search": "Buscar"
   },
   "errors": {
     "email": "Correo electrónico no válido",
