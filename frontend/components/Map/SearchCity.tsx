@@ -1,7 +1,15 @@
-import { TextField, CircularProgress, makeStyles } from "@material-ui/core";
+import useApi from "@/lib/useApi";
+import {
+  TextField,
+  CircularProgress,
+  makeStyles,
+  InputAdornment,
+} from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { FlyToInterpolator } from "@deck.gl/core";
+import { useMapContext } from "@/components/Map/Provider";
 
 export interface MapSearchCityProps {
   className?: string;
@@ -28,6 +36,8 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
+  const { apiMeili } = useApi().api;
+  const { viewState, setViewState } = useMapContext();
 
   useEffect(() => {
     let active = true;
@@ -38,22 +48,30 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
     }
 
     (async () => {
-      setLoading(true);
-      const url = `https://geo.api.gouv.fr/communes?nom=${inputValue}&fields=nom,code,codesPostaux,codeDepartement,centre,codeRegion,population&format=json&geometry=centre`;
-      const response = await fetch(url);
-      const json = await response.json();
+      try {
+        setLoading(true);
+        const { data: json, status } = await apiMeili.get(
+          `/indexes/osmname/search`,
+          {
+            params: {
+              q: inputValue,
+              limit: 200,
+            },
+          }
+        );
 
-      if (active) {
-        const newOptions = json
-          .filter((item) => item.centre && item.centre.coordinates)
-          .sort((a, b) => {
-            return b.population - a.population;
+        if (active && status === 200) {
+          const newOptions = json.hits.sort((a, b) => {
+            return Number(b.importance) - Number(a.importance);
           });
 
-        setOptions(newOptions);
-      }
+          setOptions(newOptions);
+        }
 
-      setLoading(false);
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+      }
     })();
 
     return () => {
@@ -66,7 +84,18 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       setValue(newValue);
 
       if (props.onChange) {
-        props.onChange(newValue?.centre?.coordinates);
+        props.onChange([newValue.lon, newValue.lat]);
+      }
+
+      if (setViewState) {
+        setViewState({
+          ...viewState,
+          longitude: newValue.lon,
+          latitude: newValue.lat,
+          zoom: 12,
+          transitionDuration: 1500,
+          transitionInterpolator: new FlyToInterpolator(),
+        });
       }
     }
   };
@@ -76,7 +105,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       freeSolo
       className={props.className}
       options={options}
-      getOptionLabel={(option) => option.nom}
+      getOptionLabel={(option) => option.name}
       loading={loading}
       value={value}
       style={props.style}
@@ -89,18 +118,18 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
         <TextField
           {...params}
           value={value}
-          label={t("components.Map.SearchCity.label")}
+          label="Explorer les arbres d’une ville ..."
           variant="outlined"
           InputProps={{
             ...params.InputProps,
             className: classes.root,
             endAdornment: (
-              <Fragment>
+              <InputAdornment position="end">
                 {loading ? (
                   <CircularProgress color="inherit" size={20} />
                 ) : null}
                 {params.InputProps.endAdornment}
-              </Fragment>
+              </InputAdornment>
             ),
           }}
         />
