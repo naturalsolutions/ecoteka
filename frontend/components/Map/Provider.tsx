@@ -58,7 +58,16 @@ const MapProvider: FC<MapProviderProps> = (props) => {
   }, [theme.palette.type]);
 
   return (
-    <MapContext.Provider value={{ baseLayer, setBaseLayer, layers, setLayers }}>
+    <MapContext.Provider
+      value={{
+        baseLayer,
+        setBaseLayer,
+        layers,
+        setLayers,
+        viewState,
+        setViewState,
+      }}
+    >
       <Paper className={classes.root} {...PaperProps}>
         <DeckGL
           layers={layers}
