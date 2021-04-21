@@ -46,7 +46,7 @@ class Organization(Base):
     mode = Column(
         Enum(schemas.OrganizationMode, values_callable=lambda obj: [e.value for e in obj]),
         nullable=False,
-        default=schemas.OrganizationMode.PRIVATE.value,
+        server_default=schemas.OrganizationMode.OPEN.value
     )
     working_area = Column(Geometry("MULTIPOLYGON"), nullable=True)
     boundary = Column(Geometry(geometry_type='MULTIPOLYGON', srid=4326), nullable=True)
