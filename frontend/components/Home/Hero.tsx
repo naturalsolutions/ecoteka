@@ -31,7 +31,6 @@ const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
     position: "relative",
   },
   paper: {
-    display: (props) => (props.coords ? "none" : "block"),
     position: "absolute",
     top: 20,
     left: 20,
@@ -45,6 +44,9 @@ const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
       right: 0,
       padding: "30px 40px",
     },
+  },
+  founded: {
+    display: (props) => (props.coords ? "none" : "block"),
   },
 }));
 
@@ -67,7 +69,7 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
       >
         <Paper className={classes.paper}>
           <Grid container direction="column" alignItems="stretch">
-            <Grid item>
+            <Grid item className={classes.founded}>
               <Typography
                 variant="h3"
                 component="h1"
@@ -77,7 +79,7 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
                 <Trans>{t("components.Home.title")}</Trans>
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item className={classes.founded}>
               <Box mt={4} />
             </Grid>
             <Grid item>
