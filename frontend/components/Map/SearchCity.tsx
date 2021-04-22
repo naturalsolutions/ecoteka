@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { useMapContext } from "@/components/Map/Provider";
+import SearchIcon from "@material-ui/icons/Search";
 
 export interface MapSearchCityProps {
   className?: string;
@@ -61,9 +62,9 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
         );
 
         if (active && status === 200) {
-          const newOptions = json.hits.sort((a, b) => {
-            return Number(b.importance) - Number(a.importance);
-          });
+          const newOptions = json.hits.sort(
+            (a, b) => b.importance - a.importance
+          );
 
           setOptions(newOptions);
         }
@@ -118,11 +119,16 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
         <TextField
           {...params}
           value={value}
-          label="Explorer les arbres d’une ville ..."
+          placeholder="Explorer les arbres d’une ville ..."
           variant="outlined"
           InputProps={{
             ...params.InputProps,
             className: classes.root,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
             endAdornment: (
               <InputAdornment position="end">
                 {loading ? (

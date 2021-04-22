@@ -41,8 +41,9 @@ const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
       margin: "0 auto",
       left: 0,
       width: "50%",
+      maxWidth: 780,
       right: 0,
-      padding: "40px 80px",
+      padding: "30px 40px",
     },
   },
 }));
