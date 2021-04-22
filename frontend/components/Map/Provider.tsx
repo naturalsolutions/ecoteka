@@ -69,6 +69,7 @@ const MapProvider: FC<MapProviderProps> = (props) => {
       }}
     >
       <Paper className={classes.root} {...PaperProps}>
+        {/* @ts-ignore */}
         <DeckGL
           layers={layers}
           viewState={viewState}

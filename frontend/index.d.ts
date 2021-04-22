@@ -1,4 +1,5 @@
 export type TOrganizationMode = "private" | "open" | "participatory";
+
 export interface IOrganization {
   id: number;
   name: string;
