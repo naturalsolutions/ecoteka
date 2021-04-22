@@ -1,3 +1,15 @@
+# [0.10.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.9.1...v0.10.0) (2021-04-22)
+
+
+### Bug Fixes
+
+* sort by importance ([91c2d8c](https://gitlab.com/natural-solutions/ecoteka/commit/91c2d8c10c485619d66f31b5377920db628af773))
+
+
+### Features
+
+* search all osm administrative nodes ([2593429](https://gitlab.com/natural-solutions/ecoteka/commit/25934296f36c31e4c003f2bd1d06ad637a833a64))
+
 ## [0.9.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.9.0...v0.9.1) (2021-04-20)
 
 
