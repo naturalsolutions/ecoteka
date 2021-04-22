@@ -1,3 +1,10 @@
+## [0.10.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.10.0...v0.10.1) (2021-04-22)
+
+
+### Bug Fixes
+
+* keep search toolbar ([989cb4f](https://gitlab.com/natural-solutions/ecoteka/commit/989cb4fed7a39e4f82c4085099ac2a449d884c98))
+
 # [0.10.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.9.1...v0.10.0) (2021-04-22)
 
 
