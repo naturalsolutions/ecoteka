@@ -5,6 +5,7 @@ import { makeStyles, CardMedia, Container } from "@material-ui/core";
 import HomeHero from "@/components/Home/Hero";
 import SectionContainer from "@/components/Core/Section/Container";
 import SectionItem from "@/components/Core/Section/Item";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   demos: {
@@ -34,6 +35,7 @@ const demos = [
 const HomePage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
+  const router = useRouter();
 
   return (
     <AppLayoutGeneral>
@@ -46,7 +48,9 @@ const HomePage: NextPage = () => {
               <SectionItem
                 key={demo.title}
                 title={demo.title}
-                subtitle={`${demo.trees} ${t("common.trees")}`}
+                subtitle={`${Number(demo.trees).toLocaleString(
+                  router.locale
+                )} ${t("common.trees")}`}
                 href={`/${demo.slug}`}
               >
                 <CardMedia

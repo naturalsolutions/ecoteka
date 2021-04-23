@@ -73,7 +73,7 @@ export const Provider = ({ children }) => {
   }, [router.query?.organizationSlug]);
 
   useEffect(() => {
-    if (restrictedRoutes.includes(router.route) && !user) {
+    if (!user && restrictedRoutes?.includes(router.route)) {
       router.push("/");
     }
   }, [user]);
