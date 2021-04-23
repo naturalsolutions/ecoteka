@@ -171,12 +171,7 @@ const OrganizationHeader: React.FC = (props) => {
             classes={contentStyles}
             overline={<OrganizationMode mode={organization.mode} />}
             heading={organization.name}
-            body={`${t("common.Organization")} ${t(
-              "components.organization.updated"
-            )} ${formatDistance(new Date(organization.updated_at), new Date(), {
-              addSuffix: true,
-              locale: fr,
-            })}`}
+            body={``}
           />
           <Grid
             container

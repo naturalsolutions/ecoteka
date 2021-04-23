@@ -1,8 +1,16 @@
-import { Theme, Color, ThemeOptions } from "@material-ui/core";
-import { Palette } from "@material-ui/core/styles/createPalette";
+import { Theme } from "@material-ui/core";
+import {
+  Palette,
+  TypeBackground,
+} from "@material-ui/core/styles/createPalette";
+
+export interface EcotekaTypeBackground extends TypeBackground {
+  dark: string;
+}
 
 export interface EcotekaPalette extends Palette {
   toolbar: string;
+  background: EcotekaTypeBackground;
 }
 
 export interface EcotekaTheme extends Theme {
@@ -16,6 +24,7 @@ const themes = {
       background: {
         default: "#fbfdfe",
         paper: "#fff",
+        dark: "#384145",
       },
       text: {
         primary: "#000",
@@ -95,10 +104,11 @@ const themes = {
       },
       subtitle2: {
         fontFamily: "Inter",
-        fontWeight: 500,
+        fontWeight: 700,
         fontSize: "0.875rem",
         lineHeight: 1.57,
         letterSpacing: "0.00714em",
+        textTransform: "uppercase",
       },
       body1: {
         fontFamily: "Inter",
@@ -145,6 +155,7 @@ const themes = {
       background: {
         default: "#384145",
         paper: "#424242",
+        dark: "#384145",
       },
       text: {
         primary: "#fff",
@@ -224,10 +235,11 @@ const themes = {
       },
       subtitle2: {
         fontFamily: "Inter",
-        fontWeight: 500,
+        fontWeight: 700,
         fontSize: "0.875rem",
         lineHeight: 1.57,
         letterSpacing: "0.00714em",
+        textTransform: "uppercase",
       },
       body1: {
         fontFamily: "Inter",
@@ -270,6 +282,6 @@ const themes = {
   },
 };
 
-export default function getTheme(type) {
+export default function getTheme(type: string) {
   return themes[type];
 }

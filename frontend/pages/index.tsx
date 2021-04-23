@@ -1,70 +1,64 @@
 import { NextPage } from "next";
 import AppLayoutGeneral from "@/components/AppLayout/General";
-import { Trans, useTranslation } from "react-i18next";
-import { Typography, Container, Box, Grid, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { useAppContext } from "@/providers/AppContext";
-import TutorialsGallery from "@/components/OrganizationV2/Tutorials";
-import DatasetsGallery from "@/components/Home/DatasetsGallery";
-import UserOrganizationGallery from "@/components/Home/UserOrganizationGallery";
-import CallToLogin from "@/components/Core/CallToActions/CallToLogin";
-import AddOrganization from "@/components/Organization/Card/Add";
+import { useTranslation } from "react-i18next";
+import { makeStyles, CardMedia, Container } from "@material-ui/core";
 import HomeHero from "@/components/Home/Hero";
+import SectionContainer from "@/components/Core/Section/Container";
+import SectionItem from "@/components/Core/Section/Item";
 
-const useStyles = makeStyles(({ spacing }) => ({
-  subtitle: {
-    marginTop: spacing(8),
-    marginBottom: spacing(3),
-  },
-  tutorialsSection: {
-    minHeight: "300px",
+const useStyles = makeStyles((theme) => ({
+  demos: {
+    marginTop: 30,
+    [theme.breakpoints.up("md")]: {
+      marginTop: 80,
+    },
   },
 }));
 
+const demos = [
+  { title: "Paris", trees: 205034, slug: "paris", osm_id: "7444" },
+  {
+    title: "Londres",
+    trees: 880021,
+    slug: "london",
+    osm_id: "65606",
+  },
+  {
+    title: "New York",
+    trees: 592130,
+    slug: "new_york",
+    osm_id: "175905",
+  },
+];
+
 const HomePage: NextPage = () => {
-  const styles = useStyles();
-  const { user } = useAppContext();
+  const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
 
   return (
     <AppLayoutGeneral>
       <HomeHero />
-      <Container>
-        <Typography
-          variant="h6"
-          component="h2"
-          className={styles.subtitle}
-          color="textPrimary"
-        >
-          {t("components.Home.myOrganizations")}
-        </Typography>
-        {!user && <CallToLogin variant="wide" />}
-        {user && (
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={3}>
-              <AddOrganization />
-            </Grid>
-            <UserOrganizationGallery variant="insideGrid" />
-          </Grid>
-        )}
-        <Box className={styles.tutorialsSection}>
-          <Typography
-            variant="h6"
-            component="h2"
-            className={styles.subtitle}
-            color="textPrimary"
-          >
-            {t("components.Home.exploreSampleDatasets")}
-          </Typography>
-          <DatasetsGallery />
-        </Box>
-        <Box className={styles.tutorialsSection} pb={8}>
-          <Typography variant="h6" component="h2" className={styles.subtitle}>
-            {t("common.tutorials")}
-          </Typography>
-          <TutorialsGallery />
-        </Box>
-      </Container>
+
+      <div className={classes.demos}>
+        <Container>
+          <SectionContainer title={t("common.demos")}>
+            {demos.map((demo) => (
+              <SectionItem
+                key={demo.title}
+                title={demo.title}
+                subtitle={`${demo.trees} ${t("common.trees")}`}
+                href={`/${demo.slug}`}
+              >
+                <CardMedia
+                  component="img"
+                  image={`/osm_thumbnails/thumbnail/${demo.osm_id}?width=345&height=183&padding=30`}
+                  title={demo.title}
+                />
+              </SectionItem>
+            ))}
+          </SectionContainer>
+        </Container>
+      </div>
     </AppLayoutGeneral>
   );
 };

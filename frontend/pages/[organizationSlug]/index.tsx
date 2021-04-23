@@ -38,7 +38,6 @@ const OrganizationHomePage: NextPage = () => {
         value={buildAbilityFor(organization?.current_user_role)}
       >
         <Container>
-          {!organization && <FullPageSpinner />}
           {organization && (
             <Grid
               container

@@ -80,5 +80,6 @@
   "participatory": "participatory",
   "trees": "trees",
   "members": "members",
-  "loadingMapillary": "Loading from Mapillary..."
+  "loadingMapillary": "Loading from Mapillary...",
+  "demos": "Demos"
 }
