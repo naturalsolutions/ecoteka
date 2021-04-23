@@ -1,3 +1,15 @@
+# [0.11.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.10.1...v0.11.0) (2021-04-23)
+
+
+### Bug Fixes
+
+* add demos on home pages ([94f1546](https://gitlab.com/natural-solutions/ecoteka/commit/94f1546aed96ea286f280238f24d92472738939a))
+
+
+### Features
+
+* add ecoteka osm thumbnails ([285e7dd](https://gitlab.com/natural-solutions/ecoteka/commit/285e7dd72751405b4498931241cfbe2ac3bdab87))
+
 ## [0.10.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.10.0...v0.10.1) (2021-04-22)
 
 
