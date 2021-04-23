@@ -102,6 +102,14 @@ services:
       - traefik.http.routers.frontend.rule=Host(`${NS_ECOTEKA_STUDIO_DOMAIN_NAME}`) && PathPrefix(`/`)
       - traefik.http.services.frontend.loadbalancer.server.port=3000
 
+  osm_thumbnails:
+    image: ${NS_ECOTEKA_OSM_THUMBNAILS_IMAGE}
+    labels:
+      - traefik.http.routers.osm_thumbnails.entrypoints=websecure
+      - traefik.http.routers.osm_thumbnails.tls=true
+      - traefik.http.routers.osm_thumbnails.rule=Host(`${NS_ECOTEKA_STUDIO_DOMAIN_NAME}`) && PathPrefix(`/osm_thumbnails`)
+      - traefik.http.services.osm_thumbnails.loadbalancer.server.port=3000
+
   tile_server:
     labels:
       - traefik.http.routers.tile_server.entrypoints=websecure

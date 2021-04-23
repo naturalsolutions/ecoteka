@@ -159,6 +159,17 @@ services:
       - traefik.http.routers.landing_page.middlewares=landing_page-stripprefix
       - traefik.http.middlewares.landing_page-stripprefix.stripprefix.prefixes=/lp
 
+  osm_thumbnails:
+    image: ${NS_ECOTEKA_OSM_THUMBNAILS_IMAGE}
+    restart: always
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.osm_thumbnails.rule=PathPrefix(`/osm_thumbnails`)
+      - traefik.http.routers.osm_thumbnails.middlewares=osm_thumbnails-stripprefix
+      - traefik.http.middlewares.osm_thumbnails-stripprefix.stripprefix.prefixes=/osm_thumbnails
+
   tile_server:
     restart: always
     image: ${NS_ECOTEKA_TILE_SERVER_IMAGE}
