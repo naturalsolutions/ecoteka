@@ -1,3 +1,19 @@
+# [0.12.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.11.0...v0.12.0) (2021-04-28)
+
+
+### Bug Fixes
+
+* **frontend:** add python3 to Dockerfile ([638e547](https://gitlab.com/natural-solutions/ecoteka/commit/638e547ce7be8b84dbfe5e569edf21d6e2e661a8))
+* **frontend:** enhance homepage OSM names search ([832e2a1](https://gitlab.com/natural-solutions/ecoteka/commit/832e2a1bb88d9250981753e56e669178b93caa06))
+* **frontend:** remove console.log ([fbbdaad](https://gitlab.com/natural-solutions/ecoteka/commit/fbbdaad126a574a0aabbfe1e56839903a47141db))
+* clean code ([28649fa](https://gitlab.com/natural-solutions/ecoteka/commit/28649fa19517387069704ca38d7998364e0be2f3))
+* **frontend:** unable to select python package for alpinelinux 3.13 ([9d3e216](https://gitlab.com/natural-solutions/ecoteka/commit/9d3e2161e91e7924a8a1f80c6bb7dd5e79bae0f9))
+
+
+### Features
+
+* add newsletter component ([0f60ea2](https://gitlab.com/natural-solutions/ecoteka/commit/0f60ea21c7a278b6bbb7448c1dc7e928254cea34))
+
 # [0.11.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.10.1...v0.11.0) (2021-04-23)
 
 
