@@ -73,8 +73,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
         );
 
         if (active && status === 200) {
-          const newOptions = json.hits.sort(getSortOrder("country"));
-          setOptions(newOptions);
+          setOptions(json.hits);
         }
 
         setLoading(false);
@@ -114,8 +113,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       freeSolo
       className={props.className}
       options={options}
-      getOptionLabel={(option) => `${option.name}`}
-      groupBy={(option) => option.country}
+      getOptionLabel={(option) => `${option.name}, ${option.country}`}
       filterOptions={(x) => x}
       loading={loading}
       value={value}
