@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { makeStyles, Container, Grid, Button, Link } from "@material-ui/core";
+import { makeStyles, Container, Grid, Link } from "@material-ui/core";
 import { List } from "@material-ui/core";
 import { ListItem } from "@material-ui/core";
 import { EcotekaTheme } from "@/theme/config";
+import NewsletterButton from "../NewsletterButton";
 
 const useStyles = makeStyles((theme: EcotekaTheme) => ({
   root: {
@@ -64,9 +65,7 @@ const LayoutFooter: FC = () => {
           <Grid item xs={12} md={4}>
             <List>
               <ListItem>
-                <Button color="primary" variant="outlined">
-                  {"s\u0027inscrire a la newsletter"}
-                </Button>
+                <NewsletterButton />
               </ListItem>
             </List>
           </Grid>
