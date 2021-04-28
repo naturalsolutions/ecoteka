@@ -20,6 +20,24 @@ def init_osmname(db: Session) -> None:
     nbRows = db.execute("SELECT COUNT(*) FROM osmname").scalar()
     offset = 0
     limit = 100
+
+    index.update_searchable_attributes([
+        'name',
+        'alternative_names',
+        'country',
+        'state'
+    ])
+    index.update_ranking_rules([
+        'typo',
+        'words',
+        'proximity',
+        'attribute',
+        'wordsPosition',
+        'exactness',
+        'desc(importance)',
+        'asc(place_rank)'
+    ])
+
     while offset < nbRows:
         rows = db.execute(f'SELECT json_agg(o) FROM (select * from osmname limit {limit} offset {offset}) as o')
         res = rows.first()
