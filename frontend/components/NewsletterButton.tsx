@@ -1,27 +1,11 @@
 import { FC } from "react";
-import {
-  Button,
-  makeStyles,
-  Theme,
-  Dialog,
-  DialogContent,
-  useMediaQuery,
-  useTheme,
-  DialogTitle,
-} from "@material-ui/core";
+import { Button, Dialog, DialogContent } from "@material-ui/core";
 import { useState } from "react";
 import Head from "next/head";
 
 export interface NewsletterButtonProps {}
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {},
-}));
-
 const NewsletterButton: FC<NewsletterButtonProps> = ({}) => {
-  const classes = useStyles();
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const handleFormNewsletter = () => {
