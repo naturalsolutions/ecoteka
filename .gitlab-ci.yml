@@ -1,31 +1,31 @@
 stages:
-  - test
+  #- test
   - build_base
   - build
   - clean
   - deploy
   - release
 
-test_backend:
-  stage: test
-  before_script:
-    - docker network create traefik
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker run --rm -v $(pwd):/data vikingco/jinja2cli .env.example > .env
-  script:
-    - ./scripts/test-local.sh
-  after_script:
-    - docker-compose down -v --remove-orphans
-    - docker network rm traefik
-    - cd ..
-    - sudo rm -rf ecoteka*
-  only:
-    refs:
-      - branches
-    changes:
-      - backend/**/*
-  tags:
-    - ns01
+#test_backend:
+#  stage: test
+#  before_script:
+#    - docker network create traefik
+#    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+#    - docker run --rm -v $(pwd):/data vikingco/jinja2cli .env.example > .env
+#  script:
+#    - ./scripts/test-local.sh
+#  after_script:
+#    - docker-compose down -v --remove-orphans
+#    - docker network rm traefik
+#    - cd ..
+#    - sudo rm -rf ecoteka*
+#  only:
+#    refs:
+#      - branches
+#    changes:
+#      - backend/**/*
+#  tags:
+#    - ns01
 
 build_frontend:
   stage: build
