@@ -73,7 +73,6 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
         );
 
         if (active && status === 200) {
-          console.log(json.hits);
           const newOptions = json.hits.sort(getSortOrder("country"));
           setOptions(newOptions);
         }
