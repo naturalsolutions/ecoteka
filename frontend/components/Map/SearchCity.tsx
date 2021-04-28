@@ -114,7 +114,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       freeSolo
       className={props.className}
       options={options}
-      getOptionLabel={(option) => option.display_name}
+      getOptionLabel={(option) => `${option.name}`}
       groupBy={(option) => option.country}
       filterOptions={(x) => x}
       loading={loading}
