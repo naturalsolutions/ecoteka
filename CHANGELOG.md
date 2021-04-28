@@ -1,3 +1,10 @@
+## [0.12.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.0...v0.12.1) (2021-04-28)
+
+
+### Bug Fixes
+
+* remove treehealthassessment ([7fba718](https://gitlab.com/natural-solutions/ecoteka/commit/7fba718b16b08048eeff47989fce5dbb2a08e253))
+
 # [0.12.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.11.0...v0.12.0) (2021-04-28)
 
 
