@@ -1,7 +1,7 @@
 FROM node:alpine
 
 RUN \
-  apk add --no-cache python make g++ && \
+  apk add --no-cache python3 make g++ && \
   apk add vips-dev fftw-dev --update-cache \
   --repository http://dl-3.alpinelinux.org/alpine/edge/community \
   --repository http://dl-3.alpinelinux.org/alpine/edge/main \
