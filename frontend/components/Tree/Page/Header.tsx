@@ -51,20 +51,13 @@ const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ onChange }) => {
   };
 
   const handleOnAction = async () => {
-    const newMode = mode === "read" ? "write" : "read";
-
-    if (newMode === "read") {
-      try {
-        setSaving(true);
-        await onSave();
-      } catch (e) {
-      } finally {
-        setSaving(false);
-      }
+    try {
+      setSaving(true);
+      await onSave();
+    } catch (e) {
+    } finally {
+      setSaving(false);
     }
-
-    setMode(newMode);
-    onChange(newMode);
   };
 
   return (
@@ -82,8 +75,11 @@ const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ onChange }) => {
           color="primary"
           onClick={handleOnAction}
         >
-          {mode === "read" ? t("common.edit") : t("common.save")}
-          {saving && <CircularProgress color="inherit" size={20} />}
+          {saving ? (
+            <CircularProgress color="inherit" size={20} />
+          ) : (
+            t("common.save")
+          )}
         </Button>
       </Grid>
     </Grid>

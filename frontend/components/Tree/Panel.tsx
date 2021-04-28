@@ -66,9 +66,6 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
               <TreeInterventions />
             </Grid>
             <Grid item>
-              <TreeHealthAssessment />
-            </Grid>
-            <Grid item>
               <Button
                 size="large"
                 fullWidth

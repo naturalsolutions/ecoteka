@@ -46,7 +46,7 @@ const TreePage: React.FC<ITreePageProps> = ({}) => {
                       <TreeImagesContainer variant="page" />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TreeBasicForm readOnly={readOnly} />
+                      <TreeBasicForm readOnly={false} />
                     </Grid>
                   </Grid>
                 </Paper>
@@ -54,11 +54,8 @@ const TreePage: React.FC<ITreePageProps> = ({}) => {
               <Grid item xs={12} sm={6}>
                 <TreeInterventions />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TreeHealthAssessment />
-              </Grid>
               <Grid item xs={12}>
-                <TreeForm readOnly={readOnly} />
+                <TreeForm readOnly={false} />
               </Grid>
               <Grid item>
                 <Box my={4} />
