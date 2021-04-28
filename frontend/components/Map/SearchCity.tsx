@@ -40,6 +40,17 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   const { apiMeili } = useApi().api;
   const { viewState, setViewState } = useMapContext();
 
+  const getSortOrder = (prop) => {
+    return function (a, b) {
+      if (a[prop] > b[prop]) {
+        return 1;
+      } else if (a[prop] < b[prop]) {
+        return -1;
+      }
+      return 0;
+    };
+  };
+
   useEffect(() => {
     let active = true;
 
@@ -62,10 +73,8 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
         );
 
         if (active && status === 200) {
-          const newOptions = json.hits.sort(
-            (a, b) => b.importance - a.importance
-          );
-
+          console.log(json.hits);
+          const newOptions = json.hits.sort(getSortOrder("country"));
           setOptions(newOptions);
         }
 
@@ -106,7 +115,9 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       freeSolo
       className={props.className}
       options={options}
-      getOptionLabel={(option) => option.name}
+      getOptionLabel={(option) => option.display_name}
+      groupBy={(option) => option.country}
+      filterOptions={(x) => x}
       loading={loading}
       value={value}
       style={props.style}
@@ -118,7 +129,6 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          value={value}
           placeholder="Explorer les arbres d’une ville ..."
           variant="outlined"
           InputProps={{
