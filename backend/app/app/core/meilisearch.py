@@ -34,8 +34,8 @@ def init_osmname(db: Session) -> None:
         'attribute',
         'wordsPosition',
         'exactness',
-        'asc(place_rank)',
-        'desc(importance)'
+        'desc(importance)',
+        'asc(place_rank)'
     ])
 
     while offset < nbRows:
