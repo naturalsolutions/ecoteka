@@ -108,5 +108,9 @@ def create_organization_root_node(
         )
         enforcer.load_policy()
     current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(new_organization_root_node.id))
-    new_organization_root_node.current_user_role = current_roles[0]
+    if len(current_roles) > 0:
+        new_organization_root_node.current_user_role = current_roles[0]
+    if current_user.is_superuser:
+        new_organization_root_node.current_user_role = 'admin'
+    # new_organization_root_node.current_user_role = current_roles[0]
     return new_organization_root_node
