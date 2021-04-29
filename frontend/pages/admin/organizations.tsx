@@ -48,10 +48,8 @@ const AdminOrganizations = () => {
 
   const addOrganization = async (isNew) => {
     const response = await formOrgaRootRef.current.submit();
-    console.log(response);
     if (response.status === 200) {
       dialog.current.close();
-      console.log(response.data);
       queryClient.invalidateQueries("RootOrganizations");
     }
   };
@@ -140,6 +138,8 @@ const AdminOrganizations = () => {
                           ownerEmail={organization.current_user_role}
                           slug={organization.slug}
                           name={organization.name}
+                          thumbnail={`https://studiodev.ecoteka.org/osm_thumbnails/thumbnail/${organization.osm_id}?width=345&height=230&padding=30`}
+                          isPrivate={organization.mode == "private"}
                         />
                       </Grid>
                     );
