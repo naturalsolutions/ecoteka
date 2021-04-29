@@ -1,3 +1,13 @@
+## [0.12.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.1...v0.12.2) (2021-04-29)
+
+
+### Bug Fixes
+
+* alter table organization slug and path no more required ([7683ee7](https://gitlab.com/natural-solutions/ecoteka/commit/7683ee7dd499e0eca8515b2770b3ba6d5cbae13d))
+* create_organization_root_node issue with casbin ([564dac1](https://gitlab.com/natural-solutions/ecoteka/commit/564dac1c1fd0bdf30b293c514bd3207be27b208e))
+* organization are now created in 2 step path and slug depend on id ([e26b676](https://gitlab.com/natural-solutions/ecoteka/commit/e26b676148aa11dcff90597f83c8cd29cae09cee))
+* remove reference to the sequence in organization ([88e84e3](https://gitlab.com/natural-solutions/ecoteka/commit/88e84e3152ffaa129bb37162b7ccc0e12c684f0e))
+
 ## [0.12.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.0...v0.12.1) (2021-04-28)
 
 
