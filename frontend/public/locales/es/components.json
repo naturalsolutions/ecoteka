@@ -587,7 +587,22 @@
     "members": "miembros",
     "zones": "Distritos y unidades de paisaje",
     "mapEditor": "Editor de mapas",
-    "mapExplorer": "Explorador de mapas"
+    "mapExplorer": "Explorador de mapas",
+    "osmname": {
+      "label": "OSM Name",
+      "placeholder": "Select OSM name",
+      "helperText": "OSM Name"
+    },
+    "osmId": {
+      "label": "OSM ID",
+      "placeholder": "OSM ID",
+      "helperText": "OSM ID"
+    },
+    "osmType": {
+      "label": "Tipo de OSM",
+      "placeholder": "relation, node",
+      "helperText": "Tipo de OSM"
+    }
   },
   "Dashboard": {
     "title": "Panel de control",
@@ -665,5 +680,8 @@
   },
   "TreeInterventions": {
     "title": "Intervenciones"
+  },
+  "SearchPlace": {
+    "placeholder": "Seleccione un lugar de OSM"
   }
 }

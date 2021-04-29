@@ -5,15 +5,17 @@ import React, { useEffect, useRef, useState } from "react";
 import useApi from "@/lib/useApi";
 import { IOrganization } from "@/index";
 import { AxiosError } from "axios";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import FullPageSpinner from "@/components/Core/Feedback/FullPageSpinner";
 import FormOrganizationRoot, {
   FormOrganizationRootActions,
-} from "@/components/Admin/RootOrganization/Form/Form";
+} from "@/components/Admin/Organization/Form";
+import BasicForm from "@/components/Admin/Organization/BasicForm";
 import { useAppLayout } from "@/components/AppLayout/Base";
 import { useTranslation } from "react-i18next";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import ShowcaseCard from "@/components/Core/Card/ShowcaseCard";
+import OrganizationProvider from "@/components/Admin/Organization/Provider";
 
 const AdminOrganizations = () => {
   const { user } = useAppContext();
@@ -30,6 +32,8 @@ const AdminOrganizations = () => {
     return data;
   };
 
+  const queryClient = useQueryClient();
+
   const { isLoading, isSuccess, data: organizations } = useQuery<
     IOrganization[],
     AxiosError
@@ -39,18 +43,16 @@ const AdminOrganizations = () => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-
     setOpen(false);
   };
 
   const addOrganization = async (isNew) => {
-    const {
-      data: organizationData,
-      status,
-    } = await formOrgaRootRef.current.submit();
-    if (status === 200) {
+    const response = await formOrgaRootRef.current.submit();
+    console.log(response);
+    if (response.status === 200) {
       dialog.current.close();
-      console.log(organizationData);
+      console.log(response.data);
+      queryClient.invalidateQueries("RootOrganizations");
     }
   };
 
@@ -95,49 +97,57 @@ const AdminOrganizations = () => {
     if (organizations.length > 0) {
       return (
         <AppLayoutGeneral>
-          <Container>
-            <Grid container justify="center" direction="column" spacing={2}>
-              <Grid
-                item
-                xs
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="flex-start"
-              >
-                <Grid item>
-                  <Typography variant="h5">
-                    {t("common.pages.Admin.Organizations.title")}
-                  </Typography>
+          <OrganizationProvider>
+            <Container>
+              <Grid container justify="center" direction="column" spacing={2}>
+                <Grid
+                  item
+                  xs
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="flex-start"
+                >
+                  <Grid item>
+                    <Typography variant="h5">
+                      {t("common.pages.Admin.Organizations.title")}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        openForm();
+                      }}
+                      size="small"
+                    >
+                      {t("common.pages.Admin.Organization.addRootOrganization")}
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                      openForm();
-                    }}
-                    size="small"
-                  >
-                    {t("common.pages.Admin.Organization.addRootOrganization")}
-                  </Button>
+                <Grid xs item container spacing={2}>
+                  {organizations.map((organization) => {
+                    return (
+                      <Grid
+                        key={`${organization.id}`}
+                        item
+                        xs={12}
+                        sm={6}
+                        md={3}
+                      >
+                        <ShowcaseCard
+                          ownerEmail={organization.current_user_role}
+                          slug={organization.slug}
+                          name={organization.name}
+                        />
+                      </Grid>
+                    );
+                  })}
                 </Grid>
               </Grid>
-              <Grid xs item container spacing={2}>
-                {organizations.map((organization) => {
-                  return (
-                    <Grid key={`${organization.id}`} item xs={12} sm={6} md={3}>
-                      <ShowcaseCard
-                        ownerEmail={organization.current_user_role}
-                        slug={organization.slug}
-                        name={organization.name}
-                      />
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Grid>
-          </Container>
+            </Container>
+          </OrganizationProvider>
         </AppLayoutGeneral>
       );
     }

@@ -56,10 +56,10 @@
   "pages": {
     "Admin": {
       "Organizations": {
-        "title": "Liste des organisations racine"
+        "title": "Liste des organisations"
       },
       "Organization": {
-        "addRootOrganization": "Ajouter une organisation racine"
+        "addRootOrganization": "Ajouter une organisation"
       }
     }
   },

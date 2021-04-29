@@ -2,10 +2,11 @@ import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { useTranslation, Trans } from "react-i18next";
 import useETKForm from "@/components/Form/useForm";
-import useRootOrganizationSchema from "@/components/Admin/RootOrganization/Form/Schema";
+import useOrganizationSchema from "@/components/Admin/Organization/Schema";
 import useAPI from "@/lib/useApi";
 import { IOrganization } from "@/index.d";
 import { useAppContext } from "@/providers/AppContext";
+import SearchPlace from "./SearchPlace";
 
 export type FormOrganizationRootActions = {
   submit: () => Promise<any>;
@@ -25,7 +26,7 @@ const FormOrganizationRoot = forwardRef<
   FormOrganizationRootProps
 >(({ organization, translationNode }, ref) => {
   const { t } = useTranslation("components");
-  const schema = useRootOrganizationSchema();
+  const schema = useOrganizationSchema();
   const form = useETKForm({ schema: schema });
   const { api } = useAPI();
   const { apiETK } = api;
@@ -42,6 +43,17 @@ const FormOrganizationRoot = forwardRef<
       }
     }
   }, []);
+
+  const handleOnChangePlace = (value) => {
+    console.log(value);
+    if (value) {
+      form.setValue("osm_id", value.osm_id);
+      form.setValue("osm_type", value.osm_type);
+    } else {
+      form.setValue("osm_id", undefined);
+      form.setValue("osm_id", undefined);
+    }
+  };
 
   useImperativeHandle(ref, () => ({
     submit: () => {
@@ -82,6 +94,9 @@ const FormOrganizationRoot = forwardRef<
       <Grid item>{form.fields.name}</Grid>
       <Grid item>{form.fields.owner_email}</Grid>
       <Grid item>{form.fields.mode}</Grid>
+      <SearchPlace onChange={handleOnChangePlace} />
+      <Grid item>{form.fields.osm_id}</Grid>
+      <Grid item>{form.fields.osm_type}</Grid>
     </Grid>
   );
 });
