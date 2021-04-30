@@ -194,8 +194,6 @@ services:
       - traefik.http.services.meilisearch.loadbalancer.server.port=7700
       - traefik.http.routers.meilisearch.middlewares=meilisearch-stripprefix
       - traefik.http.middlewares.meilisearch-stripprefix.stripprefix.prefixes=/meilisearch
-    volumes:
-      - ${NS_ECOTEKA_MEILISEARCH_VOLUME}:/data.ms
     environment:
       - MEILI_NO_SENTRY=true
 
