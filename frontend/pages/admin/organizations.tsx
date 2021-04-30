@@ -138,7 +138,7 @@ const AdminOrganizations = () => {
                           ownerEmail={organization.current_user_role}
                           slug={organization.slug}
                           name={organization.name}
-                          thumbnail={`https://studiodev.ecoteka.org/osm_thumbnails/thumbnail/${organization.osm_id}?width=345&height=230&padding=30`}
+                          thumbnail={`/osm_thumbnails/thumbnail/${organization.osm_id}?width=345&height=230&padding=30`}
                           isPrivate={organization.mode == "private"}
                         />
                       </Grid>

@@ -3,19 +3,22 @@ import { IOrganization, IUser } from "@/index";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useRouter } from "next/router";
 import useApi from "@/lib/useApi";
-import { withSnackbar, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 
 const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
   const [isLoading] = useState(false);
+  const [isOrganizationLoading, setIsOrganizationLoading] = useState(true);
+  const [isOrganizationSuccess, setIsOrganizationSuccess] = useState(true);
+  const [organizationError, setOrganizationError] = useState(undefined);
   const [user, setUser] = useLocalStorage<IUser>("user");
   const [organization, setOrganization] = useLocalStorage<IOrganization>(
     "etk:appContext:organization"
   );
   const router = useRouter();
   const { apiETK } = useApi().api;
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const restrictedRoutes = ["/admin/organizations", "account"];
 
   // #HOTFIX: In the long terThis could be replace by useReducer hook to programatically interacts with current user state
@@ -43,7 +46,10 @@ export const Provider = ({ children }) => {
 
   const fetchOrganization = async (organizationSlug: string) => {
     try {
+      setOrganizationError(undefined);
       setOrganization(undefined);
+      setIsOrganizationLoading(true);
+      setIsOrganizationSuccess(true);
       const { data, status } = await apiETK.get(
         `/organization/${organizationSlug}`,
         {
@@ -55,9 +61,14 @@ export const Provider = ({ children }) => {
 
       if (status === 200) {
         setOrganization(data);
+        setIsOrganizationLoading(false);
+        setIsOrganizationSuccess(true);
       }
     } catch ({ response }) {
       setOrganization(undefined);
+      setIsOrganizationLoading(false);
+      setIsOrganizationSuccess(false);
+      setOrganizationError(response);
     }
   };
 
@@ -86,7 +97,11 @@ export const Provider = ({ children }) => {
         organization,
         setOrganization,
         isLoading,
+        isOrganizationLoading,
+        isOrganizationSuccess,
+        organizationError,
         refetchUserData,
+        fetchOrganization,
       }}
     >
       {children}
