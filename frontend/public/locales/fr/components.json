@@ -586,7 +586,22 @@
     "members": "membres",
     "zones": "Secteurs et unités de paysage",
     "mapEditor": "Éditeur cartographique",
-    "mapExplorer": "Explorateur cartographique"
+    "mapExplorer": "Explorateur cartographique",
+    "osmname": {
+      "label": "OSM Name",
+      "placeholder": "Sélectionner une zone OSM",
+      "helperText": "OSM Name"
+    },
+    "osmId": {
+      "label": "OSM ID",
+      "placeholder": "OSM ID",
+      "helperText": "OSM ID"
+    },
+    "osmType": {
+      "label": "Type OSM",
+      "placeholder": "relation, node",
+      "helperText": "Type OSM"
+    }
   },
   "Dashboard": {
     "title": "Tableau de bord",
@@ -664,5 +679,8 @@
   },
   "TreeInterventions": {
     "title": "Interventions"
+  },
+  "SearchPlace": {
+    "placeholder": "Sélectionnez un lieu OSM"
   }
 }

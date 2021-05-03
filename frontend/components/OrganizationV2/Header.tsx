@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   right: {
     height: "100%",
   },
+  media: {
+    backgroundColor: theme.palette.text.secondary,
+  },
 }));
 
 const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
@@ -39,8 +42,9 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
       <Grid container spacing={2} alignItems="stretch">
         <Grid item>
           <CardMedia
+            className={classes.media}
             component="img"
-            image={`/osm_thumbnails/thumbnail/7444?width=700&height=300&padding=30`}
+            image={`/osm_thumbnails/thumbnail/${organization?.osm_id}?width=700&height=300&padding=30`}
             title={organization?.name}
           />
         </Grid>
@@ -49,7 +53,9 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
             <Grid item>
               <Grid container alignItems="center" spacing={1}>
                 <Grid item>
-                  <Typography variant="subtitle2">Paris</Typography>
+                  <Typography variant="subtitle2">
+                    {organization?.name}
+                  </Typography>
                 </Grid>
                 <Grid item>
                   <Lock className={classes.icon} />
@@ -72,7 +78,9 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
                   <ListItemIcon>
                     <Star />
                   </ListItemIcon>
-                  <ListItemText>13 400 arbres</ListItemText>
+                  <ListItemText>
+                    {organization?.total_trees} arbres
+                  </ListItemText>
                 </ListItem>
                 <ListItem button>
                   <ListItemIcon>

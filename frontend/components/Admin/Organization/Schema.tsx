@@ -8,6 +8,8 @@ const organizationModes: TOrganizationMode[] = [
   "participatory",
 ];
 
+const transformNumber = (value) => (isNaN(value) ? undefined : Number(value));
+
 function sitem(value, t, tpath) {
   return {
     value,
@@ -15,7 +17,7 @@ function sitem(value, t, tpath) {
   };
 }
 
-export default function useEtkOrganizationSchema() {
+export default function useOrganizationSchema() {
   const { t } = useTranslation(["common", "components"]);
 
   return {
@@ -42,6 +44,31 @@ export default function useEtkOrganizationSchema() {
       type: "textfield",
       component: {
         label: t("components.Organization.ownerEmail"),
+      },
+      schema: yup.string(),
+    },
+    osmname: {
+      type: "osmnamefield",
+      component: {
+        label: t("components.Organization.osmname.label"),
+        placeholder: t("components.Organization.osmname.placeholder"),
+        helperText: t("components.Organization.osmname.helperText"),
+      },
+      schema: yup.string(),
+    },
+    osm_id: {
+      type: "textfield",
+      component: {
+        label: t("components.Organization.osmId.label"),
+        placeholder: t("components.Organization.osmId.placeholder"),
+      },
+      schema: yup.string(),
+    },
+    osm_type: {
+      type: "textfield",
+      component: {
+        label: t("components.Organization.osmType.label"),
+        placeholder: t("components.Organization.osmType.placeholder"),
       },
       schema: yup.string(),
     },

@@ -8,8 +8,6 @@ import {
 import { Autocomplete } from "@material-ui/lab";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { FlyToInterpolator } from "@deck.gl/core";
-import { useMapContext } from "@/components/Map/Provider";
 import SearchIcon from "@material-ui/icons/Search";
 
 export interface MapSearchCityProps {
@@ -30,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
+const SearchPlace: React.FC<MapSearchCityProps> = (props) => {
   const { t } = useTranslation("components");
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -38,18 +36,6 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
   const { apiMeili } = useApi().api;
-  const { viewState, setViewState } = useMapContext();
-
-  const getSortOrder = (prop) => {
-    return function (a, b) {
-      if (a[prop] > b[prop]) {
-        return 1;
-      } else if (a[prop] < b[prop]) {
-        return -1;
-      }
-      return 0;
-    };
-  };
 
   useEffect(() => {
     let active = true;
@@ -92,18 +78,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       setValue(newValue);
 
       if (props.onChange) {
-        props.onChange([newValue.lon, newValue.lat]);
-      }
-
-      if (setViewState) {
-        setViewState({
-          ...viewState,
-          longitude: newValue.lon,
-          latitude: newValue.lat,
-          zoom: 12,
-          transitionDuration: 1500,
-          transitionInterpolator: new FlyToInterpolator(),
-        });
+        props.onChange(newValue);
       }
     }
   };
@@ -126,7 +101,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder="Explorer les arbres d’une ville ..."
+          placeholder={t("components.SearchPlace.placeholder")}
           variant="outlined"
           InputProps={{
             ...params.InputProps,
@@ -151,6 +126,6 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   );
 };
 
-MapSearchCity.defaultProps = defaultProps;
+SearchPlace.defaultProps = defaultProps;
 
-export default MapSearchCity;
+export default SearchPlace;

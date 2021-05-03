@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import FormSignIn, { FormSignInActions } from "@/components/SignIn/Form";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
+import { useAppContext } from "@/providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   formWidth: {
@@ -31,16 +32,21 @@ export default function SignInPage() {
   const formRef = useRef<FormSignInActions>();
   const { t } = useTranslation("components");
   const router = useRouter();
+  const { user, setOrganization } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit = async () => {
     setIsLoading(true);
-    const isOk = await formRef.current.submit();
-    setIsLoading(false);
-
-    if (isOk) {
-      // TODO if user doesn't belong to an existing organization, one's should be redirected to account page (wip)
-      // router.push("/account")
-      router.push("/");
+    const isOK = await formRef.current.submit();
+    if (isOK) {
+      setIsLoading(false);
+      const { callbackUrl } = router.query;
+      if (callbackUrl) {
+        setOrganization(undefined);
+        router.back();
+      } else {
+        router.push("/");
+      }
     }
   };
 

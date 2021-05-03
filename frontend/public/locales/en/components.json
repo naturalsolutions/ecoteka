@@ -590,7 +590,22 @@
     "members": "members",
     "zones": "Districts and landscape units",
     "mapEditor": "Map editor",
-    "mapExplorer": "Map explorer"
+    "mapExplorer": "Map explorer",
+    "osmname": {
+      "label": "OSM Name",
+      "placeholder": "Select OSM name",
+      "helperText": "OSM Name"
+    },
+    "osmId": {
+      "label": "OSM ID",
+      "placeholder": "OSM ID",
+      "helperText": "OSM ID"
+    },
+    "osmType": {
+      "label": "OSM Type",
+      "placeholder": "relation, node",
+      "helperText": "OSM Type"
+    }
   },
   "Dashboard": {
     "title": "Dashboard",
@@ -671,5 +686,8 @@
   },
   "TreeInterventions": {
     "title": "Interventions"
+  },
+  "SearchPlace": {
+    "placeholder": "Select an OSM Place"
   }
 }

@@ -7,7 +7,8 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CallMade from "@material-ui/icons/CallMade";
-import Person from "@material-ui/icons/Person";
+import Public from "@material-ui/icons/Public";
+import Private from "@material-ui/icons/Lock";
 
 import { useSizedIconButtonStyles } from "@/styles/IconButton/sized";
 
@@ -42,16 +43,20 @@ const useBasicProfileStyles = makeStyles(({ palette }) => ({
 
 export interface BasicProfileProps {
   ownerEmail: string;
+  isPrivate: boolean;
 }
 
-const BasicProfile: React.FC<BasicProfileProps> = ({ ownerEmail }) => {
+const BasicProfile: React.FC<BasicProfileProps> = ({
+  ownerEmail,
+  isPrivate,
+}) => {
   const styles = useBasicProfileStyles();
   const { t } = useTranslation(["common"]);
   return (
     <Grid item container spacing={2}>
       <Grid item>
         <Avatar className={styles.avatar}>
-          <Person />
+          {isPrivate ? <Private /> : <Public />}
         </Avatar>
       </Grid>
       <Grid item>
@@ -129,18 +134,26 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
       borderColor: "#1d675b",
     },
   },
+  thumbnail: {
+    overflow: "hidden",
+    width: "100%",
+  },
 }));
 
 export interface ShowcaseCardProps {
   ownerEmail: string;
   slug: string;
   name: string;
+  thumbnail?: string;
+  isPrivate: boolean;
 }
 
 export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   ownerEmail,
   slug,
   name,
+  thumbnail,
+  isPrivate,
 }) => {
   const styles = useStyles();
   const router = useRouter();
@@ -150,9 +163,20 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
       <Grid container direction="column" spacing={2}>
         <CardHeader slug={slug} name={name} />
         <Grid item>
-          <Box minHeight={200} bgcolor={"#dfdfdf"} borderRadius={8} />
+          <Box
+            minHeight={200}
+            bgcolor={"#dfdfdf"}
+            borderRadius={8}
+            className={styles.thumbnail}
+            style={{
+              backgroundImage: `url(${thumbnail})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          ></Box>
         </Grid>
-        <BasicProfile ownerEmail={ownerEmail} />
+        <BasicProfile ownerEmail={ownerEmail} isPrivate={isPrivate} />
       </Grid>
     </Box>
   );

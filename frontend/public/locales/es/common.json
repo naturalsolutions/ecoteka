@@ -56,10 +56,10 @@
   "pages": {
     "Admin": {
       "Organizations": {
-        "title": "Nodos raíz de la organización"
+        "title": "Nodos de organización"
       },
       "Organization": {
-        "addRootOrganization": "Agregar organización raíz"
+        "addRootOrganization": "Agregar organización"
       }
     }
   },
