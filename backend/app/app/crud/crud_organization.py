@@ -47,12 +47,41 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
         db.add(org)
         db.commit()
         db.refresh(org)
+        org.path = (
+            Ltree(str(org.id))
+            if parent is None
+            else (parent.path or Ltree("_")) + Ltree(str(org.id))
+        )
+        org.slug = Organization.initiate_unique_slug(
+            name=org.name,
+            id=org.id,
+            path=org.path
+        )
+
+        db.commit()
+        db.refresh(org)
         return org
 
     def create_root(self, db: Session, *, obj_in: OrganizationCreateRoot) -> Organization:
+        parent = self.get(db, id=obj_in.parent_id) if 'parent_id' in obj_in else None
+
         obj_in_data = jsonable_encoder(obj_in, exclude=["owner_email"])
         org = Organization(**obj_in_data, parent=None)
+
         db.add(org)
+        db.commit()
+        db.refresh(org)
+        org.path = (
+            Ltree(str(org.id))
+            if parent is None
+            else (parent.path or Ltree("_")) + Ltree(str(org.id))
+        )
+        org.slug = Organization.initiate_unique_slug(
+            name=org.name,
+            id=org.id,
+            path=org.path
+        )
+
         db.commit()
         db.refresh(org)
         return org

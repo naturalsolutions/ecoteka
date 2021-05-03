@@ -27,7 +27,7 @@ from nanoid import generate
 from datetime import datetime
 
 
-id_seq = Sequence("organization_id_seq")
+# id_seq = Sequence("organization_id_seq")
 
 
 def strfltee(s: str, replacements=(" ", "-")):
@@ -96,8 +96,8 @@ class Organization(Base):
         archived_at=None,
         current_user_role=None
     ):
-        _id = engine.execute(id_seq)
-        self.id = _id
+        # _id = engine.execute(id_seq)
+        # self.id = _id
         self.name = name
         self.mode = mode
         self.config = config
@@ -112,12 +112,12 @@ class Organization(Base):
         self.archived_at = archived_at
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
-        self.path = (
-            Ltree(str(_id))
-            if parent is None
-            else (parent.path or Ltree("_")) + Ltree(str(_id))
-        )
-        self.slug = Organization.initiate_unique_slug(name, _id, self.path)
+        # self.path = (
+        #     Ltree(str(_id))
+        #     if parent is None
+        #     else (parent.path or Ltree("_")) + Ltree(str(_id))
+        # )
+        # self.slug = Organization.initiate_unique_slug(name, _id, self.path)
 
     @property
     def total_members(self):
@@ -127,7 +127,7 @@ class Organization(Base):
 
     def to_current_user_schema(self):
         return self.to_schema()
-    
+
 
     def to_schema(self):
         return schemas.Organization(
@@ -160,7 +160,7 @@ class Organization(Base):
         return True if result.rowcount == 0 and value not in restricted_domains else False
 
     def get_root_slug(path):
-        if path: 
+        if path:
             if len(path) > 1:
                 path_ids = path.path.split('.')
                 root_id = path_ids[0]
@@ -171,7 +171,7 @@ class Organization(Base):
                 return None
         else:
             return None
-    
+
     def on_name_change_rehydrate_slug(target, value, oldvalue, initiator):
         print("generate_unique_slug")
         if value and (not target.slug or value != oldvalue):
