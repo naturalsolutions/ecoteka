@@ -689,5 +689,34 @@
   },
   "SearchPlace": {
     "placeholder": "Select an OSM Place"
+  },
+  "LayoutFooter": {
+    "titleColumn": {
+      "ns": "Learn more about Natural Solutions",
+      "ecoteka": "Learn more about ecoTeka",
+      "newsletter": "Follow the news on the urban ecosystems"
+    },
+    "links": {
+      "community": {
+        "link": "https://www.natural-solutions.eu/communaute-biodiversite-et-ecosystemes-urbains",
+        "title": "More than a product, a community"
+      },
+      "gitlab": {
+        "link": "https://gitlab.com/natural-solutions/ecoteka",
+        "title": "Find us on Gitlab"
+      },
+      "avion": {
+        "link": "https://natural-solutions.avion.io/share/xNWnWvoGkytv7crv8",
+        "title": "The project now and to come"
+      },
+      "ns": {
+        "link": "https://www.natural-solutions.eu",
+        "title": "Learn more about Natural Solutions"
+      },
+      "team": {
+        "link": "https://www.natural-solutions.eu/equipe",
+        "title": "The team"
+      }
+    }
   }
 }
