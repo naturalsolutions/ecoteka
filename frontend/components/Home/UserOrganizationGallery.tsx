@@ -23,7 +23,12 @@ const UserOrganizationGallery: React.FC<IUserOrganizationGalleryProps> = ({
           .filter((o) => !o.archived)
           .map((o) => (
             <Grid key={o.id} item xs={12} sm={6} md={3}>
-              <ShowcaseCard ownerEmail="" slug={o.slug} name={o.name} />
+              <ShowcaseCard
+                ownerEmail=""
+                slug={o.slug}
+                name={o.name}
+                isPrivate={o.mode == "private"}
+              />
             </Grid>
           ))}
       </Grid>
