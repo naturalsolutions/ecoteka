@@ -1,3 +1,21 @@
+## [0.12.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.2...v0.12.3) (2021-05-03)
+
+
+### Bug Fixes
+
+* **backend:** Add config to osmname index ([f26fad8](https://gitlab.com/natural-solutions/ecoteka/commit/f26fad88836f928a1793f741572527033e69f4dd))
+* **backend:** Give more weight in osmname index for importance sort ([18dee7d](https://gitlab.com/natural-solutions/ecoteka/commit/18dee7de6b305595d2b463f6439994ce5991df32))
+* **backend:** readd taxa index ([64b8d27](https://gitlab.com/natural-solutions/ecoteka/commit/64b8d27fd6b268a9f54bdf7d07479fcbefefa3e9))
+* **frontend:** Add query invalidation + OSM field to AdminOrg form ([5ddf5d6](https://gitlab.com/natural-solutions/ecoteka/commit/5ddf5d6fbd824b217416a2db18b4fcc788ca9756))
+* **frontend:** add ShowcaseCard missing props in UserOrganizationGallery ([5ed46b9](https://gitlab.com/natural-solutions/ecoteka/commit/5ed46b926ca9672c43f47b208483db922b26183a))
+* **frontend:** Add Thumbnail and PubStatus to ShowcaseCard ([88bbb89](https://gitlab.com/natural-solutions/ecoteka/commit/88bbb89dc3b86a3797d6487d3e3dc5867a2e6c64))
+* **frontend:** Authorize Progress and Members on Organization page ([6409b48](https://gitlab.com/natural-solutions/ecoteka/commit/6409b48fe430c1225c2dab9f09bf3a8816f13a61))
+* **frontend:** missing props in UserOrganizationGallery... again ([e2a65ec](https://gitlab.com/natural-solutions/ecoteka/commit/e2a65ec6467e088c5b4ea0e6c2a9f3b10cc96206))
+* add links to footer ([cfe4b76](https://gitlab.com/natural-solutions/ecoteka/commit/cfe4b76331da26a45c6121b7d681222c2f84d02f))
+* **frontend:** Display name and country in homepage searchbar ([5f5979c](https://gitlab.com/natural-solutions/ecoteka/commit/5f5979c524b842dba5c87f9828266e0acae70882))
+* **frontend:** Organization page access grant check ([fdc5a5a](https://gitlab.com/natural-solutions/ecoteka/commit/fdc5a5a5f30e6a60967df5230923e23d038ff132))
+* **frontend:** Use name in homepage autocomplete options ([1849c79](https://gitlab.com/natural-solutions/ecoteka/commit/1849c79f1d0466124f9908501207184d0fcd5a40))
+
 ## [0.12.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.1...v0.12.2) (2021-04-29)
 
 
