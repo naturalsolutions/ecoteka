@@ -45,6 +45,4 @@ def init_osmname(db: Session) -> None:
         offset += limit
 
 def init_indices(db: Session) -> None:
-    pass
-    # init_taxa(db)
-    # init_osmname(db)
+    init_taxa(db)
