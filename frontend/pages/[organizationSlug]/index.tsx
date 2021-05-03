@@ -13,6 +13,7 @@ import Loader from "@/components/Core/Feedback/OrganizationSkeleton";
 import Error from "@/components/Core/Error";
 import OrganizationSkeleton from "@/components/Core/Feedback/OrganizationSkeleton";
 import { useRouter } from "next/router";
+import Can from "@/components/Can";
 
 const useStyles = makeStyles(({ spacing }) => ({}));
 
@@ -38,12 +39,16 @@ const OrganizationMain = () => {
           </Grid>
           <Grid item>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <OrganizationProgress />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <OrganizationMembers />
-              </Grid>
+              <Can do="read" on="Dashboard">
+                <Grid item xs={12} md={6}>
+                  <OrganizationProgress />
+                </Grid>
+              </Can>
+              <Can do="read" on="Members">
+                <Grid item xs={12} md={6}>
+                  <OrganizationMembers />
+                </Grid>
+              </Can>
             </Grid>
           </Grid>
         </Grid>
