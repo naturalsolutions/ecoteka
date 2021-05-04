@@ -81,7 +81,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       setValue(newValue);
 
       if (props.onChange) {
-        props.onChange([newValue.lon, newValue.lat]);
+        props.onChange([Number(newValue.lon), Number(newValue.lat)]);
       }
 
       if (setViewState) {
