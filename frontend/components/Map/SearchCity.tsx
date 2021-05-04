@@ -40,17 +40,6 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   const { apiMeili } = useApi().api;
   const { viewState, setViewState } = useMapContext();
 
-  const getSortOrder = (prop) => {
-    return function (a, b) {
-      if (a[prop] > b[prop]) {
-        return 1;
-      } else if (a[prop] < b[prop]) {
-        return -1;
-      }
-      return 0;
-    };
-  };
-
   useEffect(() => {
     let active = true;
 
@@ -88,7 +77,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   }, [value, inputValue]);
 
   const onChangeHandler = (ev, newValue) => {
-    if (newValue) {
+    if (newValue?.lat && newValue?.lon) {
       setValue(newValue);
 
       if (props.onChange) {
@@ -98,8 +87,8 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       if (setViewState) {
         setViewState({
           ...viewState,
-          longitude: newValue.lon,
-          latitude: newValue.lat,
+          longitude: Number(newValue.lon),
+          latitude: Number(newValue.lat),
           zoom: 12,
           transitionDuration: 1500,
           transitionInterpolator: new FlyToInterpolator(),
