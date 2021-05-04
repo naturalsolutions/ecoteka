@@ -1,3 +1,11 @@
+## [0.12.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.3...v0.12.4) (2021-05-04)
+
+
+### Bug Fixes
+
+* change type lat and lon to number ([91f04f9](https://gitlab.com/natural-solutions/ecoteka/commit/91f04f9f83de1d9f69ca191acc422a8a8f2c9a59))
+* change type lat and lon to number ([2170990](https://gitlab.com/natural-solutions/ecoteka/commit/217099078f7f2109d585a7def075c9df2a5ba8b0))
+
 ## [0.12.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.2...v0.12.3) (2021-05-03)
 
 
