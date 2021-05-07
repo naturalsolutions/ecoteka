@@ -6,9 +6,6 @@ stages:
   - deploy
   - release
 
-before_script:
-  - find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | sudo xargs rm -rf
-
 test_backend:
   stage: test
   before_script:
