@@ -17,6 +17,7 @@ export const Provider = ({ children }) => {
     "etk:appContext:organization"
   );
   const router = useRouter();
+  const { isReady, query } = router;
   const { apiETK } = useApi().api;
   const { enqueueSnackbar } = useSnackbar();
   const restrictedRoutes = ["/admin/organizations", "account"];
@@ -73,15 +74,21 @@ export const Provider = ({ children }) => {
   };
 
   useEffect(() => {
-    const { organizationSlug } = router.query;
-
+    const { organizationSlug } = query;
+    console.log(isReady);
+    console.log(organizationSlug);
+    console.log(organization);
     if (
-      (organizationSlug && organization?.slug !== organizationSlug) ||
-      !organization
+      (organizationSlug &&
+        organization?.slug !== organizationSlug &&
+        isReady) ||
+      (!organization && isReady)
     ) {
       fetchOrganization(organizationSlug as string);
+    } else {
+      setIsOrganizationLoading(!isReady);
     }
-  }, [router.query?.organizationSlug]);
+  }, [router.query?.organizationSlug, isReady]);
 
   useEffect(() => {
     if (!user && restrictedRoutes?.includes(router.route)) {
