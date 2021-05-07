@@ -1,3 +1,10 @@
+## [0.12.5](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.4...v0.12.5) (2021-05-07)
+
+
+### Bug Fixes
+
+* **frontend:** Wait for Next Router to be ready before fetching Organization ([ceba464](https://gitlab.com/natural-solutions/ecoteka/commit/ceba4643e134500556f636045ffd7a38c5d9d931))
+
 ## [0.12.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.3...v0.12.4) (2021-05-04)
 
 
