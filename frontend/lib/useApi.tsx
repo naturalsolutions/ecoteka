@@ -101,7 +101,7 @@ export default function useApi() {
         return Promise.resolve();
       })
       .catch((error) => {
-        console.log("RefreshToken request error");
+        // console.log("RefreshToken request error");
         router.push("/signin");
       });
 
