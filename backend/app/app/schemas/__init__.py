@@ -32,7 +32,7 @@ from .taxref import (
     TaxrefOut,
     TaxrefUpdate,
 )
-from .tree import Tree, TreePost, TreeCreate, TreeUpdate, TreeImportFromGeofile, TreeStatus
+from .tree import Tree, TreePost, TreeCreate, TreeUpdate, TreeImportFromGeofile, TreeStatus, Metrics
 from .organization import (
     OrganizationMode,
     FindModeEnum,

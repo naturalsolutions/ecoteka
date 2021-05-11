@@ -582,7 +582,7 @@ def get_working_area(
     return {"type": "Feature", "geometry": mapping(shape), "properties": {}}
 
 @router.get("/{organization_id}/metrics_by_year/{year}", response_model=OrganizationMetrics)
-def get_metrics(
+def get_metrics_by_year(
     *,
     organization_id: int,
     year: int,

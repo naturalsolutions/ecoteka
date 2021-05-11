@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Optional, Any, Dict, List
 import enum
 
 from pydantic import BaseModel
@@ -9,6 +9,10 @@ class TreeStatus(enum.Enum):
     DELETE = "delete"
     IMPORT = "import"
     FROZEN = "frozen"
+
+class Metrics(BaseModel):
+    ratio: Dict
+    aggregates: Dict
 
 
 class TreeProperties(BaseModel):
