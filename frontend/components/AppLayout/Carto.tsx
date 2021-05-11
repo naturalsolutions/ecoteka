@@ -55,6 +55,8 @@ export interface IAppLayoutCarto {
   drawerLeftComponent?: ReactNode;
   drawerLeftWidth?: number;
   onMapToolbarChange?(action: TMapToolbarAction): void;
+  isLoading: boolean;
+  Skeleton: JSX.Element;
 }
 
 const Transition = forwardRef(function Transition(
@@ -122,6 +124,8 @@ export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
 const AppLayoutCarto: FC<IAppLayoutCarto> = ({
   children,
   drawerLeftWidth = 400,
+  isLoading,
+  Skeleton,
 }) => {
   const toolbarHeight = 48;
   const vh = use100vh();
@@ -138,7 +142,9 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
     >
       <div style={{ display: "flex" }}>
         <div ref={container}></div>
-        <main className={classes.content}>{children}</main>
+        <main className={classes.content}>
+          {isLoading ? Skeleton : children}
+        </main>
       </div>
     </AppLayoutCartoContext.Provider>
   );

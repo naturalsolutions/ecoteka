@@ -70,15 +70,8 @@ const OrganizationHomePage: NextPage = () => {
   } = useAppContext();
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(organizationError);
-    console.log(organizationError?.data?.detail);
-    console.log(user);
-  }, [organizationError]);
-
   const goToSignin = () => {
     const { organizationSlug } = router.query;
-    console.log(organizationSlug);
     router.push(`/signin?callbackUrl=${organizationSlug}`);
   };
 

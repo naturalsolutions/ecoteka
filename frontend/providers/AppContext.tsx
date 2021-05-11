@@ -22,8 +22,6 @@ export const Provider = ({ children }) => {
   const { enqueueSnackbar } = useSnackbar();
   const restrictedRoutes = ["/admin/organizations", "account"];
 
-  // #HOTFIX: In the long terThis could be replace by useReducer hook to programatically interacts with current user state
-  // (e.g: update user organizations lists) based on query results
   const refetchUserData = async () => {
     try {
       const { data, status } = await apiETK.get("/users/me");
@@ -47,10 +45,10 @@ export const Provider = ({ children }) => {
 
   const fetchOrganization = async (organizationSlug: string) => {
     try {
-      setOrganizationError(undefined);
-      setOrganization(undefined);
       setIsOrganizationLoading(true);
-      setIsOrganizationSuccess(true);
+      setOrganizationError(undefined);
+      // setOrganization(undefined); //Refact needed! We need to programatically deal with undefined organization
+      setIsOrganizationSuccess(true); //This is weird!
       const { data, status } = await apiETK.get(
         `/organization/${organizationSlug}`,
         {
@@ -62,7 +60,6 @@ export const Provider = ({ children }) => {
 
       if (status === 200) {
         setOrganization(data);
-        setIsOrganizationLoading(false);
         setIsOrganizationSuccess(true);
       }
     } catch ({ response }) {
@@ -70,14 +67,13 @@ export const Provider = ({ children }) => {
       setIsOrganizationLoading(false);
       setIsOrganizationSuccess(false);
       setOrganizationError(response);
+    } finally {
+      setIsOrganizationLoading(false);
     }
   };
 
   useEffect(() => {
     const { organizationSlug } = query;
-    console.log(isReady);
-    console.log(organizationSlug);
-    console.log(organization);
     if (
       (organizationSlug &&
         organization?.slug !== organizationSlug &&
@@ -86,7 +82,7 @@ export const Provider = ({ children }) => {
     ) {
       fetchOrganization(organizationSlug as string);
     } else {
-      setIsOrganizationLoading(!isReady);
+      setIsOrganizationLoading(!isReady as boolean);
     }
   }, [router.query?.organizationSlug, isReady]);
 

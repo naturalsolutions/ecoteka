@@ -45,7 +45,7 @@ const FormOrganizationRoot = forwardRef<
   }, []);
 
   const handleOnChangePlace = (value) => {
-    console.log(value);
+    // console.log(value);
     if (value) {
       form.setValue("osm_id", value.osm_id);
       form.setValue("osm_type", value.osm_type);

@@ -6,6 +6,7 @@ import {
   IconButton,
   Hidden,
   CircularProgress,
+  LinearProgress,
   Typography,
   useMediaQuery,
   useTheme,
@@ -74,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(8),
     zIndex: 1,
   },
+  organizationLoadProgress: {
+    width: "100%",
+  },
 }));
 
 const defaultViewState = {
@@ -98,13 +102,22 @@ const defaultData = {
   features: [],
 };
 
+const OrganizationLoadProgress = ({}) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.organizationLoadProgress}>
+      <LinearProgress />
+    </div>
+  );
+};
+
 const EditionPage = ({}) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
   const classes = useStyles();
   const router = useRouter();
-  const { organization } = useAppContext();
+  const { organization, isOrganizationLoading } = useAppContext();
   const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
   const [data, setData] = useLocalStorage("etk:map:data");
@@ -140,8 +153,32 @@ const EditionPage = ({}) => {
 
   const [dataOrganizationId, setDataOrganizationId] = useLocalStorage(
     "etk:map:dataOrganizationId",
-    organization.id
+    undefined
   );
+
+  const cadastreLayer = CadastreLayer(activeLayers.osm.value);
+  const osmLayer = OSMLayer(activeLayers.osm.value);
+  const treesLayer = InventoryLayer({
+    visible: activeLayers.trees.value,
+    data,
+    filters,
+    dark,
+    selection,
+    activeTree,
+    editionMode,
+  });
+  const selectionLayer = new SelectionLayer({
+    selectionType: "rectangle",
+    onSelect: ({ pickingInfos }) => {
+      const ids = pickingInfos.map((o) => o.object.properties.id);
+      setSelection(ids);
+    },
+    layerIds: ["trees"],
+    getTentativeFillColor: () => [255, 0, 255, 100],
+    getTentativeLineColor: () => [0, 0, 255, 255],
+    getTentativeLineDashArray: () => [0, 0],
+    lineWidthMinPixels: 1,
+  });
 
   const createTree = async (x, y) => {
     try {
@@ -259,31 +296,6 @@ const EditionPage = ({}) => {
     renderLayers();
   };
 
-  const cadastreLayer = CadastreLayer(activeLayers.osm.value);
-  const osmLayer = OSMLayer(activeLayers.osm.value);
-  const treesLayer = InventoryLayer({
-    visible: activeLayers.trees.value,
-    data,
-    filters,
-    dark,
-    selection,
-    activeTree,
-    editionMode,
-  });
-
-  const selectionLayer = new SelectionLayer({
-    selectionType: "rectangle",
-    onSelect: ({ pickingInfos }) => {
-      const ids = pickingInfos.map((o) => o.object.properties.id);
-      setSelection(ids);
-    },
-    layerIds: ["trees"],
-    getTentativeFillColor: () => [255, 0, 255, 100],
-    getTentativeLineColor: () => [0, 0, 255, 255],
-    getTentativeLineDashArray: () => [0, 0],
-    lineWidthMinPixels: 1,
-  });
-
   const fitToBounds = async (organizationId: number) => {
     try {
       const { status, data: bbox } = await apiETK.get(`/maps/bbox`, {
@@ -335,21 +347,6 @@ const EditionPage = ({}) => {
       transitionInterpolator: new FlyToInterpolator(),
     });
   };
-
-  useEffect(() => {
-    setViewState({ ...initialViewState });
-    fitToBounds(organization.id);
-
-    if (!data?.features.length) {
-      getData(organization.id);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (router.query?.tree) {
-      setActiveTree(Number(router.query.tree));
-    }
-  }, [router.query.tree]);
 
   const handleOnFilter = (values, filters, options) => {
     setFilters({
@@ -501,6 +498,10 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
+    setViewState({ ...initialViewState });
+  }, []);
+
+  useEffect(() => {
     if (mode !== "selection") {
       setSelection([]);
       setLayers([osmLayer, treesLayer]);
@@ -528,6 +529,12 @@ const EditionPage = ({}) => {
   }, [organization]);
 
   useEffect(() => {
+    if (router.query?.tree) {
+      setActiveTree(Number(router.query.tree));
+    }
+  }, [router.query.tree]);
+
+  useEffect(() => {
     renderLayers();
   }, [activeTree, editionMode, selection, filters, dark, data]);
 
@@ -536,6 +543,8 @@ const EditionPage = ({}) => {
       drawerLeftComponent={drawerLeftComponent}
       drawerLeftWidth={drawerLeftWidth}
       onMapToolbarChange={handleOnMapToolbarChange}
+      isLoading={isOrganizationLoading && Boolean(organization)}
+      Skeleton={<OrganizationLoadProgress />}
     >
       <Head>
         <title>ecoTeka - Map</title>
@@ -632,6 +641,7 @@ const EditionPage = ({}) => {
             }}
           />
         </Grid>
+
         <Grid item className={classes.toolbarAction}>
           <IconButton onClick={() => fitToBounds(organization.id)}>
             <CenterFocusStrongIcon />
