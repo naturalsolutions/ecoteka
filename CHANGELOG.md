@@ -1,3 +1,10 @@
+## [0.12.6](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.5...v0.12.6) (2021-05-11)
+
+
+### Bug Fixes
+
+* **frontend:** Load MapEditor components when organization context is ready ([fea2a19](https://gitlab.com/natural-solutions/ecoteka/commit/fea2a197626a591fcb25796d8f6ae4554e963c1a))
+
 ## [0.12.5](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.4...v0.12.5) (2021-05-07)
 
 
