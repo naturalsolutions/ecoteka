@@ -711,5 +711,14 @@
         "title": "L'équipe"
       }
     }
+  },
+  "RatioProgress": {
+    "caption": {
+      "canonicalName": "Nom scientifique",
+      "height": "Hauteur",
+      "diameter": "Diamètre",
+      "vernacularName": "Nom vernaculaire",
+      "plantingDate": "Année de plantation"
+    }
   }
 }

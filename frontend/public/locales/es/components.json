@@ -712,5 +712,14 @@
         "title": "El equipo"
       }
     }
+  },
+  "RatioProgress": {
+    "caption": {
+      "canonicalName": "Nombre científico",
+      "height": "Altura",
+      "diameter": "Diámetro",
+      "vernacularName": "Nombre vernáculo",
+      "plantingDate": "Año de plantación"
+    }
   }
 }
