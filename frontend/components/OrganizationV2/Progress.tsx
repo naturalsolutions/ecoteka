@@ -108,7 +108,7 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
       {metrics && (
         <Grid container spacing={4}>
           {Object.keys(metrics.ratio).map((key) => (
-            <Grid item xs={6} md={3}>
+            <Grid item xs={6} md={3} key={key}>
               <RatioProgress caption={key} progressValue={metrics.ratio[key]} />
             </Grid>
           ))}
