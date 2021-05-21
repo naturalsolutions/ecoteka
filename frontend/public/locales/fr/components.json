@@ -577,9 +577,9 @@
     "applicationMode": "Mode applicatif",
     "name": "Nom",
     "modes": {
-      "private": "Privé",
-      "open": "Ouvert",
-      "participatory": "Participatif"
+      "private": "Privée",
+      "open": "Ouverte",
+      "participatory": "Participative"
     },
     "ownerEmail": "Email du propriétaire",
     "insights": "en quelques chiffres...",
@@ -601,6 +601,10 @@
       "label": "Type OSM",
       "placeholder": "relation, node",
       "helperText": "Type OSM"
+    },
+    "Header": {
+      "mapEditor": "Éditeur cartographique",
+      "importDataset": "Importer vos données"
     }
   },
   "Dashboard": {
@@ -675,7 +679,10 @@
     "title": "État Sanitaire"
   },
   "organization": {
-    "updated": "modifiée"
+    "updated": "modifiée",
+    "Header": {
+      "lastUpdatedAt": "Dernière mise à jour"
+    }
   },
   "TreeInterventions": {
     "title": "Interventions"

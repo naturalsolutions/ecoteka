@@ -11,6 +11,7 @@ import CoreOptionsPanel from "../Core/OptionsPanel";
 import { useAppContext } from "@/providers/AppContext";
 import useApi from "@/lib/useApi";
 import { useTranslation } from "react-i18next";
+import ExportDataset from "@/components/OrganizationV2/ExportDataset";
 
 export interface OrganizationProgressProps {}
 
@@ -114,6 +115,15 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
           ))}
         </Grid>
       )}
+      <Grid
+        container
+        spacing={4}
+        direction="row"
+        justify="flex-end"
+        alignItems="center"
+      >
+        <ExportDataset />
+      </Grid>
     </CoreOptionsPanel>
   );
 };

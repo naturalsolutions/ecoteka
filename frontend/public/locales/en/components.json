@@ -605,6 +605,10 @@
       "label": "OSM Type",
       "placeholder": "relation, node",
       "helperText": "OSM Type"
+    },
+    "Header": {
+      "mapEditor": "Map Editor",
+      "importDataset": "Import datasets"
     }
   },
   "Dashboard": {
@@ -682,7 +686,10 @@
     "title": "Health Assessment"
   },
   "organization": {
-    "updated": "updated"
+    "updated": "updated",
+    "Header": {
+      "lastUpdatedAt": "Last updated"
+    }
   },
   "TreeInterventions": {
     "title": "Interventions"

@@ -602,6 +602,10 @@
       "label": "Tipo de OSM",
       "placeholder": "relation, node",
       "helperText": "Tipo de OSM"
+    },
+    "Header": {
+      "mapEditor": "Editor de mapas",
+      "importDataset": "Importar conjuntos de datos"
     }
   },
   "Dashboard": {
@@ -676,7 +680,10 @@
     "title": "Valoración de Salud"
   },
   "organization": {
-    "updated": "actualizado"
+    "updated": "actualizado",
+    "Header": {
+      "lastUpdatedAt": "Última actualización"
+    }
   },
   "TreeInterventions": {
     "title": "Intervenciones"
