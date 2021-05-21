@@ -23,11 +23,11 @@ export interface MapillaryImageProps {
 const useStyles = makeStyles<Theme, MapillaryImageProps>({
   root: {
     width: (props) => props.width || "100%",
-    height: (props) => props.height || "100%",
+    height: (props) => props.height || "200px",
   },
   children: {
     width: "100%",
-    height: "100%",
+    height: "200px",
   },
 });
 
