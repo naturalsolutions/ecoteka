@@ -81,5 +81,6 @@
   "trees": "trees",
   "members": "members",
   "loadingMapillary": "Loading from Mapillary...",
-  "demos": "Discover the trees of "
+  "demos": "Discover the trees of ",
+  "currentUserRole": "Your current role"
 }

@@ -35,7 +35,7 @@ const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
   const classes = useStyles();
   const { dialog, snackbar } = useAppLayout();
   const { t } = useTranslation(["components", "common"]);
-  const { organization } = useAppContext();
+  const { organization, user } = useAppContext();
   const { apiETK } = useApi().api;
   const [members, setMembers] = useState([]);
   const formAddMembersRef = useRef<AddMembersActions>();
@@ -111,7 +111,7 @@ const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={"members"}
+      title={t("components.Organization.Members.title")}
       items={[
         { title: "Gestion des membres", href: `/${organization.slug}/members` },
       ]}
@@ -122,10 +122,10 @@ const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
             <ListItem divider button key={`members-${m.id}`}>
               <Grid container>
                 <Grid item xs={10}>
-                  {m.full_name}
+                  {user.id == m.id ? t("common.currentUserRole") : m.full_name}
                 </Grid>
                 <Grid item xs={2} className={classes.role}>
-                  {m.role}
+                  {t(`components.Organization.Members.Table.roles.${m.role}`)}
                 </Grid>
               </Grid>
             </ListItem>

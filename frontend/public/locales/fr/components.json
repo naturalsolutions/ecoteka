@@ -572,7 +572,8 @@
         "alertTitle": "Aucun membre à inviter",
         "alertContent1": "Ajouter l'email du destinataire dans le champ ci-dessus - ",
         "alertContent2": "puis cliquer sur Entrée ou ajouter une virgule."
-      }
+      },
+      "title": "Membres de l'organisation"
     },
     "applicationMode": "Mode applicatif",
     "name": "Nom",
@@ -605,6 +606,30 @@
     "Header": {
       "mapEditor": "Éditeur cartographique",
       "importDataset": "Importer vos données"
+    },
+    "SpeciesDiversityDashboard": {
+      "title": "Tableau de bord de la diversité des espèces"
+    },
+    "Progress": {
+      "title": "Complétion des jeux de données"
+    },
+    "GreeningDashboard": {
+      "title": "Progression du verdissement de la ville"
+    },
+    "TreeHealthAssessmentDashboard": {
+      "title": "Tableau de bord du suivi sanitaire du patrimoine arboré"
+    },
+    "UrbanForestryManagement": {
+      "title": "Tableau de bord de gestion de la foresterie urbaine"
+    },
+    "EconomyDashboard": {
+      "title": "Valeur économique du patrimoine arboré"
+    },
+    "DataQualityModule": {
+      "title": "Assistant de qualité des données d'inventaire"
+    },
+    "DetectTreesModule": {
+      "title": "Assistant de détection d'arbres"
     }
   },
   "Dashboard": {
@@ -727,5 +752,12 @@
       "vernacularName": "Nom vernaculaire",
       "plantingDate": "Année de plantation"
     }
+  },
+  "common": {
+    "currentUserRole": "Votre rôle actuel"
+  },
+  "WorkInProgress": {
+    "title": "Bientôt disponible!",
+    "knowMore": "En savoir plus..."
   }
 }

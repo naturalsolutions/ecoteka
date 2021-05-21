@@ -7,7 +7,7 @@ import {
   Box,
   Typography,
 } from "@material-ui/core";
-import CoreOptionsPanel from "../Core/OptionsPanel";
+import CoreOptionsPanel from "@/components/Core/OptionsPanel";
 import { useAppContext } from "@/providers/AppContext";
 import useApi from "@/lib/useApi";
 import { useTranslation } from "react-i18next";
@@ -77,6 +77,7 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
   const classes = useStyles();
   const { organization } = useAppContext();
   const { apiETK } = useApi().api;
+  const { t } = useTranslation(["components"]);
   const [metrics, setMetrics] = useState(undefined);
 
   const fetchMetrics = async (organizationId: number) => {
@@ -101,11 +102,14 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
   }, [organization]);
 
   useEffect(() => {
-    console.log(metrics);
+    // console.log(metrics);
   }, [metrics]);
 
   return (
-    <CoreOptionsPanel title={"COMPLÉTION DU JEU DE DONNÉES"} items={[]}>
+    <CoreOptionsPanel
+      title={t("components.Organization.Progress.title")}
+      items={[]}
+    >
       {metrics && (
         <Grid container spacing={4}>
           {Object.keys(metrics.ratio).map((key) => (
