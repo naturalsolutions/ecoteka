@@ -53,6 +53,7 @@ deploy_dev:
   stage: deploy
   image: cytopia/ansible:latest-tools
   script:
+    - export ANSIBLE_HOST_KEY_CHECKING=False
     - cd /root && mkdir .ssh && chmod 700 .ssh && cat $SSH_CONFIG > .ssh/config && cat $SSH_KEY > .ssh/key && cat $SSH_KEY_PUB > .ssh/key.pub 
     - chmod 600 .ssh/key .ssh/config && chmod 644 .ssh/key.pub && ls .ssh && cat .ssh/key.pub
     - git clone https://${GL_USER}:${GL_TOKEN}@gitlab.com/natural-solutions/ns-ansible-infrastructure.git
