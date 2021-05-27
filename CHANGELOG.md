@@ -1,3 +1,10 @@
+## [0.12.9](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.8...v0.12.9) (2021-05-27)
+
+
+### Bug Fixes
+
+* tmp mv rg frontend ([37fb791](https://gitlab.com/natural-solutions/ecoteka/commit/37fb79166d50b8a45ed887bf333d5c3b55019340))
+
 ## [0.12.8](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.7...v0.12.8) (2021-05-27)
 
 
