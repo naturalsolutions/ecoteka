@@ -51,6 +51,7 @@ build_backend:
 
 deploy_dev:
   stage: deploy
+  image: cytopia/ansible
   script:
     - git clone git@gitlab.com:natural-solutions/ns-ansible-infrastructure.git
     - cd ns-ansible-infrastructure
