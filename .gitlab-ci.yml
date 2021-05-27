@@ -57,7 +57,7 @@ deploy_dev:
     - cd ns-ansible-infrastructure
     - echo ${VAULT_PASSWORD_KEY} > password-file
     - ansible-vault decrypt --vault-password-file password-file k
-    - ansible-playbook -vvvv -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
+    - ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
     - rm password-file
   only:
     - master
@@ -70,7 +70,8 @@ deploy_dev:
 release:
   stage: release
   script:
-    - semantic-release
+    - npm i @semantic-release/gitlab @semantic-release/git @semantic-release/changelog @semantic-release/exec @semantic-release/release-notes-generator @semantic-release/commit-analyzer
+    - npx semantic-release
   only:
     - master
   tags:
