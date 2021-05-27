@@ -1,3 +1,10 @@
+## [0.12.8](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.7...v0.12.8) (2021-05-27)
+
+
+### Bug Fixes
+
+* relative path in npm start ([a9e8b88](https://gitlab.com/natural-solutions/ecoteka/commit/a9e8b88af79c3c4d0975b1f38676289ebdad4096))
+
 ## [0.12.7](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.6...v0.12.7) (2021-05-27)
 
 
