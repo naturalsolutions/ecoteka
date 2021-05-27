@@ -1,3 +1,18 @@
+## [0.12.7](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.6...v0.12.7) (2021-05-27)
+
+
+### Bug Fixes
+
+* **backend:** add Trees properties metrics ([e3cd0d8](https://gitlab.com/natural-solutions/ecoteka/commit/e3cd0d89531712a4ce14db1a68c96c7f5b0a762e))
+* **backend:** Remove data seeding from osmname revision ([83fe356](https://gitlab.com/natural-solutions/ecoteka/commit/83fe35614ee6a4fc89fa2aa604fd324d9634488c))
+* **frontend:** Add ChartJS deps ([fc5aad4](https://gitlab.com/natural-solutions/ecoteka/commit/fc5aad4d17519bc5e5b127bf4f42a3bb742802a2))
+* **frontend:** Add key to Progress Metrics list ([9e45009](https://gitlab.com/natural-solutions/ecoteka/commit/9e4500917087719f7d5b325f955180780d56ade1))
+* **frontend:** Add more actions to Organization page ([8d62c08](https://gitlab.com/natural-solutions/ecoteka/commit/8d62c0840b9c8a817b232253a62778efb2685779))
+* **frontend:** add ProgressRatio ([1ad1b41](https://gitlab.com/natural-solutions/ecoteka/commit/1ad1b41d208e3b33944af097597b3c22859cee29))
+* **frontend:** Dashboards + Modules blocks in Organization page ([c580e77](https://gitlab.com/natural-solutions/ecoteka/commit/c580e77c5be15577edb913e60c3943d030f12bde))
+* **frontend:** Fix MapillaryImage height ([32aa623](https://gitlab.com/natural-solutions/ecoteka/commit/32aa62391ba6df7a5c62197817bb6766847eda79))
+* **frontend:** Manage Organization members ([79449a4](https://gitlab.com/natural-solutions/ecoteka/commit/79449a491f96132bb9b9f0ae76c97f3d598e4bd4))
+
 ## [0.12.6](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.5...v0.12.6) (2021-05-11)
 
 
