@@ -11,10 +11,15 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  IconButton,
 } from "@material-ui/core";
 import { useAppContext } from "@/providers/AppContext";
-import { Lock, Star } from "@material-ui/icons";
+import { Lock, Nature, Public, Backup } from "@material-ui/icons";
 import Share from "@material-ui/icons/Share";
+import { useTranslation } from "react-i18next";
+import { format, formatDistance, formatRelative, subDays } from "date-fns";
+import { es, enGB, fr } from "date-fns/locale";
+import { useRouter } from "next/router";
 
 export interface OrganizationHeaderProps {}
 
@@ -33,9 +38,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+const setDateLocale = (locale: string) => {
+  switch (locale) {
+    case "fr":
+      return fr;
+    case "en":
+      return enGB;
+    case "es":
+      return es;
+    default:
+      return fr;
+  }
+};
+
 const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
   const classes = useStyles();
   const { organization } = useAppContext();
+  const { t } = useTranslation(["common", "components"]);
+  const router = useRouter();
 
   return (
     <Paper className={classes.root}>
@@ -58,35 +78,41 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Lock className={classes.icon} />
+                  {organization.mode == "private" ? (
+                    <Lock className={classes.icon} />
+                  ) : (
+                    <Public className={classes.icon} />
+                  )}
                 </Grid>
                 <Grid item>
                   <Typography variant="caption" color="textSecondary">
-                    Privée
+                    {t(`components.Organization.modes.${organization.mode}`)}
                   </Typography>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item>
               <Typography variant="caption" color="textPrimary">
-                Dernières modifications il y a 8 jours
+                {t("components.organization.Header.lastUpdatedAt")}{" "}
+                {formatDistance(
+                  Date.parse(organization.updated_at),
+                  new Date(),
+                  {
+                    addSuffix: true,
+                    locale: setDateLocale(router.locale),
+                  }
+                )}
               </Typography>
             </Grid>
             <Grid item>
               <List>
                 <ListItem button>
                   <ListItemIcon>
-                    <Star />
+                    <Nature />
                   </ListItemIcon>
                   <ListItemText>
                     {organization?.total_trees} arbres
                   </ListItemText>
-                </ListItem>
-                <ListItem button>
-                  <ListItemIcon>
-                    <Star />
-                  </ListItemIcon>
-                  <ListItemText>56 684 habitants</ListItemText>
                 </ListItem>
               </List>
             </Grid>
@@ -94,13 +120,23 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
             <Grid item>
               <Grid container justify="center" alignItems="center">
                 <Grid item>
-                  <Button size="large" variant="contained" color="primary">
-                    éditeur cartographique
+                  <Button
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    onClick={() => router.push(`/${organization.slug}/map`)}
+                  >
+                    {t("components.Organization.Header.mapEditor")}
                   </Button>
                 </Grid>
                 <Grid item xs />
                 <Grid item>
-                  <Share className={classes.icon} />
+                  <Button
+                    href={`/${organization.slug}/map?panel=import`}
+                    color="primary"
+                  >
+                    {t("components.Organization.Header.importDataset")}
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>

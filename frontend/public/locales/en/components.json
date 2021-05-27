@@ -576,7 +576,8 @@
         "alertTitle": "No member to invite",
         "alertContent1": "Add recipient email in the input field above - ",
         "alertContent2": "then click Enter or add a coma."
-      }
+      },
+      "title": "Members"
     },
     "applicationMode": "Application mode",
     "name": "Name",
@@ -605,6 +606,34 @@
       "label": "OSM Type",
       "placeholder": "relation, node",
       "helperText": "OSM Type"
+    },
+    "Header": {
+      "mapEditor": "Map Editor",
+      "importDataset": "Import datasets"
+    },
+    "SpeciesDiversityDashboard": {
+      "title": "Species Diversity Dashboard"
+    },
+    "Progress": {
+      "title": "Datasets completion"
+    },
+    "GreeningDashboard": {
+      "title": "Greening Progress Dashboard"
+    },
+    "TreeHealthAssessmentDashboard": {
+      "title": "Tree Health Assessment Dashboard"
+    },
+    "UrbanForestryManagement": {
+      "title": "Urban Forestry Management Dashboard"
+    },
+    "EconomyDashboard": {
+      "title": "Economy Dashboard"
+    },
+    "DataQualityModule": {
+      "title": "Data Quality Assistant"
+    },
+    "DetectTreesModule": {
+      "title": "Tree detection assistant"
     }
   },
   "Dashboard": {
@@ -682,7 +711,10 @@
     "title": "Health Assessment"
   },
   "organization": {
-    "updated": "updated"
+    "updated": "updated",
+    "Header": {
+      "lastUpdatedAt": "Last updated"
+    }
   },
   "TreeInterventions": {
     "title": "Interventions"
@@ -718,5 +750,21 @@
         "title": "The team"
       }
     }
+  },
+  "RatioProgress": {
+    "caption": {
+      "canonicalName": "Scientific Name",
+      "height": "Height",
+      "diameter": "Diameter",
+      "vernacularName": "Vernacular name",
+      "plantingDate": "Planting Year"
+    }
+  },
+  "common": {
+    "currentUserRole": "Your current role"
+  },
+  "WorkInProgress": {
+    "title": "Coming soon!",
+    "knowMore": "More..."
   }
 }

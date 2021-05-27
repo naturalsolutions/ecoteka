@@ -1,34 +1,12 @@
 stages:
-  - test
   - build_base
   - build
-  - clean
   - deploy
   - release
 
-test_backend:
-  stage: test
-  before_script:
-    - docker network create traefik
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker run --rm -v $(pwd):/data vikingco/jinja2cli .env.example > .env
-  script:
-    - ./scripts/test-local.sh
-  after_script:
-    - docker-compose down -v --remove-orphans
-    - docker network rm traefik
-    - cd ..
-    - sudo rm -rf ecoteka*
-  only:
-    refs:
-      - branches
-    changes:
-      - backend/**/*
-  tags:
-    - ns01
-
 build_frontend:
   stage: build
+  image: dind
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-0 -f ./frontend/.docker/Dockerfile ./frontend
@@ -43,6 +21,7 @@ build_frontend:
 
 build_backend_base:
   stage: build_base
+  image: dind
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-base -f ./backend/Dockerfile.base ./backend
@@ -57,6 +36,7 @@ build_backend_base:
 
 build_backend:
   stage: build
+  image: dind
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-0 ./backend
@@ -66,15 +46,6 @@ build_backend:
       - master
     changes:
       - backend/**/*
-  tags:
-    - ns01
-
-clean:
-  stage: clean
-  script:
-    - docker system prune -a -f
-  only:
-    - master
   tags:
     - ns01
 
@@ -96,7 +67,6 @@ deploy_dev:
 release:
   stage: release
   script:
-    - export PATH=$PATH:/home/gitlab-runner/.nvm/versions/node/v14.16.0/bin
     - semantic-release
   only:
     - master

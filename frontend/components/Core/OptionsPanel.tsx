@@ -69,32 +69,36 @@ const CoreOptionsPanel: FC<CoreOptionsPanelProps> = ({
             {title}
           </Typography>
         </Grid>
-        <Grid item>
-          <IconButton size="small" onClick={handleOpen}>
-            <MoreVert />
-          </IconButton>
-        </Grid>
+        {items.length > 0 && (
+          <Grid item>
+            <IconButton size="small" onClick={handleOpen}>
+              <MoreVert />
+            </IconButton>
+          </Grid>
+        )}
       </Grid>
       <div className={classes.content}>{children}</div>
-      <Menu
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        {items.map((item) => (
-          <MenuItem key={item.title} onClick={() => handleItemClick(item)}>
-            {item.title}
-          </MenuItem>
-        ))}
-      </Menu>
+      {items.length > 0 && (
+        <Menu
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          {items.map((item) => (
+            <MenuItem key={item.title} onClick={() => handleItemClick(item)}>
+              {item.title}
+            </MenuItem>
+          ))}
+        </Menu>
+      )}
     </Paper>
   );
 };

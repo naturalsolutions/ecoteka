@@ -20,7 +20,7 @@ const TreeMapillary: React.FC<ITreeMapillaryProps> = ({ tree }) => {
 
   return useMemo(
     () => (
-      <div style={{ height: "100%", width: "100%" }}>
+      <div style={{ minHeight: "300px", height: "300px", width: "100%" }}>
         <MapillaryImage
           apiClient={mapillaryApiClient}
           coords={[tree?.x, tree?.y]}

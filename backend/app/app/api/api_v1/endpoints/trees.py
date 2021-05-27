@@ -116,6 +116,22 @@ def trees_export(
 
     return response
 
+@router.get("/metrics", dependencies=[Depends(permissive_authorization("trees:get"))], response_model=schemas.tree.Metrics)
+def get_metrics(
+    organization_id: int,
+    fields: str,
+    db: Session = Depends(get_db)
+) -> Any:
+    """ Get Trees properties metrics"""
+    requested_fields = fields.split(",")
+    ratio = crud.tree.get_properties_completion_ratio(db, organization_id, requested_fields)
+    aggregates = crud.tree.get_properties_aggregates(db, organization_id, requested_fields)
+    metrics = schemas.tree.Metrics(
+        ratio=ratio,
+        aggregates=aggregates
+        )
+    return metrics
+
 
 @router.get("/{tree_id}", dependencies=[Depends(permissive_authorization("trees:get"))], response_model=schemas.tree.Tree_xy)
 def get(

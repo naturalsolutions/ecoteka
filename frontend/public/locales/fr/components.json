@@ -572,14 +572,15 @@
         "alertTitle": "Aucun membre à inviter",
         "alertContent1": "Ajouter l'email du destinataire dans le champ ci-dessus - ",
         "alertContent2": "puis cliquer sur Entrée ou ajouter une virgule."
-      }
+      },
+      "title": "Membres de l'organisation"
     },
     "applicationMode": "Mode applicatif",
     "name": "Nom",
     "modes": {
-      "private": "Privé",
-      "open": "Ouvert",
-      "participatory": "Participatif"
+      "private": "Privée",
+      "open": "Ouverte",
+      "participatory": "Participative"
     },
     "ownerEmail": "Email du propriétaire",
     "insights": "en quelques chiffres...",
@@ -601,6 +602,34 @@
       "label": "Type OSM",
       "placeholder": "relation, node",
       "helperText": "Type OSM"
+    },
+    "Header": {
+      "mapEditor": "Éditeur cartographique",
+      "importDataset": "Importer vos données"
+    },
+    "SpeciesDiversityDashboard": {
+      "title": "Tableau de bord de la diversité des espèces"
+    },
+    "Progress": {
+      "title": "Complétion des jeux de données"
+    },
+    "GreeningDashboard": {
+      "title": "Progression du verdissement de la ville"
+    },
+    "TreeHealthAssessmentDashboard": {
+      "title": "Tableau de bord du suivi sanitaire du patrimoine arboré"
+    },
+    "UrbanForestryManagement": {
+      "title": "Tableau de bord de gestion de la foresterie urbaine"
+    },
+    "EconomyDashboard": {
+      "title": "Valeur économique du patrimoine arboré"
+    },
+    "DataQualityModule": {
+      "title": "Assistant de qualité des données d'inventaire"
+    },
+    "DetectTreesModule": {
+      "title": "Assistant de détection d'arbres"
     }
   },
   "Dashboard": {
@@ -675,7 +704,10 @@
     "title": "État Sanitaire"
   },
   "organization": {
-    "updated": "modifiée"
+    "updated": "modifiée",
+    "Header": {
+      "lastUpdatedAt": "Dernière mise à jour"
+    }
   },
   "TreeInterventions": {
     "title": "Interventions"
@@ -711,5 +743,21 @@
         "title": "L'équipe"
       }
     }
+  },
+  "RatioProgress": {
+    "caption": {
+      "canonicalName": "Nom scientifique",
+      "height": "Hauteur",
+      "diameter": "Diamètre",
+      "vernacularName": "Nom vernaculaire",
+      "plantingDate": "Année de plantation"
+    }
+  },
+  "common": {
+    "currentUserRole": "Votre rôle actuel"
+  },
+  "WorkInProgress": {
+    "title": "Bientôt disponible!",
+    "knowMore": "En savoir plus..."
   }
 }

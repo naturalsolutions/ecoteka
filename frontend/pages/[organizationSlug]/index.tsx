@@ -14,16 +14,20 @@ import Error from "@/components/Core/Error";
 import OrganizationSkeleton from "@/components/Core/Feedback/OrganizationSkeleton";
 import { useRouter } from "next/router";
 import Can from "@/components/Can";
+import SpeciesDiversityDashboard from "@/components/OrganizationV2/Dashboards/SpeciesDiversityDashboard";
+import GreeningDashboard from "@/components/OrganizationV2/Dashboards/GreeningDashboard";
+import TreeHealthAssessmentDashboard from "@/components/OrganizationV2/Dashboards/TreeHealthAssessmentDashboard";
+import UrbanForestryManagement from "@/components/OrganizationV2/Dashboards/UrbanForestryManagementDashboard";
+import EconomyDashboard from "@/components/OrganizationV2/Dashboards/EconomyDashboard";
+import DataQualityModule from "@/components/OrganizationV2/Modules/DataQualityModule";
+import DetectTreesModule from "@/components/OrganizationV2/Modules/DetectTreesModules";
 
 const useStyles = makeStyles(({ spacing }) => ({}));
 
 const OrganizationMain = () => {
   const styles = useStyles();
-  const {
-    organization,
-    isOrganizationLoading,
-    organizationError,
-  } = useAppContext();
+  const { organization, isOrganizationLoading, organizationError } =
+    useAppContext();
   const { t } = useTranslation(["common"]);
   return (
     <AbilityContext.Provider
@@ -47,6 +51,41 @@ const OrganizationMain = () => {
               <Can do="read" on="Members">
                 <Grid item xs={12} md={6}>
                   <OrganizationMembers />
+                </Grid>
+              </Can>
+              <Can do="read" on="Dashboard">
+                <Grid item xs={12} md={12}>
+                  <SpeciesDiversityDashboard />
+                </Grid>
+              </Can>
+              <Can do="read" on="Dashboard">
+                <Grid item xs={12} md={6}>
+                  <GreeningDashboard />
+                </Grid>
+              </Can>
+              <Can do="read" on="Dashboard">
+                <Grid item xs={12} md={6}>
+                  <EconomyDashboard />
+                </Grid>
+              </Can>
+              <Can do="read" on="Dashboard">
+                <Grid item xs={12} md={12}>
+                  <TreeHealthAssessmentDashboard />
+                </Grid>
+              </Can>
+              <Can do="read" on="Dashboard">
+                <Grid item xs={12} md={12}>
+                  <UrbanForestryManagement />
+                </Grid>
+              </Can>
+              <Can do="read" on="Dashboard">
+                <Grid item xs={12} md={6}>
+                  <DataQualityModule />
+                </Grid>
+              </Can>
+              <Can do="read" on="Dashboard">
+                <Grid item xs={12} md={6}>
+                  <DetectTreesModule />
                 </Grid>
               </Can>
             </Grid>

@@ -49,16 +49,6 @@ def upgrade():
     )
     op.create_index(op.f("ix_osmname_name"), "osmname", ["name"])
     op.create_index(op.f("ix_osmname_osm_type_usm_id_uq"), "osmname", ["osm_type","osm_id"], unique=True)
-    connectionObj = op.get_bind()
-    rawCursor = connectionObj.connection.cursor()
-    filenameZip = os.path.join("/data", "administrative_type.csv.gz")
-
-    with gzip.open(filenameZip, "rb") as csvFile:
-        rawCursor.copy_expert(
-            fr"COPY osmname (name,alternative_names,osm_type,osm_id,class,type,lon,lat,place_rank,importance,street,city,county,state,country,country_code,display_name,west,south,east,north,wikidata,wikipedia,housenumbers) FROM STDIN DELIMITER E'\t' CSV HEADER;", csvFile
-        )
-
-
 
 def downgrade():
     op.drop_index(op.f("ix_osmname_osm_type_usm_id_uq"), table_name="osmname")

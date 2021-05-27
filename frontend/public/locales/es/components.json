@@ -573,7 +573,8 @@
         "alertTitle": "Ningún miembro a invitar",
         "alertContent1": "Añadir el correo del destinatario en el campo de arriba - ",
         "alertContent2": "entonces hacer click o añadir una coma."
-      }
+      },
+      "title": "Miembros"
     },
     "applicationMode": "Modo de aplicación",
     "name": "Nombre",
@@ -602,6 +603,34 @@
       "label": "Tipo de OSM",
       "placeholder": "relation, node",
       "helperText": "Tipo de OSM"
+    },
+    "Header": {
+      "mapEditor": "Editor de mapas",
+      "importDataset": "Importar conjuntos de datos"
+    },
+    "SpeciesDiversityDashboard": {
+      "title": "Panel de diversidad de especies"
+    },
+    "Progress": {
+      "title": "Finalización de conjuntos de datos"
+    },
+    "GreeningDashboard": {
+      "title": "Panel de control ecológico"
+    },
+    "TreeHealthAssessmentDashboard": {
+      "title": "Tablero de evaluación de la salud de los árboles"
+    },
+    "UrbanForestryManagement": {
+      "title": "Tablero de control de gestión forestal urbana"
+    },
+    "EconomyDashboard": {
+      "title": "Panel de economía"
+    },
+    "DataQualityModule": {
+      "title": "Asistente de calidad de datos"
+    },
+    "DetectTreesModule": {
+      "title": "Asistente de detección de árboles"
     }
   },
   "Dashboard": {
@@ -676,7 +705,10 @@
     "title": "Valoración de Salud"
   },
   "organization": {
-    "updated": "actualizado"
+    "updated": "actualizado",
+    "Header": {
+      "lastUpdatedAt": "Última actualización"
+    }
   },
   "TreeInterventions": {
     "title": "Intervenciones"
@@ -712,5 +744,21 @@
         "title": "El equipo"
       }
     }
+  },
+  "RatioProgress": {
+    "caption": {
+      "canonicalName": "Nombre científico",
+      "height": "Altura",
+      "diameter": "Diámetro",
+      "vernacularName": "Nombre vernáculo",
+      "plantingDate": "Año de plantación"
+    }
+  },
+  "common": {
+    "currentUserRole": "Tu rol actual"
+  },
+  "WorkInProgress": {
+    "title": "¡Próximamente, en breve, pronto!",
+    "knowMore": "Más..."
   }
 }
