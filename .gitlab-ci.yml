@@ -53,7 +53,7 @@ deploy_dev:
   stage: deploy
   image: cytopia/ansible:latest-tools
   script:
-    - git clone git@gitlab.com:natural-solutions/ns-ansible-infrastructure.git
+    - git clone https://${GL_TOKEN}@gitlab.com/natural-solutions/ns-ansible-infrastructure.git
     - cd ns-ansible-infrastructure
     - echo ${VAULT_PASSWORD_KEY} > password-file
     - ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
