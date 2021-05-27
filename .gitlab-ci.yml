@@ -53,7 +53,7 @@ deploy_dev:
   stage: deploy
   image: cytopia/ansible:latest-tools
   script:
-    - mkdir ${pwd}/.ssh && chmod 700 ${pwd}/.ssh && echo ${SSH_CONFIG} > ${pwd}/.ssh/config && echo ${SSH_KEY} > ${pwd}/.ssh/key && chmod 600 ${pwd}/.ssh/key ${pwd}/.ssh/config
+    - cd /root && mkdir .ssh && chmod 700 .ssh && echo ${SSH_CONFIG} > .ssh/config && echo ${SSH_KEY} > .ssh/key && chmod 600 .ssh/key .ssh/config
     - git clone https://${GL_USER}:${GL_TOKEN}@gitlab.com/natural-solutions/ns-ansible-infrastructure.git
     - cd ns-ansible-infrastructure
     - echo ${VAULT_PASSWORD_KEY} > password-file
