@@ -6,7 +6,7 @@ stages:
 
 build_frontend:
   stage: build
-  image: dind
+  image: docker:dind
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-0 -f ./frontend/.docker/Dockerfile ./frontend
@@ -21,7 +21,7 @@ build_frontend:
 
 build_backend_base:
   stage: build_base
-  image: dind
+  image: docker:dind
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-base -f ./backend/Dockerfile.base ./backend
@@ -36,7 +36,7 @@ build_backend_base:
 
 build_backend:
   stage: build
-  image: dind
+  image: docker:dind
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-0 ./backend
