@@ -1,3 +1,10 @@
+## [0.12.11](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.10...v0.12.11) (2021-06-02)
+
+
+### Bug Fixes
+
+* **backend:** fix ZeroDivisioError for Tree ratio metrics ([0f299bd](https://gitlab.com/natural-solutions/ecoteka/commit/0f299bd8fd3fd8be8370c8d2a1918c8dd0a9ab22))
+
 ## [0.12.10](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.9...v0.12.10) (2021-06-02)
 
 
