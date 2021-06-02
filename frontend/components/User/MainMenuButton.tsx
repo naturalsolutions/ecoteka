@@ -40,7 +40,7 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
 
   const handlerMyOrganizationClick = () => {
     setAnchorEl(null);
-    router.push(`/organization/${organization.id}`);
+    router.push(`/`);
   };
 
   const handlerMyDashboardClick = () => {

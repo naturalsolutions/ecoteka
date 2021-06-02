@@ -82,5 +82,6 @@
   "members": "members",
   "loadingMapillary": "Loading from Mapillary...",
   "demos": "Discover the trees of ",
-  "currentUserRole": "Your current role"
+  "currentUserRole": "Your current role",
+  "myOrganizations": "My workspaces"
 }
