@@ -7,7 +7,7 @@ import {
   Grid,
   IconButton,
 } from "@material-ui/core";
-import ShareIcon from "@material-ui/icons/Share";
+import LinkIcon from "@material-ui/icons/Link";
 import { useRouter } from "next/router";
 
 export interface SectionItemProps {
@@ -58,7 +58,7 @@ const SectionItem: FC<SectionItemProps> = ({
           </div>
           <div>
             <IconButton>
-              <ShareIcon />
+              <LinkIcon />
             </IconButton>
           </div>
         </div>

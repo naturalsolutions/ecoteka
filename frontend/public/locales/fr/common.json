@@ -80,5 +80,6 @@
   "members": "membres",
   "loadingMapillary": "Chargement depuis Mapillary ...",
   "demos": "Découvrir les arbres de ",
-  "currentUserRole": "Votre rôle"
+  "currentUserRole": "Votre rôle",
+  "myOrganizations": "Mes espaces de travail"
 }
