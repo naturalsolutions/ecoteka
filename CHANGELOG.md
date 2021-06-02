@@ -1,3 +1,10 @@
+## [0.12.10](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.9...v0.12.10) (2021-06-02)
+
+
+### Bug Fixes
+
+* **frontend:** add user organizations to homepage ([a6cb2d2](https://gitlab.com/natural-solutions/ecoteka/commit/a6cb2d29818cb4baa90152436ef73c4932c05d95))
+
 ## [0.12.9](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.8...v0.12.9) (2021-05-27)
 
 
