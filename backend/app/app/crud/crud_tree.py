@@ -47,7 +47,7 @@ class CRUDTree(CRUDBase[Tree, TreeCreate, TreeUpdate]):
                 select count(*) from tree 
                 where properties->>'{field}' != '' 
                 and organization_id = {organization_id};""").first()[0]
-            ratio[field] = (non_empty_count / total_rows * 100)
+            ratio[field] = (non_empty_count / total_rows * 100) if total_rows > 0 else 0
 
         return ratio
 
