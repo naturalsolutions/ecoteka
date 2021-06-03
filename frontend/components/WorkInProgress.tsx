@@ -6,6 +6,8 @@ import Seed from "@/public/assets/icons/icon_seed.svg";
 export interface WorkInProgressProps {
   withHref?: boolean;
   href?: string;
+  title?: string;
+  redirectMessage?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -15,6 +17,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const WorkInProgress: FC<WorkInProgressProps> = ({
   withHref = false,
   href,
+  title,
+  redirectMessage,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation(["components"]);
@@ -32,7 +36,7 @@ const WorkInProgress: FC<WorkInProgressProps> = ({
       </Grid>
       <Grid item>
         <Typography variant="button" display="block" gutterBottom>
-          {t("components.WorkInProgress.title")}
+          {title ? title : t("components.WorkInProgress.title")}
         </Typography>
       </Grid>
       {withHref && (
@@ -42,7 +46,9 @@ const WorkInProgress: FC<WorkInProgressProps> = ({
           href={href ? href : "#"}
           target="_blank"
         >
-          {t("components.WorkInProgress.knowMore")}
+          {redirectMessage
+            ? redirectMessage
+            : t("components.WorkInProgress.knowMore")}
         </Button>
       )}
       <Grid item></Grid>

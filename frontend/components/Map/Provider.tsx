@@ -79,9 +79,9 @@ const MapProvider: FC<MapProviderProps> = (props) => {
     );
   }, [theme.palette.type]);
 
-  useEffect(() => {
-    console.log(clickInfo);
-  }, [clickInfo]);
+  // useEffect(() => {
+  //   console.log(clickInfo);
+  // }, [clickInfo]);
 
   return (
     <MapContext.Provider
@@ -122,7 +122,7 @@ const MapProvider: FC<MapProviderProps> = (props) => {
               horizontal: "left",
             }}
           >
-            {clickInfo?.data?.other_tags ? clickInfo.data.other_tags : "Oups"}
+            {clickInfo?.data.other_tags ? clickInfo.data.other_tags : "Oups"}
           </Popover>
           <StaticMap mapStyle={mapStyle} />
         </DeckGL>

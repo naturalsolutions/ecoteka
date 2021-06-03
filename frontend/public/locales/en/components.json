@@ -609,7 +609,8 @@
     },
     "Header": {
       "mapEditor": "Map Editor",
-      "importDataset": "Import datasets"
+      "importDataset": "Import datasets",
+      "treesExplorer": "Explore Trees"
     },
     "SpeciesDiversityDashboard": {
       "title": "Species Diversity Dashboard"
@@ -634,6 +635,9 @@
     },
     "DetectTreesModule": {
       "title": "Tree detection assistant"
+    },
+    "Zones": {
+      "title": "Organization zones management"
     }
   },
   "Dashboard": {

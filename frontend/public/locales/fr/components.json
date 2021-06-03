@@ -605,7 +605,8 @@
     },
     "Header": {
       "mapEditor": "Éditeur cartographique",
-      "importDataset": "Importer vos données"
+      "importDataset": "Importer vos données",
+      "treesExplorer": "Explorer les arbres"
     },
     "SpeciesDiversityDashboard": {
       "title": "Tableau de bord de la diversité des espèces"
@@ -623,13 +624,16 @@
       "title": "Tableau de bord de gestion de la foresterie urbaine"
     },
     "EconomyDashboard": {
-      "title": "Valeur économique du patrimoine arboré"
+      "title": "Valeur Intégrale Evaluée du patrimoine arboré"
     },
     "DataQualityModule": {
       "title": "Assistant de qualité des données d'inventaire"
     },
     "DetectTreesModule": {
       "title": "Assistant de détection d'arbres"
+    },
+    "Zones": {
+      "title": "Gestion des secteurs"
     }
   },
   "Dashboard": {
