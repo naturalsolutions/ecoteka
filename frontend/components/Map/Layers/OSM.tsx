@@ -15,17 +15,42 @@ function OSMLayer(visible: boolean): MVTLayer<string, TileLayerProps<string>> {
     minZoom: 0,
     maxZoom: 13,
     pickable: true,
+    opacity: 0.5,
     autoHighlight: true,
-    pointRadiusMinPixels: 2,
-    pointRadiusScale: 1,
-    minRadius: 4,
+    pointRadiusMinPixels: 1,
+    pointRadiusScale: 5,
+    minRadius: 1,
     radiusMinPixels: 0.5,
     lineWidthMinPixels: 1,
     lineWidthMaxPixels: 1,
-    getLineColor: [50, 152, 26],
-    getFillColor: [85, 245, 0],
+    getLineColor: (d) => {
+      const spRegex = /species/;
+      const genRegex = /genus/;
+      if (
+        spRegex.test(d.properties.other_tags) ||
+        genRegex.test(d.properties.other_tags)
+      ) {
+        return [34, 169, 54];
+      } else {
+        return [147, 168, 180];
+      }
+    },
+    getFillColor: (d) => {
+      const spRegex = /species/;
+      const genRegex = /genus/;
+      if (
+        spRegex.test(d.properties.other_tags) ||
+        genRegex.test(d.properties.other_tags)
+      ) {
+        return [34, 169, 54];
+      } else {
+        return [147, 168, 180];
+      }
+    },
     visible: visible,
-    onClick: (info, event) => console.log("Clicked:", info.object.properties),
+    onClick: (info, event) => {
+      console.log("Clicked:", info.object.properties);
+    },
   });
 }
 
