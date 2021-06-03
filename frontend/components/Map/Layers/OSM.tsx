@@ -25,6 +25,7 @@ function OSMLayer(visible: boolean): MVTLayer<string, TileLayerProps<string>> {
     getLineColor: [50, 152, 26],
     getFillColor: [85, 245, 0],
     visible: visible,
+    onClick: (info, event) => console.log("Clicked:", info.object.properties),
   });
 }
 
