@@ -1,3 +1,12 @@
+## [0.12.12](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.11...v0.12.12) (2021-06-04)
+
+
+### Bug Fixes
+
+* **frontend:** Add colorFill and radiuasScale to osmLayer ([4859cf7](https://gitlab.com/natural-solutions/ecoteka/commit/4859cf7106a4f625366fa3643ca5c91aa35a9b42))
+* **frontend:** Map Provider MVTLayeer interactivity sandbox ([beb15c3](https://gitlab.com/natural-solutions/ecoteka/commit/beb15c3fd0b6a2c30c14e9ffee481c016eacbb47))
+* **frontend:** Organization page rework ([c1c461c](https://gitlab.com/natural-solutions/ecoteka/commit/c1c461c5f472f3128061e2c4340fb7686680841b))
+
 ## [0.12.11](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.10...v0.12.11) (2021-06-02)
 
 
