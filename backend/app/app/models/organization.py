@@ -82,6 +82,9 @@ class Organization(Base):
         name: str,
         mode: str,
         archived: bool,
+        featured=False,
+        population_size=None,
+        area_sq_km=None,
         created_at=None,
         updated_at=None,
         config=None,
@@ -110,6 +113,9 @@ class Organization(Base):
         self.boundary_bbox_coords = boundary_bbox_coords
         self.archived = archived
         self.archived_at = archived_at
+        self.featured = featured,
+        self.population_size = population_size,
+        self.area_sq_km = area_sq_km,
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         # self.path = (
