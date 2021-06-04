@@ -51,5 +51,5 @@ def downgrade():
     op.drop_index(op.f("ix_healthassessment_id"), table_name="healthassessment")
     op.drop_index(op.f("ix_healthassessment_tree_id"), table_name="healthassessment")
     op.drop_index(op.f("ix_healthassessment_organization_id"), table_name="healthassessment")
-    op.execute('DROP TYPE healthassessment_organ')
     op.drop_table("healthassessment")
+    op.execute('DROP TYPE healthassessment_organ')
