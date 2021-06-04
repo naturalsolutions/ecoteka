@@ -16,14 +16,10 @@ const EconomyDashboard: FC<EconomyDashboardProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.EconomyDashboard.title")}
+      title={t("components.Organization.Zones.title")}
       items={[]}
     >
-      <WorkInProgress
-        withHref
-        redirectMessage="Calculez-la dès maintenant!"
-        href="https://www.baremedelarbre.fr/"
-      />
+      <WorkInProgress />
     </CoreOptionsPanel>
   );
 };

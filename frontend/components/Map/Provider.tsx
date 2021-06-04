@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { createContext, FC, useContext } from "react";
-import { makeStyles, Paper, PaperProps, Theme } from "@material-ui/core";
+import {
+  makeStyles,
+  Paper,
+  PaperProps,
+  Theme,
+  Popover,
+} from "@material-ui/core";
 import DeckGL from "@deck.gl/react";
 import { StaticMap } from "react-map-gl";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
@@ -46,6 +52,22 @@ const MapProvider: FC<MapProviderProps> = (props) => {
   const [baseLayer, setBaseLayer] = useState<BaseLayer>("map");
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
   const [mapStyle, setMapStyle] = useState<string>();
+  const [clickInfo, setClickInfo] = useState(null);
+  const deckRef = useRef(null);
+  const onClick = useCallback((event) => {
+    const pickInfo = deckRef.current.pickObject({
+      x: event.clientX,
+      y: event.clientY,
+      radius: 10,
+    });
+    pickInfo
+      ? setClickInfo({
+          data: pickInfo.object.properties,
+          x: pickInfo.x,
+          y: pickInfo.y,
+        })
+      : setClickInfo(null);
+  }, []);
 
   const handleOnViewStateChange = (e) => {
     setViewState(e.viewState);
@@ -57,6 +79,10 @@ const MapProvider: FC<MapProviderProps> = (props) => {
     );
   }, [theme.palette.type]);
 
+  // useEffect(() => {
+  //   console.log(clickInfo);
+  // }, [clickInfo]);
+
   return (
     <MapContext.Provider
       value={{
@@ -66,17 +92,38 @@ const MapProvider: FC<MapProviderProps> = (props) => {
         setLayers,
         viewState,
         setViewState,
+        clickInfo,
+        setClickInfo,
       }}
     >
-      <Paper className={classes.root} {...PaperProps}>
+      <Paper className={classes.root} {...PaperProps} onClick={onClick}>
         {/* @ts-ignore */}
         <DeckGL
           layers={layers}
           viewState={viewState}
           controller={true}
           onViewStateChange={handleOnViewStateChange}
+          ref={deckRef}
         >
           {children}
+          <Popover
+            open={Boolean(clickInfo?.data?.osm_id)}
+            anchorReference="anchorPosition"
+            anchorPosition={{
+              top: clickInfo ? clickInfo.y : 0,
+              left: clickInfo ? clickInfo.x : 0,
+            }}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+          >
+            {clickInfo?.data.other_tags ? clickInfo.data.other_tags : "Oups"}
+          </Popover>
           <StaticMap mapStyle={mapStyle} />
         </DeckGL>
       </Paper>

@@ -8,6 +8,7 @@ import OrganizationHeader from "@/components/OrganizationV2/Header";
 import { useAppContext } from "@/providers/AppContext";
 import { NextPage } from "next";
 import OrganizationMembers from "@/components/OrganizationV2/Members";
+import OrganizationZones from "@/components/OrganizationV2/Zones";
 import OrganizationProgress from "@/components/OrganizationV2/Progress";
 import Loader from "@/components/Core/Feedback/OrganizationSkeleton";
 import Error from "@/components/Core/Error";
@@ -31,7 +32,11 @@ const OrganizationMain = () => {
   const { t } = useTranslation(["common"]);
   return (
     <AbilityContext.Provider
-      value={buildAbilityFor(organization?.current_user_role)}
+      value={buildAbilityFor(
+        organization?.current_user_role
+          ? organization?.current_user_role
+          : "none"
+      )}
     >
       <Container>
         <Grid container direction="column">
@@ -43,26 +48,25 @@ const OrganizationMain = () => {
           </Grid>
           <Grid item>
             <Grid container spacing={2}>
-              <Can do="read" on="Dashboard">
-                <Grid item xs={12} md={6}>
-                  <OrganizationProgress />
-                </Grid>
-              </Can>
               <Can do="read" on="Members">
                 <Grid item xs={12} md={6}>
                   <OrganizationMembers />
                 </Grid>
               </Can>
-              <Can do="read" on="Dashboard">
-                <Grid item xs={12} md={12}>
-                  <SpeciesDiversityDashboard />
-                </Grid>
-              </Can>
-              <Can do="read" on="Dashboard">
+              <Can do="read" on="Teams">
                 <Grid item xs={12} md={6}>
-                  <GreeningDashboard />
+                  <OrganizationZones />
                 </Grid>
               </Can>
+              <Grid item xs={12} md={6}>
+                <OrganizationProgress />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <GreeningDashboard />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <SpeciesDiversityDashboard />
+              </Grid>
               <Can do="read" on="Dashboard">
                 <Grid item xs={12} md={6}>
                   <EconomyDashboard />

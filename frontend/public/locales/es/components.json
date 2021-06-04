@@ -606,7 +606,8 @@
     },
     "Header": {
       "mapEditor": "Editor de mapas",
-      "importDataset": "Importar conjuntos de datos"
+      "importDataset": "Importar conjuntos de datos",
+      "treesExplorer": "Explorar árboles"
     },
     "SpeciesDiversityDashboard": {
       "title": "Panel de diversidad de especies"
@@ -631,6 +632,9 @@
     },
     "DetectTreesModule": {
       "title": "Asistente de detección de árboles"
+    },
+    "Zones": {
+      "title": "Gestión de zonas de organización"
     }
   },
   "Dashboard": {

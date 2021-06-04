@@ -105,10 +105,6 @@ const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
     }
   }, [organization]);
 
-  useEffect(() => {
-    console.log(members);
-  }, [members]);
-
   return (
     <CoreOptionsPanel
       title={t("components.Organization.Members.title")}

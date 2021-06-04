@@ -32,6 +32,7 @@ const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
   },
   paper: {
     position: "absolute",
+    zIndex: 10,
     top: 20,
     left: 20,
     padding: "20px",
@@ -51,10 +52,11 @@ const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
 }));
 
 const HomeHero: FC<HomeHeroProps> = ({}) => {
-  const osmLayer = OSMLayer(true);
   const { t } = useTranslation(["common", "components"]);
   const [coords, setCoords] = useState();
   const classes = useStyles({ coords });
+  const { setClickInfo } = useMapContext();
+  const osmLayer = OSMLayer(true);
 
   const handleOnChangeCity = (coords) => {
     setCoords(coords);
@@ -84,13 +86,8 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
             </Grid>
             <Grid item>
               <Grid container spacing={1} justify="center" alignItems="center">
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12}>
                   <MapSearchCity onChange={handleOnChangeCity} />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <Button color="primary" variant="contained" fullWidth>
-                    {t("common.buttons.search")}
-                  </Button>
                 </Grid>
               </Grid>
             </Grid>

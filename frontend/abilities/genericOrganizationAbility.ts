@@ -7,6 +7,7 @@ export type Subjects =
   | "Interventions"
   | "Trees"
   | "Dashboard"
+  | "OpenDashboard"
   | "Organization"
   | "all";
 
@@ -41,8 +42,35 @@ export default function defineRulesFor(role: string) {
     case "guest":
       cannot(["manage", "create", "read", "update"], "all");
       break;
+    case "none":
+      can(["read"], ["OpenDashboard"]);
+      cannot(
+        ["manage", "create", "read", "update"],
+        [
+          "Members",
+          "Teams",
+          "Interventions",
+          "Trees",
+          "Dashboard",
+          "OpenDashboard",
+          "Organization",
+        ]
+      );
+      break;
     default:
-      cannot(["manage", "create", "read", "update"], "all");
+      can(["read"], ["OpenDashboard"]);
+      cannot(
+        ["manage", "create", "read", "update"],
+        [
+          "Members",
+          "Teams",
+          "Interventions",
+          "Trees",
+          "Dashboard",
+          "OpenDashboard",
+          "Organization",
+        ]
+      );
       break;
   }
   return rules;
