@@ -638,6 +638,15 @@
     },
     "Zones": {
       "title": "Organization zones management"
+    },
+    "populationSize": {
+      "label": "Population size"
+    },
+    "area": {
+      "label": "Area"
+    },
+    "featured": {
+      "label": "Is featured"
     }
   },
   "Dashboard": {

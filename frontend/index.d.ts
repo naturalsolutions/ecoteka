@@ -9,8 +9,11 @@ export interface IOrganization {
   total_trees: number;
   total_members: number;
   archived: boolean;
+  featured: boolean;
   mode: TOrganizationMode;
   osm_id: number;
+  population_size?: number;
+  area_sq_km?: number;
   updated_at: string;
   created_at: string;
   current_user_role?: string;

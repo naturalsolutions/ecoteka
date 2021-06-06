@@ -634,6 +634,15 @@
     },
     "Zones": {
       "title": "Gestion des secteurs"
+    },
+    "populationSize": {
+      "label": "Nombre d'habitants"
+    },
+    "area": {
+      "label": "Surface"
+    },
+    "featured": {
+      "label": "Mettre à la une"
     }
   },
   "Dashboard": {

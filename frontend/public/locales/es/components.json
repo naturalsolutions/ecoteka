@@ -635,6 +635,15 @@
     },
     "Zones": {
       "title": "Gestión de zonas de organización"
+    },
+    "populationSize": {
+      "label": "Tamaño de la poblacion"
+    },
+    "area": {
+      "label": "Área"
+    },
+    "featured": {
+      "label": "¿Está destacado"
     }
   },
   "Dashboard": {
