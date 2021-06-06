@@ -54,6 +54,9 @@ class Organization(Base):
     osm_id = Column(Integer, nullable=True)
     osm_place_id = Column(Integer, nullable=True)
     osm_type = Column(String, nullable=True)
+    population_size = Column(Integer, nullable=True)
+    area_sq_km = Column(Float, nullable=True)
+    featured = Column(Boolean, nullable=False, default=False, server_default="false")
     boundary_bbox_coords = Column(ARRAY(Float), nullable=True)
     path = Column(LtreeType, nullable=False)
     config = Column(JSONB, nullable=True)
@@ -82,7 +85,7 @@ class Organization(Base):
         name: str,
         mode: str,
         archived: bool,
-        featured=False,
+        featured: bool,
         population_size=None,
         area_sq_km=None,
         created_at=None,
@@ -113,9 +116,9 @@ class Organization(Base):
         self.boundary_bbox_coords = boundary_bbox_coords
         self.archived = archived
         self.archived_at = archived_at
-        self.featured = featured,
-        self.population_size = population_size,
-        self.area_sq_km = area_sq_km,
+        self.featured = featured
+        self.population_size = population_size
+        self.area_sq_km = area_sq_km
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         # self.path = (
