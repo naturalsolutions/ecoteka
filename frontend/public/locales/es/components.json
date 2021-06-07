@@ -720,7 +720,11 @@
   "organization": {
     "updated": "actualizado",
     "Header": {
-      "lastUpdatedAt": "Última actualización"
+      "lastUpdatedAt": "Última actualización",
+      "trees": "árboles",
+      "populationSize": "habitantes",
+      "tree": "árbol",
+      "tree_plural": "árboles"
     }
   },
   "TreeInterventions": {

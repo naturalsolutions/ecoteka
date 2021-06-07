@@ -42,7 +42,6 @@ class OrganizationCreateRoot(OrganizationBase):
     owner_email: Optional[EmailStr]
     created_at: datetime = datetime.now()
     updated_at: datetime = datetime.now()
-    pass
 
 
 class OrganizationUpdate(OrganizationBase):
