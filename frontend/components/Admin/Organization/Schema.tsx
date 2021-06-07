@@ -72,5 +72,49 @@ export default function useOrganizationSchema() {
       },
       schema: yup.string(),
     },
+    population_size: {
+      type: "textfield",
+      component: {
+        type: "number",
+        defaultValue: null,
+        required: false,
+        label: t("components.Organization.populationSize.label"),
+        InputProps: { inputProps: { min: 0 } },
+        InputLabelProps: {
+          shrink: true,
+        },
+      },
+      schema: yup
+        .number()
+        .nullable()
+        .positive()
+        .transform((value) => (isNaN(value) ? null : value)),
+    },
+    area_sq_km: {
+      type: "textfield",
+      component: {
+        type: "number",
+        defaultValue: null,
+        required: false,
+        label: t("components.Organization.area.label"),
+        InputProps: { inputProps: { min: 0 } },
+        InputLabelProps: {
+          shrink: true,
+        },
+      },
+      schema: yup
+        .number()
+        .nullable()
+        .positive()
+        .transform((value) => (isNaN(value) ? null : value)),
+    },
+    featured: {
+      type: "switch",
+      component: {
+        label: t("components.Organization.featured.label"),
+        defaultValue: false,
+      },
+      schema: yup.boolean(),
+    },
   };
 }

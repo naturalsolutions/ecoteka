@@ -18,6 +18,7 @@ class FindModeEnum(str, Enum):
 class OrganizationBase(BaseModel):
     name: str = ""
     archived: bool = False
+    featured: bool = False
     mode: OrganizationMode
     osm_id: Optional[int]
     osm_place_id: Optional[int]
@@ -26,6 +27,8 @@ class OrganizationBase(BaseModel):
     boundary: Optional[FeatureCollection]
     coords: Optional[Feature]
     config: Optional[Any]
+    population_size: Optional[int]
+    area_sq_km: Optional[float]
 
 
 class OrganizationCreate(OrganizationBase):
@@ -37,7 +40,8 @@ class OrganizationCreate(OrganizationBase):
 
 class OrganizationCreateRoot(OrganizationBase):
     owner_email: Optional[EmailStr]
-    pass
+    created_at: datetime = datetime.now()
+    updated_at: datetime = datetime.now()
 
 
 class OrganizationUpdate(OrganizationBase):

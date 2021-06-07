@@ -635,6 +635,15 @@
     },
     "Zones": {
       "title": "Gestión de zonas de organización"
+    },
+    "populationSize": {
+      "label": "Tamaño de la poblacion"
+    },
+    "area": {
+      "label": "Área"
+    },
+    "featured": {
+      "label": "¿Está destacado"
     }
   },
   "Dashboard": {
@@ -711,7 +720,11 @@
   "organization": {
     "updated": "actualizado",
     "Header": {
-      "lastUpdatedAt": "Última actualización"
+      "lastUpdatedAt": "Última actualización",
+      "trees": "árboles",
+      "populationSize": "habitantes",
+      "tree": "árbol",
+      "tree_plural": "árboles"
     }
   },
   "TreeInterventions": {

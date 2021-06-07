@@ -638,6 +638,15 @@
     },
     "Zones": {
       "title": "Organization zones management"
+    },
+    "populationSize": {
+      "label": "Population size"
+    },
+    "area": {
+      "label": "Area"
+    },
+    "featured": {
+      "label": "Is featured"
     }
   },
   "Dashboard": {
@@ -717,7 +726,11 @@
   "organization": {
     "updated": "updated",
     "Header": {
-      "lastUpdatedAt": "Last updated"
+      "lastUpdatedAt": "Last updated",
+      "trees": "trees",
+      "populationSize": "inhabitants",
+      "tree": "tree",
+      "tree_plural": "trees"
     }
   },
   "TreeInterventions": {

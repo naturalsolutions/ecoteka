@@ -634,6 +634,15 @@
     },
     "Zones": {
       "title": "Gestion des secteurs"
+    },
+    "populationSize": {
+      "label": "Nombre d'habitants"
+    },
+    "area": {
+      "label": "Surface"
+    },
+    "featured": {
+      "label": "Mettre à la une"
     }
   },
   "Dashboard": {
@@ -710,7 +719,11 @@
   "organization": {
     "updated": "modifiée",
     "Header": {
-      "lastUpdatedAt": "Dernière mise à jour"
+      "lastUpdatedAt": "Dernière mise à jour",
+      "trees": "arbres",
+      "populationSize": "habitants",
+      "tree": "arbre",
+      "tree_plural": "arbres"
     }
   },
   "TreeInterventions": {
