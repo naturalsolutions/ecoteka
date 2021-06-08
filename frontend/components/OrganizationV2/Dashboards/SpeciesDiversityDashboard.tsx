@@ -18,7 +18,7 @@ import useApi from "@/lib/useApi";
 import { styles } from "@material-ui/pickers/views/Clock/Clock";
 
 export interface SpeciesDiversityDashboardProps {
-  wip: boolean;
+  wip?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -41,7 +41,7 @@ const options = {
 };
 
 const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
-  wip,
+  wip = false,
 }) => {
   const classes = useStyles();
   const { organization } = useAppContext();
