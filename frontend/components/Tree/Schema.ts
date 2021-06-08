@@ -191,6 +191,17 @@ export default function useTreeSchema() {
       },
       schema: yup.number().transform(transformNumber),
     },
+    circumference: {
+      type: "textfield",
+      category: "Caractéristiques",
+      component: {
+        type: "number",
+        label: t("components.Tree.properties.circumference"),
+        placeholder: t("components.Tree.placeholder.circumference"),
+        helperText: t("components.Tree.helperText.circumference"),
+      },
+      schema: yup.number().transform(transformNumber),
+    },
     soilTexture: {
       type: "select",
       category: "Caractéristiques",
@@ -294,6 +305,22 @@ export default function useTreeSchema() {
         helperText: t("components.Tree.helperText.allergenicRiskScore"),
       },
       schema: yup.number().transform(transformNumber).positive().integer(),
+    },
+    associatedPhoto: {
+      type: "switch",
+      category: "Caractéristiques",
+      component: {
+        label: t("components.Tree.properties.associatedPhoto"),
+      },
+      schema: yup.boolean(),
+    },
+    sanitaryState: {
+      type: "textfield",
+      category: "Autres",
+      component: {
+        label: t("components.Tree.properties.sanitaryState"),
+      },
+      schema: yup.string(),
     },
     notes: {
       type: "textfield",
