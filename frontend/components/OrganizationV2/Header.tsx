@@ -241,25 +241,30 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
                     })}
                   </ListItemText>
                 </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <SupervisedUserCircleTwoTone />
-                  </ListItemIcon>
-                  <ListItemText>
-                    {organization?.population_size.toLocaleString(
-                      router.locale
-                    )}{" "}
-                    {t("components.organization.Header.populationSize")}
-                  </ListItemText>
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <ZoomOutMap />
-                  </ListItemIcon>
-                  <ListItemText>
-                    {organization?.area_sq_km.toLocaleString(router.locale)} km2
-                  </ListItemText>
-                </ListItem>
+                {organization?.population_size && (
+                  <ListItem>
+                    <ListItemIcon>
+                      <SupervisedUserCircleTwoTone />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {organization?.population_size.toLocaleString(
+                        router.locale
+                      )}{" "}
+                      {t("components.organization.Header.populationSize")}
+                    </ListItemText>
+                  </ListItem>
+                )}
+                {organization?.area_sq_km && (
+                  <ListItem>
+                    <ListItemIcon>
+                      <ZoomOutMap />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {organization?.area_sq_km.toLocaleString(router.locale)}{" "}
+                      km2
+                    </ListItemText>
+                  </ListItem>
+                )}
               </List>
             </Grid>
             <Grid item xs />
