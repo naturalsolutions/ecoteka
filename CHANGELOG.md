@@ -1,3 +1,21 @@
+## [0.12.13](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.12...v0.12.13) (2021-06-08)
+
+
+### Bug Fixes
+
+* **backend:** add more attributes to organization schema ([bd6bffb](https://gitlab.com/natural-solutions/ecoteka/commit/bd6bffb083acf3db157830b357a1163eccd85c60))
+* **backend:** Fix health_assessment revision rollback ([1b290f6](https://gitlab.com/natural-solutions/ecoteka/commit/1b290f6cea021043a64b219d5197a2e95a7156d8))
+* **backend:** fix organization model initialization ([5096b4d](https://gitlab.com/natural-solutions/ecoteka/commit/5096b4d7a23b146282a0054a5fef16c10d43e836))
+* **frontend:** add optional richtooltip info on options panel component ([81cf60d](https://gitlab.com/natural-solutions/ecoteka/commit/81cf60d70f2ba79812a10e9ef8acbd4b37380376))
+* **frontend:** add popSize and area to organization header ([1f204b7](https://gitlab.com/natural-solutions/ecoteka/commit/1f204b7e3754979f87bec52b746c611ff7309a39))
+* **frontend:** add RichTooltip component ([2260e82](https://gitlab.com/natural-solutions/ecoteka/commit/2260e82651763d4c33b201de11c303f4b857c0a7))
+* **frontend:** add species distribution chart ([54c7c2e](https://gitlab.com/natural-solutions/ecoteka/commit/54c7c2e3603eaf0b56848d64c1e04cd8ef505b90))
+* **frontend:** Add species preview components ([8cea323](https://gitlab.com/natural-solutions/ecoteka/commit/8cea3234246750a99b8368c4e3cbed3d045c4b33))
+* **frontend:** clear console log ([86ce48c](https://gitlab.com/natural-solutions/ecoteka/commit/86ce48ccb2819be4b42c3c63e9132cbe46192425))
+* **frontend:** conditonal rendering on organization header component ([9f5f565](https://gitlab.com/natural-solutions/ecoteka/commit/9f5f5657ff2f015a52d8df433e4c32bba8760ffe))
+* **frontend:** set wip props to optional for SpeciesDiversityDashboard components ([92d0207](https://gitlab.com/natural-solutions/ecoteka/commit/92d0207ed711becf0f6803afab740a527e7f079a))
+* **frontend:** update admin organization form ([51fb7cd](https://gitlab.com/natural-solutions/ecoteka/commit/51fb7cdd6f9735905a6524cca725ff048198f424))
+
 ## [0.12.12](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.11...v0.12.12) (2021-06-04)
 
 
