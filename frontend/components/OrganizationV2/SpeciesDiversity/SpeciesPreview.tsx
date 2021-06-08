@@ -37,7 +37,7 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({ canonicalName }) => {
       }
     } catch ({ response, request }) {
       if (response) {
-        console.log(response);
+        // console.log(response);
       }
     }
   };
@@ -56,7 +56,7 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({ canonicalName }) => {
       }
     } catch ({ response, request }) {
       if (response) {
-        console.log(response);
+        // console.log(response);
       }
     }
   };
@@ -78,7 +78,7 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({ canonicalName }) => {
       }
     } catch ({ response, request }) {
       if (response) {
-        console.log(response);
+        // console.log(response);
       }
     }
   };

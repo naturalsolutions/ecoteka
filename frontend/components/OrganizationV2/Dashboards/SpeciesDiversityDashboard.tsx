@@ -101,7 +101,6 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
         },
       ],
     };
-    console.log(formattedData);
     return formattedData;
   };
 
@@ -155,8 +154,11 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
         alignItems="center"
         spacing={2}
       >
-        {speciesAggregates.slice(0, 5).map((species) => (
-          <SpeciesPreview canonicalName={species.value} />
+        {speciesAggregates.slice(0, 5).map((species, index) => (
+          <SpeciesPreview
+            canonicalName={species.value}
+            key={`species-${index}`}
+          />
         ))}
       </Grid>
       <Typography
