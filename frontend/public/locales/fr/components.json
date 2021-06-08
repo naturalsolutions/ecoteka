@@ -609,7 +609,10 @@
       "treesExplorer": "Explorer les arbres"
     },
     "SpeciesDiversityDashboard": {
-      "title": "Tableau de bord de la diversité des espèces"
+      "title": "Tableau de bord de la diversité des espèces",
+      "taxaReparitionChart": {
+        "label": "# d' arbres"
+      }
     },
     "Progress": {
       "title": "Complétion des jeux de données"
@@ -634,6 +637,21 @@
     },
     "Zones": {
       "title": "Gestion des secteurs"
+    },
+    "populationSize": {
+      "label": "Nombre d'habitants"
+    },
+    "area": {
+      "label": "Surface"
+    },
+    "featured": {
+      "label": "Mettre à la une"
+    },
+    "Dashboards": {
+      "SpeciesDiversity": {
+        "topTaxa": "Taxons les plus représentés",
+        "taxaRepartition": "Graphique de répartition des espèces"
+      }
     }
   },
   "Dashboard": {
@@ -710,7 +728,11 @@
   "organization": {
     "updated": "modifiée",
     "Header": {
-      "lastUpdatedAt": "Dernière mise à jour"
+      "lastUpdatedAt": "Dernière mise à jour",
+      "trees": "arbres",
+      "populationSize": "habitants",
+      "tree": "arbre",
+      "tree_plural": "arbres"
     }
   },
   "TreeInterventions": {

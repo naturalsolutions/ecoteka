@@ -14,7 +14,13 @@ import {
   Box,
 } from "@material-ui/core";
 import { useAppContext } from "@/providers/AppContext";
-import { Lock, Nature, Public } from "@material-ui/icons";
+import {
+  Lock,
+  Nature,
+  Public,
+  SupervisedUserCircleTwoTone,
+  ZoomOutMap,
+} from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { formatDistance } from "date-fns";
 import { es, enGB, fr } from "date-fns/locale";
@@ -142,7 +148,7 @@ const MapData: FC<MapPreviewProps> = ({}) => {
   return <></>;
 };
 
-const MapPreview: FC<MapPreviewProps> = ({}) => {
+export const MapPreview: FC<MapPreviewProps> = ({}) => {
   const classes = useStyles();
   const { organization } = useAppContext();
   if (organization.total_trees == 0 && organization.osm_id) {
@@ -224,14 +230,41 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
             </Grid>
             <Grid item>
               <List>
-                <ListItem button>
+                <ListItem>
                   <ListItemIcon>
                     <Nature />
                   </ListItemIcon>
                   <ListItemText>
-                    {organization?.total_trees} arbres
+                    {organization?.total_trees.toLocaleString(router.locale)}{" "}
+                    {t("components.organization.Header.tree", {
+                      count: organization?.total_trees,
+                    })}
                   </ListItemText>
                 </ListItem>
+                {organization?.population_size && (
+                  <ListItem>
+                    <ListItemIcon>
+                      <SupervisedUserCircleTwoTone />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {organization?.population_size.toLocaleString(
+                        router.locale
+                      )}{" "}
+                      {t("components.organization.Header.populationSize")}
+                    </ListItemText>
+                  </ListItem>
+                )}
+                {organization?.area_sq_km && (
+                  <ListItem>
+                    <ListItemIcon>
+                      <ZoomOutMap />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {organization?.area_sq_km.toLocaleString(router.locale)}{" "}
+                      km2
+                    </ListItemText>
+                  </ListItem>
+                )}
               </List>
             </Grid>
             <Grid item xs />

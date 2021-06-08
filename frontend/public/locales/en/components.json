@@ -613,7 +613,10 @@
       "treesExplorer": "Explore Trees"
     },
     "SpeciesDiversityDashboard": {
-      "title": "Species Diversity Dashboard"
+      "title": "Species Diversity Dashboard",
+      "taxaReparitionChart": {
+        "label": " # of trees"
+      }
     },
     "Progress": {
       "title": "Datasets completion"
@@ -638,6 +641,21 @@
     },
     "Zones": {
       "title": "Organization zones management"
+    },
+    "populationSize": {
+      "label": "Population size"
+    },
+    "area": {
+      "label": "Area"
+    },
+    "featured": {
+      "label": "Is featured"
+    },
+    "Dashboards": {
+      "SpeciesDiversity": {
+        "topTaxa": "Most represented taxa in datasets",
+        "taxaRepartition": "Species repartition chart"
+      }
     }
   },
   "Dashboard": {
@@ -717,7 +735,11 @@
   "organization": {
     "updated": "updated",
     "Header": {
-      "lastUpdatedAt": "Last updated"
+      "lastUpdatedAt": "Last updated",
+      "trees": "trees",
+      "populationSize": "inhabitants",
+      "tree": "tree",
+      "tree_plural": "trees"
     }
   },
   "TreeInterventions": {

@@ -97,6 +97,9 @@ const FormOrganizationRoot = forwardRef<
       <SearchPlace onChange={handleOnChangePlace} />
       <Grid item>{form.fields.osm_id}</Grid>
       <Grid item>{form.fields.osm_type}</Grid>
+      <Grid item>{form.fields.population_size}</Grid>
+      <Grid item>{form.fields.area_sq_km}</Grid>
+      <Grid item>{form.fields.featured}</Grid>
     </Grid>
   );
 });

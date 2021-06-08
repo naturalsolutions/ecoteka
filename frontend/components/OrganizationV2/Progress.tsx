@@ -101,10 +101,6 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
     fetchMetrics(organization?.id);
   }, [organization]);
 
-  useEffect(() => {
-    // console.log(metrics);
-  }, [metrics]);
-
   return (
     <CoreOptionsPanel
       title={t("components.Organization.Progress.title")}
