@@ -1,14 +1,21 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { makeStyles, Theme, IconButton } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  IconButton,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 import { Bar } from "react-chartjs-2";
-import HelpIcon from "@material-ui/icons/Help";
 import CoreOptionsPanel from "@/components/Core/OptionsPanel";
 import { useTranslation } from "react-i18next";
 import WorkInProgress from "@/components/WorkInProgress";
 import RichTooltip from "@/components/Feedback/RichTooltip";
 import { MapPreview } from "@/components/OrganizationV2/Header";
 import { useAppContext } from "@/providers/AppContext";
+import SpeciesPreview from "@/components/OrganizationV2/SpeciesDiversity/SpeciesPreview";
 import useApi from "@/lib/useApi";
+import { styles } from "@material-ui/pickers/views/Clock/Clock";
 
 export interface SpeciesDiversityDashboardProps {
   wip: boolean;
@@ -16,6 +23,9 @@ export interface SpeciesDiversityDashboardProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
+  subtitles: {
+    color: theme.palette.grey[700],
+  },
 }));
 
 const options = {
@@ -38,7 +48,7 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   const { apiETK } = useApi().api;
   const { t } = useTranslation(["components"]);
   const [metrics, setMetrics] = useState(undefined);
-  const [open, setOpen] = useState<boolean>(false);
+
   const [speciesAggregates, setSpeciesAggregates] = useState([]);
 
   const fetchMetrics = async (organizationId: number) => {
@@ -81,7 +91,9 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
       labels: labels,
       datasets: [
         {
-          label: "# of specimens",
+          label: t(
+            "components.Organization.SpeciesDiversityDashboard.taxaReparitionChart.label"
+          ),
           data: chartData,
           backgroundColor: colors,
           borderColor: colors,
@@ -124,17 +136,38 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
     <CoreOptionsPanel
       title={t("components.Organization.SpeciesDiversityDashboard.title")}
       items={[]}
+      withTooltip
+      Tooltip={
+        <WorkInProgress withHref href="https://www.natural-solutions.eu" />
+      }
     >
-      <RichTooltip
-        content={<MapPreview />}
-        open={open}
-        placement="bottom"
-        onClose={() => setOpen(false)}
+      <Typography
+        variant="subtitle2"
+        className={classes.subtitles}
+        gutterBottom
       >
-        <IconButton onClick={() => setOpen(!open)}>
-          <HelpIcon />
-        </IconButton>
-      </RichTooltip>
+        {t("components.Organization.Dashboards.SpeciesDiversity.topTaxa")}
+      </Typography>
+      <Grid
+        container
+        direction="row"
+        justify="space-evenly"
+        alignItems="center"
+        spacing={2}
+      >
+        {speciesAggregates.slice(0, 5).map((species) => (
+          <SpeciesPreview canonicalName={species.value} />
+        ))}
+      </Grid>
+      <Typography
+        variant="subtitle2"
+        className={classes.subtitles}
+        gutterBottom
+      >
+        {t(
+          "components.Organization.Dashboards.SpeciesDiversity.taxaRepartition"
+        )}
+      </Typography>
       {speciesAggregates.length > 0 && (
         <Bar type="bar" data={memoizedData} options={options} />
       )}

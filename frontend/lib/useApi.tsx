@@ -83,6 +83,22 @@ export default function useApi() {
     },
   });
 
+  // DOC: https://eol.org/docs/what-is-eol/classic-apis
+  let eol = axios.create({
+    baseURL: "https://eol.org/api",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  //
+  let wikispecies = axios.create({
+    baseURL: "https://species.wikimedia.org/api/rest_v1",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
   const refreshAuthLogic = (failedRequest) =>
     // We got here because accessToken has expired
     // Overwriting headers in failedRequest will not help us to get a "/auth/refresh_token" successfull response
@@ -113,6 +129,8 @@ export default function useApi() {
     apiETK: ecotekaV1,
     apiMeili: meiliApi,
     apiGBIF: gbif,
+    apiEOL: eol,
+    apiWikispecies: wikispecies,
   };
 
   return {

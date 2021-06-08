@@ -609,7 +609,10 @@
       "treesExplorer": "Explorer les arbres"
     },
     "SpeciesDiversityDashboard": {
-      "title": "Tableau de bord de la diversité des espèces"
+      "title": "Tableau de bord de la diversité des espèces",
+      "taxaReparitionChart": {
+        "label": "# d' arbres"
+      }
     },
     "Progress": {
       "title": "Complétion des jeux de données"
@@ -643,6 +646,12 @@
     },
     "featured": {
       "label": "Mettre à la une"
+    },
+    "Dashboards": {
+      "SpeciesDiversity": {
+        "topTaxa": "Taxons les plus représentés",
+        "taxaRepartition": "Graphique de répartition des espèces"
+      }
     }
   },
   "Dashboard": {

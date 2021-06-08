@@ -613,7 +613,10 @@
       "treesExplorer": "Explore Trees"
     },
     "SpeciesDiversityDashboard": {
-      "title": "Species Diversity Dashboard"
+      "title": "Species Diversity Dashboard",
+      "taxaReparitionChart": {
+        "label": " # of trees"
+      }
     },
     "Progress": {
       "title": "Datasets completion"
@@ -647,6 +650,12 @@
     },
     "featured": {
       "label": "Is featured"
+    },
+    "Dashboards": {
+      "SpeciesDiversity": {
+        "topTaxa": "Most represented taxa in datasets",
+        "taxaRepartition": "Species repartition chart"
+      }
     }
   },
   "Dashboard": {
