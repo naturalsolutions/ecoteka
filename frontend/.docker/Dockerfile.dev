@@ -1,5 +1,7 @@
 FROM node:alpine
 
+ENV NEXT_TELEMETRY_DEBUG 1
+
 RUN mkdir /app 
 
 WORKDIR /app

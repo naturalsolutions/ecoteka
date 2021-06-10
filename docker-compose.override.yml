@@ -36,7 +36,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./app:/app
+      - ./backend/app:/app
     command: /start-reload.sh
     ports:
       - "5678:5678"
