@@ -1,3 +1,10 @@
+## [0.12.14](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.13...v0.12.14) (2021-06-10)
+
+
+### Bug Fixes
+
+* backend development volumen ([bdf11fc](https://gitlab.com/natural-solutions/ecoteka/commit/bdf11fc2883515ffc41c26c5c388dd80ae71a408))
+
 ## [0.12.13](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.12...v0.12.13) (2021-06-08)
 
 
