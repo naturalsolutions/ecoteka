@@ -53,16 +53,11 @@ services:
       dockerfile: .docker/Dockerfile.dev
     volumes:
       - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
     labels:
       - traefik.http.services.frontend.loadbalancer.server.port=3000
 
   meilisearch:
     ports:
       - 7700:7700
-
-  docs:
-    volumes:
-      - ./docs:/docs
-    build:
-      context: ./
-      dockerfile: ./docs/Dockerfile

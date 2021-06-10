@@ -55,6 +55,15 @@ config.webpack = (config, { isServer }) => {
   return config;
 };
 
+config.webpackDevMiddleware = (config) => {
+  config.watchOptions = {
+    poll: 1000,
+    aggregateTimeout: 300,
+  };
+
+  return config;
+};
+
 config.envVars = envVars;
 
 config.i18n = {
