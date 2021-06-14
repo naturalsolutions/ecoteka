@@ -1,3 +1,10 @@
+# [0.13.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.14...v0.13.0) (2021-06-14)
+
+
+### Features
+
+* format the data display when clicking on an OSM tree ([663ae39](https://gitlab.com/natural-solutions/ecoteka/commit/663ae39cff0f87673612692e60dc4d8f7c409828))
+
 ## [0.12.14](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.13...v0.12.14) (2021-06-10)
 
 
