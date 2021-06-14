@@ -96,7 +96,7 @@ const MapProvider: FC<MapProviderProps> = (props) => {
         setClickInfo,
       }}
     >
-      <Paper className={classes.root} {...PaperProps} onClick={onClick}>
+      <Paper className={classes.root} {...PaperProps}>
         {/* @ts-ignore */}
         <DeckGL
           layers={layers}

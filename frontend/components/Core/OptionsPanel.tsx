@@ -69,6 +69,7 @@ const CoreOptionsPanel: FC<CoreOptionsPanelProps> = ({
   };
 
   useEffect(() => {
+    console.log("aaaa");
     console.log(withTooltip);
   }, []);
 
