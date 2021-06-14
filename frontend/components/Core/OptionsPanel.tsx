@@ -68,10 +68,6 @@ const CoreOptionsPanel: FC<CoreOptionsPanelProps> = ({
     }
   };
 
-  useEffect(() => {
-    console.log(withTooltip);
-  }, []);
-
   return (
     <Paper className={classes.root}>
       <Grid container alignItems="center">

@@ -6,11 +6,12 @@ import {
   Grid,
   Typography,
   Box,
-  Button,
 } from "@material-ui/core";
 import { Trans, useTranslation } from "react-i18next";
 import MapProvider, { useMapContext } from "@/components/Map/Provider";
-import OSMLayer from "@/components/Map/Layers/OSM";
+import OSMLayer, {
+  renderTooltipInfo as renderTooltipInfoOSM,
+} from "@/components/Map/Layers/OSM";
 import MapSearchCity from "@/components/Map/SearchCity";
 
 export interface HomeHeroProps {}
@@ -51,12 +52,25 @@ const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
   },
 }));
 
+const rendersTooltip = {
+  osm: renderTooltipInfoOSM,
+};
+
 const HomeHero: FC<HomeHeroProps> = ({}) => {
   const { t } = useTranslation(["common", "components"]);
   const [coords, setCoords] = useState();
+  const [info, setInfo] = useState();
   const classes = useStyles({ coords });
-  const { setClickInfo } = useMapContext();
-  const osmLayer = OSMLayer(true);
+
+  const handleShowInfoLayer = (newInfo) => {
+    setInfo(undefined);
+
+    if (newInfo.picked) {
+      setInfo(newInfo);
+    }
+  };
+
+  const osmLayer = OSMLayer({ visible: true, onHover: handleShowInfoLayer });
 
   const handleOnChangeCity = (coords) => {
     setCoords(coords);
@@ -94,6 +108,9 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
           </Grid>
         </Paper>
       </MapProvider>
+      {info &&
+        rendersTooltip[info.layer.id] &&
+        rendersTooltip[info.layer.id]({ info })}
     </div>
   );
 };
