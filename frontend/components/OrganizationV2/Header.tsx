@@ -77,7 +77,7 @@ const defaultViewState = {
   zoom: 5,
 };
 
-const layers = [OSMLayer(true)];
+const layers = [OSMLayer({ visible: true })];
 
 const MapData: FC<MapPreviewProps> = ({}) => {
   const { viewState, setViewState } = useMapContext();

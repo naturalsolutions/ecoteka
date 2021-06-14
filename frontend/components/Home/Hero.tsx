@@ -59,7 +59,7 @@ const rendersTooltip = {
 const HomeHero: FC<HomeHeroProps> = ({}) => {
   const { t } = useTranslation(["common", "components"]);
   const [coords, setCoords] = useState();
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState<Record<string, any>>({});
   const classes = useStyles({ coords });
 
   const handleShowInfoLayer = (newInfo) => {
@@ -108,7 +108,7 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
           </Grid>
         </Paper>
       </MapProvider>
-      {info &&
+      {info?.layer?.id &&
         rendersTooltip[info.layer.id] &&
         rendersTooltip[info.layer.id]({ info })}
     </div>

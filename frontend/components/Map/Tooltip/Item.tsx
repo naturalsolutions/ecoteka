@@ -5,7 +5,7 @@ export interface MapTooltipItemProps {
   border: boolean;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles<Theme, MapTooltipItemProps>((theme: Theme) => ({
   root: {
     paddingBottom: "4px",
     borderBottom: ({ border }) => (border ? "1px solid #E0E0E0" : ""),
