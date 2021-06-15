@@ -24,8 +24,6 @@ const useStyles = makeStyles(({ spacing }) => ({}));
 const OrganizationMain = () => {
   const { organization } = useAppContext();
 
-  console.log(organization);
-
   return (
     <AbilityContext.Provider
       value={buildAbilityFor(
@@ -106,7 +104,9 @@ const OrganizationHomePage: NextPage = () => {
       error={organizationError}
       skeleton={<OrganizationSkeleton />}
     >
-      {organization && <OrganizationMain />}
+      {!isOrganizationLoading && !organizationError && organization && (
+        <OrganizationMain />
+      )}
     </AppLayoutGeneral>
   );
 };

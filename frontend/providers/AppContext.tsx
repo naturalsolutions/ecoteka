@@ -7,8 +7,17 @@ import { useSnackbar } from "notistack";
 
 const StoreContext = createContext({} as any);
 
+const initialOrganizationState = {
+  organization: undefined,
+  error: undefined,
+  isLoading: false,
+};
+
 export const Provider = ({ children }) => {
   const [isOrganizationLoading, setIsOrganizationLoading] = useState(false);
+  const [organizationState, setOrganizationState] = useState(
+    initialOrganizationState
+  );
   const [organizationError, setOrganizationError] = useState(undefined);
   const [user, setUser] = useLocalStorage<IUser>("user");
   const [organization, setOrganization] = useLocalStorage<IOrganization>(
@@ -40,16 +49,13 @@ export const Provider = ({ children }) => {
     }
   };
 
-  const defaultValues = () => {
-    setOrganization(undefined);
-    setIsOrganizationLoading(false);
-    setOrganizationError(undefined);
-  };
-
   const fetchOrganization = async (organizationSlug: string) => {
     try {
-      defaultValues();
-      setIsOrganizationLoading(true);
+      setOrganizationState({
+        isLoading: true,
+        organization: undefined,
+        error: undefined,
+      });
 
       const { data, status } = await apiETK.get(
         `/organization/${organizationSlug}`,
@@ -61,16 +67,23 @@ export const Provider = ({ children }) => {
       );
 
       if (status === 200) {
-        setOrganization(data);
+        setOrganizationState({
+          isLoading: false,
+          organization: data,
+          error: undefined,
+        });
       }
-    } catch ({ response }) {
+
       setIsOrganizationLoading(false);
-      setOrganizationError({
-        message: response.data?.detail,
-        code: response.status,
+    } catch (error) {
+      setOrganizationState({
+        isLoading: false,
+        organization: undefined,
+        error: {
+          message: error.response?.data?.detail,
+          code: error.response?.status,
+        },
       });
-    } finally {
-      setIsOrganizationLoading(false);
     }
   };
 
@@ -93,10 +106,10 @@ export const Provider = ({ children }) => {
       value={{
         user,
         setUser,
-        organization,
+        organization: organizationState.organization,
         setOrganization,
-        isOrganizationLoading,
-        organizationError,
+        isOrganizationLoading: organizationState.isLoading,
+        organizationError: organizationState.error,
         refetchUserData,
         fetchOrganization,
       }}

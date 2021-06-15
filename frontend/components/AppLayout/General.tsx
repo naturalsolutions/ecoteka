@@ -41,10 +41,6 @@ const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
     router.push("/");
   };
 
-  useEffect(() => {
-    console.log(error);
-  }, [error]);
-
   return (
     <AppLayoutGeneralContext.Provider value={{}}>
       {error && (

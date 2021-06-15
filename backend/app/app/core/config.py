@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     ROOT_PATH: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     authjwt_secret_key: str = SECRET_KEY
-    authjwt_access_token_expires: timedelta = timedelta(minutes=30)
-    authjwt_refresh_token_expires: timedelta = timedelta(days=8)
+    authjwt_access_token_expires: timedelta = timedelta(seconds=5)
+    authjwt_refresh_token_expires: timedelta = timedelta(days=10)
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     EXTERNAL_PATH: AnyHttpUrl
