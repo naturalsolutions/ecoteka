@@ -33,10 +33,11 @@ export default function useApi() {
         "Authorization"
       ] = `Bearer ${accessToken}`;
     }
+
     if (!accessToken) {
       delete ecotekaV1.defaults.headers.common["Authorization"];
     }
-  }, [accessToken, refreshToken]);
+  }, [accessToken]);
 
   let ecotekaV1 = axios.create({
     baseURL: apiUrl,
@@ -50,6 +51,7 @@ export default function useApi() {
       "Authorization"
     ] = `Bearer ${accessToken}`;
   }
+
   if (!accessToken) {
     delete ecotekaV1.defaults.headers.common["Authorization"];
   }
