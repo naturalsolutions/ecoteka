@@ -22,6 +22,9 @@ import { use100vh } from "react-div-100vh";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import { TransitionProps } from "@material-ui/core/transitions";
+import { Error } from "@/index";
+import ErrorComponent from "@/components/Core/Error";
+import { useRouter } from "next/router";
 
 interface AppLayoutCartoProps {
   height: number;
@@ -55,8 +58,9 @@ export interface IAppLayoutCarto {
   drawerLeftComponent?: ReactNode;
   drawerLeftWidth?: number;
   onMapToolbarChange?(action: TMapToolbarAction): void;
-  isLoading: boolean;
-  Skeleton: JSX.Element;
+  isLoading?: boolean;
+  skeleton?: JSX.Element;
+  error?: Error | undefined;
 }
 
 const Transition = forwardRef(function Transition(
@@ -122,10 +126,11 @@ export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
 };
 
 const AppLayoutCarto: FC<IAppLayoutCarto> = ({
-  children,
   drawerLeftWidth = 400,
-  isLoading,
-  Skeleton,
+  isLoading = false,
+  error,
+  skeleton,
+  children,
 }) => {
   const toolbarHeight = 48;
   const vh = use100vh();
@@ -135,17 +140,32 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
     height: appHeight,
     width: drawerLeftWidth,
   });
+  const router = useRouter();
+
+  const handleGoToHome = () => {
+    router.push("/");
+  };
 
   return (
     <AppLayoutCartoContext.Provider
       value={{ hegiht: appHeight, width: drawerLeftWidth, container }}
     >
-      <div style={{ display: "flex" }}>
-        <div ref={container}></div>
-        <main className={classes.content}>
-          {isLoading ? Skeleton : children}
-        </main>
-      </div>
+      {error && (
+        <ErrorComponent
+          errorCode={error.code}
+          errorMessage={error.message}
+          captionText={error.message}
+          buttonText="Back to homepage"
+          onClick={handleGoToHome}
+        />
+      )}
+      {isLoading && skeleton}
+      {!error && !isLoading && (
+        <div style={{ display: "flex" }}>
+          <div ref={container}></div>
+          <main className={classes.content}>{children}</main>
+        </div>
+      )}
     </AppLayoutCartoContext.Provider>
   );
 };

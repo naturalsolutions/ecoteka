@@ -127,11 +127,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
             </Grid>
             {showMenuItems && (
               <>
-                <OrganizationSelect
-                  user={user}
-                  organization={organization}
-                  onChange={handleOrganizationSelectChange}
-                />
+                <OrganizationSelect />
                 <Hidden smDown>
                   <ToggleButtonGroup value={menu} size="small">
                     {menuItems.map(
