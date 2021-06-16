@@ -7,37 +7,34 @@ import {
   IconButton,
   Hidden,
 } from "@material-ui/core";
-import { IOrganization, IUser } from "@/index";
+import { IOrganization } from "@/index";
 import { useRouter } from "next/router";
 import LocationCityIcon from "@material-ui/icons/LocationCity";
+import { useAppContext } from "@/providers/AppContext";
 
-export interface OrganizationSelectProps {
-  user: IUser;
-  organization: IOrganization;
-  onChange?(organization: IOrganization): void;
-}
-
-const OrganizationSelect: FC<OrganizationSelectProps> = ({
-  user,
-  organization,
-  onChange,
-}) => {
+const OrganizationSelect: FC = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
+  const { user, organization, setOrganization } = useAppContext();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (organization: IOrganization) => {
+  const handleClose = (newOrganization: IOrganization) => {
     setAnchorEl(null);
 
-    if (organization) {
-      onChange(organization);
+    if (newOrganization) {
+      setOrganization(newOrganization);
     }
 
-    if (router.route === "/organization/[id]") {
-      router.push(`/organization/${organization.id}`);
+    if (router.route === "/[organizationSlug]/map") {
+      router.push({
+        pathname: "/[organizationSlug]/map",
+        query: {
+          organizationSlug: newOrganization.slug,
+        },
+      });
     }
   };
 

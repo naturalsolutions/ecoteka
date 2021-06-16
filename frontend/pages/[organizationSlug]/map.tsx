@@ -538,6 +538,10 @@ const EditionPage = ({}) => {
     renderLayers();
   }, [activeTree, editionMode, selection, filters, dark, data]);
 
+  if (!organization) {
+    return <></>;
+  }
+
   return (
     <AppLayoutCarto
       drawerLeftComponent={drawerLeftComponent}
@@ -648,9 +652,7 @@ const EditionPage = ({}) => {
           </IconButton>
         </Grid>
       </Grid>
-      <Hidden lgUp>
-        <MapAddActions onChange={handleOnMapActionsChange} />
-      </Hidden>
+      <MapAddActions onChange={handleOnMapActionsChange} />
       <ImportPanel onFileImported={handleOnFileImported} />
       <InterventionForm />
       <InterventionsEdit />

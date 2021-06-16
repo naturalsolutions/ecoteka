@@ -1,8 +1,9 @@
 import { FC, createContext, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import Footer from "@/components/AppLayout/Footer";
-import Error from "@/components/Core/Error";
+import ErrorComponent from "@/components/Core/Error";
 import { useRouter } from "next/router";
+import { Error } from "@/index";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -16,11 +17,6 @@ const useStyles = makeStyles((theme) => ({
 const AppLayoutGeneralContext = createContext(null);
 
 export const useAppLayoutGeneral = () => useContext(AppLayoutGeneralContext);
-
-interface Error {
-  message: string;
-  code: number;
-}
 
 export interface IAppLayoutGeneral {
   isLoading?: boolean;
@@ -44,7 +40,7 @@ const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
   return (
     <AppLayoutGeneralContext.Provider value={{}}>
       {error && (
-        <Error
+        <ErrorComponent
           errorCode={error.code}
           errorMessage={error.message}
           captionText={error.message}
