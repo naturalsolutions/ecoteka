@@ -1,3 +1,10 @@
+# [0.14.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.13.1...v0.14.0) (2021-06-16)
+
+
+### Features
+
+* add tree button above the geoloc ([7fa4643](https://gitlab.com/natural-solutions/ecoteka/commit/7fa46433bd914ae7f5b01ea4f8562dc9de6aea6e))
+
 ## [0.13.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.13.0...v0.13.1) (2021-06-16)
 
 
