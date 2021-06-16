@@ -1,3 +1,10 @@
+## [0.13.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.13.0...v0.13.1) (2021-06-16)
+
+
+### Bug Fixes
+
+* improved refresh token control ([7e52ef7](https://gitlab.com/natural-solutions/ecoteka/commit/7e52ef76ffea07761eec6aa90343ebda1f4ba20d))
+
 # [0.13.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.12.14...v0.13.0) (2021-06-14)
 
 
