@@ -717,7 +717,10 @@
   "Home": {
     "title": "Are trees growing in your city? <br/> Come take a look:",
     "myOrganizations": "Organizations you belongs to",
-    "exploreSampleDatasets": "Explore sample datasets"
+    "exploreSampleDatasets": "Explore sample datasets",
+    "FeaturedOrganizations": {
+      "noOrganization": "No organization published yet"
+    }
   },
   "CallToLogin": {
     "headline": "Let's try Ecoteka! ",

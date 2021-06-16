@@ -3,6 +3,7 @@ import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
 import { makeStyles, CardMedia, Container } from "@material-ui/core";
 import HomeHero from "@/components/Home/Hero";
+import FeaturedOrganizations from "@/components/Home/FeaturedOrganizations";
 import SectionContainer from "@/components/Core/Section/Container";
 import SectionItem from "@/components/Core/Section/Item";
 import { useRouter } from "next/router";
@@ -72,28 +73,7 @@ const HomePage: NextPage = () => {
 
       <HomeHero />
 
-      <div className={classes.demos}>
-        <Container>
-          <SectionContainer title={t("common.demos")}>
-            {demos.map((demo) => (
-              <SectionItem
-                key={demo.title}
-                title={demo.title}
-                subtitle={`${Number(demo.trees).toLocaleString(
-                  router.locale
-                )} ${t("common.trees")}`}
-                href={`/${demo.slug}`}
-              >
-                <CardMedia
-                  component="img"
-                  image={`/osm_thumbnails/thumbnail/${demo.osm_id}?width=345&height=183&padding=30`}
-                  title={demo.title}
-                />
-              </SectionItem>
-            ))}
-          </SectionContainer>
-        </Container>
-      </div>
+      <FeaturedOrganizations />
     </AppLayoutGeneral>
   );
 };

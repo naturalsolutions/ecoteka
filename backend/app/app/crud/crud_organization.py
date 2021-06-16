@@ -37,6 +37,11 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
                     status_code=422,
                     detail="ID should be either of type integer or string",
                 )
+    def get_open_featured(self, db: Session):
+        return db.query(self.model).\
+                    filter(self.model.featured == True).\
+                    filter(self.model.mode == "open").\
+                    all()
 
     def create(self, db: Session, *, obj_in: OrganizationCreate) -> Organization:
         parent = self.get(db, id=obj_in.parent_id) if obj_in.parent_id else None
