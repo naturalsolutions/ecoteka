@@ -710,7 +710,10 @@
   "Home": {
     "title": "Les arbres poussent-ils dans votre ville ? <br/> Venez voir:",
     "myOrganizations": "Organisations dont vous êtes membre",
-    "exploreSampleDatasets": "Explorer les jeux de données publiques"
+    "exploreSampleDatasets": "Explorer les jeux de données publiques",
+    "FeaturedOrganizations": {
+      "noOrganization": "Aucune organisation publiée pour le moment"
+    }
   },
   "CallToLogin": {
     "headline": "Essayez Ecoteka maintenant!",

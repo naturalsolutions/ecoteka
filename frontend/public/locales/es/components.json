@@ -711,7 +711,10 @@
   "Home": {
     "title": "¿Los árboles crecen en tu ciudad? <br/> Ven y mira:",
     "myOrganizations": "Organizaciones a las que pertenece",
-    "exploreSampleDatasets": "Explore conjuntos de datos de muestra"
+    "exploreSampleDatasets": "Explore conjuntos de datos de muestra",
+    "FeaturedOrganizations": {
+      "noOrganization": "Ninguna organización publicada todavía"
+    }
   },
   "CallToLogin": {
     "headline": "¡Probemos Ecoteka!",
