@@ -8,16 +8,13 @@ import { useSnackbar } from "notistack";
 const StoreContext = createContext({} as any);
 
 export const Provider = ({ children }) => {
-  const [isLoading] = useState(false);
-  const [isOrganizationLoading, setIsOrganizationLoading] = useState(true);
-  const [isOrganizationSuccess, setIsOrganizationSuccess] = useState(true);
+  const [isOrganizationLoading, setIsOrganizationLoading] = useState(false);
   const [organizationError, setOrganizationError] = useState(undefined);
   const [user, setUser] = useLocalStorage<IUser>("user");
   const [organization, setOrganization] = useLocalStorage<IOrganization>(
     "etk:appContext:organization"
   );
   const router = useRouter();
-  const { isReady, query } = router;
   const { apiETK } = useApi().api;
   const { enqueueSnackbar } = useSnackbar();
   const restrictedRoutes = ["/admin/organizations", "account"];
@@ -43,12 +40,17 @@ export const Provider = ({ children }) => {
     }
   };
 
+  const defaultValues = () => {
+    setOrganization(undefined);
+    setIsOrganizationLoading(false);
+    setOrganizationError(undefined);
+  };
+
   const fetchOrganization = async (organizationSlug: string) => {
     try {
+      defaultValues();
       setIsOrganizationLoading(true);
-      setOrganizationError(undefined);
-      // setOrganization(undefined); //Refact needed! We need to programatically deal with undefined organization
-      setIsOrganizationSuccess(true); //This is weird!
+
       const { data, status } = await apiETK.get(
         `/organization/${organizationSlug}`,
         {
@@ -60,31 +62,25 @@ export const Provider = ({ children }) => {
 
       if (status === 200) {
         setOrganization(data);
-        setIsOrganizationSuccess(true);
       }
-    } catch ({ response }) {
-      setOrganization(undefined);
+
       setIsOrganizationLoading(false);
-      setIsOrganizationSuccess(false);
-      setOrganizationError(response);
-    } finally {
-      setIsOrganizationLoading(false);
+    } catch (error) {
+      defaultValues();
+      setOrganizationError({
+        message: error.response.data?.detail,
+        code: error.response?.status,
+      });
     }
   };
 
   useEffect(() => {
-    const { organizationSlug } = query;
-    if (
-      (organizationSlug &&
-        organization?.slug !== organizationSlug &&
-        isReady) ||
-      (!organization && isReady)
-    ) {
+    const { organizationSlug } = router.query;
+
+    if (organizationSlug) {
       fetchOrganization(organizationSlug as string);
-    } else {
-      setIsOrganizationLoading(!isReady as boolean);
     }
-  }, [router.query?.organizationSlug, isReady]);
+  }, [router.query]);
 
   useEffect(() => {
     if (!user && restrictedRoutes?.includes(router.route)) {
@@ -99,9 +95,7 @@ export const Provider = ({ children }) => {
         setUser,
         organization,
         setOrganization,
-        isLoading,
         isOrganizationLoading,
-        isOrganizationSuccess,
         organizationError,
         refetchUserData,
         fetchOrganization,

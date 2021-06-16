@@ -1,9 +1,6 @@
 import axios from "axios";
 import getConfig from "next/config";
 import { useRouter } from "next/router";
-import useLocalStorage from "@/lib/hooks/useLocalStorage";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { useEffect, useState } from "react";
 
 export default function useApi() {
   const { publicRuntimeConfig } = getConfig();
@@ -15,28 +12,6 @@ export default function useApi() {
     meiliApiUrl,
   } = publicRuntimeConfig;
   const router = useRouter();
-  const [accessToken, setAccessToken] = useLocalStorage(tokenStorage);
-  const [refreshToken, setRefreshToken] = useLocalStorage(refreshTokenStorage);
-
-  // const allowedRoutes = ["/", "/signin", "/forgot", "/users/set_password"];
-
-  useEffect(() => {
-    // if (
-    //   (!accessToken || !refreshToken) &&
-    //   !allowedRoutes.includes(router.route)
-    // ) {
-    //   localStorage.clear();
-    //   router.push("/signin");
-    // }
-    if (accessToken) {
-      ecotekaV1.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${accessToken}`;
-    }
-    if (!accessToken) {
-      delete ecotekaV1.defaults.headers.common["Authorization"];
-    }
-  }, [accessToken, refreshToken]);
 
   let ecotekaV1 = axios.create({
     baseURL: apiUrl,
@@ -45,24 +20,52 @@ export default function useApi() {
     },
   });
 
-  if (accessToken) {
-    ecotekaV1.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${accessToken}`;
-  }
-  if (!accessToken) {
-    delete ecotekaV1.defaults.headers.common["Authorization"];
-  }
+  ecotekaV1.interceptors.request.use(
+    async (config) => {
+      const token = localStorage.getItem(tokenStorage);
 
-  // This Axios instance is private;
-  // Use it only to get (or hope to get) a "/auth/refresh_token" successfull response
-  let _ecotekaV1ForRefresh = axios.create({
-    baseURL: apiUrl,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${refreshToken}`,
+      if (token) {
+        config.headers.common.Authorization = `Bearer ${token}`;
+      }
+
+      return config;
     },
-  });
+    (error) => Promise.reject(error)
+  );
+
+  ecotekaV1.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const config = error.config;
+
+      if (error.response.status === 422 && !config._retry) {
+        config._retry = true;
+        const refreshToken = window.localStorage.getItem(refreshTokenStorage);
+
+        const { status, data } = await ecotekaV1.post(
+          "/auth/refresh_token",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${refreshToken}`,
+            },
+          }
+        );
+
+        if (status === 200) {
+          window.localStorage.setItem(tokenStorage, data.access_token);
+          window.localStorage.setItem(refreshTokenStorage, data.refresh_token);
+          config.headers.Authorization = `Bearer ${data.access_token}`;
+        }
+
+        return ecotekaV1(config);
+      }
+
+      router.push("/");
+
+      return Promise.reject(error);
+    }
+  );
 
   // Axios instance to retrieve results from ecoTeka search engine;
   let meiliApi = axios.create({
@@ -97,32 +100,6 @@ export default function useApi() {
     headers: {
       "Content-Type": "application/json",
     },
-  });
-
-  const refreshAuthLogic = (failedRequest) =>
-    // We got here because accessToken has expired
-    // Overwriting headers in failedRequest will not help us to get a "/auth/refresh_token" successfull response
-    // We could have used Axios reponse interceptors to reset defaut Authorization header...
-    // But we choose to use a dedicated Axios instance to make code clearer
-
-    _ecotekaV1ForRefresh
-      .post("/auth/refresh_token")
-      .then((tokenRefreshResponse) => {
-        const { access_token, refresh_token } = tokenRefreshResponse.data;
-        setAccessToken(access_token);
-        setRefreshToken(refresh_token);
-        failedRequest.response.config.headers[
-          "Authorization"
-        ] = `Bearer ${access_token}`;
-        return Promise.resolve();
-      })
-      .catch((error) => {
-        // console.log("RefreshToken request error");
-        router.push("/signin");
-      });
-
-  createAuthRefreshInterceptor(ecotekaV1, refreshAuthLogic, {
-    statusCodes: [422],
   });
 
   const api = {

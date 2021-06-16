@@ -1,6 +1,8 @@
-import { FC, createContext, useContext } from "react";
+import { FC, createContext, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import Footer from "@/components/AppLayout/Footer";
+import Error from "@/components/Core/Error";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -15,23 +17,43 @@ const AppLayoutGeneralContext = createContext(null);
 
 export const useAppLayoutGeneral = () => useContext(AppLayoutGeneralContext);
 
+interface Error {
+  message: string;
+  code: number;
+}
+
 export interface IAppLayoutGeneral {
   isLoading?: boolean;
-  Skeleton?: JSX.Element;
+  error?: Error | undefined;
+  skeleton?: JSX.Element;
 }
 
 const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
   isLoading = false,
-  Skeleton,
+  error = undefined,
+  skeleton,
   children,
 }) => {
   const classes = useStyles();
+  const router = useRouter();
+
+  const handleGoToHome = () => {
+    router.push("/");
+  };
 
   return (
     <AppLayoutGeneralContext.Provider value={{}}>
-      {isLoading ? (
-        Skeleton
-      ) : (
+      {error && (
+        <Error
+          errorCode={error.code}
+          errorMessage={error.message}
+          captionText={error.message}
+          buttonText="Back to homepage"
+          onClick={handleGoToHome}
+        />
+      )}
+      {isLoading && skeleton}
+      {!error && !isLoading && (
         <main className={classes.content}>{children}</main>
       )}
       <Footer />
