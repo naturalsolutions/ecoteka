@@ -1,3 +1,11 @@
+## [0.14.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.0...v0.14.1) (2021-06-16)
+
+
+### Bug Fixes
+
+* **backend:** add featured open organizations endpoint ([7e276f2](https://gitlab.com/natural-solutions/ecoteka/commit/7e276f2f3dc9424e3f53ce0ea394b168417d4558))
+* **frontend:** add featured organizations to homepage ([b1f670f](https://gitlab.com/natural-solutions/ecoteka/commit/b1f670ffe905b814c2e6d8093e151b0d293b0791))
+
 # [0.14.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.13.1...v0.14.0) (2021-06-16)
 
 
