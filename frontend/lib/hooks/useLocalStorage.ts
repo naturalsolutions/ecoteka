@@ -18,6 +18,10 @@ export default function useLocalStorage<T>(key: string, initialValue?: T) {
     try {
       const item = window.localStorage.getItem(key);
 
+      if (item === "undefined") {
+        return undefined;
+      }
+
       if (isJSON(item)) {
         return item ? JSON.parse(item) : initialValue;
       } else {

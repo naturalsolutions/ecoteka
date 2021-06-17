@@ -33,37 +33,65 @@ export default function useApi() {
     (error) => Promise.reject(error)
   );
 
+  const ERRORS = [
+    "Signature has expired",
+    "Invalid crypto padding",
+    "Unprocessable Entity",
+  ];
+
   ecotekaV1.interceptors.response.use(
     (response) => response,
     async (error) => {
       const config = error.config;
 
-      if (error.response.status === 422 && !config._retry) {
-        config._retry = true;
-        const refreshToken = window.localStorage.getItem(refreshTokenStorage);
+      try {
+        if (ERRORS.includes(error.response?.data?.detail) && !config._retry) {
+          config._retry = true;
+          let refreshToken = "";
 
-        const { status, data } = await ecotekaV1.post(
-          "/auth/refresh_token",
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
+          try {
+            window.localStorage.getItem(refreshTokenStorage);
+          } catch (e) {
+            ecotekaV1(config);
+            router.push("/signin");
+            return Promise.reject(error);
           }
-        );
 
-        if (status === 200) {
-          window.localStorage.setItem(tokenStorage, data.access_token);
-          window.localStorage.setItem(refreshTokenStorage, data.refresh_token);
-          config.headers.Authorization = `Bearer ${data.access_token}`;
+          try {
+            const { status, data } = await ecotekaV1.post(
+              "/auth/refresh_token",
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${refreshToken}`,
+                },
+              }
+            );
+
+            if (status === 200) {
+              window.localStorage.setItem(tokenStorage, data.access_token);
+              window.localStorage.setItem(
+                refreshTokenStorage,
+                data.refresh_token
+              );
+              config.headers.Authorization = `Bearer ${data.access_token}`;
+              return ecotekaV1(config);
+            }
+
+            return Promise.reject(error);
+          } catch (e) {
+            ecotekaV1(config);
+            window.localStorage.clear();
+            router.push("/signin");
+
+            return Promise.reject(error);
+          }
         }
 
-        return ecotekaV1(config);
+        return Promise.reject(error);
+      } catch (e) {
+        return Promise.reject(error);
       }
-
-      router.push("/");
-
-      return Promise.reject(error);
     }
   );
 

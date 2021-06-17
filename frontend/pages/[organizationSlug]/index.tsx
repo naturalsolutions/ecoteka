@@ -104,9 +104,7 @@ const OrganizationHomePage: NextPage = () => {
       error={organizationError}
       skeleton={<OrganizationSkeleton />}
     >
-      {!isOrganizationLoading && !organizationError && organization && (
-        <OrganizationMain />
-      )}
+      {!isOrganizationLoading && !organizationError && organization && "aaaa"}
     </AppLayoutGeneral>
   );
 };
