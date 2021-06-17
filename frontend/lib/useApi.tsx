@@ -75,12 +75,12 @@ export default function useApi() {
                 data.refresh_token
               );
               config.headers.Authorization = `Bearer ${data.access_token}`;
+
               return ecotekaV1(config);
             }
 
             return Promise.reject(error);
           } catch (e) {
-            ecotekaV1(config);
             window.localStorage.clear();
             router.push("/signin");
 
