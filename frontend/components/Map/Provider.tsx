@@ -1,16 +1,11 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { createContext, FC, useContext } from "react";
-import {
-  makeStyles,
-  Paper,
-  PaperProps,
-  Theme,
-  Popover,
-} from "@material-ui/core";
+import { makeStyles, Paper, PaperProps, Theme } from "@material-ui/core";
 import DeckGL from "@deck.gl/react";
 import { StaticMap } from "react-map-gl";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import { useEffect } from "react";
+import MapAttribution from "./Attribution";
 
 export const INITIAL_VIEW_STATE = {
   longitude: 1.1,
@@ -54,21 +49,6 @@ const MapProvider: FC<MapProviderProps> = (props) => {
   const [mapStyle, setMapStyle] = useState<string>();
   const [clickInfo, setClickInfo] = useState(null);
   const deckRef = useRef(null);
-  const onClick = useCallback((event) => {
-    const pickInfo = deckRef.current.pickObject({
-      x: event.clientX,
-      y: event.clientY,
-      radius: 10,
-    });
-    pickInfo
-      ? setClickInfo({
-          data: pickInfo.object.properties,
-          x: pickInfo.x,
-          y: pickInfo.y,
-        })
-      : setClickInfo(null);
-  }, []);
-
   const handleOnViewStateChange = (e) => {
     setViewState(e.viewState);
   };
@@ -78,10 +58,6 @@ const MapProvider: FC<MapProviderProps> = (props) => {
       `/api/v1/maps/style?theme=${theme.palette.type}&background=${baseLayer}`
     );
   }, [theme.palette.type]);
-
-  // useEffect(() => {
-  //   console.log(clickInfo);
-  // }, [clickInfo]);
 
   return (
     <MapContext.Provider
@@ -106,25 +82,14 @@ const MapProvider: FC<MapProviderProps> = (props) => {
           ref={deckRef}
         >
           {children}
-          <Popover
-            open={Boolean(clickInfo?.data?.osm_id)}
-            anchorReference="anchorPosition"
-            anchorPosition={{
-              top: clickInfo ? clickInfo.y : 0,
-              left: clickInfo ? clickInfo.x : 0,
-            }}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-          >
-            {clickInfo?.data.other_tags ? clickInfo.data.other_tags : "Oups"}
-          </Popover>
-          <StaticMap mapStyle={mapStyle} />
+          <StaticMap mapStyle={mapStyle} attributionControl={false} />
+          <MapAttribution>
+            <a href="https://maptiler.com/copyright">© MapTiler </a>
+            <a href="https://www.openstreetmap.org/copyright">
+              © OpenStreetMap
+            </a>
+            <a href="https://ecoteka.org">© Ecoteka</a>
+          </MapAttribution>
         </DeckGL>
       </Paper>
     </MapContext.Provider>
