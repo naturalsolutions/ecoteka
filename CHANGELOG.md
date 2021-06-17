@@ -1,3 +1,10 @@
+## [0.14.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.2...v0.14.3) (2021-06-17)
+
+
+### Bug Fixes
+
+* authjwt_access_token_expire replace seconds to minutes ([2baa028](https://gitlab.com/natural-solutions/ecoteka/commit/2baa02856812db75d7457f6101134d7a327373b1))
+
 ## [0.14.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.1...v0.14.2) (2021-06-17)
 
 
