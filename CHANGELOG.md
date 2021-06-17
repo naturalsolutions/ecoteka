@@ -1,3 +1,10 @@
+## [0.14.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.1...v0.14.2) (2021-06-17)
+
+
+### Bug Fixes
+
+* worflow appcontext + useApi ([86ad830](https://gitlab.com/natural-solutions/ecoteka/commit/86ad8301fb587b60f6afb58c1c4e999e3a26e244))
+
 ## [0.14.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.0...v0.14.1) (2021-06-16)
 
 
