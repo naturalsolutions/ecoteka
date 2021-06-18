@@ -52,7 +52,7 @@ export default function useApi() {
           try {
             window.localStorage.getItem(refreshTokenStorage);
           } catch (e) {
-            ecotekaV1(config);
+            window.localStorage.clear()
             router.push("/signin");
             return Promise.reject(error);
           }
