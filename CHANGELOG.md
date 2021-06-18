@@ -1,3 +1,10 @@
+## [0.14.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.3...v0.14.4) (2021-06-18)
+
+
+### Bug Fixes
+
+* clear localstorage ([fc8a54a](https://gitlab.com/natural-solutions/ecoteka/commit/fc8a54ae822e010098e07412dc9ebcfed22459a5))
+
 ## [0.14.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.2...v0.14.3) (2021-06-17)
 
 
