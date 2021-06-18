@@ -49,7 +49,7 @@ export default function useApi() {
           let refreshToken = "";
 
           try {
-            window.localStorage.getItem(refreshTokenStorage);
+            refreshToken = window.localStorage.getItem(refreshTokenStorage);
           } catch (e) {
             window.localStorage.clear();
             document.location.href = "/signin";
