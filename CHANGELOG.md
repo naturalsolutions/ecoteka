@@ -1,3 +1,11 @@
+## [0.14.5](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.4...v0.14.5) (2021-06-18)
+
+
+### Bug Fixes
+
+* replace router.push to document.location.href ([e750504](https://gitlab.com/natural-solutions/ecoteka/commit/e7505049ffe7cce4779707307421f956f177101e))
+* update config ([509e607](https://gitlab.com/natural-solutions/ecoteka/commit/509e6078aaa3d405da3756d3d70154c30621251c))
+
 ## [0.14.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.3...v0.14.4) (2021-06-18)
 
 
