@@ -11,7 +11,6 @@ export default function useApi() {
     apiUrl,
     meiliApiUrl,
   } = publicRuntimeConfig;
-  const router = useRouter();
 
   let ecotekaV1 = axios.create({
     baseURL: apiUrl,
@@ -52,8 +51,8 @@ export default function useApi() {
           try {
             window.localStorage.getItem(refreshTokenStorage);
           } catch (e) {
-            window.localStorage.clear()
-            router.push("/signin");
+            window.localStorage.clear();
+            document.location.href = "/signin";
             return Promise.reject(error);
           }
 
@@ -82,10 +81,17 @@ export default function useApi() {
             return Promise.reject(error);
           } catch (e) {
             window.localStorage.clear();
-            router.push("/signin");
+            document.location.href = "/signin";
 
             return Promise.reject(error);
           }
+        }
+
+        if (ERRORS.includes(error.response?.data?.detail) && config._retry) {
+          window.localStorage.clear();
+          document.location.href = "/signin";
+
+          return Promise.reject(error);
         }
 
         return Promise.reject(error);
