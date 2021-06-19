@@ -1,3 +1,10 @@
+## [0.14.7](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.6...v0.14.7) (2021-06-19)
+
+
+### Bug Fixes
+
+* force reload when logout ([ff7feb8](https://gitlab.com/natural-solutions/ecoteka/commit/ff7feb895626b48c27bc2bef1bdf3c7a339dcab1))
+
 ## [0.14.6](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.5...v0.14.6) (2021-06-18)
 
 
