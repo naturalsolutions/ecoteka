@@ -49,8 +49,8 @@ const Logout: React.FC<LogoutProps> = (props) => {
       variant: "contained",
       size: "large",
       onClick: () => {
-        setUser();
         localStorage.clear();
+        router.reload();
 
         if (props.onClick) {
           props.onClick();
