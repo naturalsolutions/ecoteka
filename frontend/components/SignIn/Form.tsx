@@ -11,9 +11,15 @@ import useETKSignInSchema from "@/components/SignIn/Schema";
 import useAPI from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import getConfig from "next/config";
+import { IUser } from "@/index";
+
+interface SubmitResponse {
+  logged: boolean;
+  user: IUser;
+}
 
 export type FormSignInActions = {
-  submit: () => Promise<boolean>;
+  submit: () => Promise<SubmitResponse>;
 };
 
 export interface FormSignInProps {
@@ -37,11 +43,13 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
     const { fields, handleSubmit, setError, errors, trigger } = useETKForm({
       schema: schema,
     });
-    const { setUser } = useAppContext();
+    const { refetchUserData } = useAppContext();
     const { apiETK } = useAPI().api;
-    let logged = false;
     const { publicRuntimeConfig } = getConfig();
     const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
+
+    let logged = false;
+    let user = undefined;
 
     useEffect(() => {
       if (login) {
@@ -65,23 +73,10 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
         const { data, status } = response;
 
         if (status === 200) {
-          try {
-            const { data: newUser } = await apiETK.get("/users/me", {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${data.access_token}`,
-              },
-            });
-
-            if (newUser) {
-              setUser({
-                ...newUser,
-              });
-              localStorage.setItem(tokenStorage, data.access_token);
-              localStorage.setItem(refreshTokenStorage, data.refresh_token);
-              logged = true;
-            }
-          } catch (error) {}
+          localStorage.setItem(tokenStorage, data.access_token);
+          localStorage.setItem(refreshTokenStorage, data.refresh_token);
+          user = await refetchUserData();
+          logged = true;
         }
 
         return data;
@@ -97,12 +92,11 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
       }
     };
 
-    const submit = handleSubmit(handleOnSubmit);
-
     useImperativeHandle(ref, () => ({
       submit: async () => {
-        await submit();
-        return logged;
+        await handleSubmit(handleOnSubmit)();
+
+        return { logged, user };
       },
     }));
 

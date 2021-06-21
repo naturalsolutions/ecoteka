@@ -23,12 +23,12 @@ export const Provider = ({ children }) => {
     try {
       const { data, status } = await apiETK.get("/users/me");
 
-      if (status === 200) {
-        if (data) {
-          setUser({
-            ...data,
-          });
-        }
+      if (status === 200 && data) {
+        setUser({
+          ...data,
+        });
+
+        return data;
       }
     } catch ({ response, request }) {
       if (response) {
