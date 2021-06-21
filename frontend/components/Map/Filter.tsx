@@ -3,27 +3,22 @@ import { useTranslation } from "react-i18next";
 import {
   TextField,
   Grid,
-  Typography,
   Chip,
-  Box,
   Avatar,
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import useApi from "@/lib/useApi";
 import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 import { useRouter } from "next/router";
 import BackToMap from "./BackToMap";
 
-const FILTERS = [
-  { key: "canonicalName", label: "Canonical Name" },
-  { key: "vernacularName", label: "Vernacular Name" },
-];
+const FILTERS_KEYS = ["canonicalName", "vernacularName"];
 
 let defaultOptions = {};
 
-for (let filter of FILTERS) {
-  defaultOptions[filter.key] = [];
+
+for (let filter of FILTERS_KEYS) {
+  defaultOptions[filter] = [];
 }
 
 export interface IMapFilter {
@@ -32,18 +27,25 @@ export interface IMapFilter {
   onChange?(values: {}, filters: {}, options: {}): void;
 }
 
+
+
 const MapFilter: FC<IMapFilter> = ({
   initialValue,
   organizationId,
   onChange,
 }) => {
-  const { t } = useTranslation("components");
+  const { t } = useTranslation();
   const [value, setValue] = useState(initialValue);
   const [active, setActive] = useState<boolean>(false);
   const [options, setOptions] = useState(defaultOptions);
   const [loading, setLoading] = useState(false);
   const { apiETK } = useApi().api;
   const router = useRouter();
+  const translations = t("components.MapFilter.filters", { returnObjects: true });
+  const FILTERS = FILTERS_KEYS.map((key) => {
+    return { key, label: translations[key] };
+  });
+
 
   const getFilters = async (organizationId: number) => {
     try {
