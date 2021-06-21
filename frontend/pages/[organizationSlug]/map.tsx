@@ -50,6 +50,8 @@ import MapActionsBar, {
 } from "@/components/Map/ActionsBar";
 import MapAddActions from "@/components/Map/AddActions";
 import TreePanel from "@/components/Tree/Panel";
+import MapAttributionList from "@/components/Map/Attribution/List";
+import MapAttributionItem from "@/components/Map/Attribution/Item";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -603,6 +605,16 @@ const EditionPage = ({}) => {
             </Grid>
           </div>
         )}
+        <MapAttributionList>
+          <MapAttributionItem
+            href="https://maptiler.com/copyright"
+            label="© MapTiler"
+          />
+          <MapAttributionItem
+            href="https://www.openstreetmap.org/copyright"
+            label="© OpenStreetMap"
+          />
+        </MapAttributionList>
       </DeckGL>
 
       <Grid
