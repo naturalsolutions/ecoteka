@@ -12,6 +12,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
+import MyLocationIcon from "@material-ui/icons/MyLocation";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
@@ -50,6 +51,8 @@ import MapActionsBar, {
 } from "@/components/Map/ActionsBar";
 import MapAddActions from "@/components/Map/AddActions";
 import TreePanel from "@/components/Tree/Panel";
+import MapActionsList from "@/components/Map/Actions/List";
+import MapActionsAction from "@/components/Map/Actions/Action";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -567,22 +570,6 @@ const EditionPage = ({}) => {
             dark ? "dark" : "light"
           }&background=${mapBackground}`}
         ></StaticMap>
-        {navigator?.geolocation && (
-          <MapGeolocateFab
-            onGeolocate={() => {
-              navigator.geolocation.getCurrentPosition((position) => {
-                setViewState({
-                  ...viewState,
-                  longitude: position.coords.longitude,
-                  latitude: position.coords.latitude,
-                  zoom: 16,
-                  transitionDuration: 1500,
-                  transitionInterpolator: new FlyToInterpolator(),
-                });
-              });
-            }}
-          />
-        )}
         {loading && (
           <div className={classes.fabProgress}>
             <Grid container justify="center" alignItems="center" spacing={2}>
@@ -652,7 +639,31 @@ const EditionPage = ({}) => {
           </IconButton>
         </Grid>
       </Grid>
-      <MapAddActions onChange={handleOnMapActionsChange} />
+      <MapActionsList>
+        {navigator?.geolocation && (
+          <MapActionsAction
+            name="geolocate"
+            icon={<MyLocationIcon />}
+            onClick={() => {
+              navigator.geolocation.getCurrentPosition((position) => {
+                setViewState({
+                  ...viewState,
+                  longitude: position.coords.longitude,
+                  latitude: position.coords.latitude,
+                  zoom: 16,
+                  transitionDuration: 1500,
+                  transitionInterpolator: new FlyToInterpolator(),
+                });
+              });
+            }}
+          />
+        )}
+        <MapActionsAction
+          name="fitToBounds"
+          icon={<CenterFocusStrongIcon />}
+          onClick={() => fitToBounds(organization.id)}
+        />
+      </MapActionsList>
       <ImportPanel onFileImported={handleOnFileImported} />
       <InterventionForm />
       <InterventionsEdit />
