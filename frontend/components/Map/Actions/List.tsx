@@ -1,7 +1,8 @@
-import { FC, useState } from "react";
+import React, { FC, Children, useState, ReactNode, ReactElement } from "react";
 import { makeStyles, Theme, useMediaQuery, useTheme } from "@material-ui/core";
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from "@material-ui/lab";
 import { useTranslation } from "react-i18next";
+import {  MapActionsActionProps  } from "./Action";
 
 export interface MapActionsListProps {}
 
@@ -59,7 +60,15 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
       onOpen={handleOpen}
       open={open}
     >
-      {children}
+      {Children.map(children, (child: ReactElement<MapActionsActionProps>) => (
+        <SpeedDialAction
+          key={child.props.name}
+          icon={child.props.icon}
+          tooltipTitle={child.props.name}
+          tooltipOpen
+          onClick={child.props.onClick}
+        />
+      ))}
     </SpeedDial>
   );
 };

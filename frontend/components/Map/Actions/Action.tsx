@@ -35,33 +35,21 @@ const MapActionsAction: FC<MapActionsActionProps> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 
-  // return isDesktop ? (
-  //   <Tooltip title={name}>
-  //     <IconButton
-  //       className={classes.root}
-  //       aria-label={name}
-  //       size="small"
-  //       onClick={onClick}
-  //     >
-  //       {icon}
-  //     </IconButton>
-  //   </Tooltip>
-  // ) : (
-  //   <SpeedDialAction
-  //     icon={<SaveIcon />}
-  //     tooltipTitle="hi"
-  //     onClick={() => console.log("tip")}
-  //   />
-  // );
+  
   return (
-    <SpeedDialAction
-      icon={<SaveIcon />}
-      tooltipTitle="hi"
-      onClick={() => console.log("tip")}
-    />
+    <Tooltip title={name}>
+      <IconButton
+        className={classes.root}
+        aria-label={name}
+        size="small"
+        onClick={onClick}
+      >
+        {icon}
+      </IconButton>
+    </Tooltip>
   );
+  
 };
 
 export default MapActionsAction;
