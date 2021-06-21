@@ -788,5 +788,11 @@
   "WorkInProgress": {
     "title": "Bientôt disponible!",
     "knowMore": "En savoir plus..."
+  },
+  "MapFilter": {
+    "filters": {
+      "canonicalName": "Nom canonique",
+      "vernacularName": "Nom vernaculaire"
+    }
   }
 }
