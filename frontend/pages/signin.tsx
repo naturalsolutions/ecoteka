@@ -32,21 +32,32 @@ export default function SignInPage() {
   const formRef = useRef<FormSignInActions>();
   const { t } = useTranslation("components");
   const router = useRouter();
-  const { user, setOrganization } = useAppContext();
+  const { setOrganization } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async () => {
     setIsLoading(true);
-    const isOK = await formRef.current.submit();
-    if (isOK) {
+    const { logged, user } = await formRef.current.submit();
+
+    if (logged) {
       setIsLoading(false);
       const { callbackUrl } = router.query;
+
       if (callbackUrl) {
         setOrganization(undefined);
-        router.back();
-      } else {
-        router.push("/");
+        return router.back();
+      } 
+
+      if (user?.organizations?.length === 1) {
+        return router.push({ 
+          pathname: '/[organizationSlug]',
+          query: {
+            organizationSlug: user.organizations[0].slug
+          }
+        })
       }
+
+      router.push('/')
     }
   };
 
