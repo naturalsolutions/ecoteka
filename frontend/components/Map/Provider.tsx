@@ -5,7 +5,8 @@ import DeckGL from "@deck.gl/react";
 import { StaticMap } from "react-map-gl";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import { useEffect } from "react";
-import MapAttribution from "./Attribution";
+import MapAttributionList from "./Attribution/List";
+import MapAttributionItem from "./Attribution/Item";
 
 export const INITIAL_VIEW_STATE = {
   longitude: 1.1,
@@ -83,13 +84,16 @@ const MapProvider: FC<MapProviderProps> = (props) => {
         >
           {children}
           <StaticMap mapStyle={mapStyle} attributionControl={false} />
-          <MapAttribution>
-            <a href="https://maptiler.com/copyright">© MapTiler </a>
-            <a href="https://www.openstreetmap.org/copyright">
-              © OpenStreetMap
-            </a>
-            <a href="https://ecoteka.org">© Ecoteka</a>
-          </MapAttribution>
+          <MapAttributionList>
+            <MapAttributionItem
+              href="https://maptiler.com/copyright"
+              label="© MapTiler"
+            />
+            <MapAttributionItem
+              href="https://www.openstreetmap.org/copyright"
+              label="© OpenStreetMap"
+            />
+          </MapAttributionList>
         </DeckGL>
       </Paper>
     </MapContext.Provider>
