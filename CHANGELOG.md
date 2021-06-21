@@ -1,3 +1,10 @@
+# [0.15.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.7...v0.15.0) (2021-06-21)
+
+
+### Features
+
+* make redirect to organization home when user has only oneorganization ([5f3abaa](https://gitlab.com/natural-solutions/ecoteka/commit/5f3abaa7d175ba615f74db35c92ec2a1fd100252))
+
 ## [0.14.7](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.6...v0.14.7) (2021-06-19)
 
 
