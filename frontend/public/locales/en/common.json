@@ -83,5 +83,7 @@
   "loadingMapillary": "Loading from Mapillary...",
   "demos": "Discover the trees of ",
   "currentUserRole": "Your current role",
-  "myOrganizations": "My workspaces"
+  "myOrganizations": "My workspaces",
+  "geolocate": "Geolocate",
+  "fitToBounds": "Zoom to inventory"
 }

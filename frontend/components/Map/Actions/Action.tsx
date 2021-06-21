@@ -36,7 +36,6 @@ const MapActionsAction: FC<MapActionsActionProps> = ({
   const { t } = useTranslation();
   const theme = useTheme();
 
-  
   return (
     <Tooltip title={name}>
       <IconButton
@@ -49,7 +48,6 @@ const MapActionsAction: FC<MapActionsActionProps> = ({
       </IconButton>
     </Tooltip>
   );
-  
 };
 
 export default MapActionsAction;
