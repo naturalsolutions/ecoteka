@@ -30,6 +30,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: 225,
     textAlign: "center",
   },
+  staticTooltipLabelActive: {
+    display: "inline",
+    minWidth: 225,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: theme.palette.primary.light,
+  },
   backdrop: {
     zIndex: theme.zIndex.speedDial - 1,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
@@ -38,6 +45,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     background: theme.palette.background.default,
     "&:hover": {
       background: theme.palette.grey[200],
+    },
+  },
+  fabActive: {
+    background: theme.palette.primary.light,
+    "&:hover": {
+      background: theme.palette.primary.dark,
     },
   },
   [theme.breakpoints.up("sm")]: {
@@ -80,9 +93,8 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
         <Grid item>
           <Tooltip title={child.props.name} arrow placement="left">
             <Fab
-              size="small"
               color="primary"
-              className={classes.fab}
+              className={child.props.isActive ? classes.fabActive : classes.fab}
               aria-label={child.props.name}
               onClick={child.props.onClick}
             >
@@ -110,7 +122,10 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
               key={child.props.name}
               icon={child.props.icon}
               classes={{
-                staticTooltipLabel: classes.staticTooltipLabel,
+                staticTooltipLabel: child.props.isActive
+                  ? classes.staticTooltipLabelActive
+                  : classes.staticTooltipLabel,
+                fab: child.props.isActive ? classes.fabActive : classes.fab,
               }}
               tooltipTitle={child.props.name}
               tooltipOpen

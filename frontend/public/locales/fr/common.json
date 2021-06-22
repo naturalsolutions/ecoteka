@@ -83,5 +83,14 @@
   "currentUserRole": "Votre rôle",
   "myOrganizations": "Mes espaces de travail",
   "geolocate": "Géolocaliser",
-  "fitToBounds": "Zoomer sur l'inventaire"
+  "fitToBounds": "Zoomer sur l'inventaire",
+  "addTreeModeInactive": "Désactiver l'ajout d'arbre",
+  "addTreeModeActive": "Désactiver l'ajout d'arbre",
+  "activateDrawTree": "Activer l'ajout d'arbre",
+  "disableDrawTree": "Désactiver l'ajout d'abre",
+  "disableSelectTrees": "Désactiver la sélection",
+  "activateSelectTrees": "Activer la sélection",
+  "delete": "Supprimer",
+  "treesWithCount": "{{count}} arbre",
+  "treesWithCount_plural": "{{count}} arbres"
 }

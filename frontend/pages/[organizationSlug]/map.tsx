@@ -13,6 +13,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
+import SelectIcon from "@material-ui/icons/PhotoSizeSelectSmall";
 import MyLocationIcon from "@material-ui/icons/MyLocation";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
@@ -24,12 +25,11 @@ import MapLayers, {
   IMapLayers,
 } from "@/components/Map/Layers";
 import MapFilter from "@/components/Map/Filter";
+import MapDeleteTrees from "@/components/Map/DeleteTrees";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import AppLayoutCarto from "@/components/AppLayout/Carto";
 import PanelStartGeneralInfo from "@/components/Panel/Start/GeneralInfo";
-import MapModeSwitch from "@/components/Map/ModeSwitch";
-import MapDrawToolbar from "@/components/Map/DrawToolbar";
 import MapSearchCity from "@/components/Map/SearchCity";
 import ImportPanel from "@/components/Import/Panel/Index";
 import InterventionForm from "@/components/Interventions/Form";
@@ -138,7 +138,7 @@ const EditionPage = ({}) => {
   );
   const [loadDataProgress, setLoadDataProgress] = useState(0);
   const [viewState, setViewState] = useState();
-  const [mode, setMode] = useState("selection");
+  const [mode, setMode] = useState("");
   const [filters, setFilters] = useState(defaultFilters);
   const [selection, setSelection] = useState([]);
   const [editionMode, setEditionMode] = useState<boolean>(false);
@@ -371,18 +371,6 @@ const EditionPage = ({}) => {
     }
   };
 
-  const handleOnMapModeSwitch = (newMode) => {
-    if (newMode) {
-      if (newMode === "edition") {
-        setMode("selection");
-      } else {
-        setMode("");
-      }
-
-      setEditionMode(newMode === "edition");
-    }
-  };
-
   const handleOnDeleteTrees = async () => {
     if (!selection.length) {
       return;
@@ -452,9 +440,12 @@ const EditionPage = ({}) => {
     });
   };
 
-  const handleOnMapActionsChange = (action: string) => {
-    setEditionMode(true);
-    setMode(action);
+  const toggleAction = (isEditionMode: boolean, newMode: string) => {
+    mode == "" || mode == newMode
+      ? setEditionMode(!isEditionMode)
+      : setEditionMode(true);
+    isEditionMode && mode == newMode ? setMode("") : setMode(newMode);
+    console.log(editionMode, mode);
   };
 
   const handleOnMapLoad = () => {
@@ -473,6 +464,8 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapClick = (info) => {
+    console.log("handleOnMapClick");
+    console.log(editionMode, mode);
     if (editionMode && mode === "drawPoint") {
       setMode("selection");
       const [x, y] = info.coordinate;
@@ -505,6 +498,10 @@ const EditionPage = ({}) => {
   useEffect(() => {
     setViewState({ ...initialViewState });
   }, []);
+
+  useEffect(() => {
+    console.log(mode, editionMode);
+  }, [editionMode, mode]);
 
   useEffect(() => {
     if (mode !== "selection") {
@@ -610,25 +607,20 @@ const EditionPage = ({}) => {
         alignItems="center"
         className={classes.toolbar}
       >
-        <Hidden lgDown>
-          <Grid item className={classes.toolbarAction}>
-            <MapModeSwitch
-              initValue={editionMode ? "edition" : "analysis"}
-              onChange={handleOnMapModeSwitch}
-            />
-          </Grid>
-        </Hidden>
         <Grid item xs></Grid>
-        {editionMode && (
-          <Grid item className={classes.toolbarAction}>
-            <MapDrawToolbar
-              mode={mode}
-              activeDelete={Boolean(selection.length)}
-              onDelete={handleOnDeleteTrees}
-              onChange={setMode}
-            />
-          </Grid>
-        )}
+        <Grid item className={classes.toolbarAction}>
+          <MapDeleteTrees
+            active={Boolean(selection.length)}
+            message={
+              selection.length > 0
+                ? `${t("common.treesWithCount", {
+                    count: selection.length,
+                  })}`
+                : null
+            }
+            onDelete={handleOnDeleteTrees}
+          />
+        </Grid>
         <Grid item xs></Grid>
         <Grid item className={classes.toolbarAction}>
           <MapSearchCity
@@ -670,11 +662,38 @@ const EditionPage = ({}) => {
           onClick={() => fitToBounds(organization.id)}
         />
         <MapActionsAction
-          name={t("common.addTree")}
-          icon={
-            <SvgIcon color="primary" component={IconTree} viewBox="0 0 24 32" />
+          isActive={editionMode && mode == "selection"}
+          name={
+            editionMode && mode == "selection"
+              ? t("common.disableSelectTrees")
+              : t("common.activateSelectTrees")
           }
-          onClick={() => handleOnMapActionsChange("drawPoint")}
+          icon={
+            <SelectIcon
+              htmlColor={
+                editionMode && mode == "selection" ? "white" : "#46b9b1"
+              }
+            />
+          }
+          onClick={() => toggleAction(editionMode, "selection")}
+        />
+        <MapActionsAction
+          isActive={editionMode && mode == "drawPoint"}
+          name={
+            editionMode && mode == "drawPoint"
+              ? t("common.disableDrawTree")
+              : t("common.activateDrawTree")
+          }
+          icon={
+            <SvgIcon
+              htmlColor={
+                editionMode && mode == "drawPoint" ? "white" : "#46b9b1"
+              }
+              component={IconTree}
+              viewBox="0 0 24 32"
+            />
+          }
+          onClick={() => toggleAction(editionMode, "drawPoint")}
         />
       </MapActionsList>
       <ImportPanel onFileImported={handleOnFileImported} />
