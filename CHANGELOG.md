@@ -1,3 +1,11 @@
+## [0.16.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.0...v0.16.1) (2021-06-22)
+
+
+### Bug Fixes
+
+* **frontend:** add map fab actions ([4accb7a](https://gitlab.com/natural-solutions/ecoteka/commit/4accb7aa3c52b8f17a414081d6c8f3b6cbb2bc92))
+* control speedial render ([8b1d223](https://gitlab.com/natural-solutions/ecoteka/commit/8b1d223101aa8e5152e133adf3ff8c43f7c10a7a))
+
 # [0.16.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.15.1...v0.16.0) (2021-06-21)
 
 
