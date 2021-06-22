@@ -1,3 +1,10 @@
+## [0.16.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.3...v0.16.4) (2021-06-22)
+
+
+### Bug Fixes
+
+* **frontend:** change user main menu links ([84552b6](https://gitlab.com/natural-solutions/ecoteka/commit/84552b687f8db086a79760814f7ab830dca01302))
+
 ## [0.16.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.2...v0.16.3) (2021-06-22)
 
 
