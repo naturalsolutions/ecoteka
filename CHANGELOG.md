@@ -1,3 +1,17 @@
+# [0.16.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.15.1...v0.16.0) (2021-06-21)
+
+
+### Features
+
+* create attribution component ([8dec417](https://gitlab.com/natural-solutions/ecoteka/commit/8dec417fd7293b577be8acaa18162bda0b634ba2))
+
+## [0.15.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.15.0...v0.15.1) (2021-06-21)
+
+
+### Bug Fixes
+
+* add translations to MapFilter component ([ba27fb1](https://gitlab.com/natural-solutions/ecoteka/commit/ba27fb1d676d09924c3a17ed9e7536220d694362))
+
 # [0.15.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.14.7...v0.15.0) (2021-06-21)
 
 
