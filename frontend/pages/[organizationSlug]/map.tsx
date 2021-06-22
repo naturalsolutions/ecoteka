@@ -445,7 +445,6 @@ const EditionPage = ({}) => {
       ? setEditionMode(!isEditionMode)
       : setEditionMode(true);
     isEditionMode && mode == newMode ? setMode("") : setMode(newMode);
-    console.log(editionMode, mode);
   };
 
   const handleOnMapLoad = () => {
@@ -464,8 +463,6 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapClick = (info) => {
-    console.log("handleOnMapClick");
-    console.log(editionMode, mode);
     if (editionMode && mode === "drawPoint") {
       setMode("selection");
       const [x, y] = info.coordinate;
@@ -498,10 +495,6 @@ const EditionPage = ({}) => {
   useEffect(() => {
     setViewState({ ...initialViewState });
   }, []);
-
-  useEffect(() => {
-    console.log(mode, editionMode);
-  }, [editionMode, mode]);
 
   useEffect(() => {
     if (mode !== "selection") {

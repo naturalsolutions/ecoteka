@@ -53,7 +53,8 @@
     "myOrganizations": "Workspace",
     "myDashboard": "Dashboard",
     "addUser": "Add a user",
-    "adminOrganizations": "Admin Organizations"
+    "adminOrganizations": "Admin Organizations",
+    "myMap": "Map editor"
   },
   "Map": {
     "SearchCity": {

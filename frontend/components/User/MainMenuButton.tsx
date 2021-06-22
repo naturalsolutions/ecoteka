@@ -33,19 +33,21 @@ const useStyles = makeStyles({
 
 const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { user, organization } = useAppContext();
+  const { user } = useAppContext();
   const { t } = useTranslation("components");
   const router = useRouter();
   const classes = useStyles();
 
-  const handlerMyOrganizationClick = () => {
+  // It will be nice for User with multiple organizations
+  // to be able to set a default organization
+  const handleMapEditorRedirect = () => {
     setAnchorEl(null);
-    router.push(`/`);
+    router.push(`/${user.organizations[0].slug}/map`);
   };
 
-  const handlerMyDashboardClick = () => {
+  const handleDashboardRedirect = () => {
     setAnchorEl(null);
-    router.push(`/dashboard`);
+    router.push(`/${user.organizations[0].slug}`);
   };
 
   const handleAdminOrganizationClick = () => {
@@ -122,22 +124,22 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
               </Box>
               <Grid item>
                 <Button
+                  size="small"
                   className={classes.button}
                   fullWidth
-                  size="small"
-                  onClick={handlerMyOrganizationClick}
+                  onClick={handleDashboardRedirect}
                 >
-                  {t("components.Toolbar.myOrganizations")}
+                  {t("components.Toolbar.myDashboard")}
                 </Button>
               </Grid>
               <Grid item>
                 <Button
-                  size="small"
                   className={classes.button}
                   fullWidth
-                  onClick={handlerMyDashboardClick}
+                  size="small"
+                  onClick={handleMapEditorRedirect}
                 >
-                  {t("components.Toolbar.myDashboard")}
+                  {t("components.Toolbar.myMap")}
                 </Button>
               </Grid>
               {user.is_superuser && (
