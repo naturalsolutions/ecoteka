@@ -81,5 +81,7 @@
   "loadingMapillary": "Chargement depuis Mapillary ...",
   "demos": "Découvrir les arbres de ",
   "currentUserRole": "Votre rôle",
-  "myOrganizations": "Mes espaces de travail"
+  "myOrganizations": "Mes espaces de travail",
+  "geolocate": "Géolocaliser",
+  "fitToBounds": "Zoomer sur l'inventaire"
 }

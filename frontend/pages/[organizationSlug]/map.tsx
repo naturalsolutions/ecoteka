@@ -8,15 +8,16 @@ import {
   CircularProgress,
   LinearProgress,
   Typography,
+  SvgIcon,
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
 import CenterFocusStrongIcon from "@material-ui/icons/CenterFocusStrong";
+import MyLocationIcon from "@material-ui/icons/MyLocation";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
 import { TMapToolbarAction } from "@/components/Map/Toolbar";
-import MapGeolocateFab from "@/components/Map/GeolocateFab";
 import MapLayers, {
   ILayers,
   defaultLayers,
@@ -48,8 +49,10 @@ import { useTranslation } from "react-i18next";
 import MapActionsBar, {
   MapActionsBarActionType,
 } from "@/components/Map/ActionsBar";
-import MapAddActions from "@/components/Map/AddActions";
 import TreePanel from "@/components/Tree/Panel";
+import MapActionsList from "@/components/Map/Actions/List";
+import MapActionsAction from "@/components/Map/Actions/Action";
+import IconTree from "@/public/assets/icons/icon_tree.svg";
 import MapAttributionList from "@/components/Map/Attribution/List";
 import MapAttributionItem from "@/components/Map/Attribution/Item";
 
@@ -569,22 +572,6 @@ const EditionPage = ({}) => {
             dark ? "dark" : "light"
           }&background=${mapBackground}`}
         ></StaticMap>
-        {navigator?.geolocation && (
-          <MapGeolocateFab
-            onGeolocate={() => {
-              navigator.geolocation.getCurrentPosition((position) => {
-                setViewState({
-                  ...viewState,
-                  longitude: position.coords.longitude,
-                  latitude: position.coords.latitude,
-                  zoom: 16,
-                  transitionDuration: 1500,
-                  transitionInterpolator: new FlyToInterpolator(),
-                });
-              });
-            }}
-          />
-        )}
         {loading && (
           <div className={classes.fabProgress}>
             <Grid container justify="center" alignItems="center" spacing={2}>
@@ -657,14 +644,39 @@ const EditionPage = ({}) => {
             }}
           />
         </Grid>
-
-        <Grid item className={classes.toolbarAction}>
-          <IconButton onClick={() => fitToBounds(organization.id)}>
-            <CenterFocusStrongIcon />
-          </IconButton>
-        </Grid>
       </Grid>
-      <MapAddActions onChange={handleOnMapActionsChange} />
+      <MapActionsList>
+        {navigator?.geolocation && (
+          <MapActionsAction
+            name={t("common.geolocate")}
+            icon={<MyLocationIcon color="primary" />}
+            onClick={() => {
+              navigator.geolocation.getCurrentPosition((position) => {
+                setViewState({
+                  ...viewState,
+                  longitude: position.coords.longitude,
+                  latitude: position.coords.latitude,
+                  zoom: 16,
+                  transitionDuration: 1500,
+                  transitionInterpolator: new FlyToInterpolator(),
+                });
+              });
+            }}
+          />
+        )}
+        <MapActionsAction
+          name={t("common.fitToBounds")}
+          icon={<CenterFocusStrongIcon color="primary" />}
+          onClick={() => fitToBounds(organization.id)}
+        />
+        <MapActionsAction
+          name={t("common.addTree")}
+          icon={
+            <SvgIcon color="primary" component={IconTree} viewBox="0 0 24 32" />
+          }
+          onClick={() => handleOnMapActionsChange("drawPoint")}
+        />
+      </MapActionsList>
       <ImportPanel onFileImported={handleOnFileImported} />
       <InterventionForm />
       <InterventionsEdit />
