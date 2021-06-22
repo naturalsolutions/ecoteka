@@ -51,9 +51,10 @@
     "about": "En savoir plus",
     "register": "Inscription",
     "myOrganizations": "Mes organisations",
-    "myDashboard": "Mon tableau de bord",
+    "myDashboard": "Tableau de bord",
     "addUser": "Ajouter un utilisateur",
-    "adminOrganizations": "Administration des organisations"
+    "adminOrganizations": "Administration des organisations",
+    "myMap": "Éditeur de carte"
   },
   "Map": {
     "SearchCity": {

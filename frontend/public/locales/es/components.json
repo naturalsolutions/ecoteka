@@ -53,7 +53,8 @@
     "myOrganizations": "Mis organizaciones",
     "myDashboard": "Panel de control",
     "addUser": "Registrarse",
-    "adminOrganizations": "Organizaciones administrativas"
+    "adminOrganizations": "Organizaciones administrativas",
+    "myMap": "Editor de mapas"
   },
   "Map": {
     "SearchCity": {
