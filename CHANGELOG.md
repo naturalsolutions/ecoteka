@@ -1,3 +1,10 @@
+## [0.16.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.2...v0.16.3) (2021-06-22)
+
+
+### Bug Fixes
+
+* **frontend:** toggle draw tree + trees select ([4c93fb1](https://gitlab.com/natural-solutions/ecoteka/commit/4c93fb1c8c2d50f202b733ae642d44f20c0c477a))
+
 ## [0.16.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.1...v0.16.2) (2021-06-22)
 
 
