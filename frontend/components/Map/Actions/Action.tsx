@@ -41,7 +41,6 @@ const MapActionsAction: FC<MapActionsActionProps> = ({
       <IconButton
         className={classes.root}
         aria-label={name}
-        size="small"
         onClick={onClick}
       >
         {icon}
