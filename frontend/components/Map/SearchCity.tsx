@@ -4,6 +4,8 @@ import {
   CircularProgress,
   makeStyles,
   InputAdornment,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { useState, useEffect } from "react";
@@ -39,6 +41,8 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   const classes = useStyles();
   const { apiMeili } = useApi().api;
   const { viewState, setViewState } = useMapContext();
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 
   useEffect(() => {
     let active = true;
@@ -97,7 +101,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
     }
   };
 
-  return (
+  return isDesktop ? (
     <Autocomplete
       freeSolo
       className={props.className}
@@ -137,7 +141,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
         />
       )}
     />
-  );
+  ) : null;
 };
 
 MapSearchCity.defaultProps = defaultProps;

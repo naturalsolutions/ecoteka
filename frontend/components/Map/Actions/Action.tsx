@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 export interface MapActionsActionProps {
   icon: ReactElement<SvgIconProps>;
   name: string;
+  isActive: boolean;
   onClick?: () => void;
 }
 
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const MapActionsAction: FC<MapActionsActionProps> = ({
+  isActive = false,
   name,
   icon,
   onClick,
@@ -38,11 +40,7 @@ const MapActionsAction: FC<MapActionsActionProps> = ({
 
   return (
     <Tooltip title={name}>
-      <IconButton
-        className={classes.root}
-        aria-label={name}
-        onClick={onClick}
-      >
+      <IconButton className={classes.root} aria-label={name} onClick={onClick}>
         {icon}
       </IconButton>
     </Tooltip>

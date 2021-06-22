@@ -83,5 +83,14 @@
   "currentUserRole": "Tu rol actual",
   "myOrganizations": "Mis espacios de trabajo",
   "geolocate": "Geolocalizar",
-  "fitToBounds": "Zoom al inventario"
+  "fitToBounds": "Zoom al inventario",
+  "addTreeModeInactive": "Deshabilitar la adición de árboles",
+  "addTreeModeActive": "Deshabilitar dibujar árbol",
+  "activateDrawTree": "Activar dibujar árbol",
+  "disableDrawTree": "Deshabilitar dibujar árbol",
+  "disableSelectTrees": "Deshabilitar selección",
+  "activateSelectTrees": "Activar selección",
+  "delete": "Borrar",
+  "treesWithCount": "{{count}} árbol",
+  "treesWithCount_plural": "{{count}} árboles"
 }

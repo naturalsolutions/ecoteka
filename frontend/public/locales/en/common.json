@@ -85,5 +85,14 @@
   "currentUserRole": "Your current role",
   "myOrganizations": "My workspaces",
   "geolocate": "Geolocate",
-  "fitToBounds": "Zoom to inventory"
+  "fitToBounds": "Zoom to inventory",
+  "addTreeModeInactive": "Disable tree addition",
+  "addTreeModeActive": "Disable draw tree",
+  "activateDrawTree": "Activate draw tree",
+  "disableDrawTree": "Disable draw tree",
+  "disableSelectTrees": "Disable selection",
+  "activateSelectTrees": "Activate selection",
+  "delete": "Delete",
+  "treesWithCount": "{{count}} tree",
+  "treesWithCount_plural": "{{count}} trees"
 }
