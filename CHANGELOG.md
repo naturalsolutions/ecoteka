@@ -1,3 +1,10 @@
+## [0.16.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.1...v0.16.2) (2021-06-22)
+
+
+### Bug Fixes
+
+* size medium iconbutton ([31cfc09](https://gitlab.com/natural-solutions/ecoteka/commit/31cfc09309d95fce7dc0a7d6ee6925e3c711ba90))
+
 ## [0.16.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.0...v0.16.1) (2021-06-22)
 
 
