@@ -170,7 +170,7 @@ export const MapPreview: FC<MapPreviewProps> = ({}) => {
         PaperProps={{ elevation: 0 }}
         layers={layers}
         height={"300px"}
-        width={"700px"}
+        width={"100%"}
       >
         <MapData />
       </MapProvider>
@@ -188,11 +188,11 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
 
   return (
     <Paper className={classes.root}>
-      <Grid container spacing={2} alignItems="stretch">
-        <Grid item xs>
+      <Grid container spacing={4} alignItems="stretch">
+        <Grid item xs={12} sm={6}>
           <MapPreview />
         </Grid>
-        <Grid item xs>
+        <Grid item xs={12} sm={6}>
           <Grid container direction="column" className={classes.right}>
             <Grid item>
               <Grid container alignItems="center" spacing={1}>

@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState, createRef } from "react";
+import { FC, useEffect, useMemo, useState, createRef, useRef } from "react";
 import {
   makeStyles,
   Theme,
@@ -18,6 +18,7 @@ import { useAppContext } from "@/providers/AppContext";
 import SpeciesPreview from "@/components/OrganizationV2/SpeciesDiversity/SpeciesPreview";
 import useApi from "@/lib/useApi";
 import { styles } from "@material-ui/pickers/views/Clock/Clock";
+import { couldStartTrivia } from "typescript";
 
 export interface SpeciesDiversityDashboardProps {
   wip?: boolean;
@@ -30,7 +31,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const options = {
+const defaultOptions = {
+  indexAxis: "x",
+  aspectRatio: 2,
   responsive: true,
   scales: {
     yAxes: [
@@ -47,18 +50,40 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   wip = false,
 }) => {
   const [ref, { width }] = useMeasure();
+  const { width: windowWidth } = useWindowSize();
   const classes = useStyles();
   const theme = useTheme();
   const { organization } = useAppContext();
   const { apiETK } = useApi().api;
   const { t } = useTranslation(["components"]);
-  const [metrics, setMetrics] = useState(undefined);
-  const [isMobile, setIsMobile] = useState(true);
+  const [metrics, setMetrics] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [options, setOptions] = useState(defaultOptions);
+  const barRef = useRef(null);
 
   useEffect(() => {
-    const newIsMobile = Boolean(width < 600);
-    setIsMobile(newIsMobile);
-  }, [width]);
+    setOptions({
+      ...options,
+      indexAxis: isMobile ? "y" : "x",
+      aspectRatio: isMobile ? 1 : 2,
+    });
+  }, [isMobile]);
+
+  useEffect(() => {
+    console.log(options);
+  }, [options]);
+
+  useEffect(() => {
+    setIsMobile(
+      width < theme.breakpoints.values.sm ||
+        windowWidth < theme.breakpoints.values.sm
+    );
+    if (windowWidth < width && barRef) {
+      if (barRef?.current) {
+        barRef.current.resize(windowWidth - 56, barRef.current.height);
+      }
+    }
+  }, [width, windowWidth, barRef]);
 
   const [speciesAggregates, setSpeciesAggregates] = useState([]);
 
@@ -91,12 +116,17 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
     let labels = [];
     let chartData = [];
     let colors = [];
-
-    data.map((object) => {
-      labels.push(object.value);
-      chartData.push(object.total);
-      colors.push(randomRgba(0.9));
-    });
+    isMobile
+      ? data.slice(0, 10).map((object) => {
+          labels.push(object.value);
+          chartData.push(object.total);
+          colors.push(randomRgba(0.9));
+        })
+      : data.map((object) => {
+          labels.push(object.value);
+          chartData.push(object.total);
+          colors.push(randomRgba(0.9));
+        });
 
     const formattedData = {
       labels: labels,
@@ -148,58 +178,52 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
       ref={ref}
       label={t("components.Organization.SpeciesDiversityDashboard.title")}
       items={[]}
-      withTooltip
+      withTooltip={!isMobile}
       Tooltip={
         <WorkInProgress withHref href="https://www.natural-solutions.eu" />
       }
     >
-      <Typography
-        variant="subtitle2"
-        className={classes.subtitles}
-        gutterBottom
-      >
-        {t("components.Organization.Dashboards.SpeciesDiversity.topTaxa")}
-      </Typography>
-      <Grid
-        container
-        direction="row"
-        justify="space-evenly"
-        alignItems="center"
-        spacing={2}
-      >
-        {speciesAggregates.slice(0, 5).map((species, index) => (
-          <SpeciesPreview
-            canonicalName={species.value}
-            key={`species-${index}`}
-          />
-        ))}
-      </Grid>
-      <Typography
-        variant="subtitle2"
-        className={classes.subtitles}
-        gutterBottom
-      >
-        {t(
-          "components.Organization.Dashboards.SpeciesDiversity.taxaRepartition"
-        )}
-      </Typography>
-      {speciesAggregates.length > 0 &&
-        (isMobile ? (
+      {speciesAggregates.length > 0 && (
+        <>
+          <Typography
+            variant="subtitle2"
+            className={classes.subtitles}
+            gutterBottom
+          >
+            {t("components.Organization.Dashboards.SpeciesDiversity.topTaxa")}
+          </Typography>
+          <Grid
+            container
+            direction="row"
+            justify="space-evenly"
+            alignItems="center"
+            spacing={2}
+          >
+            {speciesAggregates.slice(0, 5).map((species, index) => (
+              <SpeciesPreview
+                canonicalName={species.value}
+                key={`species-${index}`}
+              />
+            ))}
+          </Grid>
+
+          <Typography
+            variant="subtitle2"
+            className={classes.subtitles}
+            gutterBottom
+          >
+            {t(
+              "components.Organization.Dashboards.SpeciesDiversity.taxaRepartition"
+            )}
+          </Typography>
           <Bar
+            ref={barRef}
             type="bar"
             data={memoizedData}
-            options={{ ...options, indexAxis: "y" }}
-            width={width}
-            height={500}
+            options={{ ...options }}
           />
-        ) : (
-          <Bar
-            type="bar"
-            data={memoizedData}
-            options={{ ...options, indexAxis: "x" }}
-            width={width}
-          />
-        ))}
+        </>
+      )}
     </CoreOptionsPanel>
   );
 };
