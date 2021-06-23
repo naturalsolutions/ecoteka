@@ -34,9 +34,9 @@ const OrganizationMain = () => {
     >
       <Container>
         <Grid container direction="column">
-          <Grid item>
+          {/* <Grid item>
             <OrganizationHeader />
-          </Grid>
+          </Grid> */}
           <Grid item>
             <Box my={2} />
           </Grid>

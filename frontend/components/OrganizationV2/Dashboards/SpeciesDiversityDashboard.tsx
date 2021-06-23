@@ -1,13 +1,15 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState, createRef } from "react";
 import {
   makeStyles,
   Theme,
   IconButton,
   Grid,
   Typography,
+  useTheme,
 } from "@material-ui/core";
 import { Bar } from "react-chartjs-2";
 import CoreOptionsPanel from "@/components/Core/OptionsPanel";
+import { useMeasure, useWindowSize } from "react-use";
 import { useTranslation } from "react-i18next";
 import WorkInProgress from "@/components/WorkInProgress";
 import RichTooltip from "@/components/Feedback/RichTooltip";
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const options = {
+  responsive: true,
   scales: {
     yAxes: [
       {
@@ -43,11 +46,19 @@ const options = {
 const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   wip = false,
 }) => {
+  const [ref, { width }] = useMeasure();
   const classes = useStyles();
+  const theme = useTheme();
   const { organization } = useAppContext();
   const { apiETK } = useApi().api;
   const { t } = useTranslation(["components"]);
   const [metrics, setMetrics] = useState(undefined);
+  const [isMobile, setIsMobile] = useState(true);
+
+  useEffect(() => {
+    const newIsMobile = Boolean(width < 600);
+    setIsMobile(newIsMobile);
+  }, [width]);
 
   const [speciesAggregates, setSpeciesAggregates] = useState([]);
 
@@ -123,7 +134,8 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   if (wip) {
     return (
       <CoreOptionsPanel
-        title={t("components.Organization.SpeciesDiversityDashboard.title")}
+        ref={ref}
+        label={t("components.Organization.SpeciesDiversityDashboard.title")}
         items={[]}
       >
         <WorkInProgress withHref href="https://www.natural-solutions.eu" />
@@ -133,7 +145,8 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.SpeciesDiversityDashboard.title")}
+      ref={ref}
+      label={t("components.Organization.SpeciesDiversityDashboard.title")}
       items={[]}
       withTooltip
       Tooltip={
@@ -170,11 +183,36 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
           "components.Organization.Dashboards.SpeciesDiversity.taxaRepartition"
         )}
       </Typography>
-      {speciesAggregates.length > 0 && (
-        <Bar type="bar" data={memoizedData} options={options} />
-      )}
+      {speciesAggregates.length > 0 &&
+        (isMobile ? (
+          <Bar
+            type="bar"
+            data={memoizedData}
+            options={{ ...options, indexAxis: "y" }}
+            width={width}
+            height={500}
+          />
+        ) : (
+          <Bar
+            type="bar"
+            data={memoizedData}
+            options={{ ...options, indexAxis: "x" }}
+            width={width}
+          />
+        ))}
     </CoreOptionsPanel>
   );
 };
 
-export default SpeciesDiversityDashboard;
+const MemoizedSpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = (
+  props
+) => {
+  const { organization } = useAppContext();
+  const { width } = useWindowSize();
+
+  return useMemo(
+    () => <SpeciesDiversityDashboard {...props} />,
+    [organization, width]
+  );
+};
+export default MemoizedSpeciesDiversityDashboard;

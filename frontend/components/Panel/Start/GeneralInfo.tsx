@@ -15,6 +15,8 @@ import Can from "@/components/Can";
 import { useAppContext } from "@/providers/AppContext";
 import { AppLayoutCartoDialog } from "@/components/AppLayout/Carto";
 import BackToMap from "@/components/Map/BackToMap";
+import OrganizationProgress from "@/components/OrganizationV2/Progress";
+import SpeciesDiversityDashboard from "@/components/OrganizationV2/Dashboards/SpeciesDiversityDashboard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +63,10 @@ const PanelStartGeneralInfo: FC<{ numberOfTrees?: number }> = ({
           wrap="nowrap"
         >
           <Grid item>
-            <Typography>{t("components.PanelStart.content")}</Typography>
+            <OrganizationProgress />
+          </Grid>
+          <Grid item>
+            <SpeciesDiversityDashboard />
           </Grid>
           <Grid item>
             <CardInfoPanel
