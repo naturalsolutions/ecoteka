@@ -12,13 +12,9 @@ import CoreOptionsPanel from "@/components/Core/OptionsPanel";
 import { useMeasure, useWindowSize } from "react-use";
 import { useTranslation } from "react-i18next";
 import WorkInProgress from "@/components/WorkInProgress";
-import RichTooltip from "@/components/Feedback/RichTooltip";
-import { MapPreview } from "@/components/OrganizationV2/Header";
 import { useAppContext } from "@/providers/AppContext";
 import SpeciesPreview from "@/components/OrganizationV2/SpeciesDiversity/SpeciesPreview";
 import useApi from "@/lib/useApi";
-import { styles } from "@material-ui/pickers/views/Clock/Clock";
-import { couldStartTrivia } from "typescript";
 
 export interface SpeciesDiversityDashboardProps {
   wip?: boolean;
@@ -28,6 +24,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   subtitles: {
     color: theme.palette.grey[700],
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(1),
   },
 }));
 
@@ -57,6 +55,8 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   const { apiETK } = useApi().api;
   const { t } = useTranslation(["components"]);
   const [metrics, setMetrics] = useState(null);
+  const [canonicalNameTotalCount, setCanonicalNameTotalCount] = useState(0);
+  const [speciesAggregates, setSpeciesAggregates] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [options, setOptions] = useState(defaultOptions);
   const barRef = useRef(null);
@@ -84,8 +84,6 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
       }
     }
   }, [width, windowWidth, barRef]);
-
-  const [speciesAggregates, setSpeciesAggregates] = useState([]);
 
   const fetchMetrics = async (organizationId: number) => {
     try {
@@ -145,6 +143,11 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
     return formattedData;
   };
 
+  const sumCanonicalName = (data) => {
+    const reducer = data.reduce((a, b) => ({ total: a.total + b.total }));
+    return reducer.total;
+  };
+
   const memoizedData = useMemo(() => {
     if (speciesAggregates.length > 0) {
       return formatBarChartData(speciesAggregates);
@@ -160,6 +163,16 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
       setSpeciesAggregates(metrics.aggregates.canonicalName);
     }
   }, [metrics?.aggregates?.canonicalName]);
+
+  useEffect(() => {
+    if (speciesAggregates.length > 0) {
+      setCanonicalNameTotalCount(sumCanonicalName(speciesAggregates));
+    }
+  }, [speciesAggregates]);
+
+  useEffect(() => {
+    console.log(canonicalNameTotalCount);
+  }, [canonicalNameTotalCount]);
 
   if (wip) {
     return (
@@ -194,14 +207,17 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
           </Typography>
           <Grid
             container
-            direction="row"
+            direction={isMobile ? "column" : "row"}
             justify="space-evenly"
             alignItems="center"
             spacing={2}
           >
-            {speciesAggregates.slice(0, 5).map((species, index) => (
+            {speciesAggregates.slice(0, 6).map((species, index) => (
               <SpeciesPreview
+                isMini={isMobile}
                 canonicalName={species.value}
+                total={species.total}
+                ratio={species.total / canonicalNameTotalCount}
                 key={`species-${index}`}
               />
             ))}
