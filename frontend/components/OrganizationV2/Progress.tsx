@@ -103,7 +103,7 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.Progress.title")}
+      label={t("components.Organization.Progress.title")}
       items={[]}
     >
       {metrics && (

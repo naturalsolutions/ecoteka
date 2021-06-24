@@ -17,7 +17,7 @@ const TreeHealthAssessmentDashboard: FC<TreeHealthAssessmentDashboardProps> =
 
     return (
       <CoreOptionsPanel
-        title={t("components.Organization.TreeHealthAssessmentDashboard.title")}
+        label={t("components.Organization.TreeHealthAssessmentDashboard.title")}
         items={[]}
       >
         <WorkInProgress withHref href="https://www.natural-solutions.eu" />

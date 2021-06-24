@@ -70,10 +70,6 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   }, [isMobile]);
 
   useEffect(() => {
-    console.log(options);
-  }, [options]);
-
-  useEffect(() => {
     setIsMobile(
       width < theme.breakpoints.values.sm ||
         windowWidth < theme.breakpoints.values.sm
@@ -97,7 +93,7 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
       }
     } catch ({ response, request }) {
       if (response) {
-        console.log(response);
+        // console.log(response);
       }
     }
   };
@@ -169,10 +165,6 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
       setCanonicalNameTotalCount(sumCanonicalName(speciesAggregates));
     }
   }, [speciesAggregates]);
-
-  useEffect(() => {
-    console.log(canonicalNameTotalCount);
-  }, [canonicalNameTotalCount]);
 
   if (wip) {
     return (

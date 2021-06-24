@@ -16,7 +16,7 @@ const GreeningDashboard: FC<GreeningDashboardProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.GreeningDashboard.title")}
+      label={t("components.Organization.GreeningDashboard.title")}
       items={[]}
     >
       <WorkInProgress withHref href="https://www.natural-solutions.eu" />

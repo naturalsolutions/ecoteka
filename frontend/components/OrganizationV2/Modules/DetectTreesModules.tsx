@@ -16,7 +16,7 @@ const DetectTreesModule: FC<DetectTreesModuleProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.DetectTreesModule.title")}
+      label={t("components.Organization.DetectTreesModule.title")}
       items={[]}
     >
       <WorkInProgress withHref href="https://www.natural-solutions.eu" />

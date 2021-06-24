@@ -16,7 +16,7 @@ const DataQualityModule: FC<DataQualityModuleProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.DataQualityModule.title")}
+      label={t("components.Organization.DataQualityModule.title")}
       items={[]}
     >
       <WorkInProgress withHref href="https://www.natural-solutions.eu" />
