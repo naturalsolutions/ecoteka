@@ -656,6 +656,12 @@
       "SpeciesDiversity": {
         "topTaxa": "Most represented taxa in datasets",
         "taxaRepartition": "Species repartition chart"
+      },
+      "GreeningDashboard": {
+        "treesPerSquareKm": "Tree / km²",
+        "treesPerSquareKm_plural": "Trees / km²",
+        "peoplePerTree": "Inhabitant / Public Tree",
+        "peoplePerTree_plural": "Inhabitants / Public Tree"
       }
     }
   },

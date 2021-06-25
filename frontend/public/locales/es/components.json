@@ -653,6 +653,12 @@
       "SpeciesDiversity": {
         "topTaxa": "Taxones más representados en conjuntos de datos",
         "taxaRepartition": "Cuadro de reparto de especies"
+      },
+      "GreeningDashboard": {
+        "treesPerSquareKm": "Árbol / km²",
+        "treesPerSquareKm_plural": "Árboles / km²",
+        "peoplePerTree": "Habitante / Árbol Público",
+        "peoplePerTree_plural": "Habitantes / Árbol Público"
       }
     }
   },
