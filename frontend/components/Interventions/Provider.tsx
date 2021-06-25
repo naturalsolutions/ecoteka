@@ -19,6 +19,10 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   const [interventionSelected, setInterventionSelected] = useState<
     TIntervention[]
   >([]);
+
+  const [treeInterventions, setTreeInterventions] = useState<TIntervention[]>(
+    []
+  );
   const [scheduledInterventions, setScheduledInterventions] = useState<
     TIntervention[]
   >([]);
@@ -36,16 +40,16 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
       );
 
       if (status === 200) {
-        const newScheduledInterventions = data
+        const newTreeInterventions = data
           .filter((intervention) => !intervention.done)
           .sort(
             (a, b) =>
-              new Date(b.intervention_start_date).getTime() -
+              new Date(b.date).getTime() -
               new Date(a.intervention_start_date).getTime()
           )
           .slice(0, 3);
 
-        setScheduledInterventions(newScheduledInterventions);
+        setTreeInterventions(newTreeInterventions);
       }
     } catch (e) {}
   };
@@ -55,8 +59,6 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
       const { data, status } = await apiETK.get(
         `/organization/${organization.id}/interventions`
       );
-
-      console.log(data);
 
       if (status === 200) {
         const newScheduledInterventions = data
@@ -68,6 +70,14 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
           );
 
         setScheduledInterventions(newScheduledInterventions);
+
+        const newDoneInterventions = data
+          .filter((intervention) => intervention.done)
+          .sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          );
+
+        setDoneInterventions(newDoneInterventions);
       }
     } catch (e) {
       console.log(e);
@@ -93,6 +103,8 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
         setScheduledInterventions,
         doneInterventions,
         setDoneInterventions,
+        treeInterventions,
+        setTreeInterventions,
       }}
     >
       {children}

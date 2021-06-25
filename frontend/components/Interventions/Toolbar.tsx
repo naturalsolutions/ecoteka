@@ -11,6 +11,7 @@ import ArchiveIcon from "@material-ui/icons/Archive";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useInterventionContext } from "./Provider";
+import { useRouter } from "next/router";
 
 export interface InterventionsToolbarProps {}
 
@@ -39,11 +40,16 @@ const InterventionsToolbar: FC<InterventionsToolbarProps> = ({}) => {
   const isBreakpointSM = useMediaQuery(theme.breakpoints.down("sm"));
   const { interventionSelected } = useInterventionContext();
   const hasInterventionSelected = Boolean(interventionSelected.length);
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    router.back();
+  };
 
   return (
     <div className={classes.root}>
       <div className={classes.left}>
-        <Button variant="outlined" color="primary">
+        <Button variant="outlined" color="primary" onClick={handleGoBack}>
           <ArrowBackIcon /> {isBreakpointSM ? null : "Retour"}
         </Button>
       </div>

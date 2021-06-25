@@ -128,7 +128,7 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
 
   const date =
     intervention.done && intervention.date
-      ? `Réalisée le ${intervention.date.toLocaleDateString()}`
+      ? `Réalisée le ${new Date(intervention.date).toLocaleDateString()}`
       : "";
   const periodDate =
     !intervention.done &&

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const InterventionListContainer: FC<InterventionListContainerProps> = ({
   label,
-  noData = <InterventionsListNoData />,
+  noData = <InterventionsListNoData allowNewIntervention={true} />,
   children,
 }) => {
   const classes = useStyles();
