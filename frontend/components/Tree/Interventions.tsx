@@ -13,14 +13,6 @@ import InterventionIcon03 from "@/public/assets/interventions/intervention-03.sv
 import InterventionIcon04 from "@/public/assets/interventions/intervention-04.svg";
 import InterventionIcon05 from "@/public/assets/interventions/intervention-05.svg";
 import InterventionIcon06 from "@/public/assets/interventions/intervention-06.svg";
-import InterventionIcon07 from "@/public/assets/interventions/intervention-07.svg";
-import InterventionIcon08 from "@/public/assets/interventions/intervention-08.svg";
-import InterventionIcon09 from "@/public/assets/interventions/intervention-09.svg";
-import InterventionIcon10 from "@/public/assets/interventions/intervention-10.svg";
-import InterventionIcon11 from "@/public/assets/interventions/intervention-11.svg";
-import InterventionIcon12 from "@/public/assets/interventions/intervention-12.svg";
-import InterventionIcon13 from "@/public/assets/interventions/intervention-13.svg";
-import InterventionIcon14 from "@/public/assets/interventions/intervention-14.svg";
 import { TIntervention, TInterventionType } from "../Interventions/Schema";
 import { useRouter } from "next/router";
 import { useTreeContext } from "@/components/Tree/Provider";
@@ -89,9 +81,8 @@ const TreeInterventions: FC<TreeInterventionsProps> = () => {
   const fetchInterventions = useInterventions(apiETK);
   const { tree } = useTreeContext();
 
-  const [interventions, setInterventions] = useState<
-    Record<TInterventionType, TIntervention[]>
-  >(null);
+  const [interventions, setInterventions] =
+    useState<Record<TInterventionType, TIntervention[]>>(null);
   const router = useRouter();
 
   const items = [

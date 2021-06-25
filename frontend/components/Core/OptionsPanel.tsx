@@ -13,7 +13,6 @@ import {
 import { MoreVert } from "@material-ui/icons";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useMeasure } from "react-use";
 import RichTooltip from "@/components/Feedback/RichTooltip";
 import HelpIcon from "@material-ui/icons/Help";
 
@@ -24,7 +23,7 @@ export interface Item {
 
 export interface CoreOptionsPanelProps extends PaperProps {
   label?: string | ReactElement;
-  items: Item[];
+  items?: Item[];
   withTooltip?: boolean;
   Tooltip?: JSX.Element;
 }

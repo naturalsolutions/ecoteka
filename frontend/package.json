@@ -60,7 +60,6 @@
     "react-map-gl": "^6.1.12",
     "react-player": "^2.9.0",
     "react-query": "^3.12.1",
-    "react-spring": "^8.0.27",
     "react-swipeable-views": "^0.13.9",
     "react-use": "^17.2.4",
     "screenfull": "^5.1.0",
@@ -72,9 +71,6 @@
   },
   "devDependencies": {
     "@hookform/devtools": "^3.0.0-rc.2",
-    "@testing-library/cypress": "^7.0.4",
-    "@types/geobuf": "^3.0.0",
-    "cypress": "^6.6.0",
-    "cypress-localstorage-commands": "^1.4.1"
+    "@types/geobuf": "^3.0.0"
   }
 }
