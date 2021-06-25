@@ -1,3 +1,15 @@
+## [0.16.5](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.4...v0.16.5) (2021-06-25)
+
+
+### Bug Fixes
+
+* **frontend:** add responsive behaviour to species bar chart ([8d824be](https://gitlab.com/natural-solutions/ecoteka/commit/8d824be8087db5cd83421397b6b0a2e724a59060))
+* **frontend:** add responsive behaviour to species preview ([fb2d162](https://gitlab.com/natural-solutions/ecoteka/commit/fb2d1624b4a3a8c2c86ed729fdb61d4a34920bf4))
+* **frontend:** cleanup deps ([9d6dce7](https://gitlab.com/natural-solutions/ecoteka/commit/9d6dce746f8655886d8eb8ade7aae6fd28087bb4))
+* **frontend:** remove unused components ([9a89fd4](https://gitlab.com/natural-solutions/ecoteka/commit/9a89fd4fff3c445b23dd5524f2cbe744cd5971af))
+* **frontend:** remove unused pages ([b9e466a](https://gitlab.com/natural-solutions/ecoteka/commit/b9e466a51206f9460ac360e28c384990f8757844))
+* **frontend:** rename CoreOptionPanel title props ([a94c93d](https://gitlab.com/natural-solutions/ecoteka/commit/a94c93da740fb1db4c56862a7fb0a31fe6238f39))
+
 ## [0.16.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.3...v0.16.4) (2021-06-22)
 
 
