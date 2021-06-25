@@ -1,3 +1,10 @@
+## [0.16.6](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.5...v0.16.6) (2021-06-25)
+
+
+### Bug Fixes
+
+* **frontend:** add greening simple metrics ([876e49e](https://gitlab.com/natural-solutions/ecoteka/commit/876e49e9463e52f5f4afea416d0632cbfb18590a))
+
 ## [0.16.5](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.4...v0.16.5) (2021-06-25)
 
 
