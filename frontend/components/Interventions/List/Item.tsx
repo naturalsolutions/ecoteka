@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  ListItemSecondaryAction,
   Checkbox,
   Divider,
 } from "@material-ui/core";
@@ -185,14 +186,16 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
           secondary={date || periodDate}
         />
         {selectable && (
-          <Checkbox
-            onClick={handleToggle(intervention.id)}
-            edge="end"
-            checked={interventionSelected.indexOf(intervention.id) !== -1}
-            tabIndex={-1}
-            disableRipple
-            inputProps={{ "aria-labelledby": intervention.intervention_type }}
-          />
+          <ListItemSecondaryAction>
+            <Checkbox
+              onClick={handleToggle(intervention.id)}
+              edge="end"
+              checked={interventionSelected.indexOf(intervention.id) !== -1}
+              tabIndex={-1}
+              disableRipple
+              inputProps={{ "aria-labelledby": intervention.intervention_type }}
+            />
+          </ListItemSecondaryAction>
         )}
       </ListItem>
       <Divider component="li" />
