@@ -1,3 +1,10 @@
+## [0.16.7](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.6...v0.16.7) (2021-06-25)
+
+
+### Bug Fixes
+
+* remove attribute ([0c41ea0](https://gitlab.com/natural-solutions/ecoteka/commit/0c41ea0a4abbe443b027740fdaf446d914c5f6c4))
+
 ## [0.16.6](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.5...v0.16.6) (2021-06-25)
 
 
