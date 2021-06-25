@@ -16,7 +16,7 @@ const EconomyDashboard: FC<EconomyDashboardProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.Zones.title")}
+      label={t("components.Organization.Zones.title")}
       items={[]}
     >
       <WorkInProgress />

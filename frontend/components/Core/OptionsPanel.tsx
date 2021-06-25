@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect } from "react";
+import { FC, forwardRef, ReactElement, useEffect } from "react";
 import {
   makeStyles,
   Theme,
@@ -8,6 +8,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  PaperProps,
 } from "@material-ui/core";
 import { MoreVert } from "@material-ui/icons";
 import { useState } from "react";
@@ -20,8 +21,8 @@ export interface Item {
   href: string;
 }
 
-export interface CoreOptionsPanelProps {
-  title: string | ReactElement;
+export interface CoreOptionsPanelProps extends PaperProps {
+  label?: string | ReactElement;
   items?: Item[];
   withTooltip?: boolean;
   Tooltip?: JSX.Element;
@@ -40,90 +41,85 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const CoreOptionsPanel: FC<CoreOptionsPanelProps> = ({
-  title,
-  items = [],
-  withTooltip = false,
-  Tooltip,
-  children,
-}) => {
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const router = useRouter();
-  const [open, setOpen] = useState<boolean>(false);
+const CoreOptionsPanel = forwardRef<HTMLDivElement, CoreOptionsPanelProps>(
+  ({ label, items = [], withTooltip = false, Tooltip, children }, ref) => {
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const router = useRouter();
+    const [open, setOpen] = useState<boolean>(false);
 
-  const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
 
-  const handleItemClick = (item) => {
-    handleClose();
+    const handleItemClick = (item) => {
+      handleClose();
 
-    if (item.href) {
-      router.push(item.href);
-    }
-  };
-
-  return (
-    <Paper className={classes.root}>
-      <Grid container alignItems="center">
-        <Grid item container alignItems="center" xs>
-          <Grid item>
-            <Typography variant="body2" className={classes.title}>
-              {title}
-            </Typography>
-          </Grid>
-          {withTooltip && (
+      if (item.href) {
+        router.push(item.href);
+      }
+    };
+    return (
+      <Paper className={classes.root} ref={ref}>
+        <Grid container alignItems="center">
+          <Grid item container alignItems="center" xs>
             <Grid item>
-              <RichTooltip
-                content={Tooltip}
-                open={open}
-                placement="bottom"
-                onClose={() => setOpen(false)}
-              >
-                <IconButton onClick={() => setOpen(!open)}>
-                  <HelpIcon />
-                </IconButton>
-              </RichTooltip>
+              <Typography variant="body2" className={classes.title}>
+                {label}
+              </Typography>
+            </Grid>
+            {withTooltip && (
+              <Grid item>
+                <RichTooltip
+                  content={Tooltip}
+                  open={open}
+                  placement="bottom"
+                  onClose={() => setOpen(false)}
+                >
+                  <IconButton onClick={() => setOpen(!open)}>
+                    <HelpIcon />
+                  </IconButton>
+                </RichTooltip>
+              </Grid>
+            )}
+          </Grid>
+          {items.length > 0 && (
+            <Grid item>
+              <IconButton size="small" onClick={handleOpen}>
+                <MoreVert />
+              </IconButton>
             </Grid>
           )}
         </Grid>
+        <div className={classes.content}>{children}</div>
         {items.length > 0 && (
-          <Grid item>
-            <IconButton size="small" onClick={handleOpen}>
-              <MoreVert />
-            </IconButton>
-          </Grid>
+          <Menu
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            {items.map((item) => (
+              <MenuItem key={item.title} onClick={() => handleItemClick(item)}>
+                {item.title}
+              </MenuItem>
+            ))}
+          </Menu>
         )}
-      </Grid>
-      <div className={classes.content}>{children}</div>
-      {items.length > 0 && (
-        <Menu
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          {items.map((item) => (
-            <MenuItem key={item.title} onClick={() => handleItemClick(item)}>
-              {item.title}
-            </MenuItem>
-          ))}
-        </Menu>
-      )}
-    </Paper>
-  );
-};
+      </Paper>
+    );
+  }
+);
 
 export default CoreOptionsPanel;
