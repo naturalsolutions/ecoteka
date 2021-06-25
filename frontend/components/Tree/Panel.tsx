@@ -8,9 +8,9 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import TreeImagesContainer from "@/components/Tree/Images/Container";
-import TreeInterventions from "@/components/Tree/Interventions";
-import TreeHealthAssessment from "./HealthAssessment";
 import TreeProvider from "@/components/Tree/Provider";
+import InterventionsWorkflow from "@/components/Interventions/Workflow";
+import InterventionProvider from "@/components/Interventions/Provider";
 
 export interface TreePanelProps {}
 
@@ -63,7 +63,9 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
               <TreeBasicForm readOnly={true} />
             </Grid>
             <Grid item>
-              <TreeInterventions />
+              <InterventionProvider>
+                <InterventionsWorkflow />
+              </InterventionProvider>
             </Grid>
             <Grid item>
               <Button

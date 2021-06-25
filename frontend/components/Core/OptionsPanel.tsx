@@ -22,7 +22,7 @@ export interface Item {
 
 export interface CoreOptionsPanelProps {
   title: string | ReactElement;
-  items: Item[];
+  items?: Item[];
   withTooltip?: boolean;
   Tooltip?: JSX.Element;
 }
