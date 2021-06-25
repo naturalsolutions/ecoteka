@@ -1,20 +1,17 @@
-import { createContext, FC, useContext, useState } from "react";
-import { AxiosInstance } from "axios";
+import { createContext, FC, useContext, useEffect, useState } from "react";
 import useApi from "@/lib/useApi";
 import { TIntervention } from "@/components/Interventions/Schema";
+import { Tree } from "@/index";
+import { useTreeContext } from "../Tree/Provider";
+import { useAppContext } from "@/providers/AppContext";
 
 export const InterventionContext = createContext({} as any);
 
-export interface InterventionProviderProps {
-  organizationSlug?: string;
-}
+export interface InterventionProviderProps {}
 
 export const useInterventionContext = () => useContext(InterventionContext);
 
-const InterventionProvider: FC<InterventionProviderProps> = ({
-  organizationSlug,
-  children,
-}) => {
+const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   const [intervention, setIntervention] = useState<TIntervention>();
   const [organizationInterventions, setOrganizationInterventions] = useState<
     TIntervention[]
@@ -24,98 +21,66 @@ const InterventionProvider: FC<InterventionProviderProps> = ({
   >([]);
   const [scheduledInterventions, setScheduledInterventions] = useState<
     TIntervention[]
-  >([
-    {
-      id: 1,
-      done: false,
-      estimated_cost: 0,
-      intervenant: "Javi",
-      intervention_type: "felling",
-      tree_id: 1,
-      properties: {},
-      required_documents: [],
-      required_material: [],
-      intervention_start_date: new Date("Fri Jun 29 2021 13:49:41 GMT+0200"),
-      intervention_end_date: new Date("Fri Jun 30 2021 13:49:41 GMT+0200"),
-    },
-    {
-      id: 2,
-      done: false,
-      estimated_cost: 0,
-      intervenant: "Javi",
-      intervention_type: "indepthdiagnostic",
-      intervention_start_date: new Date("Fri Jun 23 2021 13:49:41 GMT+0200"),
-      intervention_end_date: new Date("Fri Jun 24 2021 13:49:41 GMT+0200"),
-      tree_id: 1,
-      properties: {},
-      required_documents: [],
-      required_material: [],
-    },
-    {
-      id: 7,
-      done: false,
-      estimated_cost: 0,
-      intervenant: "Javi",
-      intervention_type: "indepthdiagnostic",
-      intervention_start_date: new Date("Wed Aug 04 2021 14:09:39 GMT+0200"),
-      intervention_end_date: new Date("Wed Aug 04 2021 14:09:39 GMT+0200"),
-      tree_id: 1,
-      properties: {},
-      required_documents: [],
-      required_material: [],
-    },
-  ]);
-  const [doneInterventions, setDoneInterventions] = useState<TIntervention[]>([
-    {
-      id: 3,
-      done: true,
-      date: new Date(),
-      estimated_cost: 0,
-      intervenant: "Javi",
-      intervention_type: "pruning",
-      tree_id: 1,
-      properties: {},
-      required_documents: [],
-      required_material: [],
-    },
-    {
-      id: 4,
-      done: true,
-      date: new Date(),
-      estimated_cost: 0,
-      intervenant: "Javi",
-      intervention_type: "streanremoval",
-      tree_id: 1,
-      properties: {},
-      required_documents: [],
-      required_material: [],
-    },
-    {
-      id: 5,
-      done: true,
-      date: new Date(),
-      estimated_cost: 0,
-      intervenant: "Javi",
-      intervention_type: "surveillance",
-      tree_id: 1,
-      properties: {},
-      required_documents: [],
-      required_material: [],
-    },
-    {
-      id: 6,
-      done: true,
-      date: new Date(),
-      estimated_cost: 0,
-      intervenant: "Javi",
-      intervention_type: "treatment",
-      tree_id: 1,
-      properties: {},
-      required_documents: [],
-      required_material: [],
-    },
-  ]);
+  >([]);
+  const [doneInterventions, setDoneInterventions] = useState<TIntervention[]>(
+    []
+  );
   const { apiETK } = useApi().api;
+  const { organization } = useAppContext();
+  const { tree } = useTreeContext();
+
+  const fetchTreeInterventions = async () => {
+    try {
+      const { data, status } = await apiETK.get(
+        `/organization/${tree.organization_id}/trees/${tree.id}/interventions`
+      );
+
+      if (status === 200) {
+        const newScheduledInterventions = data
+          .filter((intervention) => !intervention.done)
+          .sort(
+            (a, b) =>
+              new Date(b.intervention_start_date).getTime() -
+              new Date(a.intervention_start_date).getTime()
+          )
+          .slice(0, 3);
+
+        setScheduledInterventions(newScheduledInterventions);
+      }
+    } catch (e) {}
+  };
+
+  const fetchOrganizationInterventions = async () => {
+    try {
+      const { data, status } = await apiETK.get(
+        `/organization/${organization.id}/interventions`
+      );
+
+      console.log(data);
+
+      if (status === 200) {
+        const newScheduledInterventions = data
+          .filter((intervention) => !intervention.done)
+          .sort(
+            (a, b) =>
+              new Date(b.intervention_start_date).getTime() -
+              new Date(a.intervention_start_date).getTime()
+          );
+
+        setScheduledInterventions(newScheduledInterventions);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchTreeInterventions();
+  }, [tree]);
+
+  useEffect(() => {
+    fetchOrganizationInterventions();
+  }, [organization]);
 
   return (
     <InterventionContext.Provider

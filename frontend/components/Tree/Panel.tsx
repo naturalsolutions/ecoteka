@@ -64,7 +64,10 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
             </Grid>
             <Grid item>
               <InterventionProvider>
-                <InterventionsWorkflow />
+                <InterventionsWorkflow
+                  selectable={false}
+                  showAllInterventions={false}
+                />
               </InterventionProvider>
             </Grid>
             <Grid item>

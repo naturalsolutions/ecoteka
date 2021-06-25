@@ -19,9 +19,12 @@ import SurveillanceIcon from "@/public/assets/interventions/intervention-06.svg"
 import { useInterventionContext } from "../Provider";
 import { useTranslation } from "react-i18next";
 import { isAfter } from "date-fns";
+import { useAppContext } from "@/providers/AppContext";
+import { useRouter } from "next/router";
 
 export interface InterventionsListItemProps {
   intervention: TIntervention;
+  selectable?: boolean;
 }
 
 /**
@@ -109,15 +112,19 @@ const calculatePriority = ({ done, archived, start, end }) => {
 
 const InterventionsListItem: FC<InterventionsListItemProps> = ({
   intervention,
+  selectable = true,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const Icon = INTERVENTION_ICONS[intervention.intervention_type];
+  const { organization } = useAppContext();
+  const router = useRouter();
   const { interventionSelected, setInterventionSelected } =
     useInterventionContext();
   const interventionNames = t("components.Intervention.types", {
     returnObjects: true,
   });
+
   const date =
     intervention.done && intervention.date
       ? `Réalisée le ${intervention.date.toLocaleDateString()}`
@@ -126,8 +133,31 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
     !intervention.done &&
     intervention.intervention_start_date &&
     intervention.intervention_end_date
-      ? `Entre le ${intervention.intervention_start_date?.toLocaleDateString()} et ${intervention.intervention_end_date?.toLocaleDateString()} `
+      ? `Entre le ${new Date(
+          intervention.intervention_start_date
+        )?.toLocaleDateString()} et ${new Date(
+          intervention.intervention_end_date
+        )?.toLocaleDateString()} `
       : "";
+
+  const priority = calculatePriority({
+    done: intervention.done,
+    start: intervention.intervention_start_date,
+    end: intervention.intervention_end_date,
+    archived: false,
+  });
+
+  const handleShowIntervention = () => {
+    router.push({
+      pathname: "/[organizationSlug]/map",
+      query: {
+        panel: "intervention-edit",
+        intervention: intervention.id,
+        tree: intervention.tree_id,
+        organizationSlug: organization.slug,
+      },
+    });
+  };
 
   const handleToggle = (value) => () => {
     const currentIndex = interventionSelected.indexOf(value);
@@ -142,16 +172,9 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
     setInterventionSelected(newInterventionSelected);
   };
 
-  const priority = calculatePriority({
-    done: intervention.done,
-    start: intervention.intervention_start_date,
-    end: intervention.intervention_end_date,
-    archived: false,
-  });
-
   return (
     <>
-      <ListItem button onClick={handleToggle(intervention.id)}>
+      <ListItem button onClick={handleShowIntervention}>
         <ListItemAvatar>
           <Avatar className={[classes.avatar, classes[priority]].join(" ")}>
             <Icon />
@@ -161,13 +184,16 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
           primary={interventionNames[intervention.intervention_type]}
           secondary={date || periodDate}
         />
-        <Checkbox
-          edge="end"
-          checked={interventionSelected.indexOf(intervention.id) !== -1}
-          tabIndex={-1}
-          disableRipple
-          inputProps={{ "aria-labelledby": intervention.intervention_type }}
-        />
+        {selectable && (
+          <Checkbox
+            onClick={handleToggle(intervention.id)}
+            edge="end"
+            checked={interventionSelected.indexOf(intervention.id) !== -1}
+            tabIndex={-1}
+            disableRipple
+            inputProps={{ "aria-labelledby": intervention.intervention_type }}
+          />
+        )}
       </ListItem>
       <Divider component="li" />
     </>
