@@ -94,5 +94,6 @@
   "activateSelectTrees": "Activate selection",
   "delete": "Delete",
   "treesWithCount": "{{count}} tree",
-  "treesWithCount_plural": "{{count}} trees"
+  "treesWithCount_plural": "{{count}} trees",
+  "nonAvailableAbbr": "/NA"
 }
