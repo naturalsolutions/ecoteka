@@ -107,7 +107,7 @@ const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.Members.title")}
+      label={t("components.Organization.Members.title")}
       items={[
         { title: "Gestion des membres", href: `/${organization.slug}/members` },
       ]}

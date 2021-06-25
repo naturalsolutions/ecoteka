@@ -5,6 +5,9 @@ import useApi from "@/lib/useApi";
 
 export interface SpeciesPreviewProps {
   canonicalName: string;
+  total: number;
+  ratio: number;
+  isMini: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -13,12 +16,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: theme.spacing(7),
     height: theme.spacing(7),
   },
-  canonicalName: {
+  textCenter: {
     textAlign: "center",
   },
 }));
 
-const SpeciesPreview: FC<SpeciesPreviewProps> = ({ canonicalName }) => {
+const SpeciesPreview: FC<SpeciesPreviewProps> = ({
+  canonicalName,
+  total,
+  ratio,
+  isMini,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation(["components"]);
   const { apiEOL, apiWikispecies } = useApi().api;
@@ -97,12 +105,12 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({ canonicalName }) => {
     <Grid
       item
       container
-      direction="column"
-      justify="center"
+      direction={isMini ? "row" : "column"}
+      justify={isMini ? "space-between" : "center"}
       alignItems="center"
       spacing={1}
-      md={2}
-      xs={4}
+      md={isMini ? 12 : 2}
+      sm={isMini ? 12 : 4}
     >
       <Grid item>
         <Avatar alt={scName} src={speciesThumbnail} className={classes.large}>
@@ -110,17 +118,13 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({ canonicalName }) => {
         </Avatar>
       </Grid>
       <Grid item>
-        <Typography
-          variant="body2"
-          gutterBottom
-          className={classes.canonicalName}
-        >
+        <Typography variant="body2" gutterBottom>
           <i>
             {canonicalName.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}
           </i>
         </Typography>
       </Grid>
-      <Grid item></Grid>
+      <Grid item>{(ratio * 100).toFixed(2)} %</Grid>
     </Grid>
   );
 };

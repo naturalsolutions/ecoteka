@@ -16,7 +16,7 @@ const UrbanForestryManagement: FC<UrbanForestryManagementProps> = ({}) => {
 
   return (
     <CoreOptionsPanel
-      title={t("components.Organization.UrbanForestryManagement.title")}
+      label={t("components.Organization.UrbanForestryManagement.title")}
       items={[]}
     >
       <WorkInProgress withHref href="https://www.natural-solutions.eu" />
