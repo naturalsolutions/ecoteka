@@ -14,8 +14,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 WORKDIR /usr/src/app
 
-COPY package.json /usr/src/app
-COPY package-lock.json /usr/src/app
+COPY package*.json /usr/src/app
 
 RUN npm install --production --legacy-peer-deps
 
