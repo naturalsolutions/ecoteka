@@ -1,36 +1,14 @@
 import { FC } from "react";
-import { makeStyles, Theme, Button, Typography, Grid } from "@material-ui/core";
-import { useRouter } from "next/router";
-import { useAppContext } from "@/providers/AppContext";
-import { useTreeContext } from "@/components/Tree/Provider";
+import { makeStyles, Theme, Typography, Grid } from "@material-ui/core";
 
-export interface InterventionsListNoDataProps {
-  allowNewIntervention: boolean;
-}
+export interface InterventionsListNoDataProps {}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
 }));
 
-const InterventionsListNoData: FC<InterventionsListNoDataProps> = ({
-  allowNewIntervention = false,
-}) => {
+const InterventionsListNoData: FC<InterventionsListNoDataProps> = () => {
   const classes = useStyles();
-  const router = useRouter();
-  const { organization } = useAppContext();
-  const { tree } = useTreeContext();
-
-  const handleNewIntervention = () => {
-    router.push({
-      pathname: "/[organizationSlug]/map",
-      query: {
-        panel: "intervention",
-        tree: tree.id,
-        organizationSlug: organization.slug,
-      },
-    });
-  };
-
   return (
     <Grid
       container
@@ -60,19 +38,6 @@ const InterventionsListNoData: FC<InterventionsListNoDataProps> = ({
           </Grid>
         </Grid>
       </Grid>
-
-      {allowNewIntervention && (
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleNewIntervention}
-          >
-            planifier une intervention
-          </Button>
-        </Grid>
-      )}
     </Grid>
   );
 };

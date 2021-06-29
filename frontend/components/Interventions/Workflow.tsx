@@ -1,12 +1,9 @@
 import { FC } from "react";
+import { useMeasure } from "react-use";
 import { makeStyles, Theme, Grid, useTheme, Button } from "@material-ui/core";
 import { useInterventionContext } from "@/components/Interventions/Provider";
 import InterventionListContainer from "@/components/Interventions/List/Container";
-import InterventionsListItem from "./List/Item";
-import { useMeasure } from "react-use";
-import { useRouter } from "next/router";
-import { useAppContext } from "@/providers/AppContext";
-import { useTreeContext } from "../Tree/Provider";
+import InterventionsListItem from "@/components/Interventions/List/Item";
 
 export interface InterventionsWorkflowProps {
   selectable?: boolean;
@@ -34,7 +31,10 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
     <Grid ref={ref} container spacing={2}>
       {!showAllInterventions && (
         <Grid item xs={12} sm={sm}>
-          <InterventionListContainer label="interventions planifiées">
+          <InterventionListContainer
+            label="interventions planifiées"
+            allowNewInterventions={true}
+          >
             {treeInterventions?.map((intervention) => (
               <InterventionsListItem
                 key={`intervention-${intervention.id}`}

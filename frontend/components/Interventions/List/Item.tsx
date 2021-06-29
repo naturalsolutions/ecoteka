@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   makeStyles,
   Theme,
@@ -19,7 +19,6 @@ import TreatmentIcon from "@/public/assets/interventions/intervention-05.svg";
 import SurveillanceIcon from "@/public/assets/interventions/intervention-06.svg";
 import { useInterventionContext } from "../Provider";
 import { useTranslation } from "react-i18next";
-import { isAfter } from "date-fns";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
 
