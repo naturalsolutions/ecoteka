@@ -1,3 +1,10 @@
+# [0.17.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.9...v0.17.0) (2021-06-29)
+
+
+### Features
+
+* add alert when there are late interventions ([3de9d57](https://gitlab.com/natural-solutions/ecoteka/commit/3de9d57ba1bdde6cbeb5e8049c24c2a6c4f05719))
+
 ## [0.16.9](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.8...v0.16.9) (2021-06-29)
 
 
