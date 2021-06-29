@@ -1,9 +1,19 @@
 import { FC } from "react";
 import { useMeasure } from "react-use";
-import { makeStyles, Theme, Grid, useTheme, Button } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  Grid,
+  useTheme,
+  IconButton,
+} from "@material-ui/core";
 import { useInterventionContext } from "@/components/Interventions/Provider";
 import InterventionListContainer from "@/components/Interventions/List/Container";
 import InterventionsListItem from "@/components/Interventions/List/Item";
+import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import { useRouter } from "next/router";
+import { useAppContext } from "@/providers/AppContext";
+import { useTreeContext } from "../Tree/Provider";
 
 export interface InterventionsWorkflowProps {
   selectable?: boolean;
@@ -23,9 +33,22 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
     useInterventionContext();
   const [ref, measure] = useMeasure();
   const theme = useTheme();
+  const router = useRouter();
+  const { organization } = useAppContext();
+  const { tree } = useTreeContext();
 
   const isMobile = measure.width <= theme.breakpoints.values.sm;
   const sm = isMobile ? 12 : 6;
+
+  const handleShowTreeInterventions = () => {
+    router.push({
+      pathname: "/[organizationSlug]/tree/[id]/intervention",
+      query: {
+        organizationSlug: organization.slug,
+        id: tree.id,
+      },
+    });
+  };
 
   return (
     <Grid ref={ref} container spacing={2}>
@@ -34,6 +57,11 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
           <InterventionListContainer
             label="interventions planifiées"
             allowNewInterventions={true}
+            expand={
+              <IconButton size="small" onClick={handleShowTreeInterventions}>
+                <OpenInNewIcon />
+              </IconButton>
+            }
           >
             {treeInterventions?.map((intervention) => (
               <InterventionsListItem

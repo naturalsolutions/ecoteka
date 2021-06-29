@@ -12,6 +12,8 @@ import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useInterventionContext } from "./Provider";
 import { useRouter } from "next/router";
+import { useAppContext } from "@/providers/AppContext";
+import { useTreeContext } from "../Tree/Provider";
 
 export interface InterventionsToolbarProps {}
 
@@ -41,9 +43,22 @@ const InterventionsToolbar: FC<InterventionsToolbarProps> = ({}) => {
   const { interventionSelected } = useInterventionContext();
   const hasInterventionSelected = Boolean(interventionSelected.length);
   const router = useRouter();
+  const { organization } = useAppContext();
+  const { tree } = useTreeContext();
 
   const handleGoBack = () => {
     router.back();
+  };
+
+  const handleNewIntervention = () => {
+    router.push({
+      pathname: "/[organizationSlug]/map",
+      query: {
+        panel: "intervention",
+        tree: tree.id,
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   return (
@@ -64,9 +79,16 @@ const InterventionsToolbar: FC<InterventionsToolbarProps> = ({}) => {
             </Button>
           </>
         )}
-        <Button variant="contained" color="primary">
-          <AddIcon /> {isBreakpointSM ? "Ajouter" : "Ajouter une intervention"}
-        </Button>
+        {tree && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleNewIntervention}
+          >
+            <AddIcon />{" "}
+            {isBreakpointSM ? "Ajouter" : "Ajouter une intervention"}
+          </Button>
+        )}
       </div>
     </div>
   );

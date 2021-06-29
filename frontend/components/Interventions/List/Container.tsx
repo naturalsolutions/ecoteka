@@ -10,6 +10,7 @@ import { useTreeContext } from "@/components/Tree/Provider";
 
 export interface InterventionListContainerProps extends CoreOptionsPanelProps {
   noData?: ReactElement;
+  expand?: ReactElement;
   allowNewInterventions?: boolean;
 }
 
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const InterventionListContainer: FC<InterventionListContainerProps> = ({
   label,
   noData = <InterventionsListNoData />,
+  expand,
   allowNewInterventions = false,
   children,
 }) => {
@@ -40,7 +42,7 @@ const InterventionListContainer: FC<InterventionListContainerProps> = ({
   };
 
   return (
-    <OptionsPanel label={label}>
+    <OptionsPanel label={label} endActions={expand}>
       <>
         {!Children.toArray(children).length ? noData : <List>{children}</List>}
         {allowNewInterventions && (

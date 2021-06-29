@@ -24,6 +24,7 @@ export interface Item {
 export interface CoreOptionsPanelProps extends PaperProps {
   label?: string | ReactElement;
   items?: Item[];
+  endActions?: ReactElement;
   withTooltip?: boolean;
   Tooltip?: JSX.Element;
 }
@@ -42,7 +43,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const CoreOptionsPanel = forwardRef<HTMLDivElement, CoreOptionsPanelProps>(
-  ({ label, items = [], withTooltip = false, Tooltip, children }, ref) => {
+  (
+    { label, items = [], endActions, withTooltip = false, Tooltip, children },
+    ref
+  ) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const router = useRouter();
@@ -94,6 +98,8 @@ const CoreOptionsPanel = forwardRef<HTMLDivElement, CoreOptionsPanelProps>(
               </IconButton>
             </Grid>
           )}
+
+          {endActions && <Grid item>{endActions}</Grid>}
         </Grid>
         <div className={classes.content}>{children}</div>
         {items.length > 0 && (
