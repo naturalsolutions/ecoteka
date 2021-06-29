@@ -1,3 +1,10 @@
+## [0.16.8](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.7...v0.16.8) (2021-06-29)
+
+
+### Bug Fixes
+
+* remove add tree button when disconnected ([2aea6b8](https://gitlab.com/natural-solutions/ecoteka/commit/2aea6b82ef70c929d633d233de7acea29ff11517))
+
 ## [0.16.7](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.6...v0.16.7) (2021-06-25)
 
 
