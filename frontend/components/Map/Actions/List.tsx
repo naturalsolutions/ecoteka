@@ -1,4 +1,4 @@
-import React, { FC, Children, useState, ReactNode, ReactElement } from "react";
+import React, { FC, Children, useState, ReactElement } from "react";
 import {
   Backdrop,
   Fab,
@@ -10,7 +10,6 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from "@material-ui/lab";
-import { useTranslation } from "react-i18next";
 import { MapActionsActionProps } from "./Action";
 
 export interface MapActionsListProps {}
@@ -63,7 +62,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const { t } = useTranslation();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -89,7 +87,7 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
       alignItems="flex-end"
       spacing={2}
     >
-      {Children.map(children, (child: ReactElement<MapActionsActionProps>) => (
+      {Children.map(children, (child: ReactElement<MapActionsActionProps>) => (child && 
         <Grid item>
           <Tooltip title={child.props.name} arrow placement="left">
             <Fab
@@ -117,7 +115,7 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
       >
         {Children.map(
           children,
-          (child: ReactElement<MapActionsActionProps>) => (
+          (child: ReactElement<MapActionsActionProps>) => (child && 
             <SpeedDialAction
               key={child.props.name}
               icon={child.props.icon}

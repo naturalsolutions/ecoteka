@@ -71,4 +71,6 @@ config.i18n = {
   defaultLocale: "fr",
 };
 
+config.webpack5 = false;
+
 module.exports = config;

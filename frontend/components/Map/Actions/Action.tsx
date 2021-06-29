@@ -3,21 +3,18 @@ import {
   makeStyles,
   SvgIconProps,
   Theme,
-  Icon,
   Tooltip,
   IconButton,
-  useMediaQuery,
-  useTheme,
 } from "@material-ui/core";
-import { SpeedDialAction } from "@material-ui/lab";
-import SaveIcon from "@material-ui/icons/Save";
-
-import { useTranslation } from "react-i18next";
+import Can from "@/components/Can";
+import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
 
 export interface MapActionsActionProps {
-  icon: ReactElement<SvgIconProps>;
   name: string;
+  icon: ReactElement<SvgIconProps>;
   isActive: boolean;
+  action?: Actions;
+  subject?: Subjects;
   onClick?: () => void;
 }
 
@@ -30,20 +27,26 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const MapActionsAction: FC<MapActionsActionProps> = ({
   isActive = false,
-  name,
+  action = "read",
+  subject = "Trees",
   icon,
-  onClick,
+  name, 
+  onClick
 }) => {
   const classes = useStyles();
-  const { t } = useTranslation();
-  const theme = useTheme();
 
   return (
-    <Tooltip title={name}>
-      <IconButton className={classes.root} aria-label={name} onClick={onClick}>
-        {icon}
-      </IconButton>
-    </Tooltip>
+    <Can do={action} on={subject}>
+      <Tooltip title={name}>
+        <IconButton
+          className={classes.root}
+          aria-label={name}
+          onClick={onClick}
+        >
+          {icon}
+        </IconButton>
+      </Tooltip>
+    </Can>
   );
 };
 

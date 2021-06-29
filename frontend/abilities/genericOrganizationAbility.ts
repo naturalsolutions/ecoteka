@@ -40,6 +40,7 @@ export default function defineRulesFor(role: string) {
       can("read", "all");
       break;
     case "guest":
+      can("read", "Trees");
       cannot(["manage", "create", "read", "update"], "all");
       break;
     case "none":
@@ -77,7 +78,7 @@ export default function defineRulesFor(role: string) {
 }
 
 export function buildAbilityFor(role: string): AppAbility {
-  return new AppAbility(defineRulesFor(role), {
+  return new AppAbility(defineRulesFor(role ? role : "guest"), {
     // https://casl.js.org/v5/en/guide/subject-type-detection
     detectSubjectType: (object: any) => (object ? object.type : "all"),
   });
