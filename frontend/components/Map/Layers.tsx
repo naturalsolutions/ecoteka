@@ -12,7 +12,6 @@ import {
 } from "@material-ui/core";
 import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 import { useRouter } from "next/router";
-import { useAppContext } from "@/providers/AppContext";
 import BackToMap from "./BackToMap";
 
 export const defaultLayers = {
