@@ -1,3 +1,10 @@
+## [0.16.9](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.8...v0.16.9) (2021-06-29)
+
+
+### Bug Fixes
+
+* set the osm layer to disabled by default when connect and on its data layer ([57be718](https://gitlab.com/natural-solutions/ecoteka/commit/57be71843c247594aff097e820ec164b7b94f732))
+
 ## [0.16.8](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.7...v0.16.8) (2021-06-29)
 
 
