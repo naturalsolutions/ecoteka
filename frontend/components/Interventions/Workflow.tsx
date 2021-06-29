@@ -17,7 +17,7 @@ import { useTreeContext } from "../Tree/Provider";
 
 export interface InterventionsWorkflowProps {
   selectable?: boolean;
-  showAllInterventions?: boolean;
+  insidePanel?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -26,10 +26,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
   selectable = true,
-  showAllInterventions = true,
+  insidePanel = false,
 }) => {
   const classes = useStyles();
-  const { scheduledInterventions, doneInterventions, treeInterventions } =
+  const { scheduledInterventions, doneInterventions } =
     useInterventionContext();
   const [ref, measure] = useMeasure();
   const theme = useTheme();
@@ -52,53 +52,38 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
 
   return (
     <Grid ref={ref} container spacing={2}>
-      {!showAllInterventions && (
-        <Grid item xs={12} sm={sm}>
-          <InterventionListContainer
-            label="interventions planifiées"
-            allowNewInterventions={true}
-            expand={
+      <Grid item xs={12} sm={sm}>
+        <InterventionListContainer
+          label="interventions planifiées"
+          allowNewInterventions={insidePanel}
+          expand={
+            insidePanel && (
               <IconButton size="small" onClick={handleShowTreeInterventions}>
                 <OpenInNewIcon />
               </IconButton>
-            }
-          >
-            {treeInterventions?.map((intervention) => (
-              <InterventionsListItem
-                key={`intervention-${intervention.id}`}
-                selectable={selectable}
-                intervention={intervention}
-              />
-            ))}
-          </InterventionListContainer>
-        </Grid>
-      )}
-      {showAllInterventions && (
-        <>
-          <Grid item xs={12} sm={sm}>
-            <InterventionListContainer label="interventions planifiées">
-              {scheduledInterventions?.map((intervention) => (
-                <InterventionsListItem
-                  key={`intervention-${intervention.id}`}
-                  selectable={selectable}
-                  intervention={intervention}
-                />
-              ))}
-            </InterventionListContainer>
-          </Grid>
-          <Grid item xs={12} sm={sm}>
-            <InterventionListContainer label="interventions réalisées">
-              {doneInterventions?.map((intervention) => (
-                <InterventionsListItem
-                  key={`intervention-${intervention.id}`}
-                  selectable={selectable}
-                  intervention={intervention}
-                />
-              ))}
-            </InterventionListContainer>
-          </Grid>
-        </>
-      )}
+            )
+          }
+        >
+          {scheduledInterventions?.map((intervention) => (
+            <InterventionsListItem
+              key={`intervention-${intervention.id}`}
+              selectable={selectable}
+              intervention={intervention}
+            />
+          ))}
+        </InterventionListContainer>
+      </Grid>
+      <Grid item xs={12} sm={sm}>
+        <InterventionListContainer label="interventions réalisées">
+          {doneInterventions?.map((intervention) => (
+            <InterventionsListItem
+              key={`intervention-${intervention.id}`}
+              selectable={selectable}
+              intervention={intervention}
+            />
+          ))}
+        </InterventionListContainer>
+      </Grid>
     </Grid>
   );
 };

@@ -12,17 +12,12 @@ export interface InterventionProviderProps {}
 export const useInterventionContext = () => useContext(InterventionContext);
 
 const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
-  const [intervention, setIntervention] = useState<TIntervention>();
   const [organizationInterventions, setOrganizationInterventions] = useState<
     TIntervention[]
   >([]);
   const [interventionSelected, setInterventionSelected] = useState<
     TIntervention[]
   >([]);
-
-  const [treeInterventions, setTreeInterventions] = useState<TIntervention[]>(
-    []
-  );
   const [scheduledInterventions, setScheduledInterventions] = useState<
     TIntervention[]
   >([]);
@@ -33,6 +28,24 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   const { organization } = useAppContext();
   const { tree } = useTreeContext();
 
+  const formatInterventions = async (data: TIntervention[]) => {
+    const newScheduledInterventions = data
+      .filter((intervention) => !intervention.done)
+      .sort(
+        (a, b) =>
+          new Date(b.intervention_start_date).getTime() -
+          new Date(a.intervention_start_date).getTime()
+      );
+
+    setScheduledInterventions(newScheduledInterventions);
+
+    const newDoneInterventions = data
+      .filter((intervention) => intervention.done)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    setDoneInterventions(newDoneInterventions);
+  };
+
   const fetchTreeInterventions = async () => {
     try {
       const { data, status } = await apiETK.get(
@@ -40,16 +53,7 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
       );
 
       if (status === 200) {
-        const newTreeInterventions = data
-          .filter((intervention) => !intervention.done)
-          .sort(
-            (a, b) =>
-              new Date(b.date).getTime() -
-              new Date(a.intervention_start_date).getTime()
-          )
-          .slice(0, 3);
-
-        setTreeInterventions(newTreeInterventions);
+        formatInterventions(data);
       }
     } catch (e) {}
   };
@@ -61,23 +65,7 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
       );
 
       if (status === 200) {
-        const newScheduledInterventions = data
-          .filter((intervention) => !intervention.done)
-          .sort(
-            (a, b) =>
-              new Date(b.intervention_start_date).getTime() -
-              new Date(a.intervention_start_date).getTime()
-          );
-
-        setScheduledInterventions(newScheduledInterventions);
-
-        const newDoneInterventions = data
-          .filter((intervention) => intervention.done)
-          .sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-          );
-
-        setDoneInterventions(newDoneInterventions);
+        formatInterventions(data);
       }
     } catch (e) {
       console.log(e);
@@ -85,12 +73,8 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchTreeInterventions();
+    tree ? fetchTreeInterventions() : fetchOrganizationInterventions();
   }, [tree]);
-
-  useEffect(() => {
-    fetchOrganizationInterventions();
-  }, [organization]);
 
   return (
     <InterventionContext.Provider
@@ -103,8 +87,6 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
         setScheduledInterventions,
         doneInterventions,
         setDoneInterventions,
-        treeInterventions,
-        setTreeInterventions,
       }}
     >
       {children}
