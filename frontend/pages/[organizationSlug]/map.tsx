@@ -122,7 +122,7 @@ const EditionPage = ({}) => {
   const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
   const classes = useStyles();
   const router = useRouter();
-  const { organization, isOrganizationLoading } = useAppContext();
+  const { organization, user, isOrganizationLoading } = useAppContext();
   const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
   const [data, setData] = useLocalStorage("etk:map:data");
@@ -654,7 +654,9 @@ const EditionPage = ({}) => {
           icon={<CenterFocusStrongIcon color="primary" />}
           onClick={() => fitToBounds(organization.id)}
         />
-        <MapActionsAction
+        {user && <MapActionsAction
+          action="delete"
+          subject="Trees"
           isActive={editionMode && mode == "selection"}
           name={
             editionMode && mode == "selection"
@@ -669,9 +671,11 @@ const EditionPage = ({}) => {
             />
           }
           onClick={() => toggleAction(editionMode, "selection")}
-        />
-        <MapActionsAction
+        />}
+        {user && <MapActionsAction
           isActive={editionMode && mode == "drawPoint"}
+          action="create"
+          subject="Trees"
           name={
             editionMode && mode == "drawPoint"
               ? t("common.disableDrawTree")
@@ -687,7 +691,7 @@ const EditionPage = ({}) => {
             />
           }
           onClick={() => toggleAction(editionMode, "drawPoint")}
-        />
+        />}
       </MapActionsList>
       <ImportPanel onFileImported={handleOnFileImported} />
       <InterventionForm />
