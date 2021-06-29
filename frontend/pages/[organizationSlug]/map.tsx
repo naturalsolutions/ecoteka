@@ -162,7 +162,7 @@ const EditionPage = ({}) => {
   );
 
   const cadastreLayer = CadastreLayer(activeLayers.osm.value);
-  const osmLayer = OSMLayer(activeLayers.osm.value);
+  const osmLayer = OSMLayer(false);
   const treesLayer = InventoryLayer({
     visible: activeLayers.trees.value,
     data,
@@ -172,6 +172,7 @@ const EditionPage = ({}) => {
     activeTree,
     editionMode,
   });
+
   const selectionLayer = new SelectionLayer({
     selectionType: "rectangle",
     onSelect: ({ pickingInfos }) => {
@@ -281,18 +282,6 @@ const EditionPage = ({}) => {
     } finally {
       setDataOrganizationId(id);
       setLoading(false);
-    }
-  };
-
-  const handleOnTreeSave = (tree: ITree) => {
-    const newData = { ...data };
-    const index = newData.features.findIndex(
-      (f) => f.properties.id === tree.id
-    );
-
-    if (index) {
-      newData.features[index].properties = tree;
-      setData(newData);
     }
   };
 
@@ -493,10 +482,6 @@ const EditionPage = ({}) => {
   };
 
   useEffect(() => {
-    setViewState({ ...initialViewState });
-  }, []);
-
-  useEffect(() => {
     if (mode !== "selection") {
       setSelection([]);
       setLayers([osmLayer, treesLayer]);
@@ -524,6 +509,26 @@ const EditionPage = ({}) => {
   }, [organization]);
 
   useEffect(() => {
+    if (["open", "participatory"].includes(organization.mode)) {
+      setActiveLayers({
+        ...activeLayers,
+        osm: {
+          ...activeLayers.osm,
+          value: true
+        }
+      })
+    } else {
+      setActiveLayers({
+        ...activeLayers,
+        osm: {
+          ...activeLayers.osm,
+          value: false
+        }
+      })
+    }
+  }, [organization?.mode])
+
+  useEffect(() => {
     if (router.query?.tree) {
       setActiveTree(Number(router.query.tree));
     }
@@ -532,6 +537,10 @@ const EditionPage = ({}) => {
   useEffect(() => {
     renderLayers();
   }, [activeTree, editionMode, selection, filters, dark, data]);
+
+  useEffect(() => {
+    setViewState({ ...initialViewState });
+  }, [])
 
   if (!organization) {
     return <></>;
