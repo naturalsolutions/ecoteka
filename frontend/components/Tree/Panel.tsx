@@ -56,30 +56,30 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
         organizationId={organization.id}
         treeId={Number(router.query.tree)}
       >
-        <AppLayoutCartoDialog withoutContent={true}>
-          <TreeImagesContainer />
-          <Grid container direction="column" className={classes.grid}>
-            <Grid item>
-              <TreeBasicForm readOnly={true} />
-            </Grid>
-            <Grid item>
-              <InterventionProvider>
+        <InterventionProvider>
+          <AppLayoutCartoDialog withoutContent={true}>
+            <TreeImagesContainer />
+            <Grid container direction="column" className={classes.grid}>
+              <Grid item>
+                <TreeBasicForm readOnly={true} />
+              </Grid>
+              <Grid item>
                 <InterventionsWorkflow selectable={false} insidePanel={true} />
-              </InterventionProvider>
+              </Grid>
+              <Grid item>
+                <Button
+                  size="large"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={handleGoToTreePage}
+                >
+                  {t("common.buttons.moreDetails")}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Button
-                size="large"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={handleGoToTreePage}
-              >
-                {t("common.buttons.moreDetails")}
-              </Button>
-            </Grid>
-          </Grid>
-        </AppLayoutCartoDialog>
+          </AppLayoutCartoDialog>
+        </InterventionProvider>
       </TreeProvider>
     )
   );

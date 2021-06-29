@@ -1,12 +1,13 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { IconButton, makeStyles, Theme } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import StreetviewIcon from "@material-ui/icons/Streetview";
 import { useState } from "react";
 import MapillaryImage from "@/components/Core/Mapillary/Image";
-import { Tree } from "@/index";
 import TreeImagesGallery from "./Gallery";
 import { useTreeContext } from "@/components/Tree/Provider";
+import { useInterventionContext } from "@/components/Interventions/Provider";
 
 export interface TreeImagesContainerProps {
   variant?: "panel" | "page";
@@ -47,6 +48,14 @@ const useStyles = makeStyles<Theme, TreeImagesContainerProps>(
       width: "100%",
       height: "100%",
     },
+    alert: {
+      padding: "1rem",
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      width: "100%",
+      zIndex: 101,
+    },
   })
 );
 
@@ -60,6 +69,8 @@ const TreeImagesContainer: FC<TreeImagesContainerProps> = ({
   });
   const [viewer, setViewer] = useState<Viewer>("mapillary");
   const { tree } = useTreeContext();
+  const { hasLateInterventions, setHasLateInterventions } =
+    useInterventionContext();
 
   return (
     <div className={classes.root}>
@@ -73,6 +84,16 @@ const TreeImagesContainer: FC<TreeImagesContainerProps> = ({
           <TreeImagesGallery variant={variant} />
         )}
       </div>
+      {hasLateInterventions && (
+        <div className={classes.alert}>
+          <Alert
+            severity="warning"
+            onClose={() => setHasLateInterventions(false)}
+          >
+            Une intervention est prévue pour bientôt !
+          </Alert>
+        </div>
+      )}
       <div className={classes.buttons}>
         <div className={classes.buttonsContainer}>
           <IconButton onClick={() => setViewer("mapillary")}>

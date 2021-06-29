@@ -131,7 +131,7 @@ const EditionPage = ({}) => {
     {}
   );
   const [drawerLeftComponent, setDrawerLeftComponent] = useState();
-  const [drawerLeftWidth, setDrawerLeftWidth] = useState(400);
+  const [drawerLeftWidth] = useState(400);
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
     defaultViewState
@@ -514,19 +514,19 @@ const EditionPage = ({}) => {
         ...activeLayers,
         osm: {
           ...activeLayers.osm,
-          value: true
-        }
-      })
+          value: true,
+        },
+      });
     } else {
       setActiveLayers({
         ...activeLayers,
         osm: {
           ...activeLayers.osm,
-          value: false
-        }
-      })
+          value: false,
+        },
+      });
     }
-  }, [organization?.mode])
+  }, [organization?.mode]);
 
   useEffect(() => {
     if (router.query?.tree) {
@@ -540,7 +540,7 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     setViewState({ ...initialViewState });
-  }, [])
+  }, []);
 
   if (!organization) {
     return <></>;
@@ -663,44 +663,48 @@ const EditionPage = ({}) => {
           icon={<CenterFocusStrongIcon color="primary" />}
           onClick={() => fitToBounds(organization.id)}
         />
-        {user && <MapActionsAction
-          action="delete"
-          subject="Trees"
-          isActive={editionMode && mode == "selection"}
-          name={
-            editionMode && mode == "selection"
-              ? t("common.disableSelectTrees")
-              : t("common.activateSelectTrees")
-          }
-          icon={
-            <SelectIcon
-              htmlColor={
-                editionMode && mode == "selection" ? "white" : "#46b9b1"
-              }
-            />
-          }
-          onClick={() => toggleAction(editionMode, "selection")}
-        />}
-        {user && <MapActionsAction
-          isActive={editionMode && mode == "drawPoint"}
-          action="create"
-          subject="Trees"
-          name={
-            editionMode && mode == "drawPoint"
-              ? t("common.disableDrawTree")
-              : t("common.activateDrawTree")
-          }
-          icon={
-            <SvgIcon
-              htmlColor={
-                editionMode && mode == "drawPoint" ? "white" : "#46b9b1"
-              }
-              component={IconTree}
-              viewBox="0 0 24 32"
-            />
-          }
-          onClick={() => toggleAction(editionMode, "drawPoint")}
-        />}
+        {user && (
+          <MapActionsAction
+            action="delete"
+            subject="Trees"
+            isActive={editionMode && mode == "selection"}
+            name={
+              editionMode && mode == "selection"
+                ? t("common.disableSelectTrees")
+                : t("common.activateSelectTrees")
+            }
+            icon={
+              <SelectIcon
+                htmlColor={
+                  editionMode && mode == "selection" ? "white" : "#46b9b1"
+                }
+              />
+            }
+            onClick={() => toggleAction(editionMode, "selection")}
+          />
+        )}
+        {user && (
+          <MapActionsAction
+            isActive={editionMode && mode == "drawPoint"}
+            action="create"
+            subject="Trees"
+            name={
+              editionMode && mode == "drawPoint"
+                ? t("common.disableDrawTree")
+                : t("common.activateDrawTree")
+            }
+            icon={
+              <SvgIcon
+                htmlColor={
+                  editionMode && mode == "drawPoint" ? "white" : "#46b9b1"
+                }
+                component={IconTree}
+                viewBox="0 0 24 32"
+              />
+            }
+            onClick={() => toggleAction(editionMode, "drawPoint")}
+          />
+        )}
       </MapActionsList>
       <ImportPanel onFileImported={handleOnFileImported} />
       <InterventionForm />

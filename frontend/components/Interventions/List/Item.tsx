@@ -17,7 +17,7 @@ import StreanRemovalIcon from "@/public/assets/interventions/intervention-03.svg
 import IndepthDiagnosticIcon from "@/public/assets/interventions/intervention-04.svg";
 import TreatmentIcon from "@/public/assets/interventions/intervention-05.svg";
 import SurveillanceIcon from "@/public/assets/interventions/intervention-06.svg";
-import { useInterventionContext } from "../Provider";
+import { useInterventionContext, calculatePriority } from "../Provider";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
@@ -79,35 +79,6 @@ const INTERVENTION_ICONS = {
   indepthdiagnostic: IndepthDiagnosticIcon,
   treatment: TreatmentIcon,
   surveillance: SurveillanceIcon,
-};
-
-const calculatePriority = ({ done, archived, start, end }) => {
-  const now = new Date();
-  const twoWeeks = new Date();
-  const oneDay = 1000 * 3600 * 24;
-
-  twoWeeks.setTime(twoWeeks.getTime() - 15 * oneDay);
-
-  const differenceInDays = Math.abs(now.getTime() - new Date(start).getTime());
-  const distance = Math.floor(differenceInDays / oneDay);
-
-  if (done) {
-    return "done";
-  }
-
-  if (archived) {
-    return "archived";
-  }
-
-  if (!done && end < now) {
-    return "late";
-  }
-
-  if (!done && distance <= 15) {
-    return "urgent";
-  }
-
-  return "schedulable";
 };
 
 const InterventionsListItem: FC<InterventionsListItemProps> = ({

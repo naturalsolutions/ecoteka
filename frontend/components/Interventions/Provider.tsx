@@ -1,7 +1,6 @@
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import useApi from "@/lib/useApi";
 import { TIntervention } from "@/components/Interventions/Schema";
-import { Tree } from "@/index";
 import { useTreeContext } from "../Tree/Provider";
 import { useAppContext } from "@/providers/AppContext";
 
@@ -10,6 +9,35 @@ export const InterventionContext = createContext({} as any);
 export interface InterventionProviderProps {}
 
 export const useInterventionContext = () => useContext(InterventionContext);
+
+export const calculatePriority = ({ done, archived, start, end }) => {
+  const now = new Date();
+  const twoWeeks = new Date();
+  const oneDay = 1000 * 3600 * 24;
+
+  twoWeeks.setTime(twoWeeks.getTime() - 15 * oneDay);
+
+  const differenceInDays = Math.abs(now.getTime() - new Date(start).getTime());
+  const distance = Math.floor(differenceInDays / oneDay);
+
+  if (done) {
+    return "done";
+  }
+
+  if (archived) {
+    return "archived";
+  }
+
+  if (!done && end < now) {
+    return "late";
+  }
+
+  if (!done && distance <= 15) {
+    return "urgent";
+  }
+
+  return "schedulable";
+};
 
 const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   const [organizationInterventions, setOrganizationInterventions] = useState<
@@ -24,11 +52,26 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   const [doneInterventions, setDoneInterventions] = useState<TIntervention[]>(
     []
   );
+  const [hasLateInterventions, setHasLateInterventions] =
+    useState<boolean>(false);
   const { apiETK } = useApi().api;
   const { organization } = useAppContext();
   const { tree } = useTreeContext();
 
-  const formatInterventions = async (data: TIntervention[]) => {
+  const formatInterventions = (data: TIntervention[]) => {
+    const lateInterventions = data.filter((intervention) => {
+      const priority = calculatePriority({
+        done: intervention.done,
+        archived: false,
+        start: intervention.intervention_start_date,
+        end: intervention.intervention_end_date,
+      });
+
+      return priority === "urgent";
+    });
+
+    setHasLateInterventions(lateInterventions.length > 0);
+
     const newScheduledInterventions = data
       .filter((intervention) => !intervention.done)
       .sort(
@@ -87,6 +130,8 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
         setScheduledInterventions,
         doneInterventions,
         setDoneInterventions,
+        hasLateInterventions,
+        setHasLateInterventions,
       }}
     >
       {children}
