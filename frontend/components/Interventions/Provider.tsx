@@ -3,6 +3,7 @@ import useApi from "@/lib/useApi";
 import { TIntervention } from "@/components/Interventions/Schema";
 import { useTreeContext } from "../Tree/Provider";
 import { useAppContext } from "@/providers/AppContext";
+import router, { useRouter } from "next/router";
 
 export const InterventionContext = createContext({} as any);
 
@@ -39,6 +40,13 @@ export const calculatePriority = ({ done, archived, start, end }) => {
   return "schedulable";
 };
 
+const TREE_ROUTES = [
+  "/[organizationSlug]/map",
+  "/[organizationSlug]/tree/[id]/intervention",
+];
+
+const ORGANIZATION_ROUTERS = ["/[organizationSlug]/interventions"];
+
 const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   const [organizationInterventions, setOrganizationInterventions] = useState<
     TIntervention[]
@@ -57,6 +65,7 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   const { apiETK } = useApi().api;
   const { organization } = useAppContext();
   const { tree } = useTreeContext();
+  const router = useRouter();
 
   const formatInterventions = (data: TIntervention[]) => {
     const lateInterventions = data.filter((intervention) => {
@@ -116,7 +125,15 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    tree ? fetchTreeInterventions() : fetchOrganizationInterventions();
+    console.log(router.pathname);
+
+    if (tree?.id && TREE_ROUTES.includes(router.pathname)) {
+      fetchTreeInterventions();
+    }
+
+    if (ORGANIZATION_ROUTERS.includes(router.pathname)) {
+      fetchOrganizationInterventions();
+    }
   }, [tree]);
 
   return (

@@ -119,7 +119,7 @@ const OrganizationLoadProgress = ({}) => {
 const EditionPage = ({}) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesDraw = useMediaQuery(theme.breakpoints.down("sm"));
   const classes = useStyles();
   const router = useRouter();
   const { organization, user, isOrganizationLoading } = useAppContext();
@@ -492,6 +492,24 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     if (organization) {
+      if (["open", "participatory"].includes(organization.mode)) {
+        setActiveLayers({
+          ...activeLayers,
+          osm: {
+            ...activeLayers.osm,
+            value: true,
+          },
+        });
+      } else {
+        setActiveLayers({
+          ...activeLayers,
+          osm: {
+            ...activeLayers.osm,
+            value: false,
+          },
+        });
+      }
+      
       setFilters(defaultFilters);
       renderLayers();
 
@@ -507,26 +525,6 @@ const EditionPage = ({}) => {
       fitToBounds(organization.id);
     }
   }, [organization]);
-
-  useEffect(() => {
-    if (["open", "participatory"].includes(organization.mode)) {
-      setActiveLayers({
-        ...activeLayers,
-        osm: {
-          ...activeLayers.osm,
-          value: true,
-        },
-      });
-    } else {
-      setActiveLayers({
-        ...activeLayers,
-        osm: {
-          ...activeLayers.osm,
-          value: false,
-        },
-      });
-    }
-  }, [organization?.mode]);
 
   useEffect(() => {
     if (router.query?.tree) {

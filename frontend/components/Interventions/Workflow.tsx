@@ -73,17 +73,19 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
           ))}
         </InterventionListContainer>
       </Grid>
-      <Grid item xs={12} sm={sm}>
-        <InterventionListContainer label="interventions réalisées">
-          {doneInterventions?.map((intervention) => (
-            <InterventionsListItem
-              key={`intervention-${intervention.id}`}
-              selectable={selectable}
-              intervention={intervention}
-            />
-          ))}
-        </InterventionListContainer>
-      </Grid>
+      {!insidePanel && (
+        <Grid item xs={12} sm={sm}>
+            <InterventionListContainer label="interventions réalisées">
+              {doneInterventions?.map((intervention) => (
+                <InterventionsListItem
+                  key={`intervention-${intervention.id}`}
+                  selectable={selectable}
+                  intervention={intervention}
+                />
+              ))}
+            </InterventionListContainer>
+          </Grid>
+      )}
     </Grid>
   );
 };
