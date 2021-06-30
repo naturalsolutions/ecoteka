@@ -1,3 +1,10 @@
+## [0.17.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.0...v0.17.1) (2021-06-30)
+
+
+### Bug Fixes
+
+* preparing member action on members pag ([dcbd082](https://gitlab.com/natural-solutions/ecoteka/commit/dcbd082a6292d0688067870e0a99c231b4d6383c))
+
 # [0.17.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.9...v0.17.0) (2021-06-29)
 
 
