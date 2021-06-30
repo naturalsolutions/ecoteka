@@ -33,7 +33,7 @@ const AddMembersButton: FC<ButtonProps> = ({ size = "" }) => {
   const { organization } = useAppContext();
   const theme = useTheme();
   const isDownSm = useMediaQuery(theme.breakpoints.down("sm"));
-  const { organizationMembers, fetchOrganizationMembers } = useMemberContext();
+  const { fetchOrganizationMembers } = useMemberContext();
   const formAddMembersRef = useRef<AddMembersActions>();
 
   const closeAddMembersDialog = (refetchOrganizationData: boolean) => {

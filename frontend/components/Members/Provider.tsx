@@ -13,6 +13,7 @@ const MemberProvider: FC<MemberProviderProps> = ({ children }) => {
   const [member, setMember] = useState<TMember>();
   const [organizationMembers, setOrganizationMembers] = useState<TMember[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<TMember[]>([]);
+  const [editableMembers, setEditableMembers] = useState<TMember[]>([]);
   const { apiETK } = useApi().api;
   const { organization } = useAppContext();
 
@@ -39,6 +40,8 @@ const MemberProvider: FC<MemberProviderProps> = ({ children }) => {
         setOrganizationMembers,
         selectedMembers,
         setSelectedMembers,
+        editableMembers,
+        setEditableMembers,
         fetchOrganizationMembers,
       }}
     >

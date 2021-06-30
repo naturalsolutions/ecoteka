@@ -1,3 +1,4 @@
+import { FC, Fragment } from "react";
 import { TMember } from "@/components/Members/Schema";
 import {
   Avatar,
@@ -9,10 +10,14 @@ import {
   Checkbox,
   Divider,
   ListItemIcon,
+  IconButton,
+  Typography,
 } from "@material-ui/core";
-import { FC } from "react";
+import EditIcon from "@material-ui/icons/Edit";
+import CancelIcon from "@material-ui/icons/Cancel";
 import { useTranslation } from "react-i18next";
 import { useMemberContext } from "../Provider";
+import { teal, deepOrange } from "@material-ui/core/colors";
 
 export interface MemberItemProps {
   selectable: boolean;
@@ -34,25 +39,54 @@ const useStyles = makeStyles((theme) => ({
     height: 28,
     margin: theme.spacing(1),
   },
+  inline: {
+    display: "inline",
+  },
+  editable: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+  },
+  display: {
+    color: theme.palette.getContrastText(teal[500]),
+    backgroundColor: teal[500],
+  },
 }));
 
 const MemberItem: FC<MemberItemProps> = ({ member, selectable }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { selectedMembers, setSelectedMembers } = useMemberContext();
+  const {
+    selectedMembers,
+    setSelectedMembers,
+    editableMembers,
+    setEditableMembers,
+  } = useMemberContext();
 
   const goToUserProfile = () => {
-    // Navigate to User Profile
+    // TODO: Navigate to User Profile
+  };
+
+  const setItemEditable = (id: number) => () => {
+    // TODO: Handle edit mode for item
+    const currentEditIndex = editableMembers.indexOf(id);
+    const newEditableMembers = [...editableMembers];
+
+    if (currentEditIndex === -1) {
+      newEditableMembers.push(id);
+    } else {
+      newEditableMembers.splice(currentEditIndex, 1);
+    }
+    setEditableMembers(newEditableMembers);
   };
 
   const handleToggle = (id: number) => () => {
-    const currentIndex = selectedMembers.indexOf(id);
+    const currentSelectIndex = selectedMembers.indexOf(id);
     const newSelectedMember = [...selectedMembers];
 
-    if (currentIndex === -1) {
+    if (currentSelectIndex === -1) {
       newSelectedMember.push(id);
     } else {
-      newSelectedMember.splice(currentIndex, 1);
+      newSelectedMember.splice(currentSelectIndex, 1);
     }
     setSelectedMembers(newSelectedMember);
   };
@@ -75,9 +109,47 @@ const MemberItem: FC<MemberItemProps> = ({ member, selectable }) => {
         )}
 
         <ListItemAvatar>
-          <Avatar>{member.full_name[0]}</Avatar>
+          <Avatar
+            className={
+              classes[
+                editableMembers.indexOf(member.id) !== -1
+                  ? "editable"
+                  : "display"
+              ]
+            }
+          >
+            {member.full_name[0]}
+          </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={member.full_name} secondary={member.role} />
+        <ListItemText
+          primary={member.full_name}
+          secondary={
+            <Fragment>
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.inline}
+                color="textPrimary"
+              >
+                {`${member.email} • `}
+              </Typography>
+              {member.role}
+            </Fragment>
+          }
+        />
+        <ListItemSecondaryAction>
+          <IconButton
+            edge="end"
+            aria-label="delete"
+            onClick={setItemEditable(member.id)}
+          >
+            {editableMembers.indexOf(member.id) !== -1 ? (
+              <CancelIcon />
+            ) : (
+              <EditIcon />
+            )}
+          </IconButton>
+        </ListItemSecondaryAction>
       </ListItem>
       <Divider component="li" />
     </>
