@@ -1,3 +1,10 @@
+## [0.17.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.1...v0.17.2) (2021-06-30)
+
+
+### Bug Fixes
+
+* change fetcher depending on the routing system ([64cc0f7](https://gitlab.com/natural-solutions/ecoteka/commit/64cc0f78bfe27cf71a72f57d8e07b9a0224ea45f))
+
 ## [0.17.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.0...v0.17.1) (2021-06-30)
 
 
