@@ -59,7 +59,7 @@ export interface AddMembersProps {
 }
 
 const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
-  ({ organizationId, closeAddMembersDialog }) => {
+  ({ organizationId, closeAddMembersDialog }, ref) => {
     const classes = useStyles();
     const { api } = useApi();
     const { apiETK } = api;

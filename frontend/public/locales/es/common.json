@@ -93,5 +93,8 @@
   "delete": "Borrar",
   "treesWithCount": "{{count}} árbol",
   "treesWithCount_plural": "{{count}} árboles",
-  "nonAvailableAbbr": "/NA"
+  "nonAvailableAbbr": "/NA",
+  "invite": "Invitación",
+  "add": "Agregar",
+  "archive": "Archivo"
 }
