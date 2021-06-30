@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import {
   Grid,
   makeStyles,
-  IconButton,
-  Hidden,
   CircularProgress,
   LinearProgress,
   Typography,
@@ -41,7 +39,6 @@ import OSMLayer from "@/components/Map/Layers/OSM";
 import CadastreLayer from "@/components/Map/Layers/Cadastre.ts";
 import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import Head from "next/head";
-import { ITree } from "@/components";
 import InterventionsEdit from "@/components/Interventions/Panel";
 import geobuf from "geobuf";
 import Pbf from "pbf";
@@ -126,10 +123,6 @@ const EditionPage = ({}) => {
   const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
   const [data, setData] = useLocalStorage("etk:map:data");
-  const [dataOrganizations, setDataOrganizations] = useLocalStorage(
-    "etk:map:dataOrganizations",
-    {}
-  );
   const [drawerLeftComponent, setDrawerLeftComponent] = useState();
   const [drawerLeftWidth] = useState(400);
   const [initialViewState, setInitialViewState] = useLocalStorage(
@@ -155,11 +148,6 @@ const EditionPage = ({}) => {
     router.query?.tree ? Number(router.query.tree) : undefined
   );
   const [loading, setLoading] = useState(false);
-
-  const [dataOrganizationId, setDataOrganizationId] = useLocalStorage(
-    "etk:map:dataOrganizationId",
-    undefined
-  );
 
   const cadastreLayer = CadastreLayer(activeLayers.osm.value);
   const osmLayer = OSMLayer(false);
@@ -255,7 +243,6 @@ const EditionPage = ({}) => {
       );
 
       setData(defaultData);
-      setDataOrganizations({ ...dataOrganizations, [id]: defaultData });
 
       if (status === 200 && newData) {
         const pbf = new Pbf(newData);
@@ -273,14 +260,12 @@ const EditionPage = ({}) => {
           }
         });
 
-        setDataOrganizations({ ...dataOrganizations, [id]: geojson });
         setData(geojson);
         setLoadDataProgress(0);
       }
     } catch (error) {
       setData(defaultData);
     } finally {
-      setDataOrganizationId(id);
       setLoading(false);
     }
   };
@@ -509,19 +494,11 @@ const EditionPage = ({}) => {
           },
         });
       }
-      
+
       setFilters(defaultFilters);
       renderLayers();
 
-      if (dataOrganizationId !== organization.id) {
-        if (dataOrganizations[organization.id]?.features.length > 0) {
-          setDataOrganizationId(organization.id);
-          setData(dataOrganizations[organization.id]);
-        } else {
-          getData(organization.id);
-        }
-      }
-
+      getData(organization.id);
       fitToBounds(organization.id);
     }
   }, [organization]);

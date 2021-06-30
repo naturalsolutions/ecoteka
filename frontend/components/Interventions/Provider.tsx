@@ -125,8 +125,6 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log(router.pathname);
-
     if (tree?.id && TREE_ROUTES.includes(router.pathname)) {
       fetchTreeInterventions();
     }
