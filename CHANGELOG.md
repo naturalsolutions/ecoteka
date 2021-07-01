@@ -1,3 +1,10 @@
+## [0.17.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.3...v0.17.4) (2021-07-01)
+
+
+### Bug Fixes
+
+* **frontend:** add tooltip cadastre layer ([4fa1934](https://gitlab.com/natural-solutions/ecoteka/commit/4fa1934df56241fbe27a5131db7f9a15598942f0))
+
 ## [0.17.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.2...v0.17.3) (2021-06-30)
 
 
