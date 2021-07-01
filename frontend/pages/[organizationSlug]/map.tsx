@@ -36,7 +36,9 @@ import DeckGL from "@deck.gl/react";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
 import OSMLayer from "@/components/Map/Layers/OSM";
-import CadastreLayer from "@/components/Map/Layers/Cadastre.ts";
+import CadastreLayer, {
+  renderTooltipInfo as renderTooltipInfoCadastre,
+} from "@/components/Map/Layers/Cadastre";
 import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import Head from "next/head";
 import InterventionsEdit from "@/components/Interventions/Panel";
@@ -113,6 +115,10 @@ const OrganizationLoadProgress = ({}) => {
   );
 };
 
+const rendersTooltip = {
+  cadastre: renderTooltipInfoCadastre,
+};
+
 const EditionPage = ({}) => {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -149,7 +155,9 @@ const EditionPage = ({}) => {
   );
   const [loading, setLoading] = useState(false);
 
-  const cadastreLayer = CadastreLayer(activeLayers.osm.value);
+  const [info, setInfo] = useState<Record<string, any>>({});
+
+  const cadastreLayer = CadastreLayer(activeLayers.cadastre.value);
   const osmLayer = OSMLayer(false);
   const treesLayer = InventoryLayer({
     visible: activeLayers.trees.value,
@@ -437,6 +445,7 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapClick = (info) => {
+    console.log(info);
     if (editionMode && mode === "drawPoint") {
       setMode("selection");
       const [x, y] = info.coordinate;
@@ -444,7 +453,7 @@ const EditionPage = ({}) => {
       return createTree(x, y);
     }
 
-    if (info.object?.properties?.id) {
+    if (info.object?.properties?.id && info.layer?.id == "trees") {
       if (!matchesDraw) {
         router.push({
           pathname: "/[organizationSlug]/map",
@@ -463,6 +472,13 @@ const EditionPage = ({}) => {
           },
         });
       }
+    }
+  };
+
+  const handleOnMapHover = (newInfo) => {
+    setInfo(undefined);
+    if (newInfo.picked && newInfo.layer?.id == "cadastre" && newInfo.object) {
+      setInfo(newInfo);
     }
   };
 
@@ -540,6 +556,7 @@ const EditionPage = ({}) => {
         onLoad={handleOnMapLoad}
         onViewStateChange={handleOnViewStateChange}
         onClick={handleOnMapClick}
+        onHover={handleOnMapHover}
       >
         <StaticMap
           mapStyle={`/api/v1/maps/style?theme=${
@@ -585,6 +602,12 @@ const EditionPage = ({}) => {
         className={classes.toolbar}
       >
         <Grid item xs></Grid>
+        {info?.layer?.id &&
+          rendersTooltip[info.layer.id] &&
+          rendersTooltip[info.layer.id]({
+            info,
+            title: t("components.Map.Layers.Cadastre.title"),
+          })}
         <Grid item className={classes.toolbarAction}>
           <MapDeleteTrees
             active={Boolean(selection.length)}
