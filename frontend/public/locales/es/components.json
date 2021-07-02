@@ -73,6 +73,9 @@
         "trees": "Inventario",
         "cadastre": "Cadastre",
         "osm": "Open Street Map (OSM)"
+      },
+      "Cadastre": {
+        "title": "Catastro"
       }
     }
   },

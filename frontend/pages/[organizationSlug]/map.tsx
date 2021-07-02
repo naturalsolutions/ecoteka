@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import {
   Grid,
   makeStyles,
-  IconButton,
-  Hidden,
   CircularProgress,
   LinearProgress,
   Typography,
@@ -38,10 +36,11 @@ import DeckGL from "@deck.gl/react";
 import { SelectionLayer } from "nebula.gl";
 import { StaticMap } from "react-map-gl";
 import OSMLayer from "@/components/Map/Layers/OSM";
-import CadastreLayer from "@/components/Map/Layers/Cadastre.ts";
+import CadastreLayer, {
+  renderTooltipInfo as renderTooltipInfoCadastre,
+} from "@/components/Map/Layers/Cadastre";
 import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import Head from "next/head";
-import { ITree } from "@/components";
 import InterventionsEdit from "@/components/Interventions/Panel";
 import geobuf from "geobuf";
 import Pbf from "pbf";
@@ -116,20 +115,20 @@ const OrganizationLoadProgress = ({}) => {
   );
 };
 
+const rendersTooltip = {
+  cadastre: renderTooltipInfoCadastre,
+};
+
 const EditionPage = ({}) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesDraw = useMediaQuery(theme.breakpoints.down("sm"));
   const classes = useStyles();
   const router = useRouter();
   const { organization, user, isOrganizationLoading } = useAppContext();
   const { dark } = useThemeContext();
   const { apiETK } = useApi().api;
   const [data, setData] = useLocalStorage("etk:map:data");
-  const [dataOrganizations, setDataOrganizations] = useLocalStorage(
-    "etk:map:dataOrganizations",
-    {}
-  );
   const [drawerLeftComponent, setDrawerLeftComponent] = useState();
   const [drawerLeftWidth] = useState(400);
   const [initialViewState, setInitialViewState] = useLocalStorage(
@@ -156,12 +155,9 @@ const EditionPage = ({}) => {
   );
   const [loading, setLoading] = useState(false);
 
-  const [dataOrganizationId, setDataOrganizationId] = useLocalStorage(
-    "etk:map:dataOrganizationId",
-    undefined
-  );
+  const [info, setInfo] = useState<Record<string, any>>({});
 
-  const cadastreLayer = CadastreLayer(activeLayers.osm.value);
+  const cadastreLayer = CadastreLayer(activeLayers.cadastre.value);
   const osmLayer = OSMLayer(false);
   const treesLayer = InventoryLayer({
     visible: activeLayers.trees.value,
@@ -255,7 +251,6 @@ const EditionPage = ({}) => {
       );
 
       setData(defaultData);
-      setDataOrganizations({ ...dataOrganizations, [id]: defaultData });
 
       if (status === 200 && newData) {
         const pbf = new Pbf(newData);
@@ -273,14 +268,12 @@ const EditionPage = ({}) => {
           }
         });
 
-        setDataOrganizations({ ...dataOrganizations, [id]: geojson });
         setData(geojson);
         setLoadDataProgress(0);
       }
     } catch (error) {
       setData(defaultData);
     } finally {
-      setDataOrganizationId(id);
       setLoading(false);
     }
   };
@@ -452,6 +445,7 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapClick = (info) => {
+    console.log(info);
     if (editionMode && mode === "drawPoint") {
       setMode("selection");
       const [x, y] = info.coordinate;
@@ -459,7 +453,7 @@ const EditionPage = ({}) => {
       return createTree(x, y);
     }
 
-    if (info.object?.properties?.id) {
+    if (info.object?.properties?.id && info.layer?.id == "trees") {
       if (!matchesDraw) {
         router.push({
           pathname: "/[organizationSlug]/map",
@@ -481,6 +475,13 @@ const EditionPage = ({}) => {
     }
   };
 
+  const handleOnMapHover = (newInfo) => {
+    setInfo(undefined);
+    if (newInfo.picked && newInfo.layer?.id == "cadastre" && newInfo.object) {
+      setInfo(newInfo);
+    }
+  };
+
   useEffect(() => {
     if (mode !== "selection") {
       setSelection([]);
@@ -492,41 +493,31 @@ const EditionPage = ({}) => {
 
   useEffect(() => {
     if (organization) {
+      if (["open", "participatory"].includes(organization.mode)) {
+        setActiveLayers({
+          ...activeLayers,
+          osm: {
+            ...activeLayers.osm,
+            value: true,
+          },
+        });
+      } else {
+        setActiveLayers({
+          ...activeLayers,
+          osm: {
+            ...activeLayers.osm,
+            value: false,
+          },
+        });
+      }
+
       setFilters(defaultFilters);
       renderLayers();
 
-      if (dataOrganizationId !== organization.id) {
-        if (dataOrganizations[organization.id]?.features.length > 0) {
-          setDataOrganizationId(organization.id);
-          setData(dataOrganizations[organization.id]);
-        } else {
-          getData(organization.id);
-        }
-      }
-
+      getData(organization.id);
       fitToBounds(organization.id);
     }
   }, [organization]);
-
-  useEffect(() => {
-    if (["open", "participatory"].includes(organization.mode)) {
-      setActiveLayers({
-        ...activeLayers,
-        osm: {
-          ...activeLayers.osm,
-          value: true,
-        },
-      });
-    } else {
-      setActiveLayers({
-        ...activeLayers,
-        osm: {
-          ...activeLayers.osm,
-          value: false,
-        },
-      });
-    }
-  }, [organization?.mode]);
 
   useEffect(() => {
     if (router.query?.tree) {
@@ -565,6 +556,7 @@ const EditionPage = ({}) => {
         onLoad={handleOnMapLoad}
         onViewStateChange={handleOnViewStateChange}
         onClick={handleOnMapClick}
+        onHover={handleOnMapHover}
       >
         <StaticMap
           mapStyle={`/api/v1/maps/style?theme=${
@@ -610,6 +602,12 @@ const EditionPage = ({}) => {
         className={classes.toolbar}
       >
         <Grid item xs></Grid>
+        {info?.layer?.id &&
+          rendersTooltip[info.layer.id] &&
+          rendersTooltip[info.layer.id]({
+            info,
+            title: t("components.Map.Layers.Cadastre.title"),
+          })}
         <Grid item className={classes.toolbarAction}>
           <MapDeleteTrees
             active={Boolean(selection.length)}

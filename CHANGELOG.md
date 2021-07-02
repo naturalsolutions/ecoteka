@@ -1,3 +1,38 @@
+## [0.17.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.3...v0.17.4) (2021-07-01)
+
+
+### Bug Fixes
+
+* **frontend:** add tooltip cadastre layer ([4fa1934](https://gitlab.com/natural-solutions/ecoteka/commit/4fa1934df56241fbe27a5131db7f9a15598942f0))
+
+## [0.17.3](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.2...v0.17.3) (2021-06-30)
+
+
+### Bug Fixes
+
+* remove tmp cache ([3258ee6](https://gitlab.com/natural-solutions/ecoteka/commit/3258ee61a0f985cd147663377e4c246af46e9e8f))
+
+## [0.17.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.1...v0.17.2) (2021-06-30)
+
+
+### Bug Fixes
+
+* change fetcher depending on the routing system ([64cc0f7](https://gitlab.com/natural-solutions/ecoteka/commit/64cc0f78bfe27cf71a72f57d8e07b9a0224ea45f))
+
+## [0.17.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.0...v0.17.1) (2021-06-30)
+
+
+### Bug Fixes
+
+* preparing member action on members pag ([dcbd082](https://gitlab.com/natural-solutions/ecoteka/commit/dcbd082a6292d0688067870e0a99c231b4d6383c))
+
+# [0.17.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.9...v0.17.0) (2021-06-29)
+
+
+### Features
+
+* add alert when there are late interventions ([3de9d57](https://gitlab.com/natural-solutions/ecoteka/commit/3de9d57ba1bdde6cbeb5e8049c24c2a6c4f05719))
+
 ## [0.16.9](https://gitlab.com/natural-solutions/ecoteka/compare/v0.16.8...v0.16.9) (2021-06-29)
 
 
