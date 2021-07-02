@@ -3,7 +3,7 @@ import useApi from "@/lib/useApi";
 import { TIntervention } from "@/components/Interventions/Schema";
 import { useTreeContext } from "../Tree/Provider";
 import { useAppContext } from "@/providers/AppContext";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 export const InterventionContext = createContext({} as any);
 
@@ -43,6 +43,7 @@ export const calculatePriority = ({ done, archived, start, end }) => {
 const TREE_ROUTES = [
   "/[organizationSlug]/map",
   "/[organizationSlug]/tree/[id]/intervention",
+  "/[organizationSlug]/tree/[id]",
 ];
 
 const ORGANIZATION_ROUTERS = ["/[organizationSlug]/interventions"];
