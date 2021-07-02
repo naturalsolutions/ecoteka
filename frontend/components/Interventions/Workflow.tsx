@@ -50,6 +50,10 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
     });
   };
 
+  const currentInterventions = insidePanel
+    ? scheduledInterventions.slice(0, 3)
+    : scheduledInterventions;
+
   return (
     <Grid ref={ref} container spacing={2}>
       <Grid item xs={12} sm={sm}>
@@ -64,7 +68,7 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
             )
           }
         >
-          {scheduledInterventions?.map((intervention) => (
+          {currentInterventions?.map((intervention) => (
             <InterventionsListItem
               key={`intervention-${intervention.id}`}
               selectable={selectable}
