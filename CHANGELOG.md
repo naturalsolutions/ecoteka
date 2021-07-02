@@ -1,3 +1,10 @@
+## [0.17.5](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.4...v0.17.5) (2021-07-02)
+
+
+### Bug Fixes
+
+* show only three interventions on tree panel ([d633b7b](https://gitlab.com/natural-solutions/ecoteka/commit/d633b7b0d8e67e44c91787a35b514dde14b89da2))
+
 ## [0.17.4](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.3...v0.17.4) (2021-07-01)
 
 
