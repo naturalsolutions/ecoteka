@@ -8,8 +8,7 @@ import {
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArchiveIcon from "@material-ui/icons/Archive";
-import SendIcon from "@material-ui/icons/Send";
-import DeleteIcon from "@material-ui/icons/Delete";
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { useMemberContext } from "@/components/Members/Provider";
 import { useRouter } from "next/router";
 import { useAppContext } from "@/providers/AppContext";
@@ -43,12 +42,29 @@ const MembersToolbar: FC<MembersToolbarProps> = ({}) => {
   const { t } = useTranslation(["common", "components"]);
   const isBreakpointSM = useMediaQuery(theme.breakpoints.down("sm"));
   const { organization } = useAppContext();
-  const { selectedMembers } = useMemberContext();
+  const {
+    selectedMembers,
+    setSelectedMembers,
+    deleteOrganizationMember,
+    fetchOrganizationMembers,
+  } = useMemberContext();
   const hasSelectedMembers = Boolean(selectedMembers.length);
   const router = useRouter();
 
   const goBackToOrganization = () => {
     router.push(`/${router.query.organizationSlug}`);
+  };
+
+  const handleRemoveMembers = async () => {
+    await Promise.all(
+      selectedMembers.map(async (id): Promise<number> => {
+        await deleteOrganizationMember(id);
+        return id + 1;
+      })
+    );
+    // TODO(refactor) : this should be dealt in MemberProvider
+    setSelectedMembers([]);
+    fetchOrganizationMembers();
   };
 
   return (
@@ -65,11 +81,12 @@ const MembersToolbar: FC<MembersToolbarProps> = ({}) => {
       <div className={classes.right}>
         {hasSelectedMembers && (
           <>
-            <Button variant="outlined" color="primary">
-              <ArchiveIcon /> {isBreakpointSM ? null : t("common.archive")}
-            </Button>
-            <Button variant="outlined" color="primary">
-              <DeleteIcon />
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleRemoveMembers}
+            >
+              <RemoveCircleIcon /> {isBreakpointSM ? null : t("common.remove")}
             </Button>
           </>
         )}

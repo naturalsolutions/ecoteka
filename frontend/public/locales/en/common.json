@@ -98,5 +98,6 @@
   "nonAvailableAbbr": "/NA",
   "invite": "Invite",
   "add": "Add",
-  "archive": "Archive"
+  "archive": "Archive",
+  "remove": "Remove"
 }

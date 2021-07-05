@@ -96,5 +96,6 @@
   "nonAvailableAbbr": "/ND",
   "invite": "Inviter",
   "add": "Ajouter",
-  "archive": "Archiver"
+  "archive": "Archiver",
+  "remove": "Retirer"
 }
