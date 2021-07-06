@@ -18,6 +18,7 @@ build_backend_base:
       - dev
     changes:
       - backend/Dockerfile.base
+      - .gitlab-ci.yml
   tags:
     - ns01
 
@@ -33,6 +34,7 @@ build_frontend_dev:
       - dev
     changes:
       - frontend/**/*
+      - .gitlab-ci.yml
   tags:
     - ns01
 
@@ -48,6 +50,7 @@ build_backend_dev:
       - dev
     changes:
       - backend/**/*
+      - .gitlab-ci.yml
   tags:
     - ns01
 
@@ -63,6 +66,7 @@ build_frontend_prod:
       - master
     changes:
       - frontend/**/*
+      - .gitlab-ci.yml
   tags:
     - ns01
 
@@ -78,6 +82,7 @@ build_backend_prod:
       - master
     changes:
       - backend/**/*
+      - .gitlab-ci.yml
   tags:
     - ns01
 
