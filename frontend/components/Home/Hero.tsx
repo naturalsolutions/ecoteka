@@ -33,7 +33,6 @@ const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
   },
   paper: {
     position: "absolute",
-    zIndex: 10,
     top: 20,
     left: 20,
     padding: "20px",
