@@ -82,7 +82,6 @@ const MapProvider: FC<MapProviderProps> = (props) => {
           onViewStateChange={handleOnViewStateChange}
           ref={deckRef}
         >
-          {children}
           <StaticMap mapStyle={mapStyle} attributionControl={false} />
           <MapAttributionList>
             <MapAttributionItem
@@ -95,6 +94,7 @@ const MapProvider: FC<MapProviderProps> = (props) => {
             />
           </MapAttributionList>
         </DeckGL>
+        {children}
       </Paper>
     </MapContext.Provider>
   );
