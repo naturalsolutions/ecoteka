@@ -122,7 +122,7 @@ const rendersTooltip = {
 const EditionPage = ({}) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const matchesDraw = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const classes = useStyles();
   const router = useRouter();
   const { organization, user, isOrganizationLoading } = useAppContext();
@@ -206,7 +206,7 @@ const EditionPage = ({}) => {
 
         setData(newData);
 
-        if (!matchesDraw) {
+        if (!isMobile) {
           router.push({
             pathname: "/[organizationSlug]/map",
             query: {
@@ -229,7 +229,7 @@ const EditionPage = ({}) => {
       }
     } catch (error) {
     } finally {
-      if (matchesDraw) {
+      if (isMobile) {
         setEditionMode(false);
       }
     }
@@ -454,7 +454,7 @@ const EditionPage = ({}) => {
     }
 
     if (info.object?.properties?.id && info.layer?.id == "trees") {
-      if (!matchesDraw) {
+      if (!isMobile) {
         router.push({
           pathname: "/[organizationSlug]/map",
           query: {
@@ -623,18 +623,20 @@ const EditionPage = ({}) => {
         </Grid>
         <Grid item xs></Grid>
         <Grid item className={classes.toolbarAction}>
-          <MapSearchCity
-            onChange={(coordinates) => {
-              setViewState({
-                ...viewState,
-                longitude: coordinates[0],
-                latitude: coordinates[1],
-                zoom: 15,
-                transitionDuration: 1500,
-                transitionInterpolator: new FlyToInterpolator(),
-              });
-            }}
-          />
+          {!isMobile &&
+            <MapSearchCity
+              onChange={(coordinates) => {
+                setViewState({
+                  ...viewState,
+                  longitude: coordinates[0],
+                  latitude: coordinates[1],
+                  zoom: 15,
+                  transitionDuration: 1500,
+                  transitionInterpolator: new FlyToInterpolator(),
+                });
+              }}
+            />
+          }
         </Grid>
       </Grid>
       <MapActionsList>
