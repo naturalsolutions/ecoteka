@@ -15,8 +15,8 @@ const paintPoint = (d) => {
   const genRegex = /genus/;
 
   if (
-    spRegex.test(d.properties.other_tags) ||
-    genRegex.test(d.properties.other_tags)
+    spRegex.test(d.properties?.other_tags) ||
+    genRegex.test(d.properties?.other_tags)
   ) {
     return [34, 169, 54];
   }
@@ -73,7 +73,7 @@ const parseHStore = (hstore): Record<string, string> => {
 export const renderTooltipInfo: FC = ({ info }) => {
   let properties = {};
 
-  Object.keys(info.object.properties)
+  Object.keys(info.object?.properties)
     .filter((k) => !["layerName", "other_tags"].includes(k))
     .reduce((acc, k) => {
       acc[k] = info.object.properties[k];
