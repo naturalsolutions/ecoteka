@@ -1,23 +1,10 @@
 stages:
   - build_base
-  - build
-  - deploy
+  - build_dev
+  - build_prod
+  - deploy_dev
+  - deploy_prod
   - release
-
-build_frontend:
-  stage: build
-  image: docker:dind
-  script:
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-0 -f ./frontend/.docker/Dockerfile ./frontend
-    - docker push ${CI_REGISTRY_IMAGE}:frontend-0
-  only:
-    refs:
-      - master
-    changes:
-      - frontend/**/*
-  tags:
-    - ns01
 
 build_backend_base:
   stage: build_base
@@ -28,19 +15,64 @@ build_backend_base:
     - docker push ${CI_REGISTRY_IMAGE}:backend-base
   only:
     refs:
-      - master
+      - dev
     changes:
       - backend/Dockerfile.base
   tags:
     - ns01
 
-build_backend:
-  stage: build
+build_frontend_dev:
+  stage: build_dev
   image: docker:dind
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-    - docker build -t ${CI_REGISTRY_IMAGE}:backend-0 ./backend
-    - docker push ${CI_REGISTRY_IMAGE}:backend-0
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-dev -f ./frontend/.docker/Dockerfile ./frontend
+    - docker push ${CI_REGISTRY_IMAGE}:frontend-dev
+  only:
+    refs:
+      - dev
+    changes:
+      - frontend/**/*
+  tags:
+    - ns01
+
+build_backend_dev:
+  stage: build_dev
+  image: docker:dind
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-dev ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-dev
+  only:
+    refs:
+      - dev
+    changes:
+      - backend/**/*
+  tags:
+    - ns01
+
+build_frontend_prod:
+  stage: build_prod
+  image: docker:dind
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:frontend-prod -f ./frontend/.docker/Dockerfile ./frontend
+    - docker push ${CI_REGISTRY_IMAGE}:frontend-prod
+  only:
+    refs:
+      - master
+    changes:
+      - frontend/**/*
+  tags:
+    - ns01
+
+build_backend_prod:
+  stage: build_prod
+  image: docker:dind
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${CI_REGISTRY_IMAGE}:backend-prod ./backend
+    - docker push ${CI_REGISTRY_IMAGE}:backend-prod
   only:
     refs:
       - master
@@ -50,7 +82,7 @@ build_backend:
     - ns01
 
 deploy_dev:
-  stage: deploy
+  stage: deploy_dev
   image: cytopia/ansible:latest-tools
   script:
     - git clone https://${GL_USER}:${GL_TOKEN}@gitlab.com/natural-solutions/ns-ansible-infrastructure.git
@@ -58,6 +90,24 @@ deploy_dev:
     - echo ${VAULT_PASSWORD_KEY} > password-file
     - ansible-vault decrypt --vault-password-file password-file k
     - ansible-playbook -i hosts -l ecoteka_dev --vault-password-file password-file deploy.yml
+    - rm password-file
+  only:
+    - dev
+  tags:
+    - ns01
+  variables:
+    ANSIBLE_HOST_KEY_CHECKING: "false"
+    ANSIBLE_INVENTORY_UNPARSED_FAILED: "true"
+
+deploy_prod:
+  stage: deploy_prod
+  image: cytopia/ansible:latest-tools
+  script:
+    - git clone https://${GL_USER}:${GL_TOKEN}@gitlab.com/natural-solutions/ns-ansible-infrastructure.git
+    - cd ns-ansible-infrastructure
+    - echo ${VAULT_PASSWORD_KEY} > password-file
+    - ansible-vault decrypt --vault-password-file password-file k
+    - ansible-playbook -i hosts -l ecoteka_prod --vault-password-file password-file deploy.yml
     - rm password-file
   only:
     - master
