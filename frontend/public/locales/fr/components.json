@@ -322,8 +322,10 @@
     },
     "saveSuccess": "L'intervention a été enregistrée avec succès.",
     "saveError": "Une erreur s'est produite lors de l'enregistrement de l'intervention",
-    "date": "Date",
-    "done": "Fait"
+    "date": "Réalisé le",
+    "done": "Fait",
+    "intervention_start_date": "Prévu entre le...",
+    "intervention_end_date": "... et le ..."
   },
   "Tree": {
     "properties": {

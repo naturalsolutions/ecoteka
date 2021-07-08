@@ -23,6 +23,7 @@ import {
   Stepper,
   Typography,
 } from "@material-ui/core";
+import * as yup from "yup";
 import styled from "styled-components";
 import useApi from "@/lib/useApi";
 import { useAppContext } from "@/providers/AppContext";
@@ -76,6 +77,10 @@ const ETKInterventionForm = forwardRef<
   ETKInterventionFormProps
 >((props, ref) => {
   const schema = schemaMap[props.step](props.interventionType);
+  if (props.data.date) {
+    schema.intervention_start_date.schema = yup.date();
+    schema.intervention_end_date.schema = yup.date();
+  }
   const form = useETKForm({ schema });
   const router = useRouter();
   const { organization } = useAppContext();
@@ -157,9 +162,8 @@ const InterventionFormStepper: React.FC = () => {
   const router = useRouter();
   const [active, setActive] = useState<boolean>(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [interventionType, setInterventionType] = useState<TInterventionType>(
-    "pruning"
-  );
+  const [interventionType, setInterventionType] =
+    useState<TInterventionType>("pruning");
 
   const [data, setData] = useState(initialData);
   const [formRefs, setFormRefs] = useState({});
@@ -194,7 +198,6 @@ const InterventionFormStepper: React.FC = () => {
   };
 
   const submit = async () => {
-    const dateRange = data["validation"].intervention_period;
     const estimatedCost =
       data["validation"].estimated_cost === ""
         ? null
@@ -207,8 +210,6 @@ const InterventionFormStepper: React.FC = () => {
         },
         {
           properties: data["intervention"],
-          intervention_start_date: new Date(dateRange.startDate),
-          intervention_end_date: new Date(dateRange.endDate),
         } // c'est moche !!
       );
 

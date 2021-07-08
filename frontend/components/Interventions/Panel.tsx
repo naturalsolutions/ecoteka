@@ -45,7 +45,9 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   const { organization } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { fields, getValues, setValue } = useETKForm({ schema });
+  const { fields, getValues, setValue, trigger } = useETKForm({
+    schema,
+  });
 
   const handleOnSave = async () => {
     try {
@@ -54,12 +56,16 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
         id: intervention.id,
         organization_id: organization.id,
         intervention_type: intervention.intervention_type,
+        // intervention_start_date: intervention.intervention_start_date,
+        // intervention_end_date: intervention.intervention_end_date,
         tree_id: intervention.tree_id,
         properties: {},
       };
       const nonPropertiesFields = [
         "intervenant",
         "date",
+        "intervention_start_date",
+        "intervention_end_date",
         "done",
         "estimated_cost",
         "required_documents",
@@ -67,12 +73,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
       ];
 
       for (let key in values) {
-        if (key === "intervention_period") {
-          const interventionPeriod: DateRangePeriod =
-            values["intervention_period"];
-          payload["intervention_start_date"] = interventionPeriod.startDate;
-          payload["intervention_end_date"] = interventionPeriod.endDate;
-        } else if (nonPropertiesFields.includes(key)) {
+        if (nonPropertiesFields.includes(key)) {
           payload[key] = values[key];
         } else {
           payload.properties[key] = values[key];
@@ -107,26 +108,14 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   };
 
   useEffect(() => {
-    Object.keys(intervention).forEach((i) => {
-      const dateProperties = [
-        "intervention_start_date",
-        "intervention_end_date",
-      ];
-
-      if (!dateProperties.includes(i)) {
-        setValue(i, intervention[i]);
-      }
+    const { properties, ...dataIntervention } = intervention;
+    Object.keys(properties).forEach((i) => {
+      setValue(i, properties[i]);
     });
-
-    Object.keys(intervention.properties).forEach((i) => {
-      setValue(i, intervention.properties[i]);
+    Object.keys(dataIntervention).forEach((i) => {
+      setValue(i, dataIntervention[i]);
     });
-
-    // @ts-ignore
-    setValue("intervention_period", {
-      startDate: new Date(intervention.intervention_start_date),
-      endDate: new Date(intervention.intervention_end_date),
-    });
+    trigger();
   }, []);
 
   useEffect(() => {
@@ -136,7 +125,11 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   }, [saving]);
 
   const mapFields = (field) => {
-    return <Grid item>{fields[field]}</Grid>;
+    return (
+      <Grid item key={field}>
+        {fields[field]}
+      </Grid>
+    );
   };
 
   return (

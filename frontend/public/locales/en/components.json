@@ -321,8 +321,10 @@
     },
     "saveSuccess": "The intervention has been successfully saved.",
     "saveError": "An error occurred while saving the intervention",
-    "date": "Date",
-    "done": "Done"
+    "date": "Done at",
+    "done": "Done",
+    "intervention_start_date": "Schedulded between...",
+    "intervention_end_date": "... and ..."
   },
   "Tree": {
     "properties": {

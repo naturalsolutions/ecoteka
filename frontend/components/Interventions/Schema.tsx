@@ -334,18 +334,21 @@ export function usePlanningSchema(it: TInterventionType) {
   const { t } = useTranslation(["common", "components"]);
 
   return {
-    intervention_period: {
-      type: "daterange",
+    intervention_start_date: {
+      type: "date",
       component: {
-        label: t("components.Intervention.intervention_period"),
+        label: t("components.Intervention.intervention_start_date"),
       },
-      schema: yup
-        .object({
-          startDate: yup.string(),
-          endDate: yup.string(),
-        })
-        .required(t("common.errors.required")),
+      schema: yup.date().nullable(false).required(t("common.errors.required")),
     },
+    intervention_end_date: {
+      type: "date",
+      component: {
+        label: t("components.Intervention.intervention_end_date"),
+      },
+      schema: yup.date().nullable(false).required(t("common.errors.required")),
+    },
+
     estimated_cost: {
       type: "textfield",
       component: {
@@ -392,18 +395,18 @@ export function useDateSchema() {
   const { t } = useTranslation();
 
   return {
-    date: {
-      type: "date",
-      component: {
-        label: t("components.Intervention.date"),
-      },
-      schema: yup.string(),
-    },
     done: {
       type: "switch",
       component: {
         label: t("components.Intervention.done"),
       },
+    },
+    date: {
+      type: "date",
+      component: {
+        label: t("components.Intervention.date"),
+      },
+      schema: yup.string().nullable(),
     },
   };
 }

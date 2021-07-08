@@ -445,7 +445,6 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapClick = (info) => {
-    console.log(info);
     if (editionMode && mode === "drawPoint") {
       setMode("selection");
       const [x, y] = info.coordinate;
@@ -623,7 +622,7 @@ const EditionPage = ({}) => {
         </Grid>
         <Grid item xs></Grid>
         <Grid item className={classes.toolbarAction}>
-          {!isMobile &&
+          {!isMobile && (
             <MapSearchCity
               onChange={(coordinates) => {
                 setViewState({
@@ -636,7 +635,7 @@ const EditionPage = ({}) => {
                 });
               }}
             />
-          }
+          )}
         </Grid>
       </Grid>
       <MapActionsList>

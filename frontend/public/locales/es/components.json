@@ -322,8 +322,10 @@
     },
     "saveSuccess": "La intervención se ha guardado con éxito.",
     "saveError": "Ocurrió un error al guardar la intervención",
-    "date": "Fecha",
-    "done": "Hecha"
+    "date": "Hecho",
+    "done": "Hecha",
+    "intervention_start_date": "Programado entre ...",
+    "intervention_end_date": "... y..."
   },
   "Tree": {
     "properties": {
