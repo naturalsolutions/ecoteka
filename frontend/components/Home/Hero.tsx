@@ -55,20 +55,26 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
 
   return (
     <div className={classes.root}>
-      {isMobile && (
-        <HomeHeroSearchCity coords={coords} onChangeCity={handleOnChangeCity} />
-      )}
       <MapProvider
+        startComponent={
+          isMobile && (
+            <HomeHeroSearchCity
+              coords={coords}
+              onChangeCity={handleOnChangeCity}
+            />
+          )
+        }
+        endComponent={
+          !isMobile && (
+            <HomeHeroSearchCity
+              coords={coords}
+              onChangeCity={handleOnChangeCity}
+            />
+          )
+        }
         PaperProps={{ elevation: 0, className: classes.map }}
         layers={[osmLayer]}
-      >
-        {!isMobile && (
-          <HomeHeroSearchCity
-            coords={coords}
-            onChangeCity={handleOnChangeCity}
-          />
-        )}
-      </MapProvider>
+      />
       {info?.layer?.id &&
         rendersTooltip[info.layer.id] &&
         rendersTooltip[info.layer.id]({ info })}

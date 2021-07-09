@@ -20,13 +20,13 @@ export interface HomeHeroSearchCityProps {
 const useStyles = makeStyles<Theme, HomeHeroSearchCityProps>((theme) => ({
   root: {
     position: "absolute",
-    top: 0,
+    top: -223,
     left: 0,
     padding: "20px",
     width: "100%",
   },
-  founded: {
-    display: (props) => (props.coords ? "none" : "block"),
+  fouded: {
+    display: "block",
   },
   [theme.breakpoints.up("sm")]: {
     root: {
@@ -37,6 +37,9 @@ const useStyles = makeStyles<Theme, HomeHeroSearchCityProps>((theme) => ({
       maxWidth: 780,
       right: 0,
       padding: "30px 40px",
+    },
+    founded: {
+      display: (props) => (props.coords ? "none" : "block"),
     },
   },
 }));
