@@ -130,7 +130,7 @@ const EditionPage = ({}) => {
   const { apiETK } = useApi().api;
   const [data, setData] = useLocalStorage("etk:map:data");
   const [drawerLeftComponent, setDrawerLeftComponent] = useState();
-  const [drawerLeftWidth] = useState(400);
+  const [drawerLeftWidth] = useState(550);
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
     defaultViewState
@@ -623,7 +623,7 @@ const EditionPage = ({}) => {
         </Grid>
         <Grid item xs></Grid>
         <Grid item className={classes.toolbarAction}>
-          {!isMobile &&
+          {!isMobile && (
             <MapSearchCity
               onChange={(coordinates) => {
                 setViewState({
@@ -636,7 +636,7 @@ const EditionPage = ({}) => {
                 });
               }}
             />
-          }
+          )}
         </Grid>
       </Grid>
       <MapActionsList>

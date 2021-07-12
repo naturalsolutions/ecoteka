@@ -50,7 +50,8 @@ const DateRangePicker: React.FC<drprops> = (props) => {
           <Grid container direction="column">
             <TextField
               label={props.label}
-              variant="filled"
+              variant="outlined"
+              margin="dense"
               value={
                 value.startDate.toDateString() +
                 " > " +

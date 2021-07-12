@@ -5,6 +5,8 @@ import {
   ReactNode,
   forwardRef,
   useRef,
+  useEffect,
+  useState,
 } from "react";
 import {
   makeStyles,
@@ -27,8 +29,8 @@ import ErrorComponent from "@/components/Core/Error";
 import { useRouter } from "next/router";
 
 interface AppLayoutCartoProps {
-  height: number;
-  width: number;
+  height: number | string;
+  width: number | string;
 }
 
 const useStyles = makeStyles<Theme, AppLayoutCartoProps>((theme) => ({
@@ -36,6 +38,7 @@ const useStyles = makeStyles<Theme, AppLayoutCartoProps>((theme) => ({
     position: "relative",
     backgroundColor: theme.palette.background.default,
     height: (props) => props.height,
+    width: (props) => props.width,
     flexGrow: 1,
   },
   drawerLeft: {
@@ -126,7 +129,7 @@ export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
 };
 
 const AppLayoutCarto: FC<IAppLayoutCarto> = ({
-  drawerLeftWidth = 400,
+  drawerLeftWidth,
   isLoading = false,
   error,
   skeleton,
@@ -141,6 +144,9 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
     width: drawerLeftWidth,
   });
   const router = useRouter();
+  const [calculatedWidth, setCalculatedWidth] = useState<string | number>(
+    drawerLeftWidth
+  );
 
   const handleGoToHome = () => {
     router.push("/");

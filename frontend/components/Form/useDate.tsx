@@ -35,9 +35,9 @@ const DatePicker: React.FC<DatePickerProps> = (props) => {
             disableToolbar
             fullWidth
             variant="dialog"
-            inputVariant="filled"
+            inputVariant="outlined"
             format="dd/MM/yyyy"
-            margin="normal"
+            margin="dense"
             label={props.label}
             value={value}
             onChange={onChange}

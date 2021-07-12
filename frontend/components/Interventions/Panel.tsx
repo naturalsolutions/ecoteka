@@ -135,8 +135,12 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
     }
   }, [saving]);
 
-  const mapFields = (field) => {
-    return <Grid item>{fields[field]}</Grid>;
+  const mapFields = (field, index) => {
+    return (
+      <Grid item key={`${index}-${field}`}>
+        {fields[field]}
+      </Grid>
+    );
   };
 
   return (
