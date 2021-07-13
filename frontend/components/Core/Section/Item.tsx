@@ -56,11 +56,6 @@ const SectionItem: FC<SectionItemProps> = ({
               {subtitle}
             </Typography>
           </div>
-          <div>
-            <IconButton>
-              <LinkIcon />
-            </IconButton>
-          </div>
         </div>
         {children}
       </Card>
