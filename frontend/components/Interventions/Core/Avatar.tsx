@@ -62,6 +62,8 @@ const InterventionAvatar: FC<InterventionAvatarProps> = ({ intervention }) => {
     archived: intervention.properties.cancelled,
   });
 
+  console.log(priority);
+
   return (
     <Avatar className={[classes.avatar, classes[priority]].join(" ")}>
       <Icon />

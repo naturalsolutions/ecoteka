@@ -12,13 +12,17 @@ export interface InterventionProviderProps {}
 export const useInterventionContext = () => useContext(InterventionContext);
 
 export const calculatePriority = ({ done, archived, start, end }) => {
-  const now = new Date();
+  const nowDate = new Date();
+  const endDate = new Date(end);
+  const startDate = new Date(start);
   const twoWeeks = new Date();
   const oneDay = 1000 * 3600 * 24;
 
   twoWeeks.setTime(twoWeeks.getTime() - 15 * oneDay);
 
-  const differenceInDays = Math.abs(now.getTime() - new Date(start).getTime());
+  const differenceInDays = Math.abs(
+    nowDate.getTime() - new Date(start).getTime()
+  );
   const distance = Math.floor(differenceInDays / oneDay);
 
   if (done) {
@@ -29,11 +33,11 @@ export const calculatePriority = ({ done, archived, start, end }) => {
     return "archived";
   }
 
-  if (!done && end < now) {
+  if (!done && endDate < nowDate) {
     return "late";
   }
 
-  if (!done && distance <= 15) {
+  if (!done && !(end < nowDate) && distance <= 15) {
     return "urgent";
   }
 
