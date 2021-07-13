@@ -34,6 +34,10 @@ interface AppLayoutCartoProps {
 }
 
 const useStyles = makeStyles<Theme, AppLayoutCartoProps>((theme) => ({
+  dialogTitle: {
+    padding: 0,
+  },
+  dialogTitlePadding: {},
   content: {
     position: "relative",
     backgroundColor: theme.palette.background.default,
@@ -77,12 +81,14 @@ export interface AppLayoutCartoDialogProps {
   title?: string | React.ReactElement;
   actions?: React.ReactElement;
   withoutContent?: boolean;
+  titleNoPadding?: boolean;
 }
 
 export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
   title,
   children,
   actions,
+  titleNoPadding = false,
   withoutContent = false,
 }) => {
   const { theme } = useThemeContext();
@@ -96,7 +102,11 @@ export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
         children
       ) : (
         <>
-          {title && <DialogTitle>{title}</DialogTitle>}
+          {title && (
+            <DialogTitle className={titleNoPadding ? classes.dialogTitle : ""}>
+              {title}
+            </DialogTitle>
+          )}
           <DialogContent>{children}</DialogContent>
         </>
       )}
@@ -118,7 +128,13 @@ export const AppLayoutCartoDialog: FC<AppLayoutCartoDialogProps> = ({
           children
         ) : (
           <>
-            {title && <DialogTitle>{title}</DialogTitle>}
+            {title && (
+              <DialogTitle
+                className={titleNoPadding ? classes.dialogTitle : ""}
+              >
+                {title}
+              </DialogTitle>
+            )}
             <DialogContent>{children}</DialogContent>
             {actions && <DialogActions>{actions}</DialogActions>}
           </>

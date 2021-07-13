@@ -49,6 +49,7 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
         organization_id: organization.id,
         intervention_type: intervention.intervention_type,
         tree_id: intervention.tree_id,
+        done: true,
         properties: {},
       };
       const nonPropertiesFields = [
@@ -122,7 +123,8 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
       startDate: new Date(intervention.intervention_start_date),
       endDate: new Date(intervention.intervention_end_date),
     });
-    setValue("cancelled", true);
+    setValue("done", true);
+    setValue("cancelled", false);
   }, []);
 
   useEffect(() => {

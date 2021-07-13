@@ -719,6 +719,9 @@
       },
       "doneDialog": {
         "title": "Establecer fecha de realización"
+      },
+      "closePanel": {
+        "title": "Quieres guardar tus cambios ?"
       }
     }
   },

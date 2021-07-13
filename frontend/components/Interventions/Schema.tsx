@@ -386,6 +386,7 @@ export function usePlanningSchema(it: TInterventionType) {
 
 export function useDateSchema() {
   const { t } = useTranslation();
+  const tomorow = new Date(Date.now() + 86400000);
 
   return {
     date: {
@@ -395,8 +396,8 @@ export function useDateSchema() {
       },
       schema: yup
         .date()
-        .required("Date requise")
-        .min(new Date(), "Date cannot be in the past"),
+        .required(t("common.errors.date.required"))
+        .max(tomorow, t("common.errors.date.noFuture")),
     },
   };
 }

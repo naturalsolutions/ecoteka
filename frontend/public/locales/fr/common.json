@@ -27,7 +27,9 @@
     "viewAll": "Voir tout",
     "search": "Rechercher",
     "quit": "Quitter",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "no": "Non",
+    "yes": "Oui"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",

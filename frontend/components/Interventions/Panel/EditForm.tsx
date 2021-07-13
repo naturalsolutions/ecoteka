@@ -9,7 +9,6 @@ import {
   TIntervention,
   useInterventionSchema,
   usePlanningSchema,
-  useDateSchema,
 } from "@/components/Interventions/Schema";
 import useETKForm from "@/components/Form/useForm";
 import { DateRangePeriod } from "@/components/Form/useDateRange";
@@ -33,8 +32,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   const { intervention_type, id } = intervention;
   const interventionSchema = useInterventionSchema(intervention_type);
   const planningSchema = usePlanningSchema(intervention_type);
-  const doneSchema = useDateSchema();
-  const schema = { ...interventionSchema, ...planningSchema, ...doneSchema };
+  const schema = { ...interventionSchema, ...planningSchema };
   const { apiETK } = useApi().api;
   const { organization } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -137,9 +135,19 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
     );
   };
 
+  const mapFieldsOrder = [
+    "method",
+    "intervention_period",
+    "estimated_cost",
+    "required_documents",
+    "required_material",
+    "intervenant",
+    "comment",
+  ];
+
   return (
     <Grid container spacing={1} direction="column">
-      {Object.keys(fields).map(mapFields)}
+      {mapFieldsOrder.map(mapFields)}
     </Grid>
   );
 };

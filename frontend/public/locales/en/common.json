@@ -26,7 +26,9 @@
     "viewAll": "View All",
     "search": "Search",
     "quit": "Quit",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "no": "No",
+    "yes": "Yes"
   },
   "errors": {
     "email": "Email address is invalid",

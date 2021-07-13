@@ -725,6 +725,9 @@
       },
       "doneDialog": {
         "title": "Set realisation date"
+      },
+      "closePanel": {
+        "title": "Do you want to save your changes ?"
       }
     }
   },

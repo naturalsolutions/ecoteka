@@ -54,7 +54,6 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
         "intervenant",
         "date",
         "done",
-        "cancelled",
         "estimated_cost",
         "required_documents",
         "required_material",
@@ -72,6 +71,8 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
           payload.properties[key] = values[key];
         }
       }
+      payload.properties["cancelled"] = true;
+      payload.properties["cancelledAt"] = new Date(Date.now());
 
       const { status } = await apiETK.patch(
         `/organization/${organization.id}/interventions/${id}`,

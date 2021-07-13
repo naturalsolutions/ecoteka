@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Button, Grid, IconButton, withStyles } from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
+import CloseIcon from "@material-ui/icons/Close";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import useApi from "@/lib/useApi";
@@ -100,6 +100,32 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
     }
   }, [doneSaving]);
 
+  const handleClosePanel = () => {
+    const dialogActions = [
+      {
+        label: t("common.buttons.no"),
+        variant: "outlined",
+        size: "small",
+        onClick: () => handleOnClosePanel(),
+      },
+      {
+        label: t("common.buttons.yes"),
+        variant: "contained",
+        size: "small",
+        color: "secondary",
+        noClose: true,
+        onClick: () => handleOnClosePanelWithSave(),
+      },
+    ];
+    dialog.current.open({
+      title: t("components.Interventions.Panel.closePanel.title"),
+      dialogProps: {
+        fullWidth: false,
+      },
+      actions: dialogActions,
+    });
+  };
+
   const handleInterventionCancellation = () => {
     const dialogActions = [
       {
@@ -133,8 +159,15 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
     });
   };
 
-  const handleOnSave = () => {
+  const handleOnClosePanel = () => {
+    dialog.current.close();
+    handleOnBackToTree();
+  };
+
+  const handleOnClosePanelWithSave = () => {
     setSaving(true);
+    dialog.current.close();
+    handleOnBackToTree();
   };
 
   const handleOnCancellationSave = () => {
@@ -201,13 +234,14 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
   return (
     active && (
       <AppLayoutCartoDialog
+        titleNoPadding
         title={
           intervention && (
             <Header
               intervention={intervention}
               secondaryActions={
-                <IconButton aria-label="delete" onClick={handleOnSave}>
-                  <SaveIcon />
+                <IconButton aria-label="close" onClick={handleClosePanel}>
+                  <CloseIcon />
                 </IconButton>
               }
             />

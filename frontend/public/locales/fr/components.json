@@ -718,6 +718,9 @@
       },
       "doneDialog": {
         "title": "Définir la date de réalisation"
+      },
+      "closePanel": {
+        "title": "Voulez-vous enregistrer vos modifications ?"
       }
     }
   },

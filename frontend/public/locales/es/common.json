@@ -27,7 +27,9 @@
     "viewAll": "Ver todo",
     "search": "Buscar",
     "quit": "Dejar",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "no": "No",
+    "yes": "sí"
   },
   "errors": {
     "email": "Correo electrónico no válido",

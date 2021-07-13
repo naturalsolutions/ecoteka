@@ -1,9 +1,19 @@
 import React, { FC } from "react";
-import { makeStyles, Theme, Grid, ListItemText } from "@material-ui/core";
+import {
+  makeStyles,
+  Theme,
+  Grid,
+  ListItemText,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Button,
+} from "@material-ui/core";
 import Avatar from "@/components/Interventions/Core/Avatar";
+
 import { TIntervention } from "@/components/Interventions/Schema";
 import { useTranslation } from "react-i18next";
-import { Fragment } from "react";
 
 export interface InterventionPanelHeaderProps {
   intervention: TIntervention;
@@ -12,6 +22,10 @@ export interface InterventionPanelHeaderProps {
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
+  title: {
+    flexGrow: 1,
+    padding: theme.spacing(1),
+  },
 }));
 
 const InterventionPanelHeader: FC<InterventionPanelHeaderProps> = ({
@@ -25,11 +39,12 @@ const InterventionPanelHeader: FC<InterventionPanelHeaderProps> = ({
   });
 
   const date =
-    intervention.done && intervention.date
+    intervention.done && !intervention.properties.cancelled && intervention.date
       ? `Réalisée le ${new Date(intervention.date).toLocaleDateString()}`
       : "";
   const periodDate =
     !intervention.done &&
+    !intervention.properties.cancelled &&
     intervention.intervention_start_date &&
     intervention.intervention_end_date
       ? `Prévue pour le ${new Date(
@@ -37,23 +52,26 @@ const InterventionPanelHeader: FC<InterventionPanelHeaderProps> = ({
         )?.toLocaleDateString()}`
       : "";
 
+  const cancelDate =
+    intervention.properties.cancelled && intervention.properties.cancelledAt
+      ? `Annulée le ${new Date(
+          intervention.properties.cancelledAt
+        )?.toLocaleDateString()}`
+      : "";
+
   return (
-    <Grid container spacing={2} alignItems="center">
-      <Grid item>
+    <AppBar position="static" color="transparent">
+      <Toolbar>
         <Avatar intervention={intervention} />
-      </Grid>
-      <Grid item>
-        <ListItemText
-          primary={interventionNames[intervention.intervention_type]}
-          secondary={date || periodDate}
-        />
-      </Grid>
-      {secondaryActions && (
-        <Fragment>
-          <Grid item>{secondaryActions}</Grid>
-        </Fragment>
-      )}
-    </Grid>
+        <Typography variant="h6" component="div" className={classes.title}>
+          <ListItemText
+            primary={interventionNames[intervention.intervention_type]}
+            secondary={date || periodDate || cancelDate}
+          />
+        </Typography>
+        {secondaryActions}
+      </Toolbar>
+    </AppBar>
   );
 };
 
