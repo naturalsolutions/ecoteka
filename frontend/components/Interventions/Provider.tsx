@@ -14,7 +14,6 @@ export const useInterventionContext = () => useContext(InterventionContext);
 export const calculatePriority = ({ done, archived, start, end }) => {
   const nowDate = new Date();
   const endDate = new Date(end);
-  const startDate = new Date(start);
   const twoWeeks = new Date();
   const oneDay = 1000 * 3600 * 24;
 
