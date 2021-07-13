@@ -104,5 +104,6 @@
   "nonAvailableAbbr": "/NA",
   "invite": "Invitación",
   "add": "Agregar",
-  "archive": "Archivo"
+  "archive": "Archivo",
+  "remove": "Eliminar"
 }
