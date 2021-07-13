@@ -54,7 +54,7 @@ interface Fields {
 
 export default function useDateField(props): Fields {
   const rangefields = {};
-
+  console.log(props.fields);
   for (const name in props.fields) {
     const field = props.fields[name];
     const defaultFieldProps = {

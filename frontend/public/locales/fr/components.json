@@ -306,9 +306,9 @@
       "method": "Méthode",
       "comment": "Commentaire",
       "watering": "Arrosage",
-      "amendment": "Amendement/Apport organique",
-      "tutorcheck": "Vérification du tuteurage et des protections",
-      "globalcheck": "Vérification globale de l'arbre"
+      "amendment": "Amendement",
+      "tutorcheck": "Tuteurage et protections",
+      "globalcheck": "Vérification globale"
     },
     "interventionsTable": {
       "requestAnItervention": "Demander une intervention",
@@ -322,8 +322,10 @@
     },
     "saveSuccess": "L'intervention a été enregistrée avec succès.",
     "saveError": "Une erreur s'est produite lors de l'enregistrement de l'intervention",
-    "date": "Date",
-    "done": "Fait"
+    "date": "Réalisée le",
+    "done": "Fait",
+    "cancelNotes": "Remarques sur l'annulation",
+    "cancelled": "Annulé"
   },
   "Tree": {
     "properties": {
@@ -708,6 +710,15 @@
   "Interventions": {
     "Edit": {
       "title": "Modifier l'intervention"
+    },
+    "Panel": {
+      "validate": "Terminer l'intervention",
+      "archiveDialog": {
+        "title": "Annuler l'intervention"
+      },
+      "doneDialog": {
+        "title": "Définir la date de réalisation"
+      }
     }
   },
   "MapActionBar": {

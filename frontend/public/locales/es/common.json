@@ -25,7 +25,9 @@
     "backToMap": "Volver al mapa",
     "moreDetails": "Más información",
     "viewAll": "Ver todo",
-    "search": "Buscar"
+    "search": "Buscar",
+    "quit": "Dejar",
+    "confirm": "Confirmar"
   },
   "errors": {
     "email": "Correo electrónico no válido",
@@ -33,7 +35,11 @@
     "passwordsShouldMatch": "Las contraseñas no coinciden",
     "fileRequired": "Por favor, selecciona un archivo",
     "passwordMustContainOneNumberOrSymbol": "La contraseña debe contener al menos un símbolo o número",
-    "passwordMin": "La contraseña debe tener al menos 8 caracteres"
+    "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+    "date": {
+      "required": "Fecha requerida",
+      "noFuture": "La fecha no se puede establecer en el futuro"
+    }
   },
   "months": [
     "Enero",

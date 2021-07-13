@@ -1,33 +1,28 @@
 import { FC, useEffect, useState } from "react";
-import { Button, Grid, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
-import useApi from "@/lib/useApi";
-import { DateRangePeriod } from "@/components/Form/useDateRange";
-import { useAppContext } from "@/providers/AppContext";
 import { useSnackbar } from "notistack";
+
+import useApi from "@/lib/useApi";
+import { useAppContext } from "@/providers/AppContext";
 import {
   TIntervention,
   useInterventionSchema,
   usePlanningSchema,
   useDateSchema,
-} from "./Schema";
+  useArchiveSchema,
+} from "@/components/Interventions/Schema";
 import useETKForm from "@/components/Form/useForm";
-import { AppLayoutCartoDialog } from "../AppLayout/Carto";
-interface IInterventionEditProps {}
+import { DateRangePeriod } from "@/components/Form/useDateRange";
+import { Grid } from "@material-ui/core";
 
-interface IInterventionResponse {
-  status: number;
-  data: TIntervention;
-}
-
-interface IInterventionEditForm {
+interface IInterventionArchiveForm {
   intervention: TIntervention;
   saving: boolean;
   onSave(): void;
 }
 
-const InterventionEditForm: FC<IInterventionEditForm> = ({
+const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
   intervention,
   saving,
   onSave,
@@ -38,9 +33,8 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   const { t } = useTranslation("components");
   const { intervention_type, id } = intervention;
   const interventionSchema = useInterventionSchema(intervention_type);
-  const planningSchema = usePlanningSchema(intervention_type);
   const doneSchema = useDateSchema();
-  const schema = { ...interventionSchema, ...planningSchema, ...doneSchema };
+  const schema = { ...doneSchema };
   const { apiETK } = useApi().api;
   const { organization } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -61,6 +55,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
         "intervenant",
         "date",
         "done",
+        "cancelled",
         "estimated_cost",
         "required_documents",
         "required_material",
@@ -127,6 +122,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
       startDate: new Date(intervention.intervention_start_date),
       endDate: new Date(intervention.intervention_end_date),
     });
+    setValue("cancelled", true);
   }, []);
 
   useEffect(() => {
@@ -150,108 +146,4 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   );
 };
 
-const InterventionsEdit: FC<IInterventionEditProps> = () => {
-  const { t } = useTranslation("components");
-  const { organization } = useAppContext();
-  const router = useRouter();
-  const { apiETK } = useApi().api;
-  const [intervention, setIntervention] = useState<TIntervention>();
-  const [saving, setSaving] = useState<boolean>(false);
-  const [active, setActive] = useState<boolean>(false);
-
-  const getIntervention = async (intervertionId: number) => {
-    try {
-      const url = `/organization/${organization.id}/interventions/${intervertionId}`;
-      const { status, data }: IInterventionResponse = await apiETK.get(url);
-
-      if (status === 200) {
-        setIntervention(data);
-      }
-    } catch (e) {}
-  };
-
-  const handleOnBackToTree = () => {
-    if (intervention?.tree_id) {
-      router.push({
-        pathname: "/[organizationSlug]/map",
-        query: {
-          panel: "info",
-          tree: intervention.tree_id,
-          organizationSlug: organization.slug,
-        },
-      });
-    }
-  };
-
-  const handleOnSave = () => {
-    setSaving(true);
-  };
-
-  useEffect(() => {
-    const { query, route } = router;
-
-    if (
-      route === "/[organizationSlug]/map" &&
-      query.panel === "intervention-edit" &&
-      query.tree &&
-      query.intervention
-    ) {
-      const interventionId = Number(router.query?.intervention);
-
-      getIntervention(interventionId);
-      setActive(true);
-    } else {
-      setActive(false);
-    }
-  }, [router.query]);
-
-  return (
-    active && (
-      <AppLayoutCartoDialog
-        title={
-          <>
-            {t("components.Interventions.Edit.title")}:{" "}
-            {
-              t("components.Intervention.types", { returnObjects: true })[
-                intervention?.intervention_type
-              ]
-            }
-          </>
-        }
-        actions={
-          <Grid container>
-            <Button
-              color="secondary"
-              variant="contained"
-              size="small"
-              onClick={handleOnBackToTree}
-            >
-              {t("components.TreeForm.backToInfo")}
-            </Button>
-            <Grid item xs />
-            <Button
-              color="primary"
-              variant="contained"
-              size="small"
-              onClick={() => handleOnSave()}
-            >
-              {t("common.buttons.save")}
-            </Button>
-          </Grid>
-        }
-      >
-        <Grid container spacing={2} direction="column">
-          <Grid item>
-            <InterventionEditForm
-              intervention={intervention}
-              saving={saving}
-              onSave={() => setSaving(false)}
-            />
-          </Grid>
-        </Grid>
-      </AppLayoutCartoDialog>
-    )
-  );
-};
-
-export default InterventionsEdit;
+export default InterventionArchiveForm;

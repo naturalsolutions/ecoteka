@@ -393,13 +393,26 @@ export function useDateSchema() {
       component: {
         label: t("components.Intervention.date"),
       },
-      schema: yup.string(),
+      schema: yup
+        .date()
+        .required("Date requise")
+        .min(new Date(), "Date cannot be in the past"),
     },
-    done: {
-      type: "switch",
+  };
+}
+
+export function useArchiveSchema() {
+  const { t } = useTranslation();
+
+  return {
+    cancelNotes: {
+      type: "textfield",
       component: {
-        label: t("components.Intervention.done"),
+        label: t("components.Intervention.cancelNotes"),
+        multiline: true,
+        rows: 4,
       },
+      schema: yup.string(),
     },
   };
 }

@@ -41,7 +41,7 @@ import CadastreLayer, {
 } from "@/components/Map/Layers/Cadastre";
 import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import Head from "next/head";
-import InterventionsEdit from "@/components/Interventions/Panel";
+import InterventionsEdit from "@/components/Interventions/Panel/Panel";
 import geobuf from "geobuf";
 import Pbf from "pbf";
 import { useTranslation } from "react-i18next";
@@ -445,7 +445,6 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapClick = (info) => {
-    console.log(info);
     if (editionMode && mode === "drawPoint") {
       setMode("selection");
       const [x, y] = info.coordinate;

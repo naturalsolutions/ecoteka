@@ -60,10 +60,6 @@ export default function useMultiSelect({
   // const [selectedValues, setSelectedValues] = useState<Item[]>([]);
   const [selectedValues, setSelectedValues] = useState([]);
 
-  useEffect(() => {
-    console.log(selectedValues);
-  }, [selectedValues]);
-
   const setValuesToItems = (values: string, items: any): any => {
     return values ? items.filter((item) => values.includes(item.value)) : [];
   };
