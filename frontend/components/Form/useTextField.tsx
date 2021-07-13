@@ -18,11 +18,8 @@ export default function useTextField(props: ETKTextFieldProps): Fields {
     const defaultFieldProps: TextFieldProps = {
       name,
       inputRef: props.register,
-      variant: "filled",
+      variant: "outlined",
       margin: "dense",
-      InputProps: {
-        disableUnderline: true,
-      },
       label: field.label,
       placeholder: field.placeholder,
       type: field.type,

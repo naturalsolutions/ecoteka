@@ -25,7 +25,11 @@
     "backToMap": "Retour à la carte",
     "moreDetails": "Plus de details",
     "viewAll": "Voir tout",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "quit": "Quitter",
+    "confirm": "Confirmer",
+    "no": "Non",
+    "yes": "Oui"
   },
   "errors": {
     "email": "Veuillez saisir un email valide",
@@ -33,7 +37,11 @@
     "passwordsShouldMatch": "Les mots de passe ne correspondent pas",
     "fileRequired": "Veuillez sélectionner un fichier",
     "passwordMustContainOneNumberOrSymbol": "Le mot de passe doit contenir au moins un symbole ou un chiffre",
-    "passwordMin": "Mot de passe doit être d'au moins 8 caractères"
+    "passwordMin": "Mot de passe doit être d'au moins 8 caractères",
+    "date": {
+      "required": "Date requise",
+      "noFuture": "La date ne peut pas être définie dans le futur"
+    }
   },
   "months": [
     "Janvier",

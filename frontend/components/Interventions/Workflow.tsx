@@ -51,8 +51,18 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
   };
 
   const currentInterventions = insidePanel
-    ? scheduledInterventions.slice(0, 3)
-    : scheduledInterventions;
+    ? scheduledInterventions
+        .sort(
+          (a, b) =>
+            new Date(a.intervention_start_date).getTime() -
+            new Date(b.intervention_start_date).getTime()
+        )
+        .slice(0, 3)
+    : scheduledInterventions.sort(
+        (a, b) =>
+          new Date(a.intervention_start_date).getTime() -
+          new Date(b.intervention_start_date).getTime()
+      );
 
   return (
     <Grid ref={ref} container spacing={2}>
@@ -79,16 +89,21 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
       </Grid>
       {!insidePanel && (
         <Grid item xs={12} sm={sm}>
-            <InterventionListContainer label="interventions réalisées">
-              {doneInterventions?.map((intervention) => (
+          <InterventionListContainer label="interventions réalisées">
+            {doneInterventions
+              ?.sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              )
+              .map((intervention) => (
                 <InterventionsListItem
                   key={`intervention-${intervention.id}`}
                   selectable={selectable}
                   intervention={intervention}
                 />
               ))}
-            </InterventionListContainer>
-          </Grid>
+          </InterventionListContainer>
+        </Grid>
       )}
     </Grid>
   );

@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CoreTextField from "../Core/Field/TextField";
 import CoreSwitch from "@/components/Core/Field/Switch";
 import CoreSelect from "@/components/Core/Field/Select";
+import AutocompleteMultiSelect from "@/components/Core/Field/AutocompleteSelect";
 import { Controller } from "react-hook-form";
 import TreeCanonicalField from "./Field/Canonical";
 import { useState } from "react";
@@ -70,6 +71,7 @@ const fieldTypes = {
   textfield: CoreTextField,
   switch: CoreSwitch,
   select: CoreSelect,
+  multiselect: AutocompleteMultiSelect,
 };
 
 const TreeForm: FC<TreeFormProps> = ({ readOnly = true }) => {
@@ -102,6 +104,20 @@ const TreeForm: FC<TreeFormProps> = ({ readOnly = true }) => {
             defaultValue: "",
             InputProps: {
               readOnly,
+            },
+          };
+        }
+
+        if (["multiselect"].includes(type)) {
+          fieldProps = {
+            ...schema[fieldName].component,
+            error: Boolean(form.errors?.fieldName),
+            errorMessage: Boolean(form.errors?.fieldName?.message),
+            defaultValue: [],
+            inputProps: {
+              InputProps: {
+                readOnly,
+              },
             },
           };
         }

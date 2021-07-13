@@ -41,7 +41,7 @@ import CadastreLayer, {
 } from "@/components/Map/Layers/Cadastre";
 import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import Head from "next/head";
-import InterventionsEdit from "@/components/Interventions/Panel";
+import InterventionsEdit from "@/components/Interventions/Panel/Panel";
 import geobuf from "geobuf";
 import Pbf from "pbf";
 import { useTranslation } from "react-i18next";
@@ -130,7 +130,7 @@ const EditionPage = ({}) => {
   const { apiETK } = useApi().api;
   const [data, setData] = useLocalStorage("etk:map:data");
   const [drawerLeftComponent, setDrawerLeftComponent] = useState();
-  const [drawerLeftWidth] = useState(400);
+  const [drawerLeftWidth] = useState(550);
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
     defaultViewState
@@ -445,7 +445,6 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapClick = (info) => {
-    console.log(info);
     if (editionMode && mode === "drawPoint") {
       setMode("selection");
       const [x, y] = info.coordinate;
@@ -623,7 +622,7 @@ const EditionPage = ({}) => {
         </Grid>
         <Grid item xs></Grid>
         <Grid item className={classes.toolbarAction}>
-          {!isMobile &&
+          {!isMobile && (
             <MapSearchCity
               onChange={(coordinates) => {
                 setViewState({
@@ -636,7 +635,7 @@ const EditionPage = ({}) => {
                 });
               }}
             />
-          }
+          )}
         </Grid>
       </Grid>
       <MapActionsList>

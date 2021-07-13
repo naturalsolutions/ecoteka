@@ -24,7 +24,11 @@
     "import": "Import data",
     "moreDetails": "More info",
     "viewAll": "View All",
-    "search": "Search"
+    "search": "Search",
+    "quit": "Quit",
+    "confirm": "Confirm",
+    "no": "No",
+    "yes": "Yes"
   },
   "errors": {
     "email": "Email address is invalid",
@@ -32,7 +36,11 @@
     "passwordMustContainOneNumberOrSymbol": "The password must contain at least one number or symbol",
     "passwordsShouldMatch": "Passwords should match",
     "fileRequired": "Please select a file",
-    "passwordMin": "Password must be at least 8 characters"
+    "passwordMin": "Password must be at least 8 characters",
+    "date": {
+      "required": "Date required",
+      "noFuture": "Date cannot be set in the future"
+    }
   },
   "months": [
     "January",

@@ -1,8 +1,5 @@
 import { FC } from "react";
 import {
-  makeStyles,
-  Theme,
-  Avatar,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -11,20 +8,18 @@ import {
   Divider,
 } from "@material-ui/core";
 import { TIntervention } from "@/components/Interventions/Schema";
-import PruningIcon from "@/public/assets/interventions/intervention-01.svg";
-import FellingIcon from "@/public/assets/interventions/intervention-02.svg";
-import StreanRemovalIcon from "@/public/assets/interventions/intervention-03.svg";
-import IndepthDiagnosticIcon from "@/public/assets/interventions/intervention-04.svg";
-import TreatmentIcon from "@/public/assets/interventions/intervention-05.svg";
-import SurveillanceIcon from "@/public/assets/interventions/intervention-06.svg";
-import { useInterventionContext, calculatePriority } from "../Provider";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import { useRouter } from "next/router";
+import { useInterventionContext } from "@/components/Interventions/Provider";
+import InterventionAvatar from "@/components/Interventions/Core/Avatar";
 
 export interface InterventionsListItemProps {
   intervention: TIntervention;
   selectable?: boolean;
+  withDivider?: boolean;
+  dense?: boolean;
+  SecondaryActions?: React.ReactElement;
 }
 
 /**
@@ -44,50 +39,11 @@ export type InterventionState =
   | "urgent"
   | "schedulable";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {},
-  avatar: {
-    padding: 9,
-    width: theme.spacing(6),
-    height: theme.spacing(6),
-
-    "& path": {
-      fill: theme.palette.common.white,
-    },
-  },
-  urgent: {
-    backgroundColor: theme.palette.warning.main,
-  },
-  archived: {
-    backgroundColor: theme.palette.grey["300"],
-  },
-  late: {
-    backgroundColor: theme.palette.error.main,
-  },
-  schedulable: {
-    backgroundColor: theme.palette.primary.main,
-  },
-  done: {
-    backgroundColor: theme.palette.success.light,
-  },
-}));
-
-const INTERVENTION_ICONS = {
-  pruning: PruningIcon,
-  felling: FellingIcon,
-  streanremoval: StreanRemovalIcon,
-  indepthdiagnostic: IndepthDiagnosticIcon,
-  treatment: TreatmentIcon,
-  surveillance: SurveillanceIcon,
-};
-
 const InterventionsListItem: FC<InterventionsListItemProps> = ({
   intervention,
   selectable = true,
 }) => {
-  const classes = useStyles();
   const { t } = useTranslation();
-  const Icon = INTERVENTION_ICONS[intervention.intervention_type];
   const { organization } = useAppContext();
   const router = useRouter();
   const { interventionSelected, setInterventionSelected } =
@@ -110,13 +66,6 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
           intervention.intervention_end_date
         )?.toLocaleDateString()} `
       : "";
-
-  const priority = calculatePriority({
-    done: intervention.done,
-    start: intervention.intervention_start_date,
-    end: intervention.intervention_end_date,
-    archived: false,
-  });
 
   const handleShowIntervention = () => {
     router.push({
@@ -147,9 +96,7 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
     <>
       <ListItem button onClick={handleShowIntervention}>
         <ListItemAvatar>
-          <Avatar className={[classes.avatar, classes[priority]].join(" ")}>
-            <Icon />
-          </Avatar>
+          <InterventionAvatar intervention={intervention} />
         </ListItemAvatar>
         <ListItemText
           primary={interventionNames[intervention.intervention_type]}
