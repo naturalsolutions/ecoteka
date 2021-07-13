@@ -4,11 +4,11 @@ import { TIntervention } from "@/components/Interventions/Schema";
 import { calculatePriority } from "@/components/Interventions/Provider";
 
 import PruningIcon from "@/public/assets/interventions/intervention-01.svg";
-import FellingIcon from "@/public/assets/interventions/intervention-02.svg";
-import StreanRemovalIcon from "@/public/assets/interventions/intervention-03.svg";
-import IndepthDiagnosticIcon from "@/public/assets/interventions/intervention-04.svg";
+import FellingIcon from "@/public/assets/interventions/intervention-03.svg";
+import StreanRemovalIcon from "@/public/assets/interventions/intervention-02.svg";
+import IndepthDiagnosticIcon from "@/public/assets/interventions/intervention-14.svg";
 import TreatmentIcon from "@/public/assets/interventions/intervention-05.svg";
-import SurveillanceIcon from "@/public/assets/interventions/intervention-06.svg";
+import SurveillanceIcon from "@/public/assets/interventions/intervention-04.svg";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -61,8 +61,6 @@ const InterventionAvatar: FC<InterventionAvatarProps> = ({ intervention }) => {
     end: intervention.intervention_end_date,
     archived: intervention.properties.cancelled,
   });
-
-  console.log(priority);
 
   return (
     <Avatar className={[classes.avatar, classes[priority]].join(" ")}>
