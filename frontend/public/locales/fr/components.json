@@ -441,7 +441,12 @@
     },
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "code": "Matricule de l'arbre"
+    "code": "Matricule de l'arbre",
+    "Panel": {
+      "actions": {
+        "update": "Modifier cet arbre"
+      }
+    }
   },
   "TreeForm": {
     "dialogDeleteTitle": "Supprimer les arbres sélectionnés",

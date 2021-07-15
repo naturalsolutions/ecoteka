@@ -443,7 +443,12 @@
     "latitude": "Latitud",
     "longitude": "Longitud",
     "registrationNumber": "Tree registration number",
-    "code": "Tree identifier"
+    "code": "Tree identifier",
+    "Panel": {
+      "actions": {
+        "update": "Update this tree"
+      }
+    }
   },
   "TreeForm": {
     "dialogDeleteTitle": "Remove selected trees",
