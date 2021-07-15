@@ -6,7 +6,6 @@ import MapTooltip from "@/components/Map/Tooltip/Tooltip";
 import MapTooltipItem from "@/components/Map/Tooltip/Item";
 import MapTooltipKeyValue from "@/components/Map/Tooltip/KeyValue";
 import { Typography } from "@material-ui/core";
-import { useTranslation } from "react-i18next";
 
 function CadastreLayer(
   visible: boolean
@@ -35,25 +34,15 @@ function CadastreLayer(
 }
 
 export const renderTooltipInfo: FC = ({ info, title }) => {
-  let properties = {};
-
-  Object.keys(info.object.properties)
-    .filter((k) => !["layerName"].includes(k))
-    .reduce((acc, k) => {
-      acc[k] = info.object.properties[k];
-
-      return acc;
-    }, properties);
-
   return (
     <MapTooltip x={info.x} y={info.y}>
       <Typography variant="h5">{title}</Typography>
-      {properties &&
-        Object.keys(properties).map((property) => (
+      {info.object.properties &&
+        Object.keys(info.object.properties).map((property) => (
           <MapTooltipItem key={property}>
             <MapTooltipKeyValue
               property={property}
-              value={properties[property]}
+              value={info.object.properties[property]}
             />
           </MapTooltipItem>
         ))}

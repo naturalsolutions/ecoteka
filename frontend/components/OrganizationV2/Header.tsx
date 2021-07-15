@@ -27,6 +27,7 @@ import { es, enGB, fr } from "date-fns/locale";
 import { useRouter } from "next/router";
 import Can, { AbilityContext } from "@/components/Can";
 import MapProvider, { useMapContext } from "@/components/Map/Provider";
+import MapContainer from "@/components/Map/Container";
 import OSMLayer from "@/components/Map/Layers/OSM";
 import useApi from "@/lib/useApi";
 import { FlyToInterpolator } from "@deck.gl/core";
@@ -151,6 +152,7 @@ const MapData: FC<MapPreviewProps> = ({}) => {
 export const MapPreview: FC<MapPreviewProps> = ({}) => {
   const classes = useStyles();
   const { organization } = useAppContext();
+
   if (organization.total_trees == 0 && organization.osm_id) {
     return (
       <CardMedia
@@ -161,22 +163,18 @@ export const MapPreview: FC<MapPreviewProps> = ({}) => {
       />
     );
   }
-  if (organization.total_trees == 0 && !organization.osm_id) {
-    return <Box className={classes.mapPreviewDefault} />;
-  }
-  if (organization.total_trees > 0) {
-    return (
-      <MapProvider
+
+  return (
+    <MapProvider layers={layers}>
+      <MapContainer
         PaperProps={{ elevation: 0 }}
-        layers={layers}
         height={"300px"}
         width={"100%"}
       >
         <MapData />
-      </MapProvider>
-    );
-  }
-  return <div>Error!</div>;
+      </MapContainer>
+    </MapProvider>
+  );
 };
 
 const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {

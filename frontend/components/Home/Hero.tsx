@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { makeStyles, Theme, useTheme, useMediaQuery } from "@material-ui/core";
 import MapProvider from "@/components/Map/Provider";
+import MapContainer from "@/components/Map/Container";
 import OSMLayer, {
   renderTooltipInfo as renderTooltipInfoOSM,
 } from "@/components/Map/Layers/OSM";
@@ -54,31 +55,32 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
   };
 
   return (
-    <div className={classes.root}>
-      <MapProvider
-        startComponent={
-          isMobile && (
-            <HomeHeroSearchCity
-              coords={coords}
-              onChangeCity={handleOnChangeCity}
-            />
-          )
-        }
-        endComponent={
-          !isMobile && (
-            <HomeHeroSearchCity
-              coords={coords}
-              onChangeCity={handleOnChangeCity}
-            />
-          )
-        }
-        PaperProps={{ elevation: 0, className: classes.map }}
-        layers={[osmLayer]}
-      />
-      {info?.layer?.id &&
-        rendersTooltip[info.layer.id] &&
-        rendersTooltip[info.layer.id]({ info })}
-    </div>
+    <MapProvider layers={[osmLayer]}>
+      <div className={classes.root}>
+        <MapContainer
+          startComponent={
+            isMobile && (
+              <HomeHeroSearchCity
+                coords={coords}
+                onChangeCity={handleOnChangeCity}
+              />
+            )
+          }
+          endComponent={
+            !isMobile && (
+              <HomeHeroSearchCity
+                coords={coords}
+                onChangeCity={handleOnChangeCity}
+              />
+            )
+          }
+          PaperProps={{ elevation: 0, className: classes.map }}
+        />
+        {info?.layer?.id &&
+          rendersTooltip[info.layer.id] &&
+          rendersTooltip[info.layer.id]({ info })}
+      </div>
+    </MapProvider>
   );
 };
 

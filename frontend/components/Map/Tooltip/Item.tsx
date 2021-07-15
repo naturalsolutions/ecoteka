@@ -2,7 +2,7 @@ import { FC } from "react";
 import { makeStyles, Theme } from "@material-ui/core";
 
 export interface MapTooltipItemProps {
-  border: boolean;
+  border?: boolean;
 }
 
 const useStyles = makeStyles<Theme, MapTooltipItemProps>((theme: Theme) => ({

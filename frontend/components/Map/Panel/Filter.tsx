@@ -1,39 +1,27 @@
 import React, { FC, useState, memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  TextField,
-  Grid,
-  Chip,
-  Avatar,
-} from "@material-ui/core";
+import { useRouter } from "next/router";
+import { TextField, Grid, Chip, Avatar } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import useApi from "@/lib/useApi";
-import { AppLayoutCartoDialog } from "../AppLayout/Carto";
-import { useRouter } from "next/router";
-import BackToMap from "./BackToMap";
+import { AppLayoutCartoDialog } from "@/components/AppLayout/Carto";
+import BackToMap from "@/components/Map/BackToMap";
+import { useAppContext } from "@/providers/AppContext";
 
 const FILTERS_KEYS = ["canonicalName", "vernacularName"];
 
 let defaultOptions = {};
 
-
 for (let filter of FILTERS_KEYS) {
   defaultOptions[filter] = [];
 }
 
-export interface IMapFilter {
-  organizationId: number;
+export interface MapPanelFilter {
   initialValue: {};
   onChange?(values: {}, filters: {}, options: {}): void;
 }
 
-
-
-const MapFilter: FC<IMapFilter> = ({
-  initialValue,
-  organizationId,
-  onChange,
-}) => {
+const MapPanelFilter: FC<MapPanelFilter> = ({ initialValue, onChange }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState(initialValue);
   const [active, setActive] = useState<boolean>(false);
@@ -41,11 +29,13 @@ const MapFilter: FC<IMapFilter> = ({
   const [loading, setLoading] = useState(false);
   const { apiETK } = useApi().api;
   const router = useRouter();
-  const translations = t("components.MapFilter.filters", { returnObjects: true });
+  const { organization } = useAppContext();
+  const translations = t("components.MapFilter.filters", {
+    returnObjects: true,
+  });
   const FILTERS = FILTERS_KEYS.map((key) => {
     return { key, label: translations[key] };
   });
-
 
   const getFilters = async (organizationId: number) => {
     try {
@@ -85,10 +75,10 @@ const MapFilter: FC<IMapFilter> = ({
   };
 
   useEffect(() => {
-    if (organizationId) {
-      getFilters(organizationId);
+    if (organization) {
+      getFilters(organization.id);
     }
-  }, [organizationId]);
+  }, [organization]);
 
   const renderChip = (option, tagProps?) => {
     const { inputValue, ...rest } = tagProps;
@@ -163,4 +153,4 @@ const MapFilter: FC<IMapFilter> = ({
   );
 };
 
-export default memo(MapFilter);
+export default memo(MapPanelFilter);

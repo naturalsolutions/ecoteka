@@ -170,7 +170,7 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
 
   return (
     <AppLayoutCartoContext.Provider
-      value={{ hegiht: appHeight, width: drawerLeftWidth, container }}
+      value={{ height: appHeight, width: drawerLeftWidth, container }}
     >
       {error && (
         <ErrorComponent

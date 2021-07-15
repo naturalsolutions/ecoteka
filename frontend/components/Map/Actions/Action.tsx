@@ -1,18 +1,20 @@
-import { FC, ReactElement } from "react";
+import { FC, forwardRef, ReactElement } from "react";
 import {
   makeStyles,
   SvgIconProps,
   Theme,
-  Tooltip,
-  IconButton,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import Can from "@/components/Can";
 import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
+import { SpeedDialAction } from "@material-ui/lab";
 
 export interface MapActionsActionProps {
-  name: string;
-  icon: ReactElement<SvgIconProps>;
-  isActive: boolean;
+  name?: string;
+  icon?: ReactElement<SvgIconProps>;
+  open?: boolean;
+  isActive?: boolean;
   action?: Actions;
   subject?: Subjects;
   onClick?: () => void;
@@ -21,7 +23,32 @@ export interface MapActionsActionProps {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   staticTooltipLabel: {
-    minWidth: 150,
+    display: "inline",
+    minWidth: 225,
+    textAlign: "center",
+  },
+  staticTooltipLabelActive: {
+    display: "inline",
+    minWidth: 225,
+    textAlign: "center",
+    color: theme.palette.primary.light,
+  },
+  fab: {
+    background: theme.palette.background.default,
+    "&:hover": {
+      background: theme.palette.grey[200],
+    },
+  },
+  fabActive: {
+    background: theme.palette.primary.light,
+    "&:hover": {
+      background: theme.palette.primary.dark,
+    },
+  },
+  [theme.breakpoints.up("sm")]: {
+    speedDial: {
+      bottom: theme.spacing(8),
+    },
   },
 }));
 
@@ -30,22 +57,35 @@ const MapActionsAction: FC<MapActionsActionProps> = ({
   action = "read",
   subject = "Trees",
   icon,
-  name, 
-  onClick
+  open = false,
+  name,
+  onClick,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
+
+  const handleOnClick = () => {
+    if (onClick) {
+      onClick();
+    }
+  };
 
   return (
     <Can do={action} on={subject}>
-      <Tooltip title={name}>
-        <IconButton
-          className={classes.root}
-          aria-label={name}
-          onClick={onClick}
-        >
-          {icon}
-        </IconButton>
-      </Tooltip>
+      <SpeedDialAction
+        icon={icon}
+        open={open}
+        classes={{
+          staticTooltipLabel: isActive
+            ? classes.staticTooltipLabelActive
+            : classes.staticTooltipLabel,
+          fab: isActive ? classes.fabActive : classes.fab,
+        }}
+        tooltipTitle={name}
+        tooltipOpen={!isDesktop && open}
+        onClick={handleOnClick}
+      />
     </Can>
   );
 };

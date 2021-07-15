@@ -15,6 +15,7 @@ import "@fontsource/inter";
 import "@fontsource/merriweather";
 
 import { Provider as AppContextProvider } from "@/providers/AppContext";
+import { NoSsr } from "@material-ui/core";
 
 const queryClient = new QueryClient();
 
@@ -43,18 +44,21 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <I18nextProvider i18n={i18n}>
-        <ThemeProvider>
-          <SnackbarProvider maxSnack={4}>
-            <QueryClientProvider client={queryClient}>
-              <ReactQueryDevtools initialIsOpen={false} />
-              <AppContextProvider>
-                <AppLayoutBase>
-                  <Component {...pageProps} />
-                </AppLayoutBase>
-              </AppContextProvider>
-            </QueryClientProvider>
-          </SnackbarProvider>
-        </ThemeProvider>
+        <NoSsr>
+          <ThemeProvider>
+            <SnackbarProvider maxSnack={4}>
+              <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools initialIsOpen={false} />
+
+                <AppContextProvider>
+                  <AppLayoutBase>
+                    <Component {...pageProps} />
+                  </AppLayoutBase>
+                </AppContextProvider>
+              </QueryClientProvider>
+            </SnackbarProvider>
+          </ThemeProvider>
+        </NoSsr>
       </I18nextProvider>
     </>
   );

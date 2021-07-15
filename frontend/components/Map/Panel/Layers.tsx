@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import {
   Divider,
@@ -10,9 +11,9 @@ import {
   RadioGroup,
   Checkbox,
 } from "@material-ui/core";
-import { AppLayoutCartoDialog } from "../AppLayout/Carto";
-import { useRouter } from "next/router";
-import BackToMap from "./BackToMap";
+import { AppLayoutCartoDialog } from "@/components/AppLayout/Carto";
+import BackToMap from "@/components/Map/BackToMap";
+import { BaseLayer, useMapContext } from "@/components/Map/Provider";
 
 export const defaultLayers = {
   cadastre: {
@@ -29,45 +30,42 @@ export const defaultLayers = {
   },
 };
 
-export interface IMapLayer {
+export interface MapLayer {
   name: string;
   value: boolean;
 }
 
-export interface IMapLayers {
-  [key: string]: IMapLayer;
+export interface MapLayers {
+  [key: string]: MapLayer;
 }
 
-export interface IMapLayersProps {
-  mapBackground: string;
-  layers: IMapLayers;
-  onChangeBackground?(background: string): void;
-  onChangeLayers?(layers): void;
-}
+export interface MapPanelLayersProps {}
 
-const MapLayers: FC<IMapLayersProps> = ({
-  mapBackground,
-  layers,
-  onChangeBackground,
-  onChangeLayers,
-}) => {
+const MapPanelLayers: FC<MapPanelLayersProps> = ({}) => {
+  const { activeLayers, setActiveLayers, setBaseLayer, baseLayer } =
+    useMapContext();
   const [active, setActive] = useState<boolean>(false);
-  const { t } = useTranslation("components");
-  const [background, setBackground] = useState(mapBackground);
+  const { t } = useTranslation();
   const router = useRouter();
+  const labels = t("components.Map.Layers.defaultLayers", {
+    returnObjects: true,
+  });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = (event.target as HTMLInputElement).value;
 
-    setBackground(value);
-    onChangeBackground(value);
+    setBaseLayer(value as BaseLayer);
   };
 
-  const handleLayerChange = (key: string, layer: IMapLayer) => {
-    const newLayers = { ...layers } as IMapLayers;
+  const handleLayerChange = (key: string, layer: MapLayer) => {
+    const newLayers = { ...activeLayers } as MapLayers;
 
     newLayers[key].value = !layer.value;
-    onChangeLayers(newLayers);
+
+    setActiveLayers({
+      ...newLayers,
+      [key]: newLayers[key],
+    });
   };
 
   useEffect(() => {
@@ -94,7 +92,7 @@ const MapLayers: FC<IMapLayersProps> = ({
               </FormLabel>
               <RadioGroup
                 name="background"
-                value={background}
+                value={baseLayer}
                 onChange={handleChange}
               >
                 <FormControlLabel
@@ -114,24 +112,22 @@ const MapLayers: FC<IMapLayersProps> = ({
           <Grid item>
             <FormControl component="fieldset">
               <FormLabel component="legend">
-                {t("components.MapLayers.layers")}
+                {t("components.Map.Layers.activeLayers")}
               </FormLabel>
-              {Object.keys(layers)
+              {Object.keys(activeLayers)
                 .sort()
                 .map((key: string) => {
-                  const label = t("components.Map.Layers.defaultLayers", {
-                    returnObjects: true,
-                  })[key];
-
                   return (
                     <FormControlLabel
                       key={key}
-                      label={label}
+                      label={labels[key]}
                       control={
                         <Checkbox
                           color="primary"
-                          checked={layers[key].value}
-                          onChange={() => handleLayerChange(key, layers[key])}
+                          checked={activeLayers[key].value}
+                          onChange={() =>
+                            handleLayerChange(key, activeLayers[key])
+                          }
                           name={key}
                         />
                       }
@@ -146,4 +142,4 @@ const MapLayers: FC<IMapLayersProps> = ({
   );
 };
 
-export default MapLayers;
+export default MapPanelLayers;

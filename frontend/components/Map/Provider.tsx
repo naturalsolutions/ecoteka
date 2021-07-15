@@ -1,18 +1,11 @@
-import {
-  useState,
-  useRef,
-  ReactElement,
-  createContext,
-  FC,
-  useContext,
-} from "react";
-import { makeStyles, Paper, PaperProps, Theme } from "@material-ui/core";
-import DeckGL from "@deck.gl/react";
-import { StaticMap } from "react-map-gl";
+import { useState, createContext, FC, useContext } from "react";
 import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 import { useEffect } from "react";
-import MapAttributionList from "./Attribution/List";
-import MapAttributionItem from "./Attribution/Item";
+import useLocalStorage from "@/lib/hooks/useLocalStorage";
+import { MapLayers } from "@/components/Map/Panel/Layers";
+import useApi from "@/lib/useApi";
+import { FlyToInterpolator } from "@deck.gl/core";
+import { useAppContext } from "@/providers/AppContext";
 
 export const INITIAL_VIEW_STATE = {
   longitude: 1.1,
@@ -25,89 +18,115 @@ export const INITIAL_VIEW_STATE = {
 export const MapContext = createContext({} as any);
 
 export interface MapProviderProps {
-  width?: number | string;
-  height?: number | string;
-  borderRadius?: number;
-  PaperProps?: PaperProps;
+  defaultActiveLayers?: MapLayers;
   layers?: any[];
-  startComponent?: ReactElement;
-  endComponent?: ReactElement;
 }
 
 export const useMapContext = () => useContext(MapContext);
 
 export type BaseLayer = "map" | "satellite";
 
-const useStyles = makeStyles<Theme, MapProviderProps>((theme) => ({
-  root: {
-    position: "relative",
-    width: ({ width }) => width || "100%",
-    height: ({ height }) => height || "100%",
-    borderRadius: ({ borderRadius }) => borderRadius || 0,
-    overflow: "hidden",
-  },
-  startComponent: {},
-  endComponent: {},
-}));
-
-const MapProvider: FC<MapProviderProps> = (props) => {
-  const { children, layers: initialLayers = [], PaperProps } = props;
+const MapProvider: FC<MapProviderProps> = ({
+  defaultActiveLayers = {},
+  layers: initialLayers = [],
+  children,
+}) => {
+  const { apiETK } = useApi().api;
   const { theme } = useThemeContext();
-  const classes = useStyles(props);
+  const { organization } = useAppContext();
+  const [activeLayers, setActiveLayers] = useLocalStorage(
+    "etk:MapProvider:activeLayers",
+    defaultActiveLayers
+  );
   const [layers, setLayers] = useState(initialLayers);
-  const [baseLayer, setBaseLayer] = useState<BaseLayer>("map");
-  const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
-  const [mapStyle, setMapStyle] = useState<string>();
-  const [clickInfo, setClickInfo] = useState(null);
-  const deckRef = useRef(null);
-  const handleOnViewStateChange = (e) => {
-    setViewState(e.viewState);
-  };
+  const [baseLayer, setBaseLayer] = useLocalStorage<BaseLayer>(
+    "etk:MapProvider:baseLayer",
+    "map"
+  );
+  const [viewState, setViewState] = useLocalStorage(
+    "etk:MapProvider:viewState",
+    INITIAL_VIEW_STATE
+  );
+  const [mapStyle, setMapStyle] = useLocalStorage<string>(
+    "etk:MapProvider:mapStyle"
+  );
+  const [editionMode, setEditionMode] = useLocalStorage<boolean>(
+    "etk:MapProvider:editionMode",
+    false
+  );
+  const [info, setInfo] = useState<Record<string, any>>({});
 
   useEffect(() => {
     setMapStyle(
       `/api/v1/maps/style?theme=${theme.palette.type}&background=${baseLayer}`
     );
-  }, [theme.palette.type]);
+  }, [theme.palette.type, baseLayer]);
+
+  useEffect(() => {
+    setLayers([]);
+
+    const currentActiveLayers = Object.keys(activeLayers).filter(
+      (activeLayer) => activeLayers[activeLayer].value
+    );
+
+    const newLayers = initialLayers
+      .filter((layer) => {
+        return currentActiveLayers.includes(layer.id);
+      })
+      .map((layer) => layer.clone());
+
+    setLayers([...newLayers]);
+  }, [activeLayers]);
+
+  const fitToBounds = async () => {
+    try {
+      const { status, data: bbox } = await apiETK.get(`/maps/bbox`, {
+        params: {
+          organization_id: organization.id,
+        },
+      });
+
+      if (status === 200 && bbox.xmin && bbox.ymin && bbox.xmax && bbox.ymax) {
+        const newViewState = layers[0].context.viewport.fitBounds(
+          [
+            [bbox.xmin, bbox.ymin],
+            [bbox.xmax, bbox.ymax],
+          ],
+          {
+            padding: 100,
+          }
+        );
+
+        setViewState({
+          ...newViewState,
+          transitionDuration: 1000,
+          transitionInterpolator: new FlyToInterpolator(),
+        });
+      }
+    } catch (e) {}
+  };
 
   return (
     <MapContext.Provider
       value={{
+        activeLayers,
+        setActiveLayers,
         baseLayer,
         setBaseLayer,
         layers,
         setLayers,
         viewState,
         setViewState,
-        clickInfo,
-        setClickInfo,
+        mapStyle,
+        setMapStyle,
+        editionMode,
+        setEditionMode,
+        fitToBounds,
+        info,
+        setInfo,
       }}
     >
-      <Paper className={classes.root} {...PaperProps}>
-        <div className={classes.startComponent}>{props.startComponent}</div>
-        {/* @ts-ignore */}
-        <DeckGL
-          layers={layers}
-          viewState={viewState}
-          controller={true}
-          onViewStateChange={handleOnViewStateChange}
-          ref={deckRef}
-        >
-          <StaticMap mapStyle={mapStyle} attributionControl={false} />
-          <MapAttributionList>
-            <MapAttributionItem
-              href="https://maptiler.com/copyright"
-              label="© MapTiler"
-            />
-            <MapAttributionItem
-              href="https://www.openstreetmap.org/copyright"
-              label="© OpenStreetMap"
-            />
-          </MapAttributionList>
-        </DeckGL>
-        {children}
-        <div className={classes.endComponent}>{props.endComponent}</div>
-      </Paper>
+      {children}
     </MapContext.Provider>
   );
 };

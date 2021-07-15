@@ -1,12 +1,11 @@
 import { FC, ReactElement, useState } from "react";
+import { useThemeContext } from "@/lib/hooks/useThemeSwitcher";
 
 import { Box, IconButton, Tooltip, makeStyles } from "@material-ui/core";
 import Can from "@/components/Can";
 import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
 
 import LayersIcon from "@material-ui/icons/Layers";
-import CloseIcon from "@material-ui/icons/Close";
-import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import SearchIcon from "@material-ui/icons/Search";
 import InfoIcon from "@material-ui/icons/Info";
 import BackupIcon from "@material-ui/icons/Backup";
@@ -15,15 +14,20 @@ import { useTranslation } from "react-i18next";
 const useStyles = makeStyles((theme) => ({
   actionsBar: {
     position: "absolute",
-    top: 60,
+    top: 0,
     right: 8,
     display: "flex",
     flexDirection: "column",
     height: "auto",
-    [theme.breakpoints.up("lg")]: {
+    [theme.breakpoints.up("sm")]: {
       top: 8,
       left: 8,
       right: "unset",
+    },
+  },
+  [theme.breakpoints.up("sm")]: {
+    actionBar: {
+      top: 60,
     },
   },
 }));
@@ -41,7 +45,6 @@ export type MapActionBarActions = MapActionBarAction[];
 
 export interface MapActionsBarProps {
   isMenuOpen?: boolean;
-  darkBackground?: boolean;
   onClick?(action: MapActionsBarActionType): void;
 }
 
@@ -54,10 +57,11 @@ const actions = [
 
 const MapActionsBar: FC<MapActionsBarProps> = ({
   isMenuOpen = false,
-  darkBackground = false,
   onClick = () => {},
 }) => {
   const { t } = useTranslation();
+  const { theme } = useThemeContext();
+  const darkBackground = theme.palette.type === "dark";
   const classes = useStyles();
   const [activeAction, setActiveAction] = useState<MapActionsBarActionType>(
     "start" as MapActionsBarActionType
