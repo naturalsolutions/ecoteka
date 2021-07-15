@@ -81,14 +81,6 @@ const ETKInterventionForm = forwardRef<
   const { organization } = useAppContext();
   const { apiETK } = useApi().api;
 
-  const flyToTree = async (treeId: number) => {
-    try {
-      const { data: tree } = await apiETK.get(
-        `/organization/${organization.id}/trees/${treeId}`
-      );
-    } catch (e) {}
-  };
-
   useEffect(() => {
     const formFields = Object.keys(props.data).filter(
       (field) => field in schema
@@ -109,8 +101,6 @@ const ETKInterventionForm = forwardRef<
     if (router.query.tree) {
       // @ts-ignore
       form.setValue("tree_id", router.query.tree);
-
-      flyToTree(Number(router.query.tree));
     }
   }, []);
 
@@ -157,9 +147,8 @@ const InterventionFormStepper: React.FC = () => {
   const router = useRouter();
   const [active, setActive] = useState<boolean>(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [interventionType, setInterventionType] = useState<TInterventionType>(
-    "pruning"
-  );
+  const [interventionType, setInterventionType] =
+    useState<TInterventionType>("pruning");
 
   const [data, setData] = useState(initialData);
   const [formRefs, setFormRefs] = useState({});

@@ -28,6 +28,7 @@ interface IInterventionEditForm {
 
 const ArchiveButton = withStyles((theme) => ({
   root: {
+    marginTop: theme.spacing(2),
     color: theme.palette.error.main,
     borderColor: theme.palette.error.main,
     "&:hover": {
@@ -120,7 +121,8 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
     dialog.current.open({
       title: t("components.Interventions.Panel.closePanel.title"),
       dialogProps: {
-        fullWidth: false,
+        fullWidth: true,
+        maxWidth: "md",
       },
       actions: dialogActions,
     });
@@ -150,7 +152,8 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
         />
       ),
       dialogProps: {
-        fullWidth: false,
+        fullWidth: true,
+        maxWidth: "md",
       },
       dialogContentProps: {
         dividers: true,
@@ -204,7 +207,8 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
         />
       ),
       dialogProps: {
-        fullWidth: false,
+        fullWidth: true,
+        maxWidth: "md",
       },
       dialogContentProps: {
         dividers: true,
@@ -268,7 +272,7 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
               fullWidth
               onClick={handleInterventionCancellation}
             >
-              Archiver
+              {t("components.Interventions.Panel.archive")}
             </ArchiveButton>
           </Grid>
           <Grid item>

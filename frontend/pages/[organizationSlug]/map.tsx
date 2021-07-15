@@ -430,7 +430,9 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapLoad = () => {
-    fitToBounds(organization.id);
+    router.query?.tree
+      ? flyToTree(Number(router.query.tree))
+      : fitToBounds(organization.id);
   };
 
   const handleOnViewStateChange = (e) => {
@@ -518,9 +520,29 @@ const EditionPage = ({}) => {
     }
   }, [organization]);
 
+  const flyToTree = async (treeId: number) => {
+    try {
+      const { status, data: tree } = await apiETK.get(
+        `/organization/${organization.id}/trees/${treeId}`
+      );
+
+      if (status == 200) {
+        setViewState({
+          longitude: tree.x,
+          latitude: tree.y,
+          zoom: 20,
+          transitionDuration: 1200,
+          pitch: 50,
+          transitionInterpolator: new FlyToInterpolator({ speed: 2 }),
+        });
+      }
+    } catch (e) {}
+  };
+
   useEffect(() => {
     if (router.query?.tree) {
       setActiveTree(Number(router.query.tree));
+      flyToTree(Number(router.query.tree));
     }
   }, [router.query.tree]);
 
