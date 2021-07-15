@@ -722,7 +722,8 @@
       },
       "closePanel": {
         "title": "Quieres guardar tus cambios ?"
-      }
+      },
+      "archive": "Archivo"
     }
   },
   "MapActionBar": {

@@ -721,7 +721,8 @@
       },
       "closePanel": {
         "title": "Voulez-vous enregistrer vos modifications ?"
-      }
+      },
+      "archive": "Archiver"
     }
   },
   "MapActionBar": {

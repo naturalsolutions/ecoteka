@@ -728,7 +728,8 @@
       },
       "closePanel": {
         "title": "Do you want to save your changes ?"
-      }
+      },
+      "archive": "Archive"
     }
   },
   "MapActionBar": {
