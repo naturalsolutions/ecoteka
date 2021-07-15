@@ -47,7 +47,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
         organization_id: organization.id,
         intervention_type: intervention.intervention_type,
         tree_id: intervention.tree_id,
-        properties: {},
+        properties: intervention.properties,
       };
       const nonPropertiesFields = [
         "intervenant",
