@@ -121,7 +121,8 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
     dialog.current.open({
       title: t("components.Interventions.Panel.closePanel.title"),
       dialogProps: {
-        fullWidth: false,
+        fullWidth: true,
+        maxWidth: "md",
       },
       actions: dialogActions,
     });
@@ -151,7 +152,8 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
         />
       ),
       dialogProps: {
-        fullWidth: false,
+        fullWidth: true,
+        maxWidth: "md",
       },
       dialogContentProps: {
         dividers: true,
@@ -205,7 +207,8 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
         />
       ),
       dialogProps: {
-        fullWidth: false,
+        fullWidth: true,
+        maxWidth: "md",
       },
       dialogContentProps: {
         dividers: true,
