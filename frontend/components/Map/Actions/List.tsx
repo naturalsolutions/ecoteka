@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: "absolute",
     bottom: theme.spacing(2),
     right: theme.spacing(2),
+    width: "auto",
   },
   container: {
     display: "flex",
@@ -87,20 +88,26 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
       alignItems="flex-end"
       spacing={2}
     >
-      {Children.map(children, (child: ReactElement<MapActionsActionProps>) => (child && 
-        <Grid item>
-          <Tooltip title={child.props.name} arrow placement="left">
-            <Fab
-              color="primary"
-              className={child.props.isActive ? classes.fabActive : classes.fab}
-              aria-label={child.props.name}
-              onClick={child.props.onClick}
-            >
-              {child.props.icon}
-            </Fab>
-          </Tooltip>
-        </Grid>
-      ))}
+      {Children.map(
+        children,
+        (child: ReactElement<MapActionsActionProps>) =>
+          child && (
+            <Grid item>
+              <Tooltip title={child.props.name} arrow placement="left">
+                <Fab
+                  color="primary"
+                  className={
+                    child.props.isActive ? classes.fabActive : classes.fab
+                  }
+                  aria-label={child.props.name}
+                  onClick={child.props.onClick}
+                >
+                  {child.props.icon}
+                </Fab>
+              </Tooltip>
+            </Grid>
+          )
+      )}
     </Grid>
   ) : (
     <>
@@ -115,21 +122,22 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
       >
         {Children.map(
           children,
-          (child: ReactElement<MapActionsActionProps>) => (child && 
-            <SpeedDialAction
-              key={child.props.name}
-              icon={child.props.icon}
-              classes={{
-                staticTooltipLabel: child.props.isActive
-                  ? classes.staticTooltipLabelActive
-                  : classes.staticTooltipLabel,
-                fab: child.props.isActive ? classes.fabActive : classes.fab,
-              }}
-              tooltipTitle={child.props.name}
-              tooltipOpen
-              onClick={() => handleOnClick(child.props.onClick)}
-            />
-          )
+          (child: ReactElement<MapActionsActionProps>) =>
+            child && (
+              <SpeedDialAction
+                key={child.props.name}
+                icon={child.props.icon}
+                classes={{
+                  staticTooltipLabel: child.props.isActive
+                    ? classes.staticTooltipLabelActive
+                    : classes.staticTooltipLabel,
+                  fab: child.props.isActive ? classes.fabActive : classes.fab,
+                }}
+                tooltipTitle={child.props.name}
+                tooltipOpen
+                onClick={() => handleOnClick(child.props.onClick)}
+              />
+            )
         )}
       </SpeedDial>
     </>

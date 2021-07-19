@@ -11,6 +11,7 @@ import useAutocomplete from "@/components/Form/useAutocomplete";
 import useControlledTextField from "@/components/Form/useControlledTextField";
 import useTaxonAsyncAutocomplete from "@/components/Form/useTaxonAsyncAutocomplete";
 import useDateField from "@/components/Form/useDate";
+import useMultiSelect from "@/components/Form/useMultiSelect";
 
 interface useETKFormSchema {
   [key: string]: {
@@ -32,6 +33,7 @@ export default function useETKForm(props: useETKFormProps) {
   const textfields = {};
   const passwordfields = {};
   const selects = {};
+  const multiselects = {};
   const dateranges = {};
   const checkboxes = {};
   const switchs = {};
@@ -54,6 +56,9 @@ export default function useETKForm(props: useETKFormProps) {
         break;
       case "select":
         selects[field] = props.schema[field].component;
+        break;
+      case "multiselect":
+        multiselects[field] = props.schema[field].component;
         break;
       case "date":
         dates[field] = props.schema[field].component;
@@ -94,6 +99,10 @@ export default function useETKForm(props: useETKFormProps) {
     ...form,
   });
   const selectsComponents = useSelect({ fields: selects, ...form });
+  const multiselectsComponents = useMultiSelect({
+    fields: multiselects,
+    ...form,
+  });
   const passwordsComponents = usePasswordField({
     fields: passwordfields,
     ...form,
@@ -129,6 +138,7 @@ export default function useETKForm(props: useETKFormProps) {
     textfieldsComponents,
     controlledTextfieldsComponents,
     selectsComponents,
+    multiselectsComponents,
     datesComponents,
     passwordsComponents,
     dataragesComponents,

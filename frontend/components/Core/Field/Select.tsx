@@ -38,14 +38,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const CoreSelect = forwardRef<HTMLElement, CoreSelectProps>((props, ref) => {
   const classes = useStyles();
-  const {
-    items,
-    value,
-    onChange,
-    label,
-    formControlProps,
-    selectProps,
-  } = props;
+  const { items, value, onChange, label, formControlProps, selectProps } =
+    props;
 
   return (
     <FormControl {...formControlProps}>

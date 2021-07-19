@@ -307,8 +307,8 @@
       "comment": "Comentario",
       "watering": "Riego",
       "amendment": "Aporte orgánico",
-      "tutorcheck": "Vérification du tuteurage et des protections",
-      "globalcheck": "Comprobación global del árbol"
+      "tutorcheck": "Tuteurage et protections",
+      "globalcheck": "Comprobación global"
     },
     "interventionsTable": {
       "requestAnItervention": "Solicita una intervención",
@@ -322,8 +322,10 @@
     },
     "saveSuccess": "La intervención se ha guardado con éxito.",
     "saveError": "Ocurrió un error al guardar la intervención",
-    "date": "Fecha",
-    "done": "Hecha"
+    "date": "Hecho en",
+    "done": "Hecha",
+    "cancelNotes": "Notas sobre la cancelación",
+    "cancelled": "Cancelado"
   },
   "Tree": {
     "properties": {
@@ -441,7 +443,12 @@
     "latitude": "Latitud",
     "longitude": "Longitud",
     "registrationNumber": "Identificador del árbol",
-    "code": "Identificador del árbol"
+    "code": "Identificador del árbol",
+    "Panel": {
+      "actions": {
+        "update": "Actualizar este árbol"
+      }
+    }
   },
   "TreeForm": {
     "dialogDeleteTitle": "Eliminar los árboles seleccionados",
@@ -709,6 +716,19 @@
   "Interventions": {
     "Edit": {
       "title": "Editar intervención"
+    },
+    "Panel": {
+      "validate": "Validar",
+      "archiveDialog": {
+        "title": "Cancelar intervención"
+      },
+      "doneDialog": {
+        "title": "Establecer fecha de realización"
+      },
+      "closePanel": {
+        "title": "Quieres guardar tus cambios ?"
+      },
+      "archive": "Archivo"
     }
   },
   "MapActionBar": {

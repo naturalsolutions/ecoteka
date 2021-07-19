@@ -1,5 +1,11 @@
-import { useState, useRef } from "react";
-import { createContext, FC, useContext } from "react";
+import {
+  useState,
+  useRef,
+  ReactElement,
+  createContext,
+  FC,
+  useContext,
+} from "react";
 import { makeStyles, Paper, PaperProps, Theme } from "@material-ui/core";
 import DeckGL from "@deck.gl/react";
 import { StaticMap } from "react-map-gl";
@@ -24,6 +30,8 @@ export interface MapProviderProps {
   borderRadius?: number;
   PaperProps?: PaperProps;
   layers?: any[];
+  startComponent?: ReactElement;
+  endComponent?: ReactElement;
 }
 
 export const useMapContext = () => useContext(MapContext);
@@ -38,6 +46,8 @@ const useStyles = makeStyles<Theme, MapProviderProps>((theme) => ({
     borderRadius: ({ borderRadius }) => borderRadius || 0,
     overflow: "hidden",
   },
+  startComponent: {},
+  endComponent: {},
 }));
 
 const MapProvider: FC<MapProviderProps> = (props) => {
@@ -74,6 +84,7 @@ const MapProvider: FC<MapProviderProps> = (props) => {
       }}
     >
       <Paper className={classes.root} {...PaperProps}>
+        <div className={classes.startComponent}>{props.startComponent}</div>
         {/* @ts-ignore */}
         <DeckGL
           layers={layers}
@@ -82,7 +93,6 @@ const MapProvider: FC<MapProviderProps> = (props) => {
           onViewStateChange={handleOnViewStateChange}
           ref={deckRef}
         >
-          {children}
           <StaticMap mapStyle={mapStyle} attributionControl={false} />
           <MapAttributionList>
             <MapAttributionItem
@@ -95,6 +105,8 @@ const MapProvider: FC<MapProviderProps> = (props) => {
             />
           </MapAttributionList>
         </DeckGL>
+        {children}
+        <div className={classes.endComponent}>{props.endComponent}</div>
       </Paper>
     </MapContext.Provider>
   );

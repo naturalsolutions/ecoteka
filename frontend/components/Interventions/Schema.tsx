@@ -253,9 +253,8 @@ export function useInterventionSchema(it: TInterventionType) {
     },
     surveillance: {
       method: {
-        type: "select",
+        type: "multiselect",
         component: {
-          multiple: true,
           label: t("components.Intervention.surveillance.method"),
           items: interventionMethod.surveillance.map((m) =>
             sitem(m, t, "components.Intervention.surveillance")
@@ -304,10 +303,9 @@ export function useInterventionSchema(it: TInterventionType) {
     },
     indepthdiagnostic: {
       method: {
-        type: "select",
+        type: "multiselect",
         component: {
           label: t("components.Intervention.indepthdiagnostic.method"),
-          multiple: true,
           items: interventionMethod.indepthdiagnostic.map((m) =>
             sitem(m, t, "components.Intervention.indepthdiagnostic")
           ),
@@ -361,18 +359,16 @@ export function usePlanningSchema(it: TInterventionType) {
       schema: yup.number().moreThan(-1),
     },
     required_documents: {
-      type: "select",
+      type: "multiselect",
       component: {
-        multiple: true,
         label: t("components.Intervention.required_documents"),
         items: requiredDocumentsItems(it, t),
       },
       schema: yup.array().of(yup.string()),
     },
     required_material: {
-      type: "select",
+      type: "multiselect",
       component: {
-        multiple: true,
         items: requiredMaterialItems(it, t),
         label: t("components.Intervention.required_material"),
       },
@@ -390,6 +386,7 @@ export function usePlanningSchema(it: TInterventionType) {
 
 export function useDateSchema() {
   const { t } = useTranslation();
+  const tomorow = new Date(Date.now() + 86400000);
 
   return {
     date: {
@@ -397,13 +394,26 @@ export function useDateSchema() {
       component: {
         label: t("components.Intervention.date"),
       },
-      schema: yup.string(),
+      schema: yup
+        .date()
+        .required(t("common.errors.date.required"))
+        .max(tomorow, t("common.errors.date.noFuture")),
     },
-    done: {
-      type: "switch",
+  };
+}
+
+export function useArchiveSchema() {
+  const { t } = useTranslation();
+
+  return {
+    cancelNotes: {
+      type: "textfield",
       component: {
-        label: t("components.Intervention.done"),
+        label: t("components.Intervention.cancelNotes"),
+        multiline: true,
+        rows: 4,
       },
+      schema: yup.string(),
     },
   };
 }

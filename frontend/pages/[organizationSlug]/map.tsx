@@ -41,7 +41,7 @@ import CadastreLayer, {
 } from "@/components/Map/Layers/Cadastre";
 import InventoryLayer from "@/components/Map/Layers/InventoryLayer.ts";
 import Head from "next/head";
-import InterventionsEdit from "@/components/Interventions/Panel";
+import InterventionsEdit from "@/components/Interventions/Panel/Panel";
 import geobuf from "geobuf";
 import Pbf from "pbf";
 import { useTranslation } from "react-i18next";
@@ -122,7 +122,7 @@ const rendersTooltip = {
 const EditionPage = ({}) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const matchesDraw = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const classes = useStyles();
   const router = useRouter();
   const { organization, user, isOrganizationLoading } = useAppContext();
@@ -130,7 +130,7 @@ const EditionPage = ({}) => {
   const { apiETK } = useApi().api;
   const [data, setData] = useLocalStorage("etk:map:data");
   const [drawerLeftComponent, setDrawerLeftComponent] = useState();
-  const [drawerLeftWidth] = useState(400);
+  const [drawerLeftWidth] = useState(550);
   const [initialViewState, setInitialViewState] = useLocalStorage(
     "etk:map:viewstate",
     defaultViewState
@@ -206,7 +206,7 @@ const EditionPage = ({}) => {
 
         setData(newData);
 
-        if (!matchesDraw) {
+        if (!isMobile) {
           router.push({
             pathname: "/[organizationSlug]/map",
             query: {
@@ -229,7 +229,7 @@ const EditionPage = ({}) => {
       }
     } catch (error) {
     } finally {
-      if (matchesDraw) {
+      if (isMobile) {
         setEditionMode(false);
       }
     }
@@ -430,7 +430,9 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapLoad = () => {
-    fitToBounds(organization.id);
+    router.query?.tree
+      ? flyToTree(Number(router.query.tree))
+      : fitToBounds(organization.id);
   };
 
   const handleOnViewStateChange = (e) => {
@@ -445,7 +447,6 @@ const EditionPage = ({}) => {
   };
 
   const handleOnMapClick = (info) => {
-    console.log(info);
     if (editionMode && mode === "drawPoint") {
       setMode("selection");
       const [x, y] = info.coordinate;
@@ -454,7 +455,7 @@ const EditionPage = ({}) => {
     }
 
     if (info.object?.properties?.id && info.layer?.id == "trees") {
-      if (!matchesDraw) {
+      if (!isMobile) {
         router.push({
           pathname: "/[organizationSlug]/map",
           query: {
@@ -519,9 +520,29 @@ const EditionPage = ({}) => {
     }
   }, [organization]);
 
+  const flyToTree = async (treeId: number) => {
+    try {
+      const { status, data: tree } = await apiETK.get(
+        `/organization/${organization.id}/trees/${treeId}`
+      );
+
+      if (status == 200) {
+        setViewState({
+          longitude: tree.x,
+          latitude: tree.y,
+          zoom: 20,
+          transitionDuration: 1200,
+          pitch: 50,
+          transitionInterpolator: new FlyToInterpolator({ speed: 2 }),
+        });
+      }
+    } catch (e) {}
+  };
+
   useEffect(() => {
     if (router.query?.tree) {
       setActiveTree(Number(router.query.tree));
+      flyToTree(Number(router.query.tree));
     }
   }, [router.query.tree]);
 
@@ -623,18 +644,20 @@ const EditionPage = ({}) => {
         </Grid>
         <Grid item xs></Grid>
         <Grid item className={classes.toolbarAction}>
-          <MapSearchCity
-            onChange={(coordinates) => {
-              setViewState({
-                ...viewState,
-                longitude: coordinates[0],
-                latitude: coordinates[1],
-                zoom: 15,
-                transitionDuration: 1500,
-                transitionInterpolator: new FlyToInterpolator(),
-              });
-            }}
-          />
+          {!isMobile && (
+            <MapSearchCity
+              onChange={(coordinates) => {
+                setViewState({
+                  ...viewState,
+                  longitude: coordinates[0],
+                  latitude: coordinates[1],
+                  zoom: 15,
+                  transitionDuration: 1500,
+                  transitionInterpolator: new FlyToInterpolator(),
+                });
+              }}
+            />
+          )}
         </Grid>
       </Grid>
       <MapActionsList>

@@ -3,6 +3,8 @@ import React, { useState, forwardRef, useImperativeHandle } from "react";
 import {
   Button,
   Dialog,
+  DialogProps,
+  DialogContentProps,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -36,7 +38,8 @@ export interface ETKDialogProps {
   title?: string;
   content?: string | React.ReactNode;
   actions?: ETKDialogAction[];
-  dialogProps?: ETKDialogPropsDialogProps;
+  dialogProps?: DialogProps;
+  dialogContentProps?: DialogContentProps;
   isDraggable?: boolean;
 }
 
@@ -77,9 +80,11 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
     const [content, setContent] = useState<string | React.ReactNode>(
       props.content
     );
-    const [dialogProps, setDialogProps] = useState<ETKDialogPropsDialogProps>(
+    const [dialogProps, setDialogProps] = useState<DialogProps>(
       props.dialogProps
     );
+    const [dialogContentProps, setDialogContentProps] =
+      useState<DialogContentProps>(props.dialogContentProps);
 
     const onActionClick = (e, action) => {
       if (action.onClick) {
@@ -116,6 +121,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
         setActions(openProps.actions);
         setIsDraggable(openProps.isDraggable);
         setDialogProps(openProps.dialogProps);
+        setDialogContentProps(openProps.dialogContentProps);
         setIsOpen(true);
       },
       displayFullScreen: (activate: boolean) => {
@@ -143,7 +149,7 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
         }}
       >
         <DialogTitle id="etk-dialog">{title}</DialogTitle>
-        <DialogContent>{content}</DialogContent>
+        <DialogContent {...dialogContentProps}>{content}</DialogContent>
         {actions && actions.length > 0 && (
           <DialogActions>{renderActions()}</DialogActions>
         )}

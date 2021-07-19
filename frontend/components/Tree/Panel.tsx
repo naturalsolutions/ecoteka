@@ -57,7 +57,19 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
         treeId={Number(router.query.tree)}
       >
         <InterventionProvider>
-          <AppLayoutCartoDialog withoutContent={true}>
+          <AppLayoutCartoDialog
+            actions={
+              <Button
+                size="large"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleGoToTreePage}
+              >
+                {t("components.Tree.Panel.actions.update")}
+              </Button>
+            }
+          >
             <TreeImagesContainer />
             <Grid container direction="column" className={classes.grid}>
               <Grid item>
@@ -65,17 +77,6 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
               </Grid>
               <Grid item>
                 <InterventionsWorkflow selectable={false} insidePanel={true} />
-              </Grid>
-              <Grid item>
-                <Button
-                  size="large"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={handleGoToTreePage}
-                >
-                  {t("common.buttons.moreDetails")}
-                </Button>
               </Grid>
             </Grid>
           </AppLayoutCartoDialog>

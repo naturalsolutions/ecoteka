@@ -306,8 +306,8 @@
       "comment": "Comment",
       "watering": "Watering",
       "amendment": "Amendment/organic contribution",
-      "tutorcheck": "Verification of staking and protections",
-      "globalcheck": "Global tree check"
+      "tutorcheck": "Staking and protections",
+      "globalcheck": "Global check"
     },
     "interventionsTable": {
       "requestAnItervention": "Request an intervention",
@@ -321,8 +321,10 @@
     },
     "saveSuccess": "The intervention has been successfully saved.",
     "saveError": "An error occurred while saving the intervention",
-    "date": "Date",
-    "done": "Done"
+    "date": "Done on",
+    "done": "Done",
+    "cancelNotes": "Notes on cancellation",
+    "cancelled": "Cancelled"
   },
   "Tree": {
     "properties": {
@@ -441,7 +443,12 @@
     "latitude": "Latitud",
     "longitude": "Longitud",
     "registrationNumber": "Tree registration number",
-    "code": "Tree identifier"
+    "code": "Tree identifier",
+    "Panel": {
+      "actions": {
+        "update": "Update this tree"
+      }
+    }
   },
   "TreeForm": {
     "dialogDeleteTitle": "Remove selected trees",
@@ -715,6 +722,19 @@
   "Interventions": {
     "Edit": {
       "title": "Edit intervention"
+    },
+    "Panel": {
+      "validate": "Validate",
+      "archiveDialog": {
+        "title": "Cancel Intervention"
+      },
+      "doneDialog": {
+        "title": "Set realisation date"
+      },
+      "closePanel": {
+        "title": "Do you want to save your changes ?"
+      },
+      "archive": "Archive"
     }
   },
   "MapActionBar": {
@@ -811,5 +831,8 @@
       "canonicalName": "Canonical name",
       "vernacularName": "Vernacular name"
     }
+  },
+  "ons": {
+    "quit": "Quit"
   }
 }
