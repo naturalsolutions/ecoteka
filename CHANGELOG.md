@@ -1,3 +1,10 @@
+## [0.17.7](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.6...v0.17.7) (2021-07-19)
+
+
+### Bug Fixes
+
+* make hero responsive ([9f57174](https://gitlab.com/natural-solutions/ecoteka/commit/9f5717409081a138e724a1f7944242e7a245c444))
+
 ## [0.17.6](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.5...v0.17.6) (2021-07-19)
 
 
