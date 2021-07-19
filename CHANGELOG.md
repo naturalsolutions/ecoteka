@@ -1,3 +1,28 @@
+## [0.17.6](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.5...v0.17.6) (2021-07-19)
+
+
+### Bug Fixes
+
+* add cancellation and done form in intevention panel ([6f10c89](https://gitlab.com/natural-solutions/ecoteka/commit/6f10c89861185c117f9ab25b625c170d3bb9f739))
+* add margin top and translation to intervention archive button ([92b2553](https://gitlab.com/natural-solutions/ecoteka/commit/92b255372fa467cb2fd444d5c652c30e0a499e15))
+* Add multiselect component ([e4c7769](https://gitlab.com/natural-solutions/ecoteka/commit/e4c7769997bb58bdd62cd4183482c3a7475480a6))
+* add remove organization members action ([79129a9](https://gitlab.com/natural-solutions/ecoteka/commit/79129a985ae23b4cdf805f5a955f31c986f489f4))
+* add update button to tree panal actions ([6607ff3](https://gitlab.com/natural-solutions/ecoteka/commit/6607ff3125c77c9dc916a516ac9c940e449c2058))
+* add workflow changes to inteervention map panel ([5338b15](https://gitlab.com/natural-solutions/ecoteka/commit/5338b15d75007c498268761feaf3dd76826c0413))
+* change icons for intervention type ([9986ea3](https://gitlab.com/natural-solutions/ecoteka/commit/9986ea3cc9f00488c26c5263149513e966fc18c1))
+* change intervention list sorting ([75da2c0](https://gitlab.com/natural-solutions/ecoteka/commit/75da2c08fb3ad6ec31b3aba1c46f4d179c25d6c9))
+* check if property properties exists before reading it ([970079a](https://gitlab.com/natural-solutions/ecoteka/commit/970079a43a0712d88674f9201f9a9f6ec7e610ff))
+* Dont allow the map move when we are inside the search panel ([6dfb64a](https://gitlab.com/natural-solutions/ecoteka/commit/6dfb64acdc5d2948300e522bed3a665cf20e2d53))
+* fix Intervention cancellation properties overwrites ([970ba4c](https://gitlab.com/natural-solutions/ecoteka/commit/970ba4c5a6d780655690a35909ee5ec247b581a2))
+* fly to tree on map tree query change ([fbe499d](https://gitlab.com/natural-solutions/ecoteka/commit/fbe499d0217431b3fc27f976145c1ab5c3eea26d))
+* herosearchcity inside mapprovider ([5aada7e](https://gitlab.com/natural-solutions/ecoteka/commit/5aada7e2c383644efc01028b7949b35997f5cba9))
+* intervention avatar color ([1643ed4](https://gitlab.com/natural-solutions/ecoteka/commit/1643ed4c6fbdfff271e119946d3bf514d64d88ec))
+* make intervention dialogs wider ([ec7f794](https://gitlab.com/natural-solutions/ecoteka/commit/ec7f79462b104b3a27cf36fdfb184dcc39279c50))
+* No display of the search panel mobile ([4931e90](https://gitlab.com/natural-solutions/ecoteka/commit/4931e90f16732374b13efff7c6a051d148e07942))
+* remove link icon button from section item component ([21ea393](https://gitlab.com/natural-solutions/ecoteka/commit/21ea3939ba95ccb2e2f3e5f78f449de49f6c1414))
+* set map actions list width ([d5bedd2](https://gitlab.com/natural-solutions/ecoteka/commit/d5bedd231c93fdcb726a91fbb99a462b22b335f9))
+* update common demos translations ([91d4415](https://gitlab.com/natural-solutions/ecoteka/commit/91d4415a0ddafa1d8c3a94f493a6be2725c613f1))
+
 ## [0.17.5](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.4...v0.17.5) (2021-07-02)
 
 
