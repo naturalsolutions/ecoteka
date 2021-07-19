@@ -10,20 +10,21 @@ export interface HomeHeroProps {}
 
 const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
   root: {
-    position: "relative",
-    height: "calc(100vh - 200px)",
+    display: "flex",
+    flexDirection: "column",
   },
   map: {
-    top: 223,
-    left: 0,
-    height: "calc(100% - 223px)",
     width: "100%",
+    height: 300,
+    overflow: "hidden",
     position: "relative",
   },
-  [theme.breakpoints.up("sm")]: {
+  [theme.breakpoints.up("md")]: {
+    root: {
+      display: "block",
+    },
     map: {
-      top: 0,
-      height: "100%",
+      height: "calc(100vh - 200px)",
     },
   },
 }));

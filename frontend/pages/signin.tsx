@@ -18,7 +18,8 @@ import { useAppContext } from "@/providers/AppContext";
 const useStyles = makeStyles((theme) => ({
   formWidth: {
     width: "80%",
-    [theme.breakpoints.up(780)]: {
+    textAlign: "center",
+    [theme.breakpoints.up("sm")]: {
       width: "450px",
     },
   },
@@ -40,25 +41,26 @@ export default function SignInPage() {
     const { logged, user } = await formRef.current.submit();
 
     if (logged) {
-      setIsLoading(false);
       const { callbackUrl } = router.query;
 
       if (callbackUrl) {
         setOrganization(undefined);
         return router.back();
-      } 
-
-      if (user?.organizations?.length === 1) {
-        return router.push({ 
-          pathname: '/[organizationSlug]',
-          query: {
-            organizationSlug: user.organizations[0].slug
-          }
-        })
       }
 
-      router.push('/')
+      if (user?.organizations?.length === 1) {
+        return router.push({
+          pathname: "/[organizationSlug]",
+          query: {
+            organizationSlug: user.organizations[0].slug,
+          },
+        });
+      }
+
+      router.push("/");
     }
+
+    setIsLoading(false);
   };
 
   return (
