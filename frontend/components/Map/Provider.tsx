@@ -83,8 +83,8 @@ const MapProvider: FC<MapProviderProps> = (props) => {
         setClickInfo,
       }}
     >
+      <div className={classes.startComponent}>{props.startComponent}</div>
       <Paper className={classes.root} {...PaperProps}>
-        <div className={classes.startComponent}>{props.startComponent}</div>
         {/* @ts-ignore */}
         <DeckGL
           layers={layers}

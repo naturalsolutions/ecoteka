@@ -19,17 +19,15 @@ export interface HomeHeroSearchCityProps {
 
 const useStyles = makeStyles<Theme, HomeHeroSearchCityProps>((theme) => ({
   root: {
-    position: "absolute",
-    top: -223,
-    left: 0,
-    padding: "20px",
     width: "100%",
+    padding: 16,
   },
   fouded: {
     display: "block",
   },
-  [theme.breakpoints.up("sm")]: {
+  [theme.breakpoints.up("md")]: {
     root: {
+      position: "absolute",
       top: 20,
       margin: "0 auto",
       left: 0,
@@ -60,6 +58,7 @@ const HomeHeroSearchCity: FC<HomeHeroSearchCityProps> = ({
             component="h1"
             color="textPrimary"
             align="center"
+            className={classes.title}
           >
             <Trans>{t("components.Home.title")}</Trans>
           </Typography>
