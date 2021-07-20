@@ -94,10 +94,6 @@ const SelectRenderer: React.FC<SelectRendererProps> = ({
       label: t("components.Organization.Members.Table.roles.reader"),
       value: "reader",
     },
-    {
-      label: t("components.Organization.Members.Table.roles.guest"),
-      value: "guest",
-    },
   ];
   return (
     <Select
