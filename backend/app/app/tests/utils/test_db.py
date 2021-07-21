@@ -2,6 +2,7 @@ from sqlalchemy.engine import create_engine
 from sqlalchemy.orm.session import sessionmaker
 
 from app.core.config import settings
+
 # SQLALCHEMY_DATABASE_URI is builded from Settings
 # so we have the same env variables in prod/dev
 # if you need to build another connection string
@@ -19,12 +20,8 @@ from app.core.config import settings
 #     path=f"/{settings.DB_NAME}_test"
 # )
 SQLALCHEMY_DATABASE_URI = settings.SQLALCHEMY_DATABASE_URI
-db_test_uri = f'{SQLALCHEMY_DATABASE_URI}_test'
-setattr(settings, 'SQLALCHEMY_DATABASE_URI', db_test_uri)
+db_test_uri = f"{SQLALCHEMY_DATABASE_URI}_test"
+setattr(settings, "SQLALCHEMY_DATABASE_URI", db_test_uri)
 
 engine = create_engine(db_test_uri, pool_pre_ping=True)
-TestingSessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

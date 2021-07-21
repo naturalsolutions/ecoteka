@@ -31,30 +31,27 @@ services:
       - MAILDEV_BASE_PATHNAME=/mail
 
   backend:
-    image: ecoteka-backend:dev
     build:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
       - ./backend/app:/app
+      - /app/app/email-templates/build
     command: /start-reload.sh
     ports:
       - "5678:5678"
 
   celery_worker:
-    image: ecoteka-backend:dev
     volumes:
       - ./backend/app:/app
 
   frontend:
-    image: ecoteka-frontend:dev
     build:
       context: ./frontend
       dockerfile: .docker/Dockerfile.dev
     volumes:
       - ./frontend:/app
       - /app/node_modules
-      - /app/.next
     labels:
       - traefik.http.services.frontend.loadbalancer.server.port=3000
 
