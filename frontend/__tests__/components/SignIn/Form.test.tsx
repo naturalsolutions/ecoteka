@@ -1,5 +1,5 @@
 import { createRef } from "react";
-import { render, screen, fireEvent } from "@/test-utils";
+import { render, screen, fireEvent } from "@/__tests__/utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import SignInForm, { FormSignInActions } from "@/components/SignIn/Form";
 import { act } from "@testing-library/react";

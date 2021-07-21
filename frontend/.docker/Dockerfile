@@ -18,7 +18,7 @@ COPY package*.json /usr/src/app
 
 RUN npm install --production --legacy-peer-deps
 
-COPY . /usr/src/app
+COPY . /usr/src/app/
 
 RUN npm run build
 RUN mkdir -p /usr/src/app/node_modules/vscode-ripgrep/bin

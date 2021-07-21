@@ -1,6 +1,10 @@
 module.exports = {
   setupFilesAfterEnv: ["./jest.setup.js"],
-  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
+  testPathIgnorePatterns: [
+    "<rootDir>/.next/",
+    "<rootDir>/node_modules/",
+    "<rootDir>/__tests__/utils/",
+  ],
   moduleNameMapper: {
     "^@/components/(.*)$": "<rootDir>/components/$1",
     "^@/lib/(.*)$": "<rootDir>/lib/$1",
@@ -10,7 +14,8 @@ module.exports = {
     "^@/theme/(.*)$": "<rootDir>/theme/$1",
     "^@/abilities/(.*)$": "<rootDir>/abilities/$1",
     "^@/i18n": "<rootDir>/i18n",
-    "^@/test-utils": "<rootDir>/test-utils",
+    "^@/__tests__/(.*)$": "<rootDir>/__tests__/$1",
+
     "mapbox-gl": "maplibre-gl",
     "\\.(css|less|scss)$": "identity-obj-proxy",
     "^@fontsource(.*)$": "identity-obj-proxy",
