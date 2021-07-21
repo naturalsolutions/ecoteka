@@ -11,6 +11,7 @@ export default function useSignInSchema() {
         type: "email",
         label: t("SignIn.labelUsername"),
         autoComplete: "email",
+        inputProps: { "data-testid": "signin-form-email" },
       },
       schema: yup
         .string()
@@ -24,6 +25,7 @@ export default function useSignInSchema() {
         label: t("SignIn.labelPassword"),
         autoComplete: "current-password",
         onKeyDown: undefined,
+        inputProps: { "data-testid": "signin-form-password" },
       },
       schema: yup.string().required(t("SignIn.errorMessageRequiredField")),
     },

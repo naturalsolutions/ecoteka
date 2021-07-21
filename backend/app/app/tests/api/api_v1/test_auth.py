@@ -1,62 +1,122 @@
-from fastapi.testclient import TestClient
-from app.core.config import settings
 from typing import Dict
-import json
-import pytest
 
-new_user = {
-    "full_name": "test user",
-    "email": "test@mail.com",
-    "organization": "test organization",
-    "password": "toto",
-}
+from fastapi.testclient import TestClient
+
+from app.core.config import settings
 
 
-def test_auth_login_first_superuser(client: TestClient) -> None:
-    credentials = {
+def test_login_and_get_refresh_token(client: TestClient) -> None:
+    login_data = {
         "username": settings.FIRST_SUPERUSER,
         "password": settings.FIRST_SUPERUSER_PASSWORD,
     }
-    r = client.post("/auth/login", data=credentials)
-    access_token = r.json()
+    response = client.post("/auth/login", data=login_data)
+    tokens = response.json()
+    assert response.status_code == 200
+    assert "access_token" in tokens
+    assert "refresh_token" in tokens
+    assert "token_type" in tokens
+    assert tokens["access_token"]
+    assert tokens["refresh_token"]
 
-    assert r.status_code == 200
-    assert access_token["access_token"]
-    assert access_token["token_type"] == "Bearer"
 
-
-@pytest.mark.skip(reason='older test')
-def test_auth_login_bad_password(client: TestClient) -> None:
-    credentials = {
-        "username": "fake_user",
-        "password": "fake_password",
+def test_login_and_get_refresh_token_email_error(client: TestClient) -> None:
+    login_data = {
+        "username": "new_user@ecoteka.org",
+        "password": "password",
     }
-    r = client.post("/auth/login", data=credentials)
-    error_message = r.json()
+    response = client.post("/auth/login", data=login_data)
+    result = response.json()
+    assert response.status_code == 400
+    assert result["detail"] == "Incorrect email or password"
 
-    assert r.status_code == 400
-    assert error_message["detail"] == "Incorrect email or password"
 
-
-@pytest.mark.skip(reason='older test')
-def test_auth_register(
-    client: TestClient, superuser_token_headers: Dict[str, str]
+def test_get_access_token(
+    client: TestClient, superuser_refresh_token_headers: Dict[str, str]
 ) -> None:
-    json_data = json.dumps(new_user)
-    r = client.post("/auth/register/", headers=superuser_token_headers, data=json_data)
-    message = r.json()
-    assert r.status_code == 200
-    assert message["msg"] == "user created"
+    response = client.post(
+        "/auth/access_token",
+        headers=superuser_refresh_token_headers,
+    )
+    result = response.json()
+    assert response.status_code == 200
+    assert "access_token" in result
+    assert "token_type" in result
 
 
-@pytest.mark.skip(reason='older test')
-def test_auth_register_user_exist(
-    client: TestClient, superuser_token_headers: Dict[str, str]
+def test_get_refresh_token(
+    client: TestClient, superuser_refresh_token_headers: Dict[str, str]
 ) -> None:
-    json_data = json.dumps(new_user)
-    r = client.post("/auth/register/", headers=superuser_token_headers, data=json_data)
-    message = r.json()
-    assert r.status_code == 400
+    response = client.post(
+        "/auth/refresh_token",
+        headers=superuser_refresh_token_headers,
+    )
+    result = response.json()
+    assert response.status_code == 200
+    assert "access_token" in result
+    assert "refresh_token" in result
+    assert "token_type" in result
+
+
+def test_password_recovery_email(client: TestClient) -> None:
+    response = client.post(f"/auth/password-recovery/{settings.FIRST_SUPERUSER}")
+    result = response.json()
+    assert response.status_code == 200
+    assert result["msg"] == "Password recovery email sent"
+
+
+def test_password_recovery_email_error_email(client: TestClient) -> None:
+    response = client.post(f"/auth/password-recovery/new_user@ecoteka.org")
+    result = response.json()
+    assert response.status_code == 404
     assert (
-        message["detail"] == "The user with this username already exists in the system."
+        result["detail"] == "The user with this username does not exist in the system."
+    )
+
+
+def test_reset_password(
+    client: TestClient, superuser_access_token_headers: Dict[str, str]
+) -> None:
+    reset_password_data = {"new_password": settings.FIRST_SUPERUSER_PASSWORD}
+    response = client.post(
+        "/auth/reset-password",
+        headers=superuser_access_token_headers,
+        json=reset_password_data,
+    )
+    result = response.json()
+    assert response.status_code == 200
+    assert result["msg"] == "Password updated successfully"
+
+
+def test_register(
+    client: TestClient, superuser_access_token_headers: Dict[str, str]
+) -> None:
+    new_user_data = {
+        "email": "new_user@ecoteka.org",
+        "full_name": "new user",
+        "password": "password",
+    }
+    response = client.post(
+        "/auth/register", headers=superuser_access_token_headers, json=new_user_data
+    )
+    result = response.json()
+    assert response.status_code == 200
+    assert result["msg"] == "User created"
+
+
+def test_register_error_user_already_exits(
+    client: TestClient, superuser_access_token_headers: Dict[str, str]
+) -> None:
+    new_user_data = {
+        "email": "new_user@ecoteka.org",
+        "full_name": "new user",
+        "password": "password",
+    }
+    response = client.post(
+        "/auth/register", headers=superuser_access_token_headers, json=new_user_data
+    )
+    result = response.json()
+    assert response.status_code == 400
+    assert (
+        result["detail"] == "The user with this username already exists in the system."
     )

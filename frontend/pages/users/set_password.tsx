@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   image: {
     height: "250px",
     backgroundSize: "contain",
-  }
+  },
 }));
 
 const BaseCard = ({ children }) => {
@@ -51,10 +51,10 @@ const BaseCard = ({ children }) => {
   return (
     <Card elevation={0} className={classes.baseCard}>
       <CardMedia
-          image="/assets/password.svg"
-          title="Password"
-          className={classes.image}
-        />
+        image="/assets/password.svg"
+        title="Password"
+        className={classes.image}
+      />
       <CardHeader
         className={classes.baseCardTitle}
         title={t("pages.UsersSetPassword.title")}
@@ -206,7 +206,7 @@ const ChangePasswordForm = ({
           },
         };
 
-        await apiETK.post("/auth/reset-password/", payload, config);
+        await apiETK.post("/auth/reset-password", payload, config);
         setUpdating(false);
         setStatus("goToLogin");
       }
@@ -298,7 +298,6 @@ export default function UsersSetPasswordPage() {
       </Head>
       <Grid
         container
-        spacing={1}
         direction="column"
         alignItems="center"
         justify="center"
