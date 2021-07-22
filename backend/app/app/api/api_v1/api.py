@@ -13,6 +13,8 @@ from app.api.api_v1.endpoints import (
     trees,
     users,
     featured,
+    teams,
+    members,
     ws
 )
 
@@ -49,6 +51,14 @@ api_router.include_router(
 
 api_router.include_router(
     organization.router, prefix="/organization", tags=["organization"]
+)
+
+api_router.include_router(
+    teams.router, prefix="/organization", tags=["teams"]
+)
+
+api_router.include_router(
+    members.router, prefix="/organization", tags=["members"]
 )
 
 api_router.include_router(

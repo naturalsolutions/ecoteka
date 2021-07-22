@@ -20,7 +20,7 @@ import slug as slugmodule
 
 
 class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUpdate]):
-    def get_by_id_or_slug(self, db: Session, id: Any):
+    def get_by_id_or_slug(self, db: Session, id: Any) ->Optional[Organization]:
         # Query string params are passed as str, 
         # we need to try to convert it as int 
         # to differentiate slugs (str) from ids (int)
@@ -32,11 +32,9 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
             return db.query(self.model).filter(self.model.id == organization_id).first()
         if isinstance(organization_id, str):
             return db.query(self.model).filter(self.model.slug == organization_id).first()
-        if not isinstance(organization_id, (str, int)):
-            raise HTTPException(
-                    status_code=422,
-                    detail="ID should be either of type integer or string",
-                )
+        
+        return None
+
     def get_open_featured(self, db: Session):
         return db.query(self.model).\
                     filter(self.model.featured == True).\

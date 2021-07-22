@@ -45,7 +45,7 @@ def create_test_database():
         drop_database(engine.url)  # Drop the test database.
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def db() -> Generator:
     yield TestingSessionLocal()
 
