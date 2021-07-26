@@ -10,20 +10,19 @@ from typing import List
 router = APIRouter()
 
 settings.policies["interventions"] = {
-    "interventions:create": ["owner", "manager", "contributor"],
-    "interventions:get": ["owner", "manager", "contributor", "reader"],
-    "interventions:get_year": ["owner", "manager", "contributor", "reader"],
-    "interventions:update": ["owner", "manager", "contributor"],
-    "interventions:delete": ["owner", "manager", "contributor"],
+    "interventions:create": ["admin", "owner", "manager", "contributor"],
+    "interventions:get": ["admin", "owner", "manager", "contributor", "reader"],
+    "interventions:get_year": ["admin", "owner", "manager", "contributor", "reader"],
+    "interventions:update": ["admin", "owner", "manager", "contributor"],
+    "interventions:delete": ["admin", "owner", "manager", "contributor"],
 }
 
 
 
-@router.post("", response_model=Intervention)
+@router.post("", response_model=Intervention, dependencies=[Depends(authorization("interventions:create"))])
 def create(
     organization_id: int,
     *,
-    auth=Depends(authorization("interventions:create")),
     request_intervention: InterventionCreate,
     db: Session = Depends(get_db),
 ):
@@ -31,11 +30,10 @@ def create(
     return crud.intervention.create(db, obj_in=request_intervention)
 
 
-@router.get("/{intervention_id}", response_model=Intervention)
+@router.get("/{intervention_id}", response_model=Intervention, dependencies=[Depends(authorization("interventions:get"))])
 def get(
     intervention_id: int,
     *,
-    auth=Depends(authorization("interventions:get")),
     db: Session = Depends(get_db),
 ):
     return crud.intervention.get(db, id=intervention_id)
