@@ -35,8 +35,6 @@ build_backend_base:
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-base -f ./backend/Dockerfile.base ./backend
     - docker push ${CI_REGISTRY_IMAGE}:backend-base
   only:
-    refs:
-      - dev
     changes:
       - backend/Dockerfile.base
       - .gitlab-ci.yml
