@@ -197,13 +197,10 @@ def update(
     return tree_in_db.to_xy()
 
 
-@router.delete("/bulk_delete")
+@router.delete("/bulk_delete", dependencies=[Depends(authorization("trees:bulk_delete"))])
 async def bulk_delete(
-    organization_id: int,
-    request: Request,
     trees: List[int] = Body(..., embed=True),
     db: Session = Depends(get_db),
-    auth=Depends(authorization("trees:bulk_delete")),
 ) -> Any:
     """Bulk delete"""
     for tree_id in trees:
@@ -212,11 +209,9 @@ async def bulk_delete(
     return trees
 
 
-@router.delete("/{tree_id}", response_model=schemas.tree.Tree_xy)
+@router.delete("/{tree_id}", response_model=schemas.tree.Tree_xy, dependencies=[Depends(authorization("trees:delete"))])
 def delete(
-    organization_id: int,
     tree_id: int,
-    auth=Depends(authorization("trees:delete")),
     db: Session = Depends(get_db),
 ) -> Any:
     """Deletes a tree"""

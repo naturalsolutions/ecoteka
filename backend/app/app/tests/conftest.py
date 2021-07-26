@@ -73,5 +73,7 @@ def superuser_refresh_token_headers(client: TestClient) -> Dict[str, str]:
     return get_superuser_refresh_token_headers(client)
 
 pytest_plugins = [
-    "app.tests.utils.security"
+    "app.tests.utils.security",
+    "app.tests.fixtures.tree",
+    "app.tests.fixtures.intervention"
 ]

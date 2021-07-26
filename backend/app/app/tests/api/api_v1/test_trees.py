@@ -2,8 +2,6 @@ import pytest
 from typing import Dict
 from fastapi.testclient import TestClient
 from app.tests.utils.security import users_parameters
-from app.crud import crud_tree
-from app.schemas import TreeCreate
 
 @pytest.mark.parametrize(
     'mode_organization, role, status_code', 
@@ -61,21 +59,12 @@ def test_get(
     role: str,
     status_code: int,
     db,
-    headers_user_and_organization_from_organization_role
+    headers_user_and_organization_from_organization_role,
+    create_tree
 ):
     mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
     organization_id = mock_data["organization"].id
-    x = 4.269118928658703
-    y = 43.79519801939514
-
-    tree_with_user_info = TreeCreate(
-        geom=f"POINT({x} {y})",
-        user_id=mock_data["user"].id,
-        organization_id=organization_id,
-    )
-
-    tree = crud_tree.tree.create(db, obj_in=tree_with_user_info)
-       
+    tree = create_tree(organization_id, mock_data["user"].id)   
     response = client.get(
         f"/organization/{organization_id}/trees/{tree.id}", 
         headers=mock_data["headers"]

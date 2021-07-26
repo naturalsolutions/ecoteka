@@ -12,7 +12,7 @@ router = APIRouter()
 settings.policies["interventions"] = {
     "interventions:create": ["admin", "owner", "manager", "contributor"],
     "interventions:get": ["admin", "owner", "manager", "contributor", "reader"],
-    "interventions:get_year": ["admin", "owner", "manager", "contributor", "reader"],
+    "interventions:get_all": ["admin", "owner", "manager", "contributor", "reader"],
     "interventions:update": ["admin", "owner", "manager", "contributor"],
     "interventions:delete": ["admin", "owner", "manager", "contributor"],
 }
@@ -40,9 +40,9 @@ def get(
 
 
 @router.get("",
-    dependencies=[Depends(authorization("interventions:get_year"))], 
+    dependencies=[Depends(authorization("interventions:get_all"))], 
     response_model=List[Intervention])
-def get_all_interventions(
+def get_all(
     organization_id: int,
     *,
     db: Session = Depends(get_db),
@@ -70,11 +70,14 @@ def update(
     )
 
 
-@router.delete("/{intervention_id}", response_model=Intervention)
+@router.delete(
+    "/{intervention_id}", 
+    response_model=Intervention,
+    dependencies=[Depends(authorization("interventions:delete"))]
+)
 def delete(
-    id: int,
+    intervention_id: int,
     *,
-    auth=Depends(authorization("interventions:delete")),
     db: Session = Depends(get_db),
 ):
-    return crud.intervention.remove(db, id=id)
+    return crud.intervention.remove(db, id=intervention_id)
