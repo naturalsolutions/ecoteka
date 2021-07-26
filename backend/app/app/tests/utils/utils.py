@@ -1,8 +1,10 @@
+from os import access
 from typing import Dict
 
 from fastapi.testclient import TestClient
 
 from app.core.config import settings
+from app.core.security import generate_access_token_and_refresh_token_response
 
 
 def login_with_superuser(client: TestClient):
@@ -23,6 +25,12 @@ def get_superuser_refresh_token_headers(client: TestClient) -> Dict[str, str]:
 
 def get_superuser_access_token_headers(client: TestClient) -> Dict[str, str]:
     tokens = login_with_superuser(client)
+    access_token = tokens["access_token"]
+    headers = {"Authorization": f"Bearer {access_token}"}
+    return headers
+
+def get_headers_from_user_id(user_id: int, is_superuser: bool = False) -> Dict[str, str]:
+    tokens = generate_access_token_and_refresh_token_response(user_id=user_id, is_superuser=False)
     access_token = tokens["access_token"]
     headers = {"Authorization": f"Bearer {access_token}"}
     return headers

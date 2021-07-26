@@ -14,8 +14,8 @@ from app.db.base_class import Base
 from app.db.session import engine
 from app import schemas
 from app.models.tree import Tree
-from app.core import enforcer
 from functools import reduce
+from app.api.deps import get_enforcer
 
 # import slug as slugmodule
 from slugify import slugify
@@ -130,6 +130,7 @@ class Organization(Base):
 
     @property
     def total_members(self):
+        enforcer = get_enforcer()
         get_users = enforcer.model.model["g"]["g"].rm.get_users
         all_users = [get_users(role, str(self.id)) for role in enforcer.get_all_roles()]
         return reduce(lambda total, users: total + len(users), all_users, 0)
@@ -139,6 +140,7 @@ class Organization(Base):
 
 
     def to_schema(self):
+        total_members = self.total_members
         return schemas.Organization(
             **{
                 c.key: getattr(self, c.key)
@@ -182,7 +184,6 @@ class Organization(Base):
             return None
 
     def on_name_change_rehydrate_slug(target, value, oldvalue, initiator):
-        print("generate_unique_slug")
         if value and (not target.slug or value != oldvalue):
             root_slug = Organization.get_root_slug(target.path)
             if root_slug:
@@ -193,7 +194,6 @@ class Organization(Base):
                 target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
 
     def on_path_change_rehydrate_slug(target, value, oldvalue, initiator):
-        print("rehydrate_slug")
         if value and (not target.slug or value != oldvalue):
             root_slug = Organization.get_root_slug(target.path)
             if root_slug:
@@ -204,7 +204,6 @@ class Organization(Base):
                 target.slug = slug if Organization.is_slug_available(slug) else slugify(f"{slug} {target.id}")
 
     def randomize_slug(target, value, oldvalue, initiator):
-        print("randomize_slug")
         if value and (not target.slug or value != oldvalue):
             target.slug = generate('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-', 21)
             # letters = string.ascii_letters

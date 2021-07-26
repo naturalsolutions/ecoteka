@@ -5,6 +5,8 @@ import axios from "axios";
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
 config.publicRuntimeConfig.apiUrl = "http://backend";
+config.publicRuntimeConfig.meiliApiUrl = "http://meilisearch:7700";
+config.publicRuntimeConfig.meiliMasterKey = "password";
 
 setConfig(config);
 

@@ -31,9 +31,7 @@ class HealthAssessmentBase(BaseModel):
 
     @validator('problem')
     def check_problem_allowed_values(cls, v, values, **kwargs):
-        print(f"{values}")
         if 'organ' in values:
-            print(values['organ'])
             if values['organ'] == "crown":
                 problem_allowed_values = [
                     "Parasite/Maladie",

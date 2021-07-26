@@ -97,6 +97,8 @@ class Settings(BaseSettings):
     MEILI_API_URL: AnyHttpUrl
     MEILI_MASTER_KEY: str
 
+    policies: Dict[str, Any] = {}
+
     class Config:
         case_sensitive = True
 

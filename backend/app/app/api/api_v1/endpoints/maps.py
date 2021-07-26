@@ -1,4 +1,4 @@
-from typing import Dict, Optional, List, Union
+from typing import Dict, Optional, List
 import json
 from fastapi import APIRouter, Depends, Response, HTTPException
 from sqlalchemy.orm import Session
@@ -9,9 +9,8 @@ from app.api import get_db
 from app.core import (
     authorization,
     permissive_authorization,
-    authorize,
     get_optional_current_active_user,
-    set_policies
+    settings
 )
 
 from app.schemas import (
@@ -26,13 +25,11 @@ from app.crud import organization
 
 router = APIRouter()
 
-policies = {
+settings.policies["maps"] = {
     "maps:get_geojson": ["owner", "manager", "contributor", "reader"],
     "maps:get_geobuf": ["owner", "manager", "contributor", "reader"],
     "maps:get_bbox": ["owner", "manager", "contributor", "reader"]
 }
-
-set_policies(policies)
 
 
 @router.get("/style")

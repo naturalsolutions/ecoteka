@@ -1,37 +1,23 @@
-import json
-import logging
-import os
+from app.api.deps import get_enforcer
 
 from passlib import pwd
 
-from typing import Any, List, Optional, Dict
-from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
-from fastapi.encoders import jsonable_encoder
+from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException
 
 from sqlalchemy.orm import Session
-from sqlalchemy import func
-from sqlalchemy_utils.types.ltree import LQUERY
 
 from app import crud
 from app.api import get_db
-from app.core import settings, enforcer, set_policies, authorization, get_current_user
+from app.core import get_current_user
 from app.crud import organization, user
-
-# from fastapi_pagination import LimitOffsetPage, Page, Params, add_pagination
-# from fastapi_pagination.ext.sqlalchemy import paginate
 
 from app.schemas import (
     Organization,
-    OrganizationCreate,
     OrganizationCreateRoot,
-    OrganizationUpdate,
-    OrganizationMetrics,
-    Coordinate,
-    UserOut,
-    UserInvite,
     UserCreate,
 )
-from app.models import User, Organization as OrganizationModel
+from app.models import User
 from app.worker import send_new_invitation_email_task
 
 router = APIRouter()
@@ -41,6 +27,7 @@ def get_organization_root_nodes(
     *,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    enforcer = Depends(get_enforcer)
 ) -> Optional[List[Organization]]:
     """
     **Admin only**; Get all organizations trees root nodes;
@@ -69,6 +56,7 @@ def create_organization_root_node(
     db: Session = Depends(get_db),
     organization_in: OrganizationCreateRoot,
     current_user: User = Depends(get_current_user),
+    enforcer = Depends(get_enforcer)
 ) -> Optional[Organization]:
     """
     Create a new **root node for organizations tree**;

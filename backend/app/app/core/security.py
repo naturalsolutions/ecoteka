@@ -1,4 +1,5 @@
 from app.api import get_db
+from app.api.deps import get_enforcer
 from app.core import settings
 from app.schemas import CurrentUser
 from datetime import timedelta
@@ -9,9 +10,8 @@ from pydantic import BaseModel
 from pydantic.typing import Optional
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from app.models import Organization, User
+from app.models import Organization, User, organization
 from app.crud import user, organization as crud_organization
-from app.core.dependencies import enforcer
 
 
 token_url = f"{settings.ROOT_PATH}/auth/login"
@@ -125,7 +125,12 @@ def get_optional_current_active_user(
 
 
 def authorization(action: str):
-    def decorated(request: Request, organization_id, user=Depends(get_current_user)):
+    def decorated(
+        request: Request, 
+        organization_id: int, 
+        user=Depends(get_current_user),
+        enforcer=Depends(get_enforcer)
+    ):
         if not enforcer.enforce(str(user.id), str(organization_id), action):
             raise HTTPException(
                 status_code=403,
@@ -140,6 +145,7 @@ def permissive_authorization(action: str):
         organization_id, 
         user=Depends(get_optional_current_active_user),
         db: Session = Depends(get_db), 
+        enforcer = Depends(get_enforcer)
     ):
         
         organization = crud_organization.get_by_id_or_slug(db, id=organization_id)
@@ -171,7 +177,11 @@ def permissive_authorization(action: str):
 
     return decorated
 
-def authorize(object: Organization, subject: Optional[User], action: str):
+def authorize(
+    object: Organization, 
+    subject: Optional[User], 
+    action: str,
+    enforcer):
         if not subject:
             if object.mode == "public":
                 pass
@@ -193,7 +203,7 @@ def authorize(object: Organization, subject: Optional[User], action: str):
                         detail="The user doesn't have enough privileges",
                     )
 
-def set_policies(policies):
+def set_policies(policies, enforcer):
     for key in policies:
         action = key
         roles = policies[key]
@@ -202,7 +212,9 @@ def set_policies(policies):
 
 
 def get_current_user_with_organizations(
-    current_user=Depends(get_current_user), db: Session = Depends(get_db)
+    current_user=Depends(get_current_user), 
+    db: Session = Depends(get_db),
+    enforcer = Depends(get_enforcer)
 ):
     query = text("SELECT v2 FROM casbin_rule WHERE ptype=:ptype AND v0=:user")
     params = {"ptype": "g", "user": str(current_user.id)}

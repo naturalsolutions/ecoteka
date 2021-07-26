@@ -1,4 +1,5 @@
 from typing import Any, List, Dict
+import logging
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -7,7 +8,7 @@ from passlib import pwd
 from app import crud
 from app.crud import user
 from app.api import get_db
-from app.core import settings, enforcer, authorization, get_current_user, set_policies
+from app.core import authorization, get_current_user, settings
 from app.models import User
 from app.schemas import (
     UserOut,
@@ -15,42 +16,45 @@ from app.schemas import (
     UserCreate,
 )
 from app.worker import send_new_invitation_email_task
+from app.api.deps import get_enforcer
+
+settings.policies["members"] = {
+    "organizations:get_members": ["admin", "manager", "contributor", "reader"],
+    "organizations:add_members": ["admin", "manager"],
+    "organizations:remove_member": ["admin", "manager"],
+    "organizations:edit_member": ["admin", "manager"],
+}
 
 
 router = APIRouter()
 
-policies = {
-    "organizations:get_members": ["owner", "manager", "contributor", "reader"],
-    "organizations:add_members": ["owner", "manager"],
-    "organizations:remove_member": ["owner", "manager"],
-    "organizations:edit_member": ["owner", "manager"],
-}
-set_policies(policies)
 
-
-@router.get("/{organization_id}/members")
+@router.get(
+    "/{organization_id}/members", 
+    dependencies=[Depends(authorization("organizations:get_members"))]
+)
 def get_members(
     organization_id: int,
     *,
-    auth=Depends(authorization("organizations:get_members")),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
     return crud.organization.get_members(db, id=organization_id)
 
 
-@router.post("/{organization_id}/members")
+@router.post(
+    "/{organization_id}/members", 
+    dependencies=[Depends(authorization("organizations:add_members"))]
+)
 def add_members(
     organization_id: int,
     *,
     invites: List[UserInvite] = Body(...),
-    auth=Depends(authorization("organizations:add_members")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    enforcer = Depends(get_enforcer)
 ):
     try:
         members = crud.organization.get_members(db, id=organization_id)
-
+        
         users_to_add = (
             invite
             for invite in invites
@@ -59,7 +63,7 @@ def add_members(
 
         for invite in users_to_add:
             user_in_db = user.get_by_email(db, email=invite.email)
-            role = invite.role if invite.role else "guest"
+            role = invite.role if invite.role else "reader"
             
             if not user_in_db:
                 user_in_db = user.create(
@@ -89,23 +93,23 @@ def add_members(
 
         return [
             user
-            for user in get_members(
-                organization_id, auth=auth, db=db, current_user=current_user
-            )
+            for user in crud.organization.get_members(db, id=organization_id)
             if user.get("email") in (invite.email for invite in invites)
         ]
     except Exception as e:
         logging.error(e)
 
 
-@router.delete("/{organization_id}/members/{user_id}")
+@router.delete(
+    "/{organization_id}/members/{user_id}",
+    dependencies=[Depends(authorization("organizations:remove_member"))]
+)
 def remove_member(
     organization_id: int,
     user_id: int,
     *,
-    auth=Depends(authorization("organizations:remove_member")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    enforcer = Depends(get_enforcer)
 ):
     user_in_db = user.get(db, id=user_id)
 
@@ -124,15 +128,17 @@ def remove_member(
     return True
 
 
-@router.patch("/{organization_id}/members/{user_id}/role")
+@router.patch("/{organization_id}/members/{user_id}/role", dependencies=[
+    Depends(authorization("organizations:edit_member"))
+])
 def update_member_role(
     organization_id: int,
     user_id: int,
     *,
     role: str = Body(..., embed=True),
-    auth=Depends(authorization("organizations:edit_member")),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    enforcer = Depends(get_enforcer)
 ):
     roles_order = ["admin", "owner", "manager", "contributor", "reader", "guest"]
 

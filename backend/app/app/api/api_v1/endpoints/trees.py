@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from starlette.responses import FileResponse, HTMLResponse
 from app import crud, models, schemas
 from app.api import get_db
-from app.core import set_policies, authorization, permissive_authorization, get_current_user, settings
+from app.core import authorization, permissive_authorization, get_current_user, settings
 from app.worker import import_geofile_task
 
 from fastapi.responses import StreamingResponse
@@ -16,7 +16,7 @@ import geopandas as gpd
 import imghdr
 
 router = APIRouter()
-policies = {
+settings.policies["trees"] = {
     "trees:get": ["owner", "manager", "contributor", "reader"],
     "trees:add": ["owner", "manager", "contributor"],
     "trees:update": ["owner", "manager", "contributor"],
@@ -30,7 +30,6 @@ policies = {
     "trees:delete_images": ["owner", "manager", "contributor"],
     "trees:delete_image": ["owner", "manager", "contributor"],
 }
-set_policies(policies)
 
 @router.post("/import", response_model=schemas.GeoFile)
 def trees_import(
@@ -147,12 +146,12 @@ def get(
     return tree.to_xy()
 
 
-@router.post("", response_model=schemas.tree.Tree_xy)
+@router.post("", response_model=schemas.tree.Tree_xy, dependencies=[
+    Depends(authorization("trees:add"))
+])
 async def add(
     organization_id: int,
     *,
-    request: Request,
-    auth=Depends(authorization("trees:add")),
     db: Session = Depends(get_db),
     tree: schemas.TreePost,
     current_user: models.User = Depends(get_current_user),

@@ -1,18 +1,19 @@
+from casbin import enforcer
 import slug
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import insert
 from sqlalchemy import (
     func,
-    and_,
     case,
     desc
 )
 from app.core.config import settings
-from app.core import enforcer
+from app.core.security import set_policies
 from app.schemas import UserCreate, OrganizationCreate, OrganizationMode
 from app.crud import user, organization
 from app.db import base  # noqa: F401
 from app.models import OSMName, Organization
+
 # make sure all SQL Alchemy models
 # are imported (app.db.base) before initializing DB
 # otherwise, SQL Alchemy might fail to initialize relationships properly
@@ -20,12 +21,11 @@ from app.models import OSMName, Organization
 #  https://github.com/tiangolo/full-stack-fastapi-postgresql/issues/28
 
 
-def init_db(db: Session) -> None:
+def init_db(db: Session, enforcer) -> None:
     # Tables should be created with Alembic migrations
     # But if you don't want to use migrations, create
     # the tables un-commenting the next line
     # Base.metadata.create_all(bind=engine)
-
 
     # insert_organizations(db=db)
 
@@ -54,9 +54,12 @@ def init_db(db: Session) -> None:
         db.commit()
         db.refresh(user_in_db)
 
+
+    for policies in settings.policies.values():
+        set_policies(policies, enforcer)
+
     if len(enforcer.get_roles_for_user_in_domain("1", "1")) == 0:
         enforcer.add_role_for_user_in_domain("1", "admin", "1")
-
 
 
 def insert_organizations(db:Session):

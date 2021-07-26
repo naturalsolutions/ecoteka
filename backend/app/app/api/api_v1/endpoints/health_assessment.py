@@ -2,21 +2,20 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.schemas import HealthAssessment, HealthAssessmentCreate, HealthAssessmentUpdate
 from app import crud
 from app.api import get_db
-from app.core import authorization, set_policies
+from app.core import authorization, settings
 
 from sqlalchemy.orm import Session
 from typing import List
 
 router = APIRouter()
 
-policies = {
+settings.policies["health_assessment"] = {
     "health_assessment:read": ["owner", "manager", "contributor", "reader"],
     "health_assessment:create": ["owner", "manager", "contributor"],
     "health_assessment:update": ["owner", "manager", "contributor"],
     "health_assessment:delete": ["owner", "manager"],
 }
 
-set_policies(policies)
 
 @router.get("/", response_model=List[HealthAssessment])
 def index(

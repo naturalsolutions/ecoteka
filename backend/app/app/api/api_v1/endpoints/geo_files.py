@@ -1,21 +1,18 @@
 import os
 import uuid
-import json
 from typing import Any, List
-from fastapi import APIRouter, Body, Depends, HTTPException, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.api import get_db
 from app.core import (
     settings,
-    set_policies,
     authorization,
     get_current_user,
 )
 from app.worker import create_mbtiles_task
 
-router = APIRouter()
-policies = {
+settings.policies["geo_files"] = {
     "geofiles:read_geo_files": ["owner", "manager", "contributor", "reader"],
     "geofiles:read_geofile_by_name": [
         "owner",
@@ -27,7 +24,8 @@ policies = {
     "geofiles:update_geo_file": ["owner", "manager"],
     "geofiles:delete_geo_file": ["owner", "manager"],
 }
-set_policies(policies)
+
+router = APIRouter()
 
 
 @router.get("/", response_model=List[schemas.GeoFile])

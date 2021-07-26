@@ -2,21 +2,21 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.schemas import Intervention, InterventionCreate, InterventionUpdate
 from app import crud
 from app.api import get_db
-from app.core import authorization, set_policies
+from app.core import authorization, settings
 
 from sqlalchemy.orm import Session
 from typing import List
 
 router = APIRouter()
 
-policies = {
+settings.policies["interventions"] = {
     "interventions:create": ["owner", "manager", "contributor"],
     "interventions:get": ["owner", "manager", "contributor", "reader"],
     "interventions:get_year": ["owner", "manager", "contributor", "reader"],
     "interventions:update": ["owner", "manager", "contributor"],
     "interventions:delete": ["owner", "manager", "contributor"],
 }
-set_policies(policies)
+
 
 
 @router.post("", response_model=Intervention)
@@ -66,9 +66,6 @@ def update(
 
     if not intervention_in_db:
         raise HTTPException(status_code=404, detail="Intervention not found")
-
-    print(request_intervention.dict())
-
 
     return crud.intervention.update(
         db, db_obj=intervention_in_db, obj_in=request_intervention

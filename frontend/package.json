@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "node ./scripts/replace_envars.js && next start",
     "test": "jest",
+    "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage=true",
     "export": "next export"
   },

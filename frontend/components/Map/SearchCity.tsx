@@ -6,8 +6,7 @@ import {
   InputAdornment,
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { useState, useEffect, useCallback } from "react";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { useMapContext } from "@/components/Map/Provider";
 import SearchIcon from "@material-ui/icons/Search";
@@ -31,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
-  const { t } = useTranslation("components");
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -40,41 +38,41 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   const { apiMeili } = useApi().api;
   const { viewState, setViewState } = useMapContext();
 
-  useEffect(() => {
-    let active = true;
-
-    if (inputValue === "" || inputValue.length < 2) {
+  const fetchData = useCallback(async () => {
+    if (inputValue.length < 2) {
       setOptions([]);
-      return undefined;
     }
 
-    (async () => {
-      try {
-        setLoading(true);
-        const { data: json, status } = await apiMeili.get(
-          `/indexes/osmname/search`,
-          {
-            params: {
-              q: inputValue,
-              limit: 200,
-            },
-          }
-        );
-
-        if (active && status === 200) {
-          setOptions(json.hits);
+    try {
+      setLoading(true);
+      const { data: json, status } = await apiMeili.get(
+        `/indexes/osmname/search`,
+        {
+          params: {
+            q: inputValue,
+            limit: 200,
+          },
         }
+      );
 
-        setLoading(false);
-      } catch (e) {
-        setLoading(false);
+      if (status === 200) {
+        setOptions(json.hits);
       }
-    })();
 
-    return () => {
-      active = false;
-    };
-  }, [value, inputValue]);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValue]);
+
+  useEffect(() => {
+    const newInputValue = `${value?.name}, ${value?.country}`;
+
+    if (inputValue && newInputValue !== inputValue) {
+      fetchData();
+    }
+  }, [inputValue, value, fetchData]);
 
   const onChangeHandler = (ev, newValue) => {
     if (newValue?.lat && newValue?.lon) {
@@ -100,6 +98,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   return (
     <Autocomplete
       freeSolo
+      data-testid="autocomplete"
       className={props.className}
       options={options}
       getOptionLabel={(option) => `${option.name}, ${option.country}`}
@@ -129,8 +128,9 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
               <InputAdornment position="end">
                 {loading ? (
                   <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
+                ) : (
+                  params.InputProps.endAdornment
+                )}
               </InputAdornment>
             ),
           }}

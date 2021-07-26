@@ -1,7 +1,8 @@
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm.session import sessionmaker
-
 from app.core.config import settings
+
+
 
 # SQLALCHEMY_DATABASE_URI is builded from Settings
 # so we have the same env variables in prod/dev

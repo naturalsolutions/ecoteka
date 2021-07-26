@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 
 
 from app.api import get_db
-from app.core import enforcer, authorization, get_current_user, set_policies
+from app.core import authorization, get_current_user, settings
+from app.api.deps import get_enforcer
 from app import crud
 from app.crud import organization
 from app.models import User
@@ -15,14 +16,14 @@ from app.schemas import (
     Organization
 )
 
-
-router = APIRouter()
-
-policies = {
+settings.policies["teams"] = {
     "organizations:get_teams": ["owner", "manager", "contributor", "reader"],
     "organizations:delete_team": ["owner", "manager"],
 }
-set_policies(policies)
+
+router = APIRouter()
+
+
 
 @router.get("/{organization_id}/teams", response_model=List[Organization])
 def get_teams(
@@ -45,6 +46,7 @@ def delete_teams(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
     team_ids_in: List[int],
+    enforcer=Depends(get_enforcer)
 ):
     """
     bulk delete teams and their members
@@ -112,6 +114,7 @@ def remove_team(
     auth=Depends(authorization("organizations:delete_team")),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    enforcer = Depends(get_enforcer)
 ):
     """
     delete one team and its members by id

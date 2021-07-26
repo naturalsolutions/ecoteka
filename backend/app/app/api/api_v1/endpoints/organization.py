@@ -14,7 +14,8 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from app.api import get_db
 from app import crud
-from app.core import settings, enforcer, set_policies, authorization, permissive_authorization, get_current_user, get_optional_current_active_user
+from app.core import settings, authorization, permissive_authorization, get_current_user, get_optional_current_active_user
+from app.api.deps import get_enforcer
 
 from app.crud import organization, user
 from app.schemas import (
@@ -29,7 +30,7 @@ from app.models import User, Organization as OrganizationModel
 
 router = APIRouter()
 
-policies = {
+settings.policies["organizations"] = {
     "organizations:get_one": ["guest", "owner", "manager", "contributor", "reader"],
     "organizations:update": ["owner", "manager"],
     "organizations:get_geojson": ["owner", "manager", "contributor", "reader"],
@@ -54,8 +55,6 @@ policies = {
         "reader"
     ]
 }
-set_policies(policies)
-
 
 
 @router.post("", response_model=Organization)
@@ -64,6 +63,7 @@ def create_organization(
     db: Session = Depends(get_db),
     organization_in: OrganizationCreate,
     current_user: User = Depends(get_current_user),
+    enforcer = Depends(get_enforcer)
 ):
     new_organization = organization.create(db, obj_in=organization_in).to_schema()
     enforcer.add_role_for_user_in_domain(
@@ -106,7 +106,8 @@ def get_one(
     organization_id: Union[str, int],
     *,
     current_user: User = Depends(get_optional_current_active_user),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    enforcer = Depends(get_enforcer)
 ) -> Optional[Organization]:
     """
     get one organization by id
