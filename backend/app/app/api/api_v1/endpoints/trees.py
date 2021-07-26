@@ -19,12 +19,12 @@ router = APIRouter()
 settings.policies["trees"] = {
     "trees:get": ["admin", "owner", "manager", "contributor", "reader"],
     "trees:add": ["admin", "owner", "manager", "contributor"],
-    "trees:update": ["owner", "manager", "contributor"],
-    "trees:delete": ["owner", "manager", "contributor"],
-    "trees:get_interventions": ["owner", "manager", "contributor", "reader"],
+    "trees:update": ["admin", "owner", "manager", "contributor"],
+    "trees:delete": ["admin", "owner", "manager", "contributor"],
+    "trees:bulk_delete": ["admin", "owner", "manager", "contributor"],
+    "trees:get_interventions": ["admin", "owner", "manager", "contributor", "reader"],
     "trees:import": ["owner", "manager", "contributor"],
     "trees:export": ["owner", "manager", "contributor"],
-    "trees:bulk_delete": ["owner", "manager", "contributor"],
     "trees:upload_images": ["owner", "manager", "contributor"],
     "trees:get_images": ["owner", "manager", "contributor", "reader"],
     "trees:delete_images": ["owner", "manager", "contributor"],
@@ -128,7 +128,7 @@ def get_metrics(
     metrics = schemas.tree.Metrics(
         ratio=ratio,
         aggregates=aggregates
-        )
+    )
     return metrics
 
 
@@ -170,8 +170,6 @@ async def add(
         return tree_in_db.to_xy()
     except Exception as error:
         return HTTPException(status_code=500, detail=error)
-
-
 
 
 @router.put(
@@ -315,11 +313,14 @@ def delete_image(
         return HTTPException(status_code=500, detail="Can't delete {image} file")
 
 
-@router.get("/{tree_id}/interventions", response_model=List[schemas.Intervention])
+@router.get(
+    "/{tree_id}/interventions", 
+    response_model=List[schemas.Intervention],
+    dependencies=[Depends(authorization("trees:get_interventions"))]
+)
 def get_interventions(
     tree_id: int,
     *,
-    auth=Depends(authorization("trees:get_interventions")),
     db: Session = Depends(get_db),
 ):
     """Get all interventions from a tree"""
