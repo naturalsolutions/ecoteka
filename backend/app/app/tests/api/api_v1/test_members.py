@@ -1,7 +1,6 @@
 import pytest
 from typing import Dict
 from fastapi.testclient import TestClient
-from app.models import organization
 from app.tests.utils.security import users_parameters
 from faker import Faker
 from faker.providers import internet

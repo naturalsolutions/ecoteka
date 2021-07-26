@@ -17,8 +17,8 @@ import imghdr
 
 router = APIRouter()
 settings.policies["trees"] = {
-    "trees:get": ["owner", "manager", "contributor", "reader"],
-    "trees:add": ["owner", "manager", "contributor"],
+    "trees:get": ["admin", "owner", "manager", "contributor", "reader"],
+    "trees:add": ["admin", "owner", "manager", "contributor"],
     "trees:update": ["owner", "manager", "contributor"],
     "trees:delete": ["owner", "manager", "contributor"],
     "trees:get_interventions": ["owner", "manager", "contributor", "reader"],

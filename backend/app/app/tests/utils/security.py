@@ -20,7 +20,7 @@ class OrganizationMode(Enum):
 
 def users_parameters(permissions: Dict[str, List[str]]) -> List[Tuple]:
     organizations_mode = ['private', 'open', 'participatory']
-    roles = ["admin", "manager", "contributor", "reader"]
+    roles = ["admin", "owner", "manager", "contributor", "reader"]
     status_codes: List[Tuple] = []    
     default_permissions: Dict[str, Dict[str, int]] = {}
    

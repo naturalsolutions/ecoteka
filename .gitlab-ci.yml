@@ -1,6 +1,6 @@
 stages:
-  - test
   - build_base
+  - test
   - build_dev
   - build_prod
   - deploy_dev
