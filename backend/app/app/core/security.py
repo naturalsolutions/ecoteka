@@ -131,6 +131,17 @@ def authorization(action: str):
         user=Depends(get_current_user),
         enforcer=Depends(get_enforcer)
     ):
+        user_roles = enforcer.get_roles_for_user_in_domain(
+            str(user.id), str(organization_id)
+        )    
+
+        for role in user_roles:
+            if not enforcer.has_named_policy('p', role, action):
+                raise HTTPException(
+                    status_code=403,
+                    detail="The user doesn't have enough privileges",
+                )
+
         if not enforcer.enforce(str(user.id), str(organization_id), action):
             raise HTTPException(
                 status_code=403,

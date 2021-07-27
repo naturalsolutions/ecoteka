@@ -23,18 +23,17 @@ settings.policies["trees"] = {
     "trees:delete": ["admin", "owner", "manager", "contributor"],
     "trees:bulk_delete": ["admin", "owner", "manager", "contributor"],
     "trees:get_interventions": ["admin", "owner", "manager", "contributor", "reader"],
-    "trees:import": ["owner", "manager", "contributor"],
-    "trees:export": ["owner", "manager", "contributor"],
-    "trees:upload_images": ["owner", "manager", "contributor"],
-    "trees:get_images": ["owner", "manager", "contributor", "reader"],
-    "trees:delete_images": ["owner", "manager", "contributor"],
-    "trees:delete_image": ["owner", "manager", "contributor"],
+    "trees:import": ["admin", "owner", "manager", "contributor"],
+    "trees:export": ["admin", "owner", "manager", "contributor"],
+    "trees:upload_images": ["admin", "owner", "manager", "contributor"],
+    "trees:get_images": ["admin", "owner", "manager", "contributor", "reader"],
+    "trees:delete_images": ["admin", "owner", "manager", "contributor"],
+    "trees:delete_image": ["admin", "owner", "manager", "contributor"],
 }
 
-@router.post("/import", response_model=schemas.GeoFile)
+@router.post("/import", response_model=schemas.GeoFile, dependencies=[Depends(authorization("trees:import"))])
 def trees_import(
     *,
-    auth=Depends(authorization("trees:import")),
     db: Session = Depends(get_db),
     name: str,
 ) -> Any:
@@ -67,11 +66,10 @@ def trees_import(
     return geofile
 
 
-@router.get("/export")
+@router.get("/export", dependencies=[Depends(authorization("trees:export"))])
 def trees_export(
     organization_id: int,
     format: str = "geojson",
-    auth=Depends(authorization("trees:export")),
     db: Session = Depends(get_db),
 ) -> Any:
     sql = f"SELECT * FROM public.tree WHERE organization_id = {organization_id}"
@@ -217,11 +215,10 @@ def delete(
     
     return response
 
-@router.post("/{tree_id}/images")
+@router.post("/{tree_id}/images", dependencies=[Depends(authorization("trees:upload_images"))])
 def upload_images(
     tree_id: int,
     organization_id: int,
-    auth=Depends(authorization("trees:upload_images")),
     images: List[UploadFile] = File(...)
 ):
     """
@@ -272,32 +269,29 @@ def get_image(
     
     return FileResponse(f"{upload_folder}/{image}")
 
-@router.delete("/{tree_id}/images/")
+@router.delete("/{tree_id}/images", dependencies=[Depends(authorization("trees:delete_images"))])
 def delete_images(
     tree_id: int,
-    organization_id: int,
-    auth=Depends(authorization("trees:delete_images")),
+    organization_id: int
 ):
     """
     delete all images
-    """
-    upload_folder: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}"
-
+    """    
     try: 
+        upload_folder: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}"
         shutil.rmtree(upload_folder)
 
-        return HTMLResponse(status_code=200, content=f"{tree_id}")
+        return tree_id
     except Exception as e:
         logging.error(e)
         return HTTPException(status_code=500, detail="Can't delete folder")
 
 
-@router.delete("/{tree_id}/images/{image}")
+@router.delete("/{tree_id}/images/{image}", dependencies=[Depends(authorization("trees:delete_image"))])
 def delete_image(
     image: str,
     tree_id: int,
-    organization_id: int,
-    auth=Depends(authorization("trees:delete_image")),
+    organization_id: int
 ):
     """
     delete one image
@@ -308,7 +302,7 @@ def delete_image(
         if os.path.exists(image_path):
             os.remove(image_path)
 
-        return HTMLResponse(status_code=200, content=f"{tree_id}")
+        return tree_id
     except:
         return HTTPException(status_code=500, detail="Can't delete {image} file")
 
