@@ -11,4 +11,4 @@ RUN pip install --no-warn-script-location --prefix=/install --no-cache-dir \
   python-multipart pytest pytest-cov jinja2 geopandas xlrd slug celery redis \
   sqlalchemy-utils casbin casbin_sqlalchemy_adapter XLsxWriter aiofiles openpyxl \
   python-slugify fastapi-pagination[sqlalchemy] nanoid \
-  faker meilisearch 
+  faker meilisearch Pillow
