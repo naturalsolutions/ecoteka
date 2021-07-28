@@ -26,9 +26,10 @@ from app.crud import organization
 router = APIRouter()
 
 settings.policies["maps"] = {
-    "maps:get_geojson": ["owner", "manager", "contributor", "reader"],
-    "maps:get_geobuf": ["owner", "manager", "contributor", "reader"],
-    "maps:get_bbox": ["owner", "manager", "contributor", "reader"]
+    "maps:get_geojson": ["admin", "owner", "manager", "contributor", "reader"],
+    "maps:get_geobuf": ["admin", "owner", "manager", "contributor", "reader"],
+    "maps:get_filter": ["admin", "owner", "manager", "contributor", "reader"],
+    "maps:get_bbox": ["admin", "owner", "manager", "contributor", "reader"]
 }
 
 
@@ -55,7 +56,6 @@ def generate_style(
 def get_geojson(
     organization_id: int,
     mode: Optional[str] = "geopandas",
-    current_user: User = Depends(get_optional_current_active_user),
     db: Session = Depends(get_db)
 ) -> Optional[FeatureCollection]: 
     """
@@ -172,41 +172,41 @@ def get_geobuff(
     return row['pbf']
 
 
-@router.get("/{organization_id}/tree_tiles/{z}/{x}/{y}/.pbf", dependencies=[Depends(authorization("maps:get_geojson"))])
-def get_tree_tiles(
-    z: int,
-    x: float,
-    y: float,
-    *,
-    organization_id: int,
-    db: Session = Depends(get_db)
-) -> Dict:
-    """
-    Generate Trees MVT for a given organization
-    """
-    organization_in_db = organization.get(db, id=organization_id)
+# @router.get("/{organization_id}/tree_tiles/{z}/{x}/{y}.pbf", dependencies=[Depends(authorization("maps:get_geojson"))])
+# def get_tree_tiles(
+#     z: int,
+#     x: float,
+#     y: float,
+#     *,
+#     organization_id: int,
+#     db: Session = Depends(get_db)
+# ) -> Dict:
+#     """
+#     Generate Trees MVT for a given organization
+#     """
+#     organization_in_db = organization.get(db, id=organization_id)
 
-    if not organization_in_db:
-        raise HTTPException(status_code=404, detail="Organization not found")
+#     if not organization_in_db:
+#         raise HTTPException(status_code=404, detail="Organization not found")
     
-    sql = f"""
-        WITH mvtgeom AS (
-            SELECT
-                ST_AsMVTGeom(ST_SetSRID(geom, 4326), ST_Transform(ST_TileEnvelope({z},{x},{y}), 4326)) AS geom,
-                id,
-                properties
-            FROM public.tree AS t
-            WHERE ST_Intersects(ST_SetSRID(geom, 4326), ST_Transform(ST_TileEnvelope({z},{x},{y}), 4326)) AND t.organization_id = {organization_in_db.id}
-            )
-        SELECT ST_AsMVT(mvtgeom.*) AS mvt
-        FROM mvtgeom;
-    """
-    result_proxy = db.execute(sql)
-    return result_proxy.first()
+#     sql = f"""
+#         WITH mvtgeom AS (
+#             SELECT
+#                 ST_AsMVTGeom(ST_SetSRID(geom, 4326), ST_Transform(ST_TileEnvelope({z},{x},{y}), 4326)) AS geom,
+#                 id,
+#                 properties
+#             FROM public.tree AS t
+#             WHERE ST_Intersects(ST_SetSRID(geom, 4326), ST_Transform(ST_TileEnvelope({z},{x},{y}), 4326)) AND t.organization_id = {organization_in_db.id}
+#             )
+#         SELECT ST_AsMVT(mvtgeom.*) AS mvt
+#         FROM mvtgeom;
+#     """
+#     result_proxy = db.execute(sql)
+#     return result_proxy.first()
 
 
 
-@router.get("/filter", dependencies=[Depends(permissive_authorization("maps:get_filters"))])
+@router.get("/filter", dependencies=[Depends(permissive_authorization("maps:get_filter"))])
 def get_filters(
     organization_id: int,
     db: Session = Depends(get_db)
