@@ -11,6 +11,10 @@ def test_generate_style(
     )
 
     assert response.status_code == 200
+    assert response.json()["center"] == [
+        -3.7091843212851927,
+        40.41465637295403
+    ]
 
 @pytest.mark.parametrize(
     'mode_organization, role, status_code', 

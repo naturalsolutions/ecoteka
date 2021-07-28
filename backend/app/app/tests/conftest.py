@@ -78,5 +78,6 @@ pytest_plugins = [
     "app.tests.fixtures.intervention",
     "app.tests.fixtures.image",
     "app.tests.fixtures.user",
-    "app.tests.fixtures.organization"
+    "app.tests.fixtures.organization",
+    "app.tests.fixtures.team"
 ]

@@ -17,34 +17,38 @@ from app.schemas import (
 )
 
 settings.policies["teams"] = {
-    "organizations:get_teams": ["owner", "manager", "contributor", "reader"],
-    "organizations:delete_team": ["owner", "manager"],
+    "organizations:get_teams": ["admin", "owner", "manager", "contributor", "reader"],
+    "organizations:delete_team": ["admin", "owner", "manager"],
+    "organizations:delete_teams": ["admin", "owner", "manager"],
+    "organizations:archive_team": ["admin", "owner", "manager"],
+    "organizations:archive_teams": ["admin", "owner", "manager"]
 }
 
 router = APIRouter()
 
 
-
-@router.get("/{organization_id}/teams", response_model=List[Organization])
+@router.get(
+    "/{organization_id}/teams", 
+    response_model=List[Organization],
+    dependencies=[Depends(authorization("organizations:get_teams"))]
+)
 def get_teams(
     organization_id: int,
     *,
-    auth=Depends(authorization("organizations:get_teams")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
 ):
     return [
-        org.to_schema() for org in organization.get_teams(db, parent_id=organization_id)
+        org.as_dict() for org in organization.get_teams(db, parent_id=organization_id)
     ]
 
 
-@router.post("/{organization_id}/teams/bulk_delete", response_model=List[Organization])
+@router.delete(
+    "/{organization_id}/teams/bulk_delete", 
+    response_model=List[Organization],
+    dependencies=[Depends(authorization("organizations:delete_teams"))])
 def delete_teams(
-    organization_id: int,
     *,
-    auth=Depends(authorization("organizations:delete_team")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
     team_ids_in: List[int],
     enforcer=Depends(get_enforcer)
 ):
@@ -73,47 +77,49 @@ def delete_teams(
         except Exception as e:
             logging.error(e)
         organization.remove(db, id=team_id)
-        teams_out.append(dict(organization_in_db.as_dict()))
+        teams_out.append(organization_in_db.as_dict())
         
     return teams_out
 
 
-@router.post("/{organization_id}/teams/bulk_archive", response_model=List[Organization])
+@router.delete(
+    "/{organization_id}/teams/bulk_archive", 
+    response_model=List[Organization],
+    dependencies=[Depends(authorization("organizations:archive_teams"))]
+)
 def archive_teams(
-    organization_id: int,
     *,
-    auth=Depends(authorization("organizations:delete_team")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
     team_ids_in: List[int],
 ):
     """
     Bulk archive teams
     """
     teams_out = []
+    
     for team_id in team_ids_in:
         organization_in_db = organization.get(db, id=team_id)
 
         if not organization_in_db:
             raise HTTPException(status_code=404, detail="Team not found")
+        
         organization_in_db.archived = True
         organization_in_db.archived_at = datetime.now()
-        db.add(organization_in_db)
         db.commit()
-        db.refresh(organization_in_db)
-        teams_out.append(dict(organization_in_db.as_dict()))
+        teams_out.append(organization_in_db.as_dict())
+    
     return teams_out
 
 
 
-@router.delete("/{organization_id}/teams/{team_id}")
+@router.delete(
+    "/{organization_id}/teams/{team_id}",
+    dependencies=[Depends(authorization("organizations:delete_team"))]
+)
 def remove_team(
-    organization_id: int,
     team_id: int,
     *,
-    auth=Depends(authorization("organizations:delete_team")),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
     enforcer = Depends(get_enforcer)
 ):
     """
@@ -144,15 +150,14 @@ def remove_team(
 
 
 @router.delete(
-    "/{organization_id}/teams/{team_id}/archive", response_model=Organization
+    "/{organization_id}/teams/{team_id}/archive", 
+    response_model=Organization,
+    dependencies=[Depends(authorization("organizations:archive_team"))]
 )
 def archive_team(
-    organization_id: int,
     team_id: int,
     *,
-    auth=Depends(authorization("organizations:delete_team")),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
     """
     Archive one team by id
@@ -161,9 +166,9 @@ def archive_team(
 
     if not organization_in_db:
         raise HTTPException(status_code=404, detail="Team not found")
+    
     organization_in_db.archived = True
     organization_in_db.archived_at = datetime.now()
-    db.add(organization_in_db)
     db.commit()
-    db.refresh(organization_in_db)
+    
     return organization_in_db
