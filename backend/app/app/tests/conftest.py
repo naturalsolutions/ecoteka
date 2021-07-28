@@ -76,5 +76,7 @@ pytest_plugins = [
     "app.tests.utils.security",
     "app.tests.fixtures.tree",
     "app.tests.fixtures.intervention",
-    "app.tests.fixtures.image"
+    "app.tests.fixtures.image",
+    "app.tests.fixtures.user",
+    "app.tests.fixtures.organization"
 ]

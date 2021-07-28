@@ -120,7 +120,7 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
     def get_by_path(self, db: Session, *, path: str) -> Optional[Organization]:
         return db.query(Organization).filter(Organization.path == Ltree(path)).one()
 
-    def get_root_nodes(self, db: Session) -> Optional[Organization]:
+    def get_root_nodes(self, db: Session) -> List[Organization]:
         return db.query(Organization).filter(func.nlevel(Organization.path) == 1).all()
 
     def get_teams(self, db: Session, *, parent_id: int) -> List[Organization]:

@@ -37,8 +37,9 @@ def get_organization_root_nodes(
             status_code=403, detail="You are not authorized to perform this action."
         )
     
-    root_nodes_in_db = crud.organization.get_root_nodes(db)
     root_nodes = []
+    root_nodes_in_db = crud.organization.get_root_nodes(db)
+
     for org_in_db in root_nodes_in_db:
         current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(org_in_db.id))
         org = org_in_db.to_schema()
