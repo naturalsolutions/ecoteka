@@ -131,6 +131,9 @@ def authorization(action: str):
         user=Depends(get_current_user),
         enforcer=Depends(get_enforcer)
     ):
+        if user.is_superuser:
+            return
+
         user_roles = enforcer.get_roles_for_user_in_domain(
             str(user.id), str(organization_id)
         )    

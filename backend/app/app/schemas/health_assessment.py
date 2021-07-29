@@ -1,8 +1,7 @@
 from datetime import datetime, date
-from uuid import UUID
 from typing import Optional, Any
 from enum import Enum
-from pydantic import BaseModel, Field, ValidationError, validator
+from pydantic import BaseModel, Field, validator
 
 class HealthAssessmentOrgan(str, Enum):
     UNDEFINED = "undefined"

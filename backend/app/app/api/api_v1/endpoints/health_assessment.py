@@ -10,10 +10,10 @@ from typing import List
 router = APIRouter()
 
 settings.policies["health_assessment"] = {
-    "health_assessment:read": ["owner", "manager", "contributor", "reader"],
-    "health_assessment:create": ["owner", "manager", "contributor"],
-    "health_assessment:update": ["owner", "manager", "contributor"],
-    "health_assessment:delete": ["owner", "manager"],
+    "health_assessment:read": ["admin", "owner", "manager", "contributor", "reader"],
+    "health_assessment:create": ["admin", "owner", "manager", "contributor"],
+    "health_assessment:update": ["admin", "owner", "manager", "contributor"],
+    "health_assessment:delete": ["admin", "owner", "manager"],
 }
 
 
@@ -50,12 +50,15 @@ def read(
     return health_assessment
 
 
-@router.post("/", response_model=HealthAssessment)
+@router.post(
+    "", 
+    response_model=HealthAssessment,
+    dependencies=[Depends(authorization("health_assessment:create"))]
+)
 def create(
     organization_id: int,
     tree_id: int,
     *,
-    auth=Depends(authorization("health_assessment:create")),
     request_health_assessment: HealthAssessmentCreate,
     db: Session = Depends(get_db),
 ):
@@ -69,6 +72,7 @@ def create(
 
     request_health_assessment.organization_id = organization_id
     request_health_assessment.tree_id = tree_id
+    
     return crud.health_assessment.create(db, obj_in=request_health_assessment)
 
 

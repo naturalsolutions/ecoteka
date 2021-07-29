@@ -110,8 +110,6 @@ def test_remove_members(
         headers=mock_data["headers"]
     )
 
-    print(response.json())
-     
     assert response.status_code == status_code
 
 @pytest.mark.parametrize(
