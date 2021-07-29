@@ -2,12 +2,7 @@ import pytest
 from typing import Dict
 from fastapi.testclient import TestClient
 from app.tests.utils.security import users_parameters
-from faker import Faker
-from faker.providers import internet
 from app.crud import crud_user
-
-fake = Faker()
-fake.add_provider(internet)
 
 @pytest.mark.parametrize(
     'mode_organization, role, status_code', 
@@ -101,29 +96,21 @@ def test_remove_members(
     mode_organization: str,
     role: str,
     status_code: int,
-    db,
-    enforcer,
-    headers_user_and_organization_from_organization_role):
+    create_user,
+    add_user_to_organization,
+    headers_user_and_organization_from_organization_role
+):
     mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
     organization_id = mock_data["organization"].id    
-    user_in = crud_user.UserCreate(**{
-        "email": fake.email(),
-        "password": "password",
-        "full_name": fake.name()
-    })
-
-    user_in_db = crud_user.user.create(db, obj_in=user_in)
-
-    enforcer.add_role_for_user_in_domain(
-        str(user_in_db.id), role, str(mock_data["organization"].id)
-    )
-    enforcer.load_policy()
-
+    user = create_user()
+    add_user_to_organization(organization_id, user.id)
 
     response = client.delete(
-        f"/organization/{organization_id}/members/{user_in_db.id}", 
+        f"/organization/{organization_id}/members/{user.id}", 
         headers=mock_data["headers"]
     )
+
+    print(response.json())
      
     assert response.status_code == status_code
 
@@ -140,15 +127,18 @@ def test_update_member_role(
     mode_organization: str,
     role: str,
     status_code: int,
+    faker,
     db,
     enforcer,
-    headers_user_and_organization_from_organization_role):
+    headers_user_and_organization_from_organization_role
+):
+    faker.random.seed()
     mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
     organization_id = mock_data["organization"].id    
     user_in = crud_user.UserCreate(**{
-        "email": fake.email(),
+        "email": faker.email(),
         "password": "password",
-        "full_name": fake.name()
+        "full_name": faker.name()
     })
 
     user_in_db = crud_user.user.create(db, obj_in=user_in)

@@ -5,7 +5,8 @@ def test_get_organization_root_nodes(
     client: TestClient,
     auth_user,
     create_organization_root,
-    add_user_to_organization
+    add_user_to_organization,
+    delete_user
 ):
     superuser = auth_user(is_superuser=True)
     user_id = superuser["user"].id
@@ -17,7 +18,9 @@ def test_get_organization_root_nodes(
         headers=superuser["headers"]
     )
 
+    delete_user(user_id)
     assert response.status_code == 200
+
 
     is_not_superuser = auth_user(is_superuser=False)
     response = client.get(
@@ -25,12 +28,14 @@ def test_get_organization_root_nodes(
         headers=is_not_superuser["headers"]
     )
 
+    delete_user(user_id)
     assert response.status_code == 403
 
 def test_create_organization_root_node(
     client: TestClient,
     auth_user,
-    generate_organization_data
+    generate_organization_data,
+    delete_user
 ):
     superuser = auth_user(is_superuser=True)
     new_organization_data = generate_organization_data(
@@ -42,6 +47,7 @@ def test_create_organization_root_node(
         json=new_organization_data
     )
 
+    delete_user(superuser["user"].id)
     assert response.status_code == 200
 
     is_not_superuser = auth_user(is_superuser=False)
@@ -53,4 +59,5 @@ def test_create_organization_root_node(
         headers=is_not_superuser["headers"],
         json=new_organization_data
     )
+    delete_user(is_not_superuser["user"].id)
     assert response.status_code == 403 

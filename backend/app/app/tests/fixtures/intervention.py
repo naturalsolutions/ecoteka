@@ -1,14 +1,8 @@
 from typing import Optional
 import pytest
-from faker import Faker
-from faker.providers import geo
 from app.models.intervention import Intervention
 from app.schemas.intervention import InterventionCreate
 from app.crud import crud_intervention
-
-
-fake = Faker()
-fake.add_provider(geo)
 
 @pytest.fixture
 def create_intervention(db, create_tree):

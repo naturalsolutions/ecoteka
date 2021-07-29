@@ -1,19 +1,15 @@
 import pytest
-from faker import Faker
-from faker.providers import geo
 from app.models.tree import Tree
 from app.schemas.tree import TreeCreate
 from app.crud import crud_tree
 
-
-fake = Faker()
-fake.add_provider(geo)
-
 @pytest.fixture
-def create_tree(db):
+def create_tree(db, faker):
     def decorator(organization_id: int, user_id: int) -> Tree:
-        x = fake.longitude()
-        y = fake.latitude()
+        faker.random.seed()
+
+        x = faker.unique.longitude()
+        y = faker.unique.latitude()
 
         tree_data = TreeCreate(
             geom=f"POINT({x} {y})",

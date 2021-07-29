@@ -3,12 +3,6 @@ import pytest
 
 from app.core.security import generate_access_token_and_refresh_token_response
 from app.crud import crud_organization, crud_user
-from faker import Faker
-from faker.providers import internet
-
-fake = Faker()
-fake.add_provider(internet)
-
 from enum import Enum
 
 
@@ -44,48 +38,43 @@ def users_parameters(permissions: Dict[str, List[str]]) -> List[Tuple]:
 
 
 @pytest.fixture(scope="function")
-def headers_user_and_organization_from_organization_role(enforcer, db):
-    organization_in = crud_organization.OrganizationCreate(**{
-        "name": fake.name(),
-        "mode": "private"
-    })
-    organization_in_db = crud_organization.organization.create(db, obj_in=organization_in)
-
-    user_in = crud_user.UserCreate(**{
-        "email": fake.email(),
-        "password": "password",
-        "full_name": fake.name()
-    })
-
-    user_in_db = crud_user.user.create(db, obj_in=user_in)
-        
+def headers_user_and_organization_from_organization_role(
+    db, 
+    create_organization_root,
+    create_user,
+    add_user_to_organization,
+    delete_user
+):
+    user = create_user()
+    organization = create_organization_root(owner_email=user.email)
+    
     def decorator(
         organization_mode: OrganizationMode,
         role: str,
     ):
-        organization_in_db.mode = organization_mode
+       
+        organization.mode = organization_mode
         db.commit()    
-
-        enforcer.add_role_for_user_in_domain(
-            str(user_in_db.id), role, str(organization_in_db.id)
+        add_user_to_organization(
+            organization_id=organization.id, 
+            user_id=user.id,
+            role=role
         )
-        enforcer.load_policy()
 
-        tokens = generate_access_token_and_refresh_token_response(user_id=user_in_db.id, is_superuser=False)
+        tokens = generate_access_token_and_refresh_token_response(user_id=user.id, is_superuser=False)
         access_token = tokens["access_token"]
         headers = {"Authorization": f"Bearer {access_token}"}
 
 
         return {
             "headers": headers,
-            "user": user_in_db,
-            "organization": organization_in_db,
+            "user": user,
+            "organization": organization,
             "role": role
         }
 
     yield decorator
 
-    crud_organization.organization.remove(db=db, id=organization_in_db.id)
-    crud_user.user.remove(db=db, id=user_in_db.id)
-    enforcer.delete_user(str(user_in_db.id))
-    enforcer.load_policy()
+    crud_organization.organization.remove(db, id=organization.id)
+    delete_user(user.id)
+    

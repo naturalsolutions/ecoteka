@@ -16,14 +16,17 @@ from fastapi_jwt_auth import AuthJWT
 router = APIRouter()
 
 
-@router.get("/", response_model=List[UserOut])
+@router.get(
+    "", 
+    response_model=List[UserOut], 
+    dependencies=[Depends(get_current_user_if_is_superuser)]
+)
 def read_users(
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: User = Depends(get_current_user_if_is_superuser),
     Authorize: AuthJWT = Depends(),
-) -> Any:
+) -> List[UserOut]:
     """
     Retrieve users.
     """
@@ -32,30 +35,28 @@ def read_users(
     return users
 
 
-@router.post("/", response_model=UserOut)
+@router.post(
+    "", 
+    response_model=UserOut,
+    dependencies=[Depends(get_current_user_if_is_superuser)]
+)
 def create_user(
     *,
     db: Session = Depends(get_db),
-    user_in: UserCreate,
-    current_user: User = Depends(get_current_user_if_is_superuser),
-) -> Any:
+    user_in: UserCreate
+) -> User:
     """
     Create new user.
     """
     user_in_db = user.get_by_email(db, email=user_in.email)
+    
     if user_in_db:
         raise HTTPException(
             status_code=400,
             detail="The user with this username already exists in the system.",
         )
-    user_in_db = user.create(db, obj_in=user_in)
-    # if settings.EMAILS_ENABLED and user_in.email:
-    #     send_new_account_email(
-    #         email_to=user_in.email,
-    #         username=user_in.email,
-    #         password=user_in.password
-    #     )
-    return user_in_db
+    
+    return user.create(db, obj_in=user_in)
 
 
 @router.put("/me", response_model=UserOut)
