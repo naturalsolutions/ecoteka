@@ -3,14 +3,8 @@ from fastapi import APIRouter, Depends
 
 from sqlalchemy.orm import Session
 from app.api import get_db
-from app.crud import organization
-
-
-from app.schemas import (
-    Organization,
-)
-from app.models import User, Organization as OrganizationModel
-from app.worker import send_new_invitation_email_task
+from app.crud.crud_organization import organization
+from app.schemas.organization import Organization
 
 router = APIRouter()
 
