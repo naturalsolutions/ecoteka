@@ -10,7 +10,6 @@ from app.core import (
     authorization,
     get_current_user,
 )
-from app.worker import create_mbtiles_task
 
 settings.policies["geo_files"] = {
     "geofiles:read_geo_files": ["owner", "manager", "contributor", "reader"],

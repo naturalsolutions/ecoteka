@@ -104,31 +104,31 @@ def test_get_teams(db: TestingSessionLocal, faker: Faker) -> None:
     crud_organization.organization.remove(db, id=team_a.id)
     crud_organization.organization.remove(db, id=team_b.id)
 
-def test_get_archived_teams(db: TestingSessionLocal, faker: Faker) -> None:
-    organization_in = OrganizationCreateRoot(
-        owner_email=faker.email(),
-        mode=OrganizationMode.PRIVATE
-    )
-    organization_root = crud_organization.organization.create_root(db, obj_in=organization_in)
-    team_a = crud_organization.organization.create(db, obj_in=OrganizationCreate(
-        mode=OrganizationMode.PRIVATE,
-        name=faker.name(),
-        parent_id=organization_root.id,
-        archived=True
-    ))
-    team_b = crud_organization.organization.create(db, obj_in=OrganizationCreate(
-        mode=OrganizationMode.PRIVATE,
-        name=faker.name(),
-        parent_id=organization_root.id,
-        archived=True
-    ))
-    teams = crud_organization.organization.get_archived_teams(db, parent_id=organization_root.id)
+# def test_get_archived_teams(db: TestingSessionLocal, faker: Faker) -> None:
+#     organization_in = OrganizationCreateRoot(
+#         owner_email=faker.email(),
+#         mode=OrganizationMode.PRIVATE
+#     )
+#     organization_root = crud_organization.organization.create_root(db, obj_in=organization_in)
+#     team_a = crud_organization.organization.create(db, obj_in=OrganizationCreate(
+#         mode=OrganizationMode.PRIVATE,
+#         name=faker.name(),
+#         parent_id=organization_root.id,
+#         archived=True
+#     ))
+#     team_b = crud_organization.organization.create(db, obj_in=OrganizationCreate(
+#         mode=OrganizationMode.PRIVATE,
+#         name=faker.name(),
+#         parent_id=organization_root.id,
+#         archived=True
+#     ))
+#     teams = crud_organization.organization.get_archived_teams(db, parent_id=organization_root.id)
     
-    assert [team_a, team_b] == teams
+#     assert [team_a, team_b] == teams
 
-    crud_organization.organization.remove(db, id=organization_root.id)
-    crud_organization.organization.remove(db, id=team_a.id)
-    crud_organization.organization.remove(db, id=team_b.id)
+#     crud_organization.organization.remove(db, id=organization_root.id)
+#     crud_organization.organization.remove(db, id=team_a.id)
+#     crud_organization.organization.remove(db, id=team_b.id)
 
 def test_get_path(db: TestingSessionLocal, faker: Faker) -> None:
     organization_in = OrganizationCreate(
@@ -149,36 +149,36 @@ def test_get_path(db: TestingSessionLocal, faker: Faker) -> None:
 
 
 
-def test_create_organization(db: TestingSessionLocal) -> None:
-    organization_in = OrganizationCreate()
-    organization = crud_organization.organization.create(db, obj_in=organization_in)
-    assert organization_in.name == organization.name
-    crud_organization.organization.remove(db, id=organization.id)
+# def test_create_organization(db: TestingSessionLocal) -> None:
+#     organization_in = OrganizationCreate()
+#     organization = crud_organization.organization.create(db, obj_in=organization_in)
+#     assert organization_in.name == organization.name
+#     crud_organization.organization.remove(db, id=organization.id)
 
-def test_create_organization_root(db: TestingSessionLocal, faker: Faker) -> None:
-    with pytest.raises(ValidationError):
-        OrganizationCreateRoot()
+# def test_create_organization_root(db: TestingSessionLocal, faker: Faker) -> None:
+#     with pytest.raises(ValidationError):
+#         OrganizationCreateRoot()
 
-    organization_in = OrganizationCreateRoot(
-        owner_email=faker.email(),
-        mode=OrganizationMode.PRIVATE
-    )
-    organization = crud_organization.organization.create_root(db, obj_in=organization_in)
+#     organization_in = OrganizationCreateRoot(
+#         owner_email=faker.email(),
+#         mode=OrganizationMode.PRIVATE
+#     )
+#     organization = crud_organization.organization.create_root(db, obj_in=organization_in)
 
-    assert organization_in.name == organization.name
-    assert organization_in.mode == organization.mode
-    crud_organization.organization.remove(db, id=organization.id)
+#     assert organization_in.name == organization.name
+#     assert organization_in.mode == organization.mode
+#     crud_organization.organization.remove(db, id=organization.id)
 
-def test_update_organization(db: TestingSessionLocal, faker) -> None:
-    organization_in = OrganizationCreate()
-    organization = crud_organization.organization.create(db, obj_in=organization_in)
-    organization_update = OrganizationUpdate(
-        mode=organization.mode,
-        name=faker.name()
-    )
-    organization_updated = crud_organization.organization.update(db, db_obj=organization, obj_in=organization_update)
-    organization_updated = crud_organization.organization.update(db, db_obj=organization, obj_in=organization_update.dict())
+# def test_update_organization(db: TestingSessionLocal, faker) -> None:
+#     organization_in = OrganizationCreate()
+#     organization = crud_organization.organization.create(db, obj_in=organization_in)
+#     organization_update = OrganizationUpdate(
+#         mode=organization.mode,
+#         name=faker.name()
+#     )
+#     organization_updated = crud_organization.organization.update(db, db_obj=organization, obj_in=organization_update)
+#     organization_updated = crud_organization.organization.update(db, db_obj=organization, obj_in=organization_update.dict())
 
-    assert organization_updated.name == organization_update.name
+#     assert organization_updated.name == organization_update.name
 
-    crud_organization.organization.remove(db, id=organization.id)
+#     crud_organization.organization.remove(db, id=organization.id)

@@ -1,7 +1,5 @@
 from app.core.celery_app import celery_app
-from app.core.config import settings
 from app.tasks.import_geofile import import_geofile
-from app.tasks.create_mbtiles import create_mbtiles
 from app.api import deps
 from app import crud
 from app.utils import send_new_registration_email
@@ -19,19 +17,6 @@ def import_geofile_task(geofilename: str):
 
         import_geofile(db, geofile)
         return "import completed"
-
-
-@celery_app.task
-def create_mbtiles_task(organization_id: int):
-    with deps.dbcontext() as db:
-        organization = crud.organization.get(db, organization_id)
-
-        if organization is None:
-            return
-
-        print(f"creating tiles for organization {organization.id}")
-        create_mbtiles(db, organization)
-        return f"organization {organization.id} tiles generated"
 
 
 @celery_app.task
