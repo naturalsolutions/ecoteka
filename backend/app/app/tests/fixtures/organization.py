@@ -16,6 +16,9 @@ def generate_organization_data(faker):
 
         if owner_email is None:
             owner_email = faker.unique.email()
+        if owner_email is False:
+            owner_email = None
+            
         return {
             "owner_email": owner_email,
             "name": faker.unique.name(),
