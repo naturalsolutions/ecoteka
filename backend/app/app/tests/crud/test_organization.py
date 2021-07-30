@@ -136,8 +136,8 @@ def test_get_teams(db: TestingSessionLocal, faker: Faker) -> None:
         db, parent_id=organization_root.id
     )
 
-    assert teams[0].id == team_a.id
-    assert teams[1].id == team_b.id
+    assert teams[1].id == team_a.id
+    assert teams[0].id == team_b.id
 
     crud_organization.organization.remove(db, id=organization_root.id)
     crud_organization.organization.remove(db, id=team_a.id)
