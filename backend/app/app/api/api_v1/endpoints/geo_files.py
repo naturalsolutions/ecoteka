@@ -34,7 +34,7 @@ settings.policies["geo_files"] = {
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.GeoFile])
+@router.get("", response_model=List[schemas.GeoFile])
 def read_geo_files(
     organization_id: int,
     auth=Depends(authorization("geofiles:read_geo_files")),

@@ -46,38 +46,48 @@ from app.tests.utils.security import users_parameters
 #     assert response.status_code == status_code
 
 
-# @pytest.mark.parametrize(
-#     "mode_organization, role, status_code",
-#     users_parameters(
-#         {
-#             "private": ["admin", "owner", "manager", "contributor", "reader"],
-#             "open": ["admin", "owner", "manager", "contributor", "reader"],
-#             "participatory": [
-#                 "admin",
-#                 "owner",
-#                 "manager",
-#                 "contributor",
-#                 "reader",
-#             ],
-#         }
-#     ),
-# )
-# def test_read_geo_files(
-#     client: TestClient,
-#     mode_organization: str,
-#     role: str,
-#     status_code: int,
-#     headers_user_and_organization_from_organization_role,
-# ) -> None:
-#     auth = headers_user_and_organization_from_organization_role(
-#         mode_organization, role
-#     )
-#     organization_id = auth["organization"].id
-#     response = client.get(
-#         f"/organization/{organization_id}/geo_files", headers=auth["headers"]
-#     )
+@pytest.mark.parametrize(
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor", "reader"],
+            "open": ["admin", "owner", "manager", "contributor", "reader"],
+            "participatory": [
+                "admin",
+                "owner",
+                "manager",
+                "contributor",
+                "reader",
+            ],
+        }
+    ),
+)
+def test_read_geo_files(
+    client: TestClient,
+    mode_organization: str,
+    role: str,
+    status_code: int,
+    headers_user_and_organization_from_organization_role,
+    create_geo_file,
+    delete_geo_file
+) -> None:
+    auth = headers_user_and_organization_from_organization_role(
+        mode_organization, role
+    )
+    organization_id = auth["organization"].id
+    geo_file = create_geo_file(
+        organization_id=organization_id, user_id=auth["user"].id
+    )
+    response = client.get(
+        f"/organization/{organization_id}/geo_files", headers=auth["headers"]
+    )
 
-#     assert response.status_code == status_code
+    assert response.status_code == status_code
+
+    if status_code == 200:
+        response.json()[0]["id"] == geo_file.id
+
+    delete_geo_file(name=geo_file.name)
 
 
 @pytest.mark.parametrize(
