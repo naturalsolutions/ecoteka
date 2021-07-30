@@ -91,7 +91,7 @@ def get_image(
 
 
 @router.delete(
-    "/images",
+    "",
     dependencies=[Depends(authorization("trees:delete_images"))],
 )
 def delete_images(tree_id: int, organization_id: int):
@@ -104,8 +104,7 @@ def delete_images(tree_id: int, organization_id: int):
 
         return tree_id
     except Exception as e:
-        logging.error(e)
-        return HTTPException(status_code=500, detail="Can't delete folder")
+        raise HTTPException(status_code=500, detail="Can't delete folder")
 
 
 @router.delete(
@@ -119,11 +118,7 @@ def delete_image(image: str, tree_id: int, organization_id: int):
     image_path: str = f"{settings.UPLOADED_FILES_FOLDER}/organizations/{str(organization_id)}/{str(tree_id)}/{image}"
 
     try:
-        if os.path.exists(image_path):
-            os.remove(image_path)
-
+        os.remove(image_path)
         return tree_id
     except:
-        return HTTPException(
-            status_code=500, detail="Can't delete {image} file"
-        )
+        raise HTTPException(status_code=500, detail="Can't delete {image} file")
