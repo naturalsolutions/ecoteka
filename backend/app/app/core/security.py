@@ -18,15 +18,9 @@ token_url = f"{settings.ROOT_PATH}/auth/login"
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=token_url)
 
 
-class Settings(BaseModel):
-    authjwt_secret_key: str = settings.SECRET_KEY
-    authjwt_access_token_expires: timedelta = settings.authjwt_access_token_expires
-    authjwt_refresh_token_expires: timedelta = settings.authjwt_refresh_token_expires
-
-
 @AuthJWT.load_config
 def get_config():
-    return Settings()
+    return settings
 
 
 def generate_access_token_and_refresh_token_response(
@@ -84,17 +78,6 @@ def get_current_user(
     return user_in_db
 
 
-def get_current_active_user(
-    current_user: User = Depends(get_current_user),
-) -> User:
-    if not user.is_verified(current_user):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="The user account is not verified",
-        )
-    return current_user
-
-
 def get_current_user_if_is_superuser(
     current_user: User = Depends(get_current_user),
 ) -> User:
@@ -106,7 +89,9 @@ def get_current_user_if_is_superuser(
     return current_user
 
 
-reusable_oauth2_optional = OAuth2PasswordBearer(tokenUrl=token_url, auto_error=False)
+reusable_oauth2_optional = OAuth2PasswordBearer(
+    tokenUrl=token_url, auto_error=False
+)
 
 
 def get_optional_current_active_user(
@@ -126,20 +111,20 @@ def get_optional_current_active_user(
 
 def authorization(action: str):
     def decorated(
-        request: Request, 
-        organization_id: int, 
+        request: Request,
+        organization_id: int,
         user=Depends(get_current_user),
-        enforcer=Depends(get_enforcer)
+        enforcer=Depends(get_enforcer),
     ):
         if user.is_superuser:
             return
 
         user_roles = enforcer.get_roles_for_user_in_domain(
             str(user.id), str(organization_id)
-        )    
+        )
 
         for role in user_roles:
-            if not enforcer.has_named_policy('p', role, action):
+            if not enforcer.has_named_policy("p", role, action):
                 raise HTTPException(
                     status_code=403,
                     detail="The user doesn't have enough privileges",
@@ -153,16 +138,19 @@ def authorization(action: str):
 
     return decorated
 
+
 def permissive_authorization(action: str):
     def decorated(
-        request: Request, 
-        organization_id, 
+        request: Request,
+        organization_id,
         user=Depends(get_optional_current_active_user),
-        db: Session = Depends(get_db), 
-        enforcer = Depends(get_enforcer)
+        db: Session = Depends(get_db),
+        enforcer=Depends(get_enforcer),
     ):
-        
-        organization = crud_organization.get_by_id_or_slug(db, id=organization_id)
+
+        organization = crud_organization.get_by_id_or_slug(
+            db, id=organization_id
+        )
 
         if not organization:
             raise HTTPException(
@@ -183,7 +171,9 @@ def permissive_authorization(action: str):
             if organization.mode == "private":
                 if user.is_superuser:
                     pass
-                if not enforcer.enforce(str(user.id), str(organization.id), action):
+                if not enforcer.enforce(
+                    str(user.id), str(organization.id), action
+                ):
                     raise HTTPException(
                         status_code=403,
                         detail="The user doesn't have enough privileges",
@@ -191,31 +181,31 @@ def permissive_authorization(action: str):
 
     return decorated
 
+
 def authorize(
-    object: Organization, 
-    subject: Optional[User], 
-    action: str,
-    enforcer):
-        if not subject:
-            if object.mode == "public":
+    object: Organization, subject: Optional[User], action: str, enforcer
+):
+    if not subject:
+        if object.mode == "public":
+            pass
+        if object.mode == "private":
+            raise HTTPException(
+                status_code=403,
+                detail="Only authenticated members will be granted access to private organization. Please login first.",
+            )
+
+    if subject:
+        if object.mode == "public":
+            pass
+        if object.mode == "private":
+            if subject.is_superuser:
                 pass
-            if object.mode == "private":
+            if not enforcer.enforce(str(subject.id), str(object.id), action):
                 raise HTTPException(
                     status_code=403,
-                    detail="Only authenticated members will be granted access to private organization. Please login first.",
+                    detail="The user doesn't have enough privileges",
                 )
-                
-        if subject:
-            if object.mode == "public":
-                pass
-            if object.mode == "private":
-                if subject.is_superuser:
-                    pass
-                if not enforcer.enforce(str(subject.id), str(object.id), action):
-                    raise HTTPException(
-                        status_code=403,
-                        detail="The user doesn't have enough privileges",
-                    )
+
 
 def set_policies(policies, enforcer):
     for key in policies:
@@ -226,9 +216,9 @@ def set_policies(policies, enforcer):
 
 
 def get_current_user_with_organizations(
-    current_user=Depends(get_current_user), 
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
-    enforcer = Depends(get_enforcer)
+    enforcer=Depends(get_enforcer),
 ):
     query = text("SELECT v2 FROM casbin_rule WHERE ptype=:ptype AND v0=:user")
     params = {"ptype": "g", "user": str(current_user.id)}
@@ -237,8 +227,12 @@ def get_current_user_with_organizations(
 
     for row in db.execute(query, params=params):
         organization_in_db = crud_organization.get(db, id=row[0])
-        if organization_in_db is not None and isinstance(organization_in_db, Organization):
-            current_roles = enforcer.get_roles_for_user_in_domain(str(current_user.id), str(organization_in_db.id))
+        if organization_in_db is not None and isinstance(
+            organization_in_db, Organization
+        ):
+            current_roles = enforcer.get_roles_for_user_in_domain(
+                str(current_user.id), str(organization_in_db.id)
+            )
             organization = organization_in_db.to_current_user_schema()
             if len(current_roles) > 0:
                 organization.current_user_role = current_roles[0]

@@ -15,13 +15,16 @@ from app.api.api_v1.endpoints import (
     featured,
     teams,
     members,
+    images,
 )
 
 api_router = APIRouter()
 api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
 api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
 api_router.include_router(users.router, prefix="/users", tags=["users"])
-api_router.include_router(featured.router, prefix="/featured", tags=["featured"])
+api_router.include_router(
+    featured.router, prefix="/featured", tags=["featured"]
+)
 api_router.include_router(
     registration_link.router,
     prefix="/registration_link",
@@ -33,7 +36,14 @@ api_router.include_router(
     tags=["geo_files"],
 )
 api_router.include_router(
-    health_assessment.router, prefix="/organization/{organization_id}/trees/{tree_id}/health_assessments", tags=["health_assessments"]
+    images.router,
+    prefix="/organization/{organization_id}/trees/{tree_id}/images",
+    tags=["images"],
+)
+api_router.include_router(
+    health_assessment.router,
+    prefix="/organization/{organization_id}/trees/{tree_id}/health_assessments",
+    tags=["health_assessments"],
 )
 api_router.include_router(
     trees.router, prefix="/organization/{organization_id}/trees", tags=["trees"]
@@ -52,9 +62,7 @@ api_router.include_router(
     organization.router, prefix="/organization", tags=["organization"]
 )
 
-api_router.include_router(
-    teams.router, prefix="/organization", tags=["teams"]
-)
+api_router.include_router(teams.router, prefix="/organization", tags=["teams"])
 
 api_router.include_router(
     members.router, prefix="/organization", tags=["members"]

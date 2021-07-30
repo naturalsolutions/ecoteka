@@ -1,16 +1,18 @@
 import pytest
-from typing import Dict
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 from app.tests.utils.security import users_parameters
-from app.core import settings
+
 
 @pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor"],
-        "open": ["admin", "owner", "manager", "contributor"],
-        "participatory": ["admin", "owner", "manager", "contributor"]
-    })
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor"],
+            "open": ["admin", "owner", "manager", "contributor"],
+            "participatory": ["admin", "owner", "manager", "contributor"],
+        }
+    ),
 )
 def test_add(
     client: TestClient,
@@ -18,43 +20,45 @@ def test_add(
     role: str,
     status_code: int,
     headers_user_and_organization_from_organization_role,
-    create_tree
+    create_tree,
 ):
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
+    mock_data = headers_user_and_organization_from_organization_role(
+        mode_organization, role
+    )
     organization_id = mock_data["organization"].id
     tree = create_tree(organization_id, mock_data["user"].id).to_xy()
-    new_tree_data = {
-        "x": tree.x,
-        "y": tree.y
-    }
+    new_tree_data = {"x": tree.x, "y": tree.y}
 
     response = client.post(
-        f"/organization/{organization_id}/trees", 
+        f"/organization/{organization_id}/trees",
         headers=mock_data["headers"],
-        json=new_tree_data
+        json=new_tree_data,
     )
 
     assert response.status_code == status_code
 
     if status_code == 200:
         response_data = response.json()
-        del response_data['id']
+        del response_data["id"]
         assert response_data == {
-            'properties': None, 
-            'geofile_id': None, 
-            'user_id': mock_data["user"].id, 
-            'organization_id': organization_id, 
-            'x': tree.x, 
-            'y': tree.y
+            "properties": None,
+            "geofile_id": None,
+            "user_id": mock_data["user"].id,
+            "organization_id": organization_id,
+            "x": tree.x,
+            "y": tree.y,
         }
 
+
 @pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor"],
-        "open": ["admin", "owner", "manager", "contributor"],
-        "participatory": ["admin", "owner", "manager", "contributor"]
-    })
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor"],
+            "open": ["admin", "owner", "manager", "contributor"],
+            "participatory": ["admin", "owner", "manager", "contributor"],
+        }
+    ),
 )
 def test_update(
     client: TestClient,
@@ -62,22 +66,20 @@ def test_update(
     role: str,
     status_code: int,
     headers_user_and_organization_from_organization_role,
-    create_tree
+    create_tree,
 ):
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
+    mock_data = headers_user_and_organization_from_organization_role(
+        mode_organization, role
+    )
     organization_id = mock_data["organization"].id
     tree = create_tree(organization_id, mock_data["user"].id)
-    tree.properties = {
-        "name": "name"
-    }
-    tree_data = {
-        "properties": tree.properties
-    }
+    tree.properties = {"name": "name"}
+    tree_data = {"properties": tree.properties}
 
     response = client.put(
-        f"/organization/{organization_id}/trees/{tree.id}", 
+        f"/organization/{organization_id}/trees/{tree.id}",
         headers=mock_data["headers"],
-        json=tree_data
+        json=tree_data,
     )
 
     assert response.status_code == status_code
@@ -85,13 +87,22 @@ def test_update(
     if status_code == 200:
         response.json() == tree.to_xy()
 
+
 @pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor", "reader"],
-        "open": ["admin", "owner", "manager", "contributor", "reader"],
-        "participatory": ["admin", "owner", "manager", "contributor", "reader"]
-    })
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor", "reader"],
+            "open": ["admin", "owner", "manager", "contributor", "reader"],
+            "participatory": [
+                "admin",
+                "owner",
+                "manager",
+                "contributor",
+                "reader",
+            ],
+        }
+    ),
 )
 def test_get(
     client: TestClient,
@@ -99,14 +110,16 @@ def test_get(
     role: str,
     status_code: int,
     headers_user_and_organization_from_organization_role,
-    create_tree
+    create_tree,
 ):
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
+    mock_data = headers_user_and_organization_from_organization_role(
+        mode_organization, role
+    )
     organization_id = mock_data["organization"].id
-    tree = create_tree(organization_id, mock_data["user"].id)   
+    tree = create_tree(organization_id, mock_data["user"].id)
     response = client.get(
-        f"/organization/{organization_id}/trees/{tree.id}", 
-        headers=mock_data["headers"]
+        f"/organization/{organization_id}/trees/{tree.id}",
+        headers=mock_data["headers"],
     )
 
     assert response.status_code == status_code
@@ -114,13 +127,22 @@ def test_get(
     if status_code == 200:
         response.json() == tree.to_xy()
 
+
 @pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor", "reader"],
-        "open": ["admin", "owner", "manager", "contributor", "reader"],
-        "participatory": ["admin", "owner", "manager", "contributor", "reader"]
-    })
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor", "reader"],
+            "open": ["admin", "owner", "manager", "contributor", "reader"],
+            "participatory": [
+                "admin",
+                "owner",
+                "manager",
+                "contributor",
+                "reader",
+            ],
+        }
+    ),
 )
 def test_get_interventions(
     client: TestClient,
@@ -128,14 +150,16 @@ def test_get_interventions(
     role: str,
     status_code: int,
     headers_user_and_organization_from_organization_role,
-    create_intervention
+    create_intervention,
 ):
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
+    mock_data = headers_user_and_organization_from_organization_role(
+        mode_organization, role
+    )
     organization_id = mock_data["organization"].id
     intervention = create_intervention(organization_id, mock_data["user"].id)
     response = client.get(
-        f"/organization/{organization_id}/trees/{intervention.tree_id}", 
-        headers=mock_data["headers"]
+        f"/organization/{organization_id}/trees/{intervention.tree_id}",
+        headers=mock_data["headers"],
     )
 
     assert response.status_code == status_code
@@ -143,13 +167,16 @@ def test_get_interventions(
     if status_code == 200:
         response.json() == [intervention]
 
+
 @pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor"],
-        "open": ["admin", "owner", "manager", "contributor"],
-        "participatory": ["admin", "owner", "manager", "contributor"]
-    })
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor"],
+            "open": ["admin", "owner", "manager", "contributor"],
+            "participatory": ["admin", "owner", "manager", "contributor"],
+        }
+    ),
 )
 def test_delete(
     client: TestClient,
@@ -157,14 +184,16 @@ def test_delete(
     role: str,
     status_code: int,
     headers_user_and_organization_from_organization_role,
-    create_tree
+    create_tree,
 ):
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
+    mock_data = headers_user_and_organization_from_organization_role(
+        mode_organization, role
+    )
     organization_id = mock_data["organization"].id
-    tree = create_tree(organization_id, mock_data["user"].id)   
+    tree = create_tree(organization_id, mock_data["user"].id)
     response = client.delete(
-        f"/organization/{organization_id}/trees/{tree.id}", 
-        headers=mock_data["headers"]
+        f"/organization/{organization_id}/trees/{tree.id}",
+        headers=mock_data["headers"],
     )
 
     assert response.status_code == status_code
@@ -174,12 +203,14 @@ def test_delete(
 
 
 @pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor"],
-        "open": ["admin", "owner", "manager", "contributor"],
-        "participatory": ["admin", "owner", "manager", "contributor"]
-    })
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor"],
+            "open": ["admin", "owner", "manager", "contributor"],
+            "participatory": ["admin", "owner", "manager", "contributor"],
+        }
+    ),
 )
 def test_bulk_delete(
     client: TestClient,
@@ -187,17 +218,19 @@ def test_bulk_delete(
     role: str,
     status_code: int,
     headers_user_and_organization_from_organization_role,
-    create_tree
+    create_tree,
 ):
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
+    mock_data = headers_user_and_organization_from_organization_role(
+        mode_organization, role
+    )
     organization_id = mock_data["organization"].id
-    tree_one = create_tree(organization_id, mock_data["user"].id)  
-    tree_two = create_tree(organization_id, mock_data["user"].id)   
+    tree_one = create_tree(organization_id, mock_data["user"].id)
+    tree_two = create_tree(organization_id, mock_data["user"].id)
     trees = [tree_one.id, tree_two.id]
     response = client.delete(
-        f"/organization/{organization_id}/trees/bulk_delete", 
+        f"/organization/{organization_id}/trees/bulk_delete",
         headers=mock_data["headers"],
-        json={"trees": trees}
+        json={"trees": trees},
     )
 
     assert response.status_code == status_code
@@ -207,204 +240,83 @@ def test_bulk_delete(
 
 
 @pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor"],
-        "open": ["admin", "owner", "manager", "contributor"],
-        "participatory": ["admin", "owner", "manager", "contributor"]
-    })
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor"],
+            "open": ["admin", "owner", "manager", "contributor"],
+            "participatory": ["admin", "owner", "manager", "contributor"],
+        }
+    ),
 )
-def test_upload_images(
+def test_trees_export(
     client: TestClient,
     mode_organization: str,
     role: str,
     status_code: int,
     headers_user_and_organization_from_organization_role,
-    generate_image,
-    create_tree
+    create_tree,
+    delete_tree,
 ):
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
-    organization_id = mock_data["organization"].id
-    tree = create_tree(organization_id, mock_data["user"].id)
-    image_one = generate_image(100, 100)
-    image_two = generate_image(150, 200)
-
-    response = client.post(
-        f"/organization/{organization_id}/trees/{tree.id}/images", 
-        headers=mock_data["headers"],
-        files=[
-            ("images", ("file1.jpg", image_one, "image/jpeg")),
-            ("images", ("file2.jpg", image_two, "image/jpeg"))
-        ]
+    mock_data = headers_user_and_organization_from_organization_role(
+        mode_organization, role
     )
-
-    assert response.status_code == status_code
-
-@pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor", "reader"],
-        "open": ["admin", "owner", "manager", "contributor", "reader"],
-        "participatory": ["admin", "owner", "manager", "contributor", "reader"]
-    })
-)
-def test_get_images(
-    client: TestClient,
-    mode_organization: str,
-    role: str,
-    status_code: int,
-    headers_user_and_organization_from_organization_role,
-    generate_image,
-    create_tree
-):
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
     organization_id = mock_data["organization"].id
-    tree = create_tree(organization_id, mock_data["user"].id)
-    image_one = generate_image(100, 100)
-    image_two = generate_image(150, 200)
 
-    response = client.post(
-        f"/organization/{organization_id}/trees/{tree.id}/images", 
-        headers=mock_data["headers"],
-        files=[
-            ("images", ("file1.jpg", image_one, "image/jpeg")),
-            ("images", ("file2.jpg", image_two, "image/jpeg"))
-        ]
-    )
-
+    ## NO DATA
     response = client.get(
-        f"/organization/{organization_id}/trees/{tree.id}/images", 
+        f"/organization/{organization_id}/trees/export?format=geojson",
         headers=mock_data["headers"],
     )
 
-    files = [
-        f"{settings.EXTERNAL_PATH}/organization/{organization_id}/trees/{tree.id}/images/file1.jpg",
-        f"{settings.EXTERNAL_PATH}/organization/{organization_id}/trees/{tree.id}/images/file2.jpg"
-    ]
-
-
-    assert response.status_code == status_code
-    
     if status_code == 200:
-        response.json() == files
+        assert response.status_code == 404
+        assert response.json()["detail"] == "this organization has no trees"
+    else:
+        assert response.status_code == status_code
 
-@pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor", "reader"],
-        "open": ["admin", "owner", "manager", "contributor", "reader"],
-        "participatory": ["admin", "owner", "manager", "contributor", "reader"]
-    })
-)
-def test_get_image(
-    client: TestClient,
-    mode_organization: str,
-    role: str,
-    status_code: int,
-    headers_user_and_organization_from_organization_role,
-    generate_image,
-    create_tree
-):
-    mock_data_create = headers_user_and_organization_from_organization_role(mode_organization, "owner")
-    organization_id = mock_data_create["organization"].id
-    tree = create_tree(organization_id, mock_data_create["user"].id)
-    image = generate_image(100, 100)
+    tree_one = create_tree(organization_id, mock_data["user"].id)
+    tree_two = create_tree(organization_id, mock_data["user"].id)
+    trees = [tree_one, tree_two]
 
-    
-    response = client.post(
-        f"/organization/{organization_id}/trees/{tree.id}/images", 
-        headers=mock_data_create["headers"],
-        files=[
-            ("images", ("file1.jpg", image, "image/jpeg"))
-        ]
+    ## INVALID FORMAT
+    response = client.get(
+        f"/organization/{organization_id}/trees/export?format=invalid_format",
+        headers=mock_data["headers"],
     )
 
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
+    if status_code == 200:
+        assert response.status_code == 404
+        assert response.json()["detail"] == "format not found"
 
+    ## GEOJSON
     response = client.get(
-        f"/organization/{organization_id}/trees/{tree.id}/images/file1.jpg", 
+        f"/organization/{organization_id}/trees/export?format=geojson",
         headers=mock_data["headers"],
     )
 
     assert response.status_code == status_code
 
+    if status_code == 200:
+        response.json()["type"] == "FeatureCollection"
+        len(response.json()["features"]) == len(trees)
 
-@pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor"],
-        "open": ["admin", "owner", "manager", "contributor"],
-        "participatory": ["admin", "owner", "manager", "contributor"]
-    })
-)
-def test_delete_images(
-    client: TestClient,
-    mode_organization: str,
-    role: str,
-    status_code: int,
-    headers_user_and_organization_from_organization_role,
-    generate_image,
-    create_tree
-):
-    mock_data_create = headers_user_and_organization_from_organization_role(mode_organization, "owner")
-    organization_id = mock_data_create["organization"].id
-    tree = create_tree(organization_id, mock_data_create["user"].id)
-    image = generate_image(100, 100)
-
-    
-    client.post(
-        f"/organization/{organization_id}/trees/{tree.id}/images", 
-        headers=mock_data_create["headers"],
-        files=[
-            ("images", ("file1.jpg", image, "image/jpeg"))
-        ]
-    )
-
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
-
-    response = client.delete(
-        f"/organization/{organization_id}/trees/{tree.id}/images", 
-        headers=mock_data["headers"]
+    ## CSV
+    response = client.get(
+        f"/organization/{organization_id}/trees/export?format=csv",
+        headers=mock_data["headers"],
     )
 
     assert response.status_code == status_code
 
-@pytest.mark.parametrize(
-    'mode_organization, role, status_code', 
-    users_parameters({
-        "private": ["admin", "owner", "manager", "contributor"],
-        "open": ["admin", "owner", "manager", "contributor"],
-        "participatory": ["admin", "owner", "manager", "contributor"]
-    })
-)
-def test_delete_image(
-    client: TestClient,
-    mode_organization: str,
-    role: str,
-    status_code: int,
-    headers_user_and_organization_from_organization_role,
-    generate_image,
-    create_tree
-):
-    mock_data_create = headers_user_and_organization_from_organization_role(mode_organization, "owner")
-    organization_id = mock_data_create["organization"].id
-    tree = create_tree(organization_id, mock_data_create["user"].id)
-    image = generate_image(100, 100)
-
-    
-    client.post(
-        f"/organization/{organization_id}/trees/{tree.id}/images", 
-        headers=mock_data_create["headers"],
-        files=[
-            ("images", ("file1.jpg", image, "image/jpeg"))
-        ]
-    )
-
-    mock_data = headers_user_and_organization_from_organization_role(mode_organization, role)
-    
-    response = client.delete(
-        f"/organization/{organization_id}/trees/{tree.id}/images/file1.jpg", 
-        headers=mock_data["headers"]
+    ## EXCEL
+    response = client.get(
+        f"/organization/{organization_id}/trees/export?format=xlsx",
+        headers=mock_data["headers"],
     )
 
     assert response.status_code == status_code
+
+    # Clean
+    delete_tree(tree_one.id)
+    delete_tree(tree_two.id)

@@ -13,8 +13,10 @@ from app.api.deps import get_db, get_enforcer
 from app.db.init_db import init_db
 from app.tests.utils.overrides import override_get_db, override_get_enforcer
 from app.tests.utils.test_db import TestingSessionLocal, engine
-from app.tests.utils.utils import (get_superuser_access_token_headers,
-                                   get_superuser_refresh_token_headers)
+from app.tests.utils.utils import (
+    get_superuser_access_token_headers,
+    get_superuser_refresh_token_headers,
+)
 
 app.dependency_overrides[get_db] = override_get_db
 
@@ -36,7 +38,8 @@ def create_test_database():
     with engine.begin() as session:
         alembic_config.attributes["connection"] = session
         command.upgrade(alembic_config, "head")
-    session = next(app.dependency_overrides[get_db]())  
+    session = next(app.dependency_overrides[get_db]())
+
 
 @pytest.fixture(scope="session", autouse=True)
 def init_database():
@@ -50,11 +53,11 @@ def init_database():
 def db() -> Generator:
     yield TestingSessionLocal()
 
+
 @pytest.fixture()
 def enforcer() -> Generator:
     enforcer = next(app.dependency_overrides[get_enforcer]())
     yield enforcer
-
 
 
 @pytest.fixture(scope="module")
@@ -72,6 +75,7 @@ def superuser_access_token_headers(client: TestClient) -> Dict[str, str]:
 def superuser_refresh_token_headers(client: TestClient) -> Dict[str, str]:
     return get_superuser_refresh_token_headers(client)
 
+
 pytest_plugins = [
     "app.tests.utils.security",
     "app.tests.fixtures.tree",
@@ -80,5 +84,6 @@ pytest_plugins = [
     "app.tests.fixtures.user",
     "app.tests.fixtures.organization",
     "app.tests.fixtures.team",
-    "app.tests.fixtures.health_assessment"
+    "app.tests.fixtures.health_assessment",
+    "app.tests.fixtures.geo_file",
 ]
