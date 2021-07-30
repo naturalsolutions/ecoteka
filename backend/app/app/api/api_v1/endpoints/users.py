@@ -17,9 +17,9 @@ router = APIRouter()
 
 
 @router.get(
-    "", 
-    response_model=List[UserOut], 
-    dependencies=[Depends(get_current_user_if_is_superuser)]
+    "",
+    response_model=List[UserOut],
+    dependencies=[Depends(get_current_user_if_is_superuser)],
 )
 def read_users(
     db: Session = Depends(get_db),
@@ -36,26 +36,22 @@ def read_users(
 
 
 @router.post(
-    "", 
+    "",
     response_model=UserOut,
-    dependencies=[Depends(get_current_user_if_is_superuser)]
+    dependencies=[Depends(get_current_user_if_is_superuser)],
 )
-def create_user(
-    *,
-    db: Session = Depends(get_db),
-    user_in: UserCreate
-) -> User:
+def create_user(*, db: Session = Depends(get_db), user_in: UserCreate) -> User:
     """
     Create new user.
     """
     user_in_db = user.get_by_email(db, email=user_in.email)
-    
+
     if user_in_db:
         raise HTTPException(
             status_code=400,
             detail="The user with this username already exists in the system.",
         )
-    
+
     return user.create(db, obj_in=user_in)
 
 
@@ -83,9 +79,8 @@ def update_user_me(
     return user_in_db
 
 
-@router.get("/me")  # , response_model=UserMeOut)
+@router.get("/me")
 def read_user_me(
-    db: Session = Depends(get_db),
     user_with_organizations=Depends(get_current_user_with_organizations),
 ) -> Any:
     """
@@ -104,23 +99,24 @@ def read_user_by_id(
     """
     Get a specific user by id.
     """
-    user_in_db = user.get(db, id=user_id)
-    if user_in_db == current_user:
-        return user_in_db
     if not user.is_superuser(current_user):
         raise HTTPException(
             status_code=400, detail="The user doesn't have enough privileges"
         )
-    return user_in_db
+
+    return user.get(db, id=user_id)
 
 
-@router.put("/{user_id}", response_model=UserOut)
+@router.put(
+    "/{user_id}",
+    response_model=UserOut,
+    dependencies=[Depends(get_current_user_if_is_superuser)],
+)
 def update_user(
     *,
     db: Session = Depends(get_db),
     user_id: int,
     user_in: UserUpdate,
-    current_user: User = Depends(get_current_user_if_is_superuser),
 ) -> Any:
     """
     Update a user.
