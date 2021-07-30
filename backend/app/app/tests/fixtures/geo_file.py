@@ -1,3 +1,4 @@
+import os
 import pytest
 import geopandas as gpd
 import uuid
@@ -5,6 +6,7 @@ from shapely.geometry import Point
 
 from app.core import settings
 from app.models.geo_file import GeoFile
+from app.crud import crud_geo_file
 
 
 @pytest.fixture
@@ -61,3 +63,13 @@ def create_geo_file(db, geojson):
         return geo_file
 
     return decorator_create_geo_file
+
+
+@pytest.fixture
+def delete_geo_file(db):
+    def decorator_delete_geo_file(name: str):
+        geofile = crud_geo_file.geo_file.get_by_name(db, name=name)
+        os.remove(geofile.get_filepath())
+        crud_geo_file.geo_file.remove(db, id=geofile.id)
+
+    return decorator_delete_geo_file

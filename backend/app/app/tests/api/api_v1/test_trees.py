@@ -257,6 +257,7 @@ def test_trees_import(
     db,
     headers_user_and_organization_from_organization_role,
     create_geo_file,
+    delete_geo_file,
 ):
     auth = headers_user_and_organization_from_organization_role(
         mode_organization, role
@@ -299,6 +300,8 @@ def test_trees_import(
     )
 
     assert response.status_code == status_code
+
+    delete_geo_file(name=geo_file.name)
 
 
 @pytest.mark.parametrize(
