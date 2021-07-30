@@ -10,16 +10,12 @@ from app.core import (
     authorization,
     permissive_authorization,
     get_optional_current_active_user,
-    settings
+    settings,
 )
 
-from app.schemas import (
-    FeatureCollection
-)
+from app.schemas import FeatureCollection
 
-from app.models import (
-    User
-)
+from app.models import User
 
 from app.crud import organization
 
@@ -29,14 +25,13 @@ settings.policies["maps"] = {
     "maps:get_geojson": ["admin", "owner", "manager", "contributor", "reader"],
     "maps:get_geobuf": ["admin", "owner", "manager", "contributor", "reader"],
     "maps:get_filter": ["admin", "owner", "manager", "contributor", "reader"],
-    "maps:get_bbox": ["admin", "owner", "manager", "contributor", "reader"]
+    "maps:get_bbox": ["admin", "owner", "manager", "contributor", "reader"],
 }
 
 
 @router.get("/style")
 def generate_style(
-    theme: Optional[str] = "dark",
-    background: Optional[str] = "map"
+    theme: Optional[str] = "dark", background: Optional[str] = "map"
 ) -> Dict:
     """
     Generate style
@@ -45,29 +40,37 @@ def generate_style(
         style = json.load(style_json)
 
         if background == "satellite":
-            satellite = [index for index, layer in enumerate(style["layers"]) if layer["id"] == "satellite"]
-            
+            satellite = [
+                index
+                for index, layer in enumerate(style["layers"])
+                if layer["id"] == "satellite"
+            ]
+
             if len(satellite) > 0:
-                style["layers"][satellite[0]]["layout"]["visibility"] = "visible"
-        
+                style["layers"][satellite[0]]["layout"][
+                    "visibility"
+                ] = "visible"
+
         return style
 
-@router.get("/geojson", dependencies=[Depends(authorization("maps:get_geojson"))], response_model=FeatureCollection)
+
+@router.get(
+    "/geojson",
+    dependencies=[Depends(authorization("maps:get_geojson"))],
+    response_model=FeatureCollection,
+)
 def get_geojson(
     organization_id: int,
     mode: Optional[str] = "geopandas",
-    db: Session = Depends(get_db)
-) -> Optional[FeatureCollection]: 
+    db: Session = Depends(get_db),
+) -> Optional[FeatureCollection]:
     """
     Get Organization GeoJSON
     """
     organization_in_db = organization.get(db, id=organization_id)
-
-    if not organization_in_db:
-        raise HTTPException(status_code=404, detail="Organization not found")
-    
     response = None
-    if mode == 'geopandas':
+
+    if mode == "geopandas":
         sql = f"""SELECT t.id as id, t.properties, geom, 
                         COALESCE(json_agg(json_build_object('id', i.id,
                                                     'date', i.date,
@@ -125,7 +128,11 @@ def get_geojson(
         response = dict(row.jsonb_build_object)
     return response
 
-@router.get("/geobuf", dependencies=[Depends(permissive_authorization("maps:get_geobuf"))])
+
+@router.get(
+    "/geobuf",
+    dependencies=[Depends(permissive_authorization("maps:get_geobuf"))],
+)
 def get_geobuff(
     organization_id: int,
     db: Session = Depends(get_db),
@@ -135,9 +142,6 @@ def get_geobuff(
     """
     organization_in_db = organization.get_by_id_or_slug(db, id=organization_id)
 
-    if not organization_in_db:
-        raise HTTPException(status_code=404, detail="Organization not found")
-    
     sql = f"""
 
         WITH selection AS (
@@ -166,10 +170,7 @@ def get_geobuff(
     res = db.execute(sql)
     row = res.first()
 
-    if row['pbf']:
-        return Response(bytes(row['pbf']))
-    
-    return row['pbf']
+    return Response(bytes(row["pbf"]))
 
 
 # @router.get("/{organization_id}/tree_tiles/{z}/{x}/{y}.pbf", dependencies=[Depends(authorization("maps:get_geojson"))])
@@ -188,7 +189,7 @@ def get_geobuff(
 
 #     if not organization_in_db:
 #         raise HTTPException(status_code=404, detail="Organization not found")
-    
+
 #     sql = f"""
 #         WITH mvtgeom AS (
 #             SELECT
@@ -205,38 +206,44 @@ def get_geobuff(
 #     return result_proxy.first()
 
 
-
-@router.get("/filter", dependencies=[Depends(permissive_authorization("maps:get_filter"))])
-def get_filters(
-    organization_id: int,
-    db: Session = Depends(get_db)
-) -> Dict:
+@router.get(
+    "/filter",
+    dependencies=[Depends(permissive_authorization("maps:get_filter"))],
+)
+def get_filters(organization_id: int, db: Session = Depends(get_db)) -> Dict:
     """
-    Get filters 
+    Get filters
     """
     palettes = [200, 400, 600, 800, 1000]
     filters = crud.tree.get_filters(db, organization_id)
 
     for filter in filters:
         total_rows = len(filters[filter])
-        selected_palette = [palette for palette in palettes if palette > total_rows][0]
-        palette = open(f'/app/app/data/palettes/{selected_palette}.txt').read().splitlines()
+        selected_palette = [
+            palette for palette in palettes if palette > total_rows
+        ][0]
+        palette = (
+            open(f"/app/app/data/palettes/{selected_palette}.txt")
+            .read()
+            .splitlines()
+        )
 
         for i in enumerate(filters[filter]):
             filters[filter][i[0]]["background"] = palette[i[0]]
-        
+
     return filters
 
-@router.get("/bbox", dependencies=[Depends(permissive_authorization("maps:get_bbox"))])
-def get_bbox(
-    organization_id: int,
-    db: Session = Depends(get_db)
-) -> List:
+
+@router.get(
+    "/bbox", dependencies=[Depends(permissive_authorization("maps:get_bbox"))]
+)
+def get_bbox(organization_id: int, db: Session = Depends(get_db)) -> List:
     """
     Get the bounding box of all active trees within a organization
     """
 
-    rows = db.execute(f"""
+    rows = db.execute(
+        f"""
         SELECT 
             ST_XMIN(ST_EXTENT(geom)) as xmin, 
             ST_YMIN(ST_EXTENT(geom)) as ymin, 
@@ -244,6 +251,7 @@ def get_bbox(
             ST_YMAX(ST_EXTENT(geom)) as ymax
         FROM tree 
         WHERE organization_id = {organization_id};
-    """)
+    """
+    )
 
     return rows.first()
