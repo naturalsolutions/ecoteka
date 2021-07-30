@@ -1,2 +1,7 @@
 [run]
-omit = app/tests/*
+omit = 
+    */__init__.py
+    app/inital_data.py
+    app/tests/*
+    app/backend_pre_start.py
+    app/tests_pre_start.py
