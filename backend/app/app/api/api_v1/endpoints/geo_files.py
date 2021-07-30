@@ -12,16 +12,23 @@ from app.core import (
 )
 
 settings.policies["geo_files"] = {
-    "geofiles:read_geo_files": ["owner", "manager", "contributor", "reader"],
-    "geofiles:read_geofile_by_name": [
+    "geofiles:read_geo_files": [
+        "admin",
         "owner",
         "manager",
         "contributor",
         "reader",
     ],
-    "geofiles:upload_geo_file": ["owner", "manager", "contributor"],
-    "geofiles:update_geo_file": ["owner", "manager"],
-    "geofiles:delete_geo_file": ["owner", "manager"],
+    "geofiles:read_geofile_by_name": [
+        "admin",
+        "owner",
+        "manager",
+        "contributor",
+        "reader",
+    ],
+    "geofiles:upload_geo_file": ["admin", "owner", "manager", "contributor"],
+    "geofiles:update_geo_file": ["admin", "owner", "manager"],
+    "geofiles:delete_geo_file": ["admin", "owner", "manager"],
 }
 
 router = APIRouter()
@@ -89,7 +96,9 @@ async def upload_geo_file(
         extension = filename_parts[1][1:]
 
         if not extension in settings.GEO_FILES_ALLOWED:
-            raise HTTPException(status_code=415, detail="File format unsupported")
+            raise HTTPException(
+                status_code=415, detail="File format unsupported"
+            )
 
         unique_name = uuid.uuid4()
         unique_filename = f"{unique_name}.{extension}"
@@ -107,7 +116,9 @@ async def upload_geo_file(
             organization_id=organization_id,
         )
 
-        geofile_exists = crud.geo_file.get_by_checksum(db, checksum=geofile.checksum)
+        geofile_exists = crud.geo_file.get_by_checksum(
+            db, checksum=geofile.checksum
+        )
 
         if geofile_exists:
             os.remove(geofile.get_filepath(extended=False))
@@ -153,10 +164,8 @@ def update_geo_file(
     return geofile
 
 
-@router.delete("/{name}")
+@router.delete("/{name}", dependencies=[Depends(authorization("geofiles:delete_geo_file"))])
 def delete_geo_file(
-    organization_id: int,
-    auth=Depends(authorization("geofiles:delete_geo_file")),
     *,
     name: str,
     db: Session = Depends(get_db),
@@ -164,7 +173,6 @@ def delete_geo_file(
     """
     Delete one geofile
     """
-
     geofile = crud.geo_file.get_by_name(db, name=name)
 
     if not geofile:
@@ -173,11 +181,7 @@ def delete_geo_file(
             detail=f"The geofile with name {name} does not exist in the system",
         )
 
-    try:
-        os.remove(geofile.get_filepath())
-    except OSError:
-        pass
-
+    os.remove(geofile.get_filepath())
     crud.geo_file.remove(db, id=geofile.id)
 
     return name
