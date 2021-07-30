@@ -8,7 +8,6 @@ from app.api.api_v1.endpoints import (
     intervention,
     maps,
     organization,
-    registration_link,
     taxref,
     trees,
     users,
@@ -24,11 +23,6 @@ api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
 api_router.include_router(users.router, prefix="/users", tags=["users"])
 api_router.include_router(
     featured.router, prefix="/featured", tags=["featured"]
-)
-api_router.include_router(
-    registration_link.router,
-    prefix="/registration_link",
-    tags=["registration_link"],
 )
 api_router.include_router(
     geo_files.router,
