@@ -1,7 +1,7 @@
 import pytest
+import json
 
 from fastapi.testclient import TestClient
-from app.models import geo_file
 
 from app.tests.utils.security import users_parameters
 
@@ -23,26 +23,26 @@ from app.tests.utils.security import users_parameters
 #     status_code: int,
 #     headers_user_and_organization_from_organization_role,
 #     geojson,
-#     csv,
 # ) -> None:
 #     auth = headers_user_and_organization_from_organization_role(
 #         mode_organization, role
 #     )
 #     organization_id = auth["organization"].id
-#     file = (("file", ("geofile.geojson", geojson, "application/vnd.geo+json")),)
 #     response = client.post(
 #         f"/organization/{organization_id}/geo_files",
 #         headers=auth["headers"],
-#         files=file,
+#         files=[
+#             (
+#                 "file",
+#                 (
+#                     "geofile.geojson",
+#                     geojson.encode(),
+#                     "application/vnd.geo+json",
+#                 ),
+#             )
+#         ],
 #     )
-#     assert response.status_code == status_code
-
-#     file = (("file", ("geofile.csv", csv, "text/csv")),)
-#     response = client.post(
-#         f"/organization/{organization_id}/geo_files",
-#         headers=auth["headers"],
-#         files=file,
-#     )
+#     print(response.json())
 #     assert response.status_code == status_code
 
 

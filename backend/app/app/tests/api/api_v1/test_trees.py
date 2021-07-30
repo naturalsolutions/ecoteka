@@ -249,6 +249,68 @@ def test_bulk_delete(
         }
     ),
 )
+def test_trees_import(
+    client: TestClient,
+    mode_organization: str,
+    role: str,
+    status_code: int,
+    db,
+    headers_user_and_organization_from_organization_role,
+    create_geo_file,
+):
+    auth = headers_user_and_organization_from_organization_role(
+        mode_organization, role
+    )
+    organization_id = auth["organization"].id
+    geo_file = create_geo_file(
+        organization_id=organization_id, user_id=auth["user"].id
+    )
+    crs = geo_file.crs
+    geo_file.crs = None
+    db.commit()
+
+    # NOT FOUND
+    response = client.post(
+        f"/organization/{organization_id}/trees/import?name=abcde.geojson",
+        headers=auth["headers"],
+    )
+
+    if status_code == 200:
+        assert response.status_code == 404
+        assert response.json()["detail"] == "abcde.geojson not found"
+
+    # NOT CRS
+    response = client.post(
+        f"/organization/{organization_id}/trees/import?name={geo_file.name}",
+        headers=auth["headers"],
+    )
+
+    if status_code == 200:
+        assert response.status_code == 415
+        assert response.json()["detail"] == "crs not found"
+
+    # IMPORT
+    geo_file.crs = crs
+    db.commit()
+
+    response = client.post(
+        f"/organization/{organization_id}/trees/import?name={geo_file.name}",
+        headers=auth["headers"],
+    )
+
+    assert response.status_code == status_code
+
+
+@pytest.mark.parametrize(
+    "mode_organization, role, status_code",
+    users_parameters(
+        {
+            "private": ["admin", "owner", "manager", "contributor"],
+            "open": ["admin", "owner", "manager", "contributor"],
+            "participatory": ["admin", "owner", "manager", "contributor"],
+        }
+    ),
+)
 def test_trees_export(
     client: TestClient,
     mode_organization: str,
