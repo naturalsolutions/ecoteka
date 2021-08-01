@@ -1,7 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel, EmailStr
 from app.schemas.organization import OrganizationCurrentUser
-import sqlalchemy
 
 
 class UserPrimaryKey(BaseModel):

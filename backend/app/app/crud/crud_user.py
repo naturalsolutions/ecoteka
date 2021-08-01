@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.core import get_password_hash, verify_password, settings
 from app.crud import CRUDBase
 from app.models import User
-from app.schemas import UserCreate, UserUpdate, UserOut
+from app.schemas import UserCreate, UserUpdate
 from app.utils import send_new_account_email
 
 
@@ -31,7 +31,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def get_multi(
         self, db: Session, *, skip: int = 0, limit: int = 100
-    ) -> List[UserOut]:
+    ) -> List[User]:
         return db.query(self.model).offset(skip).limit(limit).all()
 
     def update(

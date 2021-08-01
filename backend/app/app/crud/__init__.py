@@ -1,6 +1,5 @@
 from .base import CRUDBase
 from .crud_user import user
-from .crud_registration_link import registration_link
 from .crud_geo_file import geo_file
 from .crud_tree import tree
 from .crud_organization import organization
@@ -12,7 +11,6 @@ __all__ = [
     "CRUDBase",
     "geo_file",
     "organization",
-    "registration_link",
     "taxref",
     "tree",
     "user",
