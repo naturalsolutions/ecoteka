@@ -43,7 +43,7 @@
 #     db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
 # ):
 
-#     if user.is_verified(current_user):
+#     if current_user.is_verified:
 #         raise HTTPException(
 #             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="User is verified"
 #         )

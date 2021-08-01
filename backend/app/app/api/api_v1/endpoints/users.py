@@ -99,7 +99,7 @@ def read_user_by_id(
     """
     Get a specific user by id.
     """
-    if not user.is_superuser(current_user):
+    if not current_user.is_superuser:
         raise HTTPException(
             status_code=400, detail="The user doesn't have enough privileges"
         )
