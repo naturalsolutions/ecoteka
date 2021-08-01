@@ -46,29 +46,12 @@ from .organization import (
 from .coordinate import Coordinate
 from .intervention import Intervention, InterventionCreate, InterventionUpdate
 from .health_assessment import HealthAssessment, HealthAssessmentCreate, HealthAssessmentUpdate, HealthAssessmentOrgan
-from .utils import NumType, BBox
-from .geometries import (
-    Point,
-    MultiPoint,
-    LineString,
-    MultiLineString,
-    Polygon,
-    MultiPolygon,
-    GeometryCollection
-)
-from .features import (
-    Feature,
-    FeatureCollection
-)
 
 __all__ = [
     "AccessAndRefreshToken",
     "AccessToken",
-    "BBox",
     "Coordinate",
     "CurrentUser",
-    "Feature",
-    "FeatureCollection"
     "FindModeEnum",
     "GeoFile",
     "GeoFileCreate",

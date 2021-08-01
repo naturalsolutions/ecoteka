@@ -2,8 +2,8 @@ from datetime import datetime
 from typing import Optional, Any
 from pydantic import BaseModel, EmailStr
 from enum import Enum
-from .utils import BBox
-from .features import FeatureCollection, Feature
+from geojson_pydantic.types import BBox
+from geojson_pydantic.features import FeatureCollection, Feature
 
 class OrganizationMode(str, Enum):
     PRIVATE = "private"

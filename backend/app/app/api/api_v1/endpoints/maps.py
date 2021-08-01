@@ -13,7 +13,7 @@ from app.core import (
     settings,
 )
 
-from app.schemas import FeatureCollection
+from geojson_pydantic.features import FeatureCollection
 
 from app.models import User
 

@@ -1,8 +1,9 @@
 import pytest
 
 from fastapi.testclient import TestClient
-from fastapi.encoders import jsonable_encoder
 from app.tests.utils.security import users_parameters
+from app.crud import crud_organization
+
 
 @pytest.mark.parametrize(
     'mode_organization, role, status_code', 
@@ -14,6 +15,7 @@ from app.tests.utils.security import users_parameters
 )
 def test_get_teams(
     client: TestClient,
+    db,
     mode_organization: str,
     role: str,
     status_code: int,
@@ -28,13 +30,15 @@ def test_get_teams(
         f"/organization/{organization_id}/teams",
         headers=mock_data["headers"]
     )
-
     
     assert response.status_code == status_code
     
     if status_code == 200:
         response.json()[0]["id"] == team_a.id
         response.json()[1]["id"] == team_b.id
+
+    crud_organization.organization.remove(db, id=team_a.id)
+    crud_organization.organization.remove(db, id=team_b.id)
 
 @pytest.mark.parametrize(
     'mode_organization, role, status_code', 
@@ -110,6 +114,7 @@ def test_archive_team(
     mode_organization: str,
     role: str,
     status_code: int,
+    db,
     headers_user_and_organization_from_organization_role,
     create_team
 ):
@@ -127,6 +132,8 @@ def test_archive_team(
     if status_code == 200:
         assert response.json()["archived"] == True
 
+    crud_organization.organization.remove(db, id=team.id)
+
 @pytest.mark.parametrize(
     'mode_organization, role, status_code', 
     users_parameters({
@@ -140,6 +147,7 @@ def test_archive_teams(
     mode_organization: str,
     role: str,
     status_code: int,
+    db,
     headers_user_and_organization_from_organization_role,
     create_team
 ):
@@ -160,4 +168,7 @@ def test_archive_teams(
     if status_code == 200:
         for team in response.json():
             assert team["archived"] == True
+
+    crud_organization.organization.remove(db, id=team_a.id)
+    crud_organization.organization.remove(db, id=team_b.id)
     
