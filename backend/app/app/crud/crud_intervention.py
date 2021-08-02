@@ -14,19 +14,6 @@ class CRUDIntervention(CRUDBase[Intervention, InterventionCreate, InterventionUp
             .all()
         )
 
-    def get_by_year(self, db: Session, organization_id: int, year: int):
-        return (
-            db.query(self.model)
-            .filter(self.model.tree_id != None)
-            .filter(self.model.organization_id == organization_id)
-            .filter(
-                sa.or_(
-                    sa.extract("year", self.model.intervention_start_date) == year,
-                    sa.extract("year", self.model.intervention_end_date) == year,
-                )
-            )
-            .all()
-        )
     def get_by_intervention_type_and_year(self, db: Session, organization_id: int, intervention_type: str, year: int):
         return (
             db.query(self.model)
@@ -40,6 +27,7 @@ class CRUDIntervention(CRUDBase[Intervention, InterventionCreate, InterventionUp
             )
             .all()
         )
+    
     def get_planned_by_year(self, db: Session, organization_id: int, year: int):
         return (
             db.query(self.model)
@@ -52,6 +40,7 @@ class CRUDIntervention(CRUDBase[Intervention, InterventionCreate, InterventionUp
             )
             .all()
         )
+
     def get_scheduled_by_year(self, db: Session, organization_id: int, year: int):
         return (
             db.query(self.model)

@@ -8,7 +8,9 @@ from app.crud import crud_tree
 @pytest.fixture
 def create_tree(db, faker, create_user):
     def decorator(
-        organization_id: int, user_id: Optional[int] = None, properties={}
+        organization_id: int, 
+        user_id: Optional[int] = None, 
+        **kwargs
     ) -> Tree:
         if user_id is None:
             user_id = create_user().id
@@ -20,7 +22,7 @@ def create_tree(db, faker, create_user):
             geom=f"POINT({x} {y})",
             user_id=user_id,
             organization_id=organization_id,
-            properties=properties,
+            **kwargs
         )
 
         return crud_tree.tree.create(db, obj_in=tree_data)

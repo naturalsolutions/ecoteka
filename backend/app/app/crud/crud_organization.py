@@ -32,8 +32,6 @@ class CRUDOrganization(CRUDBase[Organization, OrganizationCreate, OrganizationUp
             return db.query(self.model).filter(self.model.id == organization_id).first()
         if isinstance(organization_id, str):
             return db.query(self.model).filter(self.model.slug == organization_id).first()
-        
-        return None
 
     def get_open_featured(self, db: Session):
         return db.query(self.model).\

@@ -7,19 +7,16 @@ from typing import Dict, List
 
 
 class CRUDTree(CRUDBase[Tree, TreeCreate, TreeUpdate]):
-    def get_count_by_intervention_type(self, db: Session, organization_id: int, intervention_type: str):
-        return (
-            db.query(self.model)
-            .filter(self.model.organization_id == organization_id)
-            .filter(self.model.interventions.any(intervention_type=intervention_type))
-            .all()
-        )
-
-    def get_filters(self, db: Session, organization_id: int):
+    def get_filters(
+        self, db: Session, 
+        organization_id: int, 
+        fields: List[str] = ["canonicalName", "vernacularName", "diameter", "height"]
+    ):
         filter: Dict = {}
-        fields = ["canonicalName", "vernacularName", "diameter", "height"]
 
         for field in fields:
+            filter[field] = []
+
             rows = db.execute(f"""
                 select distinct properties ->> '{field}' as value, count(properties) as total
                 from tree
@@ -27,11 +24,13 @@ class CRUDTree(CRUDBase[Tree, TreeCreate, TreeUpdate]):
                 group by properties ->> '{field}'
                 order by total desc;""")
             
-            filter[field] = [{ 
-            'value': row.value, 
-            'total': row.total, 
-            'background': [0, 0, 0]
-        } for i, row in enumerate(rows) if row[0] not in ["", None]]
+            for row in rows:
+                if row.value not in ["", None]:
+                    filter[field].append({
+                        "value": row.value,
+                        "total": row.total,
+                        "background": [0, 0, 0]
+                    })
 
         return filter
 
