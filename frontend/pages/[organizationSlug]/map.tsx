@@ -158,7 +158,7 @@ const EditionPage = ({}) => {
   const [info, setInfo] = useState<Record<string, any>>({});
 
   const cadastreLayer = CadastreLayer(activeLayers.cadastre.value);
-  const osmLayer = OSMLayer(false);
+  const osmLayer = OSMLayer({ visible: true, defaultPointColor: "#7EC14D" });
   const treesLayer = InventoryLayer({
     visible: activeLayers.trees.value,
     data,
@@ -406,7 +406,10 @@ const EditionPage = ({}) => {
 
     return setLayers([
       cadastreLayer.clone({ visible: activeLayers.cadastre.value }),
-      osmLayer.clone({ visible: activeLayers.osm.value }),
+      osmLayer.clone({
+        visible: activeLayers.osm.value,
+        defaultPointColor: "#7EC14D",
+      }),
       treesLayer.clone({ visible: activeLayers.trees.value }),
     ]);
   };
