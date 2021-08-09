@@ -325,7 +325,8 @@
     "date": "Réalisée le",
     "done": "Fait",
     "cancelNotes": "Remarques sur l'annulation",
-    "cancelled": "Annulé"
+    "cancelled": "Annulé",
+    "intervention_start_date": "Prévue le"
   },
   "Tree": {
     "properties": {

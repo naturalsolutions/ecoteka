@@ -749,7 +749,7 @@ const EditionPage = ({}) => {
         darkBackground={mapBackground !== "map"}
         onClick={handleOnMapActionsBarClick}
       />
-      <TreePanel />
+      <TreePanel withEditMode={editionMode} />
     </AppLayoutCarto>
   );
 };

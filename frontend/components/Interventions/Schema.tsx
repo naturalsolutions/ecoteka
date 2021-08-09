@@ -332,10 +332,10 @@ export function usePlanningSchema(it: TInterventionType) {
   const { t } = useTranslation(["common", "components"]);
 
   return {
-    intervention_period: {
-      type: "daterange",
+    intervention_start_date: {
+      type: "date",
       component: {
-        label: t("components.Intervention.intervention_period"),
+        label: t("components.Intervention.intervention_start_date"),
       },
       schema: yup
         .object({
