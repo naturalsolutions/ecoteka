@@ -77,7 +77,7 @@ const defaultViewState = {
   zoom: 5,
 };
 
-const layers = [OSMLayer({ visible: true })];
+const layers = [OSMLayer({ visible: true, defaultPointColor: "#7EC14D" })];
 
 const MapData: FC<MapPreviewProps> = ({}) => {
   const { viewState, setViewState } = useMapContext();

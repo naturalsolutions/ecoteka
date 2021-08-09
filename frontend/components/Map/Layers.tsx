@@ -21,7 +21,8 @@ export const defaultLayers = {
   },
   osm: {
     name: "Open Street Map (OSM)",
-    value: true,
+    value: false,
+    defaultPointColor: "#7EC14D",
   },
   trees: {
     name: "Trees",
