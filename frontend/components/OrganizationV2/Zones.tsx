@@ -16,7 +16,7 @@ const OrganizationZones: FC<OrganizationZonesProps> = ({}) => {
   const { t } = useTranslation(["components"]);
   const { user } = useAppContext();
 
-  if (!user.is_superuser) return null;
+  if (!user?.is_superuser) return null;
 
   return (
     <CoreOptionsPanel

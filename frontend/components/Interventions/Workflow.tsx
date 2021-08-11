@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { useMeasure } from "react-use";
 import {
   makeStyles,
@@ -13,8 +13,8 @@ import InterventionsListItem from "@/components/Interventions/List/Item";
 import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import { useRouter } from "next/router";
 import { useAppContext } from "@/providers/AppContext";
-import { useTreeContext } from "../Tree/Provider";
-
+import { useTreeContext } from "@/components/Tree/Provider";
+import Can, { AbilityContext } from "@/components/Can";
 export interface InterventionsWorkflowProps {
   selectable?: boolean;
   insidePanel?: boolean;
@@ -36,6 +36,7 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
   const router = useRouter();
   const { organization } = useAppContext();
   const { tree } = useTreeContext();
+  const ability = useContext(AbilityContext);
 
   const isMobile = measure.width <= theme.breakpoints.values.sm;
   const sm = isMobile ? 12 : 6;
@@ -65,47 +66,51 @@ const InterventionsWorkflow: FC<InterventionsWorkflowProps> = ({
       );
 
   return (
-    <Grid ref={ref} container spacing={2}>
-      <Grid item xs={12} sm={sm}>
-        <InterventionListContainer
-          label="interventions planifiées"
-          allowNewInterventions={insidePanel}
-          expand={
-            insidePanel && (
-              <IconButton size="small" onClick={handleShowTreeInterventions}>
-                <OpenInNewIcon />
-              </IconButton>
-            )
-          }
-        >
-          {currentInterventions?.map((intervention) => (
-            <InterventionsListItem
-              key={`intervention-${intervention.id}`}
-              selectable={selectable}
-              intervention={intervention}
-            />
-          ))}
-        </InterventionListContainer>
-      </Grid>
-      {!insidePanel && (
+    <Can do="read" on="Interventions">
+      <Grid ref={ref} container spacing={2}>
         <Grid item xs={12} sm={sm}>
-          <InterventionListContainer label="interventions réalisées">
-            {doneInterventions
-              ?.sort(
-                (a, b) =>
-                  new Date(b.date).getTime() - new Date(a.date).getTime()
+          <InterventionListContainer
+            label="interventions planifiées"
+            allowNewInterventions={
+              insidePanel && ability.can("create", "Interventions")
+            }
+            expand={
+              insidePanel && (
+                <IconButton size="small" onClick={handleShowTreeInterventions}>
+                  <OpenInNewIcon />
+                </IconButton>
               )
-              .map((intervention) => (
-                <InterventionsListItem
-                  key={`intervention-${intervention.id}`}
-                  selectable={selectable}
-                  intervention={intervention}
-                />
-              ))}
+            }
+          >
+            {currentInterventions?.map((intervention) => (
+              <InterventionsListItem
+                key={`intervention-${intervention.id}`}
+                selectable={selectable}
+                intervention={intervention}
+              />
+            ))}
           </InterventionListContainer>
         </Grid>
-      )}
-    </Grid>
+        {!insidePanel && (
+          <Grid item xs={12} sm={sm}>
+            <InterventionListContainer label="interventions réalisées">
+              {doneInterventions
+                ?.sort(
+                  (a, b) =>
+                    new Date(b.date).getTime() - new Date(a.date).getTime()
+                )
+                .map((intervention) => (
+                  <InterventionsListItem
+                    key={`intervention-${intervention.id}`}
+                    selectable={selectable}
+                    intervention={intervention}
+                  />
+                ))}
+            </InterventionListContainer>
+          </Grid>
+        )}
+      </Grid>
+    </Can>
   );
 };
 
