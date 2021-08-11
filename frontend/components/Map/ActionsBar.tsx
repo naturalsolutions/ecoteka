@@ -1,5 +1,6 @@
 import { FC, ReactElement, useState } from "react";
-
+import { AbilityContext } from "@/components/Can";
+import { buildAbilityFor } from "@/abilities/genericOrganizationAbility";
 import { Box, IconButton, Tooltip, makeStyles } from "@material-ui/core";
 import Can from "@/components/Can";
 import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
@@ -11,6 +12,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import InfoIcon from "@material-ui/icons/Info";
 import BackupIcon from "@material-ui/icons/Backup";
 import { useTranslation } from "react-i18next";
+import { useAppContext } from "@/providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   actionsBar: {
@@ -46,10 +48,10 @@ export interface MapActionsBarProps {
 }
 
 const actions = [
-  { action: "start", icon: <InfoIcon />, do: "read", on: "Trees" },
-  { action: "filter", icon: <SearchIcon />, do: "read", on: "Trees" },
-  { action: "layers", icon: <LayersIcon />, do: "read", on: "Trees" },
-  { action: "import", icon: <BackupIcon />, do: "create", on: "Trees" },
+  { action: "start", icon: <InfoIcon />, do: "preview", on: "Trees" },
+  { action: "filter", icon: <SearchIcon />, do: "preview", on: "Trees" },
+  { action: "layers", icon: <LayersIcon />, do: "preview", on: "Trees" },
+  { action: "import", icon: <BackupIcon />, do: "manage", on: "Trees" },
 ] as MapActionBarActions;
 
 const MapActionsBar: FC<MapActionsBarProps> = ({
@@ -62,6 +64,7 @@ const MapActionsBar: FC<MapActionsBarProps> = ({
   const [activeAction, setActiveAction] = useState<MapActionsBarActionType>(
     "start" as MapActionsBarActionType
   );
+  const { organization } = useAppContext();
 
   const handleOnActionClick = (action: MapActionsBarActionType) => {
     setActiveAction(action);
