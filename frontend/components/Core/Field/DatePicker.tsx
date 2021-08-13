@@ -15,6 +15,7 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -50,26 +51,11 @@ const DatePickerField = forwardRef<HTMLDivElement, TextFieldProps>(
   (props, ref) => {
     const classes = useStyles();
     const router = useRouter();
+    const { t } = useTranslation(["common"]);
     console.log(props);
     const { onChange, inputProps, ...rest } = props;
 
     return (
-      //   <TextField
-      //     {...rest}
-      //     ref={ref}
-      //     size="small"
-      //     variant="filled"
-      //     margin="dense"
-      //     InputProps={{
-      //       ...InputProps,
-      //       className: classes.input,
-      //     }}
-      //     InputLabelProps={{
-      //       shrink: true,
-      //       className: classes.inputLabel,
-      //     }}
-      //     fullWidth
-      //   />
       <MuiPickersUtilsProvider
         utils={DateFnsUtils}
         locale={setDateLocale(router.locale)}
@@ -85,6 +71,8 @@ const DatePickerField = forwardRef<HTMLDivElement, TextFieldProps>(
           variant="inline"
           format={setLocaleFormat(router.locale)}
           margin="dense"
+          okLabel={t("common.buttons.confirm")}
+          cancelLabel={t("common.buttons.cancel")}
         />
       </MuiPickersUtilsProvider>
     );

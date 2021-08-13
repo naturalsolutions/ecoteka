@@ -9,6 +9,7 @@ import { Controller } from "react-hook-form";
 import { es, enGB, fr } from "date-fns/locale";
 import { useRouter } from "next/router";
 import { Typography } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 export interface DateRangePeriod {
   startDate?: Date;
@@ -60,6 +61,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   error,
 }) => {
   const router = useRouter();
+  const { t } = useTranslation(["common"]);
 
   return (
     <MuiPickersUtilsProvider
@@ -83,6 +85,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
               onChange={onChange}
               InputLabelProps={{ shrink: true }}
               error={Boolean(error)}
+              okLabel={t("common.buttons.confirm")}
+              cancelLabel={t("common.buttons.cancel")}
             />
             {error && (
               <Typography variant="caption" color="error">
