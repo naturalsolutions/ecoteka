@@ -14,7 +14,9 @@ import TreeProvider from "@/components/Tree/Provider";
 import InterventionsWorkflow from "@/components/Interventions/Workflow";
 import InterventionProvider from "@/components/Interventions/Provider";
 
-export interface TreePanelProps {}
+export interface TreePanelProps {
+  withEditMode?: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   grid: {
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const TreePanel: FC<TreePanelProps> = ({}) => {
+const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
   const classes = useStyles();
   const router = useRouter();
   const { t } = useTranslation();
@@ -80,7 +82,7 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
             <TreeImagesContainer />
             <Grid container direction="column" className={classes.grid}>
               <Grid item>
-                <TreeBasicForm readOnly={true} />
+                <TreeBasicForm isEditable={withEditMode} />
               </Grid>
               <Can do="read" on="Interventions">
                 <Grid item>
