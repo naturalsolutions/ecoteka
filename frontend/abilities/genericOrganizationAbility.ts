@@ -77,6 +77,6 @@ export default function defineRulesFor(role: string) {
 export function buildAbilityFor(role: string): AppAbility {
   return new AppAbility(defineRulesFor(role ? role : "guest"), {
     // https://casl.js.org/v5/en/guide/subject-type-detection
-    detectSubjectType: (object: any) => (object ? object.type : null),
+    detectSubjectType: (object: any) => (object ? object.type : "all"),
   });
 }
