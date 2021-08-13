@@ -447,7 +447,8 @@
     "code": "Identificador del árbol",
     "Panel": {
       "actions": {
-        "update": "Actualizar este árbol"
+        "update": "Actualizar este árbol",
+        "read": "Mostrar más"
       }
     }
   },

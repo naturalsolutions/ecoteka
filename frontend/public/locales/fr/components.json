@@ -445,7 +445,8 @@
     "code": "Matricule de l'arbre",
     "Panel": {
       "actions": {
-        "update": "Modifier cet arbre"
+        "update": "Modifier cet arbre",
+        "read": "Voir plus"
       }
     }
   },

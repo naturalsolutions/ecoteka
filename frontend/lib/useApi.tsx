@@ -1,6 +1,5 @@
 import axios from "axios";
 import getConfig from "next/config";
-import { useRouter } from "next/router";
 
 export default function useApi() {
   const { publicRuntimeConfig } = getConfig();

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { Grid, makeStyles, Theme, Button } from "@material-ui/core";
 import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 import TreeBasicForm from "./BasicForm";
@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
+import Can, { AbilityContext } from "@/components/Can";
+
 import TreeImagesContainer from "@/components/Tree/Images/Container";
 import TreeProvider from "@/components/Tree/Provider";
 import InterventionsWorkflow from "@/components/Interventions/Workflow";
@@ -31,6 +33,7 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
   const { t } = useTranslation();
   const { organization } = useAppContext();
   const [active, setActive] = useState<boolean>(false);
+  const ability = useContext(AbilityContext);
 
   useEffect(() => {
     const { query, route } = router;
@@ -61,15 +64,19 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
         <InterventionProvider>
           <AppLayoutCartoDialog
             actions={
-              <Button
-                size="large"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={handleGoToTreePage}
-              >
-                {t("components.Tree.Panel.actions.update")}
-              </Button>
+              ability.can("read", "Trees") ? (
+                <Button
+                  size="large"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={handleGoToTreePage}
+                >
+                  {ability.can("update", "Trees")
+                    ? t("components.Tree.Panel.actions.update")
+                    : t("components.Tree.Panel.actions.read")}
+                </Button>
+              ) : null
             }
           >
             <TreeImagesContainer />
@@ -77,9 +84,14 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
               <Grid item>
                 <TreeBasicForm isEditable={withEditMode} />
               </Grid>
-              <Grid item>
-                <InterventionsWorkflow selectable={false} insidePanel={true} />
-              </Grid>
+              <Can do="read" on="Interventions">
+                <Grid item>
+                  <InterventionsWorkflow
+                    selectable={false}
+                    insidePanel={true}
+                  />
+                </Grid>
+              </Can>
             </Grid>
           </AppLayoutCartoDialog>
         </InterventionProvider>

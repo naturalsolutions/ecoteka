@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
   const classes = useStyles();
-  const { dialog, snackbar } = useAppLayout();
+  const { dialog } = useAppLayout();
   const { t } = useTranslation(["components", "common"]);
   const { organization, user } = useAppContext();
   const { apiETK } = useApi().api;
@@ -41,25 +41,6 @@ const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
   const formAddMembersRef = useRef<AddMembersActions>();
   const { theme } = useThemeContext();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
-
-  const mockMembers = [
-    {
-      name: "Martine Lucette",
-      role: "Admin",
-    },
-    {
-      name: "Pedro Delavega",
-      role: "Utilisateur",
-    },
-    {
-      name: "Hans Zferingebueygfrbtblu",
-      role: "Utilisateur",
-    },
-    {
-      name: "Mamadi Doukouré",
-      role: "Admin",
-    },
-  ];
 
   const fetchMembers = async (organizationId: number) => {
     try {

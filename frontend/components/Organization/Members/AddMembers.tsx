@@ -78,7 +78,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
         const input = getValues("main").trim();
 
         if (input && isValid(input)) {
-          append({ email: input, role: "guest" });
+          append({ email: input, role: "reader" });
           setValue("main", "");
         }
       }
@@ -97,7 +97,7 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
       if (emails) {
         const toBeAdded = emails.filter((email) => !isInList(email));
         toBeAdded.map((email, index) => {
-          setTimeout(() => append({ email: email, role: "guest" }), 50);
+          setTimeout(() => append({ email: email, role: "reader" }), 50);
         });
       }
     };
@@ -161,9 +161,6 @@ const AddMembers = forwardRef<AddMembersActions, AddMembersProps>(
       },
       {
         value: "reader",
-      },
-      {
-        value: "guest",
       },
     ];
 

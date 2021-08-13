@@ -447,7 +447,8 @@
     "code": "Tree identifier",
     "Panel": {
       "actions": {
-        "update": "Update this tree"
+        "update": "Update this tree",
+        "read": "Show more"
       }
     }
   },

@@ -6,7 +6,13 @@
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "node ./scripts/replace_envars.js && next start",
+    "test": "jest",
+    "test:coverage": "jest --coverage=true",
     "export": "next export"
+  },
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest",
+    ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css"
   },
   "dependencies": {
     "@casl/ability": "^5.2.2",
@@ -71,6 +77,16 @@
   },
   "devDependencies": {
     "@hookform/devtools": "^3.0.0-rc.2",
-    "@types/geobuf": "^3.0.0"
+    "@testing-library/dom": "^8.1.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.2.0",
+    "@types/geobuf": "^3.0.0",
+    "@types/jest": "^26.0.24",
+    "babel-jest": "^27.0.6",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.0.6",
+    "next-router-mock": "^0.1.4",
+    "ts-jest": "^27.0.3"
   }
 }

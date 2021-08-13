@@ -40,7 +40,7 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
       }
     };
 
-    const { fields, handleSubmit, setError, errors, trigger } = useETKForm({
+    const { fields, handleSubmit, setError, trigger } = useETKForm({
       schema: schema,
     });
     const { refetchUserData } = useAppContext();
@@ -69,7 +69,7 @@ const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
         },
       };
       try {
-        const response = await apiETK.post("auth/login", params, config);
+        const response = await apiETK.post("/auth/login", params, config);
         const { data, status } = response;
 
         if (status === 200) {

@@ -10,26 +10,28 @@ export interface HomeHeroProps {}
 
 const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
   root: {
-    position: "relative",
-    height: "calc(100vh - 200px)",
+    display: "flex",
+    flexDirection: "column",
   },
   map: {
-    top: 223,
-    left: 0,
-    height: "calc(100% - 223px)",
     width: "100%",
+    height: 300,
+    overflow: "hidden",
     position: "relative",
   },
-  [theme.breakpoints.up("sm")]: {
+  [theme.breakpoints.up("md")]: {
+    root: {
+      display: "block",
+    },
     map: {
-      top: 0,
-      height: "100%",
+      height: "calc(100vh - 200px)",
     },
   },
 }));
 
 const rendersTooltip = {
-  osm: renderTooltipInfoOSM,
+  // Temp deprecation while waiting UX rework.
+  // osm: renderTooltipInfoOSM,
 };
 
 const HomeHero: FC<HomeHeroProps> = ({}) => {
@@ -47,7 +49,11 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
     }
   };
 
-  const osmLayer = OSMLayer({ visible: true, onHover: handleShowInfoLayer });
+  const osmLayer = OSMLayer({
+    visible: true,
+    onHover: handleShowInfoLayer,
+    defaultPointColor: "#7EC14D",
+  });
 
   const handleOnChangeCity = (coords) => {
     setCoords(coords);
@@ -75,9 +81,6 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
         PaperProps={{ elevation: 0, className: classes.map }}
         layers={[osmLayer]}
       />
-      {info?.layer?.id &&
-        rendersTooltip[info.layer.id] &&
-        rendersTooltip[info.layer.id]({ info })}
     </div>
   );
 };
