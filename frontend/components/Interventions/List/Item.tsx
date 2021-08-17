@@ -56,15 +56,11 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
     intervention.done && intervention.date
       ? `Réalisée le ${new Date(intervention.date).toLocaleDateString()}`
       : "";
-  const periodDate =
-    !intervention.done &&
-    intervention.intervention_start_date &&
-    intervention.intervention_end_date
-      ? `Entre le ${new Date(
+  const scheduledStartDate =
+    !intervention.done && intervention.intervention_start_date
+      ? `Prévue le ${new Date(
           intervention.intervention_start_date
-        )?.toLocaleDateString()} et ${new Date(
-          intervention.intervention_end_date
-        )?.toLocaleDateString()} `
+        )?.toLocaleDateString()}`
       : "";
 
   const handleShowIntervention = () => {
@@ -100,7 +96,7 @@ const InterventionsListItem: FC<InterventionsListItemProps> = ({
         </ListItemAvatar>
         <ListItemText
           primary={interventionNames[intervention.intervention_type]}
-          secondary={date || periodDate}
+          secondary={date || scheduledStartDate}
         />
         {selectable && (
           <ListItemSecondaryAction>

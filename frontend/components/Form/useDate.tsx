@@ -11,11 +11,6 @@ import { useRouter } from "next/router";
 import { Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
-export interface DateRangePeriod {
-  startDate?: Date;
-  endDate?: Date;
-}
-
 interface ResolverError {
   message: string;
   type: string;
@@ -71,6 +66,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
       <Controller
         control={control}
         name={name}
+        defaultValue={new Date()}
         render={({ onChange, value }) => (
           <>
             <KeyboardDatePicker

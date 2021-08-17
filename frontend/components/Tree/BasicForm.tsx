@@ -26,8 +26,6 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
   const treeSchema = useTreeSchema();
   const { form } = useTreeContext();
 
-  console.log(form);
-
   return (
     <Grid container>
       <Grid item xs={12}>

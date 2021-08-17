@@ -11,7 +11,6 @@ import {
   usePlanningSchema,
 } from "@/components/Interventions/Schema";
 import useETKForm from "@/components/Form/useForm";
-import { DateRangePeriod } from "@/components/Form/useDateRange";
 import { Grid } from "@material-ui/core";
 
 interface IInterventionEditForm {
@@ -39,9 +38,20 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
 
   const { fields, getValues, setValue } = useETKForm({ schema });
 
+  const nonPropertiesFields = [
+    "intervenant",
+    "date",
+    "done",
+    "estimated_cost",
+    "required_documents",
+    "required_material",
+    "intervention_start_date",
+  ];
+
   const handleOnSave = async () => {
     try {
       const values = getValues();
+      console.log(values);
       const payload = {
         id: intervention.id,
         organization_id: organization.id,
@@ -49,22 +59,9 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
         tree_id: intervention.tree_id,
         properties: intervention.properties,
       };
-      const nonPropertiesFields = [
-        "intervenant",
-        "date",
-        "done",
-        "estimated_cost",
-        "required_documents",
-        "required_material",
-      ];
 
       for (let key in values) {
-        if (key === "intervention_period") {
-          const interventionPeriod: DateRangePeriod =
-            values["intervention_period"];
-          payload["intervention_start_date"] = interventionPeriod.startDate;
-          payload["intervention_end_date"] = interventionPeriod.endDate;
-        } else if (nonPropertiesFields.includes(key)) {
+        if (nonPropertiesFields.includes(key)) {
           payload[key] = values[key];
         } else {
           payload.properties[key] = values[key];
@@ -99,25 +96,16 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   };
 
   useEffect(() => {
+    console.log(intervention);
+    Object.keys(intervention).map((key) => {});
     Object.keys(intervention).forEach((i) => {
-      const dateProperties = [
-        "intervention_start_date",
-        "intervention_end_date",
-      ];
-
-      if (!dateProperties.includes(i)) {
+      if (nonPropertiesFields.includes(i)) {
         setValue(i, intervention[i]);
       }
     });
 
     Object.keys(intervention.properties).forEach((i) => {
       setValue(i, intervention.properties[i]);
-    });
-
-    // @ts-ignore
-    setValue("intervention_period", {
-      startDate: new Date(intervention.intervention_start_date),
-      endDate: new Date(intervention.intervention_end_date),
     });
   }, []);
 
@@ -137,7 +125,7 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
 
   const mapFieldsOrder = [
     "method",
-    "intervention_period",
+    "intervention_start_date",
     "estimated_cost",
     "required_documents",
     "required_material",
