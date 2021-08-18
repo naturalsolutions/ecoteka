@@ -1,14 +1,15 @@
+//@ts-nocheck
 import { forwardRef } from "react";
 import { es, enGB, fr } from "date-fns/locale";
 import {
   KeyboardDatePicker,
-  KeyboardDatePickerProps,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { TextFieldProps } from "@material-ui/core";
 
 const setDateLocale = (locale: string) => {
   switch (locale) {
@@ -36,11 +37,16 @@ const setLocaleFormat = (locale: string) => {
   }
 };
 
-const DatePickerField = forwardRef<HTMLDivElement, KeyboardDatePickerProps>(
+const DatePickerField = forwardRef<HTMLDivElement, TextFieldProps>(
   (props, ref) => {
     const router = useRouter();
     const { t } = useTranslation(["common"]);
     const { onChange, inputProps, ...rest } = props;
+
+    const setDate = (date) => {
+      console.log(date);
+      return date;
+    };
 
     return (
       <MuiPickersUtilsProvider
@@ -49,13 +55,15 @@ const DatePickerField = forwardRef<HTMLDivElement, KeyboardDatePickerProps>(
       >
         <KeyboardDatePicker
           {...rest}
-          disableToolbar
+          {...inputProps}
+          disableToolbar={false}
+          variant="dialog"
+          inputVariant="filled"
           fullWidth
           ref={ref}
           onChange={onChange}
-          inputVariant="filled"
-          variant="inline"
           format={setLocaleFormat(router.locale)}
+          InputLabelProps={{ shrink: true }}
           margin="dense"
           okLabel={t("common.buttons.confirm")}
           cancelLabel={t("common.buttons.cancel")}
