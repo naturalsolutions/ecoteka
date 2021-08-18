@@ -32,12 +32,8 @@ class CRUDIntervention(CRUDBase[Intervention, InterventionCreate, InterventionUp
             db.query(self.model)
             .filter(self.model.organization_id == organization_id)
             .filter(self.model.intervention_type == intervention_type)
-            .filter(
-                sa.or_(
-                    sa.extract("year", self.model.intervention_start_date) == year,
-                    sa.extract("year", self.model.intervention_end_date) == year,
-                )
-            )
+            .filter(self.model.done == True)
+            .filter(self.model.date.between(f'{year}-01-01', f'{year}-12-31'))
             .all()
         )
     def get_planned_by_year(self, db: Session, organization_id: int, year: int):
