@@ -337,12 +337,7 @@ export function usePlanningSchema(it: TInterventionType) {
       component: {
         label: t("components.Intervention.intervention_start_date"),
       },
-      schema: yup
-        .object({
-          startDate: yup.string(),
-          endDate: yup.string(),
-        })
-        .required(t("common.errors.required")),
+      schema: yup.date().required(t("common.errors.required")),
     },
     estimated_cost: {
       type: "textfield",
