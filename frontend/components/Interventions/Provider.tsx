@@ -14,13 +14,14 @@ export const useInterventionContext = () => useContext(InterventionContext);
 export const calculatePriority = ({ done, archived, start, end }) => {
   const nowDate = new Date();
   const endDate = new Date(end);
+  const startDate = new Date(start);
   const twoWeeks = new Date();
   const oneDay = 1000 * 3600 * 24;
 
   twoWeeks.setTime(twoWeeks.getTime() - 15 * oneDay);
 
   const differenceInDays = Math.abs(
-    nowDate.getTime() - new Date(start).getTime()
+    nowDate.getTime() - new Date(startDate).getTime()
   );
   const distance = Math.floor(differenceInDays / oneDay);
 
@@ -32,11 +33,11 @@ export const calculatePriority = ({ done, archived, start, end }) => {
     return "archived";
   }
 
-  if (!done && endDate < nowDate) {
+  if (!done && startDate < nowDate) {
     return "late";
   }
 
-  if (!done && !(end < nowDate) && distance <= 15) {
+  if (!done && !(start < nowDate) && distance <= 15) {
     return "urgent";
   }
 
