@@ -1,11 +1,4 @@
 import { forwardRef } from "react";
-import {
-  makeStyles,
-  TextField,
-  Typography,
-  TextFieldProps,
-  Theme,
-} from "@material-ui/core";
 import { es, enGB, fr } from "date-fns/locale";
 import {
   KeyboardDatePicker,
@@ -16,10 +9,6 @@ import DateFnsUtils from "@date-io/date-fns";
 
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {},
-}));
 
 const setDateLocale = (locale: string) => {
   switch (locale) {
@@ -47,12 +36,10 @@ const setLocaleFormat = (locale: string) => {
   }
 };
 
-const DatePickerField = forwardRef<HTMLDivElement, TextFieldProps>(
+const DatePickerField = forwardRef<HTMLDivElement, KeyboardDatePickerProps>(
   (props, ref) => {
-    const classes = useStyles();
     const router = useRouter();
     const { t } = useTranslation(["common"]);
-    console.log(props);
     const { onChange, inputProps, ...rest } = props;
 
     return (
@@ -61,7 +48,6 @@ const DatePickerField = forwardRef<HTMLDivElement, TextFieldProps>(
         locale={setDateLocale(router.locale)}
       >
         <KeyboardDatePicker
-          {...inputProps}
           {...rest}
           disableToolbar
           fullWidth

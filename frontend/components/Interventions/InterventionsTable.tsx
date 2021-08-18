@@ -35,11 +35,10 @@ const InterventionsTable: FC<{
   };
 
   const renderInterventionDate = (intervention) => {
-    const {
-      date,
-      intervention_start_date,
-      intervention_end_date,
-    } = intervention;
+    const { date, intervention_start_date, intervention_end_date } =
+      intervention;
+
+    console.log("renderInterventionDate", intervention);
 
     if (date) {
       return formatDate(date);
