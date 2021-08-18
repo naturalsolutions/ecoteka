@@ -599,7 +599,7 @@ def get_metrics_by_year(
     
     trees_count = organization_in_db.total_trees
     # Asked in specs but no corresponding intervention_type
-    planted_trees_count = len([])
+    planted_trees_count = crud.tree.get_planted(db, organization_id=organization_id, year=year)
     logged_trees_count = len(crud.intervention.get_by_intervention_type_and_year(db, organization_id=organization_id, intervention_type="felling", year=year))
     scheduled_cost = 0
     scheduled_interventions = crud.intervention.get_scheduled_by_year(db, organization_id=organization_id, year=year)
