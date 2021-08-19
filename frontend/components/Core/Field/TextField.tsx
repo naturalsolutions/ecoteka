@@ -10,9 +10,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   input: {
     fontWeight: "bold",
     color: theme.palette.text.primary,
-    "&$disabled": {
-      color: "rgba(0, 0, 0, 0.6)",
-    },
   },
   inputLabel: {
     fontWeight: "bold",

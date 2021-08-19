@@ -1,4 +1,5 @@
 //@ts-nocheck
+// !! This component seems to break build pipeline. Fix needed!
 import { forwardRef } from "react";
 import { es, enGB, fr } from "date-fns/locale";
 import {
