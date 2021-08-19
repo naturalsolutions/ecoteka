@@ -600,21 +600,21 @@ def get_metrics_by_year(
     trees_count = organization_in_db.total_trees
     # Asked in specs but no corresponding intervention_type
     planted_trees_count = crud.tree.get_planted(db, organization_id=organization_id, year=year)
-    logged_trees_count = len(crud.intervention.get_by_intervention_type_and_year(db, organization_id=organization_id, intervention_type="felling", year=year))
+    logged_trees_count = len(crud.intervention.get_done_by_type_and_year(db, organization_id=organization_id, intervention_type="felling", year=year))
     scheduled_cost = 0
     scheduled_interventions = crud.intervention.get_scheduled_by_year(db, organization_id=organization_id, year=year)
     for i in scheduled_interventions:
         scheduled_cost += i.estimated_cost
-    planned_cost = 0  
-    planned_interventions = crud.intervention.get_planned_by_year(db, organization_id=organization_id, year=year)
-    for i in planned_interventions:
-        planned_cost += i.estimated_cost
+    done_cost = 0  
+    done_interventions = crud.intervention.get_done_by_year(db, organization_id=organization_id, year=year)
+    for i in done_interventions:
+        done_cost += i.estimated_cost
 
     metrics = OrganizationMetrics(
         total_tree_count=trees_count,
         logged_trees_count=logged_trees_count,
         planted_trees_count=planted_trees_count,
-        planned_interventions_cost=planned_cost,
+        done_interventions_cost=done_cost,
         scheduled_interventions_cost=scheduled_cost,
         )
 

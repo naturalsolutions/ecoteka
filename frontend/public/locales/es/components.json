@@ -676,6 +676,11 @@
         "title": "Métricas del patrimonio arbóreo por año",
         "plantedTreesCaption": "Árboles plantados",
         "loggedTreesCaption": "Árboles talados"
+      },
+      "InterventionMetrics": {
+        "title": "Presupuesto de gestión para",
+        "doneCaption": "hecho",
+        "scheduledCaption": "programado"
       }
     }
   },
