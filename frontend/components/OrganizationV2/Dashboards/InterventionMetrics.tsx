@@ -1,26 +1,42 @@
 import { FC, useEffect, useState } from "react";
 import { Grid, makeStyles, Theme, LinearProgress } from "@material-ui/core";
-import Tree from "@/components/Core/Icons/Tree";
-import Trunk from "@/components/Core/Icons/Trunk";
+import Calendar from "@/components/Core/Icons/Calendar";
+import Budget from "@/components/Core/Icons/Budget";
 import CoreOptionsPanel from "@/components/Core/OptionsPanel";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import SimpleMetric from "@/components/Core/Metrics/SimpleMetric";
 import useApi from "@/lib/useApi";
+import { useRouter } from "next/router";
 
-export interface TreeMetricsProps {}
+export interface InterventionMetricsProps {}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
 }));
 
-const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
+const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
+  const classes = useStyles();
   const { t } = useTranslation(["components"]);
   const { user, organization } = useAppContext();
   const { apiETK } = useApi().api;
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [metrics, setMetrics] = useState(null);
+  const router = useRouter();
+
+  // Should be defined in Organization config
+  const setCurrency = (locale: string): string => {
+    switch (locale) {
+      case "fr":
+      case "es":
+        return "EUR";
+      case "en":
+        return "USD";
+      default:
+        return "EUR";
+    }
+  };
 
   const fetchMetrics = async (year: number) => {
     setIsLoading(true);
@@ -44,18 +60,18 @@ const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
 
   const displayedMetrics = [
     {
-      key: "planted_trees_count",
+      key: "done_interventions_cost",
       caption: `${t(
-        "components.Organization.Dashboards.TreeMetrics.plantedTreesCaption"
+        "components.Organization.Dashboards.InterventionMetrics.doneCaption"
       )}`,
-      iconComponent: <Tree style={{ fontSize: 52 }} />,
+      iconComponent: <Budget style={{ fontSize: 52 }} />,
     },
     {
-      key: "logged_trees_count",
+      key: "scheduled_interventions_cost",
       caption: `${t(
-        "components.Organization.Dashboards.TreeMetrics.loggedTreesCaption"
+        "components.Organization.Dashboards.InterventionMetrics.scheduledCaption"
       )}`,
-      iconComponent: <Trunk style={{ fontSize: 52 }} />,
+      iconComponent: <Calendar style={{ fontSize: 52 }} />,
     },
   ];
 
@@ -68,7 +84,7 @@ const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
   return (
     <CoreOptionsPanel
       label={`${t(
-        "components.Organization.Dashboards.TreeMetrics.title"
+        "components.Organization.Dashboards.InterventionMetrics.title"
       )} ${year}`}
       items={[]}
     >
@@ -79,12 +95,16 @@ const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
         alignItems="center"
         spacing={4}
       >
-        {isLoading && <LinearProgress />}
+        {(isLoading || !metrics) && <LinearProgress />}
         {metrics &&
           displayedMetrics.map((metric) => (
             <Grid item>
               <SimpleMetric
-                metric={metrics[metric.key]}
+                metric={metrics[metric.key].toLocaleString(router.locale, {
+                  maximumFractionDigits: 0,
+                  style: "currency",
+                  currency: setCurrency(router.locale),
+                })}
                 caption={metric.caption}
                 icon={metric.iconComponent}
               />
@@ -95,4 +115,4 @@ const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
   );
 };
 
-export default TreeMetrics;
+export default InterventionMetrics;

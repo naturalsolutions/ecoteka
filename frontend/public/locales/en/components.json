@@ -679,6 +679,11 @@
         "title": "Tree heritage metrics for year",
         "plantedTreesCaption": "Planted trees",
         "loggedTreesCaption": "Logged trees"
+      },
+      "InterventionMetrics": {
+        "title": "Management budget for ",
+        "doneCaption": "done",
+        "scheduledCaption": "scheduled"
       }
     }
   },

@@ -675,6 +675,11 @@
         "title": "Votre patrimoine arboré pour l'année",
         "plantedTreesCaption": "Arbres plantés",
         "loggedTreesCaption": "Arbres coupés"
+      },
+      "InterventionMetrics": {
+        "title": "Coût des interventions pour",
+        "doneCaption": "facturés",
+        "scheduledCaption": "planifiés"
       }
     }
   },

@@ -27,7 +27,7 @@ class CRUDIntervention(CRUDBase[Intervention, InterventionCreate, InterventionUp
             )
             .all()
         )
-    def get_by_intervention_type_and_year(self, db: Session, organization_id: int, intervention_type: str, year: int):
+    def get_done_by_type_and_year(self, db: Session, organization_id: int, intervention_type: str, year: int):
         return (
             db.query(self.model)
             .filter(self.model.organization_id == organization_id)
@@ -36,23 +36,25 @@ class CRUDIntervention(CRUDBase[Intervention, InterventionCreate, InterventionUp
             .filter(self.model.date.between(f'{year}-01-01', f'{year}-12-31'))
             .all()
         )
-    def get_planned_by_year(self, db: Session, organization_id: int, year: int):
+    def get_done_by_year(self, db: Session, organization_id: int, year: int):
         return (
             db.query(self.model)
             .filter(self.model.organization_id == organization_id)
-            .filter(
-                sa.or_(
-                    sa.extract("year", self.model.intervention_start_date) == year,
-                    sa.extract("year", self.model.intervention_end_date) == year,
-                )
-            )
+            .filter(self.model.done == True)
+            .filter(self.model.date.between(f'{year}-01-01', f'{year}-12-31'))
             .all()
         )
     def get_scheduled_by_year(self, db: Session, organization_id: int, year: int):
         return (
             db.query(self.model)
             .filter(self.model.organization_id == organization_id)
-            .filter(sa.extract("year", self.model.date) == year)
+            .filter(self.model.done == False)
+            .filter(
+                sa.or_(
+                    sa.extract("year", self.model.intervention_start_date) == year,
+                    sa.extract("year", self.model.intervention_end_date) == year,
+                )
+            )
             .all()
         )
 
