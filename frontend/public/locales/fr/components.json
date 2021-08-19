@@ -678,8 +678,8 @@
       },
       "InterventionMetrics": {
         "title": "Coût des interventions pour",
-        "doneCaption": "réalisées",
-        "scheduledCaption": "planifiées"
+        "doneCaption": "facturés",
+        "scheduledCaption": "planifiés"
       }
     }
   },

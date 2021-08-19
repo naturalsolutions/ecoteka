@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import SimpleMetric from "@/components/Core/Metrics/SimpleMetric";
 import useApi from "@/lib/useApi";
+import { useRouter } from "next/router";
 
 export interface InterventionMetricsProps {}
 
@@ -22,6 +23,20 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [metrics, setMetrics] = useState(null);
+  const router = useRouter();
+
+  // Should be defined in Organization config
+  const setCurrency = (locale: string): string => {
+    switch (locale) {
+      case "fr":
+      case "es":
+        return "EUR";
+      case "en":
+        return "USD";
+      default:
+        return "EUR";
+    }
+  };
 
   const fetchMetrics = async (year: number) => {
     setIsLoading(true);
@@ -85,7 +100,11 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
           displayedMetrics.map((metric) => (
             <Grid item>
               <SimpleMetric
-                metric={metrics[metric.key]}
+                metric={metrics[metric.key].toLocaleString(router.locale, {
+                  maximumFractionDigits: 0,
+                  style: "currency",
+                  currency: setCurrency(router.locale),
+                })}
                 caption={metric.caption}
                 icon={metric.iconComponent}
               />
