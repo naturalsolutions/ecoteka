@@ -671,6 +671,11 @@
         "treesPerSquareKm_plural": "Árboles / km²",
         "peoplePerTree": "Habitante / Árbol Público",
         "peoplePerTree_plural": "Habitantes / Árbol Público"
+      },
+      "TreeMetrics": {
+        "title": "Métricas del patrimonio arbóreo por año",
+        "plantedTreesCaption": "Árboles plantados",
+        "loggedTreesCaption": "Árboles talados"
       }
     }
   },

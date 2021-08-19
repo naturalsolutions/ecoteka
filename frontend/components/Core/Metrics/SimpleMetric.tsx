@@ -1,10 +1,11 @@
-import { FC } from "react";
+import { FC, ReactElement } from "react";
 import { makeStyles, Theme, Grid, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 
 export interface SimpleMetricProps {
   metric: number;
   caption: string;
+  icon?: ReactElement;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const SimpleMetric: FC<SimpleMetricProps> = ({ metric, caption }) => {
+const SimpleMetric: FC<SimpleMetricProps> = ({ metric, caption, icon }) => {
   const classes = useStyles();
   const { t } = useTranslation(["common"]);
 
@@ -30,6 +31,7 @@ const SimpleMetric: FC<SimpleMetricProps> = ({ metric, caption }) => {
       alignItems="center"
       className={classes.root}
     >
+      {icon && <Grid item>{icon}</Grid>}
       <Grid item>
         <Typography variant="h3" component="div">
           {metric == 0 ? t("common.nonAvailableAbbr") : metric}
