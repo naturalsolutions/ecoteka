@@ -9,6 +9,7 @@ import { NextPage } from "next";
 import OrganizationMembers from "@/components/OrganizationV2/Members";
 import OrganizationZones from "@/components/OrganizationV2/Zones";
 import OrganizationProgress from "@/components/OrganizationV2/Progress";
+import TreesMetrics from "@/components/OrganizationV2/Dashboards/TreeMetrics";
 import OrganizationSkeleton from "@/components/Core/Feedback/OrganizationSkeleton";
 import Can from "@/components/Can";
 import SpeciesDiversityDashboard from "@/components/OrganizationV2/Dashboards/SpeciesDiversityDashboard";
@@ -35,6 +36,11 @@ const OrganizationMain = () => {
         </Grid>
         <Grid item>
           <Grid container spacing={2}>
+            <Can do="read" on="Dashboard">
+              <Grid item xs={12}>
+                <TreesMetrics />
+              </Grid>
+            </Can>
             <Can do="read" on="Members">
               <Grid item xs={12} md={6}>
                 <OrganizationMembers />

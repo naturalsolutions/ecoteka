@@ -674,6 +674,11 @@
         "treesPerSquareKm_plural": "Trees / km²",
         "peoplePerTree": "Inhabitant / Public Tree",
         "peoplePerTree_plural": "Inhabitants / Public Tree"
+      },
+      "TreeMetrics": {
+        "title": "Tree heritage metrics for year",
+        "plantedTreesCaption": "Planted trees",
+        "loggedTreesCaption": "Logged trees"
       }
     }
   },

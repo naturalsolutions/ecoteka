@@ -7,6 +7,19 @@ from typing import Dict, List
 
 
 class CRUDTree(CRUDBase[Tree, TreeCreate, TreeUpdate]):
+    def get_planted(self, db: Session, organization_id: int, year: int):
+        # return(
+        #     db.query(self.model)
+        #     .filter(self.model.organization_id == organization_id)
+        #     .filter(self.model.properties.comparator.contains([str(year)]))
+        # ).all()
+        return db.execute(f"""
+                select count(*) from tree 
+                where properties->>'plantationDate' LIKE '%{year}%'
+                and organization_id = {organization_id};""").first()[0]
+
+
+
     def get_count_by_intervention_type(self, db: Session, organization_id: int, intervention_type: str):
         return (
             db.query(self.model)
