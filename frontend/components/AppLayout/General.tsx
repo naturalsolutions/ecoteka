@@ -39,15 +39,7 @@ const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
 
   return (
     <AppLayoutGeneralContext.Provider value={{}}>
-      {error && (
-        <ErrorComponent
-          errorCode={error.code}
-          errorMessage={error.message}
-          captionText={error.message}
-          buttonText="Back to homepage"
-          onClick={handleGoToHome}
-        />
-      )}
+      {error && <ErrorComponent errorCode={error.code} />}
       {isLoading && skeleton}
       {!error && !isLoading && (
         <main className={classes.content}>{children}</main>

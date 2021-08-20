@@ -837,5 +837,24 @@
       "canonicalName": "Nombre canónico",
       "vernacularName": "Nombre común"
     }
+  },
+  "Core": {
+    "Error": {
+      "message": {
+        "401": "No puedes acceder a esta página. \n¡Por favor ingresa primero!",
+        "403": "¡No tienes permiso para ver esta página!",
+        "404": "Ningún árbol crece en esta página",
+        "500": "Algo salió mal",
+        "unknown": "Error desconocido"
+      },
+      "CallToActionButton": {
+        "message": {
+          "401": "Acceso",
+          "403": "Solicitar acceso",
+          "404": "Inicio",
+          "500": "Inicio"
+        }
+      }
+    }
   }
 }

@@ -836,5 +836,24 @@
       "canonicalName": "Nom canonique",
       "vernacularName": "Nom vernaculaire"
     }
+  },
+  "Core": {
+    "Error": {
+      "message": {
+        "401": "Vous ne pouvez pas avoir accès à cette ressource, veuillez vous connecter!",
+        "403": "Vous n'êtes pas autorisé à voir cette ressource !",
+        "404": "Aucun arbre ne pousse sur cette page",
+        "500": "La météo ne nous est pas favorable ! Attendez un peu et réessayez quand les nuages seront passés.",
+        "unknown": "Erreur inconnue"
+      },
+      "CallToActionButton": {
+        "message": {
+          "401": "Connexion",
+          "403": "Demande d'accès",
+          "404": "Accueil",
+          "500": "Accueil"
+        }
+      }
+    }
   }
 }

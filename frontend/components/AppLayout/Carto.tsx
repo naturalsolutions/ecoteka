@@ -172,15 +172,7 @@ const AppLayoutCarto: FC<IAppLayoutCarto> = ({
     <AppLayoutCartoContext.Provider
       value={{ hegiht: appHeight, width: drawerLeftWidth, container }}
     >
-      {error && (
-        <ErrorComponent
-          errorCode={error.code}
-          errorMessage={error.message}
-          captionText={error.message}
-          buttonText="Back to homepage"
-          onClick={handleGoToHome}
-        />
-      )}
+      {error && <ErrorComponent errorCode={error.code} />}
       {isLoading && skeleton}
       {!error && !isLoading && (
         <div style={{ display: "flex" }}>
