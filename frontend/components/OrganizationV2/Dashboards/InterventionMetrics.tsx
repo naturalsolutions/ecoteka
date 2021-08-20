@@ -1,7 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import { Grid, makeStyles, Theme, LinearProgress } from "@material-ui/core";
-import Calendar from "@/components/Core/Icons/Calendar";
-import Budget from "@/components/Core/Icons/Budget";
 import CoreOptionsPanel from "@/components/Core/OptionsPanel";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
@@ -64,14 +62,12 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
       caption: `${t(
         "components.Organization.Dashboards.InterventionMetrics.doneCaption"
       )}`,
-      iconComponent: <Budget style={{ fontSize: 52 }} />,
     },
     {
       key: "scheduled_interventions_cost",
       caption: `${t(
         "components.Organization.Dashboards.InterventionMetrics.scheduledCaption"
       )}`,
-      iconComponent: <Calendar style={{ fontSize: 52 }} />,
     },
   ];
 
@@ -106,7 +102,6 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
                   currency: setCurrency(router.locale),
                 })}
                 caption={metric.caption}
-                icon={metric.iconComponent}
               />
             </Grid>
           ))}
