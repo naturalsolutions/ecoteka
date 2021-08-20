@@ -3,6 +3,7 @@ import { Controller, UseFormMethods } from "react-hook-form";
 import { Grid } from "@material-ui/core";
 import CoreTextField from "@/components/Core/Field/TextField";
 import CoreSwitch from "@/components/Core/Field/Switch";
+import DatePicker from "@/components/Core/Field/DatePicker";
 import useTreeSchema from "@/components/Tree/Schema";
 import TreeCanonicalField from "./Field/Canonical";
 import { useTreeContext } from "@/components/Tree/Provider";
@@ -90,13 +91,18 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
       </Grid>
       <Grid item xs={12}>
         <Controller
-          {...treeSchema.plantationDate.component}
-          as={<CoreTextField type="date" />}
+          as={
+            <DatePicker
+              inputProps={{
+                ...treeSchema.plantationDate.component,
+                error: Boolean(form.errors?.plantationDate),
+                disabled: !isEditable,
+              }}
+            />
+          }
           name="plantationDate"
           control={form.control}
           defaultValue=""
-          error={Boolean(form.errors?.plantationDate)}
-          inputProps={{ disabled: !isEditable }}
         />
       </Grid>
       <Grid item xs={12}>
