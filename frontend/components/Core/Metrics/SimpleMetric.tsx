@@ -1,7 +1,6 @@
 import { FC, ReactElement } from "react";
 import { makeStyles, Theme, Grid, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/router";
 
 export interface SimpleMetricProps {
   metric: number | string;
