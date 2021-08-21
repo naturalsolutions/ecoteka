@@ -219,7 +219,7 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
 
   useEffect(() => {
     const { query, route } = router;
-
+    setIntervention(undefined);
     if (
       route === "/[organizationSlug]/map" &&
       query.panel === "intervention-edit" &&
