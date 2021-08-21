@@ -66,18 +66,18 @@ const DatePicker: React.FC<DatePickerProps> = ({
       <Controller
         control={control}
         name={name}
-        defaultValue={new Date()}
+        defaultValue={""}
         render={({ onChange, value }) => (
           <>
             <KeyboardDatePicker
-              disableToolbar
+              disableToolbar={false}
               fullWidth
               variant="dialog"
               inputVariant="outlined"
               format={setLocaleFormat(router.locale)}
               margin="dense"
               label={label}
-              value={value ? value : new Date()}
+              value={value ? value : ""}
               onChange={onChange}
               InputLabelProps={{ shrink: true }}
               error={Boolean(error)}

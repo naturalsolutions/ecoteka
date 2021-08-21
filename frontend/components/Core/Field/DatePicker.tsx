@@ -1,4 +1,3 @@
-//@ts-nocheck
 // !! This component seems to break build pipeline. Fix needed!
 import { forwardRef } from "react";
 import { es, enGB, fr } from "date-fns/locale";
@@ -10,7 +9,7 @@ import DateFnsUtils from "@date-io/date-fns";
 
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import { TextFieldProps } from "@material-ui/core";
+import { InputBaseComponentProps } from "@material-ui/core";
 
 const setDateLocale = (locale: string) => {
   switch (locale) {
@@ -38,11 +37,18 @@ const setLocaleFormat = (locale: string) => {
   }
 };
 
-const DatePickerField = forwardRef<HTMLDivElement, TextFieldProps>(
+export interface DatePickerFieldProps {
+  inputProps?: InputBaseComponentProps;
+  defaultValue?: string;
+  value?: string;
+  onChange?(date: Date): void;
+}
+
+const DatePickerField = forwardRef<HTMLDivElement, DatePickerFieldProps>(
   (props, ref) => {
     const router = useRouter();
     const { t } = useTranslation(["common"]);
-    const { onChange, inputProps, ...rest } = props;
+    const { onChange, inputProps, value, ...rest } = props;
 
     const setDate = (date) => {
       console.log(date);
@@ -56,11 +62,13 @@ const DatePickerField = forwardRef<HTMLDivElement, TextFieldProps>(
       >
         <KeyboardDatePicker
           {...rest}
-          {...inputProps}
+          label={inputProps.label}
+          inputProps={inputProps}
           disableToolbar={false}
           variant="dialog"
           inputVariant="filled"
           fullWidth
+          value={value}
           ref={ref}
           onChange={onChange}
           format={setLocaleFormat(router.locale)}

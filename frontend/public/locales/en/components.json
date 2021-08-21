@@ -736,7 +736,7 @@
       "title": "Edit intervention"
     },
     "Panel": {
-      "validate": "Validate",
+      "validate": "Set as done",
       "archiveDialog": {
         "title": "Cancel Intervention"
       },
@@ -746,7 +746,7 @@
       "closePanel": {
         "title": "Do you want to save your changes ?"
       },
-      "archive": "Archive"
+      "archive": "Cancel this task"
     }
   },
   "MapActionBar": {
@@ -846,5 +846,24 @@
   },
   "ons": {
     "quit": "Quit"
+  },
+  "Core": {
+    "Error": {
+      "message": {
+        "401": "You cannot access this page. Please login first!",
+        "403": "You are not allowed to see this page !",
+        "404": "No tree grows on this page",
+        "500": "Something went wrong",
+        "unknown": "Unknown error"
+      },
+      "CallToActionButton": {
+        "message": {
+          "401": "Login",
+          "403": "Request access",
+          "404": "Home",
+          "500": "Home"
+        }
+      }
+    }
   }
 }

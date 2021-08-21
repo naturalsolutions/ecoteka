@@ -47,8 +47,7 @@ export interface IMember {
   status: string;
   hashed_password: string;
 }
-
 export interface Error {
-  message: string;
+  message?: string;
   code: number;
 }

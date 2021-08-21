@@ -105,5 +105,7 @@
   "invite": "Invitación",
   "add": "Agregar",
   "archive": "Archivo",
-  "remove": "Eliminar"
+  "remove": "Eliminar",
+  "previousPage": "Pagina anterior",
+  "home": "Inicio"
 }

@@ -45,8 +45,7 @@ const InterventionPanelHeader: FC<InterventionPanelHeaderProps> = ({
   const periodDate =
     !intervention.done &&
     !intervention.properties.cancelled &&
-    intervention.intervention_start_date &&
-    intervention.intervention_end_date
+    intervention.intervention_start_date
       ? `Prévue pour le ${new Date(
           intervention.intervention_start_date
         )?.toLocaleDateString()}`

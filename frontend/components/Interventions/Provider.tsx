@@ -87,7 +87,10 @@ const InterventionProvider: FC<InterventionProviderProps> = ({ children }) => {
     setHasLateInterventions(lateInterventions.length > 0);
 
     const newScheduledInterventions = data
-      .filter((intervention) => !intervention.done)
+      .filter(
+        (intervention) =>
+          !intervention.done && !intervention.properties.cancelled
+      )
       .sort(
         (a, b) =>
           new Date(b.intervention_start_date).getTime() -

@@ -101,7 +101,6 @@ const OrganizationMain = () => {
 const OrganizationHomePage: NextPage = () => {
   const { isOrganizationLoading, organizationError, organization } =
     useAppContext();
-
   return (
     <AppLayoutGeneral
       isLoading={isOrganizationLoading}
