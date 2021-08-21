@@ -736,7 +736,7 @@
       "title": "Edit intervention"
     },
     "Panel": {
-      "validate": "Validate",
+      "validate": "Set as done",
       "archiveDialog": {
         "title": "Cancel Intervention"
       },
@@ -746,7 +746,7 @@
       "closePanel": {
         "title": "Do you want to save your changes ?"
       },
-      "archive": "Archive"
+      "archive": "Cancel this task"
     }
   },
   "MapActionBar": {

@@ -730,7 +730,7 @@
       "title": "Editar intervención"
     },
     "Panel": {
-      "validate": "Validar",
+      "validate": "Establecer como hecho",
       "archiveDialog": {
         "title": "Cancelar intervención"
       },
@@ -740,7 +740,7 @@
       "closePanel": {
         "title": "Quieres guardar tus cambios ?"
       },
-      "archive": "Archivo"
+      "archive": "Cancelar esta tarea"
     }
   },
   "MapActionBar": {
