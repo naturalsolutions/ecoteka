@@ -1,31 +1,10 @@
 stages:
-  - test
   - build_base
   - build_dev
   - build_prod
   - deploy_dev
   - deploy_prod
   - release
-
-test:
-  stage: test
-  image: docker/compose:latest
-  before_script:
-    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
-  variables:
-    COMPOSE_INTERACTIVE_NO_CLI: 1
-  script:
-    - cp -vf .env.ci .env
-    - docker-compose down
-    - docker-compose build
-    - docker-compose -f docker-compose.yml up -d
-    - docker-compose up -d mail
-    - sleep 10
-    - docker-compose exec -T backend pytest -s -v --cov=app --cov-report=term-missing /app/app/tests
-    - docker-compose exec -T frontend npm run test:coverage
-
-  tags:
-    - ns01
 
 build_backend_base:
   stage: build_base
