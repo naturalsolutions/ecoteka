@@ -18,22 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const demos = [
-  { title: "Paris", trees: 205034, slug: "paris", osm_id: "7444" },
-  {
-    title: "Londres",
-    trees: 880021,
-    slug: "london",
-    osm_id: "65606",
-  },
-  {
-    title: "New York",
-    trees: 592130,
-    slug: "new_york",
-    osm_id: "175905",
-  },
-];
-
 const HomePage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
@@ -59,7 +43,7 @@ const HomePage: NextPage = () => {
                     component="img"
                     image={
                       organization.osm_id
-                        ? `/osm_thumbnails/thumbnail/${organization.osm_id}?width=345&height=183&padding=30`
+                        ? `/osm_thumbnails/thumbnail/${organization.osm_id}?organizationId=${organization.id}&template=ecoteka&width=345&height=183&padding=30`
                         : "https://via.placeholder.com/345x183.png?text=..."
                     }
                     title={organization.name}
