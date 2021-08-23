@@ -34,10 +34,14 @@ const AdminOrganizations = () => {
 
   const queryClient = useQueryClient();
 
-  const { isLoading, isSuccess, data: organizations } = useQuery<
-    IOrganization[],
-    AxiosError
-  >(["RootOrganizations"], fetchRootrganizations);
+  const {
+    isLoading,
+    isSuccess,
+    data: organizations,
+  } = useQuery<IOrganization[], AxiosError>(
+    ["RootOrganizations"],
+    fetchRootrganizations
+  );
 
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -138,7 +142,7 @@ const AdminOrganizations = () => {
                           ownerEmail={organization.current_user_role}
                           slug={organization.slug}
                           name={organization.name}
-                          thumbnail={`/osm_thumbnails/thumbnail/${organization.osm_id}?width=345&height=230&padding=30`}
+                          thumbnail={`/osm_thumbnails/thumbnail/${organization.osm_id}?organizationId=${organization.id}&width=345&height=230&padding=30`}
                           isPrivate={organization.mode == "private"}
                         />
                       </Grid>

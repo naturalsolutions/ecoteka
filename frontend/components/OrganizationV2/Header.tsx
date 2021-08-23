@@ -156,7 +156,7 @@ export const MapPreview: FC<MapPreviewProps> = ({}) => {
       <CardMedia
         className={classes.media}
         component="img"
-        image={`/osm_thumbnails/thumbnail/${organization?.osm_id}?width=700&height=300&padding=30`}
+        image={`/osm_thumbnails/thumbnail/${organization?.osm_id}?organizationId=${organization.id}&width=700&height=300&padding=30`}
         title={organization?.name}
       />
     );
