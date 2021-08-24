@@ -38,6 +38,7 @@ const FeaturedOrganizations: FC<FeaturedOrganizationsProps> = ({}) => {
   useEffect(() => {
     fetchFeaturedOrganization();
   }, []);
+
   return (
     <div className={classes.demos}>
       <Container>

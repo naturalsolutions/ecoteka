@@ -1,7 +1,5 @@
 import { makeStyles, Container, Grid, Box } from "@material-ui/core";
 import React from "react";
-import { AbilityContext } from "@/components/Can";
-import { buildAbilityFor } from "@/abilities/genericOrganizationAbility";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import OrganizationHeader from "@/components/OrganizationV2/Header";
 import { useAppContext } from "@/providers/AppContext";
@@ -21,11 +19,7 @@ import EconomyDashboard from "@/components/OrganizationV2/Dashboards/EconomyDash
 import DataQualityModule from "@/components/OrganizationV2/Modules/DataQualityModule";
 import DetectTreesModule from "@/components/OrganizationV2/Modules/DetectTreesModules";
 
-const useStyles = makeStyles(({ spacing }) => ({}));
-
 const OrganizationMain = () => {
-  const { organization } = useAppContext();
-
   return (
     <Container>
       <Grid container direction="column">
