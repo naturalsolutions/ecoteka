@@ -35,7 +35,9 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
   const searchSpecies = async (canonicalName: string) => {
     try {
       const { data, status } = await apiEOL.get(
-        `/search/1.0.json?q=${canonicalName}`
+        `/search/1.0.json?q=${canonicalName
+          .replace(" x ", " ")
+          .replace("‹", "i")}`
       );
       if (status === 200) {
         if (data.results.length > 0) {
@@ -113,7 +115,10 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
       <Grid item xs>
         <Typography variant="body2" gutterBottom>
           <i>
-            {canonicalName.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}
+            {canonicalName
+              .replace("‹", "i")
+              .toLowerCase()
+              .replace(/^\w/, (c) => c.toUpperCase())}
           </i>
         </Typography>
       </Grid>

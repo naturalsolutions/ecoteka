@@ -17,6 +17,9 @@ export interface OrganizationProgressProps {}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
+  optionsPanel: {
+    minHeight: 240,
+  },
 }));
 
 interface RatioProgressProps {
@@ -107,9 +110,9 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
       items={[]}
     >
       {metrics && (
-        <Grid container spacing={4}>
+        <Grid className={classes.optionsPanel} container justify="space-around">
           {Object.keys(metrics.ratio).map((key) => (
-            <Grid item xs={6} md={3} key={key}>
+            <Grid item xs={6} md={4} key={key}>
               <RatioProgress caption={key} progressValue={metrics.ratio[key]} />
             </Grid>
           ))}

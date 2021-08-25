@@ -55,7 +55,11 @@ const FeaturedOrganizations: FC<FeaturedOrganizationsProps> = ({}) => {
               >
                 <CardMedia
                   component="img"
-                  image={`/osm_thumbnails/thumbnail/${organization.osm_id}?organizationId=${organization.id}&template=ecoteka&width=345&height=183&padding=30`}
+                  image={`/osm_thumbnails/thumbnail/${
+                    organization.osm_id
+                  }?organizationId=${organization.id}&template=${
+                    organization.total_trees > 50000 ? "osm" : "ecoteka"
+                  }&width=345&height=183`}
                   title={organization.name}
                 />
               </SectionItem>

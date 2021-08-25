@@ -1,8 +1,7 @@
-import { FC, useEffect, useMemo, useState, createRef, useRef } from "react";
+import { FC, useEffect, useMemo, useState, useRef } from "react";
 import {
   makeStyles,
   Theme,
-  IconButton,
   Grid,
   Typography,
   useTheme,
@@ -27,12 +26,20 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(1),
   },
+  bar: {
+    width: "100%",
+  },
 }));
 
 const defaultOptions = {
   indexAxis: "x",
   aspectRatio: 2,
   responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
   scales: {
     yAxes: [
       {
@@ -204,15 +211,20 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
             alignItems="center"
             spacing={2}
           >
-            {speciesAggregates.slice(0, 6).map((species, index) => (
-              <SpeciesPreview
-                isMini={isMobile}
-                canonicalName={species.value}
-                total={species.total}
-                ratio={species.total / canonicalNameTotalCount}
-                key={`species-${index}`}
-              />
-            ))}
+            {speciesAggregates
+              .filter((f) => {
+                return f.value !== " ";
+              })
+              .slice(0, 6)
+              .map((species, index) => (
+                <SpeciesPreview
+                  isMini={isMobile}
+                  canonicalName={species.value}
+                  total={species.total}
+                  ratio={species.total / canonicalNameTotalCount}
+                  key={`species-${index}`}
+                />
+              ))}
           </Grid>
 
           <Typography
@@ -225,6 +237,7 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
             )}
           </Typography>
           <Bar
+            className={classes.bar}
             ref={barRef}
             type="bar"
             data={memoizedData}

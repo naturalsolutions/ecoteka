@@ -82,7 +82,7 @@ const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
         {isLoading && <LinearProgress />}
         {metrics &&
           displayedMetrics.map((metric) => (
-            <Grid item>
+            <Grid item key={metric.key}>
               <SimpleMetric
                 metric={metrics[metric.key]}
                 caption={metric.caption}

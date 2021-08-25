@@ -142,7 +142,11 @@ const AdminOrganizations = () => {
                           ownerEmail={organization.current_user_role}
                           slug={organization.slug}
                           name={organization.name}
-                          thumbnail={`/osm_thumbnails/thumbnail/${organization.osm_id}?organizationId=${organization.id}&width=345&height=230&padding=30`}
+                          thumbnail={`/osm_thumbnails/thumbnail/${
+                            organization.osm_id
+                          }?organizationId=${organization.id}&template=${
+                            organization.total_trees > 50000 ? "osm" : "ecoteka"
+                          }&width=345&height=230`}
                           isPrivate={organization.mode == "private"}
                         />
                       </Grid>

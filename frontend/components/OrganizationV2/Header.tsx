@@ -12,6 +12,8 @@ import {
   ListItemText,
   ListItemIcon,
   Box,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import { useAppContext } from "@/providers/AppContext";
 import {
@@ -33,6 +35,7 @@ export interface MapPreviewProps {}
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: 24,
+    marginBottom: theme.spacing(2),
   },
   icon: {
     color: theme.palette.text.secondary,
@@ -43,6 +46,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   media: {
     backgroundColor: theme.palette.text.secondary,
   },
+  mapPreview: {
+    height: "unset",
+  },
   mapPreviewDefault: {
     backgroundColor: theme.palette.text.secondary,
     width: "700px",
@@ -51,6 +57,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   map: {
     width: "700px",
     height: "300px",
+  },
+  [theme.breakpoints.up("sm")]: {
+    mapPreview: {
+      height: 260,
+    },
   },
 }));
 
@@ -79,7 +90,11 @@ export const MapPreview: FC<MapPreviewProps> = ({}) => {
     <CardMedia
       className={classes.media}
       component="img"
-      image={`/osm_thumbnails/thumbnail/${organization?.osm_id}?organizationId=${organization.id}&width=700&height=300&padding=30`}
+      image={`/osm_thumbnails/thumbnail/${
+        organization?.osm_id
+      }?organizationId=${organization.id}&template=${
+        organization.total_trees > 50000 ? "osm" : "ecoteka"
+      }&width=700&height=300`}
       title={organization?.name}
     />
   );
@@ -91,49 +106,47 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
   const { t } = useTranslation(["common", "components"]);
   const ability = useContext(AbilityContext);
   const router = useRouter();
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
-    <Paper className={classes.root}>
-      <Grid container spacing={4} alignItems="stretch">
-        <Grid item xs={12} sm={6}>
+    <Paper className={classes.root} elevation={isDesktop ? 1 : 0}>
+      <Grid container direction="column">
+        <Grid item>
+          <Grid container alignItems="center" spacing={1}>
+            <Grid item>
+              <Typography variant="h3">{organization?.name}</Typography>
+            </Grid>
+            <Grid item>
+              {organization.mode == "private" ? (
+                <Lock className={classes.icon} />
+              ) : (
+                <Public className={classes.icon} />
+              )}
+            </Grid>
+            <Grid item>
+              <Typography variant="caption" color="textSecondary">
+                {t(`components.Organization.modes.${organization.mode}`)}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Typography variant="caption" color="textPrimary">
+            {t("components.organization.Header.lastUpdatedAt")}{" "}
+            {formatDistance(Date.parse(organization.updated_at), new Date(), {
+              addSuffix: true,
+              locale: setDateLocale(router.locale),
+            })}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} alignItems="stretch">
+        <Grid item xs={12} sm={6} className={classes.mapPreview}>
           <MapPreview />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Grid container direction="column" className={classes.right}>
-            <Grid item>
-              <Grid container alignItems="center" spacing={1}>
-                <Grid item>
-                  <Typography variant="subtitle2">
-                    {organization?.name}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  {organization.mode == "private" ? (
-                    <Lock className={classes.icon} />
-                  ) : (
-                    <Public className={classes.icon} />
-                  )}
-                </Grid>
-                <Grid item>
-                  <Typography variant="caption" color="textSecondary">
-                    {t(`components.Organization.modes.${organization.mode}`)}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Typography variant="caption" color="textPrimary">
-                {t("components.organization.Header.lastUpdatedAt")}{" "}
-                {formatDistance(
-                  Date.parse(organization.updated_at),
-                  new Date(),
-                  {
-                    addSuffix: true,
-                    locale: setDateLocale(router.locale),
-                  }
-                )}
-              </Typography>
-            </Grid>
             <Grid item>
               <List>
                 <ListItem>
@@ -175,7 +188,12 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
             </Grid>
             <Grid item xs />
             <Grid item>
-              <Grid container justify="center" alignItems="center">
+              <Grid
+                container
+                direction={isDesktop ? "row" : "column"}
+                justify="center"
+                alignItems="center"
+              >
                 <Grid item>
                   <Button
                     size="large"
@@ -190,8 +208,8 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
                   </Button>
                 </Grid>
                 <Grid item xs />
-                <Grid item>
-                  <Can do="manage" on="Trees">
+                <Can do="manage" on="Trees">
+                  <Grid item>
                     <Button
                       href={`/${organization.slug}/map?panel=import`}
                       fullWidth
@@ -199,8 +217,8 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
                     >
                       {t("components.Organization.Header.importDataset")}
                     </Button>
-                  </Can>
-                </Grid>
+                  </Grid>
+                </Can>
               </Grid>
             </Grid>
           </Grid>

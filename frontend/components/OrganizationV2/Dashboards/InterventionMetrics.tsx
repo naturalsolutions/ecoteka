@@ -94,9 +94,9 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
         {(isLoading || !metrics) && <LinearProgress />}
         {metrics &&
           displayedMetrics.map((metric) => (
-            <Grid item>
+            <Grid item key={metric.key}>
               <SimpleMetric
-                metric={metrics[metric.key].toLocaleString(router.locale, {
+                metric={metrics[metric.key]?.toLocaleString(router.locale, {
                   maximumFractionDigits: 0,
                   style: "currency",
                   currency: setCurrency(router.locale),

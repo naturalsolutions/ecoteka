@@ -19,16 +19,24 @@ import EconomyDashboard from "@/components/OrganizationV2/Dashboards/EconomyDash
 import DataQualityModule from "@/components/OrganizationV2/Modules/DataQualityModule";
 import DetectTreesModule from "@/components/OrganizationV2/Modules/DetectTreesModules";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: 0,
+  },
+  [theme.breakpoints.up("md")]: {
+    root: {
+      padding: theme.spacing(1),
+    },
+  },
+}));
+
 const OrganizationMain = () => {
+  const classes = useStyles();
+
   return (
-    <Container>
+    <Container className={classes.root}>
       <Grid container direction="column">
-        <Grid item>
-          <OrganizationHeader />
-        </Grid>
-        <Grid item>
-          <Box my={2} />
-        </Grid>
+        <OrganizationHeader />
         <Grid item>
           <Grid container spacing={2}>
             <Can do="read" on="Dashboard">
