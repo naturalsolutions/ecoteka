@@ -13,8 +13,8 @@ export interface SpeciesPreviewProps {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
+    width: theme.spacing(10),
+    height: theme.spacing(10),
   },
   textCenter: {
     textAlign: "center",
@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const SpeciesPreview: FC<SpeciesPreviewProps> = ({
   canonicalName,
-  total,
   ratio,
   isMini,
 }) => {
@@ -77,8 +76,8 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
       if (status === 200) {
         if (data.taxonConcept) {
           setScName(data.taxonConcept.scientificName);
-          data.dataObjects?.length > 0
-            ? setSpeciesThumbnail(data.dataObjects[0].eolMediaURL)
+          data.taxonConcept.dataObjects?.length > 0
+            ? setSpeciesThumbnail(data.taxonConcept.dataObjects[0].eolMediaURL)
             : setSpeciesThumbnailWithWikispecies(
                 canonicalName.replace(" ", "_")
               );
@@ -94,12 +93,6 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
   useEffect(() => {
     searchSpecies(canonicalName);
   }, [canonicalName]);
-  useEffect(() => {
-    // console.log(scName);
-  }, [scName]);
-  useEffect(() => {
-    // console.log(speciesThumbnail);
-  }, [speciesThumbnail]);
 
   return (
     <Grid
@@ -117,7 +110,7 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
           {scName ? scName.charAt(0) : "."}
         </Avatar>
       </Grid>
-      <Grid item>
+      <Grid item xs>
         <Typography variant="body2" gutterBottom>
           <i>
             {canonicalName.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}
