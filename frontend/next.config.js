@@ -11,7 +11,7 @@ const excludeEnvVars = ["ASSET_PREFIX"];
 
 let config = {
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
 };
 
