@@ -16,7 +16,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json /usr/src/app/
 
-RUN npm install --production --legacy-peer-deps
+RUN npm install --production
 
 COPY . /usr/src/app/
 
