@@ -60,8 +60,6 @@ const AutocompleteMultiSelect = forwardRef<
   }, [value]);
 
   const handleOnChange = (newValues: Item[]) => {
-    console.log("handleOnChange", newValues);
-
     setSelectedValues(newValues);
     const changedValues = newValues.map((item) => item.value);
     onChange(changedValues);
@@ -90,7 +88,6 @@ const AutocompleteMultiSelect = forwardRef<
         </Fragment>
       )}
       getOptionSelected={(option: Item, value) => {
-        console.log(option, value);
         return option.value == value.value;
       }}
       onChange={(e, newValues: Item[]) => {

@@ -38,8 +38,6 @@ const InterventionsTable: FC<{
     const { date, intervention_start_date, intervention_end_date } =
       intervention;
 
-    console.log("renderInterventionDate", intervention);
-
     if (date) {
       return formatDate(date);
     }

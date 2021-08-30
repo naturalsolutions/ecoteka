@@ -130,24 +130,19 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
           children,
           (child: ReactElement<MapActionsActionProps>) =>
             child && (
-              <Can
-                do={child.props.action ? child.props.action : "preview"}
-                on={child.props.subject ? child.props.subject : "Trees"}
-              >
-                <SpeedDialAction
-                  key={child.props.name}
-                  icon={child.props.icon}
-                  classes={{
-                    staticTooltipLabel: child.props.isActive
-                      ? classes.staticTooltipLabelActive
-                      : classes.staticTooltipLabel,
-                    fab: child.props.isActive ? classes.fabActive : classes.fab,
-                  }}
-                  tooltipTitle={child.props.name}
-                  tooltipOpen
-                  onClick={() => handleOnClick(child.props.onClick)}
-                />
-              </Can>
+              <SpeedDialAction
+                key={child.props.name}
+                icon={child.props.icon}
+                classes={{
+                  staticTooltipLabel: child.props.isActive
+                    ? classes.staticTooltipLabelActive
+                    : classes.staticTooltipLabel,
+                  fab: child.props.isActive ? classes.fabActive : classes.fab,
+                }}
+                tooltipTitle={child.props.name}
+                tooltipOpen
+                onClick={() => handleOnClick(child.props.onClick)}
+              />
             )
         )}
       </SpeedDial>

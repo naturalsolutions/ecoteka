@@ -1,5 +1,5 @@
 import { FC, useContext } from "react";
-import { Grid, makeStyles, Theme, Button } from "@material-ui/core";
+import { Grid, makeStyles, Theme, Button, CircularProgress } from "@material-ui/core";
 import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 import TreeBasicForm from "./BasicForm";
 import { useState } from "react";
@@ -10,9 +10,10 @@ import { useAppContext } from "@/providers/AppContext";
 import Can, { AbilityContext } from "@/components/Can";
 
 import TreeImagesContainer from "@/components/Tree/Images/Container";
-import TreeProvider from "@/components/Tree/Provider";
+import TreeProvider, { useTreeContext } from "@/components/Tree/Provider";
 import InterventionsWorkflow from "@/components/Interventions/Workflow";
 import InterventionProvider from "@/components/Interventions/Provider";
+import TreePageHeader from "@/components/Tree/Page/Header";
 
 export interface TreePanelProps {
   withEditMode?: boolean;
@@ -34,6 +35,9 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
   const { organization } = useAppContext();
   const [active, setActive] = useState<boolean>(false);
   const ability = useContext(AbilityContext);
+  const [saving, setSaving] = useState<boolean>(false);
+  const { onSave } = useTreeContext();
+
 
   useEffect(() => {
     const { query, route } = router;
@@ -53,6 +57,16 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
         id: router.query.tree,
       },
     });
+  };
+
+  const handleOnSave = async () => {
+    try {
+      setSaving(true);
+      await onSave();
+    } catch (e) {
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -79,10 +93,11 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
               ) : null
             }
           >
+            <TreePageHeader hideBack={true} />
             <TreeImagesContainer />
             <Grid container direction="column" className={classes.grid}>
               <Grid item>
-                <TreeBasicForm isEditable={withEditMode} />
+                <TreeBasicForm />
               </Grid>
               <Can do="read" on="Interventions">
                 <Grid item>

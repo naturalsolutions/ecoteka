@@ -34,11 +34,7 @@ const MapActionsAction: FC<MapActionsActionProps> = ({
   onClick,
 }) => {
   const classes = useStyles();
-  console.log("MapActionsAction");
-  useEffect(() => {
-    console.log(action, subject);
-  }, [action, subject]);
-
+  
   return (
     <Tooltip title={name}>
       <IconButton className={classes.root} aria-label={name} onClick={onClick}>

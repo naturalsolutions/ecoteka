@@ -9,7 +9,7 @@ import TreeCanonicalField from "./Field/Canonical";
 import { useTreeContext } from "@/components/Tree/Provider";
 
 export interface TreeBasicFormProps {
-  isEditable: boolean;
+  isEditable?: boolean;
 }
 
 export const fields = [

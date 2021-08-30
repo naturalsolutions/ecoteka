@@ -51,7 +51,6 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   const handleOnSave = async () => {
     try {
       const values = getValues();
-      console.log(values);
       const payload = {
         id: intervention.id,
         organization_id: organization.id,
@@ -96,7 +95,6 @@ const InterventionEditForm: FC<IInterventionEditForm> = ({
   };
 
   useEffect(() => {
-    console.log(intervention);
     Object.keys(intervention).map((key) => {});
     Object.keys(intervention).forEach((i) => {
       if (nonPropertiesFields.includes(i)) {

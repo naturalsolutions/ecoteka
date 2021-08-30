@@ -535,7 +535,6 @@ const EditionPage = ({}) => {
           latitude: tree.y,
           zoom: 20,
           transitionDuration: 1200,
-          pitch: 50,
           transitionInterpolator: new FlyToInterpolator({ speed: 2 }),
         });
       }

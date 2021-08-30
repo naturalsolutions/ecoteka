@@ -16,6 +16,7 @@ import { useTreeContext } from "@/components/Tree/Provider";
 export type Mode = "read" | "write";
 
 export interface ITreePageHeaderProps {
+  hideBack?: boolean;
   onChange?(mode: Mode): void;
 }
 
@@ -28,16 +29,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ onChange }) => {
+const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ hideBack = false, onChange }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const router = useRouter();
   const { organization } = useAppContext();
-  const [mode, setMode] = useState<Mode>("read");
   const theme = useTheme();
   const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
   const [saving, setSaving] = useState<boolean>(false);
   const { onSave } = useTreeContext();
+  
 
   const handleGoMap = () => {
     router.push({
@@ -62,11 +63,11 @@ const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ onChange }) => {
 
   return (
     <Grid container className={classes.root}>
-      <Grid item>
+      {!hideBack && <Grid item>
         <Button onClick={handleGoMap} startIcon={<ArrowBackIcon />}>
           {t("common.map")}
         </Button>
-      </Grid>
+      </Grid>}
       <Grid item xs />
       <Grid item>
         <Button
