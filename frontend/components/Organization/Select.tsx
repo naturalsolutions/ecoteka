@@ -24,9 +24,11 @@ const OrganizationSelect: FC = () => {
   const handleClose = (newOrganization: IOrganization) => {
     setAnchorEl(null);
 
-    if (newOrganization) {
-      setOrganization(newOrganization);
+    if (!newOrganization?.slug) {
+      return;
     }
+
+    setOrganization(newOrganization);
 
     if (router.route === "/[organizationSlug]/map") {
       router.push({
