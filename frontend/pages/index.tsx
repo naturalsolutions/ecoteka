@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
 import { makeStyles, CardMedia, Container } from "@material-ui/core";
@@ -26,6 +27,9 @@ const HomePage: NextPage = () => {
 
   return (
     <AppLayoutGeneral>
+      <Head>
+        <title>ecoTeka · Home</title>
+      </Head>
       {user && (
         <div className={classes.demos}>
           <Container>

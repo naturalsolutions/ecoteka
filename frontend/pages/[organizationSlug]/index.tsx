@@ -1,5 +1,6 @@
 import { makeStyles, Container, Grid, Box } from "@material-ui/core";
 import React from "react";
+import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import OrganizationHeader from "@/components/OrganizationV2/Header";
 import { useAppContext } from "@/providers/AppContext";
@@ -109,6 +110,9 @@ const OrganizationHomePage: NextPage = () => {
       error={organizationError}
       skeleton={<OrganizationSkeleton />}
     >
+      <Head>
+        <title>ecoTeka · {organization?.name}</title>
+      </Head>
       {!isOrganizationLoading && !organizationError && organization && (
         <OrganizationMain />
       )}

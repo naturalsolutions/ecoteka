@@ -1,5 +1,5 @@
 import { FC, useContext } from "react";
-import { Grid, makeStyles, Theme, Button, CircularProgress } from "@material-ui/core";
+import { Grid, makeStyles, Theme, Button } from "@material-ui/core";
 import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 import TreeBasicForm from "./BasicForm";
 import { useState } from "react";
@@ -35,9 +35,6 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
   const { organization } = useAppContext();
   const [active, setActive] = useState<boolean>(false);
   const ability = useContext(AbilityContext);
-  const [saving, setSaving] = useState<boolean>(false);
-  const { onSave } = useTreeContext();
-
 
   useEffect(() => {
     const { query, route } = router;
@@ -57,16 +54,6 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
         id: router.query.tree,
       },
     });
-  };
-
-  const handleOnSave = async () => {
-    try {
-      setSaving(true);
-      await onSave();
-    } catch (e) {
-    } finally {
-      setSaving(false);
-    }
   };
 
   return (

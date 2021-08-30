@@ -167,7 +167,7 @@ export default function useTreeSchema() {
         label: t("components.Tree.properties.plantationDate"),
         placeholder: t("components.Tree.placeholder.plantationDate"),
       },
-      schema: yup.date(),
+      schema: yup.date().nullable(),
     },
     height: {
       type: "textfield",

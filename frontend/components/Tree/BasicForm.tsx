@@ -102,7 +102,7 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
           }
           name="plantationDate"
           control={form.control}
-          defaultValue=""
+          defaultValue={null}
         />
       </Grid>
       <Grid item xs={12}>
