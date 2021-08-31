@@ -165,6 +165,8 @@ services:
       - traefik.http.routers.osm_thumbnails.rule=PathPrefix(`/osm_thumbnails`)
       - traefik.http.routers.osm_thumbnails.middlewares=osm_thumbnails-stripprefix
       - traefik.http.middlewares.osm_thumbnails-stripprefix.stripprefix.prefixes=/osm_thumbnails
+    environment:
+      - REDIS=${NS_ECOTEKA_OSM_THUMBNAILS_REDIS}
 
   tile_server:
     restart: always
