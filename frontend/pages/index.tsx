@@ -3,6 +3,7 @@ import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
 import { makeStyles, CardMedia, Container } from "@material-ui/core";
+import LazyCardMedia from "@/components/Core/LazyCardMedia";
 import HomeHero from "@/components/Home/Hero";
 import FeaturedOrganizations from "@/components/Home/FeaturedOrganizations";
 import SectionContainer from "@/components/Core/Section/Container";
@@ -43,8 +44,10 @@ const HomePage: NextPage = () => {
                   )} ${t("common.trees")}`}
                   href={`/${organization.slug}`}
                 >
-                  <CardMedia
+                  <LazyCardMedia
                     component="img"
+                    height="183"
+                    alt={`${organization.name}`}
                     image={
                       organization.osm_id
                         ? `/osm_thumbnails/thumbnail/${
@@ -54,7 +57,6 @@ const HomePage: NextPage = () => {
                           }&width=345&height=183`
                         : "https://via.placeholder.com/345x183.png?text=..."
                     }
-                    title={organization.name}
                   />
                 </SectionItem>
               ))}
