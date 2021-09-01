@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   mapPreviewDefault: {
     backgroundColor: theme.palette.text.secondary,
-    width: "700px",
+    width: "100%",
     height: "300px",
   },
   map: {
@@ -61,6 +61,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   [theme.breakpoints.up("sm")]: {
     mapPreview: {
       height: 260,
+    },
+    mapPreviewDefault: {
+      height: 250,
     },
   },
 }));
