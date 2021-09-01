@@ -17,11 +17,6 @@ const useStyles = makeStyles<Theme, TreeImagesContainerProps>(
   (theme: Theme) => ({
     root: {
       height: 200,
-      [theme.breakpoints.up("md")]: {
-        height: ({ variant }) => {
-          return variant === "panel" ? 250 : 340;
-        },
-      },
       background: theme.palette.background.paper,
       position: "relative",
     },
@@ -55,6 +50,13 @@ const useStyles = makeStyles<Theme, TreeImagesContainerProps>(
       left: 0,
       width: "100%",
       zIndex: 101,
+    },
+    [theme.breakpoints.up("md")]: {
+      root: {
+        height: ({ variant }) => {
+          return variant === "panel" ? 250 : 340;
+        },
+      },
     },
   })
 );
@@ -96,11 +98,11 @@ const TreeImagesContainer: FC<TreeImagesContainerProps> = ({
       )}
       <div className={classes.buttons}>
         <div className={classes.buttonsContainer}>
-          <IconButton onClick={() => setViewer("mapillary")}>
-            <StreetviewIcon />
-          </IconButton>
           <IconButton onClick={() => setViewer("images")}>
             <PhotoLibraryIcon />
+          </IconButton>
+          <IconButton onClick={() => setViewer("mapillary")}>
+            <StreetviewIcon />
           </IconButton>
         </div>
       </div>
