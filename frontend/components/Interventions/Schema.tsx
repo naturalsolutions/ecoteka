@@ -388,9 +388,11 @@ export function useDateSchema() {
       type: "date",
       component: {
         label: t("components.Intervention.date"),
+        defaultValue: null,
       },
       schema: yup
         .date()
+        .nullable()
         .required(t("common.errors.date.required"))
         .max(tomorow, t("common.errors.date.noFuture")),
     },

@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
 import useApi from "@/lib/useApi";
@@ -8,9 +7,7 @@ import { useAppContext } from "@/providers/AppContext";
 import {
   TIntervention,
   useInterventionSchema,
-  usePlanningSchema,
   useDateSchema,
-  useArchiveSchema,
 } from "@/components/Interventions/Schema";
 import useETKForm from "@/components/Form/useForm";
 import { Grid } from "@material-ui/core";
@@ -30,8 +27,7 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
     return null;
   }
   const { t } = useTranslation("components");
-  const { intervention_type, id } = intervention;
-  const interventionSchema = useInterventionSchema(intervention_type);
+  const { id } = intervention;
   const doneSchema = useDateSchema();
   const schema = { ...doneSchema };
   const { apiETK } = useApi().api;
@@ -115,6 +111,7 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
     });
     setValue("done", true);
     setValue("cancelled", false);
+    setValue("date", Date.now());
   }, []);
 
   useEffect(() => {

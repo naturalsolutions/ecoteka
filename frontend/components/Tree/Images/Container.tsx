@@ -69,7 +69,7 @@ const TreeImagesContainer: FC<TreeImagesContainerProps> = ({
   const classes = useStyles({
     variant,
   });
-  const [viewer, setViewer] = useState<Viewer>("mapillary");
+  const [viewer, setViewer] = useState<Viewer>("images");
   const { tree } = useTreeContext();
   const { hasLateInterventions, setHasLateInterventions } =
     useInterventionContext();
