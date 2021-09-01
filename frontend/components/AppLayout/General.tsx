@@ -20,6 +20,7 @@ export const useAppLayoutGeneral = () => useContext(AppLayoutGeneralContext);
 
 export interface IAppLayoutGeneral {
   isLoading?: boolean;
+  hasFooter?: boolean;
   error?: Error | undefined;
   skeleton?: JSX.Element;
 }
@@ -27,6 +28,7 @@ export interface IAppLayoutGeneral {
 const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
   isLoading = false,
   error = undefined,
+  hasFooter = true,
   skeleton,
   children,
 }) => {
@@ -44,7 +46,7 @@ const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
       {!error && !isLoading && (
         <main className={classes.content}>{children}</main>
       )}
-      <Footer />
+      {hasFooter && <Footer />}
     </AppLayoutGeneralContext.Provider>
   );
 };

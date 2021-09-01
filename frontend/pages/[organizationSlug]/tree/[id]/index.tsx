@@ -43,7 +43,7 @@ const TreePage: React.FC<ITreePageProps> = ({}) => {
   };
 
   return id ? (
-    <AppLayoutGeneral>
+    <AppLayoutGeneral hasFooter={false}>
       <TreeProvider organizationId={organization?.id} treeId={Number(id)}>
         <InterventionProvider>
           <Container>

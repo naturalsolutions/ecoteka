@@ -17,19 +17,33 @@ export type Mode = "read" | "write";
 
 export interface ITreePageHeaderProps {
   hideBack?: boolean;
-  onChange?(mode: Mode): void;
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: theme.spacing(1),
-    [theme.breakpoints.up("sm")]: {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    width: "100%",
+    padding: theme.spacing(1),
+    background: theme.palette.background.default,
+    zIndex: 1,
+  },
+  [theme.breakpoints.up("sm")]: {
+    root: {
       marginBottom: theme.spacing(2),
+      position: "unset",
+      padding: "unset",
+      background: "unset",
+      zIndex: "unset",
     },
   },
 }));
 
-const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ hideBack = false, onChange }) => {
+const TreePageHeader: React.FC<ITreePageHeaderProps> = ({
+  hideBack = false,
+}) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const router = useRouter();
@@ -38,7 +52,6 @@ const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ hideBack = false, onCh
   const matchesDraw = useMediaQuery(theme.breakpoints.down("md"));
   const [saving, setSaving] = useState<boolean>(false);
   const { onSave } = useTreeContext();
-  
 
   const handleGoMap = () => {
     router.push({
@@ -63,11 +76,13 @@ const TreePageHeader: React.FC<ITreePageHeaderProps> = ({ hideBack = false, onCh
 
   return (
     <Grid container className={classes.root}>
-      {!hideBack && <Grid item>
-        <Button onClick={handleGoMap} startIcon={<ArrowBackIcon />}>
-          {t("common.map")}
-        </Button>
-      </Grid>}
+      {!hideBack && (
+        <Grid item>
+          <Button onClick={handleGoMap} startIcon={<ArrowBackIcon />}>
+            {t("common.map")}
+          </Button>
+        </Grid>
+      )}
       <Grid item xs />
       <Grid item>
         <Button
