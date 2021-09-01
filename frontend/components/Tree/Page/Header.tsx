@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     padding: theme.spacing(1),
     background: theme.palette.background.default,
-    zIndex: 1,
+    zIndex: 2,
   },
   [theme.breakpoints.up("sm")]: {
     root: {

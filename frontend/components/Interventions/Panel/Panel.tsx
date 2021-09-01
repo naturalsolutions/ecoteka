@@ -181,6 +181,13 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
   const handleOnDoneSave = () => {
     dialog.current.close();
     setDoneSaving(true);
+    router.push({
+      pathname: "/[organizationSlug]/map",
+      query: {
+        tree: intervention.tree_id,
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   const handleValdidateIntervention = () => {
