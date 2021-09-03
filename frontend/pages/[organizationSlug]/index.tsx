@@ -24,9 +24,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: 0,
   },
+  itemsContainer: {
+    overflow: "hidden",
+  },
   [theme.breakpoints.up("md")]: {
     root: {
       padding: theme.spacing(1),
+    },
+    itemsContainer: {
+      overflow: "unset",
     },
   },
 }));
@@ -38,7 +44,7 @@ const OrganizationMain = () => {
     <Container className={classes.root}>
       <Grid container direction="column">
         <OrganizationHeader />
-        <Grid item>
+        <Grid item className={classes.itemsContainer}>
           <Grid container spacing={2}>
             <Can do="read" on="Dashboard">
               <Grid item xs={12} md={6}>
