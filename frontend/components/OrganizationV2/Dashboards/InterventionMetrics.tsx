@@ -10,7 +10,9 @@ import { useRouter } from "next/router";
 export interface InterventionMetricsProps {}
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {},
+  root: {
+    minHeight: 186,
+  },
 }));
 
 const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
@@ -85,6 +87,7 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
       items={[]}
     >
       <Grid
+        className={classes.root}
         container
         direction="row"
         justifyContent="space-around"
