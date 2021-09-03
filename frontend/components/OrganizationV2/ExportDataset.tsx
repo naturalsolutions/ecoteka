@@ -102,7 +102,7 @@ const ExportDataset: FC<ExportDatasetProps> = ({}) => {
         severity: "info",
       });
       let response = await apiETK.get(
-        `/organization/${organization.id}/trees/export/?format=${exportFormats[index].format}`,
+        `/organization/${organization.id}/trees/export?format=${exportFormats[index].format}`,
         {
           responseType: "blob",
           onDownloadProgress: (progressEvent) => {},

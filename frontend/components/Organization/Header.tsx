@@ -100,13 +100,15 @@ const Header: FC<HeaderProps> = (props) => {
         message: t("components.Organization.exportPending"),
         severity: "info",
       });
+
       let response = await apiETK.get(
-        `/organization/${organization.id}/trees/export/?format=${exportFormats[index].format}`,
+        `/organization/${organization.id}/trees/export?format=${exportFormats[index].format}`,
         {
           responseType: "blob",
           onDownloadProgress: (progressEvent) => {},
         }
       );
+
       if (response.status === 200) {
         // request is stale
         setPending(false);
@@ -118,9 +120,7 @@ const Header: FC<HeaderProps> = (props) => {
           const blob = await response.data;
           const filename = `export-trees-${organization.slug}.${exportFormats[index].format}`;
           downloadFile(blob, filename);
-        } catch (e) {
-        } finally {
-        }
+        } catch (e) {}
       }
     } catch (e) {}
   };
