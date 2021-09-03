@@ -22,7 +22,7 @@ const SectionContainer: FC<SectionContainerProps> = ({ title, children }) => {
       <Typography variant="h3" className={classes.title} color="textPrimary">
         {title}
       </Typography>
-      <Grid container className={classes.container} spacing={2}>
+      <Grid container className={classes.container}>
         {children}
       </Grid>
     </>
