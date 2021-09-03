@@ -31,7 +31,7 @@ const SimpleMetric: FC<SimpleMetricProps> = ({ metric, caption, icon }) => {
     <Grid
       container
       direction="column"
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       className={classes.root}
     >

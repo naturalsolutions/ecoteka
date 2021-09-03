@@ -194,7 +194,7 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
               <Grid
                 container
                 direction={isDesktop ? "row" : "column"}
-                justify="center"
+                justifyContent="center"
                 alignItems="center"
               >
                 <Grid item>

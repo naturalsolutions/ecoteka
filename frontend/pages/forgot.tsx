@@ -182,7 +182,7 @@ export default function ResetPasswordPage() {
         container
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
         style={{ minHeight: "calc(100vh - 96px)" }}
       >
         {!email ? (

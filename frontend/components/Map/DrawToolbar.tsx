@@ -38,7 +38,7 @@ const MapDrawToolbar: FC<MapDrawToolbarProps> = ({
   };
 
   return (
-    <Grid container justify="center" alignItems="center">
+    <Grid container justifyContent="center" alignItems="center">
       <ToggleButtonGroup
         className={classes.root}
         size="small"

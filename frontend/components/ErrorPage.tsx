@@ -50,7 +50,7 @@ const ETKErrorPage: React.FC<ETKErrorPageProps> = (props) => {
     <Grid
       container
       direction="column"
-      justify="flex-start"
+      justifyContent="flex-start"
       alignItems="center"
       className={classes.root}
     >

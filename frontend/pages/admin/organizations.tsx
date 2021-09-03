@@ -101,13 +101,18 @@ const AdminOrganizations = () => {
         <AppLayoutGeneral>
           <OrganizationProvider>
             <Container>
-              <Grid container justify="center" direction="column" spacing={2}>
+              <Grid
+                container
+                justifyContent="center"
+                direction="column"
+                spacing={2}
+              >
                 <Grid
                   item
                   xs
                   container
                   direction="row"
-                  justify="space-between"
+                  justifyContent="space-between"
                   alignItems="flex-start"
                 >
                   <Grid item>

@@ -319,7 +319,7 @@ const InterventionFormStepper: React.FC = () => {
                         step={step}
                         organization={organization.id}
                       />
-                      <Grid container direction="row" justify="flex-end">
+                      <Grid container direction="row" justifyContent="flex-end">
                         {activeStep !== 0 && (
                           <Button onClick={() => handlePrevious(step)}>
                             {activeStep === steps.length - 1
@@ -364,7 +364,7 @@ const InterventionFormStepper: React.FC = () => {
                       <Typography>
                         {t("components.Intervention.whatnow")}
                       </Typography>
-                      <Grid container direction="row" justify="flex-end">
+                      <Grid container direction="row" justifyContent="flex-end">
                         <Button onClick={handleBackToTree}>
                           <HomeIcon />
                         </Button>

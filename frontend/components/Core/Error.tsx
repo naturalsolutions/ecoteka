@@ -146,7 +146,7 @@ const CoreError: FC<CoreErrorProps> = (props) => {
     <Grid
       container
       direction="column"
-      justify="flex-start"
+      justifyContent="flex-start"
       alignItems="center"
       className={classes.root}
     >
@@ -169,7 +169,7 @@ const CoreError: FC<CoreErrorProps> = (props) => {
         container
         item
         direction="row"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
         className={classes.ctaContainer}
       >

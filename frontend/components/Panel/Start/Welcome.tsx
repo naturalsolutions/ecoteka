@@ -124,7 +124,12 @@ const ETKPanelWelcome: React.FC<ETKPanelWelcomeProps> = (props) => {
       className={classes.collapsedButton}
       onClick={() => setCollapsed(!collapsed)}
     >
-      <Grid container direction="column" justify="center" alignItems="center">
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Grid item>
           <SvgIcon component={PlatHeritage} viewBox="0 0 207.11 212.89" />
         </Grid>

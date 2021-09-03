@@ -59,7 +59,7 @@ const ETKImportImporting: React.FC<ETKImportImportingProps> = (props) => {
         </Typography>
       </Grid>
       <Grid item>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <CircularProgress size={80} />
         </Grid>
       </Grid>

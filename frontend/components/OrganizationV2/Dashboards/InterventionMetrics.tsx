@@ -87,7 +87,7 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
       <Grid
         container
         direction="row"
-        justify="space-around"
+        justifyContent="space-around"
         alignItems="center"
         spacing={4}
       >

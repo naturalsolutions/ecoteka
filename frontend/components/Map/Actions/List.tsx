@@ -85,7 +85,7 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
       container
       className={classes.root}
       direction="column-reverse"
-      justify="flex-end"
+      justifyContent="flex-end"
       alignItems="flex-end"
       spacing={2}
     >

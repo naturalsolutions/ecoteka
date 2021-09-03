@@ -61,7 +61,7 @@ const OrgHierarchyChart: React.FC = (props) => {
         xs
         className={styles.header}
         spacing={2}
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="center"
       >
         <Grid item xs className={styles.headline}>

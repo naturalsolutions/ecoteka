@@ -78,7 +78,7 @@ const GoToLogin = () => {
 
   return (
     <BaseCard>
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <Grid item>
           <Box mb={3} mt={2}>
             <Typography>{t("pages.UsersSetPassword.success")}</Typography>
@@ -113,7 +113,7 @@ const ResendMail = () => {
 
   return (
     <BaseCard>
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <Grid item>
           <Box mb={2}>
             <Typography>
@@ -300,7 +300,7 @@ export default function UsersSetPasswordPage() {
         container
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
         style={{ minHeight: "calc(100vh - 96px)" }}
       >
         {status === "password" && (

@@ -588,7 +588,12 @@ const EditionPage = ({}) => {
         ></StaticMap>
         {loading && (
           <div className={classes.fabProgress}>
-            <Grid container justify="center" alignItems="center" spacing={2}>
+            <Grid
+              container
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+            >
               <Grid item>
                 <Typography color="textPrimary">
                   {t("common.loading")}
@@ -620,7 +625,7 @@ const EditionPage = ({}) => {
 
       <Grid
         container
-        justify="center"
+        justifyContent="center"
         alignItems="center"
         className={classes.toolbar}
       >

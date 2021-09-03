@@ -43,7 +43,7 @@ const ETKCardAbout: React.FC<ETKCardAboutProps> = (props) => {
         <Grid
           container
           direction="column"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           spacing={1}
         >

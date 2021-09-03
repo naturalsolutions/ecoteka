@@ -27,7 +27,7 @@ const WorkInProgress: FC<WorkInProgressProps> = ({
     <Grid
       container
       direction="column"
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       spacing={4}
     >

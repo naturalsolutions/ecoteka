@@ -207,7 +207,7 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
           <Grid
             container
             direction={isMobile ? "column" : "row"}
-            justify="space-evenly"
+            justifyContent="space-evenly"
             alignItems="center"
             spacing={2}
           >

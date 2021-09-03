@@ -67,7 +67,12 @@ const HomeHeroSearchCity: FC<HomeHeroSearchCityProps> = ({
           <Box mt={4} />
         </Grid>
         <Grid item>
-          <Grid container spacing={1} justify="center" alignItems="center">
+          <Grid
+            container
+            spacing={1}
+            justifyContent="center"
+            alignItems="center"
+          >
             <Grid item xs={12}>
               <MapSearchCity onChange={onChangeCity} />
             </Grid>

@@ -180,7 +180,12 @@ const ImportUpload: React.FC<ImportUploadProps> = (props) => {
   };
 
   return (
-    <Grid container direction="column" justify="center" alignItems="flex-end">
+    <Grid
+      container
+      direction="column"
+      justifyContent="center"
+      alignItems="flex-end"
+    >
       <Grid container alignItems="center">
         <Typography variant="h6">
           <Grid container alignItems="center">
@@ -235,7 +240,7 @@ const ImportUpload: React.FC<ImportUploadProps> = (props) => {
           {file &&
             !(props.missingInfo.length > 0) &&
             props.step !== "readyToUpload" && (
-              <Grid container justify="space-between">
+              <Grid container justifyContent="space-between">
                 <Button
                   onClick={() => {
                     setFile(null);

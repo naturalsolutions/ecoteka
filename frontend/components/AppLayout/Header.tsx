@@ -163,7 +163,7 @@ const AppLayoutHeader = ({}): JSX.Element => {
           <Grid
             container
             alignItems="center"
-            justify="flex-end"
+            justifyContent="flex-end"
             direction="row"
           >
             <Grid item>

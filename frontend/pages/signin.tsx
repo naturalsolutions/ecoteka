@@ -73,7 +73,7 @@ export default function SignInPage() {
         spacing={0}
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
       >
         <Box flexGrow={1} />
         <Box>
