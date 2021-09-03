@@ -10,7 +10,8 @@ class CRUDTree(CRUDBase[Tree, TreeCreate, TreeUpdate]):
     def get_planted(self, db: Session, organization_id: int, year: int):
         return db.execute(f"""
             select count(*) from tree 
-            where ("properties"->>'plantationDate')::date is not null 
+            where ("properties"->>'plantationDate')::text is not null 
+            and trim(("properties"->>'plantationDate')::text) <> ''
             and extract(year from ("properties"->>'plantationDate')::date) = {year} 
             and organization_id = {organization_id};
         """).first()[0]
