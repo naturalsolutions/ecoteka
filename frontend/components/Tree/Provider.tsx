@@ -47,8 +47,8 @@ const TreeProvider: FC<TreeProviderProps> = ({
       form.reset();
     }
 
-    if (!tree?.properties?.date) {
-      form.setValue("date", null);
+    if (!tree?.properties?.plantationDate) {
+      form.setValue("plantationDate", null);
     }
   }, [tree]);
 
