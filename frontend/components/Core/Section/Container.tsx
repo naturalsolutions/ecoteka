@@ -11,6 +11,7 @@ const useStyles = makeStyles(() => ({
   },
   container: {
     marginBottom: 60,
+    overflow: "hidden",
   },
 }));
 
@@ -22,7 +23,7 @@ const SectionContainer: FC<SectionContainerProps> = ({ title, children }) => {
       <Typography variant="h3" className={classes.title} color="textPrimary">
         {title}
       </Typography>
-      <Grid container className={classes.container}>
+      <Grid container spacing={2} className={classes.container}>
         {children}
       </Grid>
     </>
