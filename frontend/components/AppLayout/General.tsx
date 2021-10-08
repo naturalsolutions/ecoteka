@@ -1,6 +1,7 @@
 import { FC, createContext, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import Footer from "@/components/AppLayout/Footer";
+import Subfooter from "@/components/AppLayout/Subfooter";
 import ErrorComponent from "@/components/Core/Error";
 import { useRouter } from "next/router";
 import { Error } from "@/index";
@@ -46,6 +47,7 @@ const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
       {!error && !isLoading && (
         <main className={classes.content}>{children}</main>
       )}
+      {hasFooter && <Subfooter />}
       {hasFooter && <Footer />}
     </AppLayoutGeneralContext.Provider>
   );

@@ -794,6 +794,8 @@
     "placeholder": "Select an OSM Place"
   },
   "LayoutFooter": {
+    "caption": "get into this?",
+    "contact": "Contact us!",
     "titleColumn": {
       "ns": "Learn more about Natural Solutions",
       "ecoteka": "Learn more about ecoTeka",
@@ -865,5 +867,8 @@
         }
       }
     }
+  },
+  "r": {
+    "caption": "Contact us!"
   }
 }
