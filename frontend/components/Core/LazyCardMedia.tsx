@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CardMedia } from "@material-ui/core";
 
-interface ICardMediaProp {
+interface CoreLazyCardMedia {
   component: string;
   image: string;
   alt: string;
   height: string;
 }
 
-export default (props: ICardMediaProp) => {
+const CoreLazyCardMedia = (props: CoreLazyCardMedia) => {
   const [visible, setVisible] = useState<boolean>(false);
   const placeholderRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!visible && placeholderRef.current) {
       const observer = new IntersectionObserver(([{ intersectionRatio }]) => {
@@ -38,3 +39,5 @@ export default (props: ICardMediaProp) => {
     />
   );
 };
+
+export default CoreLazyCardMedia;

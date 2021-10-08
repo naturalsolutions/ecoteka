@@ -11,12 +11,14 @@ export default function useApi() {
     meiliApiUrl,
   } = publicRuntimeConfig;
 
-  let ecotekaV1 = axios.create({
+  const defaultETKConfig = {
     baseURL: apiUrl,
     headers: {
       "Content-Type": "application/json",
     },
-  });
+  };
+
+  let ecotekaV1 = axios.create(defaultETKConfig);
 
   ecotekaV1.interceptors.request.use(
     async (config) => {
@@ -56,10 +58,11 @@ export default function useApi() {
           }
 
           try {
-            const { status, data } = await ecotekaV1.post(
+            const { status, data } = await axios.post(
               "/auth/refresh_token",
               {},
               {
+                ...defaultETKConfig,
                 headers: {
                   Authorization: `Bearer ${refreshToken}`,
                 },
