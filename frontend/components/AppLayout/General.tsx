@@ -1,9 +1,10 @@
 import { FC, createContext, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 import Footer from "@/components/AppLayout/Footer";
+import Subfooter from "@/components/AppLayout/Subfooter";
 import ErrorComponent from "@/components/Core/Error";
-import { useRouter } from "next/router";
 import { Error } from "@/index";
+import { useAppContext } from "@/providers/AppContext";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -33,11 +34,7 @@ const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
   children,
 }) => {
   const classes = useStyles();
-  const router = useRouter();
-
-  const handleGoToHome = () => {
-    router.push("/");
-  };
+  const { user } = useAppContext();
 
   return (
     <AppLayoutGeneralContext.Provider value={{}}>
@@ -46,6 +43,7 @@ const AppLayoutGeneral: FC<IAppLayoutGeneral> = ({
       {!error && !isLoading && (
         <main className={classes.content}>{children}</main>
       )}
+      {!user && hasFooter && <Subfooter />}
       {hasFooter && <Footer />}
     </AppLayoutGeneralContext.Provider>
   );

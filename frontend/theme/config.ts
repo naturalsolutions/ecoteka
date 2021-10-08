@@ -6,6 +6,7 @@ import {
 
 export interface EcotekaTypeBackground extends TypeBackground {
   dark: string;
+  shade: string;
 }
 
 export interface EcotekaPalette extends Palette {
@@ -25,6 +26,7 @@ const themes = {
         default: "#fbfdfe",
         paper: "#fff",
         dark: "#384145",
+        shade: "#2D363A",
       },
       text: {
         primary: "#000",
@@ -156,6 +158,7 @@ const themes = {
         default: "#384145",
         paper: "#424242",
         dark: "#384145",
+        shade: "#2D363A",
       },
       text: {
         primary: "#fff",
