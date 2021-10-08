@@ -788,6 +788,8 @@
     "placeholder": "Seleccione un lugar de OSM"
   },
   "LayoutFooter": {
+    "caption": "¿Estás en esto?",
+    "contact": "Contáctanos",
     "titleColumn": {
       "ns": "Saber más sobre Natural Solutions",
       "ecoteka": "Saber más sobre ecoTeka",
@@ -856,5 +858,8 @@
         }
       }
     }
+  },
+  "r": {
+    "caption": ""
   }
 }
