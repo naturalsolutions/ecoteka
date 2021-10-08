@@ -28,7 +28,11 @@ const useStyles = makeStyles((theme: EcotekaTheme) => ({
   },
 }));
 
+<<<<<<< HEAD
 const LayoutSubFooter: FC = () => {
+=======
+const MainFooterLinks: FC = () => {
+>>>>>>> 6a4099c4b79e6bd17fea6e728aa48124b7cd580a
   const classes = useStyles();
   const { t } = useTranslation();
 
