@@ -58,14 +58,14 @@ const MainFooterLinks: FC = () => {
             className={classes.text}
           >
             {" "}
-            {t("LayoutFooter.caption")}
+            {t("components.LayoutFooter.caption")}
           </Typography>
         </Grid>
         <Grid item>
           <HubButton
             buttonClassName={classes.text}
             formId="8d88fc04-0c59-4544-8229-0e3063005320"
-            message={t("LayoutFooter.contact")}
+            message={t("components.LayoutFooter.contact")}
             variant="contained"
             color="secondary"
           />
