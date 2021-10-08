@@ -1,4 +1,4 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useEffect } from "react";
 import {
   makeStyles,
   SvgIconProps,
@@ -27,26 +27,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const MapActionsAction: FC<MapActionsActionProps> = ({
   isActive = false,
-  action = "read",
+  action = "preview",
   subject = "Trees",
   icon,
-  name, 
-  onClick
+  name,
+  onClick,
 }) => {
   const classes = useStyles();
-
+  
   return (
-    <Can do={action} on={subject}>
-      <Tooltip title={name}>
-        <IconButton
-          className={classes.root}
-          aria-label={name}
-          onClick={onClick}
-        >
-          {icon}
-        </IconButton>
-      </Tooltip>
-    </Can>
+    <Tooltip title={name}>
+      <IconButton className={classes.root} aria-label={name} onClick={onClick}>
+        {icon}
+      </IconButton>
+    </Tooltip>
   );
 };
 

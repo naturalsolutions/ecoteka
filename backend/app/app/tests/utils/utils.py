@@ -1,5 +1,3 @@
-import random
-import string
 from typing import Dict
 
 from fastapi.testclient import TestClient
@@ -7,21 +5,24 @@ from fastapi.testclient import TestClient
 from app.core.config import settings
 
 
-def random_lower_string() -> str:
-    return "".join(random.choices(string.ascii_lowercase, k=32))
-
-
-def random_email() -> str:
-    return f"{random_lower_string()}@{random_lower_string()}.com"
-
-
-def get_superuser_token_headers(client: TestClient) -> Dict[str, str]:
+def login_with_superuser(client: TestClient):
     login_data = {
         "username": settings.FIRST_SUPERUSER,
         "password": settings.FIRST_SUPERUSER_PASSWORD,
     }
-    r = client.post("/auth/login", data=login_data)
-    tokens = r.json()
-    headers = {"Authorization": f'Bearer {tokens["access_token"]}'}
+    response = client.post("/auth/login", data=login_data)
+    return response.json()
 
+
+def get_superuser_refresh_token_headers(client: TestClient) -> Dict[str, str]:
+    tokens = login_with_superuser(client)
+    refresh_token = tokens["refresh_token"]
+    headers = {"Authorization": f"Bearer {refresh_token}"}
+    return headers
+
+
+def get_superuser_access_token_headers(client: TestClient) -> Dict[str, str]:
+    tokens = login_with_superuser(client)
+    access_token = tokens["access_token"]
+    headers = {"Authorization": f"Bearer {access_token}"}
     return headers

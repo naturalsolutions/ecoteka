@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { Button, Grid, Box, Typography } from "@material-ui/core";
 import WarningIcon from "@material-ui/icons/Warning";
-import { useAppContext } from "@/providers/AppContext";
 import { useTranslation } from "react-i18next";
 import { useAppLayout } from "@/components/AppLayout/Base";
 
@@ -13,7 +12,6 @@ export interface LogoutProps {
 const Logout: React.FC<LogoutProps> = (props) => {
   const { t } = useTranslation();
   const { dialog } = useAppLayout();
-  const { setUser } = useAppContext();
   const router = useRouter();
 
   const dialogContent = (

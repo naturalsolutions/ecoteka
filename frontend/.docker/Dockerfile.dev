@@ -1,15 +1,17 @@
 FROM node:alpine
 
-ENV NEXT_TELEMETRY_DEBUG 1
+ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN mkdir /app 
 
 WORKDIR /app
 
-COPY package.json /app
+COPY package*.json ./
 
-RUN yarn
+RUN npm install
+
+COPY . /app
 
 EXPOSE 3000
 
-CMD [ "yarn", "dev" ]
+CMD [ "npm", "run", "dev" ]

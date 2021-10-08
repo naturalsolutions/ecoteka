@@ -49,7 +49,7 @@ const LayoutFooter: FC = () => {
   return (
     <div className={classes.root}>
       <Container>
-        <Grid container spacing={6}>
+        <Grid container>
           <Grid item xs={12} md={4}>
             <List>
               <ListItem>

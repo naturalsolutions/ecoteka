@@ -86,6 +86,9 @@ export const Provider = ({ children }) => {
     if (!user && restrictedRoutes?.includes(router.route)) {
       router.push("/");
     }
+    if (organization) {
+      fetchOrganization(organization.slug as string);
+    }
   }, [user]);
 
   return (

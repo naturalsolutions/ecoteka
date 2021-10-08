@@ -34,10 +34,14 @@ const AdminOrganizations = () => {
 
   const queryClient = useQueryClient();
 
-  const { isLoading, isSuccess, data: organizations } = useQuery<
-    IOrganization[],
-    AxiosError
-  >(["RootOrganizations"], fetchRootrganizations);
+  const {
+    isLoading,
+    isSuccess,
+    data: organizations,
+  } = useQuery<IOrganization[], AxiosError>(
+    ["RootOrganizations"],
+    fetchRootrganizations
+  );
 
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -97,13 +101,18 @@ const AdminOrganizations = () => {
         <AppLayoutGeneral>
           <OrganizationProvider>
             <Container>
-              <Grid container justify="center" direction="column" spacing={2}>
+              <Grid
+                container
+                justifyContent="center"
+                direction="column"
+                spacing={2}
+              >
                 <Grid
                   item
                   xs
                   container
                   direction="row"
-                  justify="space-between"
+                  justifyContent="space-between"
                   alignItems="flex-start"
                 >
                   <Grid item>
@@ -138,7 +147,11 @@ const AdminOrganizations = () => {
                           ownerEmail={organization.current_user_role}
                           slug={organization.slug}
                           name={organization.name}
-                          thumbnail={`/osm_thumbnails/thumbnail/${organization.osm_id}?width=345&height=230&padding=30`}
+                          thumbnail={`/osm_thumbnails/thumbnail/${
+                            organization.osm_id
+                          }?organizationId=${organization.id}&template=${
+                            organization.total_trees > 50000 ? "osm" : "ecoteka"
+                          }&width=345&height=230`}
                           isPrivate={organization.mode == "private"}
                         />
                       </Grid>

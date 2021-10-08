@@ -9,11 +9,7 @@ import { Controller } from "react-hook-form";
 import { es, enGB, fr } from "date-fns/locale";
 import { useRouter } from "next/router";
 import { Typography } from "@material-ui/core";
-
-export interface DateRangePeriod {
-  startDate?: Date;
-  endDate?: Date;
-}
+import { useTranslation } from "react-i18next";
 
 interface ResolverError {
   message: string;
@@ -60,6 +56,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   error,
 }) => {
   const router = useRouter();
+  const { t } = useTranslation(["common"]);
 
   return (
     <MuiPickersUtilsProvider
@@ -69,20 +66,23 @@ const DatePicker: React.FC<DatePickerProps> = ({
       <Controller
         control={control}
         name={name}
+        defaultValue={null}
         render={({ onChange, value }) => (
           <>
             <KeyboardDatePicker
-              disableToolbar
+              disableToolbar={false}
               fullWidth
               variant="dialog"
               inputVariant="outlined"
               format={setLocaleFormat(router.locale)}
               margin="dense"
               label={label}
-              value={value ? value : new Date()}
+              value={value ? value : null}
               onChange={onChange}
               InputLabelProps={{ shrink: true }}
               error={Boolean(error)}
+              okLabel={t("common.buttons.confirm")}
+              cancelLabel={t("common.buttons.cancel")}
             />
             {error && (
               <Typography variant="caption" color="error">

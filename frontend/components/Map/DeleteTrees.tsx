@@ -30,7 +30,7 @@ const MapDeleteTrees: FC<MapDeleteTreesProps> = ({
 
   return (
     <Can do="manage" on="Trees">
-      <Grid container justify="center" alignItems="center">
+      <Grid container justifyContent="center" alignItems="center">
         {active && (
           <Box ml={2}>
             <Button

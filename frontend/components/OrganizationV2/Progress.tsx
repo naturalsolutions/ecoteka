@@ -17,6 +17,9 @@ export interface OrganizationProgressProps {}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
+  optionsPanel: {
+    minHeight: 240,
+  },
 }));
 
 interface RatioProgressProps {
@@ -63,7 +66,7 @@ const RatioProgress: FC<RatioProgressProps> = ({ caption, progressValue }) => {
         container
         alignContent="center"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
       >
         <Typography variant="caption" align="center">
           {t(`components.RatioProgress.caption.${caption}`)}
@@ -107,9 +110,13 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
       items={[]}
     >
       {metrics && (
-        <Grid container spacing={4}>
+        <Grid
+          className={classes.optionsPanel}
+          container
+          justifyContent="space-around"
+        >
           {Object.keys(metrics.ratio).map((key) => (
-            <Grid item xs={6} md={3} key={key}>
+            <Grid item xs={6} md={4} key={key}>
               <RatioProgress caption={key} progressValue={metrics.ratio[key]} />
             </Grid>
           ))}
@@ -119,7 +126,7 @@ const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
         container
         spacing={4}
         direction="row"
-        justify="flex-end"
+        justifyContent="flex-end"
         alignItems="center"
       >
         <ExportDataset />

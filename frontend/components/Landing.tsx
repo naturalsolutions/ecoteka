@@ -77,7 +77,7 @@ const Landing: React.FC<LandingProps> = ({ onChange }) => {
         <Grid
           className={classes.grid}
           container
-          justify="center"
+          justifyContent="center"
           direction="column"
           alignItems="center"
         >

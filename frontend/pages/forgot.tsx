@@ -65,8 +65,7 @@ const BaseCard = ({ children }) => {
 };
 
 const SentCard = ({ email, onLogin }) => {
-  const classes = useStyles();
-  const { t } = useTranslation(["pages", "common"]);
+  const { t } = useTranslation();
 
   return (
     <BaseCard>
@@ -131,6 +130,7 @@ const EmailCard = ({ onSendEmail = (email: string) => {}, onLogin }) => {
             id="email"
             name="email"
             inputRef={register}
+            inputProps={{ "data-testid": "forgot-page-email" }}
             required
             fullWidth
             placeholder={t("pages.Forgot.EmailCard.emailPlaceholder")}
@@ -180,10 +180,9 @@ export default function ResetPasswordPage() {
       </Head>
       <Grid
         container
-        spacing={1}
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
         style={{ minHeight: "calc(100vh - 96px)" }}
       >
         {!email ? (

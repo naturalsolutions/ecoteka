@@ -325,7 +325,8 @@
     "date": "Hecho en",
     "done": "Hecha",
     "cancelNotes": "Notas sobre la cancelación",
-    "cancelled": "Cancelado"
+    "cancelled": "Cancelado",
+    "intervention_start_date": "Planeado en"
   },
   "Tree": {
     "properties": {
@@ -446,7 +447,8 @@
     "code": "Identificador del árbol",
     "Panel": {
       "actions": {
-        "update": "Actualizar este árbol"
+        "update": "Actualizar este árbol",
+        "read": "Mostrar más"
       }
     }
   },
@@ -669,6 +671,16 @@
         "treesPerSquareKm_plural": "Árboles / km²",
         "peoplePerTree": "Habitante / Árbol Público",
         "peoplePerTree_plural": "Habitantes / Árbol Público"
+      },
+      "TreeMetrics": {
+        "title": "Métricas del patrimonio arbóreo por año",
+        "plantedTreesCaption": "Árboles plantados",
+        "loggedTreesCaption": "Árboles talados"
+      },
+      "InterventionMetrics": {
+        "title": "Presupuesto de gestión para",
+        "doneCaption": "hecho",
+        "scheduledCaption": "programado"
       }
     }
   },
@@ -718,7 +730,7 @@
       "title": "Editar intervención"
     },
     "Panel": {
-      "validate": "Validar",
+      "validate": "Establecer como hecho",
       "archiveDialog": {
         "title": "Cancelar intervención"
       },
@@ -728,7 +740,7 @@
       "closePanel": {
         "title": "Quieres guardar tus cambios ?"
       },
-      "archive": "Archivo"
+      "archive": "Cancelar esta tarea"
     }
   },
   "MapActionBar": {
@@ -776,6 +788,8 @@
     "placeholder": "Seleccione un lugar de OSM"
   },
   "LayoutFooter": {
+    "caption": "¿Estás en esto?",
+    "contact": "Contáctanos",
     "titleColumn": {
       "ns": "Saber más sobre Natural Solutions",
       "ecoteka": "Saber más sobre ecoTeka",
@@ -825,5 +839,27 @@
       "canonicalName": "Nombre canónico",
       "vernacularName": "Nombre común"
     }
+  },
+  "Core": {
+    "Error": {
+      "message": {
+        "401": "No puedes acceder a esta página. \n¡Por favor ingresa primero!",
+        "403": "¡No tienes permiso para ver esta página!",
+        "404": "Ningún árbol crece en esta página",
+        "500": "Algo salió mal",
+        "unknown": "Error desconocido"
+      },
+      "CallToActionButton": {
+        "message": {
+          "401": "Acceso",
+          "403": "Solicitar acceso",
+          "404": "Inicio",
+          "500": "Inicio"
+        }
+      }
+    }
+  },
+  "r": {
+    "caption": ""
   }
 }

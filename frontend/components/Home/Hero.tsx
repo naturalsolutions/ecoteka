@@ -30,7 +30,8 @@ const useStyles = makeStyles<Theme, { coords: [] }>((theme: Theme) => ({
 }));
 
 const rendersTooltip = {
-  osm: renderTooltipInfoOSM,
+  // Temp deprecation while waiting UX rework.
+  // osm: renderTooltipInfoOSM,
 };
 
 const HomeHero: FC<HomeHeroProps> = ({}) => {
@@ -48,7 +49,11 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
     }
   };
 
-  const osmLayer = OSMLayer({ visible: true, onHover: handleShowInfoLayer });
+  const osmLayer = OSMLayer({
+    visible: true,
+    onHover: handleShowInfoLayer,
+    defaultPointColor: "#7EC14D",
+  });
 
   const handleOnChangeCity = (coords) => {
     setCoords(coords);
@@ -76,9 +81,6 @@ const HomeHero: FC<HomeHeroProps> = ({}) => {
         PaperProps={{ elevation: 0, className: classes.map }}
         layers={[osmLayer]}
       />
-      {info?.layer?.id &&
-        rendersTooltip[info.layer.id] &&
-        rendersTooltip[info.layer.id]({ info })}
     </div>
   );
 };

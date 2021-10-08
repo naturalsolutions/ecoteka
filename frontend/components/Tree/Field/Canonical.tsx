@@ -84,7 +84,7 @@ const TreeCanonicalField = forwardRef<void, TreeCanonicalFieldProps>(
           options={options}
           open={open}
           onOpen={() => {
-            setOpen(true && !inputProps.InputProps.readOnly);
+            setOpen(true && !inputProps.disabled);
           }}
           onClose={() => {
             setOpen(false);

@@ -1,10 +1,10 @@
 import { useMemo, createContext, useContext } from "react";
-import { CssBaseline, createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { CssBaseline, createTheme, ThemeProvider } from "@material-ui/core";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import getTheme from "@/theme/config";
 
-const themeDark = createMuiTheme(getTheme("dark"));
-const themeLight = createMuiTheme(getTheme("light"));
+const themeDark = createTheme(getTheme("dark"));
+const themeLight = createTheme(getTheme("light"));
 
 export const ThemeContext = createContext(null);
 

@@ -3,6 +3,7 @@ import { makeStyles, Theme } from "@material-ui/core";
 import CoreOptionsPanel from "@/components/Core/OptionsPanel";
 import { useTranslation } from "react-i18next";
 import WorkInProgress from "@/components/WorkInProgress";
+import { useAppContext } from "@/providers/AppContext";
 
 export interface EconomyDashboardProps {}
 
@@ -13,6 +14,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 const EconomyDashboard: FC<EconomyDashboardProps> = ({}) => {
   const classes = useStyles();
   const { t } = useTranslation(["components"]);
+  const { user } = useAppContext();
+
+  if (!user?.is_superuser) return null;
 
   return (
     <CoreOptionsPanel

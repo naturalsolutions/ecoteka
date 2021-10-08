@@ -75,7 +75,7 @@ const CallToLogin: React.FC<CallToLoginProps> = ({
       <Grid
         container
         direction="column"
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="center"
         spacing={1}
       >

@@ -161,13 +161,13 @@ export default function useTreeSchema() {
       schema: yup.string(),
     },
     plantationDate: {
-      type: "textfield",
+      type: "date",
       category: "Identité de l'arbre",
       component: {
         label: t("components.Tree.properties.plantationDate"),
         placeholder: t("components.Tree.placeholder.plantationDate"),
       },
-      schema: yup.string(),
+      schema: yup.date().nullable(),
     },
     height: {
       type: "textfield",

@@ -17,7 +17,6 @@ const AppLayoutBase: FC = ({ children }) => {
   const snackbar = useRef();
   const dialog = useRef<ETKDialogActions>(null);
   const { organization } = useAppContext();
-
   const ability = buildAbilityFor(organization?.current_user_role); //Just for test
 
   return (

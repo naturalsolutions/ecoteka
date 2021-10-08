@@ -47,7 +47,7 @@ const GreeningDashboard: FC<GreeningDashboardProps> = ({}) => {
       <Grid
         container
         direction={setIsSm ? "row" : "row"}
-        justify="space-around"
+        justifyContent="space-around"
         alignItems="center"
         className={classes.root}
         spacing={2}

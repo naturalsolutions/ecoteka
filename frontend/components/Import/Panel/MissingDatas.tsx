@@ -136,7 +136,7 @@ const ETKMissingDatas: React.FC<ETKMissingDatasProps> = (props) => {
           </Grid>
         </Grid>
         <Grid item>
-          <Grid container justify="space-between">
+          <Grid container justifyContent="space-between">
             <Button variant="contained" onClick={props.onCancel}>
               {t("components.Import.MissingData.buttonCancelText")}
             </Button>

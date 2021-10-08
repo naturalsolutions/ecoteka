@@ -24,14 +24,35 @@ const paintPoint = (d) => {
   return [147, 168, 180];
 };
 
+export const hexToRgbArray = (h?: string) => {
+  if (!h) {
+    return [0, 0, 0];
+  }
+  const hex = h.replace(/[#]/g, "");
+  if (hex.length != 6) {
+    console.log("Only six-digit hex colors are allowed.");
+    return [0, 0, 0];
+  }
+
+  const aRgbHex = hex.match(/.{1,2}/g);
+  const aRgb = [
+    parseInt(aRgbHex[0], 16),
+    parseInt(aRgbHex[1], 16),
+    parseInt(aRgbHex[2], 16),
+  ];
+  return aRgb;
+};
+
 interface LayerFN {
   visible: boolean;
   onHover?(info): void;
+  defaultPointColor?: string;
 }
 
 function OSMLayer({
   visible,
   onHover,
+  defaultPointColor,
 }: LayerFN): MVTLayer<string, TileLayerProps<string>> {
   return new MVTLayer({
     id: "osm",
@@ -51,8 +72,8 @@ function OSMLayer({
     lineWidthMaxPixels: 1,
     visible: visible,
     pickable: true,
-    getLineColor: paintPoint,
-    getFillColor: paintPoint,
+    getLineColor: hexToRgbArray(defaultPointColor),
+    getFillColor: hexToRgbArray(defaultPointColor),
     onHover,
   });
 }

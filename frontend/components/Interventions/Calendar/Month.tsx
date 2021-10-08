@@ -61,7 +61,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
     const dayLabels = ["L", "M", "X", "J", "V", "S", "D"].map((v) => {
       return (
         <Grid xs item key={`day-label-${v}`}>
-          <Grid container justify="center">
+          <Grid container justifyContent="center">
             <Grid item>
               <Typography className={classes.dayLabel}>{v}</Typography>
             </Grid>
@@ -172,7 +172,7 @@ const CalendarMonth: React.FC<CalendarMonthProps> = (props) => {
               container
               spacing={2}
               alignItems="stretch"
-              justify="flex-start"
+              justifyContent="flex-start"
             >
               {renderDays()}
             </Grid>

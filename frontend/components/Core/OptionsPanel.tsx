@@ -9,6 +9,8 @@ import {
   Menu,
   MenuItem,
   PaperProps,
+  useTheme,
+  useMediaQuery,
 } from "@material-ui/core";
 import { MoreVert } from "@material-ui/icons";
 import { useState } from "react";
@@ -51,6 +53,8 @@ const CoreOptionsPanel = forwardRef<HTMLDivElement, CoreOptionsPanelProps>(
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const router = useRouter();
     const [open, setOpen] = useState<boolean>(false);
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
 
     const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget);
@@ -68,7 +72,7 @@ const CoreOptionsPanel = forwardRef<HTMLDivElement, CoreOptionsPanelProps>(
       }
     };
     return (
-      <Paper className={classes.root} ref={ref}>
+      <Paper className={classes.root} ref={ref} elevation={isDesktop ? 1 : 0}>
         <Grid container alignItems="center">
           <Grid item container alignItems="center" xs>
             <Grid item>
