@@ -39,8 +39,7 @@ services:
       - ${NS_ECOTEKA_REDIS_VOLUME}:/data
 
   celery_worker:
-    depends_on:
-      - backend
+    image: ecoteka-backend:dev
     networks:
       - traefik
     command: bash /app/worker-start.sh
@@ -81,9 +80,7 @@ services:
       - MEILI_MASTER_KEY=${NS_ECOTEKA_MEILISEARCH_MASTER_KEY}
 
   backend:
-    depends_on:
-      - db
-      - redis
+    image: ecoteka-backend:dev
     restart: always
     networks:
       - traefik
@@ -129,9 +126,8 @@ services:
       - MEILI_MASTER_KEY=${NS_ECOTEKA_MEILISEARCH_MASTER_KEY}
 
   frontend:
+    image: ecoteka-frontend:dev
     restart: always
-    depends_on:
-      - backend
     networks:
       - traefik
     labels:
@@ -169,6 +165,8 @@ services:
       - traefik.http.routers.osm_thumbnails.rule=PathPrefix(`/osm_thumbnails`)
       - traefik.http.routers.osm_thumbnails.middlewares=osm_thumbnails-stripprefix
       - traefik.http.middlewares.osm_thumbnails-stripprefix.stripprefix.prefixes=/osm_thumbnails
+    environment:
+      - REDIS=${NS_ECOTEKA_OSM_THUMBNAILS_REDIS}
 
   tile_server:
     restart: always

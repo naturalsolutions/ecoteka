@@ -1,7 +1,9 @@
 import { NextPage } from "next";
+import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import { useTranslation } from "react-i18next";
 import { makeStyles, CardMedia, Container } from "@material-ui/core";
+import LazyCardMedia from "@/components/Core/LazyCardMedia";
 import HomeHero from "@/components/Home/Hero";
 import FeaturedOrganizations from "@/components/Home/FeaturedOrganizations";
 import SectionContainer from "@/components/Core/Section/Container";
@@ -18,22 +20,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const demos = [
-  { title: "Paris", trees: 205034, slug: "paris", osm_id: "7444" },
-  {
-    title: "Londres",
-    trees: 880021,
-    slug: "london",
-    osm_id: "65606",
-  },
-  {
-    title: "New York",
-    trees: 592130,
-    slug: "new_york",
-    osm_id: "175905",
-  },
-];
-
 const HomePage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation(["common", "components"]);
@@ -42,6 +28,9 @@ const HomePage: NextPage = () => {
 
   return (
     <AppLayoutGeneral>
+      <Head>
+        <title>ecoTeka · Home</title>
+      </Head>
       {user && (
         <div className={classes.demos}>
           <Container>
@@ -55,14 +44,19 @@ const HomePage: NextPage = () => {
                   )} ${t("common.trees")}`}
                   href={`/${organization.slug}`}
                 >
-                  <CardMedia
+                  <LazyCardMedia
                     component="img"
+                    height="183"
+                    alt={`${organization.name}`}
                     image={
                       organization.osm_id
-                        ? `/osm_thumbnails/thumbnail/${organization.osm_id}?width=345&height=183&padding=30`
+                        ? `/osm_thumbnails/thumbnail/${
+                            organization.osm_id
+                          }?organizationId=${organization.id}&template=${
+                            organization.total_trees > 50000 ? "osm" : "ecoteka"
+                          }&width=345&height=183`
                         : "https://via.placeholder.com/345x183.png?text=..."
                     }
-                    title={organization.name}
                   />
                 </SectionItem>
               ))}

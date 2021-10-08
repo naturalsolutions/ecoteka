@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
 import useApi from "@/lib/useApi";
@@ -8,12 +7,9 @@ import { useAppContext } from "@/providers/AppContext";
 import {
   TIntervention,
   useInterventionSchema,
-  usePlanningSchema,
   useDateSchema,
-  useArchiveSchema,
 } from "@/components/Interventions/Schema";
 import useETKForm from "@/components/Form/useForm";
-import { DateRangePeriod } from "@/components/Form/useDateRange";
 import { Grid } from "@material-ui/core";
 
 interface IInterventionArchiveForm {
@@ -31,8 +27,7 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
     return null;
   }
   const { t } = useTranslation("components");
-  const { intervention_type, id } = intervention;
-  const interventionSchema = useInterventionSchema(intervention_type);
+  const { id } = intervention;
   const doneSchema = useDateSchema();
   const schema = { ...doneSchema };
   const { apiETK } = useApi().api;
@@ -60,15 +55,12 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
         "estimated_cost",
         "required_documents",
         "required_material",
+        "intervention_start_date",
+        "intervention_end_date",
       ];
 
       for (let key in values) {
-        if (key === "intervention_period") {
-          const interventionPeriod: DateRangePeriod =
-            values["intervention_period"];
-          payload["intervention_start_date"] = interventionPeriod.startDate;
-          payload["intervention_end_date"] = interventionPeriod.endDate;
-        } else if (nonPropertiesFields.includes(key)) {
+        if (nonPropertiesFields.includes(key)) {
           payload[key] = values[key];
         } else {
           payload.properties[key] = values[key];
@@ -117,14 +109,9 @@ const InterventionArchiveForm: FC<IInterventionArchiveForm> = ({
     Object.keys(intervention.properties).forEach((i) => {
       setValue(i, intervention.properties[i]);
     });
-
-    // @ts-ignore
-    setValue("intervention_period", {
-      startDate: new Date(intervention.intervention_start_date),
-      endDate: new Date(intervention.intervention_end_date),
-    });
     setValue("done", true);
     setValue("cancelled", false);
+    setValue("date", Date.now());
   }, []);
 
   useEffect(() => {

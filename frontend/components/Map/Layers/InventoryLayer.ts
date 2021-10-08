@@ -91,7 +91,7 @@ function InventoryLayer<InventoryLayerProps>({
 
       return [34, 139, 34, 100];
     },
-    getRadius: (d) => {
+    getPointRadius: (d) => {
       if (d.properties?.properties?.diameter) {
         const diameter = Number(d.properties.properties.diameter);
 
@@ -109,7 +109,7 @@ function InventoryLayer<InventoryLayerProps>({
     updateTriggers: {
       getFillColor: [activeTree, selection, editionMode, filters, dark, data],
       getLineColor: [activeTree, selection, editionMode, filters, dark, data],
-      getRadius: [activeTree, selection, editionMode, filters, dark, data],
+      getPointRadius: [activeTree, selection, editionMode, filters, dark, data],
     },
     pickable: true,
     autoHighlight: true,

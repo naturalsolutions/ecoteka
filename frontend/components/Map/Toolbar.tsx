@@ -48,7 +48,7 @@ const MapToolbar: FC<IMapToolbarProps> = ({ onChange }) => {
       container
       direction="column"
       className={classes.root}
-      justify="flex-start"
+      justifyContent="flex-start"
       alignContent="center"
     >
       {user && (

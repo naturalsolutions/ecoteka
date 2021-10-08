@@ -131,7 +131,7 @@ const Import: React.FC<ImportPanel> = ({ onFileImported }) => {
   return (
     active && (
       <AppLayoutCartoDialog actions={<BackToMap />}>
-        <Grid container direction="column" justify="center">
+        <Grid container direction="column" justifyContent="center">
           {step === "start" && (
             <Grid item>
               <ImportUpload

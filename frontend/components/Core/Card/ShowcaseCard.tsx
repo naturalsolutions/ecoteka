@@ -96,7 +96,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ slug, name }) => {
       xs
       container
       direction="row"
-      justify="space-between"
+      justifyContent="space-between"
       alignItems="flex-start"
       onClick={() => router.push(`/${slug}`)}
     >

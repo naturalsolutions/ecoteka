@@ -111,7 +111,7 @@ const MapillaryImage: FC<MapillaryImageProps> = (props) => {
           className={classes.children}
           container
           direction="column"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
         >
           <Grid item>
@@ -126,7 +126,7 @@ const MapillaryImage: FC<MapillaryImageProps> = (props) => {
         <Grid
           container
           direction="column"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           className={classes.children}
         >

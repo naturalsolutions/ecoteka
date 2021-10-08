@@ -181,6 +181,13 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
   const handleOnDoneSave = () => {
     dialog.current.close();
     setDoneSaving(true);
+    router.push({
+      pathname: "/[organizationSlug]/map",
+      query: {
+        tree: intervention.tree_id,
+        organizationSlug: organization.slug,
+      },
+    });
   };
 
   const handleValdidateIntervention = () => {
@@ -219,7 +226,7 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
 
   useEffect(() => {
     const { query, route } = router;
-
+    setIntervention(undefined);
     if (
       route === "/[organizationSlug]/map" &&
       query.panel === "intervention-edit" &&
@@ -258,6 +265,9 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
               variant="contained"
               size="small"
               fullWidth
+              disabled={Boolean(
+                intervention?.properties?.cancelled || intervention?.done
+              )}
               onClick={() => handleValdidateIntervention()}
             >
               {t("components.Interventions.Panel.validate")}
@@ -270,6 +280,9 @@ const InterventionsEdit: FC<IInterventionEditProps> = () => {
             <ArchiveButton
               variant="outlined"
               fullWidth
+              disabled={Boolean(
+                intervention?.properties?.cancelled || intervention?.done
+              )}
               onClick={handleInterventionCancellation}
             >
               {t("components.Interventions.Panel.archive")}

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { Grid, makeStyles, Theme, Button } from "@material-ui/core";
 import { AppLayoutCartoDialog } from "../AppLayout/Carto";
 import TreeBasicForm from "./BasicForm";
@@ -7,12 +7,17 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
+import Can, { AbilityContext } from "@/components/Can";
+
 import TreeImagesContainer from "@/components/Tree/Images/Container";
-import TreeProvider from "@/components/Tree/Provider";
+import TreeProvider, { useTreeContext } from "@/components/Tree/Provider";
 import InterventionsWorkflow from "@/components/Interventions/Workflow";
 import InterventionProvider from "@/components/Interventions/Provider";
+import TreePageHeader from "@/components/Tree/Page/Header";
 
-export interface TreePanelProps {}
+export interface TreePanelProps {
+  withEditMode?: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   grid: {
@@ -23,12 +28,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const TreePanel: FC<TreePanelProps> = ({}) => {
+const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
   const classes = useStyles();
   const router = useRouter();
   const { t } = useTranslation();
   const { organization } = useAppContext();
   const [active, setActive] = useState<boolean>(false);
+  const ability = useContext(AbilityContext);
 
   useEffect(() => {
     const { query, route } = router;
@@ -59,25 +65,35 @@ const TreePanel: FC<TreePanelProps> = ({}) => {
         <InterventionProvider>
           <AppLayoutCartoDialog
             actions={
-              <Button
-                size="large"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={handleGoToTreePage}
-              >
-                {t("components.Tree.Panel.actions.update")}
-              </Button>
+              ability.can("read", "Trees") ? (
+                <Button
+                  size="large"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={handleGoToTreePage}
+                >
+                  {ability.can("update", "Trees")
+                    ? t("components.Tree.Panel.actions.update")
+                    : t("components.Tree.Panel.actions.read")}
+                </Button>
+              ) : null
             }
           >
+            <TreePageHeader hideBack={true} />
             <TreeImagesContainer />
             <Grid container direction="column" className={classes.grid}>
               <Grid item>
-                <TreeBasicForm readOnly={true} />
+                <TreeBasicForm />
               </Grid>
-              <Grid item>
-                <InterventionsWorkflow selectable={false} insidePanel={true} />
-              </Grid>
+              <Can do="read" on="Interventions">
+                <Grid item>
+                  <InterventionsWorkflow
+                    selectable={false}
+                    insidePanel={true}
+                  />
+                </Grid>
+              </Can>
             </Grid>
           </AppLayoutCartoDialog>
         </InterventionProvider>

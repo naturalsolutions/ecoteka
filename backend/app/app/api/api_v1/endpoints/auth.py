@@ -1,4 +1,3 @@
-import slug
 from typing import Any
 from fastapi import APIRouter, Body, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -12,7 +11,6 @@ from app.schemas import (
     AccessToken,
     Msg,
     UserCreate,
-    UserOut,
     AccessAndRefreshToken,
 )
 from app.api import get_db
@@ -23,9 +21,7 @@ from app.core import (
     get_current_user_if_is_superuser,
     get_current_user_with_refresh_token,
 )
-from app.utils import (
-    send_reset_password_email
-)
+from app.utils import send_reset_password_email
 from app.worker import (
     send_new_registration_email_task,
     generate_and_insert_registration_link_task,
@@ -66,32 +62,25 @@ def get_access_token(
 
     return {"access_token": access_token, "token_type": "Bearer"}
 
-@router.post('/refresh_token', response_model=AccessAndRefreshToken)
-def refresh(
+
+@router.post("/refresh_token", response_model=AccessAndRefreshToken)
+def get_refresh_token(
     current_user: User = Depends(get_current_user_with_refresh_token),
-    Authorize: AuthJWT = Depends()):
+    Authorize: AuthJWT = Depends(),
+):
     """
     Renew expired acces_token with refresh_token
     """
     Authorize.jwt_refresh_token_required()
-
-    current_user_id = Authorize.get_jwt_subject()
 
     logging.info(f"refresh_token user find : {current_user}")
     return generate_access_token_and_refresh_token_response(
         user_id=current_user.id, is_superuser=current_user.is_superuser
     )
 
-@router.post("/login/test-token", response_model=UserOut)
-def test_token(current_user: User = Depends(get_current_user)) -> Any:
-    """
-    Test access token
-    """
-    return current_user
-
 
 @router.post("/password-recovery/{email}", response_model=Msg)
-def recover_password(email: str, db: Session = Depends(get_db)) -> Any:
+def password_recovery(email: str, db: Session = Depends(get_db)) -> Any:
     """
     Password Recovery
     """
@@ -104,9 +93,9 @@ def recover_password(email: str, db: Session = Depends(get_db)) -> Any:
         )
 
         send_reset_password_email(
-            email_to=user_in_db.email, 
-            username=user_in_db.full_name, 
-            token=tokens["access_token"]
+            email_to=user_in_db.email,
+            username=user_in_db.full_name,
+            token=tokens["access_token"],
         )
 
         return {"msg": "Password recovery email sent"}
@@ -114,10 +103,10 @@ def recover_password(email: str, db: Session = Depends(get_db)) -> Any:
         raise HTTPException(
             status_code=404,
             detail="The user with this username does not exist in the system.",
-        )    
+        )
 
 
-@router.post("/reset-password/", response_model=Msg)
+@router.post("/reset-password", response_model=Msg)
 def reset_password(
     new_password: str = Body(..., embed=True),
     current_user: User = Depends(get_current_user),
@@ -125,22 +114,21 @@ def reset_password(
 ) -> Any:
     """
     Reset Password
-    """   
+    """
     hashed_password = get_password_hash(new_password)
     current_user.hashed_password = hashed_password
     db.add(current_user)
     db.commit()
-    
+
     return {"msg": "Password updated successfully"}
 
 
-@router.post("/register/")
-def register_new_user(
-    *,
-    db: Session = Depends(get_db),
-    user_in: UserCreate,
-    current_user: User = Depends(get_current_user_if_is_superuser),
-) -> UserOut:
+@router.post(
+    "/register",
+    response_model=Msg,
+    dependencies=[Depends(get_current_user_if_is_superuser)],
+)
+def register_new_user(*, db: Session = Depends(get_db), user_in: UserCreate):
     user_in_db = user.get_by_email(db, email=user_in.email)
 
     if user_in_db:
@@ -149,26 +137,7 @@ def register_new_user(
             detail="The user with this username already exists in the system.",
         )
 
-    ## Users should not be matched to organization during registration
-    # organization_user = organization.get_by_name(db, name=user_in.organization)
-
-    # if not organization_user:
-    #     organization_user_in = OrganizationCreate(
-    #         name=user_in.organization,
-    #         slug=slug.slug(user_in.organization)
-    #     )
-    #     organization_user = organization.create(
-    #         db=db,
-    #         obj_in=organization_user_in)
-
-    # user_in.organization_id = organization_user.id
     user_in_db = user.create(db, obj_in=user_in)
-
-    if not (user_in_db):
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Something goes wrong",
-        )
 
     send_new_registration_email_task.delay(
         user_in.email, user_in.full_name, user_in.password
@@ -176,8 +145,4 @@ def register_new_user(
 
     generate_and_insert_registration_link_task.delay(user_in_db.id)
 
-    return {"msg": "user created"}
-    # return generate_access_token_and_refresh_token_response(
-    #     user_id=user_in_db.id,
-    #     is_superuser=user_in_db.is_superuser
-    # )
+    return {"msg": "User created"}

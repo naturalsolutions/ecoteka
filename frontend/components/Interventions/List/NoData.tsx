@@ -13,7 +13,7 @@ const InterventionsListNoData: FC<InterventionsListNoDataProps> = () => {
     <Grid
       container
       direction="column"
-      justify="center"
+      justifyContent="center"
       alignItems="stretch"
       spacing={2}
     >
@@ -21,7 +21,7 @@ const InterventionsListNoData: FC<InterventionsListNoDataProps> = () => {
         <Grid
           container
           direction="column"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           spacing={1}
         >

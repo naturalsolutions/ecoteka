@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
   const classes = useStyles();
-  const { dialog, snackbar } = useAppLayout();
+  const { dialog } = useAppLayout();
   const { t } = useTranslation(["components", "common"]);
   const { organization, user } = useAppContext();
   const { apiETK } = useApi().api;
@@ -41,25 +41,6 @@ const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
   const formAddMembersRef = useRef<AddMembersActions>();
   const { theme } = useThemeContext();
   const matches = useMediaQuery(theme.breakpoints.down("md"));
-
-  const mockMembers = [
-    {
-      name: "Martine Lucette",
-      role: "Admin",
-    },
-    {
-      name: "Pedro Delavega",
-      role: "Utilisateur",
-    },
-    {
-      name: "Hans Zferingebueygfrbtblu",
-      role: "Utilisateur",
-    },
-    {
-      name: "Mamadi Doukouré",
-      role: "Admin",
-    },
-  ];
 
   const fetchMembers = async (organizationId: number) => {
     try {
@@ -117,28 +98,31 @@ const OrganizationMembers: FC<OrganizationMembersProps> = ({}) => {
           members.map((m) => (
             <ListItem divider button key={`members-${m.id}`}>
               <Grid container>
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                   {user.id == m.id ? t("common.currentUserRole") : m.full_name}
                 </Grid>
-                <Grid item xs={2} className={classes.role}>
+                <Grid item xs={4} className={classes.role}>
                   {t(`components.Organization.Members.Table.roles.${m.role}`)}
                 </Grid>
               </Grid>
             </ListItem>
           ))}
+        <Can do="create" on="Members">
+          <ListItem>
+            <Button
+              variant="contained"
+              size="small"
+              color="primary"
+              fullWidth
+              className={classes.button}
+              startIcon={<AddIcon />}
+              onClick={addMember}
+            >
+              {t("components.Organization.Members.addMembers")}
+            </Button>
+          </ListItem>
+        </Can>
       </List>
-      <Can do="create" on="Members">
-        <Button
-          variant="contained"
-          size="small"
-          color="primary"
-          className={classes.button}
-          startIcon={<AddIcon />}
-          onClick={addMember}
-        >
-          {t("components.Organization.Members.addMembers")}
-        </Button>
-      </Can>
     </CoreOptionsPanel>
   );
 };

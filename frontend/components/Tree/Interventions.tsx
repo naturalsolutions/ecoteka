@@ -176,7 +176,7 @@ const TreeInterventions: FC<TreeInterventionsProps> = () => {
           container
           direction="column"
           className={classes.root}
-          justify="center"
+          justifyContent="center"
         >
           <Grid item>
             <Button

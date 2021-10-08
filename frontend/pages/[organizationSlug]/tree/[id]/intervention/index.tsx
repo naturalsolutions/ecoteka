@@ -21,7 +21,7 @@ const TreeInterventionsPage: NextPage<TreeInterventionsPageProps> = ({}) => {
 
   return (
     <TreeProvider
-      organizationId={organization.id}
+      organizationId={organization?.id}
       treeId={Number(router.query.id)}
     >
       <InterventionProvider>

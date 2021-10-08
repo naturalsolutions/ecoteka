@@ -43,8 +43,8 @@ const TreePage: React.FC<ITreePageProps> = ({}) => {
   };
 
   return id ? (
-    <AppLayoutGeneral>
-      <TreeProvider organizationId={organization.id} treeId={Number(id)}>
+    <AppLayoutGeneral hasFooter={false}>
+      <TreeProvider organizationId={organization?.id} treeId={Number(id)}>
         <InterventionProvider>
           <Container>
             <Grid container>
@@ -57,7 +57,7 @@ const TreePage: React.FC<ITreePageProps> = ({}) => {
                         <TreeImagesContainer variant="page" />
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <TreeBasicForm readOnly={false} />
+                        <TreeBasicForm isEditable />
                       </Grid>
                     </Grid>
                   </Paper>

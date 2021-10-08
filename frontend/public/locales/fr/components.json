@@ -325,7 +325,8 @@
     "date": "Réalisée le",
     "done": "Fait",
     "cancelNotes": "Remarques sur l'annulation",
-    "cancelled": "Annulé"
+    "cancelled": "Annulé",
+    "intervention_start_date": "Prévue le"
   },
   "Tree": {
     "properties": {
@@ -444,7 +445,8 @@
     "code": "Matricule de l'arbre",
     "Panel": {
       "actions": {
-        "update": "Modifier cet arbre"
+        "update": "Modifier cet arbre",
+        "read": "Voir plus"
       }
     }
   },
@@ -668,6 +670,16 @@
         "treesPerSquareKm_plural": "Arbres / km²",
         "peoplePerTree": "Habitant / Arbre public",
         "peoplePerTree_plural": "Habitants / Arbre public"
+      },
+      "TreeMetrics": {
+        "title": "Votre patrimoine arboré pour l'année",
+        "plantedTreesCaption": "Arbres plantés",
+        "loggedTreesCaption": "Arbres coupés"
+      },
+      "InterventionMetrics": {
+        "title": "Coût des interventions pour",
+        "doneCaption": "facturés",
+        "scheduledCaption": "planifiés"
       }
     }
   },
@@ -717,7 +729,7 @@
       "title": "Modifier l'intervention"
     },
     "Panel": {
-      "validate": "Terminer l'intervention",
+      "validate": "Marquer comme réalisée",
       "archiveDialog": {
         "title": "Annuler l'intervention"
       },
@@ -727,7 +739,7 @@
       "closePanel": {
         "title": "Voulez-vous enregistrer vos modifications ?"
       },
-      "archive": "Archiver"
+      "archive": "Annuler cette intervention"
     }
   },
   "MapActionBar": {
@@ -775,6 +787,8 @@
     "placeholder": "Sélectionnez un lieu OSM"
   },
   "LayoutFooter": {
+    "caption": "On en parle",
+    "contact": "Contactez nous !",
     "titleColumn": {
       "ns": "En savoir plus sur Natural Solutions",
       "ecoteka": "En savoir plus sur ecoTeka",
@@ -824,5 +838,27 @@
       "canonicalName": "Nom canonique",
       "vernacularName": "Nom vernaculaire"
     }
+  },
+  "Core": {
+    "Error": {
+      "message": {
+        "401": "Vous ne pouvez pas avoir accès à cette ressource, veuillez vous connecter!",
+        "403": "Vous n'êtes pas autorisé à voir cette ressource !",
+        "404": "Aucun arbre ne pousse sur cette page",
+        "500": "La météo ne nous est pas favorable ! Attendez un peu et réessayez quand les nuages seront passés.",
+        "unknown": "Erreur inconnue"
+      },
+      "CallToActionButton": {
+        "message": {
+          "401": "Connexion",
+          "403": "Demande d'accès",
+          "404": "Accueil",
+          "500": "Accueil"
+        }
+      }
+    }
+  },
+  "r": {
+    "caption": ""
   }
 }

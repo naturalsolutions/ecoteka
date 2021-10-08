@@ -15,6 +15,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CoreTextField from "../Core/Field/TextField";
 import CoreSwitch from "@/components/Core/Field/Switch";
 import CoreSelect from "@/components/Core/Field/Select";
+import DatePicker from "@/components/Core/Field/DatePicker";
+
 import AutocompleteMultiSelect from "@/components/Core/Field/AutocompleteSelect";
 import { Controller } from "react-hook-form";
 import TreeCanonicalField from "./Field/Canonical";
@@ -72,6 +74,7 @@ const fieldTypes = {
   switch: CoreSwitch,
   select: CoreSelect,
   multiselect: AutocompleteMultiSelect,
+  date: DatePicker,
 };
 
 const TreeForm: FC<TreeFormProps> = ({ readOnly = true }) => {
@@ -122,7 +125,7 @@ const TreeForm: FC<TreeFormProps> = ({ readOnly = true }) => {
           };
         }
 
-        if (type === "treecanonicalfield") {
+        if (["treecanonicalfield", "date"].includes(type)) {
           fieldProps = {
             defaultValue: "",
             inputProps: {

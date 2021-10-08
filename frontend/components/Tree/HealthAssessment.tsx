@@ -59,7 +59,7 @@ const TreeHealthAssessment: FC<TreeHealthAssessmentProps> = () => {
     >
       <Grid container className={classes.root}>
         <Grid item>
-          <Grid container justify="center" alignItems="center">
+          <Grid container justifyContent="center" alignItems="center">
             <TreeImage className={classes.treeImage} />
           </Grid>
         </Grid>
@@ -70,7 +70,7 @@ const TreeHealthAssessment: FC<TreeHealthAssessmentProps> = () => {
               <CoreTextField label={t("components.Intervention.date")} />
             </Grid>
             <Grid item>
-              <Grid container justify="space-between">
+              <Grid container justifyContent="space-between">
                 <Grid item>
                   <Typography variant="caption">{t("common.risk")}</Typography>
                 </Grid>
@@ -93,7 +93,7 @@ const TreeHealthAssessment: FC<TreeHealthAssessmentProps> = () => {
                 </Grid>
                 {legend.map((item) => (
                   <Grid item key={item.title}>
-                    <Grid container justify="center" alignItems="center">
+                    <Grid container justifyContent="center" alignItems="center">
                       <Grid item>
                         <Box
                           className={classes.legendColor}

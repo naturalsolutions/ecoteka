@@ -8,7 +8,7 @@ stages:
 
 build_backend_base:
   stage: build_base
-  image: docker:dind
+  image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-base -f ./backend/Dockerfile.base ./backend
@@ -24,7 +24,7 @@ build_backend_base:
 
 build_frontend_dev:
   stage: build_dev
-  image: docker:dind
+  image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-dev -f ./frontend/.docker/Dockerfile ./frontend
@@ -40,7 +40,7 @@ build_frontend_dev:
 
 build_backend_dev:
   stage: build_dev
-  image: docker:dind
+  image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-dev ./backend
@@ -56,7 +56,7 @@ build_backend_dev:
 
 build_frontend_prod:
   stage: build_prod
-  image: docker:dind
+  image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:frontend-prod -f ./frontend/.docker/Dockerfile ./frontend
@@ -72,7 +72,7 @@ build_frontend_prod:
 
 build_backend_prod:
   stage: build_prod
-  image: docker:dind
+  image: docker
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${CI_REGISTRY_IMAGE}:backend-prod ./backend

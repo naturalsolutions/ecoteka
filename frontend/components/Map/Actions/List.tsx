@@ -10,6 +10,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from "@material-ui/lab";
+import Can from "@/components/Can";
 import { MapActionsActionProps } from "./Action";
 
 export interface MapActionsListProps {}
@@ -84,7 +85,7 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
       container
       className={classes.root}
       direction="column-reverse"
-      justify="flex-end"
+      justifyContent="flex-end"
       alignItems="flex-end"
       spacing={2}
     >
@@ -92,20 +93,25 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
         children,
         (child: ReactElement<MapActionsActionProps>) =>
           child && (
-            <Grid item>
-              <Tooltip title={child.props.name} arrow placement="left">
-                <Fab
-                  color="primary"
-                  className={
-                    child.props.isActive ? classes.fabActive : classes.fab
-                  }
-                  aria-label={child.props.name}
-                  onClick={child.props.onClick}
-                >
-                  {child.props.icon}
-                </Fab>
-              </Tooltip>
-            </Grid>
+            <Can
+              do={child.props.action ? child.props.action : "preview"}
+              on={child.props.subject ? child.props.subject : "Trees"}
+            >
+              <Grid item>
+                <Tooltip title={child.props.name} arrow placement="left">
+                  <Fab
+                    color="primary"
+                    className={
+                      child.props.isActive ? classes.fabActive : classes.fab
+                    }
+                    aria-label={child.props.name}
+                    onClick={child.props.onClick}
+                  >
+                    {child.props.icon}
+                  </Fab>
+                </Tooltip>
+              </Grid>
+            </Can>
           )
       )}
     </Grid>

@@ -106,7 +106,7 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
                     <Grid
                       container
                       direction="column"
-                      justify="flex-start"
+                      justifyContent="flex-start"
                       alignItems="flex-start"
                     >
                       <Grid item xs>

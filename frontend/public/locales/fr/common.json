@@ -105,5 +105,7 @@
   "invite": "Inviter",
   "add": "Ajouter",
   "archive": "Archiver",
-  "remove": "Retirer"
+  "remove": "Retirer",
+  "previousPage": "Page précédente",
+  "home": "Accueil"
 }

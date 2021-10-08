@@ -183,7 +183,7 @@ const InterventionFormStepper: React.FC = () => {
   };
 
   const submit = async () => {
-    const dateRange = data["validation"].intervention_period;
+    const startDate = data["validation"].intervention_start_date;
     const estimatedCost =
       data["validation"].estimated_cost === ""
         ? null
@@ -196,13 +196,12 @@ const InterventionFormStepper: React.FC = () => {
         },
         {
           properties: data["intervention"],
-          intervention_start_date: new Date(dateRange.startDate),
-          intervention_end_date: new Date(dateRange.endDate),
         } // c'est moche !!
       );
 
     payload.tree_id = router.query.tree;
     payload.estimated_cost = estimatedCost;
+    payload.intervention_start_date = startDate;
 
     await apiETK.post(
       `/organization/${organization.id}/interventions`,
@@ -320,7 +319,7 @@ const InterventionFormStepper: React.FC = () => {
                         step={step}
                         organization={organization.id}
                       />
-                      <Grid container direction="row" justify="flex-end">
+                      <Grid container direction="row" justifyContent="flex-end">
                         {activeStep !== 0 && (
                           <Button onClick={() => handlePrevious(step)}>
                             {activeStep === steps.length - 1
@@ -365,7 +364,7 @@ const InterventionFormStepper: React.FC = () => {
                       <Typography>
                         {t("components.Intervention.whatnow")}
                       </Typography>
-                      <Grid container direction="row" justify="flex-end">
+                      <Grid container direction="row" justifyContent="flex-end">
                         <Button onClick={handleBackToTree}>
                           <HomeIcon />
                         </Button>
