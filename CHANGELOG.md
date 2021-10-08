@@ -1,3 +1,10 @@
+## [0.17.8](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.7...v0.17.8) (2021-10-08)
+
+
+### Bug Fixes
+
+* **backend:** Error: Invalid value for '-P' on celery_worker ([cded443](https://gitlab.com/natural-solutions/ecoteka/commit/cded4431bdcf11b4da4ee7d62c4ac96e707f0ef9))
+
 ## [0.17.7](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.6...v0.17.7) (2021-07-19)
 
 
