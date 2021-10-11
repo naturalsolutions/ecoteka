@@ -788,12 +788,12 @@
   },
   "LayoutFooter": {
     "caption": "On en parle",
+    "newsletterButton": "S'inscrire à la newsletter",
     "contact": "Contactez nous !",
     "titleColumn": {
       "ns": "En savoir plus sur Natural Solutions",
       "ecoteka": "En savoir plus sur ecoTeka",
       "newsletter": "Suivre l'actualité sur les écosystèmes urbains",
-      "newsletterButton": "S'inscrire à la newsletter"
     },
     "links": {
       "community": {

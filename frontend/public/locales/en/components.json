@@ -795,12 +795,12 @@
   },
   "LayoutFooter": {
     "caption": "get into this?",
+    "newsletterButton": "Subscribe to the newsletter",
     "contact": "Contact us!",
     "titleColumn": {
       "ns": "Learn more about Natural Solutions",
       "ecoteka": "Learn more about ecoTeka",
       "newsletter": "Follow the news on the urban ecosystems",
-      "newsletterButton": "Subscribe to the newsletter"
     },
     "links": {
       "community": {
