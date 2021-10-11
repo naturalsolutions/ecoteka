@@ -1,3 +1,60 @@
+# [0.18.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.8...v0.18.0) (2021-10-11)
+
+
+### Bug Fixes
+
+* add assets for intervention metrics icons ([8f7097e](https://gitlab.com/natural-solutions/ecoteka/commit/8f7097e3b04062dcff120795e9cf0283b37cbd4b))
+* add currency to interventions budget ([a788e7b](https://gitlab.com/natural-solutions/ecoteka/commit/a788e7b00e91fb0928457cf0e4ea577b28b0d264))
+* add current date to intervention ([08dda3d](https://gitlab.com/natural-solutions/ecoteka/commit/08dda3de12a3477d1cba6d9c8d745dc96700861e))
+* add error component new design ([c540b06](https://gitlab.com/natural-solutions/ecoteka/commit/c540b0605bdf3494b3f9e13379a2dba417571b8c))
+* add guest rules to map explorer ([f9138cf](https://gitlab.com/natural-solutions/ecoteka/commit/f9138cf42ac5931d58dd1610134c610f95802e32))
+* add interventions budget component ([93b3719](https://gitlab.com/natural-solutions/ecoteka/commit/93b3719dc858882f31c703423c1ab2d76cad73c4))
+* add translation subfooter wip ([1e3fbfa](https://gitlab.com/natural-solutions/ecoteka/commit/1e3fbfa0ea636ce9e884233f4d99bd4cb34b457a))
+* add tree metrics components ([7f5b5cb](https://gitlab.com/natural-solutions/ecoteka/commit/7f5b5cbc26156c056798e5506cd1f6ab1cfc5442))
+* add ts-nocheck in CoreDatePicker ([6b62c22](https://gitlab.com/natural-solutions/ecoteka/commit/6b62c22fd963c7ba79c56f8e808970415396b638))
+* allow empty dates into tree basicform ([23ba5c8](https://gitlab.com/natural-solutions/ecoteka/commit/23ba5c8d3acea324098b8da85c8465cbf91106fe))
+* **backend:** Error: Invalid value for '-P' on celery_worker ([6a7486b](https://gitlab.com/natural-solutions/ecoteka/commit/6a7486b7cd110010f20582f3a7eb32e4d6531c10))
+* broken link export ([09649c8](https://gitlab.com/natural-solutions/ecoteka/commit/09649c80f7136723f16a8143e59e9a5c7564d068))
+* change component on error pages ([ceb6829](https://gitlab.com/natural-solutions/ecoteka/commit/ceb682921e90ebae3a65128d18748b5234434dbc))
+* deprecate osm info popover + point styles change ([6cf460a](https://gitlab.com/natural-solutions/ecoteka/commit/6cf460a01b1a0e72a86480574384faeb9f054789))
+* disabled cancel and set as done actions for non scheduled intervention ([4e9de6d](https://gitlab.com/natural-solutions/ecoteka/commit/4e9de6de938c9766539c2041a00c217c45477e7d))
+* dont allow select no organization ([294f07a](https://gitlab.com/natural-solutions/ecoteka/commit/294f07af6f2b117b42748c87b461a5d9c8b7d9ef))
+* error translation ([53bb3b1](https://gitlab.com/natural-solutions/ecoteka/commit/53bb3b173c27762a188e3fb355feedc2e4065e6a))
+* fix intervention schedule avatar colors ([a98afcf](https://gitlab.com/natural-solutions/ecoteka/commit/a98afcf34254cc7ab881571607fe98cfada7e6a7))
+* fix logged tree count ([3664335](https://gitlab.com/natural-solutions/ecoteka/commit/36643359586b7ab4e76e18f1d367ee3c5d365c82))
+* fix planted trees count metrics ([4a368a4](https://gitlab.com/natural-solutions/ecoteka/commit/4a368a4fe52e22a31ab53ab7c573a01ed2949c71))
+* frontend dockerfile ([cbd8c5b](https://gitlab.com/natural-solutions/ecoteka/commit/cbd8c5bd61fc1c00bef6f4d2e95036ed28ad6cb8))
+* **frontend:** infinite loop refresh_token ([c841ce2](https://gitlab.com/natural-solutions/ecoteka/commit/c841ce2801cf266123ca280c3c0481f326fbc28e))
+* grid spacing ([f3be2f2](https://gitlab.com/natural-solutions/ecoteka/commit/f3be2f2ea66254640d0145ed2c41d256e1092daa))
+* grid spacing ([12ef7f8](https://gitlab.com/natural-solutions/ecoteka/commit/12ef7f8b88c006c7262b86ca6c52ca134db13ef4))
+* grid spacing on OrganizationHome ([472bbcd](https://gitlab.com/natural-solutions/ecoteka/commit/472bbcd84c86fa636d85c8308cfd2032a137a8b9))
+* intervention data load in edit panel ([443b108](https://gitlab.com/natural-solutions/ecoteka/commit/443b1085a6d2c99b0ed57d5c9fe8e0d056815a95))
+* load images from eol ([fff0ed3](https://gitlab.com/natural-solutions/ecoteka/commit/fff0ed3ad58408a0f3a87bda6fa9f6448dd44154))
+* mapPreview size desktop ([8cb92af](https://gitlab.com/natural-solutions/ecoteka/commit/8cb92afae5de8ca1a6f3b35f7975758b2d63fab5))
+* minHeight to InterventionMetrics ([c39f1fd](https://gitlab.com/natural-solutions/ecoteka/commit/c39f1fd0b48e0b1b4812ac9f44772411c46969f2))
+* minor changes to improve ux ([a067423](https://gitlab.com/natural-solutions/ecoteka/commit/a0674233f39235b647a2a39d72caa240f32d163e))
+* quick fix to display tree interventions page ([25995c4](https://gitlab.com/natural-solutions/ecoteka/commit/25995c4940b1fc7a33ca1c53f0e40a71fb461156))
+* refetch organization on user change to update user current role ([3bd18db](https://gitlab.com/natural-solutions/ecoteka/commit/3bd18dbc49b826fbbfe21bf7b24e8d9fb5978af7))
+* remove cancelled intervention from scheduled intervention ([0f2054a](https://gitlab.com/natural-solutions/ecoteka/commit/0f2054ad0caf1cd19ab0bec091a3c8bacd5ddbaf))
+* remove svg icon from intervention metrics ([129b6e5](https://gitlab.com/natural-solutions/ecoteka/commit/129b6e502bf0760d473c381b43d5990fe69d7b49))
+* remove unstable CoreDatePicker ([e03f752](https://gitlab.com/natural-solutions/ecoteka/commit/e03f75208cd4778c288eb6d5f402f341571daa80))
+* replace date to plantationDate ([e2df36b](https://gitlab.com/natural-solutions/ecoteka/commit/e2df36b2880681d75b52873f9507f5a0b6adf208))
+* resolve type error for date picker ([c62430d](https://gitlab.com/natural-solutions/ecoteka/commit/c62430d9bc3ce3bcadbe5f615e46e9e4431c071b))
+* set initial date on tree provider ([246026c](https://gitlab.com/natural-solutions/ecoteka/commit/246026c3957515547b038dec6fd835f2a3bd4024))
+* spanish and english version display of subfooter ([98f46b4](https://gitlab.com/natural-solutions/ecoteka/commit/98f46b4601673d1a316707fbf6c82b74fc49f12a))
+* spanish and english version display of subfooter ([f198a69](https://gitlab.com/natural-solutions/ecoteka/commit/f198a69bf0ac8df148dcd6ba6f24abc548e81d2e))
+* spanish and english version display of subfooter ([03247d3](https://gitlab.com/natural-solutions/ecoteka/commit/03247d3a5689897fb7168ba16b073bdd5800487f))
+* translate Date Picker button label ([4e0c16a](https://gitlab.com/natural-solutions/ecoteka/commit/4e0c16aa66d8c8d61c2773044ae4b1dd0d76995d))
+* use start_date instead of period in intervention form ([065cddb](https://gitlab.com/natural-solutions/ecoteka/commit/065cddb1312f6145d12b85a6a0bc1a93b85a6a7f))
+
+
+### Features
+
+* add google analytics ([541cf11](https://gitlab.com/natural-solutions/ecoteka/commit/541cf11c100998e8f6ecc30b4ab65031e3bba78a))
+* add lazy load image ([80aa7a7](https://gitlab.com/natural-solutions/ecoteka/commit/80aa7a78e02d39609906df480beafa6fb86c699e))
+* add subfooter ([232e708](https://gitlab.com/natural-solutions/ecoteka/commit/232e708d519af21da0db046f711ca4264166b535))
+* add tests ([b76a38b](https://gitlab.com/natural-solutions/ecoteka/commit/b76a38bef54d0416da6ae81900cb5ff9de12db4b))
+
 ## [0.17.8](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.7...v0.17.8) (2021-10-08)
 
 
