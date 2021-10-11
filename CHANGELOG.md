@@ -1,3 +1,11 @@
+## [0.18.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.18.0...v0.18.1) (2021-10-11)
+
+
+### Bug Fixes
+
+* json error parser in translations ([1e74bf0](https://gitlab.com/natural-solutions/ecoteka/commit/1e74bf033d58083477a0baa773644fbffa4e41fe))
+* newsletter button text display ([c334f62](https://gitlab.com/natural-solutions/ecoteka/commit/c334f6287515b3feb293b9064a01a2935db438df))
+
 # [0.18.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.17.8...v0.18.0) (2021-10-11)
 
 
