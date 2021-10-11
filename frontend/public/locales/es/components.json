@@ -793,7 +793,8 @@
     "titleColumn": {
       "ns": "Saber más sobre Natural Solutions",
       "ecoteka": "Saber más sobre ecoTeka",
-      "newsletter": "Seguir la actualidad sobre los ecosistemas urbano"
+      "newsletter": "Seguir la actualidad sobre los ecosistemas urbano",
+      "newsletterButton": "Recibe nuestro newsletter"
     },
     "links": {
       "community": {
@@ -864,5 +865,10 @@
   },
   "SearchCity": {
     "placeholder": "Busca los árboles de una ciudad..."
+  },
+  "CookieConsent": {
+    "buttonText": "Acepto",
+    "declineButtonText": "No acepto",
+    "modalText": "Este sitio web utiliza cookies para brindar un mejor experiencia de usuario."
   }
 }

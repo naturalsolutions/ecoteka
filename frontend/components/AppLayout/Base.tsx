@@ -7,6 +7,7 @@ import { NoSsr } from "@material-ui/core";
 import { AbilityContext } from "@/components/Can";
 import { buildAbilityFor } from "@/abilities/genericOrganizationAbility";
 import { useAppContext } from "@/providers/AppContext";
+import CookieConsent from "react-cookie-consent";
 
 const AppLayout = createContext(null);
 
@@ -27,6 +28,27 @@ const AppLayoutBase: FC = ({ children }) => {
           {children}
           <Dialog ref={dialog} />
           <Snackbars ref={snackbar} />
+          <CookieConsent
+            enableDeclineButton
+            location="bottom"
+            buttonText={t("components.CookieConsent.buttonText")}
+            declineButtonText={t("components.CookieConsent.declineButtonText")}
+            cookieName="etk-cookie-consent"
+            style={{ background: "#384145" }}
+            buttonStyle={{
+              color: "#fff",
+              background: "#000",
+              fontSize: "13px",
+            }}
+            declinebuttonStyle={{
+              color: "#000",
+              background: "#fff",
+              fontSize: "13px",
+            }}
+            expires={150}
+          >
+            {t("components.CookieConsent.modalText")}
+          </CookieConsent>
         </NoSsr>
       </AppLayout.Provider>
     </AbilityContext.Provider>

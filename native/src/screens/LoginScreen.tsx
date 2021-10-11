@@ -50,8 +50,7 @@ const LoginScreen = ({ navigation }: Props) => {
         }
       );
       const payload = await response.json();
-      console.log(response.status);
-      console.log(payload);
+      
       if (response.status != 200) {
         setTimeout(() => {
           setIsLoading(false);
