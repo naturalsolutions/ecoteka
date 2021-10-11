@@ -860,5 +860,8 @@
   },
   "r": {
     "caption": ""
+  },
+  "SearchCity": {
+    "placeholder": "Explorez les arbres d'une ville..."
   }
 }

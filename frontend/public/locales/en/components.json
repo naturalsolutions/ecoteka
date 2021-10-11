@@ -870,5 +870,8 @@
   },
   "r": {
     "caption": "cccc"
+  },
+  "SearchCity": {
+    "placeholder": "Explore the trees of a city..."
   }
 }

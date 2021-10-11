@@ -1,4 +1,5 @@
-import useApi from "@/lib/useApi";
+import { useState, useEffect, CSSProperties, FC } from "react";
+import { useTranslation } from "react-i18next";
 import {
   TextField,
   CircularProgress,
@@ -6,23 +7,17 @@ import {
   InputAdornment,
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { FlyToInterpolator } from "@deck.gl/core";
 import { useMapContext } from "@/components/Map/Provider";
 import SearchIcon from "@material-ui/icons/Search";
+import useApi from "@/lib/useApi";
+import * as ga from "@/lib/ga";
 
 export interface MapSearchCityProps {
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   onChange?(item: {}): void;
 }
-
-const defaultProps: MapSearchCityProps = {
-  style: {},
-  className: "",
-  onChange: () => {},
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
+const MapSearchCity: FC<MapSearchCityProps> = (props) => {
   const { t } = useTranslation("components");
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -43,10 +38,20 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
   useEffect(() => {
     let active = true;
 
-    if (inputValue === "" || inputValue.length < 2) {
+    if (
+      typeof inputValue === "string" &&
+      (inputValue === "" || inputValue.length < 2)
+    ) {
       setOptions([]);
-      return undefined;
+      return;
     }
+
+    ga.event({
+      action: "etk_map_search_city",
+      params: {
+        search_term: inputValue,
+      },
+    });
 
     (async () => {
       try {
@@ -102,7 +107,13 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       freeSolo
       className={props.className}
       options={options}
-      getOptionLabel={(option) => `${option.name}, ${option.country}`}
+      getOptionLabel={(option) => {
+        if (typeof option === "string") {
+          return option;
+        }
+
+        return `${option.name}, ${option.country}`;
+      }}
       filterOptions={(x) => x}
       loading={loading}
       value={value}
@@ -115,7 +126,7 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder="Explorer les arbres d’une ville ..."
+          placeholder={t("components.SearchCity.placeholder")}
           variant="outlined"
           InputProps={{
             ...params.InputProps,
@@ -139,7 +150,5 @@ const MapSearchCity: React.FC<MapSearchCityProps> = (props) => {
     />
   );
 };
-
-MapSearchCity.defaultProps = defaultProps;
 
 export default MapSearchCity;
