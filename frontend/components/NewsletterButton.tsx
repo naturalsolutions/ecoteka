@@ -2,11 +2,13 @@ import { FC } from "react";
 import { Button, Dialog, DialogContent } from "@material-ui/core";
 import { useState } from "react";
 import Head from "next/head";
+import { useTranslation } from "react-i18next";
 
 export interface NewsletterButtonProps {}
 
 const NewsletterButton: FC<NewsletterButtonProps> = ({}) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const handleFormNewsletter = () => {
     setIsDialogOpen(true);
@@ -39,7 +41,7 @@ const NewsletterButton: FC<NewsletterButtonProps> = ({}) => {
         </DialogContent>
       </Dialog>
       <Button color="primary" variant="outlined" onClick={handleFormNewsletter}>
-        {"s\u0027inscrire a la newsletter"}
+        {t("components.LayoutFooter.newsletterButton")}
       </Button>
     </>
   );

@@ -799,7 +799,8 @@
     "titleColumn": {
       "ns": "Learn more about Natural Solutions",
       "ecoteka": "Learn more about ecoTeka",
-      "newsletter": "Follow the news on the urban ecosystems"
+      "newsletter": "Follow the news on the urban ecosystems",
+      "newsletterButton": "Subscribe to the newsletter"
     },
     "links": {
       "community": {
@@ -873,5 +874,10 @@
   },
   "SearchCity": {
     "placeholder": "Explore the trees of a city..."
+  },
+  "CookieConsent": {
+    "buttonText": "I consent",
+    "declineButtonText": "I decline",
+    "modalText": "This website uses cookies to provide a better service."
   }
 }
