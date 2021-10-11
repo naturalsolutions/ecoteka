@@ -6,6 +6,7 @@ const envVars = {
   MEILI_MASTER_KEY: "%meili_master_key%",
   MAPILLARY_API_CLIENT: "%mapillary_api_client%",
   GOOGLE_ANALYTICS: "%google_analytics%",
+  COOKIE_CONSENT: "%cookie_consent%",
 };
 
 const excludeEnvVars = ["ASSET_PREFIX"];
