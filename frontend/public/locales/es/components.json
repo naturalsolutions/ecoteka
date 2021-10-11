@@ -861,5 +861,11 @@
   },
   "r": {
     "caption": ""
+<<<<<<< HEAD
+=======
+  },
+  "SearchCity": {
+    "placeholder": "Busca los árboles de una ciudad..."
+>>>>>>> dev
   }
 }

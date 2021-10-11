@@ -5,6 +5,7 @@ const envVars = {
   MEILI_API_URL: "%meili_api_url%",
   MEILI_MASTER_KEY: "%meili_master_key%",
   MAPILLARY_API_CLIENT: "%mapillary_api_client%",
+  GOOGLE_ANALYTICS: "%google_analytics%",
 };
 
 const excludeEnvVars = ["ASSET_PREFIX"];
