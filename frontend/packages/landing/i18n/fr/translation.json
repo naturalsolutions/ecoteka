@@ -1,0 +1,126 @@
+{
+  "title": "Salut",
+  "layout": {
+    "header": {
+      "menuItems": {
+        "contact": "Contact",
+        "about": "À propos",
+        "signin": "Se connecter"
+      }
+    }
+  },
+  "LayoutFooter": {
+    "caption": "On en parle",
+    "contact": "Contactez nous !",
+    "titleColumn": {
+      "ns": "En savoir plus sur Natural Solutions",
+      "ecoteka": "En savoir plus sur ecoTeka",
+      "newsletter": "Soyez parmi les premiers à découvrir EcoTeka!"
+    },
+    "links": {
+      "community": {
+        "href": "https://www.natural-solutions.eu/communaute-biodiversite-et-ecosystemes-urbains",
+        "title": "Plus qu'un produit, une communauté"
+      },
+      "gitlab": {
+        "href": "https://gitlab.com/natural-solutions/ecoteka",
+        "title": "Retrouvez-nous sur Gitlab"
+      },
+      "avion": {
+        "href": "https://natural-solutions.avion.io/share/xNWnWvoGkytv7crv8",
+        "title": "Le projet maintenant et à venir"
+      },
+      "ns": {
+        "href": "https://www.natural-solutions.eu",
+        "title": "En savoir plus sur Natural Solutions"
+      },
+      "team": {
+        "href": "https://www.natural-solutions.eu/equipe",
+        "title": "L'équipe"
+      },
+      "linkedin": {
+        "href": "https://www.linkedin.com/groups/12518977/",
+        "title": "Retrouvez-nous sur LinkedIn"
+      },
+      "legacy": {
+        "href": "/legacy",
+        "title": "Mentions légales"
+      }
+    },
+    "newsletterMessage": "s’inscrire a la newsletter"
+  },
+  "homePage": {
+    "keys": [
+      {
+        "src": "keys/knowledge.svg",
+        "alt": "Améliorez la connaissance de votre patrimoine arboré",
+        "title": "Améliorez la connaissance de votre patrimoine arboré",
+        "description": "Grâce à ecoTeka, importez votre inventaire, ajoutez vos arbres sur la carte, visualisez votre patrimoine, et partagez la avec vos élu-es.",
+        "reverse": false
+      },
+      {
+        "src": "keys/manage.svg",
+        "alt": "Optimisez la gestion pour des arbres en bonne santé",
+        "title": "Optimisez la gestion pour des arbres en bonne santé ",
+        "description": "Planifiez, historisez et suivez le déploiement de vos interventions grâce à notre outils de gestion intégré.",
+        "reverse": true
+      },
+      {
+        "src": "keys/think.svg",
+        "alt": "Repensez les natures en ville",
+        "title": "Repensez les natures en ville",
+        "description": "Ecoteka vous accompagne vers une ville plus verte en vous aidant à faire les bons choix pour votre ville et vos concitoyens.ennes.",
+        "reverse": false
+      }
+    ],
+    "demos": [
+      {
+        "title": "Paris",
+        "trees": 205034,
+        "slug": "paris",
+        "osm_id": "7444"
+      },
+      {
+        "title": "Londres",
+        "trees": 880021,
+        "slug": "london",
+        "osm_id": "65606"
+      },
+      {
+        "title": "New York",
+        "trees": 592130,
+        "slug": "new_york",
+        "osm_id": "175905"
+      }
+    ],
+    "reference": {
+      "avatar": "references/manon_fredout.png",
+      "title": "Manon Frédout, Développeuse de communauté",
+      "content": "\"Aujourd'hui, j'ai un rôle dans la communauté biodiversité et écosystèmes urbains de Natural Solutions. Je peux appliquer mon savoir-faire appris lors de mon cursus de paysagiste et je peux surtout fédérer des personnes autour de projets pour mieux imaginer le monde et la ville de demain. J'ai envie de rassembler les gens pour qu'il y ait des échanges de savoirs et de compétences. Tout le monde pourra ainsi apporter sa petite graine aux villes vertes que nous construisons.\"",
+      "button": "Prendre rendez-vous",
+      "hubspot": "/references/hubspot.svg",
+      "background": "references/background.png"
+    },
+    "discover": {
+      "title": "Découvrez EcoTeka",
+      "button": "Prenez rendez-vous"
+    },
+    "keys[0]": {
+      "description": "Grâce à ecoTeka, importez votre inventaire,\najoutez vos arbres sur la carte, visualisez votre patrimoine, et partagez la avec vos élu-es."
+    }
+  },
+  "hero": {
+    "getStarted": "Découvrir l'outil !",
+    "title": "Prenons soin des arbres en ville dès maintenant",
+    "body": "Avec ecoTeka, repertorier, gérer et historiser toutes les données sur les arbres en ville."
+  },
+  "demos": "Découvrir les arbres de ",
+  "trees": "arbres",
+  "features": "Fonctionnalités",
+  "team": "Souhaitez-vous collaborez à l'avenir du projet",
+  "CookieConsent": {
+    "buttonText":"J'accepte",
+    "declineButtonText": "Je refuse",
+    "modalText": "Ce site utilise des cookies pour fournir un meilleur service."
+  }
+}

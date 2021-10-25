@@ -1,0 +1,128 @@
+{
+  "title": "Hi",
+  "layout": {
+    "header": {
+      "menuItems": {
+        "contact": "Contact",
+        "about": "About",
+        "signin": "Sign In"
+      }
+    }
+  },
+  "LayoutFooter": {
+    "caption": "get into this?",
+    "contact": "Contact us!",
+    "titleColumn": {
+      "ns": "Learn more about Natural Solutions",
+      "ecoteka": "Learn more about ecoTeka",
+      "newsletter": "Be among the first to discover EcoTeka!"
+    },
+    "links": {
+      "community": {
+        "href": "https://www.natural-solutions.eu/communaute-biodiversite-et-ecosystemes-urbains",
+        "title": "More than a product, a community"
+      },
+      "gitlab": {
+        "href": "https://gitlab.com/natural-solutions/ecoteka",
+        "title": "Find us on Gitlab"
+      },
+      "avion": {
+        "href": "https://natural-solutions.avion.io/share/xNWnWvoGkytv7crv8",
+        "title": "The project now and to come"
+      },
+      "ns": {
+        "href": "https://www.natural-solutions.eu",
+        "title": "Learn more about Natural Solutions"
+      },
+      "team": {
+        "href": "https://www.natural-solutions.eu/equipe",
+        "title": "The team"
+      },
+      "linkedin": {
+        "href": "https://www.linkedin.com/groups/12518977/",
+        "title": "Find us on LinkedIn"
+      },
+      "legacy": {
+        "href": "/legacy",
+        "title": "Legal Notice"
+      }
+    },
+    "newsletterMessage": "subscribe to the newsletter"
+  },
+  "homePage": {
+    "keys": [
+      {
+        "src": "keys/knowledge.svg",
+        "alt": "Improve knowledge of your tree heritage",
+        "title": "Improve knowledge of your tree heritage",
+        "description": "Thanks to ecoTeka, import your inventory, add your trees on the map, visualize your heritage, and share it with your elected representatives",
+        "reverse": true
+      },
+      {
+        "src": "keys/manage.svg",
+        "alt": "Optimize management for healthy trees",
+        "title": "Optimize management for healthy trees",
+        "description": "Plan, log and track the deployment of your interventions with our integrated management tool.",
+        "reverse": false
+      },
+      {
+        "src": "keys/think.svg",
+        "alt": "Rethinking nature in the city ",
+        "title": "Rethinking nature in the city ",
+        "description": "Ecoteka accompanies you to a greener city by helping you make the right choices for your city and your fellow citizens.",
+        "reverse": false
+      }
+    ],
+    "demos": [
+      {
+        "title": "Paris",
+        "trees": 205034,
+        "slug": "paris",
+        "osm_id": "7444"
+      },
+      {
+        "title": "Londres",
+        "trees": 880021,
+        "slug": "london",
+        "osm_id": "65606"
+      },
+      {
+        "title": "New York",
+        "trees": 592130,
+        "slug": "new_york",
+        "osm_id": "175905"
+      }
+    ],
+    "reference": {
+      "avatar": "references/manon_fredout.png",
+      "title": "Manon Frédout, Community developer",
+      "content": "\"Today, I have a role in the biodiversity and urban ecosystems community of Natural Solutions. I can apply my know-how learned during my landscape's studies and I can especially unite people around projects to better imagine the world and the city of tomorrow. I want to bring people together so that there is an exchange of knowledge and skills. Everyone will be able to bring their little seed to the green cities that we are building.\"",
+      "button": "book an appointment",
+      "hubspot": "/references/hubspot.svg",
+      "background": "references/background.png"
+    },
+    "discover": {
+      "title": "Discover EcoTeka",
+      "button": "book an appointment"
+    },
+    "keys[0]": {
+      "alt": "Improve your tree heritage knowledge",
+      "title": "Improve your tree heritage knowledge"
+    }
+  },
+  "hero": {
+    "getStarted": "Discover the tools",
+    "title": "Let's take care of the city trees",
+    "body": "With ecoTeka, inventory, manage and log all trees data in the city."
+  },
+  "demos": "Discover the trees of ",
+  "trees": "trees",
+  "features": "Features",
+  "team": "Would you like to collaborate in the future of the project?",
+  "CookieConsent": {
+    "buttonText":"I consent",
+    "declineButtonText": "I decline",
+    "modalText": "This website uses cookies to provide a better service."
+
+  }
+}

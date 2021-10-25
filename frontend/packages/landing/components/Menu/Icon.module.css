@@ -1,0 +1,78 @@
+.menu-icon {
+	width: 30px;
+	height: 19px;
+	display: block;
+	position: absolute;
+	top: 30px;
+	right: 30px;
+	z-index: 2;
+}
+
+.menu-icon:after,
+.menu-icon:before {
+	content: "";
+	top: 0;
+	content: "";
+	background: #222;
+}
+
+.menu-icon:before {
+	-webkit-transition: top .3s ease-in-out, -webkit-transform .3s ease-in-out;
+	transition: top .3s ease-in-out, -webkit-transform .3s ease-in-out;
+	transition: transform .3s ease-in-out, top .3s ease-in-out;
+	transition: transform .3s ease-in-out, top .3s ease-in-out, -webkit-transform .3s ease-in-out;
+}
+
+.nav-active .menu-icon:before {
+	top: 7px;
+	-webkit-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
+.menu-icon:after {
+	top: auto;
+	bottom: 0;
+	-webkit-transition: bottom .3s ease-in-out, -webkit-transform .3s ease-in-out;
+	transition: bottom .3s ease-in-out, -webkit-transform .3s ease-in-out;
+	transition: transform .3s ease-in-out, bottom .3s ease-in-out;
+	transition: transform .3s ease-in-out, bottom .3s ease-in-out, -webkit-transform .3s ease-in-out;
+}
+
+.nav-active .menu-icon:after {
+	bottom: 9px;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.menu-icon span,
+.menu-icon:after,
+.menu-icon:before {
+	background-color: #000;
+	left: 0;
+	right: 0;
+	position: absolute;
+	height: 3px;
+}
+
+.menu-icon span {
+	display: block;
+	top: 8px;
+	-webkit-transition: -webkit-transform .3s ease-in-out;
+	transition: -webkit-transform .3s ease-in-out;
+	transition: transform .3s ease-in-out;
+	transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out;
+}
+
+.nav-active .menu-icon span {
+	-webkit-transform: translateY(-50%) scale(0);
+	-ms-transform: translateY(-50%) scale(0);
+	transform: translateY(-50%) scale(0);
+}
+
+@media screen and (min-width: 960px) {
+	.menu-icon {
+		display: none;
+	}
+}
