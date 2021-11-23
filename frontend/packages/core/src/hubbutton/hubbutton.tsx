@@ -56,7 +56,7 @@ const HubButton: React.FC<HubButtonProps> = ({
         onClick={handleFormHubButton}
         className={buttonClassName}
       >
-        javi{message}
+        CONTACT {message}
       </Button>
     </>
   );
