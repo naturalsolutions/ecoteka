@@ -1,9 +1,9 @@
-import HubButton from "./hubbutton";
+import Logo from "./Logo";
 import { Meta } from "@storybook/react";
 
 export default {
-  title: "HotSpot/Button",
-  component: HubButton,
+  title: "Header/Logo",
+  component: Logo,
   decorators: [
     (Story) => (
       <>
@@ -14,9 +14,10 @@ export default {
 } as Meta;
 
 export const Default = (args) => (
-  <HubButton message={args.message} formId="222" color="primary" />
+  <Logo height={args.height} width={args.width} />
 );
 
 Default.args = {
-  message: "Contact",
+  height: "50",
+  width: "120",
 };
