@@ -1,23 +1,11 @@
 import Logo from "./Logo";
-import { Meta } from "@storybook/react";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 export default {
-  title: "Header/Logo",
+  title: "Logo",
   component: Logo,
-  decorators: [
-    (Story) => (
-      <>
-        <Story />
-      </>
-    ),
-  ],
-} as Meta;
+} as ComponentMeta<typeof Logo>;
 
-export const Default = (args) => (
-  <Logo height={args.height} width={args.width} />
-);
+const Template: ComponentStory<typeof Logo> = (args) => <Logo {...args} />;
 
-Default.args = {
-  height: "50",
-  width: "120",
-};
+export const Default = Template.bind({});
