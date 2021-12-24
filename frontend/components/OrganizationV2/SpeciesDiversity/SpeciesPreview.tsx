@@ -79,7 +79,7 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
         if (data.taxonConcept) {
           setScName(data.taxonConcept.scientificName);
           data.taxonConcept.dataObjects?.length > 0
-            ? setSpeciesThumbnail(data.taxonConcept.dataObjects[0].eolMediaURL)
+            ? setSpeciesThumbnail(data.taxonConcept.dataObjects[0].eolThumbnailURL)
             : setSpeciesThumbnailWithWikispecies(
                 canonicalName.replace(" ", "_")
               );
