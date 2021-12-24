@@ -110,7 +110,7 @@ deploy_prod:
   script:
     - git clone https://${GL_USER}:${GL_TOKEN}@gitlab.com/natural-solutions/ns-ansible-infrastructure.git
     - cd ns-ansible-infrastructure
-    - pip install docker
+    - apt install -y python3-docker
     - echo ${VAULT_PASSWORD_KEY} > password-file
     - ansible-vault decrypt --vault-password-file password-file k
     - ansible-playbook -i hosts -l ecoteka_prod --vault-password-file password-file deploy.yml
