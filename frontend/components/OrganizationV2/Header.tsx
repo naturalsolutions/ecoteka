@@ -93,11 +93,7 @@ export const MapPreview: FC<MapPreviewProps> = ({}) => {
     <CardMedia
       className={classes.media}
       component="img"
-      image={`/osm_thumbnails/thumbnail/${
-        organization?.osm_id
-      }?organizationId=${organization.id}&template=${
-        organization.total_trees > 50000 ? "osm" : "ecoteka"
-      }&width=700&height=300`}
+      image={``}
       title={organization?.name}
     />
   );

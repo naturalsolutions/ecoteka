@@ -1,6 +1,6 @@
 import { makeStyles, Container, Grid, Box } from "@material-ui/core";
-import React from "react";
 import Head from "next/head";
+import { useState, useEffect } from "react";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import OrganizationHeader from "@/components/OrganizationV2/Header";
 import { useAppContext } from "@/providers/AppContext";
@@ -19,6 +19,8 @@ import UrbanForestryManagement from "@/components/OrganizationV2/Dashboards/Urba
 import EconomyDashboard from "@/components/OrganizationV2/Dashboards/EconomyDashboard";
 import DataQualityModule from "@/components/OrganizationV2/Modules/DataQualityModule";
 import DetectTreesModule from "@/components/OrganizationV2/Modules/DetectTreesModules";
+import useApi from "@/lib/useApi";
+import useMetricsByYear from "@/lib/hooks/useMetricsByYear";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +40,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrganizationMain = () => {
+  const year = new Date().getFullYear();
   const classes = useStyles();
+  const { organization } = useAppContext();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [metricByYear, setMetricsbyYear] = useState();
+  const fetchMetrics = useMetricsByYear(organization.id, year);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchMetrics().then((metrics) => {
+      setLoading(false);
+      setMetricsbyYear(metrics);
+    });
+  }, []);
 
   return (
     <Container className={classes.root}>
@@ -48,12 +63,20 @@ const OrganizationMain = () => {
           <Grid container spacing={2}>
             <Can do="read" on="Dashboard">
               <Grid item xs={12} md={6}>
-                <TreeMetrics />
+                <TreeMetrics
+                  year={year}
+                  loading={loading}
+                  metrics={metricByYear}
+                />
               </Grid>
             </Can>
             <Can do="read" on="Dashboard">
               <Grid item xs={12} md={6}>
-                <InterventionMetrics />
+                <InterventionMetrics
+                  year={year}
+                  loading={loading}
+                  metrics={metricByYear}
+                />
               </Grid>
             </Can>
             <Can do="read" on="Members">

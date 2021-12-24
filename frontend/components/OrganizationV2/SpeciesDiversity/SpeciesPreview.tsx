@@ -101,7 +101,7 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
       item
       container
       direction={isMini ? "row" : "column"}
-      justify={isMini ? "space-between" : "center"}
+      justifyContent={isMini ? "space-between" : "center"}
       alignItems="center"
       spacing={1}
       md={isMini ? 12 : 2}
