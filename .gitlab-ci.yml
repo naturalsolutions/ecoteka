@@ -88,7 +88,7 @@ build_backend_prod:
 
 deploy_dev:
   stage: deploy_dev
-  image: cytopia/ansible:latest-tools
+  image: cytopia/ansible:2.8-infra
   script:
     - git clone https://${GL_USER}:${GL_TOKEN}@gitlab.com/natural-solutions/ns-ansible-infrastructure.git
     - cd ns-ansible-infrastructure
@@ -106,7 +106,7 @@ deploy_dev:
 
 deploy_prod:
   stage: deploy_prod
-  image: cytopia/ansible:latest-tools
+  image: cytopia/ansible:2.8-infra
   script:
     - git clone https://${GL_USER}:${GL_TOKEN}@gitlab.com/natural-solutions/ns-ansible-infrastructure.git
     - cd ns-ansible-infrastructure
