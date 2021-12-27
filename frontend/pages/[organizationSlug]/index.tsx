@@ -54,20 +54,11 @@ const OrganizationMain = () => {
     Promise.all([fetchMetricsYear(), fetchMetricsTrees()]).then(
       (Allmetrics) => {
         setLoading(false);
-        console.log(Allmetrics);
         setMetricsbyYear(Allmetrics[0]);
         setMetricsTrees(Allmetrics[1]);
       }
     );
   }, []);
-
-  // useEffect(() => {
-  //   fetchMetricsTrees().then((metrics) => {
-  //     setLoading(false);
-  //     setMetricsTrees(metrics);
-  //     console.log(metrics);
-  //   });
-  // }, []);
 
   return (
     <Container className={classes.root}>
@@ -110,12 +101,10 @@ const OrganizationMain = () => {
               <GreeningDashboard />
             </Grid>
             <Grid item xs={12} md={12}>
-              {!loading && (
-                <SpeciesDiversityDashboard
-                  metrics={metricTrees}
-                  loading={loading}
-                />
-              )}
+              <SpeciesDiversityDashboard
+                metrics={metricTrees}
+                loading={loading}
+              />
             </Grid>
             <Can do="read" on="Dashboard">
               <Grid item xs={12} md={6}>

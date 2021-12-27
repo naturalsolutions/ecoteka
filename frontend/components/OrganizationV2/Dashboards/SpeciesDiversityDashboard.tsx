@@ -163,8 +163,7 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
         <WorkInProgress withHref href="https://www.natural-solutions.eu" />
       }
     >
-      {!metrics && <LinearProgress />}
-      {metrics && speciesAggregates.length > 0 && (
+      {speciesAggregates.length > 0 && (
         <>
           <Typography
             variant="subtitle2"
