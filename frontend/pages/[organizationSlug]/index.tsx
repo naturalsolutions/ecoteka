@@ -1,4 +1,4 @@
-import { makeStyles, Container, Grid, Box } from "@material-ui/core";
+import { makeStyles, Container, Grid } from "@material-ui/core";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import AppLayoutGeneral from "@/components/AppLayout/General";
@@ -19,8 +19,8 @@ import UrbanForestryManagement from "@/components/OrganizationV2/Dashboards/Urba
 import EconomyDashboard from "@/components/OrganizationV2/Dashboards/EconomyDashboard";
 import DataQualityModule from "@/components/OrganizationV2/Modules/DataQualityModule";
 import DetectTreesModule from "@/components/OrganizationV2/Modules/DetectTreesModules";
-import useApi from "@/lib/useApi";
 import useMetricsByYear from "@/lib/hooks/useMetricsByYear";
+import useMetricsTrees from "@/lib/hooks/useMetricsTrees";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,15 +45,29 @@ const OrganizationMain = () => {
   const { organization } = useAppContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [metricByYear, setMetricsbyYear] = useState();
-  const fetchMetrics = useMetricsByYear(organization.id, year);
+  const fetchMetricsYear = useMetricsByYear(organization.id, year);
+  const [metricTrees, setMetricsTrees] = useState();
+  const fetchMetricsTrees = useMetricsTrees(organization.id);
 
   useEffect(() => {
     setLoading(true);
-    fetchMetrics().then((metrics) => {
-      setLoading(false);
-      setMetricsbyYear(metrics);
-    });
+    Promise.all([fetchMetricsYear(), fetchMetricsTrees()]).then(
+      (Allmetrics) => {
+        setLoading(false);
+        console.log(Allmetrics);
+        setMetricsbyYear(Allmetrics[0]);
+        setMetricsTrees(Allmetrics[1]);
+      }
+    );
   }, []);
+
+  // useEffect(() => {
+  //   fetchMetricsTrees().then((metrics) => {
+  //     setLoading(false);
+  //     setMetricsTrees(metrics);
+  //     console.log(metrics);
+  //   });
+  // }, []);
 
   return (
     <Container className={classes.root}>
@@ -90,13 +104,18 @@ const OrganizationMain = () => {
               </Grid>
             </Can>
             <Grid item xs={12} md={6}>
-              <OrganizationProgress />
+              <OrganizationProgress metrics={metricTrees} loading={loading} />
             </Grid>
             <Grid item xs={12} md={6}>
               <GreeningDashboard />
             </Grid>
             <Grid item xs={12} md={12}>
-              <SpeciesDiversityDashboard />
+              {!loading && (
+                <SpeciesDiversityDashboard
+                  metrics={metricTrees}
+                  loading={loading}
+                />
+              )}
             </Grid>
             <Can do="read" on="Dashboard">
               <Grid item xs={12} md={6}>

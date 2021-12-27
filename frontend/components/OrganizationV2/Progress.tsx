@@ -8,12 +8,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import CoreOptionsPanel from "@/components/Core/OptionsPanel";
-import { useAppContext } from "@/providers/AppContext";
-import useApi from "@/lib/useApi";
 import { useTranslation } from "react-i18next";
 import ExportDataset from "@/components/OrganizationV2/ExportDataset";
+import { MetricTreesResponse } from "@/lib/hooks/useMetricsTrees";
 
-export interface OrganizationProgressProps {}
+export interface OrganizationProgressProps {
+  metrics: MetricTreesResponse;
+  loading: boolean;
+}
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -76,33 +78,12 @@ const RatioProgress: FC<RatioProgressProps> = ({ caption, progressValue }) => {
   );
 };
 
-const OrganizationProgress: FC<OrganizationProgressProps> = ({}) => {
+const OrganizationProgress: FC<OrganizationProgressProps> = ({
+  metrics,
+  loading,
+}) => {
   const classes = useStyles();
-  const { organization } = useAppContext();
-  const { apiETK } = useApi().api;
   const { t } = useTranslation(["components"]);
-  const [metrics, setMetrics] = useState(undefined);
-
-  const fetchMetrics = async (organizationId: number) => {
-    try {
-      const { data, status } = await apiETK.get(
-        `/organization/${organizationId}/trees/metrics?fields=canonicalName,vernacularName,diameter,height,plantingDate`
-      );
-      if (status === 200) {
-        if (data) {
-          setMetrics(data);
-        }
-      }
-    } catch ({ response, request }) {
-      if (response) {
-        console.log(response);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchMetrics(organization?.id);
-  }, [organization]);
 
   return (
     <CoreOptionsPanel

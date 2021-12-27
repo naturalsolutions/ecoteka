@@ -5,6 +5,7 @@ import {
   Grid,
   Typography,
   useTheme,
+  LinearProgress,
 } from "@material-ui/core";
 import { Bar } from "react-chartjs-2";
 import CoreOptionsPanel from "@/components/Core/OptionsPanel";
@@ -13,10 +14,12 @@ import { useTranslation } from "react-i18next";
 import WorkInProgress from "@/components/WorkInProgress";
 import { useAppContext } from "@/providers/AppContext";
 import SpeciesPreview from "@/components/OrganizationV2/SpeciesDiversity/SpeciesPreview";
-import useApi from "@/lib/useApi";
+import { MetricTreesResponse } from "@/lib/hooks/useMetricsTrees";
 
 export interface SpeciesDiversityDashboardProps {
   wip?: boolean;
+  metrics: MetricTreesResponse;
+  loading: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -53,15 +56,14 @@ const defaultOptions = {
 
 const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   wip = false,
+  metrics,
+  loading,
 }) => {
   const [ref, { width }] = useMeasure();
   const { width: windowWidth } = useWindowSize();
   const classes = useStyles();
   const theme = useTheme();
-  const { organization } = useAppContext();
-  const { apiETK } = useApi().api;
   const { t } = useTranslation(["components"]);
-  const [metrics, setMetrics] = useState(null);
   const [canonicalNameTotalCount, setCanonicalNameTotalCount] = useState(0);
   const [speciesAggregates, setSpeciesAggregates] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
@@ -87,23 +89,6 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
       }
     }
   }, [width, windowWidth, barRef]);
-
-  const fetchMetrics = async (organizationId: number) => {
-    try {
-      const { data, status } = await apiETK.get(
-        `/organization/${organizationId}/trees/metrics?fields=canonicalName`
-      );
-      if (status === 200) {
-        if (data) {
-          setMetrics(data);
-        }
-      }
-    } catch ({ response, request }) {
-      if (response) {
-        // console.log(response);
-      }
-    }
-  };
 
   const randomRgba = (a: number) => {
     const num = Math.round(0xffffff * Math.random());
@@ -158,13 +143,8 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   }, [speciesAggregates]);
 
   useEffect(() => {
-    fetchMetrics(organization?.id);
-  }, [organization]);
-
-  useEffect(() => {
-    if (metrics?.aggregates?.canonicalName) {
+    metrics?.aggregates?.canonicalName &&
       setSpeciesAggregates(metrics.aggregates.canonicalName);
-    }
   }, [metrics?.aggregates?.canonicalName]);
 
   useEffect(() => {
@@ -172,18 +152,6 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
       setCanonicalNameTotalCount(sumCanonicalName(speciesAggregates));
     }
   }, [speciesAggregates]);
-
-  if (wip) {
-    return (
-      <CoreOptionsPanel
-        ref={ref}
-        label={t("components.Organization.SpeciesDiversityDashboard.title")}
-        items={[]}
-      >
-        <WorkInProgress withHref href="https://www.natural-solutions.eu" />
-      </CoreOptionsPanel>
-    );
-  }
 
   return (
     <CoreOptionsPanel
@@ -195,7 +163,8 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
         <WorkInProgress withHref href="https://www.natural-solutions.eu" />
       }
     >
-      {speciesAggregates.length > 0 && (
+      {!metrics && <LinearProgress />}
+      {metrics && speciesAggregates.length > 0 && (
         <>
           <Typography
             variant="subtitle2"
