@@ -162,13 +162,13 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
             alignItems="center"
             spacing={2}
           >
-            {metrics?.mostRepresentedTaxa?.map((species, index) => (
+            {metrics?.mostRepresentedTaxa.map((species, index) => (
               <SpeciesPreview
-                // avatar={speciesThumbnail[index]}
                 isMini={isMobile}
                 canonicalName={species.value}
                 ratio={species.total / metrics?.canonicalNameTotalCount}
                 key={`species-${index}`}
+                thumbnail={species?.thumbnail}
               />
             ))}
           </Grid>

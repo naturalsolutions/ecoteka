@@ -1,3 +1,16 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
 // const { apiEOL, apiWikispecies } = useApi().api;
   // useEffect(() => {
   //   if (mostRepresentedTaxa.length === 6) {
@@ -30,6 +43,11 @@
   //   }
   // };
 
+
+   // setMostRepresentedTaxaThumbnails((mostRepresentedTaxaThumbnails) => [
+          //   ...mostRepresentedTaxaThumbnails,
+          //   image,
+          // ]);
   
 //   const searchSpecies = async (canonicalName: string) => {
 //     try {

@@ -1,13 +1,12 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Avatar, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import useApi from "@/lib/useApi";
 
 export interface SpeciesPreviewProps {
   canonicalName: string;
   ratio: number;
   isMini: boolean;
-  //avatar : string
+  thumbnail: string;
   // scientificName : string
 }
 
@@ -26,6 +25,7 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
   canonicalName,
   ratio,
   isMini,
+  thumbnail,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation(["components"]);
@@ -42,10 +42,9 @@ const SpeciesPreview: FC<SpeciesPreviewProps> = ({
       sm={isMini ? 12 : 4}
     >
       <Grid item>
-        {/* <Avatar alt={scName} src={speciesThumbnail} className={classes.large}>
-          {scName ? scName.charAt(0) : "."}
-        </Avatar> */}
-        {canonicalName}
+        <Avatar alt={canonicalName} src={thumbnail} className={classes.large}>
+          {/* {scName ? scName.charAt(0) : "."} */}
+        </Avatar>
       </Grid>
       <Grid item xs>
         <Typography variant="body2" gutterBottom>
