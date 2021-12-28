@@ -44,9 +44,9 @@ const OrganizationMain = () => {
   const classes = useStyles();
   const { organization } = useAppContext();
   const [loading, setLoading] = useState<boolean>(true);
-  const [metricByYear, setMetricsbyYear] = useState();
+  const [metricByYear, setMetricsbyYear] = useState<any>();
   const fetchMetricsYear = useMetricsByYear(organization.id, year);
-  const [metricTrees, setMetricsTrees] = useState();
+  const [metricTrees, setMetricsTrees] = useState<any>();
   const fetchMetricsTrees = useMetricsTrees(organization.id);
 
   useEffect(() => {

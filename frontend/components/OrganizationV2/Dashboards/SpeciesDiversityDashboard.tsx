@@ -64,8 +64,6 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   const classes = useStyles();
   const theme = useTheme();
   const { t } = useTranslation(["components"]);
-  const [canonicalNameTotalCount, setCanonicalNameTotalCount] = useState(0);
-  const [speciesAggregates, setSpeciesAggregates] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [options, setOptions] = useState(defaultOptions);
   const barRef = useRef(null);
@@ -131,27 +129,11 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
     return formattedData;
   };
 
-  const sumCanonicalName = (data) => {
-    const reducer = data.reduce((a, b) => ({ total: a.total + b.total }));
-    return reducer.total;
-  };
-
   const memoizedData = useMemo(() => {
-    if (speciesAggregates.length > 0) {
-      return formatBarChartData(speciesAggregates);
+    if (metrics?.speciesAggregates?.length > 0) {
+      return formatBarChartData(metrics.speciesAggregates);
     }
-  }, [speciesAggregates]);
-
-  useEffect(() => {
-    metrics?.aggregates?.canonicalName &&
-      setSpeciesAggregates(metrics.aggregates.canonicalName);
-  }, [metrics?.aggregates?.canonicalName]);
-
-  useEffect(() => {
-    if (speciesAggregates.length > 0) {
-      setCanonicalNameTotalCount(sumCanonicalName(speciesAggregates));
-    }
-  }, [speciesAggregates]);
+  }, [metrics?.speciesAggregates]);
 
   return (
     <CoreOptionsPanel
@@ -163,7 +145,8 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
         <WorkInProgress withHref href="https://www.natural-solutions.eu" />
       }
     >
-      {speciesAggregates.length > 0 && (
+      {loading && <LinearProgress />}
+      {metrics?.speciesAggregates?.length > 0 && (
         <>
           <Typography
             variant="subtitle2"
@@ -179,20 +162,15 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
             alignItems="center"
             spacing={2}
           >
-            {speciesAggregates
-              .filter((f) => {
-                return f.value !== " ";
-              })
-              .slice(0, 6)
-              .map((species, index) => (
-                <SpeciesPreview
-                  isMini={isMobile}
-                  canonicalName={species.value}
-                  total={species.total}
-                  ratio={species.total / canonicalNameTotalCount}
-                  key={`species-${index}`}
-                />
-              ))}
+            {metrics?.mostRepresentedTaxa?.map((species, index) => (
+              <SpeciesPreview
+                // avatar={speciesThumbnail[index]}
+                isMini={isMobile}
+                canonicalName={species.value}
+                ratio={species.total / metrics?.canonicalNameTotalCount}
+                key={`species-${index}`}
+              />
+            ))}
           </Grid>
 
           <Typography
@@ -222,10 +200,10 @@ const MemoizedSpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = (
 ) => {
   const { organization } = useAppContext();
   const { width } = useWindowSize();
-
+  const metrics = {};
   return useMemo(
     () => <SpeciesDiversityDashboard {...props} />,
-    [organization, width]
+    [organization, width, metrics]
   );
 };
 export default MemoizedSpeciesDiversityDashboard;
