@@ -15,6 +15,7 @@ import WorkInProgress from "@/components/WorkInProgress";
 import { useAppContext } from "@/providers/AppContext";
 import SpeciesPreview from "@/components/OrganizationV2/SpeciesDiversity/SpeciesPreview";
 import { MetricTreesResponse } from "@/lib/hooks/useMetricsTrees";
+import { couldStartTrivia } from "typescript";
 
 export interface SpeciesDiversityDashboardProps {
   wip?: boolean;
@@ -201,9 +202,10 @@ const MemoizedSpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = (
   const { organization } = useAppContext();
   const { width } = useWindowSize();
   const metrics = {};
+  console.log(props);
   return useMemo(
     () => <SpeciesDiversityDashboard {...props} />,
-    [organization, width, metrics]
+    [organization, width, metrics, metrics.mostRepresentedTaxa]
   );
 };
 export default MemoizedSpeciesDiversityDashboard;

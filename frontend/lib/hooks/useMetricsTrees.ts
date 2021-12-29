@@ -1,4 +1,5 @@
 import useApi from "@/lib/useApi";
+import useThumbnailsTrees from "@/lib/hooks/useThumbnailsTrees";
 
 export interface MetricTreesResponse {
     ratio : object;
@@ -28,8 +29,8 @@ function useMetricsTrees(organizationId) {
         let speciesAggregates = []
         let canonicalNameTotalCount = 0
         let mostRepresentedTaxa = []
-        if(data?.aggregates?.canonicalName) 
-        {speciesAggregates = data.aggregates.canonicalName
+        if(data?.aggregates?.canonicalName) {
+          speciesAggregates = data.aggregates.canonicalName
           if (speciesAggregates.length > 0) {
             canonicalNameTotalCount = sumCanonicalName(speciesAggregates)
             mostRepresentedTaxa = speciesAggregates
@@ -37,7 +38,15 @@ function useMetricsTrees(organizationId) {
               return f.value !== " ";
             })
             .slice(0, 6)
-        }
+          }
+
+          if(mostRepresentedTaxa.length > 0) {
+            mostRepresentedTaxa.map((specie) => {
+              useThumbnailsTrees((specie.value).then((image) => {
+                specie.thumbnail = image;
+              }))
+            })
+          }
         }
         return { ratio, aggregates, speciesAggregates, canonicalNameTotalCount, mostRepresentedTaxa } as unknown as MetricTreesResponse;
       }
