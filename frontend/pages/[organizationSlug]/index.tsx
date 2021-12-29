@@ -54,22 +54,12 @@ const OrganizationMain = () => {
     setLoading(true);
     Promise.all([fetchMetricsYear(), fetchMetricsTrees()]).then(
       (Allmetrics) => {
-        setLoading(false);
         setMetricsbyYear(Allmetrics[0]);
         setMetricsTrees(Allmetrics[1]);
+        setLoading(false);
       }
     );
   }, []);
-
-  // useEffect(() => {
-  //   // fetchThumbnails().then(())
-  //     // metricTrees?.mostRepresentedTaxa.map((specie) => {
-  //     //   useThumbnailsTrees(specie.value).then((image) => {
-  //     //     specie.thumbnail = image;
-  //     //   });
-  //     // });
-  //     // console.log(metricTrees?.mostRepresentedTaxa);
-  // }, [metricTrees?.mostRepresentedTaxa]);
 
   return (
     <Container className={classes.root}>

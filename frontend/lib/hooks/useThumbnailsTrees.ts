@@ -1,14 +1,8 @@
 import useApi from "@/lib/useApi";
 
-export interface ThumbnailsTreesResponse {
-  image: string;
-}
+const useThumbnailsTrees = async (canonicalName: string) => {
 
-function useThumbnailsTrees(canonicalName) {
-
- return async () : Promise<ThumbnailsTreesResponse | {}> => {
   const { apiEOL, apiWikispecies } = useApi().api;
-
   
   const setSpeciesThumbnailWithWikispecies = async (
     formattedCanonicalName: string
@@ -70,8 +64,7 @@ function useThumbnailsTrees(canonicalName) {
         console.log(response);
       }
     }
-  };
+};
 
-}
 
 export default useThumbnailsTrees;

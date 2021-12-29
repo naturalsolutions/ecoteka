@@ -205,7 +205,7 @@ const MemoizedSpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = (
   console.log(props);
   return useMemo(
     () => <SpeciesDiversityDashboard {...props} />,
-    [organization, width, metrics, metrics.mostRepresentedTaxa]
+    [organization, width, metrics]
   );
 };
 export default MemoizedSpeciesDiversityDashboard;

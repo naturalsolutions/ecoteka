@@ -10,7 +10,7 @@ export interface MetricTreesResponse {
 }
 
 function useMetricsTrees(organizationId) {
-  
+
   return async (): Promise<MetricTreesResponse | {}> => {
     const { apiETK } = useApi().api;
 
@@ -40,12 +40,13 @@ function useMetricsTrees(organizationId) {
             .slice(0, 6)
           }
 
+          //fetch thumbnails
           if(mostRepresentedTaxa.length > 0) {
             mostRepresentedTaxa.map((specie) => {
-              useThumbnailsTrees((specie.value).then((image) => {
-                specie.thumbnail = image;
-              }))
-            })
+              useThumbnailsTrees(specie.value).then((image) => {
+                specie.thumbnail = image
+              } 
+            )})
           }
         }
         return { ratio, aggregates, speciesAggregates, canonicalNameTotalCount, mostRepresentedTaxa } as unknown as MetricTreesResponse;
