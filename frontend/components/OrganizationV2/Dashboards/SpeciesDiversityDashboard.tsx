@@ -15,12 +15,10 @@ import WorkInProgress from "@/components/WorkInProgress";
 import { useAppContext } from "@/providers/AppContext";
 import SpeciesPreview from "@/components/OrganizationV2/SpeciesDiversity/SpeciesPreview";
 import { MetricTreesResponse } from "@/lib/hooks/useMetricsTrees";
-import { couldStartTrivia } from "typescript";
 
 export interface SpeciesDiversityDashboardProps {
-  wip?: boolean;
   metrics: MetricTreesResponse;
-  loading: boolean;
+  loading?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -56,9 +54,8 @@ const defaultOptions = {
 };
 
 const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
-  wip = false,
   metrics,
-  loading,
+  loading = true,
 }) => {
   const [ref, { width }] = useMeasure();
   const { width: windowWidth } = useWindowSize();
@@ -101,6 +98,7 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
     let labels = [];
     let chartData = [];
     let colors = [];
+
     isMobile
       ? data.slice(0, 10).map((object) => {
           labels.push(object.value);
@@ -127,6 +125,7 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
         },
       ],
     };
+
     return formattedData;
   };
 
@@ -196,16 +195,16 @@ const SpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
   );
 };
 
-const MemoizedSpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = (
-  props
-) => {
+const MemoizedSpeciesDiversityDashboard: FC<SpeciesDiversityDashboardProps> = ({
+  loading,
+  metrics,
+}) => {
   const { organization } = useAppContext();
   const { width } = useWindowSize();
-  const metrics = {};
-  console.log(props);
+
   return useMemo(
-    () => <SpeciesDiversityDashboard {...props} />,
-    [organization, width, metrics]
+    () => <SpeciesDiversityDashboard loading={loading} metrics={metrics} />,
+    [organization, width, loading]
   );
 };
 export default MemoizedSpeciesDiversityDashboard;

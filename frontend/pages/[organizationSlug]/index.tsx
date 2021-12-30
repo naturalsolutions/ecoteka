@@ -48,7 +48,6 @@ const OrganizationMain = () => {
   const fetchMetricsYear = useMetricsByYear(organization.id, year);
   const [metricTrees, setMetricsTrees] = useState<any>();
   const fetchMetricsTrees = useMetricsTrees(organization.id);
-  console.log(metricTrees);
 
   useEffect(() => {
     setLoading(true);
