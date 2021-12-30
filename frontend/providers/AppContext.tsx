@@ -62,7 +62,6 @@ export const Provider = ({ children }) => {
 
       if (status === 200) {
         setOrganization(data);
-        console.log("fetch");
       }
 
       setIsOrganizationLoading(false);
