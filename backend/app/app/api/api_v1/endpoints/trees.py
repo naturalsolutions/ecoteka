@@ -11,9 +11,14 @@ from app.api import get_db
 from app.core import set_policies, authorization, permissive_authorization, get_current_user, settings
 from app.worker import import_geofile_task
 
+
 from fastapi.responses import StreamingResponse
 import geopandas as gpd
 import imghdr
+import requests
+
+from fastapi_cache import FastAPICache
+
 
 router = APIRouter()
 policies = {
@@ -117,20 +122,51 @@ def trees_export(
     return response
 
 @router.get("/metrics", dependencies=[Depends(permissive_authorization("trees:get"))], response_model=schemas.tree.Metrics)
-def get_metrics(
+async def get_metrics(
     organization_id: int,
     fields: str,
     db: Session = Depends(get_db)
 ) -> Any:
     """ Get Trees properties metrics"""
-    requested_fields = fields.split(",")
-    ratio = crud.tree.get_properties_completion_ratio(db, organization_id, requested_fields)
-    aggregates = crud.tree.get_properties_aggregates(db, organization_id, requested_fields)
-    metrics = schemas.tree.Metrics(
-        ratio=ratio,
-        aggregates=aggregates
+    backend = FastAPICache.get_backend()
+    coder =  FastAPICache.get_coder()
+    key = f'trees_metrics_{organization_id}_{fields}'
+    ret = await backend.get(key)
+        
+    if ret is None:
+        requested_fields = fields.split(",")
+        ratio = crud.tree.get_properties_completion_ratio(db, organization_id, requested_fields)
+        aggregates = crud.tree.get_properties_aggregates(db, organization_id, requested_fields)
+        mostRepresented = [item for item in aggregates["canonicalName"] if item["value"] != " "][:6]
+
+        for index, item in enumerate(mostRepresented):
+            canonical_name = item["value"].replace(" x ", " ").replace("‹", "i")
+            item["value"] = canonical_name
+            response_eol_search = requests.get(f'https://eol.org/api/search/1.0.json?q={canonical_name}')
+            if response_eol_search.status_code == 200 and len(response_eol_search.json()["results"]) > 0:
+                id = response_eol_search.json()["results"][0]["id"]
+                response_eol_pages = requests.get(f'https://eol.org/api/pages/1.0/{id}.json?details=true&images_per_page=10')
+                if response_eol_pages.status_code == 200:
+                    json = response_eol_pages.json()
+                    if "dataObjects" in json["taxonConcept"] and len(json["taxonConcept"]["dataObjects"]) > 0:
+                        mostRepresented[index]["thumbnail"] = json["taxonConcept"]["dataObjects"][0]["eolThumbnailURL"]
+                    else:
+                        response_wikispecies = requests.get(f'https://species.wikimedia.org/api/rest_v1/page/summary/{canonical_name.replace(" ", "_")}')
+                        if response_wikispecies.status_code == 200 and "thumbnail" in response_wikispecies.json():
+                            mostRepresented[index]["thumbnail"] = response_wikispecies.json()["thumbnail"]["source"]
+
+
+        canonicalNameTotalCount = sum(item["total"] for item in aggregates["canonicalName"])
+        metrics = schemas.tree.Metrics(
+            canonicalNameTotalCount=canonicalNameTotalCount,
+            mostRepresented=mostRepresented,
+            ratio=ratio,
+            aggregates=aggregates,
         )
-    return metrics
+        await backend.set(key, coder.encode(metrics), 60000000)
+        return metrics
+    
+    return coder.decode(ret) 
 
 
 @router.get("/{tree_id}", dependencies=[Depends(permissive_authorization("trees:get"))], response_model=schemas.tree.Tree_xy)

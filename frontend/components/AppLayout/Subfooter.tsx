@@ -41,7 +41,7 @@ const LayoutSubFooter: FC = () => {
             item
             xs={12}
             spacing={1}
-            justify="center"
+            justifyContent="center"
             direction="column"
             alignItems="center"
           >

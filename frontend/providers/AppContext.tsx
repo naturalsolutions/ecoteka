@@ -75,21 +75,16 @@ export const Provider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (!user && restrictedRoutes?.includes(router.route)) {
+      router.push("/");
+    }
+
     const { organizationSlug } = router.query;
 
     if (organizationSlug && organization?.slug !== organizationSlug) {
       fetchOrganization(organizationSlug as string);
     }
-  }, [router.query]);
-
-  useEffect(() => {
-    if (!user && restrictedRoutes?.includes(router.route)) {
-      router.push("/");
-    }
-    if (organization) {
-      fetchOrganization(organization.slug as string);
-    }
-  }, [user]);
+  }, [router.query, user]);
 
   return (
     <StoreContext.Provider

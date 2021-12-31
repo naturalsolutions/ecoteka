@@ -17,8 +17,14 @@ const AppLayoutBase: FC = ({ children }) => {
   const { t } = useTranslation(["common", "components"]);
   const snackbar = useRef();
   const dialog = useRef<ETKDialogActions>(null);
-  const { organization } = useAppContext();
-  const ability = buildAbilityFor(organization?.current_user_role); //Just for test
+  const { organization, user } = useAppContext();
+  const ability = buildAbilityFor(
+    user?.is_superuser
+      ? "admin"
+      : organization?.current_user_role
+      ? organization?.current_user_role
+      : "guest"
+  );
 
   return (
     <AbilityContext.Provider value={ability}>

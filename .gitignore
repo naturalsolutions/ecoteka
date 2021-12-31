@@ -17,3 +17,4 @@ data.ms
 node_modules
 
 .DS_Store
+.mypy_cache
