@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Grid, makeStyles, Theme, LinearProgress } from "@material-ui/core";
 import CoreOptionsPanel from "@/components/Core/OptionsPanel";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import SimpleMetric from "@/components/Core/Metrics/SimpleMetric";
-import useApi from "@/lib/useApi";
 import { useRouter } from "next/router";
+import useMetricsByYear from "@/lib/hooks/useMetricsByYear";
 
 export interface InterventionMetricsProps {}
 
@@ -15,15 +15,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
+const InterventionMetrics: FC<InterventionMetricsProps> = () => {
+  const year = new Date().getFullYear();
   const classes = useStyles();
   const { t } = useTranslation(["components"]);
   const { user, organization } = useAppContext();
-  const { apiETK } = useApi().api;
-  const [year, setYear] = useState<number>(new Date().getFullYear());
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [metrics, setMetrics] = useState(null);
   const router = useRouter();
+  const fetchMetricsTrees = useMetricsByYear(organization.id, year);
+
+  if (!user?.is_superuser) return null;
+
+  const { data: metrics, isLoading: loading } = fetchMetricsTrees();
 
   // Should be defined in Organization config
   const setCurrency = (locale: string): string => {
@@ -38,46 +40,22 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
     }
   };
 
-  const fetchMetrics = async (year: number) => {
-    setIsLoading(true);
-    try {
-      const { data, status } = await apiETK.get(
-        `/organization/${organization.id}/metrics_by_year/${year}`
-      );
-      if (status === 200) {
-        if (data) {
-          setMetrics(data);
-        }
-      }
-      setIsLoading(false);
-    } catch ({ response, request }) {
-      if (response) {
-        // console.log(response);
-      }
-      setIsLoading(false);
-    }
-  };
-
   const displayedMetrics = [
     {
       key: "done_interventions_cost",
+      value: metrics?.done_interventions_cost,
       caption: `${t(
         "components.Organization.Dashboards.InterventionMetrics.doneCaption"
       )}`,
     },
     {
       key: "scheduled_interventions_cost",
+      value: metrics?.scheduled_interventions_cost,
       caption: `${t(
         "components.Organization.Dashboards.InterventionMetrics.scheduledCaption"
       )}`,
     },
   ];
-
-  useEffect(() => {
-    fetchMetrics(year);
-  }, [year, organization]);
-
-  if (!user?.is_superuser) return null;
 
   return (
     <CoreOptionsPanel
@@ -94,12 +72,13 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
         alignItems="center"
         spacing={4}
       >
-        {(isLoading || !metrics) && <LinearProgress />}
-        {metrics &&
+        {loading ? (
+          <LinearProgress />
+        ) : (
           displayedMetrics.map((metric) => (
             <Grid item key={metric.key}>
               <SimpleMetric
-                metric={metrics[metric.key]?.toLocaleString(router.locale, {
+                metric={metric.value.toLocaleString(router.locale, {
                   maximumFractionDigits: 0,
                   style: "currency",
                   currency: setCurrency(router.locale),
@@ -107,7 +86,8 @@ const InterventionMetrics: FC<InterventionMetricsProps> = ({}) => {
                 caption={metric.caption}
               />
             </Grid>
-          ))}
+          ))
+        )}
       </Grid>
     </CoreOptionsPanel>
   );

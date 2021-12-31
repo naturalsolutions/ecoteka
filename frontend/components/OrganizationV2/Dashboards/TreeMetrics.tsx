@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Grid, makeStyles, Theme, LinearProgress } from "@material-ui/core";
 import Tree from "@/components/Core/Icons/Tree";
 import Trunk from "@/components/Core/Icons/Trunk";
@@ -6,7 +6,7 @@ import CoreOptionsPanel from "@/components/Core/OptionsPanel";
 import { useTranslation } from "react-i18next";
 import { useAppContext } from "@/providers/AppContext";
 import SimpleMetric from "@/components/Core/Metrics/SimpleMetric";
-import useApi from "@/lib/useApi";
+import useMetricsByYear from "@/lib/hooks/useMetricsByYear";
 
 export interface TreeMetricsProps {}
 
@@ -14,37 +14,21 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {},
 }));
 
-const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
+const TreeMetrics: FC<TreeMetricsProps> = () => {
   const { t } = useTranslation(["components"]);
   const { user, organization } = useAppContext();
-  const { apiETK } = useApi().api;
-  const [year, setYear] = useState<number>(new Date().getFullYear());
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [metrics, setMetrics] = useState(null);
+  const year = new Date().getFullYear();
 
-  const fetchMetrics = async (year: number) => {
-    setIsLoading(true);
-    try {
-      const { data, status } = await apiETK.get(
-        `/organization/${organization.id}/metrics_by_year/${year}`
-      );
-      if (status === 200) {
-        if (data) {
-          setMetrics(data);
-        }
-      }
-      setIsLoading(false);
-    } catch ({ response, request }) {
-      if (response) {
-        // console.log(response);
-      }
-      setIsLoading(false);
-    }
-  };
+  if (!user?.is_superuser) return null;
+
+  const fetchMetricsTrees = useMetricsByYear(organization.id, year);
+
+  const { data: metrics, isLoading: loading } = fetchMetricsTrees();
 
   const displayedMetrics = [
     {
       key: "planted_trees_count",
+      value: metrics?.planted_trees_count,
       caption: `${t(
         "components.Organization.Dashboards.TreeMetrics.plantedTreesCaption"
       )}`,
@@ -52,18 +36,13 @@ const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
     },
     {
       key: "logged_trees_count",
+      value: metrics?.logged_trees_count,
       caption: `${t(
         "components.Organization.Dashboards.TreeMetrics.loggedTreesCaption"
       )}`,
       iconComponent: <Trunk style={{ fontSize: 52 }} />,
     },
   ];
-
-  useEffect(() => {
-    fetchMetrics(year);
-  }, [year, organization]);
-
-  if (!user?.is_superuser) return null;
 
   return (
     <CoreOptionsPanel
@@ -79,17 +58,19 @@ const TreeMetrics: FC<TreeMetricsProps> = ({}) => {
         alignItems="center"
         spacing={4}
       >
-        {isLoading && <LinearProgress />}
-        {metrics &&
+        {loading ? (
+          <LinearProgress />
+        ) : (
           displayedMetrics.map((metric) => (
             <Grid item key={metric.key}>
               <SimpleMetric
-                metric={metrics[metric.key]}
+                metric={metric.value}
                 caption={metric.caption}
                 icon={metric.iconComponent}
               />
             </Grid>
-          ))}
+          ))
+        )}
       </Grid>
     </CoreOptionsPanel>
   );

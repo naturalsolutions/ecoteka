@@ -7,6 +7,7 @@ export type Actions =
   | "update"
   | "delete"
   | "manage";
+
 export type Subjects =
   | "Members"
   | "Teams"

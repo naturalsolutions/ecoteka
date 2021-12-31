@@ -1,6 +1,6 @@
-import { makeStyles, Container, Grid, Box } from "@material-ui/core";
-import React from "react";
+import { makeStyles, Container, Grid } from "@material-ui/core";
 import Head from "next/head";
+import { useState, useEffect } from "react";
 import AppLayoutGeneral from "@/components/AppLayout/General";
 import OrganizationHeader from "@/components/OrganizationV2/Header";
 import { useAppContext } from "@/providers/AppContext";
@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrganizationMain = () => {
+  const year = new Date().getFullYear();
   const classes = useStyles();
 
   return (
