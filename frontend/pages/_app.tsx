@@ -35,15 +35,17 @@ function MyApp({ Component, pageProps }) {
   }, [router.locale]);
 
   useEffect(() => {
-    const handleRouteChange = (url) => {
-      ga.pageview(url);
-    };
+    if (process.env.NODE_ENV === "production") {
+      const handleRouteChange = (url) => {
+        ga.pageview(url);
+      };
 
-    router.events.on("routeChangeComplete", handleRouteChange);
+      router.events.on("routeChangeComplete", handleRouteChange);
 
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
+      return () => {
+        router.events.off("routeChangeComplete", handleRouteChange);
+      };
+    }
   }, [router.events]);
 
   return (

@@ -11,6 +11,8 @@ class TreeStatus(enum.Enum):
     FROZEN = "frozen"
 
 class Metrics(BaseModel):
+    canonicalNameTotalCount: int
+    mostRepresented: List[Dict]
     ratio: Dict
     aggregates: Dict
 

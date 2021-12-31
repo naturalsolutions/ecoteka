@@ -5,7 +5,7 @@ import Snackbar, { SnackbarOrigin } from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { Alert, Color } from "@material-ui/lab";
-
+import { TransitionProps } from "@material-ui/core/transitions";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     close: {
@@ -91,7 +91,7 @@ export const Snackbars = forwardRef((props, ref) => {
       open={open}
       autoHideDuration={messageInfo ? messageInfo.autoHideDuration : 6000}
       onClose={handleClose}
-      onExited={handleExited}
+      TransitionProps={{ onExited: handleExited }}
       action={
         <React.Fragment>
           <Button color="secondary" size="small" onClick={handleClose}>
