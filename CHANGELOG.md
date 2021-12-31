@@ -1,3 +1,11 @@
+## [0.18.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.18.1...v0.18.2) (2021-12-31)
+
+
+### Bug Fixes
+
+* change dockerfile frontend to 14alpine ([85f2e33](https://gitlab.com/natural-solutions/ecoteka/commit/85f2e33ec95c96d01cc006c7486081b49928f493))
+* resolve merge conflict locally ([8cbf3ac](https://gitlab.com/natural-solutions/ecoteka/commit/8cbf3ac92386dd6b087d2e80da54b19e44ec33f2))
+
 ## [0.18.1](https://gitlab.com/natural-solutions/ecoteka/compare/v0.18.0...v0.18.1) (2021-10-11)
 
 
