@@ -7,7 +7,7 @@ services:
       - celery_worker
       - tile_server
       - landing_page
-    image: ${NS_ECOTEKA_PROXY_IMAGE}
+    image: ${NS_ECOTEKA_PROXY_IMAGE:-traefik:v2.6}
     networks:
       - traefik
     volumes:
@@ -17,7 +17,7 @@ services:
       - traefik.enable=true
 
   db:
-    image: ${NS_ECOTEKA_DB_IMAGE}
+    image: ${NS_ECOTEKA_DB_IMAGE:-postgis/postgis:14-master}
     networks:
       - traefik
     volumes:
