@@ -22,9 +22,7 @@ All work environments need at least the following requirements:
 ## Install environment for development
 
 ```shell
-npm install # Install husky and commitlint
-npm run prepare # Install pre-commit hooks with husky
-./scripts/start_dev.sh
+./scripts/setup_dev.sh
 ```
 
 ## Quick Start With Docker Compose

@@ -32,7 +32,7 @@ services:
       - ecoteka
 
   celery_worker:
-    image: ecoteka-backend:dev
+    image: registry.gitlab.com/natural-solutions/ecoteka:backend-latest
     networks:
       - ecoteka
     command: bash /app/worker-start.sh
@@ -73,7 +73,7 @@ services:
       - MEILI_MASTER_KEY=${NS_ECOTEKA_MEILISEARCH_MASTER_KEY}
 
   backend:
-    image: ecoteka-backend:dev
+    image: registry.gitlab.com/natural-solutions/ecoteka:backend-latest
     restart: always
     networks:
       - ecoteka
@@ -119,7 +119,7 @@ services:
       - MEILI_MASTER_KEY=${NS_ECOTEKA_MEILISEARCH_MASTER_KEY}
 
   frontend:
-    image: ecoteka-frontend:dev
+    image: registry.gitlab.com/natural-solutions/ecoteka:latest
     restart: always
     networks:
       - ecoteka
@@ -136,22 +136,8 @@ services:
       - GOOGLE_ANALYTICS=${NS_ECOTEKA_FRONTEND_GOOGLE_ANALYTICS}
       - COOKIE_CONSENT=${NS_ECOTEKA_FRONTEND_COOKIE_CONSENT}
 
-  landing_page:
-    image: ${NS_ECOTEKA_LANDING_PAGE_IMAGE}
-    restart: always
-    networks:
-      - ecoteka
-    environment:
-      - STUDIO_URL=https://${NS_ECOTEKA_STUDIO_DOMAIN_NAME}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.landing_page.rule=PathPrefix(`/lp`)
-      - traefik.http.services.landing_page.loadbalancer.server.port=3000
-      - traefik.http.routers.landing_page.middlewares=landing_page-stripprefix
-      - traefik.http.middlewares.landing_page-stripprefix.stripprefix.prefixes=/lp
-
   osm_thumbnails:
-    image: ${NS_ECOTEKA_OSM_THUMBNAILS_IMAGE}
+    image: ${NS_ECOTEKA_OSM_THUMBNAILS_IMAGE:-registry.gitlab.com/natural-solutions/ecoteka-osm-thumbnail:latest}
     restart: always
     networks:
       - ecoteka
@@ -161,11 +147,11 @@ services:
       - traefik.http.routers.osm_thumbnails.middlewares=osm_thumbnails-stripprefix
       - traefik.http.middlewares.osm_thumbnails-stripprefix.stripprefix.prefixes=/osm_thumbnails
     environment:
-      - REDIS_HOST=${NS_ECOTEKA_OSM_THUMBNAILS_REDIS_HOST}
+      - REDIS_HOST=${NS_ECOTEKA_OSM_THUMBNAILS_REDIS_HOST:-redis}
 
   tile_server:
+    image: ${NS_ECOTEKA_TILE_SERVER_IMAGE:-registry.gitlab.com/natural-solutions/vector-tile-server}
     restart: always
-    image: ${NS_ECOTEKA_TILE_SERVER_IMAGE}
     networks:
       - ecoteka
     labels:
@@ -178,7 +164,7 @@ services:
       - KEY_SECRET=${NS_ECOTEKA_BACKEND_SECRET_KEY}
 
   meilisearch:
-    image: ${NS_ECOTEKA_MEILISEARCH_IMAGE}
+    image: ${NS_ECOTEKA_MEILISEARCH_IMAGE:-registry.gitlab.com/natural-solutions/ecoteka-meilisearch:latest}
     networks:
       - ecoteka
     labels:

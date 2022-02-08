@@ -18,7 +18,7 @@ services:
       - "${NS_ECOTEKA_DB_PORT}:5432"
 
   mail:
-    image: ${NS_ECOTEKA_MAIL_IMAGE}
+    image: ${NS_ECOTEKA_MAIL_IMAGE:-maildev/maildev}
     networks:
       - ecoteka
     labels:
