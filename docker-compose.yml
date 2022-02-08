@@ -2,14 +2,9 @@ version: "3.3"
 
 services:
   proxy:
-    depends_on:
-      - backend
-      - celery_worker
-      - tile_server
-      - landing_page
     image: ${NS_ECOTEKA_PROXY_IMAGE:-traefik:v2.6}
     networks:
-      - traefik
+      - ecoteka
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
@@ -19,7 +14,7 @@ services:
   db:
     image: ${NS_ECOTEKA_DB_IMAGE:-postgis/postgis:14-master}
     networks:
-      - traefik
+      - ecoteka
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
     restart: always
@@ -31,17 +26,15 @@ services:
       - POSTGRES_USER=${NS_ECOTEKA_DB_USER}
 
   redis:
-    image: ${NS_ECOTEKA_REDIS_IMAGE}
+    image: ${NS_ECOTEKA_REDIS_IMAGE:-redis:6}
     restart: always
     networks:
-      - traefik
-    volumes:
-      - ${NS_ECOTEKA_REDIS_VOLUME}:/data
+      - ecoteka
 
   celery_worker:
     image: ecoteka-backend:dev
     networks:
-      - traefik
+      - ecoteka
     command: bash /app/worker-start.sh
     restart: always
     volumes:
@@ -83,7 +76,7 @@ services:
     image: ecoteka-backend:dev
     restart: always
     networks:
-      - traefik
+      - ecoteka
     volumes:
       - ${NS_ECOTEKA_BACKEND_TILES_FOLDER}:/app/tiles
       - ${NS_ECOTEKA_BACKEND_UPLOADED_FILES_FOLDER}:/app/app/uploaded_files
@@ -129,7 +122,7 @@ services:
     image: ecoteka-frontend:dev
     restart: always
     networks:
-      - traefik
+      - ecoteka
     labels:
       - traefik.enable=true
       - traefik.http.routers.frontend.rule=PathPrefix(`/`)
@@ -147,7 +140,7 @@ services:
     image: ${NS_ECOTEKA_LANDING_PAGE_IMAGE}
     restart: always
     networks:
-      - traefik
+      - ecoteka
     environment:
       - STUDIO_URL=https://${NS_ECOTEKA_STUDIO_DOMAIN_NAME}
     labels:
@@ -161,7 +154,7 @@ services:
     image: ${NS_ECOTEKA_OSM_THUMBNAILS_IMAGE}
     restart: always
     networks:
-      - traefik
+      - ecoteka
     labels:
       - traefik.enable=true
       - traefik.http.routers.osm_thumbnails.rule=PathPrefix(`/osm_thumbnails`)
@@ -174,7 +167,7 @@ services:
     restart: always
     image: ${NS_ECOTEKA_TILE_SERVER_IMAGE}
     networks:
-      - traefik
+      - ecoteka
     labels:
       - traefik.enable=true
       - traefik.http.routers.tile_server.rule=PathPrefix(`/tiles`)
@@ -187,7 +180,7 @@ services:
   meilisearch:
     image: ${NS_ECOTEKA_MEILISEARCH_IMAGE}
     networks:
-      - traefik
+      - ecoteka
     labels:
       - traefik.enable=true
       - traefik.http.routers.meilisearch.rule=PathPrefix(`/meilisearch`)
@@ -201,5 +194,4 @@ volumes:
   app-db-data:
 
 networks:
-  traefik:
-    external: true
+  ecoteka:

@@ -20,7 +20,7 @@ services:
   mail:
     image: ${NS_ECOTEKA_MAIL_IMAGE}
     networks:
-      - traefik
+      - ecoteka
     labels:
       - traefik.enable=true
       - traefik.http.routers.mail.rule=PathPrefix(`/mail`)
@@ -50,7 +50,8 @@ services:
       context: ./frontend
       dockerfile: .docker/Dockerfile.dev
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app:cached
+      - /app/.next
       - /app/node_modules
     labels:
       - traefik.http.services.frontend.loadbalancer.server.port=3000
