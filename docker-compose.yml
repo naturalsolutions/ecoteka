@@ -180,12 +180,14 @@ services:
     image: cypress/base
     depends_on:
       - frontend
+    networks:
+      - ecoteka
     environment:
       - CYPRESS_baseUrl=http://proxy
     command: sleep infinity
     volumes:
-      - ../cypress:/app/cypress
-      - ../cypress.json:/app/cypress.json
+      - ./cypress:/app/cypress
+      - ./cypress.json:/app/cypress.json
 
 volumes:
   app-db-data:

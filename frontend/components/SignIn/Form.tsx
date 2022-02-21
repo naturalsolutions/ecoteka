@@ -141,6 +141,9 @@ const FormSignIn = () => {
             <TextField
               name="username"
               margin="dense"
+              inputProps={{
+                "data-test": "signin-form-username",
+              }}
               fullWidth
               label={t("components.SignIn.labelUsername")}
               variant="outlined"
@@ -156,6 +159,9 @@ const FormSignIn = () => {
               margin="dense"
               defaultValue=""
               fullWidth
+              inputProps={{
+                "data-test": "signin-form-password",
+              }}
               label={t("components.SignIn.labelPassword")}
               variant="outlined"
               onKeyDown={handleOnPasswordEnter}
@@ -183,7 +189,7 @@ const FormSignIn = () => {
                   variant="contained"
                   fullWidth
                   onClick={handleSubmit(onSubmit)}
-                  data-test="connection"
+                  data-test="signin-form-submit"
                   disabled={isLoading}
                 >
                   {isLoading ? <CircularProgress size={30} /> : "Connexion"}
