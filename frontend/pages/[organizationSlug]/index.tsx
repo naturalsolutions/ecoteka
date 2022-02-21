@@ -42,7 +42,7 @@ const OrganizationMain = () => {
   const classes = useStyles();
 
   return (
-    <Container className={classes.root}>
+    <Container data-test="page-organizationSlug-index" className={classes.root}>
       <Grid container direction="column">
         <OrganizationHeader />
         <Grid item className={classes.itemsContainer}>

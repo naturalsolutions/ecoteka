@@ -176,6 +176,17 @@ services:
     environment:
       - MEILI_NO_SENTRY=true
 
+  e2e:
+    image: cypress/base
+    depends_on:
+      - frontend
+    environment:
+      - CYPRESS_baseUrl=http://proxy
+    command: sleep infinity
+    volumes:
+      - ../cypress:/app/cypress
+      - ../cypress.json:/app/cypress.json
+
 volumes:
   app-db-data:
 

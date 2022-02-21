@@ -1,118 +1,216 @@
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useState,
-  useEffect,
-} from "react";
-import { Box, Grid } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  Grid,
+  TextField,
+  Link,
+  Button,
+  CircularProgress,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import useETKForm from "@/components/Form/useForm";
-import useETKSignInSchema from "@/components/SignIn/Schema";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import useAPI from "@/lib/useApi";
-import { useAppContext } from "@/providers/AppContext";
 import getConfig from "next/config";
-import { IUser } from "@/index";
+import { useAppContext } from "@/providers/AppContext";
+import { useRouter } from "next/router";
 
-interface SubmitResponse {
-  logged: boolean;
-  user: IUser;
-}
+const useStyles = makeStyles((theme) => ({
+  formWidth: {
+    textAlign: "center",
+    margin: "0 16px",
+    [theme.breakpoints.up("sm")]: {
+      width: "450px",
+      margin: "0 auto",
+    },
+  },
+}));
 
-export type FormSignInActions = {
-  submit: () => Promise<SubmitResponse>;
+type SignInFormValues = {
+  username: string;
+  password: string;
 };
 
-export interface FormSignInProps {
-  onSubmit?(): void;
-}
+const FormSignIn = () => {
+  const { t } = useTranslation();
+  const classes = useStyles();
+  const [isLoading, setIsLoading] = useState(false);
+  const { apiETK } = useAPI().api;
+  const { publicRuntimeConfig } = getConfig();
+  const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
+  const { refetchUserData, setOrganization } = useAppContext();
+  const router = useRouter();
 
-const defaultProps: FormSignInProps = {};
+  const schema = yup.object().shape({
+    username: yup
+      .string()
+      .required(t("components.SignIn.errorMessageRequiredField"))
+      .email(t("components.SignIn.errorMessageEmail")),
+    password: yup
+      .string()
+      .required(t("components.SignIn.errorMessageRequiredField")),
+  });
 
-const FormSignIn = forwardRef<FormSignInActions, FormSignInProps>(
-  ({ onSubmit }, ref) => {
-    const { t } = useTranslation("components");
-    const schema = useETKSignInSchema();
-    const [login, setLogin] = useState(false);
+  const { register, handleSubmit, errors, setError } =
+    useForm<SignInFormValues>({
+      resolver: yupResolver(schema),
+    });
 
-    schema.password.component.onKeyDown = async (e) => {
-      if (e.keyCode == 13) {
-        setLogin(true);
-      }
+  const handleOnPasswordEnter = async (e) => {
+    if (e.keyCode == 13) {
+      handleSubmit(onSubmit)();
+    }
+  };
+
+  const onSubmit = async (data?: SignInFormValues) => {
+    setIsLoading(true);
+    const params = new URLSearchParams();
+    params.append("username", data.username);
+    params.append("password", data.password);
+
+    const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     };
 
-    const { fields, handleSubmit, setError, trigger } = useETKForm({
-      schema: schema,
-    });
-    const { refetchUserData } = useAppContext();
-    const { apiETK } = useAPI().api;
-    const { publicRuntimeConfig } = getConfig();
-    const { tokenStorage, refreshTokenStorage } = publicRuntimeConfig;
+    try {
+      const response = await apiETK.post("/auth/login", params, config);
+      const { data, status } = response;
 
-    let logged = false;
-    let user = undefined;
+      if (status === 200) {
+        localStorage.setItem(tokenStorage, data.access_token);
+        localStorage.setItem(refreshTokenStorage, data.refresh_token);
+        const user = await refetchUserData();
 
-    useEffect(() => {
-      if (login) {
-        onSubmit();
-        setLogin(false);
-      }
-    }, [login]);
+        const { callbackUrl } = router.query;
 
-    const handleOnSubmit = async ({ username, password }) => {
-      const params = new URLSearchParams();
-      params.append("username", username);
-      params.append("password", password);
-
-      const config = {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      };
-      try {
-        const response = await apiETK.post("/auth/login", params, config);
-        const { data, status } = response;
-
-        if (status === 200) {
-          localStorage.setItem(tokenStorage, data.access_token);
-          localStorage.setItem(refreshTokenStorage, data.refresh_token);
-          user = await refetchUserData();
-          logged = true;
+        if (callbackUrl) {
+          setOrganization(undefined);
+          return router.back();
         }
 
-        return data;
-      } catch (error) {
-        setError("username", {
-          type: "manual",
-          message: t("components.SignIn.errorMessageServer"),
-        });
-        setError("password", {
-          type: "manual",
-          message: t("components.SignIn.errorMessageServer"),
-        });
+        if (user?.organizations?.length === 1) {
+          return router.push({
+            pathname: "/[organizationSlug]",
+            query: {
+              organizationSlug: user.organizations[0].slug,
+            },
+          });
+        }
+
+        router.push("/");
       }
-    };
 
-    useImperativeHandle(ref, () => ({
-      submit: async () => {
-        await handleSubmit(handleOnSubmit)();
+      return data;
+    } catch (error) {
+      setError("username", {
+        type: "manual",
+        message: t("components.SignIn.errorMessageServer"),
+      });
+      setError("password", {
+        type: "manual",
+        message: t("components.SignIn.errorMessageServer"),
+      });
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-        return { logged, user };
-      },
-    }));
-
-    return (
-      <Box width={1}>
-        <form>
-          <Grid container direction="column">
-            <Grid item>{fields.username}</Grid>
-            <Grid item>{fields.password}</Grid>
+  return (
+    <div className={classes.formWidth}>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Grid item>
+          <img src="/assets/signin-header.png" />
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" align="center" color="textPrimary">
+            <strong>{t("components.SignIn.title")}</strong>
+          </Typography>
+        </Grid>
+        <Grid container direction="column">
+          <Grid item>
+            <TextField
+              name="username"
+              margin="dense"
+              fullWidth
+              label={t("components.SignIn.labelUsername")}
+              variant="outlined"
+              type="email"
+              error={Boolean(errors.username)}
+              helperText={errors.username?.message ?? ""}
+              inputRef={register}
+            />
           </Grid>
-        </form>
-      </Box>
-    );
-  }
-);
+          <Grid item>
+            <TextField
+              name="password"
+              margin="dense"
+              defaultValue=""
+              fullWidth
+              label={t("components.SignIn.labelPassword")}
+              variant="outlined"
+              onKeyDown={handleOnPasswordEnter}
+              type="password"
+              error={Boolean(errors.password)}
+              helperText={errors.password?.message ?? ""}
+              inputRef={register}
+            />
+          </Grid>
 
-FormSignIn.defaultProps = defaultProps;
+          <Grid item>
+            <Grid container direction="column" spacing={2}>
+              <Grid item>
+                <Link
+                  href="/forgot"
+                  color="textPrimary"
+                  style={{ textAlign: "right" }}
+                >
+                  {t("components.SignIn.forgotPassword")}
+                </Link>
+              </Grid>
+              <Grid item>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  fullWidth
+                  onClick={handleSubmit(onSubmit)}
+                  data-test="connection"
+                  disabled={isLoading}
+                >
+                  {isLoading ? <CircularProgress size={30} /> : "Connexion"}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Typography variant="h6" align="center" color="textPrimary">
+                  {t("components.SignIn.noAccount")}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  color="primary"
+                  fullWidth
+                  variant="outlined"
+                  href="https://www.natural-solutions.eu/creation-de-compte-ecoteka"
+                  target="_blank"
+                >
+                  {t("components.SignIn.accountRequest")}
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
 
 export default FormSignIn;

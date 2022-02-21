@@ -1,10 +1,33 @@
 stages:
+  - test
   - build_base
   - build_dev
   - build_prod
   - deploy_dev
   - deploy_prod
   - release
+
+e2e:
+  stage: test
+  image:
+    name: docker/compose:latest
+    entrypoint: [""]
+  before_script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+  allow_failure: true
+  script:
+    - sh scripts/e2e.sh
+  artifacts:
+    when: always
+    paths:
+      - cypress/videos/**/*.mp4
+      - cypress/screenshots/**/*.png
+    expire_in: 5 days
+    reports:
+      junit:
+        - results/TEST-*.xml
+  tags:
+    - shared-shell01
 
 build_backend_base:
   stage: build_base
