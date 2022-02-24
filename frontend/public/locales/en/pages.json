@@ -5,7 +5,7 @@
       "description": "Enter the email address associated with your account, and we'll email you a link to reset your password",
       "emailPlaceholder": "Email",
       "sendButton": "Send reset link",
-      "signin": "Or go to login"
+      "signin": "Go to login"
     },
     "SentCard": {
       "description": "A link to reset your password has been sent to",

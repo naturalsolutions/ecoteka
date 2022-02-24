@@ -32,6 +32,7 @@
     "yes": "sí"
   },
   "errors": {
+    "emailUnmatch": "Este correo electrónico no está registrado",
     "email": "Correo electrónico no válido",
     "required": "Campo obligatorio",
     "passwordsShouldMatch": "Las contraseñas no coinciden",

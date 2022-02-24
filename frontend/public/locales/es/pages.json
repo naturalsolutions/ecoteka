@@ -5,7 +5,7 @@
       "description": "Introduce la dirección de correo electrónico asociada a tu cuenta y te enviaremos un enlace para restablecer tu contraseña",
       "emailPlaceholder": "Correo electrónico",
       "sendButton": "Enviar enlace para restablecer contraseña",
-      "signin": "O ir a iniciar sesión"
+      "signin": "Ir a iniciar sesión"
     },
     "SentCard": {
       "description": "Hemos enviado un enlace para restablecer tu contraseña a la dirección",

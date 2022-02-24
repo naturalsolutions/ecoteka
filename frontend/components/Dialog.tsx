@@ -1,5 +1,4 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
-
 import {
   Button,
   Dialog,
@@ -13,6 +12,7 @@ import {
 } from "@material-ui/core";
 
 import Draggable from "react-draggable";
+import { autocompleteClasses } from "@mui/material";
 
 export type ETKDialogActions = {
   open: (openProps: ETKDialogProps) => void;
@@ -49,24 +49,27 @@ const defaultProps: ETKDialogProps = {
   actions: [],
 };
 
-const DraggablePaperComponent = (props) => {
-  return (
-    <Draggable handle="#etk-dialog" cancel={'[class*="MuiDialogContent-root"]'}>
-      <Paper {...props} />
-    </Draggable>
-  );
-};
-
-const PaperComponent = (props) => {
-  return <Paper {...props} />;
-};
-
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     pointerEvents: "none",
   },
   paper: {
     pointerEvents: "all",
+  },
+  dialogActions: {
+    display: "flex",
+    [theme.breakpoints.only("xs")]: {
+      flexDirection: "column",
+    },
+  },
+  action: {
+    [theme.breakpoints.only("xs")]: {
+      width: "100%",
+      margin: 10,
+    },
+  },
+  dialogAlign: {
+    textAlign: "center",
   },
 }));
 
@@ -96,11 +99,27 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
       }
     };
 
+    const DraggablePaperComponent = (props) => {
+      return (
+        <Draggable
+          handle="#etk-dialog"
+          cancel={'[class*="MuiDialogContent-root"]'}
+        >
+          <Paper {...props} />
+        </Draggable>
+      );
+    };
+
+    const PaperComponent = (props) => {
+      return <Paper {...props} />;
+    };
+
     const renderActions = () => {
       return actions.map((action, idx) => {
         const { onClick, label, noClose, ...buttonProps } = action;
         return (
           <Button
+            className={classes.action}
             {...buttonProps}
             key={idx}
             onClick={(e) => onActionClick(e, action)}
@@ -148,10 +167,17 @@ export const ETKDialog = forwardRef<ETKDialogActions, ETKDialogProps>(
           paper: classes.paper,
         }}
       >
-        <DialogTitle id="etk-dialog">{title}</DialogTitle>
-        <DialogContent {...dialogContentProps}>{content}</DialogContent>
+        <DialogTitle className={classes.dialogAlign} id="etk-dialog">
+          {title}
+        </DialogTitle>
+        <DialogContent className={classes.dialogAlign} {...dialogContentProps}>
+          {content}
+        </DialogContent>
+
         {actions && actions.length > 0 && (
-          <DialogActions>{renderActions()}</DialogActions>
+          <DialogActions className={classes.dialogActions}>
+            {renderActions()}
+          </DialogActions>
         )}
       </Dialog>
     );

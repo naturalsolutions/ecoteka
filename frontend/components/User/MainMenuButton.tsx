@@ -20,7 +20,7 @@ export interface UserMainMenuButtonProps {}
 
 const defaultProps: UserMainMenuButtonProps = {};
 
-const getDisplayNameFromUser = (user: IUser) => {
+const getUsername = (user: IUser) => {
   return user.full_name || user.email.substr(0, user.email.indexOf("@"));
 };
 
@@ -62,6 +62,7 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
   return (
     <>
       <Button
+        data-test="user-menu"
         onClick={(e) => {
           setAnchorEl(e.currentTarget);
         }}
@@ -92,29 +93,28 @@ const UserMainMenuButton: React.FC<UserMainMenuButtonProps> = (props) => {
         <Card>
           <CardContent>
             <Grid container direction="column" spacing={1}>
-              <Grid item>
-                <Grid container direction="row" alignItems="center" spacing={2}>
-                  <Grid item>
-                    <Avatar>
-                      {user.full_name
-                        .split(" ")
-                        .slice(0, 2)
-                        .map((s) => s[0].toUpperCase())}
-                    </Avatar>
-                  </Grid>
-                  <Grid item>
-                    <Grid
-                      container
-                      direction="column"
-                      justifyContent="flex-start"
-                      alignItems="flex-start"
-                    >
-                      <Grid item xs>
-                        <span>{getDisplayNameFromUser(user)}</span>
-                      </Grid>
-                      <Grid item xs>
-                        <span>{user.email}</span>
-                      </Grid>
+              <Grid
+                item
+                container
+                direction="row"
+                alignItems="center"
+                spacing={2}
+              >
+                <Grid item>
+                  <Avatar>
+                    {user.full_name
+                      .split(" ")
+                      .slice(0, 2)
+                      .map((s) => s[0].toUpperCase())}
+                  </Avatar>
+                </Grid>
+                <Grid item>
+                  <Grid container direction="column">
+                    <Grid item xs>
+                      <span>{getUsername(user)}</span>
+                    </Grid>
+                    <Grid item xs>
+                      <span>{user.email}</span>
                     </Grid>
                   </Grid>
                 </Grid>
