@@ -13,10 +13,63 @@ describe("Sign In", () => {
 
   it("success login", function () {
     cy.get("@username").invoke("attr", "type").should("eq", "email");
-    cy.get("@username").type(this.data.admin.email);
     cy.get("@password").invoke("attr", "type").should("eq", "password");
-    cy.get("@password").type(this.data.admin.password);
-    cy.get("@connection").click();
-    cy.get("[data-test=page-organizationSlug-index]");
+    cy.login(this.data.admin.email, this.data.admin.password);
+    cy.visit("/");
+    cy.get("[data-test=login-button-header]").should("not.exist");
+    cy.get("[data-test=user-menu]").should(() => {
+      expect(localStorage.getItem("ecoteka_access_token")).to.exist;
+      expect(localStorage.getItem("user")).to.exist;
+    });
+  });
+
+  it("wrong password", function () {
+    cy.get("@username").type(this.data.admin.email);
+    cy.get("@password").type("wrong password").type("{enter}");
+    cy.get("@password").should("have.attr", "aria-invalid", "true");
+    cy.get(".MuiFormHelperText-root", {
+      timeout: 10000,
+    }).should("be.visible");
+    //test traduction par rapport au contexte (récupérer les translations)
+  });
+
+  it("wrong username", function () {
+    cy.get("@username").type("wrong email");
+    cy.get("@password").type("wrong password").type("{enter}");
+    cy.get("@username").should("have.attr", "aria-invalid", "true");
+    cy.get(".MuiFormHelperText-root", {
+      timeout: 10000,
+    }).should("be.visible");
+  });
+
+  it("empty password", function () {
+    cy.get("@username").type(this.data.admin.email);
+    cy.get("@password").type("{enter}");
+    cy.get("@password").should("have.attr", "aria-invalid", "true");
+    cy.get(".MuiFormHelperText-root")
+      .contains("Veuillez renseigner ce champ.")
+      .and("be.visible");
+  });
+
+  it("empty username", function () {
+    cy.get("@password").type(this.data.admin.password).type("{enter}");
+    cy.get("@username").should("have.attr", "aria-invalid", "true");
+    cy.get(".MuiFormHelperText-root")
+      .contains("Veuillez renseigner ce champ.")
+      .and("be.visible");
+  });
+
+  it("empty fields", function () {
+    cy.get("@password").type("{enter}");
+    cy.get("@username").should("have.attr", "aria-invalid", "true");
+    cy.get("@password").should("have.attr", "aria-invalid", "true");
+    cy.get(".MuiFormHelperText-root")
+      .contains("Veuillez renseigner ce champ.")
+      .and("be.visible");
+  });
+
+  it("type enter in email field", function () {
+    cy.get("@username").type(this.data.admin.email).type("{enter}");
+    cy.focused().should("have.attr", "type").and("eq", "password");
   });
 });

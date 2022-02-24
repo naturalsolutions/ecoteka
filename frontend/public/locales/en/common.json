@@ -31,6 +31,7 @@
     "yes": "Yes"
   },
   "errors": {
+    "emailUnmatch": "This email address doesn't match an account",
     "email": "Email address is invalid",
     "required": "Field required",
     "passwordMustContainOneNumberOrSymbol": "The password must contain at least one number or symbol",

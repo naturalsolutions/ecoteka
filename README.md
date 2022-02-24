@@ -67,6 +67,18 @@ backend is started on the next path:
 
 - http://localhost:8000/api/v1/docs
 
+## Access to Cypress Test Runner
+
+The project's tests are located in the `cypress` folder.
+
+The `cypress.json` file at the root of the project contains some configuration.
+
+If you're using Windows 10, you'll need an [X-server](https://sourceforge.net/projects/vcxsrv/) (allows to display linux GUI)
+
+Use this commant to launch Cypress Test Runner:
+
+      npx cypress open
+
 ## How to deploy in production
 
 First create an .env file and modify the necessary variables:

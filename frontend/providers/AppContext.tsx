@@ -18,7 +18,7 @@ export const Provider = ({ children }) => {
   const { apiETK } = useApi().api;
   const { enqueueSnackbar } = useSnackbar();
   const restrictedRoutes = ["/admin/organizations", "account"];
-
+  const nonLoggedInRoutes = ["/signin", "/forgot"];
   const refetchUserData = async () => {
     try {
       const { data, status } = await apiETK.get("/users/me");
@@ -78,10 +78,16 @@ export const Provider = ({ children }) => {
     if (!user && restrictedRoutes?.includes(router.route)) {
       router.push("/");
     }
-
+    if (
+      user &&
+      !isOrganizationLoading &&
+      nonLoggedInRoutes?.includes(router.route)
+    ) {
+      router.push("/");
+    }
     const { organizationSlug } = router.query;
 
-    if (organizationSlug && organization?.slug !== organizationSlug) {
+    if (organizationSlug && organizationSlug !== router.query) {
       fetchOrganization(organizationSlug as string);
     }
   }, [router.query, user]);

@@ -32,6 +32,7 @@
     "yes": "Oui"
   },
   "errors": {
+    "emailUnmatch": "Cet email n'est lié à aucun compte",
     "email": "Veuillez saisir un email valide",
     "required": "Veuillez renseigner ce champ",
     "passwordsShouldMatch": "Les mots de passe ne correspondent pas",

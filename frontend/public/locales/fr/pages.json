@@ -5,7 +5,7 @@
       "description": "Saisissez l'adresse e-mail associée à votre compte. Nous vous enverrons un lien par e-mail pour réinitialiser votre mot de passe.",
       "emailPlaceholder": "Email",
       "sendButton": "Envoyer le lien de réinitialisation",
-      "signin": "Ou allez à la page de connexion"
+      "signin": "Allez à la page de connexion"
     },
     "SentCard": {
       "description": "Un lien pour réinitialiser votre mot de passe a été envoyé par e-mail à",

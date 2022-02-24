@@ -1,7 +1,7 @@
 import { createRef } from "react";
 import { render, screen, fireEvent } from "@/__tests__/utils/test-utils";
 import userEvent from "@testing-library/user-event";
-import SignInForm, { FormSignInActions } from "@/components/SignIn/Form";
+import SignInForm, { FormSignInActions } from "@/components/Login/FormSignIn";
 import { act } from "@testing-library/react";
 import translations from "@/public/locales/fr/components.json";
 

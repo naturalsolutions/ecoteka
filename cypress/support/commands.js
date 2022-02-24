@@ -23,3 +23,22 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("login", (username, password) => {
+  cy.session([username, password], () => {
+    cy.visit("/signin");
+    cy.get("[data-test=signin-form-username]").type(username);
+    cy.get("[data-test=signin-form-password]").type(password);
+    cy.get("[data-test=signin-form-submit]").click();
+    cy.get("[data-test=page-organizationSlug-index]", {
+      timeout: 25000,
+    }).should("be.visible");
+  });
+});
+
+Cypress.Commands.add("logout", () => {
+  cy.visit("/");
+  cy.get("[data-test=user-menu]").click();
+  cy.get("[data-test=button-logout]").click();
+  cy.get("[data-test=button-confirm-logout]").click();
+});

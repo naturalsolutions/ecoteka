@@ -57,7 +57,12 @@ const FormSignIn = () => {
     useForm<SignInFormValues>({
       resolver: yupResolver(schema),
     });
-
+  const handleOnEmailEnter = async (e) => {
+    if (e.keyCode == 13) {
+      const nextField = document.querySelector("input[name='password']");
+      nextField.focus();
+    }
+  };
   const handleOnPasswordEnter = async (e) => {
     if (e.keyCode == 13) {
       handleSubmit(onSubmit)();
@@ -102,6 +107,7 @@ const FormSignIn = () => {
         }
 
         router.push("/");
+        setIsLoading(false);
       }
 
       return data;
@@ -114,8 +120,6 @@ const FormSignIn = () => {
         type: "manual",
         message: t("components.SignIn.errorMessageServer"),
       });
-      setIsLoading(false);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -151,6 +155,7 @@ const FormSignIn = () => {
               error={Boolean(errors.username)}
               helperText={errors.username?.message ?? ""}
               inputRef={register}
+              onKeyDown={handleOnEmailEnter}
             />
           </Grid>
           <Grid item>

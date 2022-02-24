@@ -191,7 +191,11 @@ const AppLayoutHeader = ({}): JSX.Element => {
               </Grid>
             )}
             {!user && (
-              <Button size="small" onClick={handleSignInClick}>
+              <Button
+                data-test="login-button-header"
+                size="small"
+                onClick={handleSignInClick}
+              >
                 {t("components.SignIn.buttonConnexion")}
               </Button>
             )}

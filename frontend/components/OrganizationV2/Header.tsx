@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: 24,
     marginBottom: theme.spacing(2),
+    height: "auto",
   },
   icon: {
     color: theme.palette.text.secondary,
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   media: {
     backgroundColor: theme.palette.text.secondary,
+    height: "100%",
   },
   mapPreview: {
     height: "unset",
@@ -115,23 +117,21 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
   return (
     <Paper className={classes.root} elevation={isDesktop ? 1 : 0}>
       <Grid container direction="column">
-        <Grid item>
-          <Grid container alignItems="center" spacing={1}>
-            <Grid item>
-              <Typography variant="h3">{organization?.name}</Typography>
-            </Grid>
-            <Grid item>
-              {organization.mode == "private" ? (
-                <Lock className={classes.icon} />
-              ) : (
-                <Public className={classes.icon} />
-              )}
-            </Grid>
-            <Grid item>
-              <Typography variant="caption" color="textSecondary">
-                {t(`components.Organization.modes.${organization.mode}`)}
-              </Typography>
-            </Grid>
+        <Grid item container alignItems="center" spacing={1}>
+          <Grid item>
+            <Typography variant="h3">{organization?.name}</Typography>
+          </Grid>
+          <Grid item>
+            {organization.mode == "private" ? (
+              <Lock className={classes.icon} />
+            ) : (
+              <Public className={classes.icon} />
+            )}
+          </Grid>
+          <Grid item>
+            <Typography variant="caption" color="textSecondary">
+              {t(`components.Organization.modes.${organization.mode}`)}
+            </Typography>
           </Grid>
         </Grid>
         <Grid item>
@@ -148,82 +148,86 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
         <Grid item xs={12} sm={6} className={classes.mapPreview}>
           <MapPreview />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Grid container direction="column" className={classes.right}>
-            <Grid item>
-              <List>
+        <Grid
+          item
+          container
+          direction="column"
+          className={classes.right}
+          xs={12}
+          sm={6}
+        >
+          <Grid item>
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <Nature />
+                </ListItemIcon>
+                <ListItemText>
+                  {organization?.total_trees.toLocaleString(router.locale)}{" "}
+                  {t("components.organization.Header.tree", {
+                    count: organization?.total_trees,
+                  })}
+                </ListItemText>
+              </ListItem>
+              {organization?.population_size && (
                 <ListItem>
                   <ListItemIcon>
-                    <Nature />
+                    <SupervisedUserCircleTwoTone />
                   </ListItemIcon>
                   <ListItemText>
-                    {organization?.total_trees.toLocaleString(router.locale)}{" "}
-                    {t("components.organization.Header.tree", {
-                      count: organization?.total_trees,
-                    })}
+                    {organization?.population_size.toLocaleString(
+                      router.locale
+                    )}{" "}
+                    {t("components.organization.Header.populationSize")}
                   </ListItemText>
                 </ListItem>
-                {organization?.population_size && (
-                  <ListItem>
-                    <ListItemIcon>
-                      <SupervisedUserCircleTwoTone />
-                    </ListItemIcon>
-                    <ListItemText>
-                      {organization?.population_size.toLocaleString(
-                        router.locale
-                      )}{" "}
-                      {t("components.organization.Header.populationSize")}
-                    </ListItemText>
-                  </ListItem>
-                )}
-                {organization?.area_sq_km && (
-                  <ListItem>
-                    <ListItemIcon>
-                      <ZoomOutMap />
-                    </ListItemIcon>
-                    <ListItemText>
-                      {organization?.area_sq_km.toLocaleString(router.locale)}{" "}
-                      km2
-                    </ListItemText>
-                  </ListItem>
-                )}
-              </List>
+              )}
+              {organization?.area_sq_km && (
+                <ListItem>
+                  <ListItemIcon>
+                    <ZoomOutMap />
+                  </ListItemIcon>
+                  <ListItemText>
+                    {organization?.area_sq_km.toLocaleString(router.locale)} km2
+                  </ListItemText>
+                </ListItem>
+              )}
+            </List>
+          </Grid>
+          <Grid item xs />
+
+          <Grid
+            item
+            container
+            direction={isDesktop ? "row" : "column"}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item>
+              <Button
+                size="large"
+                variant="contained"
+                fullWidth
+                color="primary"
+                onClick={() => router.push(`/${organization.slug}/map`)}
+              >
+                {ability.can("manage", "Trees")
+                  ? t("components.Organization.Header.mapEditor")
+                  : t("components.Organization.Header.treesExplorer")}
+              </Button>
             </Grid>
             <Grid item xs />
-            <Grid item>
-              <Grid
-                container
-                direction={isDesktop ? "row" : "column"}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Grid item>
-                  <Button
-                    size="large"
-                    variant="contained"
-                    fullWidth
-                    color="primary"
-                    onClick={() => router.push(`/${organization.slug}/map`)}
-                  >
-                    {ability.can("manage", "Trees")
-                      ? t("components.Organization.Header.mapEditor")
-                      : t("components.Organization.Header.treesExplorer")}
-                  </Button>
-                </Grid>
-                <Grid item xs />
-                <Can do="manage" on="Trees">
-                  <Grid item>
-                    <Button
-                      href={`/${organization.slug}/map?panel=import`}
-                      fullWidth
-                      color="primary"
-                    >
-                      {t("components.Organization.Header.importDataset")}
-                    </Button>
-                  </Grid>
-                </Can>
+            <Can do="manage" on="Trees">
+              <Grid item>
+                <Button
+                  href={`/${organization.slug}/map?panel=import`}
+                  fullWidth
+                  color="primary"
+                >
+                  {t("components.Organization.Header.importDataset")}
+                </Button>
               </Grid>
-            </Grid>
+            </Can>
           </Grid>
         </Grid>
       </Grid>

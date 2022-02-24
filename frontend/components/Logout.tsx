@@ -46,10 +46,10 @@ const Logout: React.FC<LogoutProps> = (props) => {
       color: "primary",
       variant: "contained",
       size: "large",
+      "data-test": "button-confirm-logout",
       onClick: () => {
         localStorage.clear();
         router.reload();
-
         if (props.onClick) {
           props.onClick();
         }
@@ -59,6 +59,7 @@ const Logout: React.FC<LogoutProps> = (props) => {
 
   return (
     <Button
+      data-test="button-logout"
       {...props.buttonProps}
       onClick={(e) => {
         dialog.current.open({
