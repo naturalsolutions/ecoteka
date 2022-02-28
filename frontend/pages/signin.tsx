@@ -1,6 +1,6 @@
 import Head from "next/head";
 import AppLayoutGeneral from "@/components/AppLayout/General";
-import FormSignIn from "@/components/Login/FormSignIn";
+import FormSignIn from "@/components/Auth/SignIn";
 
 export default function SignInPage() {
   return (

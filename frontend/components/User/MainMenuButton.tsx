@@ -11,7 +11,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import Logout from "@/components/Logout";
+import Logout from "@/components/Auth/Logout";
 import { useAppContext } from "@/providers/AppContext";
 import { IUser } from "@/index";
 import { useRouter } from "next/router";

@@ -92,6 +92,12 @@ export const Provider = ({ children }) => {
     }
   }, [router.query, user]);
 
+  useEffect(() => {
+    if (!user && organizationError?.code === 403) {
+      router.push("/");
+    }
+  }, [organizationError]);
+
   return (
     <StoreContext.Provider
       value={{
