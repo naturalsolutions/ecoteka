@@ -125,7 +125,10 @@ const OrganizationHeader: FC<OrganizationHeaderProps> = ({}) => {
             {organization.mode == "private" ? (
               <Lock className={classes.icon} />
             ) : (
-              <Public className={classes.icon} />
+              <Public
+                className={classes.icon}
+                data-test="public-organization"
+              />
             )}
           </Grid>
           <Grid item>

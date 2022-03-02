@@ -17,6 +17,16 @@ describe("Sign Out", () => {
     });
   });
 
-  //test redirection si organisation privée => home
-  //si orga publique reste sur la m page
+  it("private organization logout", function () {
+    cy.logout();
+    cy.visit("/ecoteka-1");
+    cy.url().should("not.contain", "ecoteka-1");
+  });
+
+  it("public organization logout", function () {
+    cy.logout();
+    cy.visit("/argenteuil-2");
+    cy.url().should("contain", "argenteuil-2");
+    cy.get("[data-test=public-organization]").should("be.visible");
+  });
 });

@@ -46,7 +46,10 @@ const FormForgot = () => {
   const classes = useStyles();
 
   const schema = yup.object().shape({
-    email: yup.string().email().required(),
+    email: yup
+      .string()
+      .email(t("components.SignIn.errorMessageEmail"))
+      .required(t("components.SignIn.errorMessageRequiredField")),
   });
 
   const { register, getValues, handleSubmit, trigger, errors, setError } =
@@ -77,11 +80,13 @@ const FormForgot = () => {
         }
         return data;
       } catch (error) {
-        setPasswordRecovery(false);
+        console.log(error);
+
         setError("email", {
           type: "manual",
           message: t("common.errors.emailUnmatch"),
         });
+        setPasswordRecovery(false);
       }
     }
   };
@@ -119,16 +124,16 @@ const FormForgot = () => {
               <Grid item>
                 <TextField
                   error={Boolean(errors?.email?.message)}
+                  inputProps={{
+                    "data-test": "forgot-form-username",
+                  }}
                   id="email"
                   name="email"
                   inputRef={register}
-                  inputProps={{ "data-test": "forgot-form-email" }}
                   required
                   fullWidth
                   placeholder={t("pages.Forgot.EmailCard.emailPlaceholder")}
-                  helperText={
-                    errors?.email?.message && t("common.errors.emailUnmatch")
-                  }
+                  helperText={errors?.email?.message ?? ""}
                   variant="outlined"
                   onKeyDown={() => handleKeyDown}
                 />
@@ -152,7 +157,7 @@ const FormForgot = () => {
             </Grid>
           </>
         ) : (
-          <Typography align="center">
+          <Typography align="center" data-test="forgot-form-success">
             {t("pages.Forgot.SentCard.description")} <strong>{email}</strong>.
           </Typography>
         )}

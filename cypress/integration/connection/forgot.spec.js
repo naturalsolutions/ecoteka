@@ -13,11 +13,28 @@ describe("Forgot Password", () => {
     cy.url().should("not.contain", "forgot");
   });
 
-  it("send reset link", function () {
+  it("success send reset link", function () {
+    cy.fixture("users").then((data) => {
+      cy.get("[data-test=forgot-form-username]").type(data.admin.email);
+    });
     cy.get("[data-test=forgot-form-submit]").click();
+    cy.get("[data-test=forgot-form-success]").should("be.visible");
   });
 
-  it("empty email", function () {});
+  it("empty email", function () {
+    cy.get("[data-test=forgot-form-submit]").click();
+    cy.get(".MuiFormHelperText-root").should("be.visible");
+  });
 
-  it("wrong email", function () {});
+  it("wrong email", function () {
+    cy.get("[data-test=forgot-form-username]").type("wrong email");
+    cy.get("[data-test=forgot-form-submit]").click();
+    cy.get(".MuiFormHelperText-root").should("be.visible");
+  });
+
+  it("unmatched email", function () {
+    cy.get("[data-test=forgot-form-username]").type("unmatched@email.com");
+    cy.get("[data-test=forgot-form-submit]").click();
+    cy.get(".MuiFormHelperText-root").should("be.visible");
+  });
 });

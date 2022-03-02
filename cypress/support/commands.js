@@ -31,7 +31,7 @@ Cypress.Commands.add("login", (username, password) => {
     cy.get("[data-test=signin-form-password]").type(password);
     cy.get("[data-test=signin-form-submit]").click();
     cy.get("[data-test=page-organizationSlug-index]", {
-      timeout: 25000,
+      timeout: 30000,
     }).should("be.visible");
   });
 });

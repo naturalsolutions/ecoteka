@@ -27,45 +27,34 @@ describe("Sign In", () => {
     cy.get("@username").type(this.data.admin.email);
     cy.get("@password").type("wrong password").type("{enter}");
     cy.get("@password").should("have.attr", "aria-invalid", "true");
-    cy.get(".MuiFormHelperText-root", {
-      timeout: 10000,
-    }).should("be.visible");
-    //test traduction par rapport au contexte (récupérer les translations)
+    cy.get(".MuiFormHelperText-root").should("be.visible");
   });
 
   it("wrong username", function () {
     cy.get("@username").type("wrong email");
     cy.get("@password").type("wrong password").type("{enter}");
     cy.get("@username").should("have.attr", "aria-invalid", "true");
-    cy.get(".MuiFormHelperText-root", {
-      timeout: 10000,
-    }).should("be.visible");
+    cy.get(".MuiFormHelperText-root").should("be.visible");
   });
 
   it("empty password", function () {
     cy.get("@username").type(this.data.admin.email);
     cy.get("@password").type("{enter}");
     cy.get("@password").should("have.attr", "aria-invalid", "true");
-    cy.get(".MuiFormHelperText-root")
-      .contains("Veuillez renseigner ce champ.")
-      .and("be.visible");
+    cy.get(".MuiFormHelperText-root").and("be.visible");
   });
 
   it("empty username", function () {
     cy.get("@password").type(this.data.admin.password).type("{enter}");
     cy.get("@username").should("have.attr", "aria-invalid", "true");
-    cy.get(".MuiFormHelperText-root")
-      .contains("Veuillez renseigner ce champ.")
-      .and("be.visible");
+    cy.get(".MuiFormHelperText-root").and("be.visible");
   });
 
   it("empty fields", function () {
     cy.get("@password").type("{enter}");
     cy.get("@username").should("have.attr", "aria-invalid", "true");
     cy.get("@password").should("have.attr", "aria-invalid", "true");
-    cy.get(".MuiFormHelperText-root")
-      .contains("Veuillez renseigner ce champ.")
-      .and("be.visible");
+    cy.get(".MuiFormHelperText-root").and("be.visible");
   });
 
   it("type enter in email field", function () {
