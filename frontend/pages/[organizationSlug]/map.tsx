@@ -158,7 +158,10 @@ const EditionPage = ({}) => {
   const [info, setInfo] = useState<Record<string, any>>({});
 
   const cadastreLayer = CadastreLayer(activeLayers.cadastre.value);
-  const osmLayer = OSMLayer({ visible: true, defaultPointColor: "#7EC14D" });
+  const osmLayer = OSMLayer({
+    visible: true,
+    defaultPointColor: "#7EC14D",
+  });
   const treesLayer = InventoryLayer({
     visible: activeLayers.trees.value,
     data,
@@ -710,6 +713,7 @@ const EditionPage = ({}) => {
           onClick={() => toggleAction(editionMode, "selection")}
         />
         <MapActionsAction
+          dataTest="add-tree-button"
           isActive={editionMode && mode == "drawPoint"}
           action={"create"}
           subject={"Trees"}

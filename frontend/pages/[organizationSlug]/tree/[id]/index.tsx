@@ -46,7 +46,7 @@ const TreePage: React.FC<ITreePageProps> = ({}) => {
     <AppLayoutGeneral hasFooter={false}>
       <TreeProvider organizationId={organization?.id} treeId={Number(id)}>
         <InterventionProvider>
-          <Container>
+          <Container data-test="tree-page">
             <Grid container>
               <TreePageHeader onChange={handleOnAction} />
               <Grid container spacing={2}>

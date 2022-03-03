@@ -67,6 +67,7 @@ const TreePanel: FC<TreePanelProps> = ({ withEditMode = false }) => {
             actions={
               ability.can("read", "Trees") ? (
                 <Button
+                  data-test="update-tree-button"
                   size="large"
                   fullWidth
                   variant="contained"

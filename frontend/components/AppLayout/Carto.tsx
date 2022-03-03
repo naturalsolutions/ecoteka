@@ -31,6 +31,7 @@ import { useRouter } from "next/router";
 interface AppLayoutCartoProps {
   height: number | string;
   width: number | string;
+  dataTest: string;
 }
 
 const useStyles = makeStyles<Theme, AppLayoutCartoProps>((theme) => ({

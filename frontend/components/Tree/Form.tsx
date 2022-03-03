@@ -165,12 +165,18 @@ const TreeForm: FC<TreeFormProps> = ({ readOnly = true }) => {
   }, [form]);
 
   return (
-    <Paper elevation={0} className={classes.root}>
+    <Paper data-test="tree-full-form" elevation={0} className={classes.root}>
       {Object.keys(categories).map((category) => (
         <TreeFormAccordion key={category} title={category}>
-          <Grid container>
+          <Grid container data-test={"tree-full-form-" + category}>
             {Object.keys(categories[category]).map((field) => (
-              <Grid key={field} item xs={12} sm={6}>
+              <Grid
+                data-test={"tree-full-form-" + category + "field-" + field}
+                key={field}
+                item
+                xs={12}
+                sm={6}
+              >
                 <Box>{categories[category][field]}</Box>
               </Grid>
             ))}

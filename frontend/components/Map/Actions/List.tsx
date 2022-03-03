@@ -100,6 +100,7 @@ const MapActionsList: FC<MapActionsListProps> = ({ children }) => {
               <Grid item>
                 <Tooltip title={child.props.name} arrow placement="left">
                   <Fab
+                    data-test={child.props.dataTest}
                     color="primary"
                     className={
                       child.props.isActive ? classes.fabActive : classes.fab

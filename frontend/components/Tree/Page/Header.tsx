@@ -86,6 +86,7 @@ const TreePageHeader: React.FC<ITreePageHeaderProps> = ({
       <Grid item xs />
       <Grid item>
         <Button
+          data-test="save-tree-button"
           disabled={saving}
           variant="contained"
           color="primary"

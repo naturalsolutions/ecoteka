@@ -2,9 +2,7 @@
 
 describe("Sign Out", () => {
   beforeEach(function () {
-    cy.fixture("users").then((data) => {
-      cy.login(data.admin.email, data.admin.password);
-    });
+    cy.loginAdmin();
   });
 
   it("success logout", function () {

@@ -27,7 +27,7 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
   const { form } = useTreeContext();
 
   return (
-    <Grid container>
+    <Grid container data-test="tree-basic-form">
       <Grid item xs={12}>
         <Controller
           as={TreeCanonicalField}
@@ -35,6 +35,7 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
             ...treeSchema.canonicalName.component,
             error: Boolean(form.errors?.canonicalName),
             disabled: !isEditable,
+            "data-test": "tree-basic-form-canonicalname",
           }}
           name="canonicalName"
           defaultValue=""
@@ -49,7 +50,10 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
           control={form.control}
           defaultValue=""
           error={Boolean(form.errors?.vernacularName)}
-          inputProps={{ disabled: !isEditable }}
+          inputProps={{
+            disabled: !isEditable,
+            "data-test": "tree-basic-form-vernacularname",
+          }}
         />
       </Grid>
       <Grid item xs={12}>
@@ -62,7 +66,10 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
               control={form.control}
               defaultValue=""
               error={Boolean(form.errors?.height)}
-              inputProps={{ disabled: !isEditable }}
+              inputProps={{
+                disabled: !isEditable,
+                "data-test": "tree-basic-form-height",
+              }}
             />
           </Grid>
           <Grid item xs={6}>
@@ -73,7 +80,10 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
               control={form.control}
               defaultValue=""
               error={Boolean(form.errors?.diameter)}
-              inputProps={{ disabled: !isEditable }}
+              inputProps={{
+                disabled: !isEditable,
+                "data-test": "tree-basic-form-diameter",
+              }}
             />
           </Grid>
         </Grid>
@@ -86,7 +96,10 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
           control={form.control}
           defaultValue=""
           error={Boolean(form.errors?.address)}
-          inputProps={{ disabled: !isEditable }}
+          inputProps={{
+            disabled: !isEditable,
+            "data-test": "tree-basic-form-address",
+          }}
         />
       </Grid>
       <Grid item xs={12}>
@@ -97,6 +110,7 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
                 ...treeSchema.plantationDate.component,
                 error: Boolean(form.errors?.plantationDate),
                 disabled: !isEditable,
+                "data-test": "tree-basic-form-plantationDate",
               }}
             />
           }
@@ -112,7 +126,10 @@ const TreeBasicForm: FC<TreeBasicFormProps> = ({ isEditable = true }) => {
           control={form.control}
           as={CoreSwitch}
           defaultValue={false}
-          switchProps={{ disabled: !isEditable }}
+          switchProps={{
+            disabled: !isEditable,
+            "data-test": "tree-basic-form-treeOfInterest",
+          }}
         />
       </Grid>
     </Grid>

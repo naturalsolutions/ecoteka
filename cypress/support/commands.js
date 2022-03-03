@@ -36,9 +36,37 @@ Cypress.Commands.add("login", (username, password) => {
   });
 });
 
+Cypress.Commands.add("loginAdmin", () => {
+  cy.session("admin session", () => {
+    cy.visit("/signin");
+    cy.fixture("users").then((data) => {
+      cy.login(data.admin.email, data.admin.password);
+    });
+  });
+});
+
 Cypress.Commands.add("logout", () => {
   cy.visit("/");
   cy.get("[data-test=user-menu]").click();
   cy.get("[data-test=button-logout]").click();
   cy.get("[data-test=button-confirm-logout]").click();
 });
+
+Cypress.Commands.add("createtree", () => {
+  cy.visit("/ecoteka-1/map");
+  cy.get("[data-test=add-tree-button]").click({ force: true });
+  cy.get("#view-default-view", {
+    timeout: 30000,
+  }).click({ force: true });
+  cy.get("[data-test=tree-basic-form]", {
+    timeout: 30000,
+  }).should("be.visible");
+  cy.get("[data-test=save-tree-button]").click();
+  cy.intercept("PUT", "/trees");
+});
+
+//   cy.get("[data-test=update-tree-button]").should("have.attr", "data-id");
+// cy.get("[data-test=tree-page]", {
+//   timeout: 30000,
+// }).should("be.visible");
+// cy.url().should("contain", "ecoteka-1/tree/");

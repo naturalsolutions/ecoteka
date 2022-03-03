@@ -6,10 +6,10 @@ import {
   Tooltip,
   IconButton,
 } from "@material-ui/core";
-import Can from "@/components/Can";
 import { Actions, Subjects } from "@/abilities/genericOrganizationAbility";
 
 export interface MapActionsActionProps {
+  dataTest?: string;
   name: string;
   icon: ReactElement<SvgIconProps>;
   isActive: boolean;
@@ -29,12 +29,13 @@ const MapActionsAction: FC<MapActionsActionProps> = ({
   isActive = false,
   action = "preview",
   subject = "Trees",
+  dataTest = "",
   icon,
   name,
   onClick,
 }) => {
   const classes = useStyles();
-  
+
   return (
     <Tooltip title={name}>
       <IconButton className={classes.root} aria-label={name} onClick={onClick}>
