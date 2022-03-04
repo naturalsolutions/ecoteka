@@ -51,15 +51,23 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface TreeFormAccordionProps {
   title: string;
+  dataTest: string;
 }
 
-const TreeFormAccordion: FC<TreeFormAccordionProps> = ({ title, children }) => {
+const TreeFormAccordion: FC<TreeFormAccordionProps> = ({
+  title,
+  dataTest,
+  children,
+}) => {
   const classes = useStyles();
 
   return (
     <Accordion elevation={0} className={classes.accordion}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography className={classes.accordionSummaryTitle}>
+        <Typography
+          data-test={dataTest}
+          className={classes.accordionSummaryTitle}
+        >
           {title}
         </Typography>
       </AccordionSummary>
@@ -166,12 +174,16 @@ const TreeForm: FC<TreeFormProps> = ({ readOnly = true }) => {
 
   return (
     <Paper data-test="tree-full-form" elevation={0} className={classes.root}>
-      {Object.keys(categories).map((category) => (
-        <TreeFormAccordion key={category} title={category}>
-          <Grid container data-test={"tree-full-form-" + category}>
+      {Object.keys(categories).map((category, index) => (
+        <TreeFormAccordion
+          key={category}
+          title={category}
+          dataTest={`tree-full-form-${index}`}
+        >
+          <Grid container>
             {Object.keys(categories[category]).map((field) => (
               <Grid
-                data-test={"tree-full-form-" + category + "field-" + field}
+                data-test={`tree-full-form-${field}`}
                 key={field}
                 item
                 xs={12}

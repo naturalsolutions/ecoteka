@@ -1,6 +1,14 @@
 {
     "commontree": {
-    "canonicalname": "Platanus",
+      "family": "Platanaceae",
+      "genus" : "Platanus",
+      "species" : "occidentalis",
+      "cultivar" : "Cripps Pink",
+      "townshipCode" :  13010,
+      "zipCode" :  13010,
+      "zone" : "",
+      "code" :"A20200525",
+      "canonicalname": "Platanus",
       "vernacularname": "Platane Common",
       "height" : 1500,
       "diameter" : 6,

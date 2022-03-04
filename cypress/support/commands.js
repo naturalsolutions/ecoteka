@@ -62,11 +62,13 @@ Cypress.Commands.add("createtree", () => {
     timeout: 30000,
   }).should("be.visible");
   cy.get("[data-test=save-tree-button]").click();
-  cy.intercept("PUT", "/trees");
+  cy.get("[data-test=update-tree-button]").click();
+  cy.get("[data-test=tree-page]", {
+    timeout: 30000,
+  }).should("be.visible");
 });
 
-//   cy.get("[data-test=update-tree-button]").should("have.attr", "data-id");
-// cy.get("[data-test=tree-page]", {
-//   timeout: 30000,
-// }).should("be.visible");
-// cy.url().should("contain", "ecoteka-1/tree/");
+Cypress.Commands.add("visitTree", (treeId) => {
+  cy.visit("/ecoteka-1/tree/" + treeId);
+  cy.get("[data-test=tree-page]").should("be.visible");
+});

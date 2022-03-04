@@ -3,10 +3,14 @@
 describe("Add tree", () => {
   beforeEach(function () {
     cy.loginAdmin();
-    cy.visit("/ecoteka-1/map");
   });
 
   it("success add tree", function () {
     cy.createtree();
   });
+
+  //TO DO:
+  // it("fail add tree", function () {
+  //   if tree is out of organization reach or in unreachable place (water for instance)
+  // });
 });
