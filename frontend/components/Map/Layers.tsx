@@ -108,6 +108,11 @@ const MapLayers: FC<IMapLayersProps> = ({
                   control={<Radio color="primary" />}
                   label="Satellite"
                 />
+                <FormControlLabel
+                  value="ign"
+                  control={<Radio color="primary" />}
+                  label="Plan IGN"
+                />
               </RadioGroup>
             </FormControl>
           </Grid>

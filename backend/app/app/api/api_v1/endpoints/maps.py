@@ -38,7 +38,7 @@ set_policies(policies)
 @router.get("/style")
 def generate_style(
     theme: Optional[str] = "dark",
-    background: Optional[str] = "map"
+    background: Optional[str] = "ign"
 ) -> Dict:
     """
     Generate style
