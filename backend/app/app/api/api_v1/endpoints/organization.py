@@ -381,6 +381,20 @@ def remove_member(
 
     return True
 
+@router.delete("/{organization_id}", , response_model=Organization)
+def delete_organization(
+    organization_id: int,
+    *,
+    auth=Depends(authorization("organizations:delete_organization")),
+    db: Session = Depends(get_db),
+):
+    organization_in_db = crud.organization.get_by_id_or_slug(db, id=organization_id)
+
+    if not organization_in_db:
+        raise HTTPException(status_code=404, detail="Organization not found")
+
+    return crud.organization.remove(db, id=organization_id)
+
 
 @router.patch("/{organization_id}/members/{user_id}/role")
 def update_member_role(
