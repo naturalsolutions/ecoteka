@@ -381,7 +381,7 @@ def remove_member(
 
     return True
 
-@router.delete("/{organization_id}", , response_model=Organization)
+@router.delete("/{organization_id}", response_model=Organization)
 def delete_organization(
     organization_id: int,
     *,
