@@ -38,20 +38,20 @@ set_policies(policies)
 @router.get("/style")
 def generate_style(
     theme: Optional[str] = "dark",
-    background: Optional[str] = "map"
+    background: Optional[str] = "ign"
 ) -> Dict:
     """
     Generate style
     """
-    with open(f"/app/app/assets/styles/{theme}.json") as style_json:
+    with open(f"/app/app/assets/styles/{background}-{theme}.json") as style_json:
         style = json.load(style_json)
 
         if background == "satellite":
             satellite = [index for index, layer in enumerate(style["layers"]) if layer["id"] == "satellite"]
-            
+                
             if len(satellite) > 0:
                 style["layers"][satellite[0]]["layout"]["visibility"] = "visible"
-        
+
         return style
 
 @router.get("/geojson", dependencies=[Depends(authorization("maps:get_geojson"))], response_model=FeatureCollection)

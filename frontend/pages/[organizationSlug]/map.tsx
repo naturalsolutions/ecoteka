@@ -143,7 +143,7 @@ const EditionPage = ({}) => {
   const [editionMode, setEditionMode] = useState<boolean>(false);
   const [mapBackground, setMapbackground] = useLocalStorage(
     "etk:map:mapBackground",
-    "map"
+    "ign"
   );
   const [layers, setLayers] = useState([]);
   const [activeLayers, setActiveLayers] = useLocalStorage<IMapLayers>(
@@ -612,14 +612,23 @@ const EditionPage = ({}) => {
           </div>
         )}
         <MapAttributionList>
-          <MapAttributionItem
-            href="https://maptiler.com/copyright"
-            label="© MapTiler"
-          />
-          <MapAttributionItem
-            href="https://www.openstreetmap.org/copyright"
-            label="© OpenStreetMap"
-          />
+          {mapBackground === "ign" ? (
+            <MapAttributionItem
+              href="https://geoservices.ign.fr/cgu-licences"
+              label="© IGN - Géoportail"
+            />
+          ) : (
+            <>
+              <MapAttributionItem
+                href="https://maptiler.com/copyright"
+                label="© MapTiler"
+              />
+              <MapAttributionItem
+                href="https://www.openstreetmap.org/copyright"
+                label="© OpenStreetMap"
+              />
+            </>
+          )}
         </MapAttributionList>
       </DeckGL>
 
