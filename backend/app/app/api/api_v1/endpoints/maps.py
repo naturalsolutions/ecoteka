@@ -43,16 +43,21 @@ def generate_style(
     """
     Generate style
     """
-    with open(f"/app/app/assets/styles/{background}-{theme}.json") as style_json:
-        style = json.load(style_json)
+    if background == "ign":
+        with open(f"/app/app/assets/styles/ign-{theme}.json") as style_json:
+            style = json.load(style_json)
+            return style
+    else:
+        with open(f"/app/app/assets/styles/map-{theme}.json") as style_json:
+            style = json.load(style_json)
 
-        if background == "satellite":
-            satellite = [index for index, layer in enumerate(style["layers"]) if layer["id"] == "satellite"]
-                
-            if len(satellite) > 0:
-                style["layers"][satellite[0]]["layout"]["visibility"] = "visible"
+            if background == "satellite":
+                satellite = [index for index, layer in enumerate(style["layers"]) if layer["id"] == "satellite"]
+                    
+                if len(satellite) > 0:
+                    style["layers"][satellite[0]]["layout"]["visibility"] = "visible"
 
-        return style
+            return style
 
 @router.get("/geojson", dependencies=[Depends(authorization("maps:get_geojson"))], response_model=FeatureCollection)
 def get_geojson(
