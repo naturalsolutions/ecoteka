@@ -1,3 +1,15 @@
+# [0.19.0](https://gitlab.com/natural-solutions/ecoteka/compare/v0.18.2...v0.19.0) (2022-08-19)
+
+
+### Bug Fixes
+
+* conflict in maps.py ([9569721](https://gitlab.com/natural-solutions/ecoteka/commit/95697217c913319c437a74cc4eabce7779afaf11))
+
+
+### Features
+
+* merge ign map into master ([dd7626f](https://gitlab.com/natural-solutions/ecoteka/commit/dd7626fba675995251581fb1d6ba6a3fafd78334))
+
 ## [0.18.2](https://gitlab.com/natural-solutions/ecoteka/compare/v0.18.1...v0.18.2) (2021-12-31)
 
 
