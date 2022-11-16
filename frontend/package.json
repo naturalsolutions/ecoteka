@@ -50,7 +50,7 @@
     "material-ui-dropzone": "^3.5.0",
     "materialui-daterange-picker": "^1.1.92",
     "nebula.gl": "^0.23.3",
-    "next": "11.1.0",
+    "next": "13.0.3",
     "notistack": "^1.0.5",
     "pbf": "^3.2.1",
     "react": "^17.0.2",
